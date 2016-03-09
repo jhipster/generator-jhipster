@@ -118,7 +118,7 @@ module.exports = EntityGenerator.extend({
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
-            this.pathConfigs = (this.config.get('pathConfigs'));
+            this.pathConfigs = this._globalConfig.get('pathConfigs');
             // backward compatibility on testing frameworks
             if (this.testFrameworks == null) {
                 this.testFrameworks = ['gatling'];
@@ -1075,9 +1075,9 @@ module.exports = EntityGenerator.extend({
                 if (props.useMicroserviceJson) {
                     this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                     if(path.isAbsolute(props.microservicePath)) {
-                        this.microservicePath = path.relative(this.destinationRoot(), props.microservicePath);
-                    } else {
                         this.microservicePath = props.microservicePath;
+                    } else {
+                        this.microservicePath = path.resolve(props.microservicePath);
                     }
                     this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
                     this.useConfigurationFile = true;
@@ -1645,7 +1645,7 @@ module.exports = EntityGenerator.extend({
                 entityPath: this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'
             };
 
-            this.config.set('pathConfigs', this.pathConfigs);
+            this._globalConfig.set('pathConfigs', this.pathConfigs);
         },
 
         writeEnumFiles: function() {
