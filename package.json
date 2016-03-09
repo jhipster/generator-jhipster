@@ -1,0 +1,40 @@
+{
+  "name": "jhipster-domain-language",
+  "version": "0.0.1",
+  "description": "JHipster's own domain language",
+  "main": "module/index.js",
+  "keywords": [
+    "JHipster",
+    "DSL"
+  ],
+  "scripts": {
+    "test": "mocha test/*"
+  },
+  "homepage": "https://github.com/jhipster/jhipster-domain-language#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhipster/jhipster-domain-language.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/jhipster/jhipster-domain-language/issues"
+  },
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache 2.0"
+    }
+  ],
+  "dependencies": {
+    "pegjs": "0.9.0"
+  },
+  "devDependencies": {
+    "mocha": "2.4.5",
+    "chai": "3.5.0"
+  },
+  "peerDependencies": {},
+  "engines": {
+    "node": ">=0.10.25",
+    "npm": ">=1.4.21"
+  }
+}
