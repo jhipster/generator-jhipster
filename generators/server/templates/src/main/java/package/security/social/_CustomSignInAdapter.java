@@ -1,6 +1,9 @@
 package <%=packageName%>.security.social;
 
 import <%=packageName%>.config.JHipsterProperties;
+<%_ if (authenticationType == 'jwt') { _%>
+import <%=packageName%>.security.jwt.TokenProvider;
+<%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +18,6 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
 <%_ if (authenticationType == 'jwt') { _%>
-import com.mycompany.myapp.security.jwt.TokenProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.context.request.ServletWebRequest;
 import javax.servlet.http.Cookie;
