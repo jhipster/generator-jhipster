@@ -119,6 +119,9 @@ dependencies {
     compile (group: 'io.dropwizard.metrics', name: 'metrics-servlets', version: dropwizard_metrics_version) {
         exclude(module: 'metrics-healthchecks')
     }
+    compile(group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: logstash_logback_encoder_version) {
+        exclude(module: 'ch.qos.logback')
+    }
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jackson_version
@@ -182,9 +185,6 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: spring_cloud_version
-    compile(group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: logstash_logback_encoder_version) {
-        exclude(module: 'ch.qos.logback')
-    }
     <%_ } _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector'

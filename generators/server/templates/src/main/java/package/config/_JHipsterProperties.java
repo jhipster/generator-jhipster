@@ -571,7 +571,6 @@ public class JHipsterProperties {
         }
     }
 
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
     private final Logging logging = new Logging();
 
     public Logging getLogging() { return logging; }
@@ -609,7 +608,6 @@ public class JHipsterProperties {
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
     }
-    <%_ } _%>
 
     <%_ if (enableSocialSignIn) { _%>
     public static class Social {

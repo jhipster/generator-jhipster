@@ -181,11 +181,9 @@ jhipster:
         logs: # report metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
             host: localhost
             port: 5000
             queueSize: 512
-    <%_ } _%>
