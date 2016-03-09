@@ -6,6 +6,7 @@ import com.netflix.zuul.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.filters.post.SendResponseFilter;
+import springfox.documentation.swagger2.web.Swagger2Controller;
 
 import java.io.*;
 import java.util.LinkedHashMap;
@@ -16,6 +17,8 @@ import java.util.LinkedHashMap;
 public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerBasePathRewritingFilter.class);
+
+    private ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public String filterType() {
@@ -32,7 +35,7 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
      */
     @Override
     public boolean shouldFilter() {
-        return RequestContext.getCurrentContext().getRequest().getRequestURI().endsWith("/v2/api-docs");
+        return RequestContext.getCurrentContext().getRequest().getRequestURI().endsWith(Swagger2Controller.DEFAULT_URL);
     }
 
     @Override
@@ -51,17 +54,16 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
         try {
             String response = CharStreams.toString(new InputStreamReader(responseDataStream));
             if (response != null) {
-                ObjectMapper mapper = new ObjectMapper();
-                LinkedHashMap<String, Object> map = mapper.readValue(response, LinkedHashMap.class);
+                LinkedHashMap<String, Object> map = this.mapper.readValue(response, LinkedHashMap.class);
 
-                String basePath = requestUri.replace("/v2/api-docs","");
+                String basePath = requestUri.replace(Swagger2Controller.DEFAULT_URL,"");
                 map.put("basePath",basePath);
                 log.debug("Swagger-docs: rewritten Base URL with correct micro-service route: {}", basePath);
                 return mapper.writeValueAsString(map);
             }
         }
         catch (IOException e){
-            log.error("Swagger-docs filter error: {}", e.getMessage(), e);
+            log.error("Swagger-docs filter error", e);
         }
         return null;
     }
