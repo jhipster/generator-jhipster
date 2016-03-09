@@ -114,6 +114,12 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('inject', function() {
+    return gulp.src(config.app + 'index.html')
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
+        .pipe(gulp.dest(config.app));
+});
+
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
 
 gulp.task('wiredep:app', function () {
@@ -289,12 +295,6 @@ gulp.task('install', function (done) {
 
 gulp.task('serve', function () {
     runSequence('install', serve);
-});
-
-gulp.task('inject', function() {
-    return gulp.src(config.app + 'index.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
-        .pipe(gulp.dest(config.app));
 });
 
 gulp.task('build', function (cb) {

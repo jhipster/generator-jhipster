@@ -1674,6 +1674,15 @@ module.exports = EntityGenerator.extend({
         }
     },
 
+    install: function () {
+        var injectJsFilesToIndex = function () {
+            this.spawnCommand('gulp', ['inject']);
+        };
+        if (!this.options['skip-install'] && !this.skipClient) {
+            injectJsFilesToIndex.call(this);
+        }
+    },
+
     end: {
         afterRunHook: function () {
             try {
