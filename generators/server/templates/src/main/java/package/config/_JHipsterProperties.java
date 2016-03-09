@@ -132,7 +132,7 @@ public class JHipsterProperties {
 
         public static class Cache {
 
-            private int timeToLiveInDays = 31;
+            private int timeToLiveInDays = 1461;
 
             public int getTimeToLiveInDays() {
                 return timeToLiveInDays;
