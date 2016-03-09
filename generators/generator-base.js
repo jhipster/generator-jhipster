@@ -1083,11 +1083,8 @@ Generator.prototype.copyI18nFilesByName = function (_this, webappDir, fileToCopy
 
 Generator.prototype.copyI18n = function (language) {
     try {
-        var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
-        if (stats.isDirectory()) {
-            this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_entity_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
-        }
+        this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_entity_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+        this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing
@@ -1096,10 +1093,7 @@ Generator.prototype.copyI18n = function (language) {
 
 Generator.prototype.copyEnumI18n = function (language, enumInfo) {
     try {
-        var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
-        if (stats.isDirectory()) {
-            this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_enum_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
-        }
+        this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_enum_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing

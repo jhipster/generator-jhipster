@@ -16,6 +16,10 @@ bootRun {
   args = ["--spring.profiles.active=prod"]
 }
 <% if (!skipClient) { %>
+task gulpBuildWithOpts(type: GulpTask) {
+   args = ["build", "--no-notification"]
+}
+
 war {
   webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }<% } %>
@@ -33,9 +37,9 @@ task setProdProperties(dependsOn: bootRun) << {
         System.setProperty('spring.profiles.active', 'prod')
     }
 }
-
+<% if (!skipClient) { %>
 gulp_build.dependsOn 'npmInstall'
 gulp_build.dependsOn 'bower'
-processResources.dependsOn gulp_build
+processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
-bootRun.dependsOn gulp_test
+bootRun.dependsOn gulp_test<% } %>

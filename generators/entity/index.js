@@ -1568,7 +1568,8 @@ module.exports = EntityGenerator.extend({
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
-                        this.getAllInstalledLanguages().forEach(function (language) {
+                        var languages = this.languages || this.getAllInstalledLanguages();
+                        languages.forEach(function (language) {
                             this.copyEnumI18n(language, enumInfo);
                         }, this);
                     }
@@ -1646,7 +1647,8 @@ module.exports = EntityGenerator.extend({
 
             // Copy for each
             if (this.enableTranslation) {
-                this.getAllInstalledLanguages().forEach(function (language) {
+                var languages = this.languages || this.getAllInstalledLanguages();
+                languages.forEach(function (language) {
                     this.copyI18n(language);
                 }, this);
             }
