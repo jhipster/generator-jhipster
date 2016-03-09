@@ -11,8 +11,10 @@ _%>
 
     <%= entityClass %>.$inject = ['$resource'<% if (hasDate) { %>, 'DateUtils'<% } %>];
 
-    function <%= entityClass %> ($resource<% if (hasDate) { %>, DateUtils<% } %>) {
-        return $resource('api/<%= entityApiUrl %>/:id', {}, {
+    function <%= entityClass %> ($resource, DateUtils) {
+        var resourceUrl = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName %>/' +<% } %> 'api/<%= entityApiUrl %>/:id';
+
+        return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
