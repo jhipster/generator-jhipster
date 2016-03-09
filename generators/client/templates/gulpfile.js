@@ -282,16 +282,16 @@ gulp.task('watch', function () {
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
-gulp.task('install', function (done) {
-    runSequence('wiredep', 'inject', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, done);
+gulp.task('install', function () {
+    runSequence(['wiredep',  'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>], 'inject');
 });
 
 gulp.task('serve', function () {
     runSequence('install', serve);
 });
 
-gulp.task('build', function (cb) {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'inject', 'eslint', 'assets:prod', cb);
+gulp.task('build', ['clean'], function (cb) {
+    runSequence(['copy', 'wiredep:app', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);
