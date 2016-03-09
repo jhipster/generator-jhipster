@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "रिअल-टाइम वापरकर्ता क्रियाकलाप",
+        "table": {
+            "userlogin": "वापरकर्ता",
+            "ipaddress": "IP Address",
+            "userAgent": "User agent",
+            "page": "चालू पान",
+            "time": "वेळ"
+        }
+    }
+}
