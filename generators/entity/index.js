@@ -1678,6 +1678,7 @@ module.exports = EntityGenerator.extend({
 
     install: function () {
         var injectJsFilesToIndex = function () {
+            this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
             this.spawnCommand('gulp', ['inject']);
         };
         if (!this.options['skip-install'] && !this.skipClient) {
