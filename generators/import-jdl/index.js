@@ -54,11 +54,9 @@ module.exports = JDLGenerator.extend({
 
         parseJDL: function () {
 
-            Editors = jhuml.editors;
-            self.entityGenerator = jhuml.entityGenerator;
-            self.EntitiesCreator = jhuml.EntitiesCreator;
-            ClassScheduler = jhuml.ClassScheduler;
-            self.cardinalities = cardinalities;
+            var Editors = jhuml.editors;
+            var EntitiesCreator = jhuml.EntitiesCreator;
+            var ClassScheduler = jhuml.ClassScheduler;
 
             var types = this._initDatabaseTypeHolder(this.databaseType);
 
@@ -80,12 +78,11 @@ module.exports = JDLGenerator.extend({
                 parser.databaseTypes,
                 [], {}, {});
 
-                creator.createEntities();
-                if (!this.options['force']) {
-                    scheduledClasses = creator.filterOutUnchangedEntities(scheduledClasses);
-                }
-                creator.writeJSON(scheduledClasses);
+            creator.createEntities();
+            if (!this.options['force']) {
+                scheduledClasses = creator.filterOutUnchangedEntities(scheduledClasses);
             }
+            creator.writeJSON(scheduledClasses);
         },
 
         generateEntities: function () {
