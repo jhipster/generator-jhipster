@@ -44,7 +44,8 @@
     "wordwrap": "1.0.0",
     "yeoman-generator": "0.22.5",
     "yo": "1.7.0",
-    "semver": "5.1.0"
+    "semver": "5.1.0",
+    "jhipster-uml" : "1.6.1"
   },
   "devDependencies": {
     "fs-extra": "0.26.5",
