@@ -2,6 +2,7 @@ package <%=packageName%>.config;
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
@@ -63,6 +64,16 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
             log.debug("Initializing Metrics JMX reporting");
             JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
             jmxReporter.start();
+        }
+
+        if (jHipsterProperties.getMetrics().getLogs().isEnabled()) {
+            log.info("Initializing Metrics Log reporting");
+            final Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry)
+                .outputTo(LoggerFactory.getLogger("metrics"))
+                .convertRatesTo(TimeUnit.SECONDS)
+                .convertDurationsTo(TimeUnit.MILLISECONDS)
+                .build();
+            reporter.start(jHipsterProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
         }
     }
 

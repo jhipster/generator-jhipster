@@ -35,7 +35,7 @@ services:
         ports:
             - "27017:27017"
 <%_ } _%>
-<%_ if (devDatabaseType == 'cassandra') { _%>
+<%_ if (devDatabaseType == 'cassandra' || applicationType == 'gateway') { _%>
     <%= baseName.toLowerCase() %>-dev-cassandra:
         container_name: <%= baseName.toLowerCase() %>-dev-cassandra
         build:

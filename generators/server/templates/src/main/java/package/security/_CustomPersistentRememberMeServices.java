@@ -4,6 +4,7 @@ import <%=packageName%>.domain.PersistentToken;<% if (databaseType == 'sql' || d
 import <%=packageName%>.domain.User;<%}%>
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -72,10 +73,10 @@ public class CustomPersistentRememberMeServices extends
     private UserRepository userRepository;
 
     @Inject
-    public CustomPersistentRememberMeServices(Environment env, org.springframework.security.core.userdetails
+    public CustomPersistentRememberMeServices(JHipsterProperties jHipsterProperties, org.springframework.security.core.userdetails
         .UserDetailsService userDetailsService) {
 
-        super(env.getProperty("jhipster.security.rememberMe.key"), userDetailsService);
+        super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
         random = new SecureRandom();
     }
 

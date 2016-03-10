@@ -102,6 +102,10 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packageName = this.config.get('packageName');
+            this.serverPort = this.config.get('serverPort');
+            if (this.serverPort == undefined) {
+                this.serverPort = 8080;
+            }
             this.authenticationType = this.config.get('authenticationType');
             this.clusteredHttpSession = this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine');
@@ -130,7 +134,9 @@ module.exports = JhipsterServerGenerator.extend({
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.rememberMeKey = this.config.get('rememberMeKey');
+            if (this.authenticationType == 'session') {
+                this.rememberMeKey = this.config.get('rememberMeKey');
+            }
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
@@ -163,7 +169,7 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.baseName != null && serverConfigFound) {
 
                 // Generate remember me key if key does not already exist in config
-                if (this.rememberMeKey == null) {
+                if (this.authenticationType == 'session' && this.rememberMeKey == null) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
 
@@ -210,6 +216,22 @@ module.exports = JhipsterServerGenerator.extend({
             var done = this.async();
             var applicationType = this.applicationType;
             var prompts = [
+                {
+                    when: function (response) {
+                        if (applicationType == 'monolith') {
+                            ++currentQuestion; //skip the question for monoliths
+                        }
+                        return (applicationType == 'gateway' || applicationType == 'microservice');
+                    },
+                    type: 'input',
+                    name: 'serverPort',
+                    validate: function (input) {
+                        if (/^([0-9]*)$/.test(input)) return true;
+                        return 'This is not a valid port number.';
+                    },
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
+                    default: '8080'
+                },
                 {
                     type: 'input',
                     name: 'packageName',
@@ -523,18 +545,20 @@ module.exports = JhipsterServerGenerator.extend({
             ];
 
             this.prompt(prompts, function (props) {
-                this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                     this.authenticationType = 'jwt';
                 } else {
                     this.authenticationType = props.authenticationType;
                 }
-
+                if (this.authenticationType == 'session') {
+                    this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+                }
                 if (this.authenticationType == 'jwt') {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
                 this.packageName = props.packageName;
+                this.serverPort = props.serverPort;
                 this.hibernateCache = props.hibernateCache;
                 this.clusteredHttpSession = props.clusteredHttpSession;
                 this.websocket = props.websocket;
@@ -614,7 +638,7 @@ module.exports = JhipsterServerGenerator.extend({
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelize(this.baseName);
-            this.slugifiedBaseName = _.slugify(this.baseName);
+            this.dasherizedBaseName = _.dasherize(_.camelize(this.baseName,true));
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.mainClass = this.getMainClassName();
 
@@ -642,6 +666,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
             this.config.set('packageFolder', this.packageFolder);
+            this.config.set('serverPort', this.serverPort);
             this.config.set('authenticationType', this.authenticationType);
             this.config.set('hibernateCache', this.hibernateCache);
             this.config.set('clusteredHttpSession', this.clusteredHttpSession);
@@ -699,18 +724,20 @@ module.exports = JhipsterServerGenerator.extend({
         writeDockerFiles: function () {
             // Create docker-compose file
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
-            if (this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+            if ((this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_db.dev.yml', DOCKER_DIR + 'db.dev.yml', this, {});
             }
-            if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch") {
+            if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch" || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_db.prod.yml', DOCKER_DIR + 'db.prod.yml', this, {});
             }
-            if (this.devDatabaseType == "cassandra") {
+            if (this.applicationType == 'gateway' || this.devDatabaseType == "cassandra") {
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-Dev.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-Prod.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
-                this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
+                if (this.devDatabaseType == "cassandra") {
+                    this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
+                }
                 this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
@@ -888,6 +915,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingFilter.java', javaDir + 'gateway/ratelimiting/RateLimitingFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingRepository.java', javaDir + 'gateway/ratelimiting/RateLimitingRepository.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/accesscontrol/_AccessControlFilter.java', javaDir + 'gateway/accesscontrol/AccessControlFilter.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilter.java', javaDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
         },
@@ -903,8 +931,6 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
-
         },
 
         writeServerJavaAppFiles: function () {
@@ -929,6 +955,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
 
             if (this.databaseType == 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
@@ -1068,6 +1095,11 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_TEST_RES_DIR + 'config/_application.yml', SERVER_TEST_RES_DIR + 'config/application.yml', this, {});
             this.template(SERVER_TEST_RES_DIR + '_logback-test.xml', SERVER_TEST_RES_DIR + 'logback-test.xml', this, {});
+
+            // Create Gateway tests files
+            if (this.applicationType == "gateway"){
+                this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
+            }
 
             if (this.hibernateCache == "ehcache") {
                 this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});

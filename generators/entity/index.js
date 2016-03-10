@@ -1,6 +1,5 @@
 'use strict';
 var util = require('util'),
-    fs = require('fs'),
     path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
@@ -83,13 +82,23 @@ module.exports = EntityGenerator.extend({
             defaults: ''
         });
 
+        // This adds support for a `--skip-server` flag
+        this.option('skip-server', {
+            desc: 'Skip the server-side application generation',
+            type: Boolean,
+            defaults: false
+        });
+
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
+        this.entityNameCapitalized = _s.capitalize(this.name);
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
-        if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')) {
+        this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
+        if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
+        this.rootDir = this.destinationRoot();
     },
     initializing: {
         getConfig: function (args) {
@@ -97,6 +106,7 @@ module.exports = EntityGenerator.extend({
             this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
+            this.applicationType = this.config.get('applicationType');
             this.packageFolder = this.config.get('packageFolder');
             this.authenticationType = this.config.get('authenticationType');
             this.hibernateCache = this.config.get('hibernateCache');
@@ -108,25 +118,22 @@ module.exports = EntityGenerator.extend({
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
-            this.skipClient = this.config.get('skipClient');
             // backward compatibility on testing frameworks
             if (this.testFrameworks == null) {
                 this.testFrameworks = ['gatling'];
             }
+
+            this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient');
+
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
 
-            this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
+            this.filename = this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
             if (shelljs.test('-f', this.filename)) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
-                try {
-                    this.fileData = this.fs.readJSON(this.filename);
-                } catch (err) {
-                    this.log(chalk.red('\nThe configuration file could not be read!\n'));
-                    return;
-                }
                 this.useConfigurationFile = true;
+                this.fromPath = this.filename;
             }
         },
 
@@ -180,38 +187,48 @@ module.exports = EntityGenerator.extend({
             } else {
                 //existing entity reading values from file
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being updated.\n'));
-                this.relationships = this.fileData.relationships;
-                this.fields = this.fileData.fields;
-                this.changelogDate = this.fileData.changelogDate;
-                this.dto = this.fileData.dto;
-                this.service = this.fileData.service;
-                this.pagination = this.fileData.pagination;
-                this.javadoc = this.fileData.javadoc;
-                this.entityTableName = this.fileData.entityTableName || _s.underscored(this.name).toLowerCase();
-                this.fields && this.fields.forEach(function (field) {
-                    fieldNamesUnderscored.push(_s.underscored(field.fieldName));
-                    fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
-                }, this);
-                this.relationships && this.relationships.forEach(function (rel) {
-                    relNameChoices.push({
-                        name: rel.relationshipName + ':' + rel.relationshipType,
-                        value: rel.relationshipName + ':' + rel.relationshipType
-                    });
-                }, this);
-                if (this.fileData.angularJSSuffix !== undefined) {
-                    this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
-                }
+                this._loadJson();
             }
         }
     },
 
     /* private Helper methods */
+    _loadJson: function () {
+        try {
+            this.fileData = this.fs.readJSON(this.fromPath);
+        } catch (err) {
+            this.log(chalk.red('\nThe configuration file could not be read!\n'));
+            return;
+        }
+        this.relationships = this.fileData.relationships;
+        this.fields = this.fileData.fields;
+        this.changelogDate = this.fileData.changelogDate;
+        this.dto = this.fileData.dto;
+        this.service = this.fileData.service;
+        this.pagination = this.fileData.pagination;
+        this.javadoc = this.fileData.javadoc;
+        this.entityTableName = this.fileData.entityTableName || _s.underscored(this.name).toLowerCase();
+        this.fields && this.fields.forEach(function (field) {
+            fieldNamesUnderscored.push(_s.underscored(field.fieldName));
+            fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
+        }, this);
+        this.relationships && this.relationships.forEach(function (rel) {
+            relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
+        }, this);
+        if (this.fileData.angularJSSuffix !== undefined){
+            this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+        }
+        if (this.applicationType == 'gateway'){
+            this.microserviceName = this.fileData.microserviceName;
+            this.searchEngine = this.fileData.searchEngine || this.searchEngine;
+        }
+    },
     /**
      * Show the entity and it's fields and relationships in console
      */
     _logFieldsAndRelationships: function () {
         if (this.fields.length > 0 || this.relationships.length > 0) {
-            this.log(chalk.red(chalk.white('\n================= ') + _s.capitalize(this.name) + chalk.white(' =================')));
+            this.log(chalk.red(chalk.white('\n================= ') + this.entityNameCapitalized + chalk.white(' =================')));
         }
         if (this.fields.length > 0) {
             this.log(chalk.white('Fields'));
@@ -255,8 +272,7 @@ module.exports = EntityGenerator.extend({
             }, this);
             this.log();
         }
-    }
-    ,
+    },
     /**
      * ask question for a field creation
      */
@@ -1003,6 +1019,61 @@ module.exports = EntityGenerator.extend({
 
     prompting: {
         /* pre entity hook needs to be written here */
+        askForMicroserviceJson: function(){
+            if (this.applicationType != 'gateway' || this.useConfigurationFile) {
+                return;
+            }
+
+            var cb = this.async();
+
+            var prompts = [
+                {
+                    type: 'confirm',
+                    name: 'useMicroserviceJson',
+                    message: 'Do you want to generate this entity from an existing microservice?',
+                    default: true
+                },
+                {
+                    when: function(response) {
+                        return response.useMicroserviceJson == true;
+                    },
+                    type: 'input',
+                    name: 'microservicePath',
+                    message: 'Enter the path to the microservice root directory:',
+                    store: true,
+                    validate: function(input) {
+                        var fromPath = '';
+                        if(path.isAbsolute(input)) {
+                            fromPath = input + '/' + this.filename;
+                        } else {
+                            fromPath = this.destinationPath(input + '/' + this.filename);
+                        }
+
+                        if (shelljs.test('-f', fromPath)) {
+                            return true;
+                        } else {
+                            return this.filename + ' not found in ' + input + '/';
+                        }
+                    }.bind(this)
+                }
+            ];
+
+            this.prompt(prompts, function(props) {
+                if (props.useMicroserviceJson) {
+                    this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
+                    if(path.isAbsolute(props.microservicePath)) {
+                        this.microservicePath = props.microservicePath;
+                    } else {
+                        this.microservicePath = path.resolve(props.microservicePath);
+                    }
+                    this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
+                    this.useConfigurationFile = true;
+                    this.skipServer = true;
+                    this._loadJson();
+                }
+                cb();
+            }.bind(this));
+        },
         /* ask question to user if s/he wants to update entity */
         askForUpdate: function () {
             // ask only if running an existing entity without arg option --force or --regenerate
@@ -1048,7 +1119,7 @@ module.exports = EntityGenerator.extend({
             }.bind(this));
         },
 
-        askForFields: function () {
+        askForFields: function() {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile && this.updateEntity != 'add') {
                 return;
@@ -1208,10 +1279,8 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    configuring: {
-
-        validateFile: function () {
-
+    configuring : {
+        validateFile: function() {
             if (!this.useConfigurationFile) {
                 return;
             }
@@ -1341,6 +1410,10 @@ module.exports = EntityGenerator.extend({
             this.data.javadoc = this.javadoc;
             if (this.entityAngularJSSuffix) {
                 this.data.angularJSSuffix = this.entityAngularJSSuffix;
+            }
+            if (this.applicationType == 'microservice'){
+                this.data.microserviceName = this.baseName;
+                this.data.searchEngine = this.searchEngine;
             }
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
@@ -1499,7 +1572,7 @@ module.exports = EntityGenerator.extend({
             var entityNameSpinalCased = _s.dasherize(_s.decapitalize(this.name));
             var entityNamePluralizedAndSpinalCased = _s.dasherize(_s.decapitalize(pluralize(this.name)));
 
-            this.entityClass = _s.capitalize(this.name);
+            this.entityClass = this.entityNameCapitalized;
             this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
@@ -1546,10 +1619,17 @@ module.exports = EntityGenerator.extend({
             insight.track('entity/service', this.service);
         }
     },
+    writing : {
+        saveRemoteEntityPath: function() {
+            if (_.isUndefined(this.microservicePath)) {
+                return;
+            }
+            
+            this.copy(this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json', this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
+        },
 
-    writing: {
-
-        writeEnumFiles: function () {
+        writeEnumFiles: function() {
+            if (this.skipServer) return;
 
             for (var idx in this.fields) {
                 var field = this.fields[idx];
@@ -1578,7 +1658,8 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeServerFiles: function () {
+        writeServerFiles: function() {
+            if (this.skipServer) return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Entity.java',
                 SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
@@ -1611,7 +1692,9 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeDbFiles: function () {
+        writeDbFiles: function() {
+            if (this.skipServer) return;
+
             if (this.databaseType == "sql") {
                 this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
                     SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
@@ -1656,6 +1739,7 @@ module.exports = EntityGenerator.extend({
 
         writeClientTestFiles: function () {
             if (this.skipClient) return;
+
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
             // Create Protractor test files
@@ -1664,7 +1748,9 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeTestFiles: function () {
+        writeTestFiles: function() {
+            if (this.skipServer) return;
+
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
                 SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
 

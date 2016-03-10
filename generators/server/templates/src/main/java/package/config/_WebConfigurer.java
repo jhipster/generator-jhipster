@@ -38,7 +38,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private Environment env;
 
     @Inject
-    private JHipsterProperties props;
+    private JHipsterProperties jHipsterProperties;
 
     @Autowired(required = false)
     private MetricRegistry metricRegistry;<% if (hibernateCache == 'hazelcast') { %>
@@ -132,7 +132,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.debug("Registering Caching HTTP Headers Filter");
         FilterRegistration.Dynamic cachingHttpHeadersFilter =
             servletContext.addFilter("cachingHttpHeadersFilter",
-                new CachingHttpHeadersFilter(env));
+                new CachingHttpHeadersFilter(jHipsterProperties));
 
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
@@ -168,7 +168,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = props.getCors();
+        CorsConfiguration config = jHipsterProperties.getCors();
         if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
             source.registerCorsConfiguration("/api/**", config);
             source.registerCorsConfiguration("/v2/api-docs", config);
