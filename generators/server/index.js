@@ -134,7 +134,9 @@ module.exports = JhipsterServerGenerator.extend({
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.rememberMeKey = this.config.get('rememberMeKey');
+            if (this.authenticationType == 'session') {
+                this.rememberMeKey = this.config.get('rememberMeKey');
+            }
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
@@ -167,7 +169,7 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.baseName != null && serverConfigFound) {
 
                 // Generate remember me key if key does not already exist in config
-                if (this.rememberMeKey == null) {
+                if (this.authenticationType == 'session' && this.rememberMeKey == null) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
 
@@ -528,7 +530,6 @@ module.exports = JhipsterServerGenerator.extend({
             ];
 
             this.prompt(prompts, function (props) {
-                this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                     this.authenticationType = 'jwt';
                 } else {
@@ -542,6 +543,9 @@ module.exports = JhipsterServerGenerator.extend({
                         this.enableSocialSignIn = false;
                     }
                     props.enableSocialSignIn = this.enableSocialSignIn;
+                }
+                if (this.authenticationType == 'session') {
+                    this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
                 if (this.authenticationType == 'jwt') {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');

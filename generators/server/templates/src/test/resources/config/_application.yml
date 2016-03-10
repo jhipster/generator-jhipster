@@ -115,9 +115,11 @@ jhipster:
                 tokenValidityInSeconds: 1800
     <%_ } _%>
 <%_ } _%>
+<%_ if (authenticationType == 'session') { _%>
         rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
+<%_ } _%>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
     swagger:
