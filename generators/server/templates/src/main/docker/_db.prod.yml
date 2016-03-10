@@ -45,7 +45,7 @@ services:
         ports:
             - "27017:27017"
 <%_ } _%>
-<%_ if (prodDatabaseType == 'cassandra') { _%>
+<%_ if (prodDatabaseType == 'cassandra' || applicationType == 'gateway') { _%>
     jhipster-opscenter:
         container_name: jhipster-opscenter
         build:
