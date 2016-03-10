@@ -23,7 +23,8 @@ var gulp = require('gulp'),<% if(useSass) { %>
     changed = require('gulp-changed'),
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
-    angularFilesort = require('gulp-angular-filesort');
+    angularFilesort = require('gulp-angular-filesort'),
+    argv = require('yargs').argv;
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
@@ -258,12 +259,17 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
 });
 
 <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
+/* to run individual suites pass `gulp itest --suite suiteName` */
 gulp.task('protractor', function () {
-    return gulp.src([config.test + 'e2e/**/*.js'])
+    var configObj = {
+        configFile: config.test + 'protractor.conf.js'
+    };
+    if (argv.suite) {
+        configObj['args'] = ['--suite', argv.suite];
+    }
+    return gulp.src([])
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(protractor({
-            configFile: config.test + 'protractor.conf.js'
-        }))
+        .pipe(protractor(configObj))
         .on('error', function () {
             gutil.log('E2E Tests failed');
             process.exit(1);
@@ -283,7 +289,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function () {
-    runSequence(['wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>], 'inject');
+    runSequence(['wiredep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject');
 });
 
 gulp.task('serve', function () {
