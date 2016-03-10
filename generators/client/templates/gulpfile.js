@@ -10,6 +10,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant-fork'),
     eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
+    argv = require('yargs').argv;
     gutil = require('gulp-util'),
     protractor = require('gulp-protractor').protractor,<% } %>
     es = require('event-stream'),
@@ -24,7 +25,6 @@ var gulp = require('gulp'),<% if(useSass) { %>
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
     angularFilesort = require('gulp-angular-filesort'),
-    argv = require('yargs').argv;
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),

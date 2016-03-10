@@ -36,7 +36,7 @@
 
             function authenticateSuccess (data, status, headers) {
                 var bearerToken = headers('Authorization');
-                if (bearerToken !== undefined && bearerToken.slice(0, 7) === 'Bearer ') {
+                if (angular.isUndefined(bearerToken) && bearerToken.slice(0, 7) === 'Bearer ') {
                     var jwt = bearerToken.slice(7, bearerToken.length);
                     if(credentials.rememberMe){
                         $localStorage.authenticationToken = jwt;
