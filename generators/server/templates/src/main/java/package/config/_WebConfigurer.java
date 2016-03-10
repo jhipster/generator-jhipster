@@ -116,11 +116,14 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
         mappings.add("json", "text/html;charset=utf-8");
         container.setMimeMappings(mappings);<% if (!skipClient) { %>
-        // Set document root
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            container.setDocumentRoot(new File("<%= CLIENT_DIST_DIR %>"));
-        } else if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
-            container.setDocumentRoot(new File("<%= CLIENT_MAIN_SRC_DIR %>"));
+
+        // Set document root if we're not running from a jar/war
+        if (getClass().getProtectionDomain().getCodeSource().getLocation().getProtocol().equals("file")) {
+            if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+                container.setDocumentRoot(new File("<%= CLIENT_DIST_DIR %>"));
+            } else if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+                container.setDocumentRoot(new File("<%= CLIENT_MAIN_SRC_DIR %>"));
+            }
         }<% } %>
     }<% if (!skipClient) { %>
 
