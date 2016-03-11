@@ -1451,17 +1451,14 @@ module.exports = JhipsterGenerator.extend({
             if (this.options['skip-install']) {
                 this.log(
                     'After running `npm install & bower install`, inject your front end dependencies' +
-                    '\ninto your source code by running:' +
+                    '\ninto your source code and generate constants by running:' +
                     '\n' +
-                    '\n' + chalk.yellow.bold('grunt wiredep') +
-                    '\n' +
-                    '\n ...and generate the Angular constants with:' +
-                    '\n' + chalk.yellow.bold('grunt ngconstant:dev')
+                    '\n' + chalk.yellow.bold('gulp install')
                 );
             } else {
                 switch (this.frontendBuilder) {
                     case 'gulp':
-                        this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
+                        this.spawnCommand('gulp', ['install']);
                         break;
                     case 'grunt':
                     default:
