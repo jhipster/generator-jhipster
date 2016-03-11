@@ -196,13 +196,13 @@ module.exports = JhipsterGenerator.extend({
             if (this.existingProject) return;
 
             var done = this.async();
-            var getOrderedQuestion = this.getOrderedQuestion;
+            var getNumberedQuestion = this.getNumberedQuestion;
 
             this.prompt({
                 type: 'list',
                 name: 'applicationType',
                 message: function (response) {
-                    return getOrderedQuestion('Which *type* of application would you like to create?', currentQuestion, totalQuestions, function (current) {
+                    return getNumberedQuestion('Which *type* of application would you like to create?', currentQuestion, totalQuestions, function (current) {
                         currentQuestion = current;
                     }, true);
                 },
@@ -298,7 +298,7 @@ module.exports = JhipsterGenerator.extend({
         askForTestOpts: function () {
             if (this.existingProject) return;
 
-            var getOrderedQuestion = this.getOrderedQuestion;
+            var getNumberedQuestion = this.getNumberedQuestion;
             var choices = [];
             if (!this.skipServer) {
                 // all server side test frameworks should be addded here
@@ -319,7 +319,7 @@ module.exports = JhipsterGenerator.extend({
                 type: 'checkbox',
                 name: 'testFrameworks',
                 message: function (response) {
-                    return getOrderedQuestion('Which testing frameworks would you like to use?', currentQuestion, totalQuestions, function (current) {
+                    return getNumberedQuestion('Which testing frameworks would you like to use?', currentQuestion, totalQuestions, function (current) {
                         currentQuestion = current;
                     }, true);
                 },

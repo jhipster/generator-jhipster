@@ -174,13 +174,13 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.existingProject) return;
 
             var done = this.async();
-            var getOrderedQuestion = this.getOrderedQuestion;
+            var getNumberedQuestion = this.getNumberedQuestion;
             var prompts = [
                 {
                     type: 'confirm',
                     name: 'useSass',
                     message: function (response) {
-                        return getOrderedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, true);
                     },

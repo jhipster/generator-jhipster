@@ -1205,7 +1205,7 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
 
     var done = generator.async();
     var defaultAppBaseName = this.getDefaultAppName();
-    var getOrderedQuestion = this.getOrderedQuestion;
+    var getNumberedQuestion = this.getNumberedQuestion;
     generator.prompt({
         type: 'input',
         name: 'baseName',
@@ -1217,7 +1217,7 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
         },
         message: function (response) {
-            return getOrderedQuestion('What is the base name of your application?', currentQuestion, totalQuestions, function (current) {
+            return getNumberedQuestion('What is the base name of your application?', currentQuestion, totalQuestions, function (current) {
                 currentQuestion = current;
             }, true);
         },
@@ -1231,7 +1231,7 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
 Generator.prototype.aski18n = function (generator, currentQuestion, totalQuestions) {
 
     var languageOptions = this.getAllSupportedLanguageOptions();
-    var getOrderedQuestion = this.getOrderedQuestion;
+    var getNumberedQuestion = this.getNumberedQuestion;
 
     var done = generator.async();
     var prompts = [
@@ -1239,7 +1239,7 @@ Generator.prototype.aski18n = function (generator, currentQuestion, totalQuestio
             type: 'confirm',
             name: 'enableTranslation',
             message: function (response) {
-                return getOrderedQuestion('Would you like to enable internationalization support?', currentQuestion, totalQuestions, function (current) {
+                return getNumberedQuestion('Would you like to enable internationalization support?', currentQuestion, totalQuestions, function (current) {
                     currentQuestion = current;
                 }, true);
             },
@@ -1299,7 +1299,7 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
     }
 };
 
-Generator.prototype.getOrderedQuestion = function (msg, currentQuestion, totalQuestions, cb, cond) {
+Generator.prototype.getNumberedQuestion = function (msg, currentQuestion, totalQuestions, cb, cond) {
     var order;
     if (cond) {
         ++currentQuestion;

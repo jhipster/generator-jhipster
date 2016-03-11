@@ -213,7 +213,7 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.existingProject) return;
 
             var done = this.async();
-            var getOrderedQuestion = this.getOrderedQuestion;
+            var getNumberedQuestion = this.getNumberedQuestion;
             var applicationType = this.applicationType;
             var prompts = [
                 {
@@ -227,7 +227,7 @@ module.exports = JhipsterServerGenerator.extend({
                         return 'This is not a valid port number.';
                     },
                     message: function (response) {
-                        return getOrderedQuestion('As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, applicationType == 'gateway' || applicationType == 'microservice');
                     },
@@ -241,7 +241,7 @@ module.exports = JhipsterServerGenerator.extend({
                         return 'The package name you have provided is not a valid Java package name.';
                     },
                     message: function (response) {
-                        return getOrderedQuestion('What is your default Java package name?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('What is your default Java package name?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, true);
                     },
@@ -255,7 +255,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'authenticationType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *type* of authentication would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *type* of authentication would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, applicationType == 'monolith');
                     },
@@ -286,7 +286,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'databaseType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, applicationType == 'microservice');
                     },
@@ -317,7 +317,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'databaseType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.authenticationType == 'session-social');
                     },
@@ -340,7 +340,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'databaseType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.authenticationType != 'session-social' && applicationType != 'microservice');
                     },
@@ -367,7 +367,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'prodDatabaseType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *production* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *production* database would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.databaseType == 'sql');
                     },
@@ -394,7 +394,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'devDatabaseType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.databaseType == 'sql' && response.prodDatabaseType == 'mysql');
                     },
@@ -421,7 +421,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'devDatabaseType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.databaseType == 'sql' && response.prodDatabaseType == 'postgresql');
                     },
@@ -448,7 +448,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'devDatabaseType',
                     message: function (response) {
-                        return getOrderedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.databaseType == 'sql' && response.prodDatabaseType == 'oracle');
                     },
@@ -475,7 +475,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'hibernateCache',
                     message: function (response) {
-                        return getOrderedQuestion('Do you want to use Hibernate 2nd level cache?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.databaseType == 'sql');
                     },
@@ -502,7 +502,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'searchEngine',
                     message: function (response) {
-                        return getOrderedQuestion('Do you want to use a search engine in your application?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Do you want to use a search engine in your application?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, response.databaseType == 'sql');
                     },
@@ -525,7 +525,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'clusteredHttpSession',
                     message: function (response) {
-                        return getOrderedQuestion('Do you want to use clustered HTTP sessions?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Do you want to use clustered HTTP sessions?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, applicationType == 'monolith' || applicationType == 'gateway');
                     },
@@ -548,7 +548,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'websocket',
                     message: function (response) {
-                        return getOrderedQuestion('Do you want to use WebSockets?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Do you want to use WebSockets?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, applicationType == 'monolith' || applicationType == 'gateway');
                     },
@@ -568,7 +568,7 @@ module.exports = JhipsterServerGenerator.extend({
                     type: 'list',
                     name: 'buildTool',
                     message: function (response) {
-                        return getOrderedQuestion('Would you like to use Maven or Gradle for building the backend?', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, true);
                     },
