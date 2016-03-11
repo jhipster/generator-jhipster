@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
-import io.github.jhipster.gateway.config.JHipsterProperties;
-
 /**
  * Zuul filter for restricting access to backend micro-services endpoints.
  */
