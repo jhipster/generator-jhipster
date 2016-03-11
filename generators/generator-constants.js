@@ -10,6 +10,8 @@ const CLIENT_DIST_DIR = 'www/';
 
 const constants = {
     QUESTIONS: 16,
+    CLIENT_QUESTIONS: 3,
+    SERVER_QUESTIONS: 12,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: MAIN_DIR + 'docker/',
 

@@ -17,13 +17,14 @@ util.inherits(JhipsterClientGenerator, scriptBase);
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
-    QUESTIONS = constants.QUESTIONS,
+    QUESTIONS = constants.CLIENT_QUESTIONS,
     DIST_DIR = constants.CLIENT_DIST_DIR,
     MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     ANGULAR_DIR = constants.ANGULAR_DIR;
 
 var currentQuestion;
+var totalQuestions;
 var configOptions = {};
 
 module.exports = JhipsterClientGenerator.extend({
@@ -109,8 +110,8 @@ module.exports = JhipsterClientGenerator.extend({
         this.jhiPrefixCapitalized = _.capitalize(this.jhiPrefix);
         this.testFrameworks = [];
         this.options['protractor'] && this.testFrameworks.push('protractor');
-        var lastQuestion = configOptions.lastQuestion;
-        currentQuestion = lastQuestion ? lastQuestion : 0;
+        currentQuestion = configOptions.lastQuestion ? configOptions.lastQuestion : 0;
+        totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
 
@@ -166,18 +167,23 @@ module.exports = JhipsterClientGenerator.extend({
 
             if (this.baseName) return;
 
-            this.askModuleName(this, ++currentQuestion, QUESTIONS);
+            this.askModuleName(this, currentQuestion++, totalQuestions);
         },
 
         askForClientSideOpts: function () {
             if (this.existingProject) return;
 
             var done = this.async();
+            var getOrderedQuestion = this.getOrderedQuestion;
             var prompts = [
                 {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: function (response) {
+                        return getOrderedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, true);
+                    },
                     default: false
                 }
             ];
@@ -190,11 +196,12 @@ module.exports = JhipsterClientGenerator.extend({
         askFori18n: function () {
             if (this.existingProject || configOptions.skipI18nQuestion) return;
 
-            this.aski18n(this, ++currentQuestion, QUESTIONS);
+            this.aski18n(this, currentQuestion++, totalQuestions);
         },
 
         setSharedConfigOptions: function () {
             configOptions.lastQuestion = currentQuestion;
+            configOptions.totalQuestions = totalQuestions;
             configOptions.useSass = this.useSass;
         }
 

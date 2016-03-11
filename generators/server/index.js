@@ -15,7 +15,7 @@ util.inherits(JhipsterServerGenerator, scriptBase);
 
 /* Constants used throughout */
 const constants = require('../generator-constants'),
-    QUESTIONS = constants.QUESTIONS,
+    QUESTIONS = constants.SERVER_QUESTIONS,
     INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
     DOCKER_DIR = constants.DOCKER_DIR,
     MAIN_DIR = constants.MAIN_DIR,
@@ -29,6 +29,7 @@ const constants = require('../generator-constants'),
     SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
 var currentQuestion;
+var totalQuestions;
 var configOptions = {};
 var javaDir;
 
@@ -72,8 +73,8 @@ module.exports = JhipsterServerGenerator.extend({
         this.testFrameworks = [];
         this.options['gatling'] && this.testFrameworks.push('gatling');
         this.options['cucumber'] && this.testFrameworks.push('cucumber');
-        var lastQuestion = configOptions.lastQuestion;
-        currentQuestion = lastQuestion ? lastQuestion : 0;
+        currentQuestion = configOptions.lastQuestion ? configOptions.lastQuestion : 0;
+        totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
         this.logo = configOptions.logo;
         this.baseName = configOptions.baseName;
     },
@@ -205,20 +206,18 @@ module.exports = JhipsterServerGenerator.extend({
         askForModuleName: function () {
             if (this.baseName) return;
 
-            this.askModuleName(this, ++currentQuestion, QUESTIONS);
+            this.askModuleName(this, currentQuestion++, totalQuestions);
         },
 
         askForServerSideOpts: function () {
             if (this.existingProject) return;
 
             var done = this.async();
+            var getOrderedQuestion = this.getOrderedQuestion;
             var applicationType = this.applicationType;
             var prompts = [
                 {
                     when: function (response) {
-                        if (applicationType == 'monolith') {
-                            ++currentQuestion; //skip the question for monoliths
-                        }
                         return (applicationType == 'gateway' || applicationType == 'microservice');
                     },
                     type: 'input',
@@ -227,7 +226,11 @@ module.exports = JhipsterServerGenerator.extend({
                         if (/^([0-9]*)$/.test(input)) return true;
                         return 'This is not a valid port number.';
                     },
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
+                    message: function (response) {
+                        return getOrderedQuestion('As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType == 'gateway' || applicationType == 'microservice');
+                    },
                     default: '8080'
                 },
                 {
@@ -237,7 +240,11 @@ module.exports = JhipsterServerGenerator.extend({
                         if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                         return 'The package name you have provided is not a valid Java package name.';
                     },
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') What is your default Java package name?',
+                    message: function (response) {
+                        return getOrderedQuestion('What is your default Java package name?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, true);
+                    },
                     default: 'com.mycompany.myapp',
                     store: true
                 },
@@ -247,7 +254,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'authenticationType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *type* of authentication would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType == 'monolith');
+                    },
                     choices: [
                         {
                             value: 'session',
@@ -274,7 +285,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType == 'microservice');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -301,7 +316,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.authenticationType == 'session-social');
+                    },
                     choices: [
                         {
                             value: 'sql',
@@ -320,7 +339,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.authenticationType != 'session-social' && applicationType != 'microservice');
+                    },
                     choices: [
                         {
                             value: 'sql',
@@ -343,7 +366,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'prodDatabaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *production* database would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *production* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType == 'sql');
+                    },
                     choices: [
                         {
                             value: 'mysql',
@@ -366,7 +393,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType == 'sql' && response.prodDatabaseType == 'mysql');
+                    },
                     choices: [
                         {
                             value: 'h2Disk',
@@ -389,7 +420,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType == 'sql' && response.prodDatabaseType == 'postgresql');
+                    },
                     choices: [
                         {
                             value: 'h2Disk',
@@ -412,7 +447,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: function (response) {
+                        return getOrderedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType == 'sql' && response.prodDatabaseType == 'oracle');
+                    },
                     choices: [
                         {
                             value: 'h2Disk',
@@ -435,7 +474,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'hibernateCache',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
+                    message: function (response) {
+                        return getOrderedQuestion('Do you want to use Hibernate 2nd level cache?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType == 'sql');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -458,7 +501,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'searchEngine',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use a search engine in your application?',
+                    message: function (response) {
+                        return getOrderedQuestion('Do you want to use a search engine in your application?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType == 'sql');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -477,7 +524,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'clusteredHttpSession',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
+                    message: function (response) {
+                        return getOrderedQuestion('Do you want to use clustered HTTP sessions?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType == 'monolith' || applicationType == 'gateway');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -496,7 +547,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'websocket',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use WebSockets?',
+                    message: function (response) {
+                        return getOrderedQuestion('Do you want to use WebSockets?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType == 'monolith' || applicationType == 'gateway');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -512,7 +567,11 @@ module.exports = JhipsterServerGenerator.extend({
                 {
                     type: 'list',
                     name: 'buildTool',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
+                    message: function (response) {
+                        return getOrderedQuestion('Would you like to use Maven or Gradle for building the backend?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, true);
+                    },
                     choices: [
                         {
                             value: 'maven',
@@ -582,11 +641,12 @@ module.exports = JhipsterServerGenerator.extend({
 
         askFori18n: function () {
             if (this.existingProject || configOptions.skipI18nQuestion) return;
-            this.aski18n(this, ++currentQuestion, QUESTIONS);
+            this.aski18n(this, currentQuestion++, totalQuestions);
         },
 
         setSharedConfigOptions: function () {
             configOptions.lastQuestion = currentQuestion;
+            configOptions.totalQuestions = totalQuestions;
             configOptions.packageName = this.packageName;
             configOptions.hibernateCache = this.hibernateCache;
             configOptions.clusteredHttpSession = this.clusteredHttpSession;

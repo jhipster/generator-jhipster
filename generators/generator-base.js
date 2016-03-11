@@ -1201,11 +1201,11 @@ Generator.prototype.getMainClassName = function () {
     return _s.capitalize(this.getAngularAppName());
 };
 
-Generator.prototype.askModuleName = function (generator, question, questions) {
+Generator.prototype.askModuleName = function (generator, currentQuestion, totalQuestions) {
 
     var done = generator.async();
     var defaultAppBaseName = this.getDefaultAppName();
-
+    var getOrderedQuestion = this.getOrderedQuestion;
     generator.prompt({
         type: 'input',
         name: 'baseName',
@@ -1216,7 +1216,11 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
             }
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
         },
-        message: '(' + (question) + '/' + questions + ') What is the base name of your application?',
+        message: function (response) {
+            return getOrderedQuestion('What is the base name of your application?', currentQuestion, totalQuestions, function (current) {
+                currentQuestion = current;
+            }, true);
+        },
         default: defaultAppBaseName
     }, function (prompt) {
         generator.baseName = prompt.baseName;
@@ -1224,16 +1228,21 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
     }.bind(generator));
 };
 
-Generator.prototype.aski18n = function (generator, question, questions) {
+Generator.prototype.aski18n = function (generator, currentQuestion, totalQuestions) {
 
     var languageOptions = this.getAllSupportedLanguageOptions();
+    var getOrderedQuestion = this.getOrderedQuestion;
 
     var done = generator.async();
     var prompts = [
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: '(' + (question) + '/' + questions + ') Would you like to enable internationalization support?',
+            message: function (response) {
+                return getOrderedQuestion('Would you like to enable internationalization support?', currentQuestion, totalQuestions, function (current) {
+                    currentQuestion = current;
+                }, true);
+            },
             default: true
         },
         {
@@ -1289,6 +1298,16 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
         });
     }
 };
+
+Generator.prototype.getOrderedQuestion = function (msg, currentQuestion, totalQuestions, cb, cond) {
+    var order;
+    if (cond) {
+        ++currentQuestion;
+    }
+    order = '(' + currentQuestion + '/' + totalQuestions + ') ';
+    cb(currentQuestion);
+    return order + msg;
+},
 
 Generator.prototype.contains = _.includes;
 
