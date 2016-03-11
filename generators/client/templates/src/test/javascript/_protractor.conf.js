@@ -8,9 +8,11 @@ exports.config = {
     chromeDriver: prefix + 'node_modules/protractor/selenium/chromedriver',
     allScriptsTimeout: 20000,
 
-    specs: [
-        // These are piped in from gulp.src, see protractor task in gulpfile.js
-    ],
+    suites: {
+        account: './e2e/account/*.js',
+        admin: './e2e/admin/*.js',
+        entity: './e2e/entities/*.js'
+    },
 
     capabilities: {
         'browserName': 'firefox',
@@ -30,6 +32,35 @@ exports.config = {
     },
 
     onPrepare: function() {
+        // Disable animations so e2e tests run more quickly
+        var disableNgAnimate = function() {
+            angular
+                .module('disableNgAnimate', [])
+                .run(['$animate', function($animate) {
+                    $animate.enabled(false);
+                }]);
+        };
+
+        var disableCssAnimate = function() {
+            angular
+                .module('disableCssAnimate', [])
+                .run(function() {
+                    var style = document.createElement('style');
+                    style.type = 'text/css';
+                    style.innerHTML = 'body * {' +
+                        '-webkit-transition: none !important;' +
+                        '-moz-transition: none !important;' +
+                        '-o-transition: none !important;' +
+                        '-ms-transition: none !important;' +
+                        'transition: none !important;' +
+                        '}';
+                    document.getElementsByTagName('head')[0].appendChild(style);
+                });
+        };
+
+        browser.addMockModule('disableNgAnimate', disableNgAnimate);
+        browser.addMockModule('disableCssAnimate', disableCssAnimate);
+        
         browser.driver.manage().window().setSize(1280, 1024);
         jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
             savePath: '<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e',

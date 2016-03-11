@@ -134,7 +134,11 @@ liquibase:
     contexts: prod
 
 server:
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    port: <%= serverPort %>
+<%_ } else { _%>
     port: 8080
+<%_ } _%>
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
@@ -153,7 +157,7 @@ jhipster:
     <%_ } _%>
     http:
         cache: # Used by the CachingHttpHeadersFilter
-            timeToLiveInDays: 31
+            timeToLiveInDays: 1461
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         timeToLiveSeconds: 3600
@@ -179,11 +183,12 @@ jhipster:
             host: localhost
             port: 2003
             prefix: <%= baseName %>
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        logs: # report metrics in the logs
+            enabled: false
+            reportFrequency: 60 # in seconds
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
             host: localhost
             port: 5000
             queueSize: 512
-    <%_ } _%>

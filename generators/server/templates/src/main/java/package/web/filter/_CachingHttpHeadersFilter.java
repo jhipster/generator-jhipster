@@ -1,6 +1,6 @@
 package <%=packageName%>.web.filter;
 
-import org.springframework.core.env.Environment;
+import <%=packageName%>.config.JHipsterProperties;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -15,18 +15,17 @@ public class CachingHttpHeadersFilter implements Filter {
     // We consider the last modified date is the start up time of the server
     private final static long LAST_MODIFIED = System.currentTimeMillis();
 
-    private long CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(31L);
+    private long CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(1461L);
 
-    private Environment env;
+    private JHipsterProperties jHipsterProperties;;
 
-    public CachingHttpHeadersFilter(Environment env) {
-        this.env = env;
+    public CachingHttpHeadersFilter(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
     }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(env.getProperty("jhipster.http.cache.timeToLiveInDays",
-            Long.class, 31L));
+        CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays());
     }
 
     @Override

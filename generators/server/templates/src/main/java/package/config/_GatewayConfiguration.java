@@ -3,6 +3,7 @@ package <%=packageName%>.config;
 import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
 import <%=packageName%>.gateway.ratelimiting.RateLimitingRepository;
 import <%=packageName%>.gateway.accesscontrol.AccessControlFilter;
+import <%=packageName%>.gateway.responserewriting.SwaggerBasePathRewritingFilter;
 
 import javax.inject.Inject;
 
@@ -17,7 +18,16 @@ import com.datastax.driver.core.Session;
 public class GatewayConfiguration {
 
     @Configuration
-    public static class AccessControl {
+    public static class SwaggerBasePathRewritingConfiguration {
+
+        @Bean
+        public SwaggerBasePathRewritingFilter swaggerBasePathRewritingFilter(){
+            return new SwaggerBasePathRewritingFilter();
+        }
+    }
+
+    @Configuration
+    public static class AccessControlFilter {
 
         @Bean
         public AccessControlFilter accessControlFilter(){

@@ -10,7 +10,7 @@
     </parent>
 
     <groupId><%= packageName %></groupId>
-    <artifactId><%= slugifiedBaseName %></artifactId>
+    <artifactId><%= dasherizedBaseName %></artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name><%= baseName %></name>
@@ -80,6 +80,7 @@
         <maven-sortpom-plugin.version>2.3.1</maven-sortpom-plugin.version>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
+        <logstash-logback-encoder.version>4.6</logstash-logback-encoder.version>
         <%_ if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { _%>
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <%_ } _%>
@@ -99,9 +100,6 @@
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
         <spring-social-facebook.version>2.0.3.RELEASE</spring-social-facebook.version>
         <spring-social-twitter.version>1.1.2.RELEASE</spring-social-twitter.version>
-        <%_ } _%>
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-        <logstash-logback-encoder.version>4.6</logstash-logback-encoder.version>
         <%_ } _%>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -570,6 +568,7 @@
             <artifactId>spring-cloud-starter-config</artifactId>
             <version>${spring-cloud.version}</version>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
@@ -589,7 +588,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <%_ } _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-cloudfoundry-connector</artifactId>
@@ -1053,6 +1051,7 @@
                                 </goals>
                                 <configuration>
                                     <buildTool>gulp</buildTool>
+                                    <buildArgs>build --no-notification</buildArgs>
                                 </configuration>
                             </execution>
                         </executions>

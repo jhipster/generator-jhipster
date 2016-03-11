@@ -2,10 +2,11 @@ package <%=packageName%>.config;
 <% if (authenticationType == 'session' || authenticationType == 'jwt') { %>
 import <%=packageName%>.security.*;<% } %><% if (authenticationType == 'session') { %>
 import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authenticationType == 'jwt') { %>
-import <%=packageName%>.security.jwt.*;<% } %>
+import <%=packageName%>.security.jwt.*;<% } %><% if (authenticationType == 'session') { %>
+import <%=packageName%>.config.JHipsterProperties;<% } %>
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'session') { %>
-import org.springframework.core.env.Environment;<% } %>
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,7 +33,7 @@ import javax.inject.Inject;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (authenticationType == 'session') { %>
 
     @Inject
-    private Environment env;
+    private JHipsterProperties jHipsterProperties;
 
     @Inject
     private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
@@ -105,7 +106,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .rememberMe()
             .rememberMeServices(rememberMeServices)
             .rememberMeParameter("remember-me")
-            .key(env.getProperty("jhipster.security.rememberMe.key"))
+            .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
         .and()
             .formLogin()
             .loginProcessingUrl("/api/authentication")

@@ -28,13 +28,6 @@ module.exports = LanguagesGenerator.extend({
             description: 'Languages'
         });
 
-        // This adds support for a `--skip-wiredep` flag
-        this.option('skip-wiredep', {
-            desc: 'Skip the wiredep step',
-            type: Boolean,
-            defaults: false
-        });
-
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip installing client files',
@@ -49,7 +42,6 @@ module.exports = LanguagesGenerator.extend({
             defaults: false
         });
 
-        this.skipWiredep = this.options['skip-wiredep'];
         this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
 
@@ -177,7 +169,7 @@ module.exports = LanguagesGenerator.extend({
         var wiredepAddedBowerOverrides = function () {
             this.spawnCommand('gulp', ['wiredep']);
         };
-        if (!this.skipWiredep && !this.skipClient) {
+        if (!this.options['skip-install'] && !this.skipClient) {
             wiredepAddedBowerOverrides.call(this);
         }
     }

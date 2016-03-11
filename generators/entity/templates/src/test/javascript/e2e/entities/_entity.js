@@ -23,14 +23,16 @@ describe('<%= entityClass %> e2e test', function () {
 
     it('should load <%= entityClassPlural %>', function () {
         entityMenu.click();
-        element(by.css('[ui-sref="<%= entityStateName %>"]')).click();
-        expect(element.all(by.css('h2')).first().getText()).toMatch(/<%= entityClassPlural %>/);
+        element(by.css('[ui-sref="<%= entityStateName %>"]')).click().then(function() {
+            expect(element.all(by.css('h2')).first().getText()).toMatch(/<%= entityClassPlural %>/);
+        });
     });
 
     it('should load create <%= entityClass %> dialog', function () {
-        element(by.css('[ui-sref="<%= entityStateName %>.new"]')).click();
-        expect(element.all(by.css('h4')).first().getText()).toMatch(/Create or edit a <%= entityClass %>/);
-        element(by.css('button.close')).click();
+        element(by.css('[ui-sref="<%= entityStateName %>.new"]')).click().then(function() {
+            expect(element(by.css('h4.modal-title')).getText()).toMatch(/Create or edit a <%= entityClass %>/);
+            element(by.css('button.close')).click();
+        });
     });
 
     afterAll(function () {

@@ -365,7 +365,10 @@ module.exports = JhipsterGenerator.extend({
             if (this.withEntities) {
                 this.getExistingEntities().forEach(function (entity) {
                     this.composeWith('jhipster:entity', {
-                        options: {regenerate: true},
+                        options: {
+                            regenerate: true,
+                            'skip-install': true,
+                        },
                         args: [entity.name]
                     }, {
                         local: require.resolve('../entity')

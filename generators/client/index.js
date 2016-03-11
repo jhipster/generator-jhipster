@@ -214,7 +214,7 @@ module.exports = JhipsterClientGenerator.extend({
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _s.camelize(this.baseName);
-            this.slugifiedBaseName = _s.slugify(this.baseName);
+            this.dasherizedBaseName = _s.dasherize(_s.camelize(this.baseName,true));
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
         },
@@ -274,15 +274,16 @@ module.exports = JhipsterClientGenerator.extend({
 
             // Make dist dir available in templates
             if (configOptions.buildTool === 'maven') {
-                this.DIST_DIR = 'target/' + DIST_DIR;
+                this.BUILD_DIR = 'target/';
             } else {
-                this.DIST_DIR = 'build/' + DIST_DIR;
+                this.BUILD_DIR = 'build/';
             }
+            this.DIST_DIR = this.BUILD_DIR + DIST_DIR;
         },
 
         composeLanguages: function () {
             if (configOptions.skipI18nQuestion) return;
-            
+
             this.composeLanguagesSub(this, configOptions, 'client');
         }
     },
@@ -294,12 +295,14 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
-            this.template('gulpfile.js', 'gulpfile.js', this, {});
             this.template('_eslintrc.json', '.eslintrc.json', this, {})
             this.template('_eslintignore', '.eslintignore', this, {});
+            this.template('gulpfile.js', 'gulpfile.js', this, {});
             this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
             this.template('gulp/utils.js', 'gulp/utils.js', this, {});
             this.template('gulp/serve.js', 'gulp/serve.js', this, {});
+            this.template('gulp/config.js', 'gulp/config.js', this, {});
+            this.template('gulp/build.js', 'gulp/build.js', this, {});
         },
 
         writeCssFiles: function () {
@@ -331,6 +334,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularAppFiles: function () {
+            this.copyHtml(MAIN_SRC_DIR + '_index.html', MAIN_SRC_DIR + 'index.html');
+
             // Angular JS module
             this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
             this.template(ANGULAR_DIR + '_app.state.js', ANGULAR_DIR + 'app.state.js', this, {});
@@ -535,173 +540,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'content/images/development_ribbon.png', MAIN_SRC_DIR + 'content/images/development_ribbon.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
-
-        },
-
-        updateJsToHtml: function () {
-            // Index page
-            var indexFile = html.readFileAsString(path.join(this.sourceRoot(), MAIN_SRC_DIR + '_index.html'));
-
-            indexFile = engine(indexFile, this, {});
-
-            var appScripts = [
-                'app/app.module.js',
-                'app/app.state.js',
-                'app/app.constants.js',
-                //blocks
-                'app/blocks/handlers/state.handler.js',
-                'app/blocks/config/alert.config.js',
-                'app/blocks/config/http.config.js',
-                'app/blocks/config/localstorage.config.js',
-                'app/blocks/config/compile.config.js',
-                'app/blocks/interceptor/auth-expired.interceptor.js',
-                'app/blocks/interceptor/errorhandler.interceptor.js',
-                'app/blocks/interceptor/notification.interceptor.js',
-                // account
-                'app/account/account.state.js',
-                'app/account/activate/activate.state.js',
-                'app/account/activate/activate.controller.js',
-                'app/account/password/password.state.js',
-                'app/account/password/password.controller.js',
-                'app/account/password/password-strength-bar.directive.js',
-                'app/account/register/register.state.js',
-                'app/account/register/register.controller.js',
-                'app/account/settings/settings.state.js',
-                'app/account/settings/settings.controller.js',
-                'app/account/reset/finish/reset.finish.controller.js',
-                'app/account/reset/finish/reset.finish.state.js',
-                'app/account/reset/request/reset.request.controller.js',
-                'app/account/reset/request/reset.request.state.js',
-                // admin
-                'app/admin/admin.state.js',
-                'app/admin/audits/audits.state.js',
-                'app/admin/audits/audits.controller.js',
-                'app/admin/audits/audits.service.js',
-                'app/admin/configuration/configuration.state.js',
-                'app/admin/configuration/configuration.controller.js',
-                'app/admin/configuration/configuration.service.js',
-                'app/admin/docs/docs.state.js',
-                'app/admin/health/health.state.js',
-                'app/admin/health/health.controller.js',
-                'app/admin/health/health.service.js',
-                'app/admin/health/health.modal.controller.js',
-                'app/admin/logs/logs.state.js',
-                'app/admin/logs/logs.controller.js',
-                'app/admin/logs/logs.service.js',
-                'app/admin/metrics/metrics.state.js',
-                'app/admin/metrics/metrics.controller.js',
-                'app/admin/metrics/metrics.service.js',
-                'app/admin/metrics/metrics.modal.controller.js',
-                'app/admin/user-management/user-management-detail.controller.js',
-                'app/admin/user-management/user-management-dialog.controller.js',
-                'app/admin/user-management/user-management-delete-dialog.controller.js',
-                'app/admin/user-management/user-management.controller.js',
-                'app/admin/user-management/user-management.state.js',
-                // components
-                'app/components/form/show-validation.directive.js',
-                'app/components/form/maxbytes.directive.js',
-                'app/components/form/minbytes.directive.js',
-                'app/components/form/uib-pager.config.js',
-                'app/components/form/uib-pagination.config.js',
-                'app/components/form/pagination.constants.js',
-                'app/components/login/login.service.js',
-                'app/components/login/login.controller.js',
-                'app/components/util/truncate-characters.filter.js',
-                'app/components/util/truncate-words.filter.js',
-                'app/components/util/base64.service.js',
-                'app/components/util/capitalize.filter.js',
-                'app/components/alert/alert.service.js',
-                'app/components/alert/alert.directive.js',
-                'app/components/util/parse-links.service.js',
-                'app/components/util/date-util.service.js',
-                'app/components/util/data-util.service.js',
-                'app/components/util/pagination-util.service.js',
-                'app/components/util/sort.directive.js',
-                'app/components/util/sort-by.directive.js',
-                'app/components/util/jhi-item-count.directive.js',
-                // entities
-                'app/entities/entity.state.js',
-                // home
-                'app/home/home.state.js',
-                'app/home/home.controller.js',
-                // layouts
-                'app/layouts/error/error.state.js',
-                'app/layouts/navbar/active-link.directive.js',
-                'app/layouts/navbar/navbar.controller.js',
-                // services
-                'app/services/auth/auth.service.js',
-                'app/services/auth/principal.service.js',
-                'app/services/auth/has-authority.directive.js',
-                'app/services/auth/has-any-authority.directive.js',
-                'app/services/auth/account.service.js',
-                'app/services/auth/activate.service.js',
-                'app/services/auth/password.service.js',
-                'app/services/auth/password-reset-init.service.js',
-                'app/services/auth/password-reset-finish.service.js',
-                'app/services/auth/register.service.js',
-                'app/services/user/user.service.js'
-            ];
-            if (this.enableTranslation) {
-                appScripts = appScripts.concat([
-                    'app/blocks/handlers/translation.handler.js',
-                    'app/blocks/config/translation.config.js',
-                    'app/blocks/config/translation-storage.provider.js',
-                    'app/components/language/language.service.js',
-                    'app/components/language/language.constants.js',
-                    'app/components/language/language.filter.js',
-                    'app/components/language/language.controller.js',
-                    'app/layouts/navbar/active-menu.directive.js'
-                ]);
-            }
-            if (this.enableSocialSignIn) {
-                appScripts = appScripts.concat([
-                    'app/account/social/directive/social.directive.js',
-                    'app/account/social/social-register.state.js',
-                    'app/account/social/social-register.controller.js',
-                    'app/account/social/social.service.js'
-                ]);
-            }
-            if (this.authenticationType == 'jwt') {
-                appScripts = appScripts.concat([
-                    'app/services/auth/auth.jwt.service.js',
-                    'app/blocks/interceptor/auth.interceptor.js'
-                ]);
-            }
-
-            if (this.authenticationType == 'oauth2') {
-                appScripts = appScripts.concat([
-                    'app/services/auth/auth.oauth2.service.js',
-                    'app/blocks/interceptor/auth.interceptor.js'
-                ]);
-            }
-
-            if (this.authenticationType == 'session') {
-                appScripts = appScripts.concat([
-                    'app/services/auth/sessions.service.js',
-                    'app/services/auth/auth.session.service.js',
-                    'app/account/sessions/sessions.state.js',
-                    'app/account/sessions/sessions.controller.js'
-                ]);
-            }
-
-            if (this.websocket == 'spring-websocket') {
-                appScripts = appScripts.concat([
-                    'app/admin/tracker/tracker.state.js',
-                    'app/admin/tracker/tracker.controller.js',
-                    'app/admin/tracker/tracker.service.js'
-                ]);
-            }
-
-            if (this.applicationType == 'gateway') {
-                appScripts = appScripts.concat([
-                    'app/admin/gateway/gateway.state.js',
-                    'app/admin/gateway/gateway.controller.js',
-                    'app/admin/gateway/gateway.routes.service.js'
-                ]);
-            }
-
-            indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});
-            this.write(MAIN_SRC_DIR + 'index.html', indexFile);
 
         },
 

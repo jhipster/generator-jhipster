@@ -132,7 +132,7 @@ public class JHipsterProperties {
 
         public static class Cache {
 
-            private int timeToLiveInDays = 31;
+            private int timeToLiveInDays = 1461;
 
             public int getTimeToLiveInDays() {
                 return timeToLiveInDays;
@@ -216,16 +216,20 @@ public class JHipsterProperties {
     }
 
     public static class Security {
+        <%_ if (authenticationType == 'session') { _%>
 
         private final RememberMe rememberMe = new RememberMe();
-
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
-        private final Authentication authentication = new Authentication();
-
         <%_ } _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+
+        private final Authentication authentication = new Authentication();
+        <%_ } _%>
+        <%_ if (authenticationType == 'session') { _%>
+
         public RememberMe getRememberMe() {
             return rememberMe;
         }
+        <%_ } _%>
 
         <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         public Authentication getAuthentication() {
@@ -323,6 +327,7 @@ public class JHipsterProperties {
             <%_ } _%>
         }
         <%_ } _%>
+        <%_ if (authenticationType == 'session') { _%>
         public static class RememberMe {
 
             @NotNull
@@ -336,6 +341,7 @@ public class JHipsterProperties {
                 this.key = key;
             }
         }
+        <%_ } _%>
     }
 
     public static class Swagger {
@@ -439,6 +445,8 @@ public class JHipsterProperties {
 
         private final Graphite graphite = new Graphite();
 
+        private final Logs logs = new Logs();
+
         public Jmx getJmx() {
             return jmx;
         }
@@ -450,6 +458,11 @@ public class JHipsterProperties {
         public Graphite getGraphite() {
             return graphite;
         }
+
+        public Logs getLogs() {
+            return logs;
+        }
+
 
         public static class Jmx {
 
@@ -539,9 +552,31 @@ public class JHipsterProperties {
                 this.prefix = prefix;
             }
         }
+
+        public static  class Logs {
+
+            private boolean enabled = false;
+
+            private long reportFrequency = 60;
+
+            public long getReportFrequency() {
+                return reportFrequency;
+            }
+
+            public void setReportFrequency(int reportFrequency) {
+                this.reportFrequency = reportFrequency;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
     }
 
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
     private final Logging logging = new Logging();
 
     public Logging getLogging() { return logging; }
@@ -579,7 +614,6 @@ public class JHipsterProperties {
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
     }
-    <%_ } _%>
 
     <%_ if (enableSocialSignIn) { _%>
     public static class Social {
