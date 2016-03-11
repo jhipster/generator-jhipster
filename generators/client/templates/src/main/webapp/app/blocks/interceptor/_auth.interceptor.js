@@ -24,7 +24,7 @@
             }
             <% } %><% if (authenticationType == 'jwt') { %>
             if (token) {
-              config.headers.Authorization = 'Bearer ' + token;
+                config.headers.Authorization = 'Bearer ' + token;
             }
             <% } %>
             return config;
