@@ -216,16 +216,20 @@ public class JHipsterProperties {
     }
 
     public static class Security {
+        <%_ if (authenticationType == 'session') { _%>
 
         private final RememberMe rememberMe = new RememberMe();
-
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
-        private final Authentication authentication = new Authentication();
-
         <%_ } _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+
+        private final Authentication authentication = new Authentication();
+        <%_ } _%>
+        <%_ if (authenticationType == 'session') { _%>
+
         public RememberMe getRememberMe() {
             return rememberMe;
         }
+        <%_ } _%>
 
         <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         public Authentication getAuthentication() {
@@ -323,6 +327,7 @@ public class JHipsterProperties {
             <%_ } _%>
         }
         <%_ } _%>
+        <%_ if (authenticationType == 'session') { _%>
         public static class RememberMe {
 
             @NotNull
@@ -336,6 +341,7 @@ public class JHipsterProperties {
                 this.key = key;
             }
         }
+        <%_ } _%>
     }
 
     public static class Swagger {

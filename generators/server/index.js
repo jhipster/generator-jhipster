@@ -135,7 +135,9 @@ module.exports = JhipsterServerGenerator.extend({
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.rememberMeKey = this.config.get('rememberMeKey');
+            if (this.authenticationType == 'session') {
+                this.rememberMeKey = this.config.get('rememberMeKey');
+            }
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
@@ -168,7 +170,7 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.baseName != null && serverConfigFound) {
 
                 // Generate remember me key if key does not already exist in config
-                if (this.rememberMeKey == null) {
+                if (this.authenticationType == 'session' && this.rememberMeKey == null) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
 
@@ -587,7 +589,6 @@ module.exports = JhipsterServerGenerator.extend({
             ];
 
             this.prompt(prompts, function (props) {
-                this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                     this.authenticationType = 'jwt';
                 } else {
@@ -601,6 +602,9 @@ module.exports = JhipsterServerGenerator.extend({
                         this.enableSocialSignIn = false;
                     }
                     props.enableSocialSignIn = this.enableSocialSignIn;
+                }
+                if (this.authenticationType == 'session') {
+                    this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
                 if (this.authenticationType == 'jwt') {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
@@ -688,7 +692,7 @@ module.exports = JhipsterServerGenerator.extend({
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelize(this.baseName);
-            this.slugifiedBaseName = _.slugify(this.baseName);
+            this.dasherizedBaseName = _.dasherize(_.camelize(this.baseName,true));
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.mainClass = this.getMainClassName();
 
@@ -774,18 +778,20 @@ module.exports = JhipsterServerGenerator.extend({
         writeDockerFiles: function () {
             // Create docker-compose file
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
-            if (this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+            if ((this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_db.dev.yml', DOCKER_DIR + 'db.dev.yml', this, {});
             }
-            if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch") {
+            if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch" || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_db.prod.yml', DOCKER_DIR + 'db.prod.yml', this, {});
             }
-            if (this.devDatabaseType == "cassandra") {
+            if (this.applicationType == 'gateway' || this.devDatabaseType == "cassandra") {
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-Dev.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-Prod.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
-                this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
+                if (this.devDatabaseType == "cassandra") {
+                    this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
+                }
                 this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
