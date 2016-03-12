@@ -1,26 +1,26 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "अपना पासवर्ड रीसेट करें",
             "form": {
-                "button": "Reset password"
+                "button": "अपना पासवर्ड रीसेट करें"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "रजिस्टर करने के लिए आप ई-मेल दर्ज करें",
+                "success": "अपने पासवर्ड रीसेट करने के जानकारी के लिए अपने ई-मेल्स की जाँच करें.",
+                "notfound": "<strong>पंजीकृत ई-मेल पता नहीं है!</strong> कृपया जाँच करें और पुन: प्रयास करें"
 
             }
 
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "अपना पासवर्ड रीसेट करें",
             "form": {
-                "button": "Validate new password"
+                "button": "नया पासवर्ड पुष्टि करें"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
+                "info": "एक नया पासवर्ड चुनें",
+                "success": "<strong>अपना पासवर्ड रीसेट किया गया है.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
                 "keymissing": "The reset key is missing.",
                 "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
             }
