@@ -20,9 +20,9 @@
             },
             "messages": {
                 "info": "एक नया पासवर्ड चुनें",
-                "success": "<strong>अपना पासवर्ड रीसेट किया गया है.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "success": "<strong>अपना पासवर्ड रीसेट किया गया है.</strong> कृपया <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन</a> करें.",
+                "keymissing": "रीसेट कुंजी गुम है।",
+                "error": "अपना पासवर्ड रीसेट नहीं कर सका। याद रखें एक पासवर्ड अनुरोध केवल 24 घंटे के लिए मान्य है।"
             }
         }
     }

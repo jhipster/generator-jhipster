@@ -1,30 +1,30 @@
 {
     "settings": {
-        "title": "User settings for [<b>{{username}}</b>]",
+        "title": "[<b>{{username}}</b>] के लिए User सेटिंग्स",
         "form": {
-            "firstname": "First Name",
-            "firstname.placeholder": "Your first name",
-            "lastname": "Last Name",
-            "lastname.placeholder": "Your last name",
-            "language": "Language",
-            "button": "Save"
+            "firstname": "प्रथम नाम",
+            "firstname.placeholder": "प्रथम नाम",
+            "lastname": "अंतिम नाम",
+            "lastname.placeholder": "अंतिम नाम",
+            "language": "भाषा ",
+            "button": "सहेजें "
         },
         "messages": {
             "error": {
-                "fail": "<strong>An error has occurred!</strong> Settings could not be saved.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "fail": "<strong>कोई त्रुटि उत्पन्न हुई!</strong> सेटिंग्स को सहेजा नहीं जा सका.",
+                "emailexists": "<strong>ई-मेल उपयोग में पहले से ही है!</strong> कृपया कोई अन्य नाम चुनें. "
             },
-            "success": "<strong>Settings saved!</strong>",
+            "success": "<strong>सहेजी गई सेटिंग्स!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Your first name is required.",
-                    "minlength": "Your first name is required to be at least 1 character",
-                    "maxlength": "Your first name cannot be longer than 50 characters"
+                    "required": "अपने प्रथम नाम आवश्यक है.",
+                    "minlength": "आपका पहला नाम कम से कम 1 character हो के लिए आवश्यक है",
+                    "maxlength": "आपका पहला नाम 50 characters से अधिक नहीं हो सकता"
                 },
                 "lastname": {
-                    "required": "Your last name is required.",
-                    "minlength": "Your last name is required to be at least 1 character",
-                    "maxlength": "Your last name cannot be longer than 50 characters"
+                    "required": "अपने अंतिम नाम आवश्यक है.",
+                    "minlength": "आपका अंतिम नाम कम से कम 1 character हो के लिए आवश्यक है",
+                    "maxlength": "आपका अंतिम नाम 50 characters से अधिक नहीं हो सकता"
                 }
             }
         }

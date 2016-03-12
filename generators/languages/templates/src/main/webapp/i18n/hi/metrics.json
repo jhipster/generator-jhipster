@@ -1,34 +1,34 @@
 {
     "metrics": {
-        "title": "Application Metrics",
-        "refresh.button": "Refresh",
-        "updating": "Updating...",
+        "title": "अनुप्रयोग मेट्रिक्स",
+        "refresh.button": "ताज़ा करें",
+        "updating": "अद्यतन कर रहा है...",
         "jvm": {
-            "title": "JVM Metrics",
+            "title": "JVM मेट्रिक्स",
             "memory": {
-                "title": "Memory",
-                "total": "Total Memory",
-                "heap": "Heap Memory",
-                "nonheap": "Non-Heap Memory"
+                "title": "स्मृति",
+                "total": "कुल स्मृति",
+                "heap": "हीप स्मृति",
+                "nonheap": "Non-हीप स्मृति"
             },
             "threads": {
                 "title": "Threads",
-                "all": "All",
+                "all": "सभी",
                 "runnable": "Runnable",
-                "timedwaiting": "Timed waiting",
-                "waiting": "Waiting",
-                "blocked": "Blocked",
+                "timedwaiting": "टाइम्ड प्रतीक्षा",
+                "waiting": "प्रतीक्षा",
+                "blocked": "ब्लॉक किया गया",
                 "dump": {
-                    "title": "Threads dump",
+                    "title": "Threads डंप",
                     "id": "Id: ",
-                    "blockedtime": "Blocked Time",
-                    "blockedcount": "Blocked Count",
-                    "waitedtime": "Waited Time",
-                    "waitedcount": "Waited Count",
-                    "lockname": "Lock name",
+                    "blockedtime": "ब्लॉक समय",
+                    "blockedcount": "ब्लॉक गिनती",
+                    "waitedtime": "प्रतीक्षा समय",
+                    "waitedcount": "प्रतीक्षा गिनती",
+                    "lockname": "Lock नाम",
                     "stacktrace": "Stacktrace",
-                    "show": "Show Stacktrace",
-                    "hide": "Hide Stacktrace"
+                    "show": "Stacktrace दिखाएँ",
+                    "hide": "Stacktrace छुपाएँ "
                 }
             },
             "gc": {
@@ -39,30 +39,30 @@
                 "scavengetime": "Scavenge time"
             },
             "http": {
-                "title": "HTTP requests (events per second)",
-                "active": "Active requests:",
-                "total": "Total requests:",
+                "title": "HTTP अनुरोध (घटनाएँ प्रति सेकंड)",
+                "active": "सक्रिय अनुरोध:",
+                "total": "कुल अनुरोध:",
                 "table": {
                     "code": "Code",
-                    "count": "Count",
+                    "count": "गिनती",
                     "mean": "Mean",
-                    "average": "Average"
+                    "average": "औसत"
                 },
                 "code": {
-                    "ok": "Ok",
-                    "notfound": "Not found",
-                    "servererror": "Server Error"
+                    "ok": "ठीक है",
+                    "notfound": "नहीं मिला",
+                    "servererror": "सर्वर त्रुटि"
                 }
             }
         },
         "servicesstats": {
-            "title": "Services statistics (time in millisecond)",
+            "title": "सेवाओं के आँकड़े (मिलीसेकंड में समय)",
             "table": {
-                "name": "Service name",
-                "count": "Count",
+                "name": "सेवा का नाम",
+                "count": "गिनती",
                 "mean": "Mean",
-                "min": "Min",
-                "max": "Max",
+                "min": "न्यूनतम",
+                "max": "अधिकतम",
                 "p50": "p50",
                 "p75": "p75",
                 "p95": "p95",
@@ -70,22 +70,22 @@
             }
         },
         "ehcache": {
-            "title": "Ehcache statistics",
-            "cachename": "Cache name",
+            "title": "Ehcache सांख्यिकी",
+            "cachename": "Cache का नाम",
             "objects": "Objects",
-            "hits": "Hits",
-            "misses": "Misses",
-            "evictioncount": "Eviction count",
+            "hits": "हिट्स कूल",
+            "misses": "मिस",
+            "evictioncount": "बेदखली गणना",
             "mean": "Mean get time (ms)"
         },
         "datasource": {
-        	"usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
-            "name": "Pool usage",
-            "count": "Count",
+        	"usage": "उपयोग",
+            "title": "डेटास्रोत सांख्यिकी (मिलीसेकंड में समय)",
+            "name": "पूल उपयोग",
+            "count": "गिनती",
             "mean": "Mean",
-            "min": "Min",
-            "max": "Max",
+            "min": "न्यूनतम",
+            "max": "अधिकतम",
             "p50": "p50",
             "p75": "p75",
             "p95": "p95",
