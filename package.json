@@ -31,7 +31,6 @@
     "chalk": "1.1.1",
     "cheerio": "0.20.0",
     "ejs": "2.4.1",
-    "graceful-fs": "4.1.3",
     "html-wiring": "1.2.0",
     "insight": "0.7.0",
     "lodash": "4.6.1",

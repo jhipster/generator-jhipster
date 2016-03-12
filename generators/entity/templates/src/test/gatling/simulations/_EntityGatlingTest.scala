@@ -110,12 +110,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .pause(10)
         .repeat(2) {
             exec(http("Get all <%= entityInstancePlural %>")
-            .get("/api/<%= entityApiUrl %>")
+            .get(<% if (applicationType == 'gateway' && locals.microserviceName) {%> "/<%= microserviceName.toLowerCase() %>" + <% } %>"/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new <%= entityInstance %>")
-            .post("/api/<%= entityApiUrl %>")
+            .post(<% if (applicationType == 'gateway' && locals.microserviceName) {%> "/<%= microserviceName.toLowerCase() %>" + <% } %>"/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .body(StringBody("""{"id":null<% for (idx in fields) { %>, "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType == 'String') { %>"SAMPLE_TEXT"<% } else if (fields[idx].fieldType == 'Integer') { %>"0"<% } else if (fields[idx].fieldType == 'ZonedDateTime' || fields[idx].fieldType == 'LocalDate') { %>"2020-01-01T00:00:00.000Z"<% } else { %>null<% } } %>}""")).asJSON
             .check(status.is(201))
@@ -123,12 +123,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .pause(10)
             .repeat(5) {
                 exec(http("Get created <%= entityInstance %>")
-                .get("${new_<%= entityInstance %>_url}")
+                .get(<% if (applicationType == 'gateway' && locals.microserviceName) {%> "/<%= microserviceName.toLowerCase() %>" + <% } %>"${new_<%= entityInstance %>_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
             .exec(http("Delete created <%= entityInstance %>")
-            .delete("${new_<%= entityInstance %>_url}")
+            .delete(<% if (applicationType == 'gateway' && locals.microserviceName) {%> "/<%= microserviceName.toLowerCase() %>" + <% } %>"${new_<%= entityInstance %>_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }
