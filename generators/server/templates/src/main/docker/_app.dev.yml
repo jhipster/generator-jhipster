@@ -61,9 +61,9 @@ services:
             <%_ } _%>
         <%_ if (applicationType == 'gateway') { _%>
         ports:
-            - "8080:8080"
+            - "<%= serverPort %>:<%= serverPort %>"
         <%_ } _%>
         <%_ if (applicationType == 'microservice') { _%>
         expose:
-            - "8081"
+            - "<%= serverPort %>"
         <%_ } _%>
