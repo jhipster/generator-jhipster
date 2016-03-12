@@ -1,7 +1,15 @@
 {
     "health": {
         "title": "Состояние",
+        "refresh.button": "Обновить",
         "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Детали",
+            "properties": "Параметры",
+            "name": "Имя",
+            "value": "Значение",
+            "error": "Ошибка"
+        },
         "indicator": {
             "diskSpace": "Место на диске",
             "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
@@ -12,7 +20,7 @@
         },
         "table": {
             "service": "Название сервиса",
-            "status": "статус"
+            "status": "Статус"
         },
         "status": {
             "UP": "UP",
