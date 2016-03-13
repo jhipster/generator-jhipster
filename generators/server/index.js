@@ -233,7 +233,7 @@ module.exports = JhipsterServerGenerator.extend({
                             currentQuestion = current;
                         }, applicationType == 'gateway' || applicationType == 'microservice');
                     },
-                    default: '8080'
+                    default: applicationType == 'gateway' ? '8080' : '8081'
                 },
                 {
                     type: 'input',
