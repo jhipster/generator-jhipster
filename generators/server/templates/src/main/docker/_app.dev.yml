@@ -61,9 +61,12 @@ services:
             <%_ } _%>
         <%_ if (applicationType == 'gateway') { _%>
         ports:
-            - "8080:8080"
+            - "<%= serverPort %>:<%= serverPort %>"
+            <%_ if (hibernateCache == 'hazelcast') { _%>
+            - "<%= parseInt(serverPort) + 5000 %>"
+            <%_ } _%>
         <%_ } _%>
         <%_ if (applicationType == 'microservice') { _%>
         expose:
-            - "8081"
+            - "<%= parseInt(serverPort) + 5000 %>"
         <%_ } _%>
