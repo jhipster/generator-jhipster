@@ -100,7 +100,7 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('install', function () {
+gulp.task('install', function (done) {
     runSequence(['wiredep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %>, done);
 });
 
