@@ -3,7 +3,7 @@
         "title": "आपका स्वागत है, Java Hipster!",
         "subtitle": "यह आपका होमपेज है",
         "logged": {
-            "message": "तुम उपयोगकर्ता \"{{username}}\ के रूप में लॉग ऑन हैं"
+            "message": "आप उपयोगकर्ता \"{{username}}\" के रूप में लॉग ऑन हैं "
         },
         "question": "यदि आप JHipster पर किसी भी सवाल है:",
         "link": {
