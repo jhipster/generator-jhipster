@@ -7,7 +7,7 @@ var util = require('util'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
