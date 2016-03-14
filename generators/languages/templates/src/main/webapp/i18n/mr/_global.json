@@ -37,40 +37,40 @@
             "language": "भाषा"
         },
         "form": {
-            "username": "Username",
-            "username.placeholder": "Your username",
-            "newpassword": "New password",
-            "newpassword.placeholder": "New password",
-            "confirmpassword": "New password confirmation",
-            "confirmpassword.placeholder": "Confirm the new password",
-            "email": "E-mail",
-            "email.placeholder": "Your e-mail"
+            "username": "वापरकर्तानाव ",
+            "username.placeholder": "आपले वापरकर्ता नाव",
+            "newpassword": "नवीन पासवर्ड",
+            "newpassword.placeholder": "नवीन पासवर्ड",
+            "confirmpassword": "नवीन पासवर्ड पुष्टी",
+            "confirmpassword.placeholder": "नवीन पासवर्ड पुष्टी करा",
+            "email": "ई-मेल",
+            "email.placeholder": "आपला ई-मेल"
         },
         "messages": {
             "info": {
-                "authenticated": "If you want to <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
-                "register": "You don't have an account yet? <a class=\"alert-link\" ui-sref=\"register\">Register a new account</a>"
+                "authenticated": "आपण <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन</a> करू इच्छित असल्यास, तुम्ही मुलभूत खाती प्रयत्न करू शकता:<br/>- प्रशासक (लॉग इन=\"admin\" आणि पासवर्ड=\"admin\") <br/>- वापरकर्ता (लॉग इन=\"user\" आणि पासवर्ड=\"user\").",
+                "register": "आपण खाते नाही? <a class=\"alert-link\" ui-sref=\"register\">नवीन खाते नोंदणी करू</a>"
             },
             "error": {
-                "dontmatch": "The password and its confirmation do not match!"
+                "dontmatch": "पासवर्ड आणि त्याची पुष्टीकरण जुळत नाही!"
             },
             "validate": {
                 "newpassword": {
-                    "required": "Your password is required.",
-                    "minlength": "Your password is required to be at least 5 characters.",
-                    "maxlength": "Your password cannot be longer than 50 characters.",
-                    "strength": "Password strength:"
+                    "required": "आपला संकेतशब्द आवश्यक आहे.",
+                    "minlength": "आपला संकेतशब्द कमीत कमी 5 वर्ण असणे आवश्यक आहे.",
+                    "maxlength": "आपला संकेतशब्द 50 वर्ण असू शकत नाही.",
+                    "strength": "पासवर्ड सामर्थ्य:"
                 },
                 "confirmpassword": {
-                    "required": "Your confirmation password is required.",
-                    "minlength": "Your confirmation password is required to be at least 5 characters.",
-                    "maxlength": "Your confirmation password cannot be longer than 50 characters."
+                    "required": "आपल्या पुष्टीकरण संकेतशब्द आवश्यक आहे.",
+                    "minlength": "आपल्या पुष्टीकरण पासवर्ड कमीत कमी 5 वर्ण असणे आवश्यक आहे.",
+                    "maxlength": "आपल्या पुष्टीकरण संकेतशब्द 50 वर्ण असू शकत नाही."
                 },
                 "email": {
-                    "required": "Your e-mail is required.",
-                    "invalid": "Your e-mail is invalid.",
-                    "minlength": "Your e-mail is required to be at least 5 characters.",
-                    "maxlength": "Your e-mail cannot be longer than 50 characters."
+                    "required": "आपला ई-मेल आवश्यक आहे.",
+                    "invalid": "आपला ई-मेल अवैध आहे.",
+                    "minlength": "आपला ई-मेल किमान 5 वर्ण असणे आवश्यक आहे.",
+                    "maxlength": "आपला ई-मेल 50 वर्ण असू शकत नाही."
                 }
             }
         },
@@ -80,42 +80,42 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "blob जोडा",
+            "addimage": "प्रतिमा जोडा",
+            "back": "परत",
+            "cancel": "रद्द करा",
+            "delete": "हटवा",
+            "edit": "संपादित करा",
+            "save": "जतन करा",
+            "view": "पहा"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "फील्ड",
+            "value": "मूल्य"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "हटवा ऑपरेशन पुष्टी करा"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{ min }} characters.",
-            "maxlength": "This field cannot be longer than {{ max }} characters.",
-            "min": "This field should be more than {{ min }}.",
-            "max": "This field cannot be more than {{ max }}.",
-            "minbytes": "This field should be more than {{ min }} bytes.",
-            "maxbytes": "This field cannot be more than {{ max }} bytes.",
-            "pattern": "This field should follow pattern {{ pattern }}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "हे फील्ड आवश्यक आहे.",
+            "minlength": "हे फील्ड किमान {{ min }} वर्ण असणे आवश्यक आहे.",
+            "maxlength": "हे फील्ड {{ max }} वर्ण अधिक असू शकत नाही..",
+            "min": "हे फील्ड {{ min }} असणे आवश्यक आहे.",
+            "max": "हे फील्ड {{ max }} पेक्षा अधिक असू शकत नाही.",
+            "minbytes": "हे फील्ड {{ min }} बाइटपेक्षा असणे आवश्यक आहे.",
+            "maxbytes": "हे फील्ड {{ max }} बाइटपेक्षा अधिक असू शकत नाही.",
+            "pattern": "हे फील्ड नमुना {{ pattern }} अनुसरणे आवश्यक आहे.",
+            "number": "हे फील्ड संख्या असावे.",
+            "datetimelocal": "हे फील्ड एक तारीख आणि वेळ असावी."
         }
     },
     "error": {
-        "server.not.reachable": "Server not reachable",
-        "NotNull": "Field {{ fieldName }} cannot be empty!",
-        "Size": "Field {{ fieldName }} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{ entityName }} cannot already have an ID"
+        "server.not.reachable": "सर्व्हर वर पोहचू शकत नाही",
+        "NotNull": "फील्ड {{ fieldName }} रिक्त असू शकत नाही!",
+        "Size": "फील्ड {{ fieldName }} किमान / कमाल आकार आवश्यकता पूर्ण करत नाही!",
+        "userexists": "लॉगिन नाव आधीच वापरले आहे!",
+        "emailexists": "ई-मेल आधीच वापरात आहे!",
+        "idexists": "एक नवीन {{entityName}} आधीच आयडी असू शकत नाही"
     },
-    "footer": "This is your footer"
+    "footer": "हे आपल्या तळटीप आहे"
 }

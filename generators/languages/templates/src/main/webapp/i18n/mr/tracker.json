@@ -4,7 +4,7 @@
         "table": {
             "userlogin": "वापरकर्ता",
             "ipaddress": "IP Address",
-            "userAgent": "User agent",
+            "userAgent": "वापरकर्ताagent",
             "page": "चालू पान",
             "time": "वेळ"
         }
