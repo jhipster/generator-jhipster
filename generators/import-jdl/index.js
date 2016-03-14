@@ -28,6 +28,7 @@ module.exports = JDLGenerator.extend({
 
         getConfig: function () {
             this.log('The jdl is being imported.');
+            this.baseName = this.config.get('baseName');
             this.databaseType = this.config.get('databaseType');
         }
     },
@@ -86,7 +87,28 @@ module.exports = JDLGenerator.extend({
         },
 
         generateEntities: function () {
-
+            this.getExistingEntities().forEach(function (entity) {
+                this.composeWith('jhipster:entity', {
+                    options: {
+                        regenerate: true,
+                        'skip-install': true,
+                    },
+                    args: [entity.name]
+                }, {
+                    local: require.resolve('../entity')
+                });
+            }, this);
         }
+    },
 
-    });
+    install: function () {
+        var injectJsFilesToIndex = function () {
+            this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
+            this.spawnCommand('gulp', ['inject']);
+        };
+        if (!this.options['skip-install'] && !this.skipClient) {
+            injectJsFilesToIndex.call(this);
+        }
+    }
+
+});
