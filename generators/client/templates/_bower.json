@@ -6,7 +6,7 @@
   "dependencies": {
     "angular": "1.5.0",
     "angular-aria": "1.5.0",
-    "angular-bootstrap": "1.1.2",
+    "angular-bootstrap": "1.2.4",
     "angular-cache-buster": "0.4.3",
     "angular-cookies": "1.5.0",
     <%_ if (enableTranslation) { _%>
@@ -29,7 +29,7 @@
     <%_ } else { _%>
     "bootstrap-sass": "3.3.6",
     <%_ } _%>
-    "bootstrap-ui-datetime-picker": "2.2.0",
+    "bootstrap-ui-datetime-picker": "2.2.3",
     "jquery": "2.2.1",
     "json3": "3.3.2",
     "modernizr": "3.3.1",
@@ -62,6 +62,7 @@
   "resolutions": {
     "angular": "1.5.0",
     "angular-cookies": "1.5.0",
+    "angular-bootstrap": "1.2.4",
     "jquery": "2.1.4"
   }
 }
