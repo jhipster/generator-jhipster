@@ -495,7 +495,7 @@ module.exports = JhipsterServerGenerator.extend({
                             name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
                         }
                     ],
-                    default: 1
+                    default: (applicationType == 'gateway' || applicationType == 'microservice') ? 2 : 1
                 },
                 {
                     when: function (response) {
