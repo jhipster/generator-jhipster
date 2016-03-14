@@ -1289,7 +1289,7 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
         var skipClient = type && type === 'server';
         generator.composeWith('jhipster:languages', {
             options: {
-                'skip-wiredep': true,
+                'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
                 configOptions: configOptions
