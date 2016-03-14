@@ -26,7 +26,7 @@ eureka:
 
 <%_ if (applicationType == 'gateway') { _%>
 # Prevent services from being automatically added to new routes
-# In production, routes should be explictly defined in the config server's gateway-prod.yml
+# In production, routes should be explictly defined in the config server's <%= baseName %>-prod.yml
 zuul:
     ignoredServices: '*'
 <%_ } _%>
