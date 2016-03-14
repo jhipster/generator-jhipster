@@ -1,0 +1,23 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPlural %>",
+                "createLabel": "नवीन <%= entityClass %> तयार करा",
+                "createOrEditLabel": "<%= entityClass %> तयार किंवा संपादित करा",
+                "search": "<%= entityClass %> शोधा"
+            },
+            "created": "<%= entityClass %> [identifier: {{ param }}] तयार आहे",
+            "updated": "<%= entityClass %> [identifier: {{ param }}] सुधारित केले आहे",
+            "deleted": "<%= entityClass %> [identifier: {{ param }}] हटविले आहे",
+            "delete": {
+                "question": "<%= entityClass %> [id: {{ id }}] काढून टाकण्याबाबत पुष्टी?"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%=fields[idx].fieldNameCapitalized%>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameCapitalized %>"<% } %>
+        }
+    }
+}
