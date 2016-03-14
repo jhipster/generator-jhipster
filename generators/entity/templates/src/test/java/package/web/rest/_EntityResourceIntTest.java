@@ -232,7 +232,11 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        <%_ }} _%>
+        <%_ }} _%><% if (searchEngine == 'elasticsearch') { %>
+        // Validate the <%= entityClass %> in ElasticSearch
+        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
+        assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
+        <%_ } _%>
     }
 <% for (idx in fields) { %><% if (fields[idx].fieldValidate == true) {
     var required = false;
