@@ -57,7 +57,7 @@ gulp.task('copy', function () {
             merge: true
         }))
         .pipe(gulp.dest(config.dist)),<% } %>
-        gulp.src(config.app + 'content/**/*.{woff,woff2,svg,ttf,eot}')
+        gulp.src(config.app + 'content/**/*.{woff,woff2,svg,ttf,eot,otf}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(flatten())
@@ -99,9 +99,10 @@ gulp.task('sass', function () {
         .pipe(changed(config.cssDir, {extension: '.css'}))
         .pipe(sass({includePaths:config.bower}).on('error', sass.logError))
         .pipe(gulp.dest(config.cssDir)),
-        gulp.src(config.bower + 'bootstrap-sass/assets/fonts/bootstrap/*.*')
+        gulp.src(config.bower + '**/fonts/**/*.{woff,woff2,svg,ttf,eot,otf}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.app + 'content/fonts'))
+        .pipe(flatten())
         .pipe(gulp.dest(config.app + 'content/fonts'))
     );
 });
