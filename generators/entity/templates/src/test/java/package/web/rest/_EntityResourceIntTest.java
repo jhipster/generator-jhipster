@@ -195,7 +195,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     @Before
     public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
-        <%= entityInstance %>Repository.deleteAll();<% } %>
+        <%= entityInstance %>Repository.deleteAll();<% } %><% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.deleteAll();<% } %>
         <%= entityInstance %> = new <%= entityClass %>();
         <%_ for (idx in fields) { _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
@@ -362,5 +363,25 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         // Validate the database is empty
         List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstancePlural %>).hasSize(databaseSizeBeforeDelete - 1);
-    }
+    }<% if (searchEngine == 'elasticsearch') { %>
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void search<%= entityClass %>() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);
+
+        // Search the <%= entityInstance %>
+        rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (idx in fields) {%>
+            <%_ if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
+            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
+            <%_ } _%>
+            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { %>)<% } else if (fields[idx].fieldType == 'Integer') { %><% } else if (fields[idx].fieldType == 'Long') { %>.intValue()<% } else if (fields[idx].fieldType == 'Float' || fields[idx].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>_STR<% } else if (fields[idx].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
+    }<% } %>
 }
