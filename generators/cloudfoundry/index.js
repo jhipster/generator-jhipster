@@ -187,10 +187,10 @@ module.exports = CloudFoundryGenerator.extend({
             var cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -p';
             var buildCmd;
             if (this.buildTool === 'maven') {
-                cloudfoundryDeployCommand = ' target/*.war';
+                cloudfoundryDeployCommand += ' target/*.war';
                 buildCmd = 'mvn package -DskipTests';
             } else if (this.buildTool === 'gradle') {
-                cloudfoundryDeployCommand = ' build/libs/*.war';
+                cloudfoundryDeployCommand += ' build/libs/*.war';
                 buildCmd = 'gradlew bootRepackage -x test';
             }
 
