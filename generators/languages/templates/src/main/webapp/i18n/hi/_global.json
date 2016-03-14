@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "आप एक <strong>पुराने</strong> ब्राउज़र का उपयोग कर रहे हैं। कृपया अपने अनुभव में सुधार करने के लिए अपने <a href=\"http://browsehappy.com/?locale=en\">ब्राउज़र को अपग्रेड करें</a>",
         "menu": {
             "home": "होम",

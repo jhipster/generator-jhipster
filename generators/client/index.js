@@ -221,6 +221,7 @@ module.exports = JhipsterClientGenerator.extend({
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _s.camelize(this.baseName);
+            this.capitalizedBaseName = _s.capitalize(this.baseName);
             this.dasherizedBaseName = _s.dasherize(_s.camelize(this.baseName,true));
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';

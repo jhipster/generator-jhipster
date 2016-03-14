@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "Folosiți un browser <strong>vechi</strong> . Va rugăm <a href=\"http://browsehappy.com/?locale=en\"> să îl upgradați</a> pentru o experiența îmbunătațită.",
         "menu": {
             "home": "Acasă",

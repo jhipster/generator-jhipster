@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "Você está usando um navegador <strong>desatualizado</strong>. Favor <a href=\"http://browsehappy.com/?locale=pt_BR\">atualizar o seu navegador</a> para ter uma experiência melhor.",
         "menu": {
             "home": "Início",
