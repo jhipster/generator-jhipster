@@ -1199,7 +1199,7 @@ Generator.prototype.getAngularAppName = function () {
 };
 
 Generator.prototype.getMainClassName = function () {
-    return _.capitalize(this.getAngularAppName());
+    return _.upperFirst(_.camelCase(this.getAngularAppName()));
 };
 
 Generator.prototype.askModuleName = function (generator, currentQuestion, totalQuestions) {
