@@ -11,11 +11,16 @@
             "error": "Error"
         },
         "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
             "diskSpace": "Disk space",
-            "mail": "Email"<% if (searchEngine == 'elasticsearch') { %>,
-            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType == 'sql') { %>,
-            "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {
