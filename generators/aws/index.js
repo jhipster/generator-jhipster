@@ -2,7 +2,7 @@
 var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base'),
     build = require('./lib/build.js'),
     AwsFactory = require('./lib/aws.js');
@@ -130,9 +130,9 @@ module.exports = AwsGenerator.extend({
             }];
 
         this.prompt(prompts, function (props) {
-            this.applicationName = _.slugify(props.applicationName);
-            this.environmentName = _.slugify(props.environmentName);
-            this.bucketName = _.slugify(props.bucketName);
+            this.applicationName = _.kebabCase(props.applicationName);
+            this.environmentName = _.kebabCase(props.environmentName);
+            this.bucketName = _.kebabCase(props.bucketName);
             this.instanceType = props.instanceType;
             this.awsRegion = props.awsRegion;
             this.dbName = props.dbName;

@@ -3,7 +3,7 @@ var path = require('path'),
     html = require("html-wiring"),
     shelljs = require('shelljs'),
     engine = require('ejs').render,
-    _s = require('underscore.string');
+    _ = require('lodash');
 
 const constants = require('./generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
@@ -159,7 +159,7 @@ function replacePlaceholders(body, _this) {
 function geti18nJson(key, _this, template) {
 
     var i18nDirectory = LANGUAGES_MAIN_SRC_DIR + 'i18n/en/',
-        name = _s.slugify(key.split('.')[0]),
+        name = _.kebabCase(key.split('.')[0]),
         filename = i18nDirectory + name + '.json',
         keyValue, render = template;
 

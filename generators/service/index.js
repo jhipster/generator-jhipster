@@ -2,7 +2,7 @@
 var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
