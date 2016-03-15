@@ -3,7 +3,7 @@ var util = require('util'),
     path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base'),
     packagejs = require('../../package.json'),
     crypto = require("crypto"),
@@ -691,8 +691,8 @@ module.exports = JhipsterServerGenerator.extend({
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
-            this.camelizedBaseName = _.camelize(this.baseName);
-            this.dasherizedBaseName = _.dasherize(_.camelize(this.baseName,true));
+            this.camelizedBaseName = _.camelCase(this.baseName);
+            this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.mainClass = this.getMainClassName();
 
