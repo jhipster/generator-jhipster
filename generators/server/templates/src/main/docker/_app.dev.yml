@@ -33,13 +33,13 @@ services:
         ports:
             - "<%= serverPort %>:<%= serverPort %>"
             <%_ if (hibernateCache == 'hazelcast') { _%>
-            - "<%= parseInt(serverPort) + 5000 %>"
+            - "<%= parseInt(serverPort) + 5701 %>"
             <%_ } _%>
         <%_ } _%>
         <%_ if (applicationType == 'microservice') { _%>
         expose:
             - "<%= serverPort %>"
             <%_ if (hibernateCache == 'hazelcast') { _%>
-            - "<%= parseInt(serverPort) + 5000 %>"
+            - "<%= parseInt(serverPort) + 5701 %>"
             <%_ } _%>
         <%_ } _%>
