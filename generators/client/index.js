@@ -219,9 +219,9 @@ module.exports = JhipsterClientGenerator.extend({
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
-            this.camelizedBaseName = _.kebabCase(this.baseName);
+            this.camelizedBaseName = _.camelCase(this.baseName);
             this.capitalizedBaseName = _.capitalize(this.baseName);
-            this.dasherizedBaseName = _.kebabCase(_.camelCase(this.baseName,true));
+            this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
         },
