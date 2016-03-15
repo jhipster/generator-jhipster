@@ -70,7 +70,7 @@
                 <%_ } _%>
                 <%_ if (fieldType == 'LocalDate' || fieldType == 'Date') { _%>
                 <div class="input-group">
-                    <input id="field_<%= fieldName %>" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
+                    <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" uib-datepicker-popup="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
                     <%- include ng_validators %>/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -78,7 +78,7 @@
                 </div>
                 <%_ } else if(fieldType == 'ZonedDateTime') { _%>
                 <div class="input-group">
-                    <input id="field_<%= fieldName %>" type="text" class="form-control" datetime-picker="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
+                    <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" datetime-picker="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
                     <%- include ng_validators %>  />
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
