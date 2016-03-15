@@ -1,48 +1,18 @@
 version: '2'
 services:
-<%_ if (prodDatabaseType == 'mysql') { _%>
-    <%= baseName.toLowerCase() %>-mysql:
-        extends:
-            file: db.prod.yml
-            service: <%= baseName.toLowerCase() %>-mysql
-
-<%_ } _%>
-<%_ if (prodDatabaseType == 'postgresql') { _%>
-    <%= baseName.toLowerCase() %>-postgresql:
-        extends:
-            file: db.prod.yml
-            service: <%= baseName.toLowerCase() %>-postgresql
-
-<%_ } _%>
-<%_ if (prodDatabaseType == 'mongodb') { _%>
-    <%= baseName.toLowerCase() %>-mongodb:
-        extends:
-            file: db.prod.yml
-            service: <%= baseName.toLowerCase() %>-mongodb
-
-<%_ } _%>
     <%= baseName.toLowerCase() %>-app:
         image: jhipster/<%= baseName.toLowerCase() %>
+        external_links:
+            - "jhipster-registry:registry"
         <%_ if (prodDatabaseType == 'mysql') { _%>
-        depends_on:
-            - <%= baseName.toLowerCase() %>-mysql
-        links:
             - "<%= baseName.toLowerCase() %>-mysql:mysql"
         <%_ } _%>
         <%_ if (prodDatabaseType == 'postgresql') { _%>
-        depends_on:
-            - <%= baseName.toLowerCase() %>-postgresql
-        links:
             - "<%= baseName.toLowerCase() %>-postgresql:postgresql"
         <%_ } _%>
         <%_ if (prodDatabaseType == 'mongodb') { _%>
-        depends_on:
-            - <%= baseName.toLowerCase() %>-mongodb
-        links:
             - "<%= baseName.toLowerCase() %>-mongodb:mongodb"
         <%_ } _%>
-        external_links:
-            - "jhipster-registry:registry"
         environment:
             - SPRING_PROFILES_ACTIVE=prod
             <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
@@ -61,9 +31,15 @@ services:
             <%_ } _%>
         <%_ if (applicationType == 'gateway') { _%>
         ports:
-            - "8080:8080"
+            - "<%= serverPort %>:<%= serverPort %>"
+            <%_ if (hibernateCache == 'hazelcast') { _%>
+            - "5701"
+            <%_ } _%>
         <%_ } _%>
         <%_ if (applicationType == 'microservice') { _%>
         expose:
-            - "8080"
+            - "<%= serverPort %>"
+            <%_ if (hibernateCache == 'hazelcast') { _%>
+            - "5701"
+            <%_ } _%>
         <%_ } _%>

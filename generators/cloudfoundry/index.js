@@ -28,6 +28,7 @@ module.exports = CloudFoundryGenerator.extend({
             this.log(chalk.bold('CloudFoundry configuration is starting'));
             this.env.options.appPath = this.config.get('appPath') || MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
+            this.buildTool = this.config.get('buildTool');
             this.packageName = this.config.get('packageName');
             this.packageFolder = this.config.get('packageFolder');
             this.hibernateCache = this.config.get('hibernateCache');
@@ -156,15 +157,18 @@ module.exports = CloudFoundryGenerator.extend({
     productionBuild: function () {
         if (this.abort) return;
         var done = this.async();
-        var mvn = '';
+        var buildCmd = '';
+        if (this.buildTool === 'maven') {
+            buildCmd = 'mvn package -DskipTests';
+        } else if (this.buildTool === 'gradle') {
+            buildCmd = 'gradlew bootRepackage -x test';
+        }
         if (this.cloudfoundryProfile == 'prod') {
             this.log(chalk.bold('\nBuilding the application with the production profile'));
-            mvn = 'mvn package -Pprod -DskipTests';
-        } else {
-            this.log(chalk.bold('\nBuilding the application with the development profile'));
-            mvn = 'mvn package -DskipTests';
+            buildCmd += ' -Pprod';
         }
-        var child = exec(mvn, function (err, stdout) {
+
+        var child = exec(buildCmd, function (err, stdout) {
             if (err) {
                 this.log.error(err);
             }
@@ -180,7 +184,15 @@ module.exports = CloudFoundryGenerator.extend({
         this.on('end', function () {
             if (this.abort) return;
             var done = this.async();
-            var cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war';
+            var cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -p';
+            var buildCmd;
+            if (this.buildTool === 'maven') {
+                cloudfoundryDeployCommand += ' target/*.war';
+                buildCmd = 'mvn package -DskipTests';
+            } else if (this.buildTool === 'gradle') {
+                cloudfoundryDeployCommand += ' build/libs/*.war';
+                buildCmd = 'gradlew bootRepackage -x test';
+            }
 
             this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
             var child = exec(cloudfoundryDeployCommand, function (err, stdout) {
@@ -188,8 +200,8 @@ module.exports = CloudFoundryGenerator.extend({
                     this.log.error(err);
                 }
                 this.log(chalk.green('\nYour app should now be live'));
-                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('mvn package -P' + this.cloudfoundryProfile + ' -DskipTests')));
-                this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold('cf push -f deploy/cloudfoundry/manifest.yml -p target/*.war')));
+                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(buildCmd + ' -P' + this.cloudfoundryProfile)));
+                this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(cloudfoundryDeployCommand)));
                 done();
             }.bind(this));
 

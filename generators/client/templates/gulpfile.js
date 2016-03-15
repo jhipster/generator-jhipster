@@ -10,6 +10,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant-fork'),
     eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
+    argv = require('yargs').argv,
     gutil = require('gulp-util'),
     protractor = require('gulp-protractor').protractor,<% } %>
     es = require('event-stream'),
@@ -23,8 +24,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     changed = require('gulp-changed'),
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
-    angularFilesort = require('gulp-angular-filesort'),
-    argv = require('yargs').argv;
+    angularFilesort = require('gulp-angular-filesort');
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
@@ -57,7 +57,7 @@ gulp.task('copy', function () {
             merge: true
         }))
         .pipe(gulp.dest(config.dist)),<% } %>
-        gulp.src(config.app + 'content/**/*.{woff,woff2,svg,ttf,eot}')
+        gulp.src(config.app + 'content/**/*.{woff,woff2,svg,ttf,eot,otf}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(flatten())
@@ -99,9 +99,10 @@ gulp.task('sass', function () {
         .pipe(changed(config.cssDir, {extension: '.css'}))
         .pipe(sass({includePaths:config.bower}).on('error', sass.logError))
         .pipe(gulp.dest(config.cssDir)),
-        gulp.src(config.bower + 'bootstrap-sass/assets/fonts/bootstrap/*.*')
+        gulp.src(config.bower + '**/fonts/**/*.{woff,woff2,svg,ttf,eot,otf}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.app + 'content/fonts'))
+        .pipe(flatten())
         .pipe(gulp.dest(config.app + 'content/fonts'))
     );
 });

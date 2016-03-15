@@ -11,6 +11,11 @@
             "error": "பிழை"
         },
         "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
             "diskSpace": "வட்டு காலியிடம்",
             "mail": "மின்னஞ்சல்"<% if (searchEngine == 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType == 'sql') { %>,

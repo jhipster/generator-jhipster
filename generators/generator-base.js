@@ -272,10 +272,12 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Galician', value: 'gl'},
         {name: 'German', value: 'de'},
         {name: 'Greek', value: 'el'},
+        {name: 'Hindi', value: 'hi'},
         {name: 'Hungarian', value: 'hu'},
         {name: 'Italian', value: 'it'},
         {name: 'Japanese', value: 'ja'},
         {name: 'Korean', value: 'ko'},
+        {name: 'Marathi', value: 'mr'},
         {name: 'Polish', value: 'pl'},
         {name: 'Portuguese (Brazilian)', value: 'pt-br'},
         {name: 'Portuguese', value: 'pt-pt'},
@@ -1201,11 +1203,11 @@ Generator.prototype.getMainClassName = function () {
     return _s.capitalize(this.getAngularAppName());
 };
 
-Generator.prototype.askModuleName = function (generator, question, questions) {
+Generator.prototype.askModuleName = function (generator, currentQuestion, totalQuestions) {
 
     var done = generator.async();
     var defaultAppBaseName = this.getDefaultAppName();
-
+    var getNumberedQuestion = this.getNumberedQuestion;
     generator.prompt({
         type: 'input',
         name: 'baseName',
@@ -1216,7 +1218,11 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
             }
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
         },
-        message: '(' + (question) + '/' + questions + ') What is the base name of your application?',
+        message: function (response) {
+            return getNumberedQuestion('What is the base name of your application?', currentQuestion, totalQuestions, function (current) {
+                currentQuestion = current;
+            }, true);
+        },
         default: defaultAppBaseName
     }, function (prompt) {
         generator.baseName = prompt.baseName;
@@ -1224,16 +1230,21 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
     }.bind(generator));
 };
 
-Generator.prototype.aski18n = function (generator, question, questions) {
+Generator.prototype.aski18n = function (generator, currentQuestion, totalQuestions) {
 
     var languageOptions = this.getAllSupportedLanguageOptions();
+    var getNumberedQuestion = this.getNumberedQuestion;
 
     var done = generator.async();
     var prompts = [
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: '(' + (question) + '/' + questions + ') Would you like to enable internationalization support?',
+            message: function (response) {
+                return getNumberedQuestion('Would you like to enable internationalization support?', currentQuestion, totalQuestions, function (current) {
+                    currentQuestion = current;
+                }, true);
+            },
             default: true
         },
         {
@@ -1278,7 +1289,7 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
         var skipClient = type && type === 'server';
         generator.composeWith('jhipster:languages', {
             options: {
-                'skip-wiredep': true,
+                'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
                 configOptions: configOptions
@@ -1289,6 +1300,16 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
         });
     }
 };
+
+Generator.prototype.getNumberedQuestion = function (msg, currentQuestion, totalQuestions, cb, cond) {
+    var order;
+    if (cond) {
+        ++currentQuestion;
+    }
+    order = '(' + currentQuestion + '/' + totalQuestions + ') ';
+    cb(currentQuestion);
+    return order + msg;
+},
 
 Generator.prototype.contains = _.includes;
 

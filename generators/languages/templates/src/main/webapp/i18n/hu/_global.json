@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "Ön <strong>elavult</strong> böngészőt használ. Kérjük <a href=\"http://browsehappy.com/?locale=hu\">frissítse böngészőjét</a> hogy javuljon a felhasználói élménye.",
         "menu": {
             "home": "Kezdőpont",

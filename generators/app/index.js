@@ -12,10 +12,10 @@ var JhipsterGenerator = generators.Base.extend({});
 util.inherits(JhipsterGenerator, scriptBase);
 
 /* Constants use throughout */
-const constants = require('../generator-constants'),
-    QUESTIONS = constants.QUESTIONS;
+const constants = require('../generator-constants');
 
 var currentQuestion = 0;
+var totalQuestions = constants.QUESTIONS;
 var configOptions = {};
 
 module.exports = JhipsterGenerator.extend({
@@ -196,11 +196,16 @@ module.exports = JhipsterGenerator.extend({
             if (this.existingProject) return;
 
             var done = this.async();
+            var getNumberedQuestion = this.getNumberedQuestion;
 
             this.prompt({
                 type: 'list',
                 name: 'applicationType',
-                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of application would you like to create?',
+                message: function (response) {
+                    return getNumberedQuestion('Which *type* of application would you like to create?', currentQuestion, totalQuestions, function (current) {
+                        currentQuestion = current;
+                    }, true);
+                },
                 choices: [
                     {
                         value: 'monolith',
@@ -225,8 +230,9 @@ module.exports = JhipsterGenerator.extend({
         askForModuleName: function () {
             if (this.existingProject) return;
 
-            this.askModuleName(this, ++currentQuestion, QUESTIONS);
+            this.askModuleName(this, currentQuestion++, totalQuestions);
             configOptions.lastQuestion = currentQuestion;
+            configOptions.totalQuestions = totalQuestions;
         }
     },
 
@@ -281,8 +287,9 @@ module.exports = JhipsterGenerator.extend({
 
         askFori18n: function () {
             currentQuestion = configOptions.lastQuestion;
+            totalQuestions = configOptions.totalQuestions;
             if (this.skipI18n || this.existingProject) return;
-            this.aski18n(this, ++currentQuestion, QUESTIONS);
+            this.aski18n(this, currentQuestion++, totalQuestions);
         }
     },
 
@@ -291,6 +298,7 @@ module.exports = JhipsterGenerator.extend({
         askForTestOpts: function () {
             if (this.existingProject) return;
 
+            var getNumberedQuestion = this.getNumberedQuestion;
             var choices = [];
             if (!this.skipServer) {
                 // all server side test frameworks should be addded here
@@ -310,7 +318,11 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which testing frameworks would you like to use?',
+                message: function (response) {
+                    return getNumberedQuestion('Which testing frameworks would you like to use?', currentQuestion, totalQuestions, function (current) {
+                        currentQuestion = current;
+                    }, true);
+                },
                 choices: choices,
                 default: ['gatling']
             }, function (prompt) {
@@ -321,6 +333,7 @@ module.exports = JhipsterGenerator.extend({
 
         setSharedConfigOptions: function () {
             configOptions.lastQuestion = currentQuestion;
+            configOptions.totalQuestions = totalQuestions;
             configOptions.testFrameworks = this.testFrameworks;
             configOptions.enableTranslation = this.enableTranslation;
             configOptions.nativeLanguage = this.nativeLanguage;

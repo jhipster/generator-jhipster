@@ -1624,7 +1624,7 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.microservicePath)) {
                 return;
             }
-            
+
             this.copy(this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json', this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
         },
 
@@ -1749,10 +1749,12 @@ module.exports = EntityGenerator.extend({
         },
 
         writeTestFiles: function() {
-            if (this.skipServer) return;
 
-            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
-                SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
+            if (!this.skipServer) {
+                this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
+                    SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
+            }
+
 
             if (this.testFrameworks.indexOf('gatling') != -1) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',

@@ -2,9 +2,20 @@
     "health": {
         "title": "Control de saúde",
         "refresh.button": "Refrescar",
-        "health.details.details": "Detalles",
         "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Details",
+            "properties": "Properties",
+            "name": "Name",
+            "value": "Value",
+            "error": "Error"
+        },
         "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
             "diskSpace": "Espazo en disco",
             "mail": "Email",<% if (databaseType == 'sql') { %>
             "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>

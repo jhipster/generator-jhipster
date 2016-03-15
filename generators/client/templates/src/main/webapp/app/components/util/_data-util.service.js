@@ -10,9 +10,10 @@
     function DataUtils ($window) {
 
         var service = {
-            abbreviate : abbreviate,
-            byteSize : byteSize,
-            openFile : openFile
+            abbreviate: abbreviate,
+            byteSize: byteSize,
+            openFile: openFile,
+            toBase64: toBase64
         };
 
         return service;
@@ -59,6 +60,15 @@
 
         function openFile (type, data) {
             $window.open('data:' + type + ';base64,' + data, '_blank', 'height=300,width=400');
+        }
+
+        function toBase64 (file, cb) {
+            var fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = function (e) {
+                var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+                cb(base64Data);
+            };
         }
     }
 })();

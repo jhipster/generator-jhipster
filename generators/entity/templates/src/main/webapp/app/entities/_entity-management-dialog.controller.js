@@ -63,14 +63,14 @@
         vm.clear = function() {
             $uibModalInstance.dismiss('cancel');
         };
-        <%_ if (fieldsContainBlob) { _%>
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate || fieldsContainDate) { _%>
 
-        vm.openFile = DataUtils.openFile;
-
-        vm.byteSize = DataUtils.byteSize;
+        vm.datePickerOpenStatus = {};
         <%_ } _%>
         <%_ for (idx in fields) {
-            if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+            if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
+        vm.datePickerOpenStatus.<%= fields[idx].fieldName %> = false;
+        <%_ } else if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
 
         vm.set<%= fields[idx].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
             <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>
@@ -79,27 +79,25 @@
             }
             <%_ } _%>
             if ($file) {
-                var fileReader = new FileReader();
-                fileReader.readAsDataURL($file);
-                fileReader.onload = function (e) {
-                    var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+                DataUtils.toBase64($file, function(base64Data) {
                     $scope.$apply(function() {
                         <%= entityInstance %>.<%= fields[idx].fieldName %> = base64Data;
                         <%= entityInstance %>.<%= fields[idx].fieldName %>ContentType = $file.type;
                     });
-                };
+                });
             }
         };
-        <%_ } else if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
-        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %> = {};
-
-        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status = {
-            opened: false
-        };
-
-        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>Open = function() {
-            vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status.opened = true;
-        };
         <%_ } } _%>
+        <%_ if (fieldsContainBlob) { _%>
+
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
+        <%_ } _%>
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate || fieldsContainDate) { _%>
+
+        vm.openCalendar = function(date) {
+            vm.datePickerOpenStatus[date] = true;
+        };
+        <%_ } _%>
     }
 })();
