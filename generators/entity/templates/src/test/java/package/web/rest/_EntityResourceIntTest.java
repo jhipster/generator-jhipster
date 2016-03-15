@@ -313,7 +313,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
-        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
 
 		int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
@@ -348,14 +349,19 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        <%_ } } _%>
+        <%_ } } _%><% if (searchEngine == 'elasticsearch') { %>
+        // Validate the <%= entityClass %> in ElasticSearch
+        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
+        assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
+        <%_ } _%>
     }
 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void delete<%= entityClass %>() throws Exception {
         // Initialize the database
-        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
 
 		int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
@@ -366,7 +372,12 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
         // Validate the database is empty
         List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstancePlural %>).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(<%= entityInstancePlural %>).hasSize(databaseSizeBeforeDelete - 1);<% if (searchEngine == 'elasticsearch') { %>
+
+        // Validate tElasticSearch is empty
+        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
+        assertThat(<%= entityInstance %>ExistsInEs).isFalse();
+        <%_ } _%>
     }<% if (searchEngine == 'elasticsearch') { %>
 
     @Test<% if (databaseType == 'sql') { %>
