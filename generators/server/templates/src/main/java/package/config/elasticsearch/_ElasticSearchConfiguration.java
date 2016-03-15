@@ -1,8 +1,13 @@
-package <%=packageName%>.config;
+package <%=packageName%>.config.elasticsearch;
 
 import java.io.IOException;
 
+import <%=packageName%>.config.JacksonConfiguration;
+
 import org.elasticsearch.client.Client;
+<%_ if (databaseType == 'sql') { _%>
+import org.springframework.beans.factory.BeanFactory;
+<%_ } _%>
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +27,14 @@ public class ElasticSearchConfiguration {
         return new ElasticsearchTemplate(client, new CustomEntityMapper(jackson2ObjectMapperBuilder.createXmlMapper(false).build()));
     }
 
+<%_ if (databaseType == 'sql') { _%>
+    @Bean
+    public static BeanFactoryHolder beanFactoryHolder(BeanFactory beanFactory) {
+        BeanFactoryHolder.INSTANCE = new BeanFactoryHolder(beanFactory);
+        return BeanFactoryHolder.INSTANCE;
+    }
+
+<%_ } _%>
     public class CustomEntityMapper implements EntityMapper {
 
         private ObjectMapper objectMapper;
@@ -42,4 +55,25 @@ public class ElasticSearchConfiguration {
             return objectMapper.readValue(source, clazz);
         }
     }
+    <%_ if (databaseType == 'sql') { _%>
+
+    public static class BeanFactoryHolder {
+
+        private static BeanFactoryHolder INSTANCE;
+
+        private BeanFactory beanFactory;
+
+        private BeanFactoryHolder(BeanFactory beanFactory) {
+            this.beanFactory = beanFactory;
+        }
+
+        public static BeanFactoryHolder beanFactoryHolder() {
+            return INSTANCE;
+        }
+
+        public BeanFactory get() {
+            return beanFactory;
+        }
+    }
+<%_ } _%>
 }
