@@ -4,8 +4,8 @@ import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service != 'no') { %>
-import <%=packageName%>.service.<%= entityClass %>Service;<% } else { if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} if (dto == 'mapstruct') { %>
+import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 
@@ -165,10 +165,10 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } if (service != 'no') { %>
 
     @Inject
-    private <%= entityClass %>Service <%= entityInstance %>Service;<% } else { if (searchEngine == 'elasticsearch') { %>
+    private <%= entityClass %>Service <%= entityInstance %>Service;<% } if (searchEngine == 'elasticsearch') { %>
 
     @Inject
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% }} %>
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -195,7 +195,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     @Before
     public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
-        <%= entityInstance %>Repository.deleteAll();<% } %><% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>Repository.deleteAll();<% } if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.deleteAll();<% } %>
         <%= entityInstance %> = new <%= entityClass %>();
         <%_ for (idx in fields) { _%>
@@ -232,7 +232,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        <%_ }} _%><% if (searchEngine == 'elasticsearch') { %>
+        <%_ }} if (searchEngine == 'elasticsearch') { _%>
+
         // Validate the <%= entityClass %> in ElasticSearch
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
@@ -349,7 +350,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        <%_ } } _%><% if (searchEngine == 'elasticsearch') { %>
+        <%_ } } if (searchEngine == 'elasticsearch') { _%>
+
         // Validate the <%= entityClass %> in ElasticSearch
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
