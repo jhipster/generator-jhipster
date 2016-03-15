@@ -11,6 +11,11 @@
             "error": "错误"
         },
         "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
             "diskSpace": "硬盘空间",
             "mail": "电子邮件",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>

@@ -11,6 +11,11 @@
             "error": "त्रुटि"
         },
         "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
             "diskSpace": "डिस्क स्थान",
             "mail": "ईमेल"<% if (searchEngine == 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType == 'sql') { %>,
