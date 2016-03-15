@@ -1320,7 +1320,7 @@ var wordwrap = function (text, width, seperator, keepLF) {
         if (keepLF == true && i != 0) {
             wrappedText = wrappedText + '\\n';
         }
-        wrappedText = wrappedText + seperator + row + seperator;
+        wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;
     }
     return wrappedText;
 }
