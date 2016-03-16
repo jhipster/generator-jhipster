@@ -35,7 +35,7 @@ module.exports = CloudFoundryGenerator.extend({
             this.databaseType = this.config.get('databaseType');
             this.devDatabaseType = this.config.get('devDatabaseType');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
-            this.angularAppName = _.camelCase(_.kebabCase(this.baseName)) + 'App';
+            this.angularAppName = this.getAngularAppName();
         }
     },
 

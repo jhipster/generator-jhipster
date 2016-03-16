@@ -30,7 +30,7 @@ module.exports = HerokuGenerator.extend({
         this.hibernateCache = this.config.get('hibernateCache');
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
-        this.angularAppName = _.camelCase(_.kebabCase(this.baseName)) + 'App';
+        this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
     },
 
