@@ -5,8 +5,10 @@ import java.io.IOException;
 import <%=packageName%>.config.JacksonConfiguration;
 
 import org.elasticsearch.client.Client;
+
 <%_ if (databaseType == 'sql') { _%>
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 <%_ } _%>
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @AutoConfigureAfter(value = { JacksonConfiguration.class })
-public class ElasticSearchConfiguration {
+public class ElasticSearchConfiguration <% if (databaseType == 'sql') { %>implements BeanFactoryAware <% } %>{
 
     @Bean
     public ElasticsearchTemplate elasticsearchTemplate(Client client, Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
@@ -28,10 +30,9 @@ public class ElasticSearchConfiguration {
     }
 
 <%_ if (databaseType == 'sql') { _%>
-    @Bean
-    public static BeanFactoryHolder beanFactoryHolder(BeanFactory beanFactory) {
-        BeanFactoryHolder.INSTANCE = new BeanFactoryHolder(beanFactory);
-        return BeanFactoryHolder.INSTANCE;
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
+        ElasticSearchUpdater.setBeanFactory(beanFactory);
     }
 
 <%_ } _%>
@@ -55,25 +56,4 @@ public class ElasticSearchConfiguration {
             return objectMapper.readValue(source, clazz);
         }
     }
-    <%_ if (databaseType == 'sql') { _%>
-
-    public static class BeanFactoryHolder {
-
-        private static BeanFactoryHolder INSTANCE;
-
-        private BeanFactory beanFactory;
-
-        private BeanFactoryHolder(BeanFactory beanFactory) {
-            this.beanFactory = beanFactory;
-        }
-
-        public static BeanFactoryHolder beanFactoryHolder() {
-            return INSTANCE;
-        }
-
-        public BeanFactory get() {
-            return beanFactory;
-        }
-    }
-<%_ } _%>
 }

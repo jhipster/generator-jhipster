@@ -1,6 +1,5 @@
 package <%=packageName%>.config.elasticsearch;
 
-import static <%=packageName%>.config.elasticsearch.ElasticSearchConfiguration.BeanFactoryHolder.beanFactoryHolder;
 import static org.apache.commons.lang.StringUtils.uncapitalize;
 
 import java.io.Serializable;
@@ -17,6 +16,8 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchCrudReposi
 public class ElasticSearchUpdater<T> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    private static BeanFactory beanFactory;
 
     @PostPersist
     @PostUpdate
@@ -41,7 +42,6 @@ public class ElasticSearchUpdater<T> {
 
     @SuppressWarnings("unchecked")
     private ElasticsearchCrudRepository<T, Serializable> repositoryFor(T entity) {
-        BeanFactory beanFactory = beanFactoryHolder().get();
         String repositoryName = repositoryNameFor(entity);
     
         ElasticsearchCrudRepository<T, Serializable> repository = null;
@@ -56,5 +56,9 @@ public class ElasticSearchUpdater<T> {
     private String repositoryNameFor(T entity) {
         String entityName = entity.getClass().getSimpleName();
         return uncapitalize(entityName) + "SearchRepository";
+    }
+
+    static void setBeanFactory(BeanFactory beanFactory) {
+        ElasticSearchUpdater.beanFactory = beanFactory;
     }
 }
