@@ -24,13 +24,6 @@ eureka:
             defaultZone: http://localhost:8761/eureka/
 <%_ } _%>
 
-<%_ if (applicationType == 'gateway') { _%>
-# Prevent services from being automatically added to new routes
-# In production, routes should be explictly defined in the config server's <%= baseName %>-prod.yml
-zuul:
-    ignoredServices: '*'
-<%_ } _%>
-
 spring:
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
