@@ -29,7 +29,7 @@ services:
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
-        <%_ if (applicationType == 'gateway') { _%>
+        <%_ if (applicationType == 'monolith' || applicationType == 'gateway') { _%>
         ports:
             - "<%= serverPort %>:<%= serverPort %>"
             <%_ if (hibernateCache == 'hazelcast') { _%>

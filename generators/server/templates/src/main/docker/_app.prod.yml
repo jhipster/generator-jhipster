@@ -3,7 +3,9 @@ services:
     <%= baseName.toLowerCase() %>-app:
         image: jhipster/<%= baseName.toLowerCase() %>
         external_links:
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
             - "jhipster-registry:registry"
+        <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
             - "<%= baseName.toLowerCase() %>-mysql:mysql"
         <%_ } _%>
@@ -29,7 +31,7 @@ services:
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
-        <%_ if (applicationType == 'gateway') { _%>
+        <%_ if (applicationType == 'monolith' || applicationType == 'gateway') { _%>
         ports:
             - "<%= serverPort %>:<%= serverPort %>"
             <%_ if (hibernateCache == 'hazelcast') { _%>

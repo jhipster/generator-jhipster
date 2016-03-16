@@ -786,7 +786,10 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeDockerFiles: function () {
-            // Create docker-compose file
+            // Create Docker and Docker Compose files
+            this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
+            this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
+            this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
             if ((this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_db.dev.yml', DOCKER_DIR + 'db.dev.yml', this, {});
@@ -807,9 +810,6 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
-                this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
-                this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
-                this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
             }
         },
 
