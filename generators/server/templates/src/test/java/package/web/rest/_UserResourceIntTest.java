@@ -67,6 +67,7 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
                 .andExpect(status().isNotFound());
     }
 
+    <%_ if (enableSocialSignIn) { _%>
     @Test
     public void testGetExistingUserWithAnEmailLogin() throws Exception {
         User user = userService.createUserInformation("john.doe@localhost.com", "johndoe", "John", "Doe", "john.doe@localhost.com", "en-US");
@@ -92,4 +93,5 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
 
         userRepository.delete(user);
     }
+    <%_ } _%>
 }
