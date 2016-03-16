@@ -9,7 +9,7 @@ module.exports = {
     tmp: '<%= BUILD_DIR %>tmp',
     revManifest: '<%= BUILD_DIR %>tmp/rev-manifest.json',
     port: 9000,
-    apiPort: 8080,
+    apiPort: <%= serverPort %>,
     liveReloadPort: 35729,
     uri: 'http://localhost:'
 };
