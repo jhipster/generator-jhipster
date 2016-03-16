@@ -1,11 +1,13 @@
-<%_
-var mapper = entityInstance  + 'Mapper';
-var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO'; %>
-        <%_ if (!viaService) { _%>
+<%_ var mapper = entityInstance  + 'Mapper';
+    var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+    var entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs'; %>
+<%_ if (!viaService) { _%>
         return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
-            .map(<%= entityToDtoReference %>)<% } %>
+            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)
+    <%_ if (useDto) { _%>
+            .map(<%= entityToDtoReference %>)
+    <%_ } _%>
             .collect(Collectors.toList());
-        <%_ } else { _%>
-        return <%= entityInstance %>Service.search(query);
-        <%_ } _%>
+<%_ } else { _%>
+        return <% if (useDto) { %><%= entityListToDtoListReference %>(<% } %><%= entityInstance %>Service.search(query)<% if (useDto) { %>)<% } %>;
+<%_ } _%>

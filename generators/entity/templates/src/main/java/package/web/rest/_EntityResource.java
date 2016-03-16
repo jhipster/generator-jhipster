@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;<% } %>
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;<% if (dto == 'mapstruct') { %>
@@ -42,9 +41,10 @@ public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
     <% var viaService = service != 'no';
+    var useDto = (dto == 'mapstruct');
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
-    <%- include('../../common/inject_template', {viaService: viaService}); -%>
+    <%- include('../../common/inject_template', {viaService: viaService, useDto: useDto}); -%>
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
      *
@@ -59,8 +59,10 @@ public class <%= entityClass %>Resource {
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("<%= entityInstance %>", "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
-        }<%- include('../../common/save_template', {viaService: viaService}); -%>
+            return ResponseEntity.badRequest()
+                .headers(HeaderUtil.createFailureAlert("<%= entityInstance %>", "idexists", "A new <%= entityInstance %> cannot already have an ID"))
+                .body(null);
+        }<%- include('../../common/save_template', {viaService: viaService, useDto: useDto}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
             .body(result);
@@ -83,7 +85,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             return create<%= entityClass %>(<%= instanceName %>);
-        }<%- include('../../common/save_template', {viaService: viaService}); -%>
+        }<%- include('../../common/save_template', {viaService: viaService, useDto: useDto}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("<%= entityInstance %>", <%= instanceName %>.getId().toString()))
             .body(result);
@@ -113,11 +115,9 @@ public class <%= entityClass %>Resource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, useDto: useDto}); -%>
         return Optional.ofNullable(<%= instanceName %>)
-            .map(result -> new ResponseEntity<>(
-                result,
-                HttpStatus.OK))
+            .map(result -> ResponseEntity.ok().body(result))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -133,7 +133,9 @@ public class <%= entityClass %>Resource {
     @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("<%= entityInstance %>", id.toString())).build();
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityDeletionAlert("<%= entityInstance %>", id.toString()))
+            .build();
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
@@ -146,6 +148,6 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/_search/<%= entityApiUrl %>",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
+    @Timed<%- include('../../common/search_template', {viaService: viaService, useDto: useDto}); -%><% } %>
 
 }
