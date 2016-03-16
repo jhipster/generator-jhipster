@@ -283,7 +283,11 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'enableSocialSignIn',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType == 'monolith' && (response.authenticationType == 'session' || response.authenticationType == 'jwt'));
+                    },
                     choices: [
                         {
                             value: false,
@@ -291,7 +295,7 @@ module.exports = JhipsterServerGenerator.extend({
                         },
                         {
                             value: true,
-                            name: 'Yes, with social login'
+                            name: 'Yes, use social login'
                         }
                     ],
                     default: false
