@@ -40,6 +40,15 @@ public class SocialService {
     @Inject
     private MailService mailService;
 
+    public void deleteUserSocialConnection(String login) {
+        ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(login);
+        connectionRepository.findAllConnections().keySet().stream()
+            .forEach(providerId -> {
+                connectionRepository.removeConnections(providerId);
+                log.debug("Delete user social connection providerId: {}", providerId);
+            });
+    }
+
     public void createSocialUser(Connection<?> connection, String langKey) {
         if (connection == null) {
             log.error("Cannot create social user because connection is null");

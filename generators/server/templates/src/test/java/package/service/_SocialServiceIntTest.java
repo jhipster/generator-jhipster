@@ -20,6 +20,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -67,6 +69,26 @@ public class SocialServiceIntTest {
         ReflectionTestUtils.setField(socialService, "mailService", mockMailService);
         ReflectionTestUtils.setField(socialService, "userRepository", userRepository);
         ReflectionTestUtils.setField(socialService, "usersConnectionRepository", mockUsersConnectionRepository);
+    }
+
+    @Test
+    public void testDeleteUserSocialConnection() throws Exception {
+        // Setup
+        Connection<?> connection = createConnection("@LOGIN",
+            "mail@mail.com",
+            "FIRST_NAME",
+            "LAST_NAME",
+            "PROVIDER");
+        socialService.createSocialUser(connection, "fr");
+        MultiValueMap connectionsByProviderId = new LinkedMultiValueMap<>();
+        connectionsByProviderId.put("PROVIDER", null);
+        when(mockConnectionRepository.findAllConnections()).thenReturn(connectionsByProviderId);
+
+        // Exercise
+        socialService.deleteUserSocialConnection("@LOGIN");
+
+        // Verify
+        verify(mockConnectionRepository, times(1)).removeConnections("PROVIDER");
     }
 
     @Test(expected = IllegalArgumentException.class)

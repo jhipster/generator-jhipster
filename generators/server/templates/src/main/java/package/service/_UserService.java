@@ -33,6 +33,11 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
+    <%_ if (enableSocialSignIn) { _%>
+    @Inject
+    private SocialService socialService;
+    <%_ } _%>
+
     @Inject
     private PasswordEncoder passwordEncoder;
 
@@ -41,6 +46,7 @@ public class UserService {
 
     @Inject
     private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
+
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %><% } %>
@@ -164,6 +170,9 @@ public class UserService {
 
     public void deleteUserInformation(String login) {
         userRepository.findOneByLogin(login).ifPresent(u -> {
+            <%_ if (enableSocialSignIn) { _%>
+            socialService.deleteUserSocialConnection(u.getLogin());
+            <%_ } _%>
             userRepository.delete(u);<% if (searchEngine == 'elasticsearch') { %>
             userSearchRepository.delete(u);<% } %>
             log.debug("Deleted User: {}", u);
