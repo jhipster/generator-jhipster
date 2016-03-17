@@ -24,6 +24,7 @@ targetCompatibility=1.<%= javaVersion %>
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
+apply plugin: 'docker'
 apply plugin: 'propdeps'
 defaultTasks 'bootRun'
 
@@ -50,6 +51,20 @@ test {
 
     ignoreFailures true
     reports.html.enabled = false
+}
+
+task docker(type: Docker, dependsOn: build) {
+    push = false
+    tag = '<%=baseName.toLowerCase()%>'
+    tagVersion = 'latest'
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from 'build/libs'
+            into stageDir
+            include '*.war*'
+        }
+    }
 }
 
 task cucumberTest(type: Test) {
