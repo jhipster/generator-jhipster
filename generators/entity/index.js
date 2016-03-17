@@ -1584,13 +1584,6 @@ module.exports = EntityGenerator.extend({
             this.entityAngularJSName = this.entityClass + _.camelCase(this.entityAngularJSSuffix);
             this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
-            if (databaseType == 'sql') {
-                this.entityUrlType = 'int';
-            } else if (databaseType == 'mongodb') {
-                this.entityUrlType = '[0-9a-fA-F]{24}';
-            } else if (databaseType == 'cassandra') {
-                this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
-            }
             this.entityTranslationKey = this.entityInstance;
             this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
@@ -1804,7 +1797,6 @@ module.exports = EntityGenerator.extend({
                         entityServiceFileName: this.entityServiceFileName,
                         entityStateName: this.entityStateName,
                         entityUrl: this.entityUrl,
-                        entityUrlType: this.entityUrlType,
                         entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
