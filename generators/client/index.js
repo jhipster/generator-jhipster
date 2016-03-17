@@ -113,7 +113,7 @@ module.exports = JhipsterClientGenerator.extend({
         totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
-
+        this.serverPort = this.config.get('serverPort') ? this.config.get('serverPort') : 8080;
     },
 
     initializing: {
