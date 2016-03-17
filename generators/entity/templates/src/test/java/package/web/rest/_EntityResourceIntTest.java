@@ -314,10 +314,14 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
+<%_ if (service != 'no' && dto != 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
+<%_ } _%>
 
-		int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
         <%= entityClass %> updated<%= entityClass %> = new <%= entityClass %>();
@@ -362,10 +366,14 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Transactional<% } %>
     public void delete<%= entityClass %>() throws Exception {
         // Initialize the database
+<%_ if (service != 'no' && dto != 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
+<%_ } _%>
 
-		int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
@@ -386,8 +394,12 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Transactional<% } %>
     public void search<%= entityClass %>() throws Exception {
         // Initialize the database
+<%_ if (service != 'no' && dto != 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);
+<%_ } _%>
 
         // Search the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))
