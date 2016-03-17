@@ -181,6 +181,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: spring_cloud_version
+    compile group: 'org.springframework.retry', name: 'spring-retry'
     <%_ } _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector'

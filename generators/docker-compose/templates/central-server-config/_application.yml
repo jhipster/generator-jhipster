@@ -1,4 +1,4 @@
-#common config shared between all apps
+#common configuration shared between all applications
 configserver:
     status: ${spring.cloud.config.uri}/${spring.cloud.config.label}/${spring.cloud.config.name}-${spring.cloud.config.profile}.yml
 jhipster:

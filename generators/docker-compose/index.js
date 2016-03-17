@@ -17,7 +17,7 @@ module.exports = yeoman.Base.extend({
 
             shelljs.exec('docker -v', {silent:true},function(code, stdout, stderr) {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' docker is not found on your computer.\n' +
+                    this.log(chalk.yellow.bold('WARNING!') + ' Docker is not installed on your computer.\n' +
                         '         Read http://docs.docker.com/engine/installation/#installation\n');
                 }
                 done();
@@ -29,7 +29,7 @@ module.exports = yeoman.Base.extend({
 
             shelljs.exec('docker-compose -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' docker-compose is not found on your computer.\n' +
+                    this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose is installed on your computer.\n' +
                         '         Read https://docs.docker.com/compose/install/\n');
                 }
                 done();
@@ -40,7 +40,6 @@ module.exports = yeoman.Base.extend({
 
             this.defaultAppsFolders = this.config.get('appsFolders');
             this.useElk = this.config.get('useElk');
-            this.profile = this.config.get('profile');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
             if(this.defaultAppsFolders !== undefined) {
@@ -57,7 +56,7 @@ module.exports = yeoman.Base.extend({
             var prompts = [{
                 type: 'input',
                 name: 'directoryPath',
-                message: 'Where are the applications located ?',
+                message: 'Enter the root directory where your gateway(s) and microservices are located',
                 default: '../',
                 validate: function (input) {
                     var path = this.destinationPath(input);
@@ -84,7 +83,6 @@ module.exports = yeoman.Base.extend({
                     } else {
                         return path + ' is not a directory or doesn\'t exist';
                     }
-
                 }.bind(this)
             }];
 
@@ -115,7 +113,7 @@ module.exports = yeoman.Base.extend({
             var prompts = [{
                 type: 'checkbox',
                 name: 'chosenApps',
-                message: 'Which applications do you want in your DockerFile ?',
+                message: 'Which applications do you want to include your Docker Compose configuration?',
                 choices: this.appsFolders,
                 default: this.defaultAppsFolders,
                 validate: function (input) {
@@ -159,42 +157,21 @@ module.exports = yeoman.Base.extend({
                 done();
             }.bind(this));
         },
-
-        askForProfile: function() {
-            if(this.abort) return;
-            var done = this.async();
-
-            var choices = ['dev', 'prod'];
-
-            var prompts = [{
-                type: 'list',
-                name: 'profile',
-                message: 'Which profile do you want to use ?',
-                choices: choices,
-                default: this.profile || 'dev'
-            }];
-
-            this.prompt(prompts, function(props) {
-                this.profile = props.profile;
-
-                done();
-            }.bind(this));
-        }
     },
 
     configuring: {
         checkImages: function() {
             if(this.abort) return;
 
-            this.log('\nChecking Docker images in applications directories...');
+            this.log('\nChecking Docker images in applications\' directories...');
 
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].buildTool === 'maven') {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
-                    var runCommand = 'mvn package docker:build';
+                    var runCommand = 'mvn package -Pprod docker:build';
                 } else {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
-                    var runCommand = './gradlew bootRepackage buildDocker';
+                    var runCommand = './gradlew -Pprod bootRepackage buildDocker';
                 }
 
                 if (!shelljs.test('-f', imagePath)) {
@@ -225,7 +202,6 @@ module.exports = yeoman.Base.extend({
             if(this.abort) return;
             this.config.set('appsFolders', this.appsFolders);
             this.config.set('useElk', this.useElk);
-            this.config.set('profile', this.profile);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
         }
     },
@@ -240,7 +216,7 @@ module.exports = yeoman.Base.extend({
         writeRegistryFiles: function() {
             if(this.abort) return;
 
-            this.copy('registry.yml', 'registry.yml');
+            this.copy('jhipster-registry.yml', 'jhipster-registry.yml');
             this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
         },
 
@@ -256,7 +232,7 @@ module.exports = yeoman.Base.extend({
         if(this.abort) return;
 
         this.log('\n' + chalk.bold.green('##### USAGE #####'));
-        this.log('First launch the JHipster Registry by running : ' + chalk.cyan('docker-compose up -d jhipster-registry'));
+        this.log('First launch the JHipster Registry by running : ' + chalk.cyan('docker-compose -f jhipster-registry.yml up -d'));
         this.log('Wait a minute, then launch all your applications by running : ' + chalk.cyan('docker-compose up -d'));
     }
 });

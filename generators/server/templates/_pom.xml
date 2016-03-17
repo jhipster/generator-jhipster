@@ -564,6 +564,10 @@
             <artifactId>spring-cloud-starter-config</artifactId>
             <version>${spring-cloud.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
         <%_ } _%>
         <dependency>
             <groupId>net.logstash.logback</groupId>

@@ -2,9 +2,8 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
-        links:
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-            - "jhipster-registry:registry"
+        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        external_links:
         <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
             - "<%= baseName.toLowerCase() %>-mysql:mysql"
@@ -15,11 +14,18 @@ services:
         <%_ if (prodDatabaseType == 'mongodb') { _%>
             - "<%= baseName.toLowerCase() %>-mongodb:mongodb"
         <%_ } _%>
-        <%_ if (applicationType == 'gateway' || prodDatabaseType == 'cassandra') { _%>
+        <%_ if (prodDatabaseType == 'cassandra') { _%>
             - "<%= baseName.toLowerCase() %>-cassandra:cassandra"
+        <%_ } _%>
+        <%_ if (applicationType == 'gateway' && prodDatabaseType != 'cassandra') { _%>
+            # Uncomment to have Cassandra working with the gateway
+            # - "<%= baseName.toLowerCase() %>-cassandra:cassandra"
         <%_ } _%>
         <%_ if (searchEngine == 'elasticsearch') { _%>
             - "<%= baseName.toLowerCase() %>-elasticsearch:elasticsearch"
+        <%_ } _%>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+            - "jhipster-registry:registry"
         <%_ } _%>
         environment:
             - SPRING_PROFILES_ACTIVE=prod
@@ -57,12 +63,6 @@ services:
             - "5701"
             <%_ } _%>
         <%_ } _%>
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-    jhipster-registry:
-        extends:
-            file: jhipster-registry.yml
-            service: jhipster-registry
-    <%_ } _%>
     <%_ if (prodDatabaseType == 'mysql') { _%>
     <%= baseName.toLowerCase() %>-mysql:
         extends:
@@ -81,11 +81,17 @@ services:
             file: mongodb.yml
             service: <%= baseName.toLowerCase() %>-mongodb
     <%_ } _%>
-    <%_ if (applicationType == 'gateway' || prodDatabaseType == 'cassandra') { _%>
+    <%_ if (prodDatabaseType == 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:
         extends:
             file: cassandra.yml
             service: <%= baseName.toLowerCase() %>-cassandra
+    <%_ } _%>
+    <%_ if (applicationType == 'gateway' && prodDatabaseType != 'cassandra') { _%>
+        # Uncomment to have Cassandra working with the gateway
+        # extends:
+        #     file: cassandra.yml
+        #     service: <%= baseName.toLowerCase() %>-cassandra
     <%_ } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>
     <%= baseName.toLowerCase() %>-elasticsearch:
