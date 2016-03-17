@@ -13,15 +13,15 @@ dependencies {
 }
 
 bootRun {
-  args = ["--spring.profiles.active=prod"]
+    args = ["--spring.profiles.active=prod"]
 }
 <% if (!skipClient) { %>
 task gulpBuildWithOpts(type: GulpTask) {
-   args = ["build", "--no-notification"]
+    args = ["build", "--no-notification"]
 }
 
 war {
-  webAppDirName = '<%= CLIENT_DIST_DIR %>'
+    webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }<% } %>
 
 processResources {

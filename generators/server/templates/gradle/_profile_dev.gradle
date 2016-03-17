@@ -10,11 +10,11 @@ dependencies {
 }
 
 bootRun {
-  args = ["--spring.profiles.active=dev"]
+    args = ["--spring.profiles.active=dev"]
 }
 <% if (!skipClient) { %>
 war {
-  webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
+    webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
 }<% } %>
 
 task setProdProperties(dependsOn: bootRun) << {
