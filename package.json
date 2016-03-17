@@ -37,7 +37,6 @@
     "mkdirp": "0.5.1",
     "shelljs": "0.6.0",
     "pluralize": "1.2.1",
-    "underscore.string": "3.3.4",
     "wordwrap": "1.0.0",
     "yeoman-generator": "0.22.5",
     "yo": "1.7.0",
