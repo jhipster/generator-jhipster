@@ -97,6 +97,7 @@
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                     controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
@@ -133,6 +134,7 @@
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                     controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: ['<%= entityClass %>', function(<%= entityClass %>) {
