@@ -4,7 +4,6 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
-    _s = require('underscore.string'),
     shelljs = require('shelljs'),
     pluralize = require('pluralize'),
     scriptBase = require('../generator-base');
@@ -91,8 +90,8 @@ module.exports = EntityGenerator.extend({
 
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
-        this.entityNameCapitalized = _s.capitalize(this.name);
-        this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
+        this.entityNameCapitalized = _.upperFirst(this.name);
+        this.entityTableName = _.snakeCase(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
@@ -166,7 +165,7 @@ module.exports = EntityGenerator.extend({
                 this.env.error(chalk.red('The table name cannot contain a Cassandra reserved keyword'));
             } else if (prodDatabaseType == 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.entityTableName.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The table name cannot contain a Oracle reserved keyword'));
-            } else if (prodDatabaseType == 'oracle' && _s.underscored(this.entityTableName).length > 26) {
+            } else if (prodDatabaseType == 'oracle' && _.snakeCase(this.entityTableName).length > 26) {
                 this.env.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
             } else if (prodDatabaseType == 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.entityTableName.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The table name cannot contain a MongoDB reserved keyword'));
@@ -207,9 +206,9 @@ module.exports = EntityGenerator.extend({
         this.service = this.fileData.service;
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
-        this.entityTableName = this.fileData.entityTableName || _s.underscored(this.name).toLowerCase();
+        this.entityTableName = this.fileData.entityTableName || _.snakeCase(this.name).toLowerCase();
         this.fields && this.fields.forEach(function (field) {
-            fieldNamesUnderscored.push(_s.underscored(field.fieldName));
+            fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
         }, this);
         this.relationships && this.relationships.forEach(function (rel) {
@@ -268,7 +267,7 @@ module.exports = EntityGenerator.extend({
         if (this.relationships.length > 0) {
             this.log(chalk.white('Relationships'));
             this.relationships.forEach(function (relationship) {
-                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _s.capitalize(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
+                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
             }, this);
             this.log();
         }
@@ -298,7 +297,7 @@ module.exports = EntityGenerator.extend({
                         return 'Your field name cannot be empty';
                     } else if (input.charAt(0) == input.charAt(0).toUpperCase()) {
                         return 'Your field name cannot start with a upper case letter';
-                    } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                    } else if (input == 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) != -1) {
                         return 'Your field name cannot use an already existing field name';
                     } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
                         return 'Your field name cannot contain a Java reserved keyword';
@@ -746,7 +745,7 @@ module.exports = EntityGenerator.extend({
         this.prompt(prompts, function (props) {
             if (props.fieldAdd) {
                 if (props.fieldIsEnum) {
-                    props.fieldType = _s.capitalize(props.fieldType);
+                    props.fieldType = _.upperFirst(props.fieldType);
                 }
 
                 var field = {
@@ -765,7 +764,7 @@ module.exports = EntityGenerator.extend({
                     fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes
                 };
 
-                fieldNamesUnderscored.push(_s.underscored(props.fieldName));
+                fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
                 this.fields.push(field);
             }
             this._logFieldsAndRelationships();
@@ -858,7 +857,7 @@ module.exports = EntityGenerator.extend({
                         return 'Your relationship cannot contain special characters';
                     } else if (input == '') {
                         return 'Your relationship cannot be empty';
-                    } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                    } else if (input == 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) != -1) {
                         return 'Your relationship cannot use an already existing field name';
                     } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
                         return 'Your relationship cannot contain a Java reserved keyword';
@@ -867,7 +866,7 @@ module.exports = EntityGenerator.extend({
                 },
                 message: 'What is the name of the relationship?',
                 default: function (response) {
-                    return _s.decapitalize(response.otherEntityName);
+                    return _.lowerFirst(response.otherEntityName);
                 }
             },
             {
@@ -899,7 +898,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+                    return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.upperFirst(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
                 name: 'noOtherEntity',
@@ -925,12 +924,12 @@ module.exports = EntityGenerator.extend({
                 name: 'otherEntityRelationshipName',
                 message: 'What is the name of this relationship in the other entity?',
                 default: function (response) {
-                    return _s.decapitalize(name);
+                    return _.lowerFirst(name);
                 }
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+                    return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.upperFirst(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
                 name: 'noOtherEntity2',
@@ -957,13 +956,13 @@ module.exports = EntityGenerator.extend({
             if (props.relationshipAdd) {
                 var relationship = {
                     relationshipName: props.relationshipName,
-                    otherEntityName: _s.decapitalize(props.otherEntityName),
+                    otherEntityName: _.lowerFirst(props.otherEntityName),
                     relationshipType: props.relationshipType,
                     otherEntityField: props.otherEntityField,
                     ownerSide: props.ownerSide,
                     otherEntityRelationshipName: props.otherEntityRelationshipName
                 }
-                fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
+                fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
                 this.relationships.push(relationship);
             }
             this._logFieldsAndRelationships();
@@ -1343,8 +1342,8 @@ module.exports = EntityGenerator.extend({
 
                 if (_.isUndefined(relationship.otherEntityRelationshipName)
                     && (relationship.relationshipType == 'one-to-many' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == false) || (relationship.relationshipType == 'one-to-one'))) {
-                    relationship.otherEntityRelationshipName = _s.decapitalize(this.name);
-                    this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _s.decapitalize(this.name) + ' as fallback'));
+                    relationship.otherEntityRelationshipName = _.lowerFirst(this.name);
+                    this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _.lowerFirst(this.name) + ' as fallback'));
                 }
 
                 if (_.isUndefined(relationship.otherEntityField)
@@ -1437,11 +1436,11 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(field.fieldNameCapitalized)) {
-                    field.fieldNameCapitalized = _s.capitalize(field.fieldName);
+                    field.fieldNameCapitalized = _.upperFirst(field.fieldName);
                 }
 
                 if (_.isUndefined(field.fieldNameUnderscored)) {
-                    field.fieldNameUnderscored = _s.underscored(field.fieldName);
+                    field.fieldNameUnderscored = _.snakeCase(field.fieldName);
                 }
 
                 if (_.isUndefined(field.fieldInJavaBeanMethod)) {
@@ -1453,10 +1452,10 @@ module.exports = EntityGenerator.extend({
                         if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
                             field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
                         } else {
-                            field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
+                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                         }
                     } else {
-                        field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
+                        field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                     }
                 }
 
@@ -1472,23 +1471,23 @@ module.exports = EntityGenerator.extend({
                 var relationship = this.relationships[idx];
 
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
-                    relationship.relationshipNameCapitalized = _s.capitalize(relationship.relationshipName);
+                    relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {
-                    relationship.relationshipFieldName = _s.decapitalize(relationship.relationshipName);
+                    relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
-                    relationship.otherEntityNameCapitalized = _s.capitalize(relationship.otherEntityName);
+                    relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                 }
 
                 if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
-                    relationship.otherEntityFieldCapitalized = _s.capitalize(relationship.otherEntityField);
+                    relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
-                    relationship.otherEntityStateName = _s.trim(_s.dasherize(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
+                    relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
                 }
             }
 
@@ -1569,12 +1568,12 @@ module.exports = EntityGenerator.extend({
                 this.pkType = 'Long';
             }
 
-            var entityNameSpinalCased = _s.dasherize(_s.decapitalize(this.name));
-            var entityNamePluralizedAndSpinalCased = _s.dasherize(_s.decapitalize(pluralize(this.name)));
+            var entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
+            var entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
 
             this.entityClass = this.entityNameCapitalized;
             this.entityClassPlural = pluralize(this.entityClass);
-            this.entityInstance = _s.decapitalize(this.name);
+            this.entityInstance = _.lowerFirst(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityApiUrl = entityNamePluralizedAndSpinalCased;
 
@@ -1582,7 +1581,7 @@ module.exports = EntityGenerator.extend({
             this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased;
-            this.entityAngularJSName = this.entityClass + _s.camelize(this.entityAngularJSSuffix);
+            this.entityAngularJSName = this.entityClass + _.camelCase(this.entityAngularJSSuffix);
             this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
             if (databaseType == 'sql') {
@@ -1593,7 +1592,7 @@ module.exports = EntityGenerator.extend({
                 this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
             }
             this.entityTranslationKey = this.entityInstance;
-            this.entityTranslationKeyMenu = _s.camelize(this.entityStateName);
+            this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
@@ -1639,7 +1638,7 @@ module.exports = EntityGenerator.extend({
                     enumInfo.packageName = this.packageName;
                     enumInfo.enumName = fieldType;
                     enumInfo.enumValues = field.fieldValues;
-                    field.enumInstance = _s.decapitalize(enumInfo.enumName);
+                    field.enumInstance = _.lowerFirst(enumInfo.enumName);
                     enumInfo.enumInstance = field.enumInstance;
                     enumInfo.angularAppName = this.angularAppName;
                     enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
