@@ -668,7 +668,7 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('social login', function () {
+    describe('social login for http session', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -676,7 +676,7 @@ describe('JHipster generator', function () {
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
                     "packageFolder": "com/mycompany/myapp",
-                    "authenticationType": "session-social",
+                    "authenticationType": "session",
                     "hibernateCache": "ehcache",
                     "clusteredHttpSession": "no",
                     "websocket": "no",
@@ -685,6 +685,7 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "enableSocialSignIn": true,
                     "nativeLanguage": 'en',
                     "languages": ['fr'],
                     "buildTool": "maven",
@@ -694,7 +695,39 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with social login enabled', function () {
+        it('creates expected files with social login for http session enabled', function () {
+            assert.file(expectedFiles.socialLogin);
+        });
+    });
+
+    describe('social login for JWT session', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "enableSocialSignIn": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with social login for http session enabled', function () {
             assert.file(expectedFiles.socialLogin);
         });
     });

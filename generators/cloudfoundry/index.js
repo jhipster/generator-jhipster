@@ -4,7 +4,7 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
@@ -35,7 +35,7 @@ module.exports = CloudFoundryGenerator.extend({
             this.databaseType = this.config.get('databaseType');
             this.devDatabaseType = this.config.get('devDatabaseType');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
-            this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
+            this.angularAppName = this.getAngularAppName();
         }
     },
 
@@ -81,7 +81,7 @@ module.exports = CloudFoundryGenerator.extend({
         }];
 
         this.prompt(prompts, function (props) {
-            this.cloudfoundryDeployedName = _.slugify(props.cloudfoundryDeployedName).split('-').join('');
+            this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
             this.cloudfoundryProfile = props.cloudfoundryProfile;
             this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
             this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;

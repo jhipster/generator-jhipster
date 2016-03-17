@@ -4,7 +4,6 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
-    _s = require('underscore.string'),
     scriptBase = require('../generator-base'),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
@@ -220,9 +219,9 @@ module.exports = JhipsterClientGenerator.extend({
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
-            this.camelizedBaseName = _s.camelize(this.baseName);
-            this.capitalizedBaseName = _s.capitalize(this.baseName);
-            this.dasherizedBaseName = _s.dasherize(_s.camelize(this.baseName,true));
+            this.camelizedBaseName = _.camelCase(this.baseName);
+            this.capitalizedBaseName = _.capitalize(this.baseName);
+            this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
         },
@@ -394,7 +393,11 @@ module.exports = JhipsterClientGenerator.extend({
                 this.copyHtml(ANGULAR_DIR + 'account/social/_social-register.html', ANGULAR_DIR + 'account/social/social-register.html');
                 this.template(ANGULAR_DIR + 'account/social/_social-register.controller.js', ANGULAR_DIR + 'account/social/social-register.controller.js', this, {});
                 this.template(ANGULAR_DIR + 'account/social/_social.service.js', ANGULAR_DIR + 'account/social/social.service.js', this, {});
-                this.copyJs(ANGULAR_DIR + 'account/social/_social-register.state.js', ANGULAR_DIR + 'account/social/social-register.state.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'account/social/_social.state.js', ANGULAR_DIR + 'account/social/social.state.js', this, {});
+
+                if (this.authenticationType == 'jwt') {
+                    this.template(ANGULAR_DIR + 'account/social/_social-auth.controller.js', ANGULAR_DIR + 'account/social/social-auth.controller.js', this, {});
+                }
             }
         },
 

@@ -120,5 +120,9 @@ jhipster:
         licenseUrl:
 <%_ if (enableSocialSignIn) { _%>
     social:
+        <%_ if (authenticationType == 'jwt') { _%>
+        redirectAfterSignIn: "/#/social-auth"
+        <%_ } else { _%>
         redirectAfterSignIn: "/#/home"
+        <%_ } _%>
 <%_ } _%>

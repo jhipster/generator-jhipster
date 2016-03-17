@@ -267,10 +267,6 @@ module.exports = JhipsterServerGenerator.extend({
                             name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                         },
                         {
-                            value: 'session-social',
-                            name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this doesn\'t work with Cassandra!'
-                        },
-                        {
                             value: 'oauth2',
                             name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
                         },
@@ -280,6 +276,29 @@ module.exports = JhipsterServerGenerator.extend({
                         }
                     ],
                     default: 0
+                },
+                {
+                    when: function (response) {
+                        return applicationType == 'monolith' && (response.authenticationType == 'session' || response.authenticationType == 'jwt');
+                    },
+                    type: 'list',
+                    name: 'enableSocialSignIn',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType == 'monolith' && (response.authenticationType == 'session' || response.authenticationType == 'jwt'));
+                    },
+                    choices: [
+                        {
+                            value: false,
+                            name: 'No'
+                        },
+                        {
+                            value: true,
+                            name: 'Yes, use social login'
+                        }
+                    ],
+                    default: false
                 },
                 {
                     when: function (response) {
@@ -314,7 +333,7 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.authenticationType == 'session-social';
+                        return response.enableSocialSignIn;
                     },
                     type: 'list',
                     name: 'databaseType',
@@ -337,7 +356,7 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.authenticationType != 'session-social' && applicationType != 'microservice';
+                        return !response.enableSocialSignIn && applicationType != 'microservice';
                     },
                     type: 'list',
                     name: 'databaseType',
@@ -592,16 +611,7 @@ module.exports = JhipsterServerGenerator.extend({
                 if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                     this.authenticationType = 'jwt';
                 } else {
-                    // Read the authenticationType to extract the enableSocialSignIn
-                    // This allows to have only one authenticationType question for the moment
-                    if (props.authenticationType == 'session-social') {
-                        this.authenticationType = 'session';
-                        this.enableSocialSignIn = true;
-                    } else {
-                        this.authenticationType = props.authenticationType;
-                        this.enableSocialSignIn = false;
-                    }
-                    props.enableSocialSignIn = this.enableSocialSignIn;
+                    this.authenticationType = props.authenticationType;
                 }
                 if (this.authenticationType == 'session') {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');

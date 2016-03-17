@@ -2,7 +2,6 @@
 var path = require('path'),
     util = require('util'),
     _ = require('lodash'),
-    _s = require('underscore.string'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
     jhipsterUtils = require('./util'),
@@ -74,7 +73,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
                 '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"' : '' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
+                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span></a></li>'
             ]
         }, this);
     } catch (e) {
@@ -97,7 +96,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [
                 '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
+                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span></a></li>'
             ]
         }, this);
     } catch (e) {
@@ -119,7 +118,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _s.camelize(routerName) + '"' : '' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
+                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span></a></li>'
             ]
         }, this);
     } catch (e) {
@@ -943,7 +942,7 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
     try {
         var modules;
         var error, duplicate;
-        var moduleName = _s.humanize(npmPackageName.replace('generator-jhipster-', ''));
+        var moduleName = _.startCase(npmPackageName.replace('generator-jhipster-', ''));
         var generatorName = npmPackageName.replace('generator-', '');
         var generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app');
         var moduleConfig = {
@@ -1125,11 +1124,11 @@ Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
 };
 
 Generator.prototype.getTableName = function (value) {
-    return _s.underscored(value).toLowerCase();
+    return _.snakeCase(value).toLowerCase();
 };
 
 Generator.prototype.getColumnName = function (value) {
-    return _s.underscored(value).toLowerCase();
+    return _.snakeCase(value).toLowerCase();
 };
 
 Generator.prototype.insight = function () {
@@ -1196,11 +1195,11 @@ Generator.prototype.printJHipsterLogo = function () {
 };
 
 Generator.prototype.getAngularAppName = function () {
-    return _s.camelize(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
+    return _.camelCase(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
 };
 
 Generator.prototype.getMainClassName = function () {
-    return _s.capitalize(this.getAngularAppName());
+    return _.upperFirst(this.getAngularAppName());
 };
 
 Generator.prototype.askModuleName = function (generator, currentQuestion, totalQuestions) {
@@ -1321,11 +1320,7 @@ var wordwrap = function (text, width, seperator, keepLF) {
         if (keepLF == true && i != 0) {
             wrappedText = wrappedText + '\\n';
         }
-        wrappedText = wrappedText + seperator + _s.wrap(row, {
-                width: width,
-                seperator: seperator,
-                preserveSpaces: keepLF
-            });
+        wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;
     }
     return wrappedText;
 }

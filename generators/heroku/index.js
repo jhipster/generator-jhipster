@@ -6,7 +6,7 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
@@ -30,7 +30,7 @@ module.exports = HerokuGenerator.extend({
         this.hibernateCache = this.config.get('hibernateCache');
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
-        this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
+        this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
     },
 
@@ -53,7 +53,7 @@ module.exports = HerokuGenerator.extend({
             }];
 
         this.prompt(prompts, function (props) {
-            this.herokuDeployedName = _.slugify(props.herokuDeployedName);
+            this.herokuDeployedName = _.kebabCase(props.herokuDeployedName);
             this.herokuRegion = props.herokuRegion;
             done();
         }.bind(this));
