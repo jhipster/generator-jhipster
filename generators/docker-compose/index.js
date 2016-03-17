@@ -39,7 +39,6 @@ module.exports = yeoman.generators.Base.extend({
         loadConfig: function() {
 
             this.defaultAppsFolders = this.config.get('appsFolders');
-            this.appConfigs = this.config.get('appConfigs');
             this.useElk = this.config.get('useElk');
             this.profile = this.config.get('profile');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
@@ -226,7 +225,6 @@ module.exports = yeoman.generators.Base.extend({
         saveConfig: function() {
             if(this.abort) return;
             this.config.set('appsFolders', this.appsFolders);
-            this.config.set('appConfigs', this.appConfigs);
             this.config.set('useElk', this.useElk);
             this.config.set('profile', this.profile);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
