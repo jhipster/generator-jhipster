@@ -7,14 +7,7 @@ var _ = require('lodash');
 
 module.exports = yeoman.generators.Base.extend({
     initializing: {
-        printJHipsterLogo: function() {
-            this.log(' \n' +
-                chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
-                chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
-                chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
-                chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
-                chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
-            this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+        sayHello: function() {
             this.log(chalk.white('Welcome to the JHipster Docker Compose Sub-Generator '));
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
         },
