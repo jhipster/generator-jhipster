@@ -113,7 +113,6 @@ module.exports = JhipsterClientGenerator.extend({
         totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
-        this.serverPort = this.config.get('serverPort') ? this.config.get('serverPort') : 8080;
     },
 
     initializing: {
@@ -128,6 +127,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.MAIN_SRC_DIR = MAIN_SRC_DIR;
             this.TEST_SRC_DIR = TEST_SRC_DIR;
 
+            this.serverPort = this.config.get('serverPort') || configOptions.serverPort || 8080;
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';

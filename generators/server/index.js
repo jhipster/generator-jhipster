@@ -672,6 +672,7 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
+            configOptions.serverPort = this.serverPort;
 
             // Make dist dir available in templates
             if (this.buildTool === 'maven') {
