@@ -12,16 +12,25 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
 }
 
+def profiles = 'prod'
+if (project.hasProperty('no-liquibase')) {
+    profiles += ',no-liquibase'
+}
+
+if (project.hasProperty('no-cache')) {
+    profiles += ',no-cache'
+}
+
 bootRun {
-  args = ["--spring.profiles.active=prod"]
+    args = ["--spring.profiles.active=" + profiles]
 }
 <% if (!skipClient) { %>
 task gulpBuildWithOpts(type: GulpTask) {
-   args = ["build", "--no-notification"]
+    args = ["build", "--no-notification"]
 }
 
 war {
-  webAppDirName = '<%= CLIENT_DIST_DIR %>'
+    webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }<% } %>
 
 processResources {
@@ -34,7 +43,7 @@ processResources {
 
 task setProdProperties(dependsOn: bootRun) << {
     doFirst {
-        System.setProperty('spring.profiles.active', 'prod')
+        System.setProperty('spring.profiles.active', profiles)
     }
 }
 <% if (!skipClient) { %>

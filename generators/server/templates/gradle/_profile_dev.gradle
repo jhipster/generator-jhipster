@@ -9,17 +9,28 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
 }
 
+def profiles = 'dev'
+if (project.hasProperty('no-liquibase')) {
+    profiles += ',no-liquibase'
+}
+if (project.hasProperty('no-swagger')) {
+    profiles += ',no-swagger'
+}
+if (project.hasProperty('no-cache')) {
+    profiles += ',no-cache'
+}
+
 bootRun {
-  args = ["--spring.profiles.active=dev"]
+    args = ["--spring.profiles.active=" + profiles]
 }
 <% if (!skipClient) { %>
 war {
-  webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
+    webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
 }<% } %>
 
 task setProdProperties(dependsOn: bootRun) << {
     doFirst {
-        System.setProperty('spring.profiles.active', 'dev')
+        System.setProperty('spring.profiles.active', profiles)
     }
 }
 
