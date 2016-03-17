@@ -195,7 +195,7 @@ module.exports = yeoman.generators.Base.extend({
                     var runCommand = 'mvn package docker:build';
                 } else {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
-                    var runCommand = 'gradle bootRepackage buildDocker';
+                    var runCommand = './gradlew bootRepackage buildDocker';
                 }
 
                 if (!shelljs.test('-f', imagePath)) {
