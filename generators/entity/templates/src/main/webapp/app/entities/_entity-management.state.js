@@ -61,7 +61,7 @@
         })
         .state('<%= entityStateName %>-detail', {
             parent: 'entity',
-            url: '/<%= entityUrl %>/{id:<%= entityUrlType %>}',
+            url: '/<%= entityUrl %>/{id}',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
@@ -124,7 +124,7 @@
         })
         .state('<%= entityStateName %>.edit', {
             parent: '<%= entityStateName %>',
-            url: '/{id:<%= entityUrlType %>}/edit',
+            url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -148,7 +148,7 @@
         })
         .state('<%= entityStateName %>.delete', {
             parent: '<%= entityStateName %>',
-            url: '/{id:<%= entityUrlType %>}/delete',
+            url: '/{id}/delete',
             data: {
                 authorities: ['ROLE_USER']
             },
