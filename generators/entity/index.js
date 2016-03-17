@@ -90,7 +90,7 @@ module.exports = EntityGenerator.extend({
 
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
-        this.entityNameCapitalized = _.capitalize(this.name);
+        this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityTableName = _.snakeCase(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
@@ -267,7 +267,7 @@ module.exports = EntityGenerator.extend({
         if (this.relationships.length > 0) {
             this.log(chalk.white('Relationships'));
             this.relationships.forEach(function (relationship) {
-                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.capitalize(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
+                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
             }, this);
             this.log();
         }
@@ -745,7 +745,7 @@ module.exports = EntityGenerator.extend({
         this.prompt(prompts, function (props) {
             if (props.fieldAdd) {
                 if (props.fieldIsEnum) {
-                    props.fieldType = _.capitalize(props.fieldType);
+                    props.fieldType = _.upperFirst(props.fieldType);
                 }
 
                 var field = {
@@ -898,7 +898,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.capitalize(response.otherEntityName) + '.java'))
+                    return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.upperFirst(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
                 name: 'noOtherEntity',
@@ -929,7 +929,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.capitalize(response.otherEntityName) + '.java'))
+                    return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.upperFirst(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
                 name: 'noOtherEntity2',
@@ -1436,7 +1436,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(field.fieldNameCapitalized)) {
-                    field.fieldNameCapitalized = _.capitalize(field.fieldName);
+                    field.fieldNameCapitalized = _.upperFirst(field.fieldName);
                 }
 
                 if (_.isUndefined(field.fieldNameUnderscored)) {
@@ -1452,10 +1452,10 @@ module.exports = EntityGenerator.extend({
                         if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
                             field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
                         } else {
-                            field.fieldInJavaBeanMethod = _.capitalize(field.fieldName);
+                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                         }
                     } else {
-                        field.fieldInJavaBeanMethod = _.capitalize(field.fieldName);
+                        field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                     }
                 }
 
@@ -1471,7 +1471,7 @@ module.exports = EntityGenerator.extend({
                 var relationship = this.relationships[idx];
 
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
-                    relationship.relationshipNameCapitalized = _.capitalize(relationship.relationshipName);
+                    relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {
@@ -1479,11 +1479,11 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
-                    relationship.otherEntityNameCapitalized = _.capitalize(relationship.otherEntityName);
+                    relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                 }
 
                 if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
-                    relationship.otherEntityFieldCapitalized = _.capitalize(relationship.otherEntityField);
+                    relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
