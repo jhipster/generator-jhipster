@@ -1,6 +1,7 @@
 'use strict';
 var util = require('util'),
     path = require('path'),
+    os = require('os'),
     generators = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
@@ -161,7 +162,12 @@ module.exports = CloudFoundryGenerator.extend({
         if (this.buildTool === 'maven') {
             buildCmd = 'mvn package -DskipTests';
         } else if (this.buildTool === 'gradle') {
-            buildCmd = 'gradlew bootRepackage -x test';
+            if (os.platform() === 'win32') {
+                buildCmd = 'gradlew bootRepackage -x test';
+            } else {
+                buildCmd = './gradlew bootRepackage -x test';
+            }
+
         }
         if (this.cloudfoundryProfile == 'prod') {
             this.log(chalk.bold('\nBuilding the application with the production profile'));
@@ -191,7 +197,17 @@ module.exports = CloudFoundryGenerator.extend({
                 buildCmd = 'mvn package -DskipTests';
             } else if (this.buildTool === 'gradle') {
                 cloudfoundryDeployCommand += ' build/libs/*.war';
-                buildCmd = 'gradlew bootRepackage -x test';
+                if (os.platform() === 'win32') {
+                    buildCmd = 'gradlew bootRepackage -x test';
+                } else {
+                    buildCmd = './gradlew bootRepackage -x test';
+                }
+
+                if (this.cloudfoundryProfile == 'prod') {
+                    this.log(chalk.bold('\nBuilding the application with the production profile'));
+                    buildCmd += ' -Pprod';
+                }
+
             }
 
             this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
