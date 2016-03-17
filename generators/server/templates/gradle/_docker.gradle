@@ -2,8 +2,7 @@ apply plugin: 'docker'
 
 task buildDocker(type: Docker, dependsOn: build) {
     push = false
-    registry = 'jhipster'
-    applicationName = '<%= baseName.toLowerCase() %>'
+    tag = '<%= baseName.toLowerCase() %>'
     tagVersion = 'latest'
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
