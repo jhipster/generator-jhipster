@@ -1173,6 +1173,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_StepDefs.java', testDir + 'cucumber/stepdefs/StepDefs.java', this, {});
                 mkdirp(TEST_DIR + 'features/');
             }
+
+            // Create ElasticSearch test files
+            if (this.searchEngine == 'elasticsearch') {
+                this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_AbstractIndexInitializer.java', testDir + 'config/elasticsearch/AbstractIndexInitializer.java', this, {});
+            }
         },
 
         writeJavaUserManagementFiles: function () {
