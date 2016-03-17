@@ -69,7 +69,7 @@ module.exports = yeoman.Base.extend({
                             if(file.isDirectory()) {
                                 if(shelljs.test('-f', file.name + '/.yo-rc.json')) {
                                     var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
-                                    if(fileData['generator-jhipster'] !== undefined) {
+                                    if(fileData['generator-jhipster'].baseName !== undefined) {
                                         this.appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                                     }
                                 }
