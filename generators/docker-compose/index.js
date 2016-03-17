@@ -5,7 +5,7 @@ var shelljs = require('shelljs');
 var crypto = require('crypto');
 var _ = require('lodash');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
     initializing: {
         sayHello: function() {
             this.log(chalk.white('Welcome to the JHipster Docker Compose Sub-Generator '));
