@@ -81,7 +81,7 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     private MongoProperties mongoProperties;<% } %><% if (databaseType == 'sql') { %>
 
     @Bean(destroyMethod = "close")
-    @ConditionalOnExpression("#{!environment.acceptsProfiles('cloud') && !environment.acceptsProfiles('heroku')}")
+    @ConditionalOnExpression("#{!environment.acceptsProfiles('" + Constants.SPRING_PROFILE_CLOUD + "') && !environment.acceptsProfiles('" + Constants.SPRING_PROFILE_HEROKU + "')}")
     @ConfigurationProperties(prefix = "spring.datasource.hikari")
     public DataSource dataSource(DataSourceProperties dataSourceProperties<% if (hibernateCache == 'hazelcast') { %>, CacheManager cacheManager<% } %>) {
         log.debug("Configuring Datasource");
@@ -132,8 +132,12 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         liquibase.setContexts(liquibaseProperties.getContexts());
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
         liquibase.setDropFirst(liquibaseProperties.isDropFirst());
-        liquibase.setShouldRun(liquibaseProperties.isEnabled());
-        log.debug("Configuring Liquibase");
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_NO_LIQUIBASE)) {
+            liquibase.setShouldRun(false);
+        } else {
+            liquibase.setShouldRun(liquibaseProperties.isEnabled());
+            log.debug("Configuring Liquibase");
+        }
 
         return liquibase;
     }
