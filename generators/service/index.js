@@ -46,7 +46,7 @@ module.exports = ServiceGenerator.extend({
     },
 
     writing: function () {
-        this.serviceClass = _.capitalize(this.name);
+        this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = this.name.toLowerCase();
         var insight = this.insight();
         insight.track('generator', 'service');
