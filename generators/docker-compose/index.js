@@ -189,7 +189,6 @@ module.exports = yeoman.Base.extend({
             this.log('\nChecking Docker images in applications directories...');
 
             for (var i = 0; i < this.appsFolders.length; i++) {
-                this.log(this.appConfigs[i]);
                 if(this.appConfigs[i].buildTool === 'maven') {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
                     var runCommand = 'mvn package docker:build';
