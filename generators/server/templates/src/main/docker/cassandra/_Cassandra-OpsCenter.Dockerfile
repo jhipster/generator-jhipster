@@ -13,7 +13,7 @@ RUN chmod a+x /cassandra.sh
 # script to initialize the database
 ADD cassandra/scripts/init-prod.sh /usr/local/bin/init
 RUN chmod 755 /usr/local/bin/init
-<%_ if (devDatabaseType == 'cassandra') { _%>
+<%_ if (databaseType == 'cassandra') { _%>
 
 # script to add new tables
 ADD cassandra/scripts/entities.sh /usr/local/bin/entities
