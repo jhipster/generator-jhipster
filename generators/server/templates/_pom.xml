@@ -116,8 +116,6 @@
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
-        <!-- Docker properties -->
-        <docker.image.prefix>jhipster</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -921,7 +919,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.4.1</version>
                 <configuration>
-                    <imageName>${docker.image.prefix}/<%= baseName.toLowerCase() %></imageName>
+                    <imageName><%= baseName.toLowerCase() %></imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
