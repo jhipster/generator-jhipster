@@ -168,7 +168,7 @@ module.exports = yeoman.Base.extend({
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].buildTool === 'maven') {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
-                    var runCommand = 'mvn package -Pprod docker:build';
+                    var runCommand = './mvnw package -Pprod docker:build';
                 } else {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
                     var runCommand = './gradlew -Pprod bootRepackage buildDocker';
