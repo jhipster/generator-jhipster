@@ -31,7 +31,7 @@ spring:
         database-platform: <%=packageName%>.domain.util.FixedH2Dialect
         database: H2
         open-in-view: false
-        show_sql: true
+        show_sql: false
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
