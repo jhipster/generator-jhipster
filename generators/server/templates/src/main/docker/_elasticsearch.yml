@@ -5,6 +5,7 @@ services:
         image: elasticsearch:1.7.5
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/elasticsearch/:/usr/share/elasticsearch/data/
-        ports:
-            - "9200:9200"
-            - "9300:9300"
+        # Uncomment to have the server accessible from outside Docker
+        # ports:
+        #     - 9200:9200
+        #     - 9300:9300

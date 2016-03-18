@@ -4,4 +4,4 @@ services:
         container_name: jhipster-registry
         image: jhipster/jhipster-registry
         ports:
-            - "8761:8761"
+            - 8761:8761

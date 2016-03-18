@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var shelljs = require('shelljs');
 var crypto = require('crypto');
 var _ = require('lodash');
+var jsyaml = require('js-yaml');
 
 module.exports = yeoman.Base.extend({
     initializing: {
@@ -94,7 +95,7 @@ module.exports = yeoman.Base.extend({
                     var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
                     var fileData = this.fs.readJSON(path);
                     var config = fileData['generator-jhipster'];
-                    if(config.applicationType === 'monolith' || this.appsFolders[i]==='jhipster-registry' || this.appsFolders[i] === 'registry') {
+                    if (config.applicationType === 'monolith' || this.appsFolders[i]==='jhipster-registry' || this.appsFolders[i] === 'registry') {
                         this.appsFolders.splice(i,1);
                         i--;
                     }
@@ -113,7 +114,7 @@ module.exports = yeoman.Base.extend({
             var prompts = [{
                 type: 'checkbox',
                 name: 'chosenApps',
-                message: 'Which applications do you want to include your Docker Compose configuration?',
+                message: 'Which applications do you want to include in your Docker Compose configuration?',
                 choices: this.appsFolders,
                 default: this.defaultAppsFolders,
                 validate: function (input) {
@@ -167,14 +168,13 @@ module.exports = yeoman.Base.extend({
 
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].buildTool === 'maven') {
-                    var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
+                    var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
                     var runCommand = 'mvn package -Pprod docker:build';
                 } else {
-                    var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-0.0.1-SNAPSHOT.war');
+                    var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
                     var runCommand = './gradlew -Pprod bootRepackage buildDocker';
                 }
-
-                if (!shelljs.test('-f', imagePath)) {
+                if (shelljs.ls(imagePath).length == 0) {
                     this.log(chalk.red('\nDocker Image not found at ' + imagePath));
                     this.log(chalk.red('Please run "' + runCommand + '" in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + ' to generate Docker image'));
                     this.abort = true;
@@ -195,6 +195,72 @@ module.exports = yeoman.Base.extend({
             for (var i = 0; i < this.appsFolders.length; i++) {
                 var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
                 this.appsFolderPaths.push(path);
+            }
+        },
+
+        setAppsYaml: function() {
+            this.appsYaml = [];
+            for (var i = 0; i < this.appsFolders.length; i++) {
+                var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+                var yamlContent = this.fs.read(path + '/src/main/docker/app.yml');
+                var yaml = jsyaml.load(yamlContent);
+                var appYaml = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
+                var parent = {};
+                parent[this.appConfigs[i].baseName.toLowerCase() + '-app'] = appYaml;
+                var stringYaml = jsyaml.dump(parent, {indent: 4});
+                var array = stringYaml.split("\n");
+                for (var j = 0; j < array.length; j++) {
+                    array[j] = "    " + array[j];
+                    array[j] = array[j].replace(/\'/g, '');
+                }
+                stringYaml = array.join("\n");
+                this.appsYaml.push(stringYaml);
+            }
+        },
+
+        setDatabasesYaml: function() {
+            this.databasesYaml = [];
+            for (var i = 0; i < this.appsFolders.length; i++) {
+                var database = this.appConfigs[i].prodDatabaseType;
+                if (database != 'no') {
+                    var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+                    var yamlContent = this.fs.read(path + '/src/main/docker/' + database + '.yml');
+                    var yaml = jsyaml.load(yamlContent);
+                    var appYaml = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                    var parent = {};
+                    parent[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = appYaml;
+                    var stringYaml = jsyaml.dump(parent, {indent: 4});
+                    var array = stringYaml.split("\n");
+                    for (var j = 0; j < array.length; j++) {
+                        array[j] = "    " + array[j];
+                        array[j] = array[j].replace(/\'/g, '');
+                    }
+                    stringYaml = array.join("\n");
+                    this.databasesYaml.push(stringYaml);
+                }
+            }
+        },
+
+        setSearchEnginesYaml: function() {
+            this.searchEnginesYaml = [];
+            for (var i = 0; i < this.appsFolders.length; i++) {
+                var searchEngine = this.appConfigs[i].searchEngine;
+                if (searchEngine != 'no') {
+                    var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+                    var yamlContent = this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml');
+                    var yaml = jsyaml.load(yamlContent);
+                    var appYaml = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
+                    var parent = {};
+                    parent[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine] = appYaml;
+                    var stringYaml = jsyaml.dump(parent, {indent: 4});
+                    var array = stringYaml.split("\n");
+                    for (var j = 0; j < array.length; j++) {
+                        array[j] = "    " + array[j];
+                        array[j] = array[j].replace(/\'/g, '');
+                    }
+                    stringYaml = array.join("\n");
+                    this.searchEnginesYaml.push(stringYaml);
+                }
             }
         },
 
@@ -231,8 +297,7 @@ module.exports = yeoman.Base.extend({
     end: function() {
         if(this.abort) return;
 
-        this.log('\n' + chalk.bold.green('##### USAGE #####'));
-        this.log('First launch the JHipster Registry by running : ' + chalk.cyan('docker-compose -f jhipster-registry.yml up -d'));
-        this.log('Wait a minute, then launch all your applications by running : ' + chalk.cyan('docker-compose up -d'));
+        this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
+        this.log('You can launch all your infrastructure by running : ' + chalk.cyan('docker-compose up -d'));
     }
 });
