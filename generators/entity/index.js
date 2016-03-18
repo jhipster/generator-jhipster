@@ -1754,12 +1754,14 @@ module.exports = EntityGenerator.extend({
                     SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
             }
 
-
             if (this.testFrameworks.indexOf('gatling') != -1) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
                     TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }
 
+            if (this.searchEngine == 'elasticsearch') {
+                this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_EntityIndexInitializer.java', SERVER_TEST_SRC_DIR + this.packageFolder + '/config/elasticsearch/' + this.entityClass + 'IndexInitializer.java', this, {});
+            }
         }
     },
 
