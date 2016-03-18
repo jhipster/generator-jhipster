@@ -211,14 +211,14 @@ module.exports = yeoman.Base.extend({
                 var database = this.appConfigs[i].prodDatabaseType;
                 if (database != 'no') {
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
-                    var databaseYamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                    var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
                 }
                 // Add search engine configuration
                 var searchEngine = this.appConfigs[i].searchEngine;
                 if (searchEngine != 'no') {
                     var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
-                    var searchEngineConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
+                    var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine] = searchEngineConfig;
                 }
                 // Dump the file
