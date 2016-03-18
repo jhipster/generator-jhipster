@@ -7,7 +7,7 @@
                 <strong>The password reset key is missing.</strong>
             </div>
 
-            <div class="alert alert-warning" ng-hide="success || vm.keyMissing">
+            <div class="alert alert-warning" ng-hide="vm.success || vm.keyMissing">
                 <p translate="reset.finish.messages.info">Choose a new password</p>
             </div>
 
@@ -24,7 +24,7 @@
             </div>
 
             <div ng-hide="vm.keyMissing">
-                <form ng-show="!success" name="form" role="form" novalidate ng-submit="vm.finishReset()" show-validation>
+                <form ng-show="!vm.success" name="form" role="form" novalidate ng-submit="vm.finishReset()" show-validation>
                     <div class="form-group">
                         <label class="control-label" for="password" translate="global.form.newpassword">New password</label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
