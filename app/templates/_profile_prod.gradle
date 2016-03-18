@@ -30,6 +30,8 @@ task setProdProperties(dependsOn: bootRun) << {
     }
 }
 
+setProdProperties.dependsOn 'gulp_ngconstant:prod'
+
 <% if(frontendBuilder == 'grunt') {%>
 task gruntBuild(type: Exec) {
   if (Os.isFamily(Os.FAMILY_WINDOWS)) {

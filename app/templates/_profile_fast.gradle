@@ -26,3 +26,5 @@ task setProdProperties(dependsOn: bootRun) << {
         System.setProperty('spring.profiles.active', 'dev,fast')
     }
 }
+
+setProdProperties.dependsOn 'gulp_ngconstant:dev'

@@ -26,3 +26,5 @@ processResources {
         }
     }
 }
+
+setProdProperties.dependsOn 'gulp_ngconstant:dev'
