@@ -212,6 +212,7 @@ module.exports = yeoman.Base.extend({
                 if (database != 'no') {
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
                     var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                    delete databaseYamlConfig.ports;
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
                 }
                 // Add search engine configuration
@@ -219,6 +220,7 @@ module.exports = yeoman.Base.extend({
                 if (searchEngine != 'no') {
                     var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
                     var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
+                    delete searchEngineConfig.ports;
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine] = searchEngineConfig;
                 }
                 // Dump the file

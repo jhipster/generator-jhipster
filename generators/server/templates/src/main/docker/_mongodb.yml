@@ -5,6 +5,5 @@ services:
         image: mongo:3.2.3
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
-        # Uncomment to have the server accessible from outside Docker
-        # ports:
-        #     - 27017:27017
+        ports:
+            - 27017:27017

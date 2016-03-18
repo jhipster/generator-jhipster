@@ -8,6 +8,5 @@ services:
         environment:
             - POSTGRES_USER=<%= baseName %>
             - POSTGRES_PASSWORD=
-        # Uncomment to have the server accessible from outside Docker
-        # ports:
-        #     - 5432:5432
+        ports:
+            - 5432:5432

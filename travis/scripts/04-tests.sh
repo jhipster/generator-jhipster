@@ -5,8 +5,7 @@ set -ev
 #--------------------------------------------------
 cd "$HOME"/"$JHIPSTER"
 if [ "$JHIPSTER" != "app-gradle" ]; then
-  MYSQL_HOST=$(docker inspect --format '{{.NetworkSettings.Networks.docker_default.IPAddress}}' tmp-mysql)
-  mvn test --spring.datasource.url=jdbc:mysql://${MYSQL_HOST}:3306/tmp?useUnicode=true&characterEncoding=utf8&useSSL=false
+  mvn test
 else
   ./gradlew test
 fi

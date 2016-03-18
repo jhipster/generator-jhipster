@@ -52,16 +52,6 @@ services:
         <%_ if (applicationType == 'monolith' || applicationType == 'gateway') { _%>
         ports:
             - <%= serverPort %>:<%= serverPort %>
-            <%_ if (hibernateCache == 'hazelcast') { _%>
-            - 5701
-            <%_ } _%>
-        <%_ } _%>
-        <%_ if (applicationType == 'microservice') { _%>
-        expose:
-            - <%= serverPort %>
-            <%_ if (hibernateCache == 'hazelcast') { _%>
-            - 5701
-            <%_ } _%>
         <%_ } _%>
     <%_ if (prodDatabaseType == 'mysql') { _%>
     <%= baseName.toLowerCase() %>-mysql:

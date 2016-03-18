@@ -15,13 +15,12 @@ services:
         #     - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
         links:
             - jhipster-opscenter:opscenter
-        # Uncomment to have the server accessible from outside Docker
-        # ports:
-        #     - 7000:7000
-        #     - 7001:7001
-        #     - 7199:7199
-        #     - 9042:9042
-        #     - 9160:9160
+        ports:
+            - 7000:7000
+            - 7001:7001
+            - 7199:7199
+            - 9042:9042
+            - 9160:9160
     <%=baseName.toLowerCase()%>-cassandra-node:
         build:
             context: .
