@@ -62,6 +62,7 @@
                     templateUrl: 'app/admin/user-management/user-management-dialog.html',
                     controller: 'UserManagementDialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
@@ -91,6 +92,7 @@
                     templateUrl: 'app/admin/user-management/user-management-dialog.html',
                     controller: 'UserManagementDialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: ['User', function(User) {
