@@ -105,7 +105,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageName = this.config.get('packageName');
             this.serverPort = this.config.get('serverPort');
             if (this.serverPort == undefined) {
-                this.serverPort = 8080;
+                this.serverPort = '8080';
             }
             this.authenticationType = this.config.get('authenticationType');
             this.clusteredHttpSession = this.config.get('clusteredHttpSession');
@@ -622,6 +622,9 @@ module.exports = JhipsterServerGenerator.extend({
 
                 this.packageName = props.packageName;
                 this.serverPort = props.serverPort;
+                if (this.serverPort == undefined) {
+                    this.serverPort = '8080';
+                }
                 this.hibernateCache = props.hibernateCache;
                 this.clusteredHttpSession = props.clusteredHttpSession;
                 this.websocket = props.websocket;
