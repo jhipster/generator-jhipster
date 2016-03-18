@@ -4,8 +4,8 @@ import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service != 'no') { %>
-import <%=packageName%>.service.<%= entityClass %>Service;<% } else { if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} if (dto == 'mapstruct') { %>
+import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 
@@ -165,10 +165,10 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } if (service != 'no') { %>
 
     @Inject
-    private <%= entityClass %>Service <%= entityInstance %>Service;<% } else { if (searchEngine == 'elasticsearch') { %>
+    private <%= entityClass %>Service <%= entityInstance %>Service;<% } if (searchEngine == 'elasticsearch') { %>
 
     @Inject
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% }} %>
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -195,7 +195,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     @Before
     public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
-        <%= entityInstance %>Repository.deleteAll();<% } %>
+        <%= entityInstance %>Repository.deleteAll();<% } if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.deleteAll();<% } %>
         <%= entityInstance %> = new <%= entityClass %>();
         <%_ for (idx in fields) { _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
@@ -231,7 +232,12 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        <%_ }} _%>
+        <%_ }} if (searchEngine == 'elasticsearch') { _%>
+
+        // Validate the <%= entityClass %> in ElasticSearch
+        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
+        assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
+        <%_ } _%>
     }
 <% for (idx in fields) { %><% if (fields[idx].fieldValidate == true) {
     var required = false;
@@ -308,9 +314,14 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
-        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+<%_ if (service != 'no' && dto != 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
+<%_ } _%>
 
-		int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
         <%= entityClass %> updated<%= entityClass %> = new <%= entityClass %>();
@@ -343,16 +354,26 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        <%_ } } _%>
+        <%_ } } if (searchEngine == 'elasticsearch') { _%>
+
+        // Validate the <%= entityClass %> in ElasticSearch
+        <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
+        assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
+        <%_ } _%>
     }
 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void delete<%= entityClass %>() throws Exception {
         // Initialize the database
-        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+<%_ if (service != 'no' && dto != 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<%_ } _%>
+<%_ } _%>
 
-		int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
@@ -361,6 +382,35 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
         // Validate the database is empty
         List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstancePlural %>).hasSize(databaseSizeBeforeDelete - 1);
-    }
+        assertThat(<%= entityInstancePlural %>).hasSize(databaseSizeBeforeDelete - 1);<% if (searchEngine == 'elasticsearch') { %>
+
+        // Validate tElasticSearch is empty
+        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
+        assertThat(<%= entityInstance %>ExistsInEs).isFalse();
+        <%_ } _%>
+    }<% if (searchEngine == 'elasticsearch') { %>
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void search<%= entityClass %>() throws Exception {
+        // Initialize the database
+<%_ if (service != 'no' && dto != 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= entityInstance %>);
+<%_ } else { _%>
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);
+<%_ } _%>
+
+        // Search the <%= entityInstance %>
+        rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (idx in fields) {%>
+            <%_ if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
+            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
+            <%_ } _%>
+            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { %>)<% } else if (fields[idx].fieldType == 'Integer') { %><% } else if (fields[idx].fieldType == 'Long') { %>.intValue()<% } else if (fields[idx].fieldType == 'Float' || fields[idx].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>_STR<% } else if (fields[idx].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
+    }<% } %>
 }

@@ -30,7 +30,7 @@ module.exports = yeoman.Base.extend({
 
             shelljs.exec('docker-compose -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose is installed on your computer.\n' +
+                    this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose is not installed on your computer.\n' +
                         '         Read https://docs.docker.com/compose/install/\n');
                 }
                 done();
@@ -169,7 +169,7 @@ module.exports = yeoman.Base.extend({
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].buildTool === 'maven') {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
-                    var runCommand = 'mvn package -Pprod docker:build';
+                    var runCommand = './mvnw package -Pprod docker:build';
                 } else {
                     var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
                     var runCommand = './gradlew -Pprod bootRepackage buildDocker';

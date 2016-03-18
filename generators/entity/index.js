@@ -83,7 +83,14 @@ module.exports = EntityGenerator.extend({
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
-            desc: 'Skip the server-side application generation',
+            desc: 'Skip the server-side code generation',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skip the client-side code generation',
             type: Boolean,
             defaults: false
         });
@@ -122,7 +129,7 @@ module.exports = EntityGenerator.extend({
                 this.testFrameworks = ['gatling'];
             }
 
-            this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient');
+            this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
@@ -1747,12 +1754,14 @@ module.exports = EntityGenerator.extend({
                     SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
             }
 
-
             if (this.testFrameworks.indexOf('gatling') != -1) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
                     TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }
 
+            if (this.searchEngine == 'elasticsearch') {
+                this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_EntityIndexInitializer.java', SERVER_TEST_SRC_DIR + this.packageFolder + '/config/elasticsearch/' + this.entityClass + 'IndexInitializer.java', this, {});
+            }
         }
     },
 

@@ -366,29 +366,29 @@ const expectedFiles = {
     ],
 
     dockerServicesDev: [
-        DOCKER_DIR + 'db.dev.yml'
+        DOCKER_DIR + 'app.yml'
     ],
 
     dockerServicesProd: [
-        DOCKER_DIR + 'sonar.yml',
-        DOCKER_DIR + 'db.prod.yml'
+        DOCKER_DIR + 'sonar.yml'
     ],
 
     dockerCassandra: [
-        DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile',
-        DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile',
+        DOCKER_DIR + 'cassandra/Cassandra.Dockerfile',
+        DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile',
         DOCKER_DIR + 'cassandra/scripts/init-dev.sh',
         DOCKER_DIR + 'cassandra/scripts/init-prod.sh',
         DOCKER_DIR + 'cassandra/scripts/entities.sh',
         DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
-        DOCKER_DIR + 'opscenter/Dockerfile'
+        DOCKER_DIR + 'opscenter/Dockerfile',
+        DOCKER_DIR + 'cassandra-opscenter.yml',
+        DOCKER_DIR + 'cassandra.yml',
     ],
 
     containerizeWithDocker: [
         DOCKER_DIR + 'jhipster-registry.yml',
         DOCKER_DIR + 'Dockerfile',
-        DOCKER_DIR + 'app.dev.yml',
-        DOCKER_DIR + 'app.prod.yml'
+        DOCKER_DIR + 'app.yml'
     ]
 };
 
