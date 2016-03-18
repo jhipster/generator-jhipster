@@ -74,7 +74,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http)
         .check(status.is(401))<% if (authenticationType == 'session') { %>
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))<% } %>)
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))<% } %>).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
 <%_ if (authenticationType == 'session') { _%>
@@ -83,7 +83,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("j_username", "admin")
         .formParam("j_password", "admin")
         .formParam("remember-me", "true")
-        .formParam("submit", "Login"))
+        .formParam("submit", "Login")).exitHereIfFailed
 <%_ } else if (authenticationType == 'oauth2') { _%>
         .post("/oauth/token")
         .headers(headers_http_authentication)
@@ -94,12 +94,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("client_secret", "mySecretOAuthSecret")
         .formParam("client_id", "<%= baseName%>app")
         .formParam("submit", "Login")
-        .check(jsonPath("$.access_token").saveAs("access_token")))
+        .check(jsonPath("$.access_token").saveAs("access_token"))).exitHereIfFailed
 <%_ } else if (authenticationType == 'jwt') { _%>
         .post("/api/authenticate")
         .headers(headers_http_authentication)
         .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJSON
-        .check(header.get("Authorization").saveAs("access_token")))
+        .check(header.get("Authorization").saveAs("access_token"))).exitHereIfFailed
 <%_ } _%>
         .pause(1)
         .exec(http("Authenticated request")
@@ -119,7 +119,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{"id":null<% for (idx in fields) { %>, "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType == 'String') { %>"SAMPLE_TEXT"<% } else if (fields[idx].fieldType == 'Integer') { %>"0"<% } else if (fields[idx].fieldType == 'ZonedDateTime' || fields[idx].fieldType == 'LocalDate') { %>"2020-01-01T00:00:00.000Z"<% } else { %>null<% } } %>}""")).asJSON
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url")))
+            .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
                 exec(http("Get created <%= entityInstance %>")
