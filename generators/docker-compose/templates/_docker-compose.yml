@@ -2,8 +2,6 @@ version: '2'
 services:
 <%_ for(var i = 0; i < appConfigs.length; i++) { _%>
 <%= appsYaml[i] %>
-<%= databasesYaml[i] %>
-<%= searchEnginesYaml[i] %>
 <%_ } _%>
     jhipster-registry:
         extends:

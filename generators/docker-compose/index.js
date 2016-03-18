@@ -201,13 +201,28 @@ module.exports = yeoman.Base.extend({
         setAppsYaml: function() {
             this.appsYaml = [];
             for (var i = 0; i < this.appsFolders.length; i++) {
+                var parentConfiguration = {};
                 var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-                var yamlContent = this.fs.read(path + '/src/main/docker/app.yml');
-                var yaml = jsyaml.load(yamlContent);
-                var appYaml = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
-                var parent = {};
-                parent[this.appConfigs[i].baseName.toLowerCase() + '-app'] = appYaml;
-                var stringYaml = jsyaml.dump(parent, {indent: 4});
+                // Add application configuration
+                var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
+                var yamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
+                parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
+                // Add database configuration
+                var database = this.appConfigs[i].prodDatabaseType;
+                if (database != 'no') {
+                    var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
+                    var databaseYamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                    parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
+                }
+                // Add search engine configuration
+                var searchEngine = this.appConfigs[i].searchEngine;
+                if (searchEngine != 'no') {
+                    var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
+                    var searchEngineConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
+                    parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine] = searchEngineConfig;
+                }
+                // Dump the file
+                var stringYaml = jsyaml.dump(parentConfiguration, {indent: 4});
                 var array = stringYaml.split("\n");
                 for (var j = 0; j < array.length; j++) {
                     array[j] = "    " + array[j];
@@ -215,52 +230,6 @@ module.exports = yeoman.Base.extend({
                 }
                 stringYaml = array.join("\n");
                 this.appsYaml.push(stringYaml);
-            }
-        },
-
-        setDatabasesYaml: function() {
-            this.databasesYaml = [];
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                var database = this.appConfigs[i].prodDatabaseType;
-                if (database != 'no') {
-                    var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-                    var yamlContent = this.fs.read(path + '/src/main/docker/' + database + '.yml');
-                    var yaml = jsyaml.load(yamlContent);
-                    var appYaml = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
-                    var parent = {};
-                    parent[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = appYaml;
-                    var stringYaml = jsyaml.dump(parent, {indent: 4});
-                    var array = stringYaml.split("\n");
-                    for (var j = 0; j < array.length; j++) {
-                        array[j] = "    " + array[j];
-                        array[j] = array[j].replace(/\'/g, '');
-                    }
-                    stringYaml = array.join("\n");
-                    this.databasesYaml.push(stringYaml);
-                }
-            }
-        },
-
-        setSearchEnginesYaml: function() {
-            this.searchEnginesYaml = [];
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                var searchEngine = this.appConfigs[i].searchEngine;
-                if (searchEngine != 'no') {
-                    var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-                    var yamlContent = this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml');
-                    var yaml = jsyaml.load(yamlContent);
-                    var appYaml = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
-                    var parent = {};
-                    parent[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine] = appYaml;
-                    var stringYaml = jsyaml.dump(parent, {indent: 4});
-                    var array = stringYaml.split("\n");
-                    for (var j = 0; j < array.length; j++) {
-                        array[j] = "    " + array[j];
-                        array[j] = array[j].replace(/\'/g, '');
-                    }
-                    stringYaml = array.join("\n");
-                    this.searchEnginesYaml.push(stringYaml);
-                }
             }
         },
 
