@@ -29,7 +29,7 @@ module.exports = yeoman.Base.extend({
 
             shelljs.exec('docker-compose -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose is installed on your computer.\n' +
+                    this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose is not installed on your computer.\n' +
                         '         Read https://docs.docker.com/compose/install/\n');
                 }
                 done();
