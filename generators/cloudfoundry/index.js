@@ -6,6 +6,7 @@ var util = require('util'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
     _ = require('lodash'),
+    glob = require('glob'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
@@ -158,23 +159,24 @@ module.exports = CloudFoundryGenerator.extend({
     productionBuild: function () {
         if (this.abort) return;
         var done = this.async();
-        var buildCmd = '';
+
         if (this.buildTool === 'maven') {
-            buildCmd = 'mvn package -DskipTests';
+            this.buildCmd = 'mvn package -DskipTests';
         } else if (this.buildTool === 'gradle') {
             if (os.platform() === 'win32') {
-                buildCmd = 'gradlew bootRepackage -x test';
+                this.buildCmd = 'gradlew bootRepackage -x test';
             } else {
-                buildCmd = './gradlew bootRepackage -x test';
+                this.buildCmd = './gradlew bootRepackage -x test';
             }
 
         }
+
         if (this.cloudfoundryProfile == 'prod') {
             this.log(chalk.bold('\nBuilding the application with the production profile'));
-            buildCmd += ' -Pprod';
+            this.buildCmd += ' -Pprod';
         }
 
-        var child = exec(buildCmd, function (err, stdout) {
+        var child = exec(this.buildCmd, function (err, stdout) {
             if (err) {
                 this.log.error(err);
             }
@@ -186,28 +188,25 @@ module.exports = CloudFoundryGenerator.extend({
         }.bind(this));
     },
 
+    _getWarFileName: function (warFolder) {
+        return glob.sync(warFolder.trim() + '*.war')[0];
+    },
+
     cloudfoundryPush: function () {
         this.on('end', function () {
             if (this.abort) return;
             var done = this.async();
             var cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -p';
-            var buildCmd;
+            var warFolder = '';
             if (this.buildTool === 'maven') {
-                cloudfoundryDeployCommand += ' target/*.war';
-                buildCmd = 'mvn package -DskipTests';
+                warFolder = ' target/';
             } else if (this.buildTool === 'gradle') {
-                cloudfoundryDeployCommand += ' build/libs/*.war';
-                if (os.platform() === 'win32') {
-                    buildCmd = 'gradlew bootRepackage -x test';
-                } else {
-                    buildCmd = './gradlew bootRepackage -x test';
-                }
-
-                if (this.cloudfoundryProfile == 'prod') {
-                    this.log(chalk.bold('\nBuilding the application with the production profile'));
-                    buildCmd += ' -Pprod';
-                }
-
+                warFolder = ' build/libs/';
+            }
+            if (os.platform() === 'win32') {
+                cloudfoundryDeployCommand += ' ' + this._getWarFileName(warFolder);
+            } else {
+                cloudfoundryDeployCommand += warFolder + '*.war';
             }
 
             this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
@@ -216,7 +215,7 @@ module.exports = CloudFoundryGenerator.extend({
                     this.log.error(err);
                 }
                 this.log(chalk.green('\nYour app should now be live'));
-                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(buildCmd + ' -P' + this.cloudfoundryProfile)));
+                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(this.buildCmd)));
                 this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(cloudfoundryDeployCommand)));
                 done();
             }.bind(this));
