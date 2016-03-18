@@ -61,7 +61,7 @@
         })
         .state('<%= entityStateName %>-detail', {
             parent: 'entity',
-            url: '/<%= entityUrl %>/{id:<%= entityUrlType %>}',
+            url: '/<%= entityUrl %>/{id}',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
@@ -97,6 +97,7 @@
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                     controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
@@ -124,7 +125,7 @@
         })
         .state('<%= entityStateName %>.edit', {
             parent: '<%= entityStateName %>',
-            url: '/{id:<%= entityUrlType %>}/edit',
+            url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
@@ -133,6 +134,7 @@
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                     controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: ['<%= entityClass %>', function(<%= entityClass %>) {
@@ -148,7 +150,7 @@
         })
         .state('<%= entityStateName %>.delete', {
             parent: '<%= entityStateName %>',
-            url: '/{id:<%= entityUrlType %>}/delete',
+            url: '/{id}/delete',
             data: {
                 authorities: ['ROLE_USER']
             },

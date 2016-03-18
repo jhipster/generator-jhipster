@@ -789,29 +789,36 @@ module.exports = JhipsterServerGenerator.extend({
         writeDockerFiles: function () {
             // Create Docker and Docker Compose files
             this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
-            this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
-            this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
-            this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
-            if ((this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") || this.applicationType == 'gateway') {
-                this.template(DOCKER_DIR + '_db.dev.yml', DOCKER_DIR + 'db.dev.yml', this, {});
+            this.template(DOCKER_DIR + '_app.yml', DOCKER_DIR + 'app.yml', this, {});
+            if (this.prodDatabaseType == "mysql") {
+                this.template(DOCKER_DIR + '_mysql.yml', DOCKER_DIR + 'mysql.yml', this, {});
             }
-            if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch" || this.applicationType == 'gateway') {
-                this.template(DOCKER_DIR + '_db.prod.yml', DOCKER_DIR + 'db.prod.yml', this, {});
+            if (this.prodDatabaseType == "postgresql") {
+                this.template(DOCKER_DIR + '_postgresql.yml', DOCKER_DIR + 'postgresql.yml', this, {});
             }
-            if (this.applicationType == 'gateway' || this.devDatabaseType == "cassandra") {
-                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Dev.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
-                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Prod.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
+            if (this.prodDatabaseType == "mongodb") {
+                this.template(DOCKER_DIR + '_mongodb.yml', DOCKER_DIR + 'mongodb.yml', this, {});
+            }
+            if (this.applicationType == 'gateway' || this.prodDatabaseType == "cassandra") {
+                this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
+                this.template(DOCKER_DIR + '_cassandra-opscenter.yml', DOCKER_DIR + 'cassandra-opscenter.yml', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-OpsCenter.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
-                if (this.devDatabaseType == "cassandra") {
+                if (this.prodDatabaseType == "cassandra") {
                     this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
                 }
                 this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
+            if (this.searchEngine == "elasticsearch") {
+                this.template(DOCKER_DIR + '_elasticsearch.yml', DOCKER_DIR + 'elasticsearch.yml', this, {});
+            }
             if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
             }
+            this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
         },
 
         writeServerBuildFiles: function () {

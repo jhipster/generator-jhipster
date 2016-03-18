@@ -1,0 +1,12 @@
+version: '2'
+services:
+    jhipster-registry:
+        container_name: jhipster-registry
+        image: jhipster/jhipster-registry
+        ports:
+            - "8761:8761"
+        volumes:
+            - ./central-server-config:/central-config
+        environment:
+            - GIT_URI=https://github.com/jhipster/jhipster-registry/
+            - GIT_SEARCH_PATH=central-config

@@ -1,0 +1,22 @@
+version: '2'
+services:
+<%_ for(var i=0; i<appConfigs.length; i++) { _%>
+    <%= appConfigs[i].baseName.toLowerCase() %>:
+        extends:
+            file: <%= appsFolderPaths[i] %>/src/main/docker/app.yml
+            service: <%= appConfigs[i].baseName.toLowerCase() %>-app
+<%_ } _%>
+<%_ if (useElk) { _%>
+    elk-elasticsearch:
+        extends:
+            file: elk.yml
+            service: elk-elasticsearch
+    elk-logstash:
+        extends:
+          file: elk.yml
+          service: elk-logstash
+    jhipster-console:
+        extends:
+            file: elk.yml
+            service: jhipster-console
+<%_ } _%>
