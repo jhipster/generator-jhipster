@@ -82,7 +82,7 @@ spring:
         <%_ } else { _%>
         database: H2
         <%_ } _%>
-        show_sql: true
+        show_sql: false
         properties:
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
