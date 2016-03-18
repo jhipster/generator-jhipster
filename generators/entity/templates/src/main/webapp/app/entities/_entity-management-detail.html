@@ -12,7 +12,7 @@
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
-            <img data-ng-src="{{'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
+            <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
             <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
             <%_ } else if (fieldType == 'LocalDate') { _%>
