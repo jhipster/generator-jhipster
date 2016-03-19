@@ -1,6 +1,8 @@
 package <%=packageName%>.config;
 
+<%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
+<%_ } _%>
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
