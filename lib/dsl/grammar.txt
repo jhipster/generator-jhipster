@@ -1,0 +1,219 @@
+/*
+ *
+ * This the grammar we use to generate the parser jhGrammar.js.
+ *   We use the online tool http://pegjs.org/online to generate the parser.
+ *   Modifying this file won't affect the program, this is just to have a more readable grammar. 
+ */
+
+{
+  function concat(array1, array2){
+    if (array2) {
+      Array.prototype.push.apply(array1, array2);
+    }
+    return array1;
+  }
+
+  function flattenArray(array) {
+    var newArray = [];
+
+    array.forEach(function(element) {
+      if (!element.length) {
+        newArray.push(element);
+      } else {
+        element.forEach(function(internalElement) {
+          newArray.push(internalElement);
+        });
+      }
+    });
+    
+    return newArray;
+  }
+
+  function makeString(o) {
+    return o.join("");
+  }
+  
+  function addCardinalityToRelationships(cardinality, relationships) {
+    if (!relationships) {
+      return;
+    }
+    relationships.forEach(function(relationship) {
+      relationship.cardinality = cardinality;
+    });
+  }
+  
+  var entities = [];
+  var relationships = [];
+  var enums = [];
+  var dto = {};
+  var pagination = {};
+  var service = {};
+}
+
+start = p:prog { return p; }
+  
+prog
+  = space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / space* rd:relationDecl space* p:prog {return {"entities" : p.entities, "relationships" : flattenArray(concat([rd],p.relationships)), "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / space* end:enumDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": concat([end], p.enums), "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / space* dto:dtoDecl space* p:prog {return {"entities": p.entities, "relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / space* pagination:pagiDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / space* service:serviceDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / space* Comment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / space* JDLComment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
+  / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service};}                                                                 
+
+//Entities
+entityDecl
+  = jd:Comment? space* JDLComment? space* "entity" space* e:ENTITYNAME space* eb:entityBody? space* JDLComment? {return {"name" : e, "body":eb, "javadoc":jd};}
+  / "entity" space* e:ENTITYNAME space* eb:entityBody? {return {"name" : e, "body":eb, "javadoc":""};}           
+ 
+entityBody
+  = "{" space* JDLComment? space* fdl:fieldDeclList space* JDLComment? space* "}" {return fdl;}
+  / "" {return [];}
+
+fieldDeclList
+  = JDLComment? space* com:Comment? space* JDLComment? space* f:FIELDNAME space t:type space* vl:validationList? space* ","? space* JDLComment? space* fdl:fieldDeclList {return concat([{"name" : f, "type" : t, "validations" : vl, "javadoc": com}], fdl );}
+  / com:Comment? space* f:FIELDNAME space t:type space* vl:validationList {return [{"name" : f, "type" : t, "validations" : vl, "javadoc": com}];}
+  / "" {return [];}                                                
+
+validationList
+  = v:validation space* vl:validationList {return concat([v], vl);}                                    
+  / "" {return [];}
+
+//Relationship
+relationDecl
+  = 'relationship' space rt:relationshipType space* "{" space* JDLComment? space* rb:relationshipBody space* subrb:subRelationshipBodies? "}" {rb.cardinality = rt; addCardinalityToRelationships(rt, subrb); return concat([rb], subrb);}  
+
+subRelationshipBodies
+  = ','? space* rb:relationshipBody space* morerb:subRelationshipBodies? { return concat([rb], morerb); }
+  / ','? space* rb:relationshipBody { return rb; }
+
+relationshipBody
+  = from:relationshipSide space* JDLComment? space* "to" space* JDLComment? space* to:relationshipSide space* JDLComment? {return {"from" : from , "to" : to};}
+
+relationshipSide          
+  = jd:Comment? space* e:ENTITYNAME space* "{" space* i:INJECTEDFIELDNAME space* "}" space* {return {"name" :e, "injectedfield" : i, "javadoc": jd};}
+  / jd:Comment? space* e:ENTITYNAME space* ("{" space* "}")? space* {return {"name" :e, "injectedfield" : null, "javadoc": jd};}
+  / e:ENTITYNAME space {return {"name" :e, "injectedfield" : null, "javadoc": ''};}
+
+
+//Enum
+enumDecl
+  = 'enum' space e:ENUMNAME space* '{' space* JDLComment? space* el:enumPropList space* JDLComment? space* '}' {return {"name":e, "values" : el };}
+
+enumPropList
+  = e:ENUMPROP space* ',' space* JDLComment? space* el:enumPropList {return concat([e],el);}
+  / e:ENUMPROP {return [e];} 
+
+exclusion
+  = 'except' space+ sub:exclusionSub {return sub;}
+
+exclusionSub
+  = e:ENTITYNAME space* ',' space* sub:exclusionSub {return concat([e], sub);}
+  / e:ENTITYNAME {return [e];}
+
+// DTO
+dtoDecl
+  = 'dto' space+ decl:subDtoDecl space* ex:exclusion? space* JDLComment? {
+    dto[decl[decl.length - 1]] = dto[decl[decl.length - 1]] || { list: [], excluded: [] };
+    concat(dto[decl[decl.length - 1]].list, decl.slice(0, decl.length-1));
+    if (ex) {
+    	concat(dto[decl[decl.length - 1]].excluded, ex);
+    }
+  }
+
+subDtoDecl
+ = e:ENTITYNAME space* ',' space* sub:subDtoDecl {return concat([e], sub);}
+ / '*' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
+ / 'all' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
+ / e:ENTITYNAME space* 'with' space* method:([A-z-]+) {return [e, method.toString().replace(/,/g,'')];}
+
+// Pagination
+pagiDecl
+  = 'paginate' space+ decl:subPagiDecl space* ex:exclusion? space* JDLComment? {
+  	pagination[decl[decl.length - 1]] = pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
+    concat(pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length-1));
+    if (ex) {
+    	concat(pagination[decl[decl.length - 1]].excluded, ex);
+    }
+  }
+
+subPagiDecl
+  = e:ENTITYNAME space* ',' space* sub:subPagiDecl {return concat([e], sub);}
+  / '*' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
+  / 'all' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
+  / e:ENTITYNAME space* 'with' space* method:([A-z-]+) {return [e, method.toString().replace(/,/g,'')];}
+
+// Service
+serviceDecl
+  = 'service' space+ decl:subServiceDecl space* ex:exclusion? space* JDLComment? {
+  	service[decl[decl.length - 1]] = service[decl[decl.length - 1]] || { list: [], excluded: [] };
+    concat(service[decl[decl.length - 1]].list, decl.slice(0, decl.length-1));
+    if (ex) {
+    	concat(service[decl[decl.length - 1]].excluded, ex);
+    }
+  }
+
+subServiceDecl
+  = e:ENTITYNAME space* ',' space* sub:subServiceDecl {return concat([e], sub);}
+  / '*' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
+  / 'all' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
+  / e:ENTITYNAME space* 'with' space* method:([A-z-]+) {return [e, method.toString().replace(/,/g,'')];}
+
+
+relationshipType = "OneToOne" {return "one-to-one";} / "OneToMany" {return "one-to-many";} / "ManyToOne" {return "many-to-one";} / "ManyToMany" {return "many-to-many";}
+
+type "a type" = head:[A-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));} //we must check afterward if the type is acceptable.
+
+validation 
+  = "required" {return {key:'required', value:''};}
+  / "minlength" space* "(" space* int:INTEGER space* ")" {return {key:'minlength', value:int};}
+  / "maxlength" space* "(" space* int:INTEGER space* ")" {return {key:'maxlength', value:int};}
+  / "minbytes" space* "(" space* int:INTEGER space* ")" {return {key:'minlength', value:int};}
+  / "maxbytes" space* "(" space* int:INTEGER space* ")" {return {key:'maxlength', value:int};}
+  / "max" space* "(" space* int:INTEGER space* ")" {return {key:'max', value:int};}
+  / "min" space* "(" space* int:INTEGER space* ")" {return {key:'min', value:int};}
+  / "pattern" space* "("  apostrophe regexp:REGEXP  apostrophe space* ")" {return {key:'pattern' , value:regexp};}
+
+
+
+apostrophe "apostrophe"
+  = a:["|']                    
+
+REGEXP "a regular expression" 
+  = word:[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* {return makeString(word);}
+
+ENUMNAME "an enum name"
+  = head:[A-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));}
+
+ENUMPROP "an enum property"
+  = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {return makeString(concat(concat(underscore,[head]), tail));}
+
+INTEGER "integer"
+  = int:[0-9]+ {return parseInt(int.join(""), 10);} 
+
+INJECTEDFIELDNAME "an injected field"
+  = head:[a-zA-Z]tail:[a-zA-Z0-9()]* {return makeString(concat([head],tail));}
+
+ENTITYNAME "an entity name"  
+  = head:[A-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));}
+
+FIELDNAME "a field name"
+  = head:[a-zA-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));}               
+
+space "a space"
+  = space:['\n'|'\t'|'\r'|' '|\u2028|\u2029]+ 
+
+/******************               COMMENT                 ***********************/
+Comment 
+  = ComStart nc:Not_Com* ComStop {return makeString(nc);}
+
+ComStart = "/*" [*]*
+
+ComStop = [*]+ "/"
+
+// a completely ignored comment, will not be a Javadoc comment
+JDLComment = "//" [^\n\r]*
+
+Not_Com = (!ComStop !ComStart char:.) {return char;}

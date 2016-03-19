@@ -1,0 +1,111 @@
+entity Department {
+  departmentId Long,
+  departmentName String required
+}
+
+entity JobHistory {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime
+}
+
+entity Job {
+  jobId Long,
+  jobTitle String,
+  minSalary Long,
+  maxSalary Long
+}
+
+/**
+ * The Employee entity.
+ */
+entity Employee {
+  employeeId Long,
+  /**
+   * The firstname attribute.
+   */
+  firstName String,
+  lastName String,
+  email String,
+  phoneNumber String,
+  hireDate ZonedDateTime,
+  salary Long,
+  commissionPct Long
+}
+
+entity Location {
+  locationId Long,
+  streetAddress String,
+  postalCode String,
+  city String,
+  stateProvince String
+}
+
+entity Task {
+  taskId Long,
+  title String,
+  description String
+}
+
+entity Country {
+  countryId Long,
+  countryName String
+}
+
+entity Region {
+  regionId Long,
+  regionName String
+}
+
+relationship OneToOne {
+  JobHistory{department} to Department
+}
+
+relationship OneToOne {
+  JobHistory{job} to Job
+}
+
+relationship OneToOne {
+  JobHistory{employee} to Employee
+}
+
+relationship ManyToMany {
+  Job{task(title)} to Task{job}
+}
+
+relationship OneToOne {
+  Department{location} to Location
+}
+
+relationship OneToMany {
+  /**
+   * A relationship
+   */
+  Department{employee} to
+  /**
+   * Another side of the same relationship
+   */
+  Employee
+}
+
+relationship ManyToOne {
+  Employee{manager} to Employee
+}
+
+relationship OneToMany {
+  Employee{job} to Job
+}
+
+relationship OneToOne {
+  Location{country} to Country
+}
+
+relationship OneToOne {
+  Country{region} to Region
+}
+
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+dto Employee with mapstruct
+
+service Employee with serviceClass
