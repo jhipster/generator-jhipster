@@ -30,14 +30,12 @@ public abstract class AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @CreatedBy<% if (databaseType == 'sql') { %>
-    @NotNull
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_by")<% } %>
     @JsonIgnore
     private String createdBy;
 
     @CreatedDate<% if (databaseType == 'sql') { %>
-    @NotNull
     @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_date")<% } %>
     @JsonIgnore
