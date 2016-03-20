@@ -15,8 +15,9 @@ task bower(type: Exec) {
 bower.onlyIf { !project.hasProperty('skipBower') }
 processResources.dependsOn 'bower'
 <% }  if(frontendBuilder == 'gulp') {%>
+bower.onlyIf { !project.hasProperty('skipBower') }
 gulp_build.dependsOn 'npmInstall'
 gulp_build.dependsOn 'bower'
-processResources.dependsOn gulp_build
+processResources.dependsOn 'bower'
 test.dependsOn gulp_test
 <% } %>

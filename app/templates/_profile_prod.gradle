@@ -30,6 +30,7 @@ task setProdProperties(dependsOn: bootRun) << {
     }
 }
 
+
 <% if(frontendBuilder == 'grunt') {%>
 task gruntBuild(type: Exec) {
   if (Os.isFamily(Os.FAMILY_WINDOWS)) {

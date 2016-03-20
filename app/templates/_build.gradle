@@ -46,7 +46,6 @@ bootRun {
 
 
 test {
-    println 'Starting the Unit and Integration test'
     include '**/*UnitTest*'
     include '**/*IntTest*'
 }
