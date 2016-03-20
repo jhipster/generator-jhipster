@@ -24,7 +24,7 @@ We use [Gulp][] as our build system. Install the Gulp command-line tool globally
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 <% if (buildTool == 'maven') { %>
-    mvn<% } %><% if (buildTool == 'gradle') { %>
+    ./mvnw<% } %><% if (buildTool == 'gradle') { %>
     ./gradlew<% } %>
     gulp
 
@@ -37,7 +37,7 @@ Add the `-h` flag on any command to see how you can use it. For example, `bower 
 
 To optimize the <%= baseName %> client for production, run:
 <% if (buildTool == 'maven') { %>
-    mvn -Pprod clean package<% } %><% if (buildTool == 'gradle') { %>
+    ./mvnw -Pprod clean package<% } %><% if (buildTool == 'gradle') { %>
     ./gradlew -Pprod clean bootRepackage<% } %>
 <% if(!skipClient) { %>
 This will concatenate and minify CSS and JavaScript files. It will also modify `index.html` so it references
@@ -57,7 +57,7 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
     gulp test
 
 <% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>mvn spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
+and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
 <% } %>
 ## Continuous Integration
 
@@ -75,7 +75,7 @@ To setup this project in Jenkins, use the following configuration:
     * Invoke Gradle script / Use Gradle Wrapper / Tasks: `-Pprod clean test bootRepackage`<% } %><% if (testFrameworks.indexOf("protractor") > -1) { %>
     * Execute Shell / Command:
         ````
-        <% if (buildTool == 'maven') { %>mvn spring-boot:run &<% } %><% if (buildTool == 'gradle') { %>./gradlew bootRun &<% } %>
+        <% if (buildTool == 'maven') { %>./mvnw spring-boot:run &<% } %><% if (buildTool == 'gradle') { %>./gradlew bootRun &<% } %>
         bootPid=$!
         sleep 30s
         gulp itest

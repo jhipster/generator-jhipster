@@ -160,15 +160,13 @@ module.exports = CloudFoundryGenerator.extend({
         if (this.abort) return;
         var done = this.async();
 
-        if (this.buildTool === 'maven') {
-            this.buildCmd = 'mvn package -DskipTests';
-        } else if (this.buildTool === 'gradle') {
-            if (os.platform() === 'win32') {
-                this.buildCmd = 'gradlew bootRepackage -x test';
-            } else {
-                this.buildCmd = './gradlew bootRepackage -x test';
-            }
+        this.buildCmd = 'mvnw package -DskipTests';
 
+        if (this.buildTool === 'gradle') {
+            this.buildCmd = 'gradlew bootRepackage -x test';
+        }
+        if (os.platform() !== 'win32') {
+            this.buildCmd = './' + this.buildCmd;
         }
 
         if (this.cloudfoundryProfile == 'prod') {
