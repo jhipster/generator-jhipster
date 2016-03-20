@@ -26,5 +26,5 @@ processResources {
         }
     }
 }
-<% }  if(frontendBuilder == 'gulp') {%>
+<% if(frontendBuilder == 'gulp') {%>
 setProdProperties.dependsOn 'gulp_ngconstant:dev'<% } %>
