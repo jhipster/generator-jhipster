@@ -110,7 +110,10 @@ gulp.task('sass', function () {
 
 <%_ if(enableTranslation) { _%>
 gulp.task('languages', function () {
-    return gulp.src(config.bower + 'angular-i18n/angular-locale_{' + yorc.languages.join(',') + '}.js')
+    var locales = yorc.languages.map(function (locale) {
+        return config.bower + 'angular-i18n/angular-locale_' + locale + '.js';
+    });
+    return gulp.src(locales)
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.app + 'i18n/'))
         .pipe(gulp.dest(config.app + 'i18n/'));

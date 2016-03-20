@@ -106,7 +106,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }<% } %>
 
     /**
-     * Set up Mime types.
+     * Set up Mime types and, if needed, set the document root.
      */
     @Override
     public void customize(ConfigurableEmbeddedServletContainer container) {
@@ -117,13 +117,15 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         mappings.add("json", "text/html;charset=utf-8");
         container.setMimeMappings(mappings);<% if (!skipClient) { %>
 
-        // Set document root if we're not running from a jar/war
-        if (getClass().getProtectionDomain().getCodeSource().getLocation().getProtocol().equals("file")) {
-            if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-                container.setDocumentRoot(new File("<%= CLIENT_DIST_DIR %>"));
-            } else if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
-                container.setDocumentRoot(new File("<%= CLIENT_MAIN_SRC_DIR %>"));
-            }
+        // When running in an IDE or with <% if (buildTool == 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
+        File root;
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+            root = new File("<%= CLIENT_DIST_DIR %>");
+        } else {
+            root = new File("<%= CLIENT_MAIN_SRC_DIR %>");
+        }
+        if (root.exists() && root.isDirectory()) {
+            container.setDocumentRoot(root);
         }<% } %>
     }<% if (!skipClient) { %>
 

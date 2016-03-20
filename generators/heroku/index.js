@@ -202,18 +202,22 @@ module.exports = HerokuGenerator.extend({
             if (this.abort) return;
             var done = this.async();
             this.log(chalk.bold('\nBuilding and deploying application'));
-
-            var herokuDeployCommand = 'mvn package -Pprod -DskipTests=true && heroku deploy:jar --jar target/*.war --app ' + this.herokuDeployedName;
-            if (this.buildTool == 'gradle') {
-                if (os.platform() === 'win32') {
-                    herokuDeployCommand = 'gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
-                } else {
-                    herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
-                }
+            
+            var buildCmd = 'mvnw package -Pprod -DskipTests=true';
+            var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
+            if (this.buildTool === 'gradle') {
+                buildCmd = 'gradlew -Pprod bootRepackage -x test';
+                herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war';
             }
+            if (os.platform() !== 'win32') {
+                buildCmd = './' + buildCmd;
+            }
+            herokuDeployCommand += ' --app ' + this.herokuDeployedName;
+
+            var runCmd = buildCmd + ' && ' + herokuDeployCommand;
 
             this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
-            var child = exec(herokuDeployCommand, function (err, stdout) {
+            var child = exec(runCmd, function (err, stdout) {
                 if (err) {
                     this.abort = true;
                     this.log.error(err);
@@ -224,11 +228,7 @@ module.exports = HerokuGenerator.extend({
                 } else {
                     this.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
                     this.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
-                    if (this.buildTool == 'gradle') {
-                        this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('./gradlew -Pprod bootRepackage -x test')));
-                    } else {
-                        this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('mvn package -Pprod -DskipTests')));
-                    }
+                    this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(buildCmd)));
                     this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
                 }
                 done();

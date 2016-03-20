@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://jhipster.github.io/">
+    <img height="257" src="https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/img/logo-jhipster2x.png">
+  </a>
+  <p align="center">Greetings, Java Hipster!</p>
+</p>
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
 Full documentation and information is available on our website at [http://jhipster.github.io/](http://jhipster.github.io/)

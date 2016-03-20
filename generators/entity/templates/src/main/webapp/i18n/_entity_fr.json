@@ -5,7 +5,7 @@
                 "title": "<%= entityClassPlural %>",
                 "createLabel": "Créer un nouveau <%= entityClass %>",
                 "createOrEditLabel": "Créer ou éditer un <%= entityClass %>",
-                "search": "Search for <%= entityClass %>"
+                "search": "Recherche pour <%= entityClass %>"
             },
             "created": "Un nouveau <%= entityClass %> a été créé avec l'identifiant {{ param }}",
             "updated": "Le <%= entityClass %> avec l'identifiant {{ param }} a été mis à jour",
