@@ -1,7 +1,7 @@
 version: '2'
 services:
     elk-elasticsearch:
-        image: elasticsearch:2.2.0
+        image: elasticsearch:2.2.1
         ports:
             - 9200:9200
             - 9300:9300
