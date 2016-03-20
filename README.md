@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://jhipster.github.io/">
-    <img height="257" width="114" src="https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/img/logo-jhipster2x.png">
+    <img height="257" src="https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/img/logo-jhipster2x.png">
   </a>
   <p align="center">Greetings, Java Hipster!</p>
 </p>
