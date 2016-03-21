@@ -1,10 +1,8 @@
 'use strict';
 
-var JDLParser = require('../lib/reader/jdl_reader');
+var JDLReader = require('../lib/reader/jdl_reader');
 
-module.exports = (function () {
-  return {
-    parse: JDLParser.read,
-    parseFromFiles: JDLParser.readFiles
-  };
-})();
+module.exports = {
+    parse: JDLReader.read,
+    parseFromFiles: JDLReader.readFiles
+};
