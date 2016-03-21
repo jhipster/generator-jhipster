@@ -44,6 +44,10 @@ public class JHipsterProperties {
 
     private final Gateway gateway = new Gateway();
     <%_ } _%>
+    <%_ if (searchEngine == 'elasticsearch' && databaseType == 'sql') { _%>
+
+    private final ElasticSearch elasticSearch = new ElasticSearch();
+    <%_ } _%>
 
     public Async getAsync() {
         return async;
@@ -86,6 +90,12 @@ public class JHipsterProperties {
 
     public Gateway getGateway() {
         return gateway;
+    }
+    <%_ } _%>
+    <%_ if (searchEngine == 'elasticsearch' && databaseType == 'sql') { _%>
+
+    public ElasticSearch getElasticSearch() {
+        return elasticSearch;
     }
     <%_ } _%>
 
@@ -668,6 +678,21 @@ public class JHipsterProperties {
             public void setLimit(long limit) {
                 this.limit = limit;
             }
+        }
+    }
+<%_ } _%>
+<%_ if (searchEngine == 'elasticsearch' && databaseType == 'sql') { _%>
+
+    public static class ElasticSearch {
+
+        private boolean updateOnCommit = true;
+
+        public boolean isUpdateOnCommit() {
+            return updateOnCommit;
+        }
+
+        public void setUpdateOnCommit(boolean updateOnCommit) {
+            this.updateOnCommit = updateOnCommit;
         }
     }
 <%_ } _%>

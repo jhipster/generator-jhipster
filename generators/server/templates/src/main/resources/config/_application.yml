@@ -126,3 +126,6 @@ jhipster:
         redirectAfterSignIn: "/#/home"
         <%_ } _%>
 <%_ } _%>
+<%_ if (searchEngine == 'elasticsearch' && databaseType == 'sql') { _%>
+    elasticSearch.updateOnCommit: true
+<%_ } _%>

@@ -1,5 +1,8 @@
 package <%=packageName%>.domain;
-<% if (databaseType == 'cassandra') { %>
+
+<% if (searchEngine == 'elasticsearch' && databaseType == 'sql') { %>
+import <%=packageName%>.config.elasticsearch.ElasticSearchUpdater;
+<%} if (databaseType == 'cassandra') { %>
 import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
@@ -32,7 +35,8 @@ import java.time.ZonedDateTime;<% } %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "jhi_user")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName = "user")<% } %>
+@Document(indexName = "user")<% if (databaseType == 'sql') { %>
+@EntityListeners(ElasticSearchUpdater.class)<% }} %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
