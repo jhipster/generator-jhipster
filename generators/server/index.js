@@ -1195,7 +1195,7 @@ module.exports = JhipsterServerGenerator.extend({
 
             // Create ElasticSearch test files
             if (this.searchEngine == 'elasticsearch') {
-                this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_AbstractIndexInitializer.java', testDir + 'config/elasticsearch/AbstractIndexInitializer.java', this, {});
+                this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_IndexReinitializer.java', testDir + 'config/elasticsearch/IndexReinitializer.java', this, {});
             }
         },
 
