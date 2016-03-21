@@ -378,16 +378,15 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk());<% if (searchEngine == 'elasticsearch') { %>
+
+        // Validate ElasticSearch is empty
+        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
+        assertThat(<%= entityInstance %>ExistsInEs).isFalse();<% } %>
 
         // Validate the database is empty
         List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstancePlural %>).hasSize(databaseSizeBeforeDelete - 1);<% if (searchEngine == 'elasticsearch') { %>
-
-        // Validate tElasticSearch is empty
-        boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
-        assertThat(<%= entityInstance %>ExistsInEs).isFalse();
-        <%_ } _%>
+        assertThat(<%= entityInstancePlural %>).hasSize(databaseSizeBeforeDelete - 1);
     }<% if (searchEngine == 'elasticsearch') { %>
 
     @Test<% if (databaseType == 'sql') { %>
