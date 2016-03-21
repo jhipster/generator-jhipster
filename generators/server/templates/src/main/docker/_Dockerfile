@@ -10,3 +10,5 @@ ADD *.war /app.war
 RUN sh -c 'touch /app.war'
 VOLUME /tmp
 CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.war"]
+
+EXPOSE <%= serverPort %><% if (hibernateCache == 'hazelcast') { %> 5701/udp<% } %>
