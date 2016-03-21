@@ -1,8 +1,9 @@
 'use strict';
 
 var expect = require('chai').expect,
+    fs = require('fs'),
     fail = expect.fail,
-    readFile = require('../../lib/reader/jdl_reader').read,
+    read = require('../../lib/reader/jdl_reader').read,
     readFiles = require('../../lib/reader/jdl_reader').readFiles;
 
 describe('#readContent', function () {
@@ -10,7 +11,7 @@ describe('#readContent', function () {
     describe('such as nil', function () {
       it('throws an error', function () {
         try {
-          readFile(null);
+          read(null);
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException')
@@ -20,11 +21,20 @@ describe('#readContent', function () {
     describe('such as an empty array', function () {
       it('throws an error', function () {
         try {
-          readFile('');
+          read('');
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException')
         }
+      });
+    });
+  });
+  describe('when passing valid arguments', function () {
+    describe('when reading JDL content', function () {
+      it('reads it', function () {
+        var input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
+        var content = read(input);
+        expect(content).not.to.be.null;
       });
     });
   });
