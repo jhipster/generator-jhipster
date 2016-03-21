@@ -1,8 +1,15 @@
-package <%=packageName%>.config;
+package <%=packageName%>.config.elasticsearch;
 
 import java.io.IOException;
 
+import <%=packageName%>.config.JacksonConfiguration;
+
 import org.elasticsearch.client.Client;
+
+<%_ if (databaseType == 'sql') { _%>
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+<%_ } _%>
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +22,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @AutoConfigureAfter(value = { JacksonConfiguration.class })
-public class ElasticSearchConfiguration {
+public class ElasticSearchConfiguration <% if (databaseType == 'sql') { %>implements BeanFactoryAware <% } %>{
 
     @Bean
     public ElasticsearchTemplate elasticsearchTemplate(Client client, Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
         return new ElasticsearchTemplate(client, new CustomEntityMapper(jackson2ObjectMapperBuilder.createXmlMapper(false).build()));
     }
 
+<%_ if (databaseType == 'sql') { _%>
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
+        ElasticSearchUpdater.setBeanFactory(beanFactory);
+    }
+
+<%_ } _%>
     public class CustomEntityMapper implements EntityMapper {
 
         private ObjectMapper objectMapper;

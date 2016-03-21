@@ -132,3 +132,6 @@ jhipster:
         contactEmail:
         license:
         licenseUrl:
+    <%_ if (searchEngine == 'elasticsearch' && databaseType == 'sql') { _%>
+    elasticSearch.updateOnCommit: false
+    <%_ } _%>

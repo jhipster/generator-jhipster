@@ -1072,7 +1072,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
             }
             if (this.searchEngine == 'elasticsearch') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/elasticsearch/_ElasticSearchConfiguration.java', javaDir + 'config/elasticsearch/ElasticSearchConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/elasticsearch/_package-info.java', javaDir + 'config/elasticsearch/package-info.java', this, {});
+                if (this.databaseType == "sql") {
+                    this.template(SERVER_MAIN_SRC_DIR + 'package/config/elasticsearch/_ElasticSearchUpdater.java', javaDir + 'config/elasticsearch/ElasticSearchUpdater.java', this, {});
+                }
             }
         },
 
@@ -1196,6 +1200,9 @@ module.exports = JhipsterServerGenerator.extend({
             // Create ElasticSearch test files
             if (this.searchEngine == 'elasticsearch') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_AbstractIndexInitializer.java', testDir + 'config/elasticsearch/AbstractIndexInitializer.java', this, {});
+                if (this.databaseType == "sql") {
+                    this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_ElasticSearchUpdaterTest.java', testDir + 'config/elasticsearch/ElasticSearchUpdaterTest.java', this, {});
+                }
             }
         },
 

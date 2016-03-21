@@ -15,6 +15,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.annotations.Document;<% } %>
 <% if (databaseType == 'sql') { %>
+<%_ if (searchEngine == 'elasticsearch') { _%>
+import <%=packageName%>.config.elasticsearch.ElasticSearchUpdater;
+
+<%_ } _%>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
@@ -43,7 +47,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %>
+@Document(indexName = "<%= entityInstance.toLowerCase() %>")<% if (databaseType == 'sql') { %>
+@EntityListeners(ElasticSearchUpdater.class)<% }} %>
 public class <%= entityClass %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
