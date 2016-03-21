@@ -5,8 +5,6 @@ services:
         ports:
             - 9200:9200
             - 9300:9300
-        volumes:
-            - ./log-monitoring/log-data:/usr/share/elasticsearch/data
     elk-logstash:
         image: logstash:2.2.2
         volumes:
