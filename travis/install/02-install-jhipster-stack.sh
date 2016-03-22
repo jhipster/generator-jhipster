@@ -20,4 +20,5 @@ npm test
 #-------------------------------------------------------------------------------
 # Force no insight
 #-------------------------------------------------------------------------------
+mkdir -p "$HOME"/.config/configstore/
 mv "$JHIPSTER_TRAVIS"/configstore/*.json "$HOME"/.config/configstore/
