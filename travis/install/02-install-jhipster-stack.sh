@@ -17,3 +17,7 @@ cd "$TRAVIS_BUILD_DIR"/
 npm install
 npm link
 npm test
+#-------------------------------------------------------------------------------
+# Force no insight
+#-------------------------------------------------------------------------------
+mv "$JHIPSTER_TRAVIS"/configstore/*.json "$HOME"/.config/configstore/
