@@ -1,6 +1,6 @@
 'use strict';
 
-var JDLReader = require('../lib/reader/jdl_reader');
+const JDLReader = require('../lib/reader/jdl_reader');
 
 module.exports = {
   parse: JDLReader.read,
