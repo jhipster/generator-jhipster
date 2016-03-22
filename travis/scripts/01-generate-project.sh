@@ -1,6 +1,12 @@
 #!/bin/bash
 set -ev
 #-------------------------------------------------------------------------------
+# Force no insight
+#-------------------------------------------------------------------------------
+mkdir -p "$HOME"/.config/configstore/
+mv "$JHIPSTER_TRAVIS"/configstore/*.json "$HOME"/.config/configstore/
+
+#-------------------------------------------------------------------------------
 # Generate the project with yo jhipster
 #-------------------------------------------------------------------------------
 mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER" "$HOME"/
