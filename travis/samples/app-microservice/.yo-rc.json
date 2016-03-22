@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "microservice",
-    "baseName": "sampleDefault",
+    "baseName": "travisMicroservice",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "jwt",
@@ -25,6 +25,7 @@
     ],
     "enableSocialSignIn": false,
     "skipClient": true,
-    "skipUserManagement": true
+    "skipUserManagement": true,
+    "travis": true
   }
 }
