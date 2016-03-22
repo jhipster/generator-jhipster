@@ -286,7 +286,7 @@ module.exports = yeoman.Base.extend({
 
             this.copy('elk.yml', 'elk.yml');
             this.copy('log-monitoring/log-config/logstash.conf', 'log-monitoring/log-config/logstash.conf');
-            this.copy('log-monitoring/log-data/.gitignore', 'log-monitoring/log-data/.gitignore');
+            this.copy('log-monitoring/log-data/gitignore', 'log-monitoring/log-data/.gitignore');
         }
     },
     end: function() {
