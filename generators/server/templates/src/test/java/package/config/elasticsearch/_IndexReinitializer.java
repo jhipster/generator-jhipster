@@ -2,29 +2,26 @@ package <%=packageName%>.config.elasticsearch;
 
 import static java.lang.System.currentTimeMillis;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.stereotype.Component;
 
-public abstract class AbstractIndexInitializer {
+@Component
+public class IndexReinitializer {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Inject
     private ElasticsearchTemplate elasticsearchTemplate;
-    private Class<?> entityClass;
 
-    public AbstractIndexInitializer(Class<?> entityClass) {
-        this.entityClass = entityClass;
-    }
-
+    @PostConstruct
     public void resetIndex() {
         long t = currentTimeMillis();
-        elasticsearchTemplate.deleteIndex(entityClass);
-        elasticsearchTemplate.createIndex(entityClass);
-        elasticsearchTemplate.putMapping(entityClass);
+        elasticsearchTemplate.deleteIndex("_all");
         t = currentTimeMillis() - t;
-        logger.debug("{} ElasticSearch index reset in {} ms", entityClass.getSimpleName(), t);
+        logger.debug("ElasticSearch indexes reset in {} ms", t);
     }
 }
