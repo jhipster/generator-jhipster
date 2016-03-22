@@ -8,7 +8,7 @@
     "DSL"
   ],
   "scripts": {
-    "test": "mocha test/*"
+    "test": "mocha test/spec/**/*.js"
   },
   "homepage": "https://github.com/jhipster/jhipster-domain-language#readme",
   "repository": {
