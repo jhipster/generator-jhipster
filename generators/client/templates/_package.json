@@ -11,7 +11,7 @@
     "bower": "^1.6.3"
   },
   "devDependencies": {
-    "browser-sync": "2.11.1",
+    "browser-sync": "2.11.2",
     "del": "2.2.0",
     "eslint-config-angular": "0.5.0",
     "eslint-plugin-angular": "1.0.0",
@@ -53,13 +53,13 @@
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
     "jasmine-reporters": "2.1.1",
     <%_ } _%>
-    "karma": "0.13.21",
-    "karma-chrome-launcher": "0.2.2",
-    "karma-coverage": "0.5.3",
-    "karma-jasmine": "0.3.7",
+    "karma": "0.13.22",
+    "karma-chrome-launcher": "0.2.3",
+    "karma-coverage": "0.5.5",
+    "karma-jasmine": "0.3.8",
     "karma-jenkins-reporter": "0.0.2",
     "karma-phantomjs-launcher": "1.0.0",
-    "karma-script-launcher": "0.1.0",
+    "karma-script-launcher": "0.2.0",
     "lazypipe": "1.0.1",
     "lodash": "4.6.1",
     "map-stream": "0.0.6",
@@ -70,11 +70,11 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.1.5",
-    "wiredep": "3.0.0",
+    "wiredep": "4.0.0",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.16",
     <%_ } _%>
-    "yargs": "4.2.0"
+    "yargs": "4.3.2"
   },
   "engines": {
     "node": "^4.3"

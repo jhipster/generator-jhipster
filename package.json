@@ -49,7 +49,7 @@
     "jhipster-uml" : "1.6.1"
   },
   "devDependencies": {
-    "fs-extra": "0.26.5",
+    "fs-extra": "0.26.7",
     "mocha": "2.4.5",
     "yeoman-assert": "2.1.1",
     "yeoman-test": "1.1.0"
