@@ -5,6 +5,8 @@ var shelljs = require('shelljs');
 var crypto = require('crypto');
 var _ = require('lodash');
 var jsyaml = require('js-yaml');
+var pathjs = require('path');
+
 
 module.exports = yeoman.Base.extend({
     initializing: {
@@ -231,6 +233,10 @@ module.exports = yeoman.Base.extend({
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
                     var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
                     delete databaseYamlConfig.ports;
+                    if(this.appConfigs[i].devDatabaseType === 'cassandra') {
+                        var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
+                        databaseYamlConfig.build.context = relativePath;
+                    }
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
                 }
                 // Add search engine configuration
@@ -280,7 +286,7 @@ module.exports = yeoman.Base.extend({
 
             this.copy('elk.yml', 'elk.yml');
             this.copy('log-monitoring/log-config/logstash.conf', 'log-monitoring/log-config/logstash.conf');
-            this.copy('log-monitoring/log-data/.gitignore', 'log-monitoring/log-data/.gitignore');
+            this.copy('log-monitoring/log-data/gitignore', 'log-monitoring/log-data/.gitignore');
         }
     },
     end: function() {

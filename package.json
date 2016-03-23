@@ -49,14 +49,14 @@
     "jhipster-uml" : "1.6.1"
   },
   "devDependencies": {
-    "fs-extra": "0.26.5",
+    "fs-extra": "0.26.7",
     "mocha": "2.4.5",
     "yeoman-assert": "2.1.1",
     "yeoman-test": "1.1.0"
   },
   "engines": {
-    "node": ">=0.12.0",
-    "npm": ">=1.4.0"
+    "node": ">=4.0.0",
+    "npm": ">=2.14.2"
   },
   "license": "Apache-2.0"
 }

@@ -84,6 +84,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                     Key: warKey
                 },
                 signatureVersion: 'v4'
+                httpOptions: {timeout: 600000}
             });
 
             var filePath = buildFolder + warFilename,
