@@ -1758,10 +1758,6 @@ module.exports = EntityGenerator.extend({
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
                     TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }
-
-            if (this.searchEngine == 'elasticsearch') {
-                this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_EntityIndexInitializer.java', SERVER_TEST_SRC_DIR + this.packageFolder + '/config/elasticsearch/' + this.entityClass + 'IndexInitializer.java', this, {});
-            }
         }
     },
 

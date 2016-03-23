@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "SampleJwt",
+    "baseName": "travisJwt",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "jwt",
@@ -18,9 +18,10 @@
     "nativeLanguage": "en",
     "languages": ["en", "fr"],
     "enableSocialSignIn": false,
-    "rememberMeKey": "aa7cd1151a7181987d053a4a7e2667036abac16a",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
       "gatling"
-    ]
+    ],
+    "travis": true
   }
 }
