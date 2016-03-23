@@ -1,7 +1,7 @@
 {
   "name": "generator-jhipster",
-  "version": "2.27.0",
-  "description": "Java + Spring + JPA + AngularJS complete dev stack",
+  "version": "3.0.0",
+  "description": "Spring Boot + AngularJS in one handy generator",
   "files": [
     "generators"
   ],
