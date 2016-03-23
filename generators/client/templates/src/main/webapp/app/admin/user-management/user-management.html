@@ -47,22 +47,27 @@
                 <td>{{user.lastModifiedBy}}</td>
                 <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
                 <td class="text-right">
-                    <button type="submit"
-                            ui-sref="user-management-detail({login:user.login})"
-                            class="btn btn-info btn-sm">
-                        <span class="glyphicon glyphicon-eye-open"></span>
-                    </button>
-                    <button type="submit"
-                            ui-sref="user-management.edit({login:user.login})"
-                            class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                    <button type="submit"
-                            ui-sref="user-management.delete({login:user.login})"
-                            class="btn btn-danger btn-sm"
-                            ng-disabled="vm.currentAccount.login==user.login">
-                        <span class="glyphicon glyphicon-remove-circle"></span>
-                    </button>
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                ui-sref="user-management-detail({login:user.login})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="user-management.edit({login:user.login})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="user-management.delete({login:user.login})"
+                                class="btn btn-danger btn-sm"
+                                ng-disabled="vm.currentAccount.login==user.login">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                        </button>
+                    </div>
                 </td>
             </tr>
             </tbody>
