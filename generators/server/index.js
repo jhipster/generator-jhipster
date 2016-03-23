@@ -356,7 +356,30 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return !response.enableSocialSignIn && applicationType != 'microservice';
+                        return response.authenticationType == 'oauth2' && !response.enableSocialSignIn && applicationType != 'microservice';
+                    },
+                    type: 'list',
+                    name: 'databaseType',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.authenticationType != 'session-social' && applicationType != 'microservice');
+                    },
+                    choices: [
+                        {
+                            value: 'sql',
+                            name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                        },
+                        {
+                            value: 'mongodb',
+                            name: 'MongoDB'
+                        }
+                    ],
+                    default: 0
+                },
+                {
+                    when: function (response) {
+                        return response.authenticationType != 'oauth2' && !response.enableSocialSignIn && applicationType != 'microservice';
                     },
                     type: 'list',
                     name: 'databaseType',
