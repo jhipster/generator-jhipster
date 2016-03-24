@@ -10,7 +10,9 @@ var path = require('path'),
     shelljs = require('shelljs'),
     ejs = require('ejs'),
     packagejs = require('../package.json'),
-    semver = require('semver');
+    semver = require('semver'),
+    exec = require('child_process').exec,
+    os = require('os');
 
 const JHIPSTER_CONFIG_DIR = ".jhipster";
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
@@ -1308,7 +1310,25 @@ Generator.prototype.getNumberedQuestion = function (msg, currentQuestion, totalQ
     order = '(' + currentQuestion + '/' + totalQuestions + ') ';
     cb(currentQuestion);
     return order + msg;
-},
+};
+
+Generator.prototype.buildApplication = function (buildTool, profile, cb) {
+    var buildCmd = 'mvnw package -DskipTests=true -B';
+
+    if (buildTool === 'gradle') {
+        buildCmd = 'gradlew bootRepackage -x test';
+    }
+
+    if (os.platform() !== 'win32') {
+        buildCmd = './' + buildCmd;
+    }
+    buildCmd += ' -P' + profile;
+    var child = {};
+    child.stdout = exec(buildCmd, cb).stdout;
+    child.buildCmd = buildCmd;
+
+    return child;
+};
 
 Generator.prototype.contains = _.includes;
 

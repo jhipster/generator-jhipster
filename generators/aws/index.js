@@ -4,7 +4,6 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('lodash'),
     scriptBase = require('../generator-base'),
-    build = require('./lib/build.js'),
     AwsFactory = require('./lib/aws.js');
 
 var AwsGenerator = generators.Base.extend({});
@@ -169,16 +168,17 @@ module.exports = AwsGenerator.extend({
         var cb = this.async();
         this.log(chalk.bold('Building application'));
 
-        build.buildProduction(this.buildTool, function (err) {
-                if (err) {
-                    this.env.error(chalk.red(err));
-                } else {
-                    cb();
-                }
-            }.bind(this))
-            .on('data', function (data) {
-                this.log(data.toString());
-            }.bind(this));
+        var child = this.buildApplication(this.buildTool, 'prod', function (err) {
+            if (err) {
+                this.env.error(chalk.red(err));
+            } else {
+                cb();
+            }
+        }.bind(this));
+
+        child.stdout.on('data', function (data) {
+            this.log(data.toString());
+        }.bind(this));
     },
     createBucket: function () {
         var cb = this.async();

@@ -197,40 +197,51 @@ module.exports = HerokuGenerator.extend({
         });
     },
 
+    productionBuild: function () {
+        if (this.abort) return;
+        var done = this.async();
+        this.log(chalk.bold('\nBuilding application'));
+
+        var child = this.buildApplication(this.buildTool, 'prod', function (err) {
+            if (err) {
+                this.abort = true;
+                this.log.error(err);
+            }
+            done();
+        }.bind(this));
+
+        this.buildCmd = child.buildCmd;
+
+        child.stdout.on('data', function (data) {
+            this.log(data.toString());
+        }.bind(this));
+
+    },
+
     productionDeploy: function () {
         this.on('end', function () {
             if (this.abort) return;
             var done = this.async();
-            this.log(chalk.bold('\nBuilding and deploying application'));
-            
-            var buildCmd = 'mvnw package -Pprod -DskipTests=true';
+            this.log(chalk.bold('\nDeploying application'));
+
             var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
             if (this.buildTool === 'gradle') {
-                buildCmd = 'gradlew -Pprod bootRepackage -x test';
                 herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war';
             }
-            if (os.platform() !== 'win32') {
-                buildCmd = './' + buildCmd;
-            }
+
             herokuDeployCommand += ' --app ' + this.herokuDeployedName;
 
-            var runCmd = buildCmd + ' && ' + herokuDeployCommand;
-
             this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
-            var child = exec(runCmd, function (err, stdout) {
+            var child = exec(herokuDeployCommand, function (err, stdout) {
                 if (err) {
                     this.abort = true;
                     this.log.error(err);
                 }
                 this.log(stdout);
-                if (err) {
-                    this.log(chalk.red(err));
-                } else {
-                    this.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
-                    this.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
-                    this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(buildCmd)));
-                    this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
-                }
+                this.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
+                this.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
+                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(this.buildCmd)));
+                this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
                 done();
             }.bind(this));
 
