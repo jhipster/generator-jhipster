@@ -83,7 +83,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                     Bucket: bucket,
                     Key: warKey
                 },
-                signatureVersion: 'v4'
+                signatureVersion: 'v4',
                 httpOptions: {timeout: 600000}
             });
 
