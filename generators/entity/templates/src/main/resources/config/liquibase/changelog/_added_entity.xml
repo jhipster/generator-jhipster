@@ -100,6 +100,7 @@
                     joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
                 }
           _%>
+
         <createTable tableName="<%= joinTableName %>">
             <column name="<%= getPluralColumnName(relationshipName) %>_id" type="bigint">
                 <constraints nullable="false"/>
