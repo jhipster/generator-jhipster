@@ -12,7 +12,8 @@ var path = require('path'),
     packagejs = require('../package.json'),
     semver = require('semver'),
     exec = require('child_process').exec,
-    os = require('os');
+    os = require('os'),
+    pluralize = require('pluralize');
 
 const JHIPSTER_CONFIG_DIR = ".jhipster";
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
