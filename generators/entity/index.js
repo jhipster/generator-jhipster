@@ -1427,6 +1427,13 @@ module.exports = EntityGenerator.extend({
         loadInMemoryData: function () {
 
             // Load in-memory data for fields
+            this.fieldsContainZonedDateTime = false;
+            this.fieldsContainLocalDate = false;
+            this.fieldsContainDate = false;
+            this.fieldsContainBigDecimal = false;
+            this.fieldsContainBlob = false;
+            this.validation = false;
+
             for (var idx in this.fields) {
                 var field = this.fields[idx];
 
@@ -1434,8 +1441,10 @@ module.exports = EntityGenerator.extend({
                 if (field.fieldType == 'DateTime') {
                     field.fieldType = 'ZonedDateTime';
                 }
+                var fieldType = field.fieldType;
+
                 var nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType);
+                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], fieldType);
                 if ((databaseType == 'sql' || databaseType == 'mongodb') && !nonEnumType) {
                     field.fieldIsEnum = true;
                 } else {
@@ -1475,9 +1484,34 @@ module.exports = EntityGenerator.extend({
                 } else {
                     field.fieldValidate = false;
                 }
+
+                if (fieldType === 'ZonedDateTime') {
+                    this.fieldsContainZonedDateTime = true;
+                } else if (fieldType === 'LocalDate') {
+                    this.fieldsContainLocalDate = true;
+                } else if (fieldType === 'Date') {
+                    this.fieldsContainDate = true;
+                } else if (fieldType === 'BigDecimal') {
+                    this.fieldsContainBigDecimal = true;
+                } else if (fieldType === 'byte[]') {
+                    this.fieldsContainBlob = true;
+                }
+
+                if (field.fieldValidate) {
+                    this.validation = true;
+                }
             }
 
             // Load in-memory data for relationships
+            this.fieldsContainOwnerManyToMany = false;
+            this.fieldsContainNoOwnerOneToOne = false;
+            this.fieldsContainOwnerOneToOne = false;
+            this.fieldsContainOneToMany = false;
+            this.differentTypes = [this.entityClass];
+            if (this.relationships == undefined) {
+                this.relationships = [];
+            }
+
             for (var idx in this.relationships) {
                 var relationship = this.relationships[idx];
 
@@ -1504,79 +1538,23 @@ module.exports = EntityGenerator.extend({
                 if (_.isUndefined(relationship.otherEntityStateName)) {
                     relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
                 }
-            }
-
-            // Load in-memory data for root
-            this.fieldsContainOwnerManyToMany = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) {
+                // Load in-memory data for root
+                if (relationship.relationshipType == 'many-to-many' && relationship.ownerSide) {
                     this.fieldsContainOwnerManyToMany = true;
-                }
-            }
-            this.fieldsContainNoOwnerOneToOne = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == false) {
+                } else if (relationship.relationshipType == 'one-to-one' && !relationship.ownerSide) {
                     this.fieldsContainNoOwnerOneToOne = true;
-                }
-            }
-            this.fieldsContainOwnerOneToOne = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true) {
+                } else if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide) {
                     this.fieldsContainOwnerOneToOne = true;
-                }
-            }
-            this.fieldsContainOneToMany = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'one-to-many') {
+                } else if (relationship.relationshipType == 'one-to-many') {
                     this.fieldsContainOneToMany = true;
                 }
-            }
-            this.fieldsContainZonedDateTime = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'ZonedDateTime') {
-                    this.fieldsContainZonedDateTime = true;
+
+                var entityType = relationship.otherEntityNameCapitalized;
+                if (this.differentTypes.indexOf(entityType) == -1) {
+                    this.differentTypes.push(entityType);
                 }
             }
-            this.fieldsContainLocalDate = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'LocalDate') {
-                    this.fieldsContainLocalDate = true;
-                }
-            }
-            this.fieldsContainDate = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'Date') {
-                    this.fieldsContainDate = true;
-                }
-            }
-            this.fieldsContainBigDecimal = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'BigDecimal') {
-                    this.fieldsContainBigDecimal = true;
-                }
-            }
-            this.fieldsContainBlob = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'byte[]') {
-                    this.fieldsContainBlob = true;
-                }
-            }
-            this.validation = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldValidate == true) {
-                    this.validation = true;
-                }
-            }
+
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
                 this.pkType = 'String';
             } else {
@@ -1603,17 +1581,6 @@ module.exports = EntityGenerator.extend({
             this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityTranslationKey = this.entityInstance;
             this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
-
-            this.differentTypes = [this.entityClass];
-            if (this.relationships == undefined) {
-                this.relationships = [];
-            }
-            for (var idx in this.relationships) {
-                var entityType = this.relationships[idx].otherEntityNameCapitalized;
-                if (this.differentTypes.indexOf(entityType) == -1) {
-                    this.differentTypes.push(entityType);
-                }
-            }
         },
 
         insight: function () {
@@ -1707,6 +1674,7 @@ module.exports = EntityGenerator.extend({
             if (this.databaseType == "sql") {
                 this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
                     SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
+                if ()
 
                 this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
             }
