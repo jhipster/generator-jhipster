@@ -464,6 +464,27 @@ Generator.prototype.addConstraintsChangelogToLiquibase = function (changelogName
 };
 
 /**
+ * Add a new changelog to the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ * @param {string} needle - The needle at where it has to be added.
+ */
+Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, needle) {
+    try {
+        var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: needle,
+            splicable: [
+                '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
+            ]
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+    }
+},
+
+/**
  * A a new column to a Liquibase changelog file for entity.
  *
  * @param {string} filePath - The full path of the changelog file.
@@ -1343,21 +1364,6 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
 
     return child;
 };
-
-Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, needle) {
-    try {
-        var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: needle,
-            splicable: [
-                '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
-            ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
-    }
-},
 
 Generator.prototype.contains = _.includes;
 
