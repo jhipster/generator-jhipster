@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entity <%= entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>" author="jhipster">
+    <changeSet id="<%= changelogDate %>-2" author="jhipster">
         <% for (idx in relationships) {
             var relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,

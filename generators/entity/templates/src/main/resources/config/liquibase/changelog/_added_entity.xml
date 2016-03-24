@@ -16,7 +16,7 @@
     <!--
         Added the entity <%= entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>" author="jhipster">
+    <changeSet id="<%= changelogDate %>-1" author="jhipster">
         <createTable tableName="<%= entityTableName %>">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
