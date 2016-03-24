@@ -1443,17 +1443,24 @@ module.exports = EntityGenerator.extend({
             this.entityTranslationKey = this.entityInstance;
             this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
-            // Load in-memory data for fields
             this.fieldsContainZonedDateTime = false;
             this.fieldsContainLocalDate = false;
             this.fieldsContainDate = false;
             this.fieldsContainBigDecimal = false;
             this.fieldsContainBlob = false;
             this.validation = false;
+            this.fieldsContainOwnerManyToMany = false;
+            this.fieldsContainNoOwnerOneToOne = false;
+            this.fieldsContainOwnerOneToOne = false;
+            this.fieldsContainOneToMany = false;
+            this.fieldsContainManyToOne = false;
+            this.differentTypes = [this.entityClass];
+            if (!this.relationships) {
+                this.relationships = [];
+            }
 
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-
+            // Load in-memory data for fields
+            this.fields && this.fields.forEach( function (field) {
                 // Migration from JodaTime to Java Time
                 if (field.fieldType == 'DateTime') {
                     field.fieldType = 'ZonedDateTime';
@@ -1517,21 +1524,10 @@ module.exports = EntityGenerator.extend({
                 if (field.fieldValidate) {
                     this.validation = true;
                 }
-            }
+            }, this);
 
             // Load in-memory data for relationships
-            this.fieldsContainOwnerManyToMany = false;
-            this.fieldsContainNoOwnerOneToOne = false;
-            this.fieldsContainOwnerOneToOne = false;
-            this.fieldsContainOneToMany = false;
-            this.fieldsContainManyToOne = false;
-            this.differentTypes = [this.entityClass];
-            if (!this.relationships) {
-                this.relationships = [];
-            }
-
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
+            this.relationships && this.relationships.forEach( function (relationship) {
 
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
@@ -1573,7 +1569,7 @@ module.exports = EntityGenerator.extend({
                 if (this.differentTypes.indexOf(entityType) == -1) {
                     this.differentTypes.push(entityType);
                 }
-            }
+            }, this);
 
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
                 this.pkType = 'String';
