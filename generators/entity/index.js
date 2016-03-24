@@ -1425,6 +1425,23 @@ module.exports = EntityGenerator.extend({
         },
 
         loadInMemoryData: function () {
+            var entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
+            var entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
+
+            this.entityClass = this.entityNameCapitalized;
+            this.entityClassPlural = pluralize(this.entityClass);
+            this.entityInstance = _.lowerFirst(this.name);
+            this.entityInstancePlural = pluralize(this.entityInstance);
+            this.entityApiUrl = entityNamePluralizedAndSpinalCased;
+            this.entityFolderName = entityNameSpinalCased;
+            this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
+            this.entityServiceFileName = entityNameSpinalCased;
+            this.entityAngularJSName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
+            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityTranslationKey = this.entityInstance;
+            this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
             // Load in-memory data for fields
             this.fieldsContainZonedDateTime = false;
@@ -1509,7 +1526,7 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainOneToMany = false;
             this.fieldsContainManyToOne = false;
             this.differentTypes = [this.entityClass];
-            if (this.relationships == undefined) {
+            if (!this.relationships) {
                 this.relationships = [];
             }
 
@@ -1563,27 +1580,6 @@ module.exports = EntityGenerator.extend({
             } else {
                 this.pkType = 'Long';
             }
-
-            var entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
-            var entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
-
-            this.entityClass = this.entityNameCapitalized;
-            this.entityClassHumanized = _.startCase(this.entityNameCapitalized);
-            this.entityClassPlural = pluralize(this.entityClass);
-            this.entityClassPluralHumanized = _.startCase(this.entityClassPlural);
-            this.entityInstance = _.lowerFirst(this.name);
-            this.entityInstancePlural = pluralize(this.entityInstance);
-            this.entityApiUrl = entityNamePluralizedAndSpinalCased;
-
-            this.entityFolderName = entityNameSpinalCased;
-            this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
-            this.entityServiceFileName = entityNameSpinalCased;
-            this.entityAngularJSName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
-            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityTranslationKey = this.entityInstance;
-            this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
         },
 
         insight: function () {

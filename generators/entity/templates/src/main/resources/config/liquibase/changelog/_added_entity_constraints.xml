@@ -43,6 +43,7 @@
                 otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase().substring(0, 6) + '_' + relationshipName.toLowerCase().substring(0, 6) +  '_' + name.toLowerCase().substring(0, 6) + '_id';
             }
           _%>
+
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>s_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= constraintName %>"
