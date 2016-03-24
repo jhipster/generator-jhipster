@@ -1145,6 +1145,10 @@ Generator.prototype.getColumnName = function (value) {
     return _.snakeCase(value).toLowerCase();
 };
 
+Generator.prototype.getPluralColumnName = function (value) {
+    return this.getColumnName(pluralize(value));
+};
+
 Generator.prototype.insight = function () {
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
