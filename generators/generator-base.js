@@ -446,23 +446,21 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
 };
 
 /**
- * A a new changelog to the Liquibase master.xml file.
+ * Add a new changelog to the Liquibase master.xml file.
  *
  * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
  */
 Generator.prototype.addChangelogToLiquibase = function (changelogName) {
-    try {
-        var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: 'jhipster-needle-liquibase-add-changelog',
-            splicable: [
-                '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
-            ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
-    }
+    this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-changelog');
+};
+
+/**
+ * Add a new constraints changelog to the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.addConstraintsChangelogToLiquibase = function (changelogName) {
+    this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-constraints-changelog');
 };
 
 /**
@@ -1345,6 +1343,21 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
 
     return child;
 };
+
+Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, needle) {
+    try {
+        var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: needle,
+            splicable: [
+                '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
+            ]
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+    }
+},
 
 Generator.prototype.contains = _.includes;
 

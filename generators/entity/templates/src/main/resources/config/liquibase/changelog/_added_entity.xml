@@ -91,7 +91,7 @@
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
-            if ((relationshipType == 'many-to-many') && (ownerSide == true)) {
+            if (relationshipType == 'many-to-many' && ownerSide) {
                 var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
                 if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
                     joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';

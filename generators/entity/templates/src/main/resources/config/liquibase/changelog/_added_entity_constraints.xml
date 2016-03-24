@@ -12,7 +12,7 @@
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
-            if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) {
+            if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
             var constraintName = 'fk_' + name.toLowerCase() + '_' + relationshipName.toLowerCase() + '_id';
             if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
                 constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) + '_id';
@@ -24,7 +24,7 @@
                                  referencedTableName="<%
                                  var otherEntityTable = getTableName(otherEntityName);
                                  if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
-        <%_ } else if ((relationshipType == 'many-to-many') && (ownerSide == true)) {
+        <%_ } else if (relationshipType == 'many-to-many' && ownerSide) {
             var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
             if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
                 joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';

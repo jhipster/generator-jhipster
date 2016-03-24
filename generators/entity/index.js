@@ -1507,6 +1507,7 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainNoOwnerOneToOne = false;
             this.fieldsContainOwnerOneToOne = false;
             this.fieldsContainOneToMany = false;
+            this.fieldsContainManyToOne = false;
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
                 this.relationships = [];
@@ -1547,6 +1548,8 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainOwnerOneToOne = true;
                 } else if (relationship.relationshipType == 'one-to-many') {
                     this.fieldsContainOneToMany = true;
+                } else if (relationship.relationshipType == 'many-to-one') {
+                    this.fieldsContainManyToOne = true;
                 }
 
                 var entityType = relationship.otherEntityNameCapitalized;
@@ -1674,7 +1677,12 @@ module.exports = EntityGenerator.extend({
             if (this.databaseType == "sql") {
                 this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
                     SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
-                if ()
+
+                if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
+                    this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity_constraints.xml',
+                        SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_constraints_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.addConstraintsChangelogToLiquibase(this.changelogDate + '_added_entity_constraints_' + this.entityClass);
+                }
 
                 this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
             }
