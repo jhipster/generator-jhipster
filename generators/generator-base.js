@@ -482,7 +482,7 @@ Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, nee
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
     }
-},
+};
 
 /**
  * A a new column to a Liquibase changelog file for entity.
