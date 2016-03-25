@@ -14,6 +14,9 @@
 eureka:
     client:
         enabled: false
+    instance:
+        appname: <%= baseName %>
+        instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
 
 <%_ } _%>
 spring:
