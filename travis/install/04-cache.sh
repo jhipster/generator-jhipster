@@ -19,10 +19,11 @@ fi
 # Use phantomjs cache
 #-------------------------------------------------------------------------------
 tar -xvf "$TRAVIS_BUILD_DIR"/jhipster-travis-build/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C "$TRAVIS_BUILD_DIR"/jhipster-travis-build/
-mkdir -p /usr/local/phantomjs-2.1.1/
-mv "$TRAVIS_BUILD_DIR"/jhipster-travis-build/phantomjs-2.1.1-linux-x86_64/LICENSE.BSD /usr/local/phantomjs-2.1.1/
-mv "$TRAVIS_BUILD_DIR"/jhipster-travis-build/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/phantomjs-2.1.1/
-ln -sf /usr/local/phantomjs-2.1.1/ /usr/local/phantomjs
+sudo mkdir -p /usr/local/phantomjs-2.1.1/
+sudo mv "$TRAVIS_BUILD_DIR"/jhipster-travis-build/phantomjs-2.1.1-linux-x86_64/LICENSE.BSD /usr/local/phantomjs-2.1.1/
+sudo mv "$TRAVIS_BUILD_DIR"/jhipster-travis-build/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/phantomjs-2.1.1/
+sudo rm /usr/local/phantomjs
+sudo ln -sf /usr/local/phantomjs-2.1.1/ /usr/local/phantomjs
 ls -l /usr/local/
 ls -l /usr/local/phantomjs/
 ls -l /usr/local/phantomjs-2.1.1/
