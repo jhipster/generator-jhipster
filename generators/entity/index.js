@@ -1450,6 +1450,10 @@ module.exports = EntityGenerator.extend({
                     field.fieldNameUnderscored = _.snakeCase(field.fieldName);
                 }
 
+                if (_.isUndefined(field.fieldNameHumanized)) {
+                    field.fieldNameHumanized = _.startCase(field.fieldName);
+                }
+
                 if (_.isUndefined(field.fieldInJavaBeanMethod)) {
                     // Handle the specific case when the second letter is capitalized
                     // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
@@ -1479,6 +1483,10 @@ module.exports = EntityGenerator.extend({
 
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
+                }
+
+                if (_.isUndefined(relationship.relationshipNameHumanized)) {
+                    relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {

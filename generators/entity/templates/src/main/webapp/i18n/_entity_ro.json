@@ -16,8 +16,8 @@
             "detail": {
                 "title": "<%= entityClass %>"
             }<% for (idx in fields) { %>,
-            "<%=fields[idx].fieldName%>": "<%=fields[idx].fieldNameCapitalized%>"<% } %><% for (idx in relationships) { %>,
-            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameCapitalized %>"<% } %>
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
         }
     }
 }
