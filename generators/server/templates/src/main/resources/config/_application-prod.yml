@@ -185,3 +185,5 @@ jhipster:
             host: localhost
             port: 5000
             queueSize: 512
+    swagger: # swagger is disabled. It can be disabled by pasing 'no-swagger' profile at run time as well
+        enabled: false
