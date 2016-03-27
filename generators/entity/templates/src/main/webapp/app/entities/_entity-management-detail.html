@@ -1,6 +1,6 @@
 <% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div>
-    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{vm.<%= entityInstance %>.id}}</h2>
+    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
         <%_ for (idx in fields) {

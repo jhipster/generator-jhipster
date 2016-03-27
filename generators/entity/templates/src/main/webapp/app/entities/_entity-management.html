@@ -1,6 +1,6 @@
 <div>
 <%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
-    <h2 translate="<%= keyPrefix %>home.title"><%= entityClassPlural %></h2>
+    <h2 translate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
@@ -8,7 +8,7 @@
                 <button class="btn btn-primary" ui-sref="<%= entityStateName %>.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> translate="<%= keyPrefix %>home.createLabel">
-                        Create new <%= entityClass %>
+                        Create new <%= entityClassHumanized %>
                     </span>
                 </button>
             </div>

@@ -3,18 +3,18 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPlural %>",
-                "createLabel": "Créer un nouveau <%= entityClass %>",
-                "createOrEditLabel": "Créer ou éditer un <%= entityClass %>",
-                "search": "Recherche pour <%= entityClass %>"
+                "createLabel": "Créer un nouveau <%= entityClassHumanized %>",
+                "createOrEditLabel": "Créer ou éditer un <%= entityClassHumanized %>",
+                "search": "Recherche pour <%= entityClassHumanized %>"
             },
-            "created": "Un nouveau <%= entityClass %> a été créé avec l'identifiant {{ param }}",
-            "updated": "Le <%= entityClass %> avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le <%= entityClass %> avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau <%= entityClassHumanized %> a été créé avec l'identifiant {{ param }}",
+            "updated": "Le <%= entityClassHumanized %> avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le <%= entityClassHumanized %> avec l'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le <%= entityClass %> {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le <%= entityClassHumanized %> {{ id }} ?"
             },
             "detail": {
-                "title": "<%= entityClass %>"
+                "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) { %>,
             "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
             "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
