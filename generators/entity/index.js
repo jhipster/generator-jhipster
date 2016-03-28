@@ -1429,7 +1429,9 @@ module.exports = EntityGenerator.extend({
             var entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
 
             this.entityClass = this.entityNameCapitalized;
+            this.entityClassHumanized = _.startCase(this.entityNameCapitalized);
             this.entityClassPlural = pluralize(this.entityClass);
+            this.entityClassPluralHumanized = _.startCase(this.entityClassPlural);
             this.entityInstance = _.lowerFirst(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityApiUrl = entityNamePluralizedAndSpinalCased;
