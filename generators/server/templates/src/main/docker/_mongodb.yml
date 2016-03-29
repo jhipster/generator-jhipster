@@ -6,9 +6,9 @@ services:
         build:
             context: .
             dockerfile: mongodb/MongoDB.Dockerfile
-        command: mongos --port 27017
-        expose:
-            - "27017"
+        command: mongos
+        ports:
+            - "27017:27017"
         <%_ } else { _%>
         image: mongo:3.2.3
         # volumes:
