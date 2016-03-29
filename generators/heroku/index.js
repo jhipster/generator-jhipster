@@ -11,6 +11,7 @@ var util = require('util'),
 
 const constants = require('../generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 var HerokuGenerator = generators.Base.extend({});
@@ -32,6 +33,7 @@ module.exports = HerokuGenerator.extend({
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
+        this.applicationType = this.config.get('applicationType');
     },
 
     prompting: function () {
@@ -117,7 +119,12 @@ module.exports = HerokuGenerator.extend({
 
         var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
-        var dbAddOn = (this.prodDatabaseType != 'postgresql') ? ' --addons jawsdb:kitefin' : ' --addons heroku-postgresql';
+        var dbAddOn = "";
+        if (this.prodDatabaseType == 'postgresql') {
+          dbAddOn = ' --addons heroku-postgresql'
+        } else if (this.prodDatabaseType == 'mysql') {
+          dbAddOn = ' --addons jawsdb:kitefin'
+        }
 
         this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
         var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
@@ -185,6 +192,40 @@ module.exports = HerokuGenerator.extend({
         }.bind(this));
     },
 
+    configureJHipsterRegistry: function() {
+        if (this.abort) return;
+        var done = this.async();
+
+        if (this.applicationType == "microservice" || this.applicationType == "gateway") {
+            var prompts = [
+                {
+                    type: "input",
+                    name: 'herokuJHipsterRegistry',
+                    message: 'What is the URL of your JHipster Registry?'
+                }];
+
+            this.log("");
+            this.prompt(prompts, function (props) {
+                var configSetCmd = "heroku config:set " + "JHIPSTER_REGISTRY_URL=" + props.herokuJHipsterRegistry;
+                var child = exec(configSetCmd, {}, function (err, stdout, stderr) {
+                    if (err) {
+                        this.abort = true;
+                        this.log.error(err);
+                    }
+                    done();
+                }.bind(this));
+
+                child.stdout.on('data', function (data) {
+                    this.log(data.toString());
+                }.bind(this));
+            }.bind(this));
+        } else {
+          this.conflicter.resolve(function (err) {
+              done();
+          });
+        }
+    },
+
     copyHerokuFiles: function () {
         if (this.abort) return;
         var insight = this.insight();
@@ -192,7 +233,13 @@ module.exports = HerokuGenerator.extend({
         var done = this.async();
         this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-        this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
+
+        if (this.prodDatabaseType != 'no') {
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
+        }
+
+        this.template('_bootstrap-heroku.yml', SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
+        this.template('_application-heroku.yml', SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
         this.template('_Procfile', 'Procfile');
 
         this.conflicter.resolve(function (err) {
