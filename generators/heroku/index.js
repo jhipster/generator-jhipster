@@ -197,29 +197,29 @@ module.exports = HerokuGenerator.extend({
         });
     },
 
-    productionBuild: function () {
-        if (this.abort) return;
-        var done = this.async();
-        this.log(chalk.bold('\nBuilding application'));
+    end: {
+        productionBuild: function () {
+            if (this.abort) return;
+            var done = this.async();
+            this.log(chalk.bold('\nBuilding application'));
 
-        var child = this.buildApplication(this.buildTool, 'prod', function (err) {
-            if (err) {
-                this.abort = true;
-                this.log.error(err);
-            }
-            done();
-        }.bind(this));
+            var child = this.buildApplication(this.buildTool, 'prod', function (err) {
+                if (err) {
+                    this.abort = true;
+                    this.log.error(err);
+                }
+                done();
+            }.bind(this));
 
-        this.buildCmd = child.buildCmd;
+            this.buildCmd = child.buildCmd;
 
-        child.stdout.on('data', function (data) {
-            this.log(data.toString());
-        }.bind(this));
+            child.stdout.on('data', function (data) {
+                this.log(data.toString());
+            }.bind(this));
 
-    },
+        },
 
-    productionDeploy: function () {
-        this.on('end', function () {
+        productionDeploy: function () {
             if (this.abort) return;
             var done = this.async();
             this.log(chalk.bold('\nDeploying application'));
@@ -248,6 +248,6 @@ module.exports = HerokuGenerator.extend({
             child.stdout.on('data', function (data) {
                 this.log(data.toString());
             }.bind(this));
-        });
+        }
     }
 });
