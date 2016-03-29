@@ -1,5 +1,5 @@
 var status = rs.status();
-if(status.errormsg === 'no replset config has been received') {
+if(status.errmsg === 'no replset config has been received') {
     rs.initiate();
 }
 for (var i = 1; i <= param; i++) {

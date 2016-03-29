@@ -841,6 +841,10 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (this.prodDatabaseType == "mongodb") {
                 this.template(DOCKER_DIR + '_mongodb.yml', DOCKER_DIR + 'mongodb.yml', this, {});
+                if(this.mongoCluster) {
+                    this.copy(DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', this, {});
+                    this.template(DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', this, {});
+                }
             }
             if (this.applicationType == 'gateway' || this.prodDatabaseType == "cassandra") {
                 this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
