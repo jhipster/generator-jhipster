@@ -7,7 +7,7 @@
             var fieldName = fields[idx].fieldName;
             var fieldType = fields[idx].fieldType;
             var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></dt></dt>
+        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
