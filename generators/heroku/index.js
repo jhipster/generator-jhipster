@@ -143,18 +143,21 @@ module.exports = HerokuGenerator.extend({
 
                     this.log("");
                     this.prompt(prompts, function (props) {
+                        var getHerokuAppName = function(def, stdout) { return def; }
                         if (props.herokuForceName == 'Yes') {
                             herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName
                         } else {
                             herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
+
+                            // Extract from "Created random-app-name-1234... done"
+                            getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); }
                         }
                         var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
                             if (err) {
                                 this.abort = true;
                                 this.log.error(err);
                             } else {
-                                // Extract from "Created random-app-name-1234... done"
-                                this.herokuDeployedName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
+                                this.herokuDeployedName = getHerokuAppName(this.herokuDeployedName, stdout)
                                 this.log(stdout);
                             }
                             done();
@@ -197,29 +200,29 @@ module.exports = HerokuGenerator.extend({
         });
     },
 
-    productionBuild: function () {
-        if (this.abort) return;
-        var done = this.async();
-        this.log(chalk.bold('\nBuilding application'));
+    end: {
+        productionBuild: function () {
+            if (this.abort) return;
+            var done = this.async();
+            this.log(chalk.bold('\nBuilding application'));
 
-        var child = this.buildApplication(this.buildTool, 'prod', function (err) {
-            if (err) {
-                this.abort = true;
-                this.log.error(err);
-            }
-            done();
-        }.bind(this));
+            var child = this.buildApplication(this.buildTool, 'prod', function (err) {
+                if (err) {
+                    this.abort = true;
+                    this.log.error(err);
+                }
+                done();
+            }.bind(this));
 
-        this.buildCmd = child.buildCmd;
+            this.buildCmd = child.buildCmd;
 
-        child.stdout.on('data', function (data) {
-            this.log(data.toString());
-        }.bind(this));
+            child.stdout.on('data', function (data) {
+                this.log(data.toString());
+            }.bind(this));
 
-    },
+        },
 
-    productionDeploy: function () {
-        this.on('end', function () {
+        productionDeploy: function () {
             if (this.abort) return;
             var done = this.async();
             this.log(chalk.bold('\nDeploying application'));
@@ -248,6 +251,6 @@ module.exports = HerokuGenerator.extend({
             child.stdout.on('data', function (data) {
                 this.log(data.toString());
             }.bind(this));
-        });
+        }
     }
 });
