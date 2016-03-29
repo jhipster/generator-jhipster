@@ -145,7 +145,7 @@ module.exports = EntityGenerator.extend({
 
         validateDbExistence: function () {
             if(this.databaseType === 'no') {
-                this.env.error(chalk.red('No database configured in this application'));
+                this.env.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
             }
         },
 
