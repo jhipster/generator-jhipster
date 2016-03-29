@@ -278,6 +278,9 @@ module.exports = JhipsterClientGenerator.extend({
             if (configOptions.languages != null) {
                 this.languages = configOptions.languages;
             }
+            if (configOptions.mongoCluster != null) {
+                this.mongoCluster = configOptions.mongoCluster;
+            }
 
             // Make dist dir available in templates
             if (configOptions.buildTool === 'maven') {

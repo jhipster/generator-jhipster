@@ -116,6 +116,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.devDatabaseType = 'mongodb';
                 this.prodDatabaseType = 'mongodb';
                 this.hibernateCache = 'no';
+                this.mongoCluster = this.config.get('mongoCluster');
             } else if (this.databaseType == 'cassandra') {
                 this.devDatabaseType = 'cassandra';
                 this.prodDatabaseType = 'cassandra';
@@ -406,6 +407,19 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
+                        return response.databaseType == 'mongodb';
+                    },
+                    type: 'confirm',
+                    name: 'mongoCluster',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use Mongo in cluster mode?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType == 'mongodb');
+                    },
+                    default: false
+                },
+                {
+                    when: function (response) {
                         return response.databaseType == 'sql';
                     },
                     type: 'list',
@@ -666,6 +680,7 @@ module.exports = JhipsterServerGenerator.extend({
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
                     this.hibernateCache = 'no';
+                    this.mongoCluster = props.mongoCluster;
                 } else if (this.databaseType == 'cassandra') {
                     this.devDatabaseType = 'cassandra';
                     this.prodDatabaseType = 'cassandra';
@@ -689,6 +704,7 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.totalQuestions = totalQuestions;
             configOptions.packageName = this.packageName;
             configOptions.hibernateCache = this.hibernateCache;
+            configOptions.mongoCluster = this.mongoCluster;
             configOptions.clusteredHttpSession = this.clusteredHttpSession;
             configOptions.websocket = this.websocket;
             configOptions.databaseType = this.databaseType;
@@ -760,6 +776,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('serverPort', this.serverPort);
             this.config.set('authenticationType', this.authenticationType);
             this.config.set('hibernateCache', this.hibernateCache);
+            this.config.set('mongoCluster', this.mongoCluster);
             this.config.set('clusteredHttpSession', this.clusteredHttpSession);
             this.config.set('websocket', this.websocket);
             this.config.set('databaseType', this.databaseType);

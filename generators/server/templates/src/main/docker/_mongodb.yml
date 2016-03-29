@@ -2,8 +2,24 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-mongodb:
         container_name: <%= baseName.toLowerCase() %>-mongodb
+        <%_ if (mongoCluster) { _%>
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongos --port 27017
+        expose:
+            - "27017"
+        <%_ } else { _%>
         image: mongo:3.2.3
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
         ports:
             - 27017:27017
+        <%_ } _%>
+    <%= baseName.toLowerCase() %>-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        expose:
+            - "27017"
+        command: mongod --replSet rs1 --noprealloc --smallfiles
