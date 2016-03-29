@@ -14,13 +14,9 @@ services:
         build:
             context: .
             dockerfile: mongodb/MongoDB.Dockerfile
-        expose:
-            - "27017"
         command: mongod --replSet rs1 --noprealloc --smallfiles
     <%= baseName.toLowerCase() %>-mongodb-config:
         image: mongo:3.2.3
         container_name: <%= baseName.toLowerCase() %>-mongodb-config
-        expose:
-            - "27019"
         command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
     <%_ } _%>
