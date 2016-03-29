@@ -15,15 +15,27 @@
         vm.inProduction = ENV === 'prod';
         vm.login = login;
         vm.logout = logout;
+        vm.toggleNavbar = toggleNavbar;
+        vm.hideNavbar = hideNavbar;
         vm.$state = $state;
 
         function login () {
+            hideNavbar();
             LoginService.open();
         }
 
         function logout () {
+            hideNavbar();
             Auth.logout();
             $state.go('home');
+        }
+
+        function toggleNavbar () {
+            vm.navCollapsed = !vm.navCollapsed;
+        }
+
+        function hideNavbar () {
+            vm.navCollapsed = true;
         }
     }
 })();
