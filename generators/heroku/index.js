@@ -206,7 +206,7 @@ module.exports = HerokuGenerator.extend({
 
             this.log("");
             this.prompt(prompts, function (props) {
-                var configSetCmd = "heroku config:set " + "JHIPSTER_REGISTRY_URL=" + props.herokuJHipsterRegistry;
+                var configSetCmd = "heroku config:set " + "JHIPSTER_REGISTRY_URL=" + props.herokuJHipsterRegistry + ' --app ' + this.herokuDeployedName;
                 var child = exec(configSetCmd, {}, function (err, stdout, stderr) {
                     if (err) {
                         this.abort = true;
