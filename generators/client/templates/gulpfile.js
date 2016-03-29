@@ -138,9 +138,7 @@ gulp.task('wiredep:app', function () {
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [
-                /angular-i18n/,  // localizations are loaded dynamically<% if (useSass) { %>
-                'bower_components/bootstrap-sass/assets/javascripts/' // Exclude Bootstrap js files as we use ui-bootstrap<% } else { %>
-                'bower_components/bootstrap/dist/js/' // exclude bootstrap js files as we use ui-bootstrap<% } %>
+                /angular-i18n/  // localizations are loaded dynamically
             ]
         }))
         .pipe(gulp.dest(config.app));
@@ -159,9 +157,7 @@ gulp.task('wiredep:test', function () {
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
-                /angular-scenario/,<% if (useSass) { %>
-                'bower_components/bootstrap-sass/assets/javascripts/' // Exclude Bootstrap js files as we use ui-bootstrap<% } else { %>
-                'bower_components/bootstrap/dist/js/' // exclude Bootstrap js files as we use ui-bootstrap<% } %>
+                /angular-scenario/
             ],
             ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected JavaScript files
             devDependencies: true,
