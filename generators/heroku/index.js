@@ -150,7 +150,7 @@ module.exports = HerokuGenerator.extend({
                             herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
 
                             // Extract from "Created random-app-name-1234... done"
-                            getHerokuAppName = function(stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); }
+                            getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); }
                         }
                         var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
                             if (err) {
