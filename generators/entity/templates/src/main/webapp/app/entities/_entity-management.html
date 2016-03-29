@@ -1,6 +1,6 @@
 <div>
 <%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
-    <h2 translate="<%= keyPrefix %>home.title"><%= entityClassPlural %></h2>
+    <h2 translate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
@@ -8,7 +8,7 @@
                 <button class="btn btn-primary" ui-sref="<%= entityStateName %>.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> translate="<%= keyPrefix %>home.createLabel">
-                        Create new <%= entityClass %>
+                        Create new <%= entityClassHumanized %>
                     </span>
                 </button>
             </div>
@@ -40,14 +40,14 @@
                 <tr<% if (pagination != 'no') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
                     <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ for (idx in fields) { _%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[idx].fieldName %>"><%=fields[idx].fieldNameCapitalized%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType == 'many-to-one'
                                 || (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true)
                                 || (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true && pagination == 'no')) {
                             var fieldName = dto == 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%=relationships[idx].relationshipName%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th></th>

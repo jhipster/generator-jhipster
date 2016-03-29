@@ -14,9 +14,14 @@
 eureka:
     client:
         enabled: false
+    instance:
+        appname: <%= baseName %>
+        instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
 
 <%_ } _%>
 spring:
+    application:
+        name: <%= baseName %>
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
@@ -132,3 +137,4 @@ jhipster:
         contactEmail:
         license:
         licenseUrl:
+        enabled: false

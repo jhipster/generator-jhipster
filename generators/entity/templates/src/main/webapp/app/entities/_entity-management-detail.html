@@ -1,13 +1,13 @@
 <% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div>
-    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{vm.<%= entityInstance %>.id}}</h2>
+    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
         <%_ for (idx in fields) {
             var fieldName = fields[idx].fieldName;
             var fieldType = fields[idx].fieldType;
             var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameCapitalized %></dt></dt>
+        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
@@ -33,6 +33,7 @@
                 var ownerSide = relationships[idx].ownerSide;
                 var relationshipName = relationships[idx].relationshipName;
                 var relationshipFieldName = relationships[idx].relationshipFieldName;
+                var relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
                 var otherEntityName = relationships[idx].otherEntityName;
                 var otherEntityStateName = relationships[idx].otherEntityStateName;
                 var otherEntityField = relationships[idx].otherEntityField;
@@ -40,7 +41,7 @@
                 if (relationshipType == 'many-to-one'
                     || (relationshipType == 'one-to-one' && ownerSide == true)
                     || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
-        <dt><span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span></dt>
+        <dt><span translate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
         <dd>
             <%_ if (otherEntityName == 'user') { _%>
                 <%_ if (relationshipType == 'many-to-many') { _%>

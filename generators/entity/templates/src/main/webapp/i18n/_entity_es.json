@@ -2,22 +2,22 @@
     "<%= angularAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPlural %>",
-                "createLabel": "Crear nuevo <%= entityClass %>",
-                "createOrEditLabel": "Crear o editar <%= entityClass %>",
-                "search": "Search for <%= entityClass %>"
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Crear nuevo <%= entityClassHumanized %>",
+                "createOrEditLabel": "Crear o editar <%= entityClassHumanized %>",
+                "search": "Search for <%= entityClassHumanized %>"
             },
-            "created": "Un nuevo <%= entityClass %> ha sido creado con el identificador {{ param }}",
-            "updated": "Un <%= entityClass %> ha sido actualizado con el identificador {{ param }}",
-            "deleted": "Un <%= entityClass %> ha sido eliminado con el identificador {{ param }}",
+            "created": "Un nuevo <%= entityClassHumanized %> ha sido creado con el identificador {{ param }}",
+            "updated": "Un <%= entityClassHumanized %> ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un <%= entityClassHumanized %> ha sido eliminado con el identificador {{ param }}",
             "delete": {
-                "question": "¿Seguro que quiere eliminar <%= entityClass %> {{ id }}?"
+                "question": "¿Seguro que quiere eliminar <%= entityClassHumanized %> {{ id }}?"
             },
             "detail": {
-                "title": "<%= entityClass %>"
+                "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) { %>,
-            "<%=fields[idx].fieldName%>": "<%=fields[idx].fieldNameCapitalized%>"<% } %><% for (idx in relationships) { %>,
-            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameCapitalized %>"<% } %>
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
         }
     }
 }

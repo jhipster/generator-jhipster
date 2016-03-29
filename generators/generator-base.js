@@ -10,7 +10,9 @@ var path = require('path'),
     shelljs = require('shelljs'),
     ejs = require('ejs'),
     packagejs = require('../package.json'),
-    semver = require('semver');
+    semver = require('semver'),
+    exec = require('child_process').exec,
+    os = require('os');
 
 const JHIPSTER_CONFIG_DIR = ".jhipster";
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
@@ -72,8 +74,12 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
-                '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span></a></li>'
+                '<li ui-sref-active="active" >\n' +
+                '                    <a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in">\n' +
+                '                        <span class="glyphicon glyphicon-' + glyphiconName + '></span>&nbsp;\n' +
+                '                        <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                    </a>\n' +
+                '                </li>'
             ]
         }, this);
     } catch (e) {
@@ -95,8 +101,12 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [
-                '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span></a></li>'
+                '<li ui-sref-active="active" >\n' +
+                '                            <a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in">\n' +
+                '                                <span class="glyphicon glyphicon-' + glyphiconName + '></span>&nbsp;\n' +
+                '                                <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                            </a>\n' +
+                '                        </li>'
             ]
         }, this);
     } catch (e) {
@@ -117,8 +127,12 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             file: fullPath,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
-                '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span></a></li>'
+                '<li ui-sref-active="active" >\n' +
+                '                            <a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in">\n' +
+                '                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;\n' +
+                '                                <span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                            </a>\n' +
+                '                        </li>'
             ]
         }, this);
     } catch (e) {
@@ -140,7 +154,7 @@ Generator.prototype.addElementTranslationKey = function (key, value, language) {
             file: fullPath,
             needle: 'jhipster-needle-menu-add-element',
             splicable: [
-                '"' + key + '": "' + value + '",'
+                '"' + key + '": "' + _.startCase(value) + '",'
             ]
         }, this);
     } catch (e) {
@@ -162,7 +176,7 @@ Generator.prototype.addAdminElementTranslationKey = function (key, value, langua
             file: fullPath,
             needle: 'jhipster-needle-menu-add-admin-element',
             splicable: [
-                '"' + key + '": "' + value + '",'
+                '"' + key + '": "' + _.startCase(value) + '",'
             ]
         }, this);
     } catch (e) {
@@ -184,7 +198,7 @@ Generator.prototype.addEntityTranslationKey = function (key, value, language) {
             file: fullPath,
             needle: 'jhipster-needle-menu-add-entry',
             splicable: [
-                '"' + key + '": "' + value + '",'
+                '"' + key + '": "' + _.startCase(value) + '",'
             ]
         }, this);
     } catch (e) {
@@ -1308,7 +1322,25 @@ Generator.prototype.getNumberedQuestion = function (msg, currentQuestion, totalQ
     order = '(' + currentQuestion + '/' + totalQuestions + ') ';
     cb(currentQuestion);
     return order + msg;
-},
+};
+
+Generator.prototype.buildApplication = function (buildTool, profile, cb) {
+    var buildCmd = 'mvnw package -DskipTests=true -B';
+
+    if (buildTool === 'gradle') {
+        buildCmd = 'gradlew bootRepackage -x test';
+    }
+
+    if (os.platform() !== 'win32') {
+        buildCmd = './' + buildCmd;
+    }
+    buildCmd += ' -P' + profile;
+    var child = {};
+    child.stdout = exec(buildCmd, cb).stdout;
+    child.buildCmd = buildCmd;
+
+    return child;
+};
 
 Generator.prototype.contains = _.includes;
 

@@ -2,22 +2,22 @@
     "<%= angularAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPlural %>",
-                "createLabel": "नवीन <%= entityClass %> तयार करा",
-                "createOrEditLabel": "<%= entityClass %> तयार किंवा संपादित करा",
-                "search": "<%= entityClass %> शोधा"
+                "title": "<%= entityClassPluralHumanized  %>",
+                "createLabel": "नवीन <%= entityClassHumanized %> तयार करा",
+                "createOrEditLabel": "<%= entityClassHumanized %> तयार किंवा संपादित करा",
+                "search": "<%= entityClassHumanized %> शोधा"
             },
-            "created": "<%= entityClass %> [identifier: {{ param }}] तयार आहे",
-            "updated": "<%= entityClass %> [identifier: {{ param }}] सुधारित केले आहे",
-            "deleted": "<%= entityClass %> [identifier: {{ param }}] हटविले आहे",
+            "created": "<%= entityClassHumanized %> [identifier: {{ param }}] तयार आहे",
+            "updated": "<%= entityClassHumanized %> [identifier: {{ param }}] सुधारित केले आहे",
+            "deleted": "<%= entityClassHumanized %> [identifier: {{ param }}] हटविले आहे",
             "delete": {
-                "question": "<%= entityClass %> [id: {{ id }}] काढून टाकण्याबाबत पुष्टी?"
+                "question": "<%= entityClassHumanized %> [id: {{ id }}] काढून टाकण्याबाबत पुष्टी?"
             },
             "detail": {
-                "title": "<%= entityClass %>"
+                "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) { %>,
-            "<%=fields[idx].fieldName%>": "<%=fields[idx].fieldNameCapitalized%>"<% } %><% for (idx in relationships) { %>,
-            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameCapitalized %>"<% } %>
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
         }
     }
 }

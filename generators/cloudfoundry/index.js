@@ -160,26 +160,16 @@ module.exports = CloudFoundryGenerator.extend({
         if (this.abort) return;
         var done = this.async();
 
-        this.buildCmd = 'mvnw package -DskipTests';
+        this.log(chalk.bold('\nBuilding the application with the ' + this.cloudfoundryProfile + ' profile'));
 
-        if (this.buildTool === 'gradle') {
-            this.buildCmd = 'gradlew bootRepackage -x test';
-        }
-        if (os.platform() !== 'win32') {
-            this.buildCmd = './' + this.buildCmd;
-        }
-
-        if (this.cloudfoundryProfile == 'prod') {
-            this.log(chalk.bold('\nBuilding the application with the production profile'));
-            this.buildCmd += ' -Pprod';
-        }
-
-        var child = exec(this.buildCmd, function (err, stdout) {
+        var child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, function (err) {
             if (err) {
                 this.log.error(err);
             }
             done();
         }.bind(this));
+
+        this.buildCmd = child.buildCmd;
 
         child.stdout.on('data', function (data) {
             this.log(data.toString());
@@ -208,7 +198,7 @@ module.exports = CloudFoundryGenerator.extend({
             }
 
             this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
-            var child = exec(cloudfoundryDeployCommand, function (err, stdout) {
+            var child = exec(cloudfoundryDeployCommand, function (err) {
                 if (err) {
                     this.log.error(err);
                 }

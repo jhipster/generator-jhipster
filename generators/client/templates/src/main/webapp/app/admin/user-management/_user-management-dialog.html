@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" translate="userManagement.firstName">FirstName</label>
+            <label class="control-label" translate="userManagement.firstName">First Name</label>
             <input type="text" class="form-control" name="firstName"
                    ng-model="vm.user.firstName" ng-maxlength="50">
 
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label translate="userManagement.lastName">LastName</label>
+            <label translate="userManagement.lastName">Last Name</label>
             <input type="text" class="form-control" name="lastName"
                    ng-model="vm.user.lastName" ng-maxlength="50">
 
@@ -88,7 +88,7 @@
         </div><% if (enableTranslation) { %>
 
         <div class="form-group">
-            <label translate="userManagement.langKey">LangKey</label>
+            <label translate="userManagement.langKey">Lang Key</label>
             <select class="form-control" name="langKey" ng-model="vm.user.langKey"
                     ng-options="language as language for language in vm.languages track by language">
             </select>

@@ -143,6 +143,12 @@ module.exports = EntityGenerator.extend({
             }
         },
 
+        validateDbExistence: function () {
+            if(this.databaseType === 'no') {
+                this.env.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
+            }
+        },
+
         validateEntityName: function () {
             databaseType = this.databaseType;
             prodDatabaseType = this.prodDatabaseType;
@@ -1450,6 +1456,10 @@ module.exports = EntityGenerator.extend({
                     field.fieldNameUnderscored = _.snakeCase(field.fieldName);
                 }
 
+                if (_.isUndefined(field.fieldNameHumanized)) {
+                    field.fieldNameHumanized = _.startCase(field.fieldName);
+                }
+
                 if (_.isUndefined(field.fieldInJavaBeanMethod)) {
                     // Handle the specific case when the second letter is capitalized
                     // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
@@ -1479,6 +1489,10 @@ module.exports = EntityGenerator.extend({
 
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
+                }
+
+                if (_.isUndefined(relationship.relationshipNameHumanized)) {
+                    relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {
@@ -1579,7 +1593,9 @@ module.exports = EntityGenerator.extend({
             var entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
 
             this.entityClass = this.entityNameCapitalized;
+            this.entityClassHumanized = _.startCase(this.entityNameCapitalized);
             this.entityClassPlural = pluralize(this.entityClass);
+            this.entityClassPluralHumanized = _.startCase(this.entityClassPlural);
             this.entityInstance = _.lowerFirst(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityApiUrl = entityNamePluralizedAndSpinalCased;
