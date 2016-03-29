@@ -33,6 +33,7 @@ module.exports = HerokuGenerator.extend({
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
+        this.applicationType = this.config.get('applicationType');
     },
 
     prompting: function () {
@@ -118,7 +119,12 @@ module.exports = HerokuGenerator.extend({
 
         var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
-        var dbAddOn = (this.prodDatabaseType != 'postgresql') ? ' --addons jawsdb:kitefin' : ' --addons heroku-postgresql';
+        var dbAddOn = "";
+        if (this.prodDatabaseType == 'postgresql') {
+          dbAddOn = ' --addons heroku-postgresql'
+        } else if (this.prodDatabaseType == 'mysql') {
+          dbAddOn = ' --addons jawsdb:kitefin'
+        }
 
         this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
         var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
@@ -151,7 +157,7 @@ module.exports = HerokuGenerator.extend({
                             herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
 
                             // Extract from "Created random-app-name-1234... done"
-                            getHerokuAppName = function(stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); }
+                            getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); }
                         }
                         var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
                             if (err) {
@@ -190,7 +196,7 @@ module.exports = HerokuGenerator.extend({
         if (this.abort) return;
         var done = this.async();
 
-        //if (true) { // if src/main/resources/config/application-prod.yml contains eureka
+        if (this.applicationType == "microservice" || this.applicationType == "gateway") {
             var prompts = [
                 {
                     type: "input",
@@ -213,7 +219,11 @@ module.exports = HerokuGenerator.extend({
                     this.log(data.toString());
                 }.bind(this));
             }.bind(this));
-        //}
+        } else {
+          this.conflicter.resolve(function (err) {
+              done();
+          });
+        }
     },
 
     copyHerokuFiles: function () {
@@ -223,7 +233,11 @@ module.exports = HerokuGenerator.extend({
         var done = this.async();
         this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-        this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
+
+        if (this.prodDatabaseType != 'no') {
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
+        }
+
         this.template('_bootstrap-heroku.yml', SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
         this.template('_application-heroku.yml', SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
         this.template('_Procfile', 'Procfile');
@@ -234,8 +248,7 @@ module.exports = HerokuGenerator.extend({
     },
 
     end: {
-      productionBuild: function () {
-        //this.on('install', function () {
+        productionBuild: function () {
             if (this.abort) return;
             var done = this.async();
             this.log(chalk.bold('\nBuilding application'));
@@ -253,40 +266,38 @@ module.exports = HerokuGenerator.extend({
             child.stdout.on('data', function (data) {
                 this.log(data.toString());
             }.bind(this));
-        //});
-      },
 
-      productionDeploy: function () {
-          //this.on('end', function () {
-              if (this.abort) return;
-              var done = this.async();
-              this.log(chalk.bold('\nDeploying application'));
+        },
 
-              var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
-              if (this.buildTool === 'gradle') {
-                  herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war';
-              }
+        productionDeploy: function () {
+            if (this.abort) return;
+            var done = this.async();
+            this.log(chalk.bold('\nDeploying application'));
 
-              herokuDeployCommand += ' --app ' + this.herokuDeployedName;
+            var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
+            if (this.buildTool === 'gradle') {
+                herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war';
+            }
 
-              this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
-              var child = exec(herokuDeployCommand, function (err, stdout) {
-                  if (err) {
-                      this.abort = true;
-                      this.log.error(err);
-                  }
-                  this.log(stdout);
-                  this.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
-                  this.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
-                  this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(this.buildCmd)));
-                  this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
-                  done();
-              }.bind(this));
+            herokuDeployCommand += ' --app ' + this.herokuDeployedName;
 
-              child.stdout.on('data', function (data) {
-                  this.log(data.toString());
-              }.bind(this));
-          //});
-      }
+            this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
+            var child = exec(herokuDeployCommand, function (err, stdout) {
+                if (err) {
+                    this.abort = true;
+                    this.log.error(err);
+                }
+                this.log(stdout);
+                this.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
+                this.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
+                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(this.buildCmd)));
+                this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
+                done();
+            }.bind(this));
+
+            child.stdout.on('data', function (data) {
+                this.log(data.toString());
+            }.bind(this));
+        }
     }
 });

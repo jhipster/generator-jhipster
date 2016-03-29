@@ -14,3 +14,7 @@ eureka:
     client:
         serviceUrl:
             defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
+
+spring:
+  datasource:
+    maximumPoolSize: 10
