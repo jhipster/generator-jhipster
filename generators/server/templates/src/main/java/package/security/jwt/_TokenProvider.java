@@ -50,7 +50,7 @@ public class TokenProvider {
             .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        Date validity = new Date(now);
+        Date validity;
         if (rememberMe) {
             validity = new Date(now + this.tokenValidityInSecondsForRememberMe);
         } else {
