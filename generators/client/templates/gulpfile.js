@@ -151,9 +151,6 @@ gulp.task('wiredep:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
-            exclude: [
-                /angular-scenario/
-            ],
             ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected JavaScript files
             devDependencies: true,
             fileTypes: {
