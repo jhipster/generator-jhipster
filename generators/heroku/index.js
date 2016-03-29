@@ -143,18 +143,21 @@ module.exports = HerokuGenerator.extend({
 
                     this.log("");
                     this.prompt(prompts, function (props) {
+                        var getHerokuAppName = function(def, stdout) { return def; }
                         if (props.herokuForceName == 'Yes') {
                             herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName
                         } else {
                             herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
+
+                            // Extract from "Created random-app-name-1234... done"
+                            getHerokuAppName = function(stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); }
                         }
                         var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
                             if (err) {
                                 this.abort = true;
                                 this.log.error(err);
                             } else {
-                                // Extract from "Created random-app-name-1234... done"
-                                this.herokuDeployedName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
+                                this.herokuDeployedName = getHerokuAppName(this.herokuDeployedName, stdout)
                                 this.log(stdout);
                             }
                             done();
