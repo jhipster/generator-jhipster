@@ -233,9 +233,17 @@ module.exports = yeoman.Base.extend({
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
                     var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
                     delete databaseYamlConfig.ports;
-                    if(this.appConfigs[i].devDatabaseType === 'cassandra') {
+                    if(database === 'cassandra') {
                         var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         databaseYamlConfig.build.context = relativePath;
+                    }
+                    if(database === 'mongodb' && this.appConfigs[i].mongoCluster) {
+                        var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
+                        var mongodbNodeConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
+                        var mongoDbConfigSrvConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
+                        mongodbNodeConfig.build.context = relativePath;
+                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = mongodbNodeConfig;
+                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'] = mongoDbConfigSrvConfig;
                     }
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
                 }

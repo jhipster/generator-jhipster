@@ -70,7 +70,16 @@ services:
         extends:
             file: mongodb.yml
             service: <%= baseName.toLowerCase() %>-mongodb
-    <%_ } _%>
+    <%_ if (mongoCluster) { _%>
+    <%= baseName.toLowerCase() %>-mongodb-node:
+        extends:
+            file: mongodb.yml
+            service: <%= baseName.toLowerCase() %>-mongodb-node
+    <%= baseName.toLowerCase() %>-mongodb-config:
+        extends:
+            file: mongodb.yml
+            service: <%= baseName.toLowerCase() %>-mongodb-config
+    <%_ }} _%>
     <%_ if (prodDatabaseType == 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:
         extends:
