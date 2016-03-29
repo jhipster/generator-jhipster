@@ -9,7 +9,7 @@ services:
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
         <%_ } else { _%>
-        command: mongos --configdb mongodb-config
+        command: mongos --configdb <%= baseName.toLowerCase() %>-mongodb-config
     <%= baseName.toLowerCase() %>-mongodb-node:
         build:
             context: .
@@ -19,7 +19,7 @@ services:
         command: mongod --replSet rs1 --noprealloc --smallfiles
     <%= baseName.toLowerCase() %>-mongodb-config:
         image: mongo:3.2.3
-        container_name: mongodb-config
+        container_name: <%= baseName.toLowerCase() %>-mongodb-config
         expose:
             - "27019"
         command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
