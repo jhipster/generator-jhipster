@@ -1,0 +1,20 @@
+{
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "extends": ["eslint:recommended", "angular"],
+    "rules": {
+        "indent": [2, 4],
+        "linebreak-style": 0,
+        "eol-last": 2,
+        "quotes": [2, "single"],
+        "semi": [2, "always"],
+        "wrap-iife": [2, "inside"],
+        "eqeqeq": 2,
+        "no-use-before-define": [2, "nofunc"],
+        "no-unused-vars": [2, {"vars": "local", "args": "none"}],
+        "no-multi-str": 2,
+        "no-irregular-whitespace": 2
+    }
+}
