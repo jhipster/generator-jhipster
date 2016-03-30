@@ -10,9 +10,6 @@ generateEntity() {
   local entity="$1"
   if [ -a .jhipster/"$entity".json ]; then
     yo jhipster:entity "$entity" --force --no-insight
-    if [ "$JHIPSTER" == "app-cassandra" ]; then
-      cat src/main/resources/config/cql/*_added_entity_"$entity".cql >> src/main/resources/config/cql/create-tables.cql
-    fi
   fi
 }
 
