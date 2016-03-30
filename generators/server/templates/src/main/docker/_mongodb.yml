@@ -5,18 +5,5 @@ services:
         image: mongo:3.2.3
         ports:
             - "27017:27017"
-        <%_ if (!mongoCluster) { _%>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
-        <%_ } else { _%>
-        command: mongos --configdb <%= baseName.toLowerCase() %>-mongodb-config
-    <%= baseName.toLowerCase() %>-mongodb-node:
-        build:
-            context: .
-            dockerfile: mongodb/MongoDB.Dockerfile
-        command: mongod --replSet rs1 --noprealloc --smallfiles
-    <%= baseName.toLowerCase() %>-mongodb-config:
-        image: mongo:3.2.3
-        container_name: <%= baseName.toLowerCase() %>-mongodb-config
-        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
-    <%_ } _%>

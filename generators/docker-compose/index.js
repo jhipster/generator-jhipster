@@ -237,14 +237,14 @@ module.exports = yeoman.Base.extend({
                         var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         databaseYamlConfig.build.context = relativePath;
                     }
-                    if(database === 'mongodb' && this.appConfigs[i].mongoCluster) {
+                    /*if(database === 'mongodb' && this.appConfigs[i].mongoCluster) {
                         var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         var mongodbNodeConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
                         var mongoDbConfigSrvConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
                         mongodbNodeConfig.build.context = relativePath;
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = mongodbNodeConfig;
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'] = mongoDbConfigSrvConfig;
-                    }
+                    }*/
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
                 }
                 // Add search engine configuration
