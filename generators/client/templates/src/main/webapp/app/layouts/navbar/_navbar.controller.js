@@ -10,32 +10,32 @@
     function NavbarController ($location, $state, Auth, Principal, ENV, LoginService) {
         var vm = this;
 
-        vm.navCollapsed = true;
+        vm.isNavbarCollapsed = false;
         vm.isAuthenticated = Principal.isAuthenticated;
         vm.inProduction = ENV === 'prod';
         vm.login = login;
         vm.logout = logout;
         vm.toggleNavbar = toggleNavbar;
-        vm.hideNavbar = hideNavbar;
+        vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
 
         function login () {
-            hideNavbar();
+            collapseNavbar();
             LoginService.open();
         }
 
         function logout () {
-            hideNavbar();
+            collapseNavbar();
             Auth.logout();
             $state.go('home');
         }
 
         function toggleNavbar () {
-            vm.navCollapsed = !vm.navCollapsed;
+            vm.isNavbarCollapsed = !vm.isNavbarCollapsed;
         }
 
-        function hideNavbar () {
-            vm.navCollapsed = true;
+        function collapseNavbar () {
+            vm.isNavbarCollapsed = true;
         }
     }
 })();

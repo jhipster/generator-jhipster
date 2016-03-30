@@ -9,10 +9,10 @@
             </button>
             <a class="navbar-brand" href="#/"><span translate="global.title"><%= capitalizedBaseName %></span> <span class="navbar-version">v{{VERSION}}</span></a>
         </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="vm.navCollapsed" ng-switch="vm.isAuthenticated()">
+        <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="vm.isNavbarCollapsed" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
-                    <a ui-sref="home" ng-click="vm.hideNavbar()">
+                    <a ui-sref="home" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-home"></span>
                         <span class="hidden-sm" translate="global.menu.home">Home</span>
                     </a>
@@ -44,20 +44,20 @@
                     </a>
                     <ul class="dropdown-menu" uib-dropdown-menu>
                         <li ui-sref-active="active" ng-switch-when="true">
-                            <a ui-sref="settings" ng-click="vm.hideNavbar()">
+                            <a ui-sref="settings" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-wrench"></span>&nbsp;
                                 <span translate="global.menu.account.settings">Settings</span>
                             </a>
                         </li>
                         <li ui-sref-active="active" ng-switch-when="true">
-                            <a ui-sref="password" ng-click="vm.hideNavbar()">
+                            <a ui-sref="password" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-lock"></span>
                                 <span translate="global.menu.account.password">Password</span>
                             </a>
                         </li>
                         <%_ if (authenticationType == 'session') { _%>
                         <li ui-sref-active="active" ng-switch-when="true">
-                            <a ui-sref="sessions" ng-click="vm.hideNavbar()">
+                            <a ui-sref="sessions" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-cloud"></span>&nbsp;
                                 <span translate="global.menu.account.sessions">Sessions</span>
                             </a>
@@ -76,7 +76,7 @@
                             </a>
                         </li>
                         <li ui-sref-active="active" ng-switch-when="false">
-                            <a ui-sref="register" ng-click="vm.hideNavbar()">
+                            <a ui-sref="register" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;
                                 <span translate="global.menu.account.register">Register</span>
                             </a>
@@ -94,58 +94,58 @@
                     <ul class="dropdown-menu" uib-dropdown-menu>
                         <%_ if (applicationType == 'gateway') { _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="gateway" ng-click="vm.hideNavbar()">
+                            <a ui-sref="gateway" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-road"></span>&nbsp;
                                 <span translate="global.menu.admin.gateway">Gateway</span>
                             </a>
                         </li>
                         <%_ } _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="user-management" ng-click="vm.hideNavbar()">
+                            <a ui-sref="user-management" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-user"></span>&nbsp;
                                 <span translate="global.menu.admin.userManagement">User management</span>
                             </a>
                         </li>
                         <%_ if (websocket == 'spring-websocket') { _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-tracker" ng-click="vm.hideNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-tracker" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-eye-open"></span>&nbsp;
                                 <span translate="global.menu.admin.tracker">User tracker</span>
                             </a>
                         </li>
                         <%_ } _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-metrics" ng-click="vm.hideNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-metrics" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
                                 <span translate="global.menu.admin.metrics">Metrics</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-health" ng-click="vm.hideNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-health" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-heart"></span>&nbsp;
                                 <span translate="global.menu.admin.health">Health</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-configuration" ng-click="vm.hideNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-configuration" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-list-alt"></span>&nbsp;
                                 <span translate="global.menu.admin.configuration">Configuration</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="audits" ng-click="vm.hideNavbar()">
+                            <a ui-sref="audits" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-bell"></span>&nbsp;
                                 <span translate="global.menu.admin.audits">Audits</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="logs" ng-click="vm.hideNavbar()">
+                            <a ui-sref="logs" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-tasks"></span>&nbsp;
                                 <span translate="global.menu.admin.logs">Logs</span>
                             </a>
                         </li>
                         <li ng-hide="vm.inProduction" ui-sref-active="active">
-                            <a ui-sref="docs" ng-click="vm.hideNavbar()">
+                            <a ui-sref="docs" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-book"></span>&nbsp;
                                 <span translate="global.menu.admin.apidocs">API</span>
                             </a>
@@ -153,7 +153,7 @@
                         <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
                         <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
                         <li ng-hide="vm.inProduction">
-                            <a href='/h2-console' target="_tab" ng-click="vm.hideNavbar()">
+                            <a href='/h2-console' target="_tab" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-hdd"></span>&nbsp;
                                 <span translate="global.menu.admin.database">Database</span>
                             </a>
@@ -172,7 +172,7 @@
                     </a>
                     <ul class="dropdown-menu" uib-dropdown-menu ng-if="languageVm.languages.length > 1">
                         <li active-menu="{{language}}" ng-repeat="language in languageVm.languages">
-                            <a href="" ng-click="languageVm.changeLanguage(language);vm.hideNavbar();">{{language | findLanguageFromKey}}</a>
+                            <a href="" ng-click="languageVm.changeLanguage(language);vm.collapseNavbar();">{{language | findLanguageFromKey}}</a>
                         </li>
                     </ul>
                 </li>
