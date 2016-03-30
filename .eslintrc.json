@@ -1,9 +1,10 @@
 {
     "env": {
         "browser": true,
-        "node": true
+        "node": true,
+        "es6": true
     },
-    "extends": ["eslint:recommended", "angular"],
+    "extends": ["eslint:recommended"],
     "rules": {
         "indent": [2, 4],
         "linebreak-style": 0,
