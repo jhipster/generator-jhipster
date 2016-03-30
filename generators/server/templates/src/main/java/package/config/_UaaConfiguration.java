@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableAuthorizationServer
-public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
+public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @EnableResourceServer
     static class ResourceServcerConfiguration extends ResourceServerConfigurerAdapter {
