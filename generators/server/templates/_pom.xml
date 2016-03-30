@@ -85,8 +85,8 @@
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <%_ } _%>
         <run.addResources>false</run.addResources>
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-        <spring-cloud.version>1.1.0.RC1</spring-cloud.version>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+        <spring-cloud.version>1.1.0.M5</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.0.4.RELEASE</spring-security.version>
         <%_ if (authenticationType == 'oauth2') { _%>
@@ -500,11 +500,22 @@
             <version>${spring-security-oauth2.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'jwt' && applicationType == 'monolith') { _%>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.6.0</version>
+        </dependency>
+        <%_ } _%>
+        <%_ if (authenticationType == 'jwt' && applicationType != 'monolith') { _%>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring-security-oauth2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
@@ -538,7 +549,7 @@
             <version>${spring-cloud.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>

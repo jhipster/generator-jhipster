@@ -12,8 +12,8 @@ import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;<% if(applicationType != 'uaa') {}%>
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;<% } %>
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'jwt' || authenticationType == 'oauth2') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;<% } %>
@@ -28,7 +28,7 @@ import org.springframework.security.web.csrf.CsrfFilter;<% } %>
 import javax.inject.Inject;
 
 @Configuration
-@EnableWebSecurity
+<% if (applicationType != 'uaa') { %>@EnableWebSecurity<% } %>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (authenticationType == 'session') { %>
 
@@ -86,7 +86,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/account/reset_password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/h2-console/**");<% } %>
-    }<% if (authenticationType == 'session' || authenticationType == 'jwt') { %>
+    }<% if (applicationType != 'uaa' && (authenticationType == 'session' || authenticationType == 'jwt') ){ %>
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -158,7 +158,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/configuration/security").permitAll()
             .antMatchers("/configuration/ui").permitAll()
             .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'jwt') { %>;<% } %><% if (authenticationType == 'jwt') { %>
+            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'jwt' || applicationType == 'uaa') { %>;<% } %><% if (authenticationType == 'jwt' && applicationType != 'uaa') { %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
@@ -176,13 +176,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .and()
                 .authorizeRequests()
                 .antMatchers("/oauth/authorize").authenticated();
-    }
+    }<% } %>
 
+    <% if(authenticationType == 'oauth2' || applicationType == 'uaa') {%>
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }<% } %><% if (authenticationType == 'jwt') { %>
+    }<% } %><% if (authenticationType == 'jwt' && applicationType != 'uaa') { %>
 
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
