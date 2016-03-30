@@ -87,13 +87,13 @@ jhipster:
     mail:
         from: <%= baseName %>@localhost
     security:
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || applicationType == 'uaa') { _%>
         authentication:
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType == 'jwt' || applicationType == 'uaa') { _%>
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
+                # tokenValidityInSeconds: 86400 //currently not used with uaa-server PRA
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
