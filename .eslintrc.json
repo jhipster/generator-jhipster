@@ -11,7 +11,6 @@
         "eol-last": 2,
         "quotes": [2, "single"],
         "semi": [2, "always"],
-        "wrap-iife": [2, "inside"],
         "eqeqeq": 2,
         "no-use-before-define": [2, "nofunc"],
         "no-unused-vars": [2, {"vars": "local", "args": "none"}],
