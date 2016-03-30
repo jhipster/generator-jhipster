@@ -150,7 +150,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             // force variables unused by microservice applications
-            if (this.applicationType === 'microservice') {
+            if (this.applicationType == 'microservice' || this.applicationType == 'uaa') {
                 this.clusteredHttpSession = 'no';
                 this.websocket = 'no';
             }
@@ -219,7 +219,7 @@ module.exports = JhipsterServerGenerator.extend({
             var prompts = [
                 {
                     when: function (response) {
-                        return (applicationType === 'gateway' || applicationType === 'microservice');
+                        return (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa');
                     },
                     type: 'input',
                     name: 'serverPort',
@@ -232,7 +232,7 @@ module.exports = JhipsterServerGenerator.extend({
                             currentQuestion = current;
                         }, applicationType === 'gateway' || applicationType === 'microservice');
                     },
-                    default: applicationType === 'gateway' ? '8080' : '8081'
+                    default: applicationType == 'gateway' ? applicationType == 'uaa' ? '9999' : '8080' : '8081'
                 },
                 {
                     type: 'input',
@@ -630,7 +630,7 @@ module.exports = JhipsterServerGenerator.extend({
             ];
 
             this.prompt(prompts, function (props) {
-                if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
+                if (this.applicationType == 'microservice'/* || this.applicationType == 'gateway'*/) {
                     this.authenticationType = 'jwt';
                 } else {
                     this.authenticationType = props.authenticationType;
@@ -640,6 +640,10 @@ module.exports = JhipsterServerGenerator.extend({
                 }
                 if (this.authenticationType === 'jwt') {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
+                }
+
+                if(this.applicationType == 'gateway') {
+                    this.skipUserManagement = true;
                 }
 
                 this.packageName = props.packageName;
@@ -843,7 +847,8 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.searchEngine === 'elasticsearch') {
                 this.template(DOCKER_DIR + '_elasticsearch.yml', DOCKER_DIR + 'elasticsearch.yml', this, {});
             }
-            if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
+
+            if (this.applicationType == 'microservice' || this.applicationType == 'gateway' || this.applicationType == 'uaa') {
                 this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
             }
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
@@ -945,7 +950,12 @@ module.exports = JhipsterServerGenerator.extend({
             /* Skip the code below for --skip-user-management */
             if (this.skipUserManagement) return;
 
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
+            if(this.applicationType == 'uaa') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaWebSecurityConfiguration.java', javaDir + 'config/UaaWebSecurityConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaConfiguration.java', javaDir + 'config/UaaConfiguration.java', this, {});
+            } else {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
+            }
 
             if (this.authenticationType === 'session') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
@@ -956,7 +966,8 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
-            if (this.authenticationType === 'jwt') {
+
+            if (this.authenticationType == 'jwt' && this.applicationType !== 'uaa') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoginDTO.java', javaDir + 'web/rest/dto/LoginDTO.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_JWTToken.java', javaDir + 'web/rest/JWTToken.java', this, {});
