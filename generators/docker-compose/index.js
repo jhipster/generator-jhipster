@@ -161,6 +161,42 @@ module.exports = yeoman.Base.extend({
             }.bind(this));
         },
 
+        askForClustersMode: function () {
+            if(this.abort) return;
+            var done = this.async();
+            var mongoApps = [];
+
+            for (var i = 0; i < this.appConfigs.length; i++) {
+                if(this.appConfigs[i].prodDatabaseType === 'mongodb') {
+                    mongoApps.push(this.appsFolders[i]);
+                }
+            }
+
+            if(mongoApps.length===0) return;
+
+            var prompts = [{
+                type: 'checkbox',
+                name: 'clusteredDbApps',
+                message: 'Which applications do you want to use with clustered databases (only available with MongoDB)?',
+                choices: mongoApps
+            }];
+
+            this.prompt(prompts, function (props) {
+                for (var i = 0; i < this.appsFolders.length; i++) {
+                    for (var j = 0; j < props.clusteredDbApps.length; j++) {
+                        if(this.appsFolders[i] === props.clusteredDbApps[j]) {
+                            this.appConfigs[i].clusteredDb = true;
+                        }
+                        else {
+                            this.appConfigs[i].clusteredDb = false;
+                        }
+                    }
+                }
+
+                done();
+            }.bind(this));
+        },
+
         askForElk: function() {
             if(this.abort) return;
             var done = this.async();
@@ -237,10 +273,11 @@ module.exports = yeoman.Base.extend({
                         var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         databaseYamlConfig.build.context = relativePath;
                     }
-                    if(database === 'mongodb' && this.appConfigs[i].mongoCluster) {
+                    if(this.appConfigs[i].clusteredDb) {
+                        var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
                         var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var mongodbNodeConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
-                        var mongoDbConfigSrvConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
+                        var mongodbNodeConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
+                        var mongoDbConfigSrvConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
                         mongodbNodeConfig.build.context = relativePath;
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = mongodbNodeConfig;
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'] = mongoDbConfigSrvConfig;
