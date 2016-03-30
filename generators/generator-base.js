@@ -12,7 +12,8 @@ var path = require('path'),
     packagejs = require('../package.json'),
     semver = require('semver'),
     exec = require('child_process').exec,
-    os = require('os');
+    os = require('os'),
+    pluralize = require('pluralize');
 
 const JHIPSTER_CONFIG_DIR = ".jhipster";
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
@@ -446,16 +447,35 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
 };
 
 /**
- * A a new changelog to the Liquibase master.xml file.
+ * Add a new changelog to the Liquibase master.xml file.
  *
  * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
  */
 Generator.prototype.addChangelogToLiquibase = function (changelogName) {
+    this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-changelog');
+};
+
+/**
+ * Add a new constraints changelog to the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.addConstraintsChangelogToLiquibase = function (changelogName) {
+    this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-constraints-changelog');
+};
+
+/**
+ * Add a new changelog to the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ * @param {string} needle - The needle at where it has to be added.
+ */
+Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, needle) {
     try {
         var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-liquibase-add-changelog',
+            needle: needle,
             splicable: [
                 '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
             ]
@@ -1143,6 +1163,10 @@ Generator.prototype.getTableName = function (value) {
 
 Generator.prototype.getColumnName = function (value) {
     return _.snakeCase(value).toLowerCase();
+};
+
+Generator.prototype.getPluralColumnName = function (value) {
+    return this.getColumnName(pluralize(value));
 };
 
 Generator.prototype.insight = function () {
