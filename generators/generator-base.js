@@ -75,7 +75,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
                 '<li ui-sref-active="active" >\n' +
-                '                    <a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in">\n' +
+                '                    <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                        <span class="glyphicon glyphicon-' + glyphiconName + '></span>&nbsp;\n' +
                 '                        <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                    </a>\n' +
