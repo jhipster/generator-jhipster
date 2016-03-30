@@ -102,7 +102,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [
                 '<li ui-sref-active="active" >\n' +
-                '                            <a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in">\n' +
+                '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-' + glyphiconName + '></span>&nbsp;\n' +
                 '                                <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
@@ -128,7 +128,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 '<li ui-sref-active="active" >\n' +
-                '                            <a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in">\n' +
+                '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;\n' +
                 '                                <span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
