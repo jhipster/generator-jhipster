@@ -63,9 +63,17 @@ module.exports = JhipsterGenerator.extend({
             defaults: true
         });
 
+        // This adds support for a `--jhi-prefix` flag
+        this.option('jhi-prefix', {
+            desc: 'Add prefix before services, controllers and states name',
+            type: String,
+            defaults: 'jhi'
+        });
+
         this.skipClient = configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
+        this.jhiPrefix = configOptions.jhiPrefix = this.options['jhi-prefix'] || this.config.get('jhiPrefix');
         this.withEntities = this.options['with-entities'];
         this.checkInstall = this.options['check-install'];
 
