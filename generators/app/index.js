@@ -73,7 +73,7 @@ module.exports = JhipsterGenerator.extend({
         this.skipClient = configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.jhiPrefix = configOptions.jhiPrefix = this.options['jhi-prefix'] || this.config.get('jhiPrefix');
+        this.jhiPrefix = configOptions.jhiPrefix = this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.checkInstall = this.options['check-install'];
 
@@ -365,6 +365,7 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('applicationType', this.applicationType);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
+            this.config.set('jhiPrefix', this.jhiPrefix);
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);
