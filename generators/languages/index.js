@@ -154,7 +154,6 @@ module.exports = LanguagesGenerator.extend({
         this.languagesToApply && this.languagesToApply.forEach(function (language) {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
-                this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
             }
             if (!this.skipServer) {
                 this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
