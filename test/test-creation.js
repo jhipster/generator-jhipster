@@ -4,7 +4,6 @@
 var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
-var os = require('os');
 
 const constants = require('../generators/generator-constants'),
     TEST_DIR = constants.TEST_DIR,
@@ -382,7 +381,7 @@ const expectedFiles = {
         DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
         DOCKER_DIR + 'opscenter/Dockerfile',
         DOCKER_DIR + 'cassandra-opscenter.yml',
-        DOCKER_DIR + 'cassandra.yml',
+        DOCKER_DIR + 'cassandra.yml'
     ],
 
     containerizeWithDocker: [
@@ -531,7 +530,7 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct application name', function () {
             assert.file([
-                CLIENT_MAIN_SRC_DIR + 'app/home/home.state.js',
+                CLIENT_MAIN_SRC_DIR + 'app/home/home.state.js'
             ]);
             assert.fileContent(CLIENT_MAIN_SRC_DIR + 'app/home/home.state.js', /myapplicationApp/);
         });

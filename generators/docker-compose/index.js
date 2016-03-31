@@ -26,7 +26,7 @@ module.exports = yeoman.Base.extend({
                     var dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
                     var dockerVersionMajor = dockerVersion.split('.')[0];
                     var dockerVersionMinor = dockerVersion.split('.')[1];
-                    if ( dockerVersionMajor < 1 || ( dockerVersionMajor == 1 && dockerVersionMinor < 10 )) {
+                    if ( dockerVersionMajor < 1 || ( dockerVersionMajor === 1 && dockerVersionMinor < 10 )) {
                         this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
                             '         Docker version found: ' + dockerVersion + '\n' +
                             '         Read http://docs.docker.com/engine/installation/#installation\n');
@@ -47,7 +47,7 @@ module.exports = yeoman.Base.extend({
                     var composeVersion = stdout.split(' ')[2].replace(/,/g, '');
                     var composeVersionMajor = composeVersion.split('.')[0];
                     var composeVersionMinor = composeVersion.split('.')[1];
-                    if ( composeVersionMajor < 1 || ( composeVersionMajor == 1 && composeVersionMinor < 6 )) {
+                    if ( composeVersionMajor < 1 || ( composeVersionMajor === 1 && composeVersionMinor < 6 )) {
                         this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
                             '         Docker Compose version found: ' + composeVersion + '\n' +
                             '         Read https://docs.docker.com/compose/install/\n');
@@ -213,7 +213,7 @@ module.exports = yeoman.Base.extend({
 
                 done();
             }.bind(this));
-        },
+        }
     },
 
     configuring: {
@@ -222,15 +222,18 @@ module.exports = yeoman.Base.extend({
 
             this.log('\nChecking Docker images in applications\' directories...');
 
+            var imagePath = '';
+            var runCommand = '';
+
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].buildTool === 'maven') {
-                    var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
-                    var runCommand = './mvnw package -Pprod docker:build';
+                    imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
+                    runCommand = './mvnw package -Pprod docker:build';
                 } else {
-                    var imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
-                    var runCommand = './gradlew -Pprod bootRepackage buildDocker';
+                    imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
+                    runCommand = './gradlew -Pprod bootRepackage buildDocker';
                 }
-                if (shelljs.ls(imagePath).length == 0) {
+                if (shelljs.ls(imagePath).length === 0) {
                     this.log(chalk.red('\nDocker Image not found at ' + imagePath));
                     this.log(chalk.red('Please run "' + runCommand + '" in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + ' to generate Docker image'));
                     this.abort = true;
@@ -265,17 +268,18 @@ module.exports = yeoman.Base.extend({
                 parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
                 // Add database configuration
                 var database = this.appConfigs[i].prodDatabaseType;
-                if (database != 'no') {
+                if (database !== 'no') {
+                    var relativePath = '';
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
                     var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
                     delete databaseYamlConfig.ports;
                     if(database === 'cassandra') {
-                        var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
+                        relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         databaseYamlConfig.build.context = relativePath;
                     }
                     if(this.appConfigs[i].clusteredDb) {
                         var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
-                        var relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
+                        relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         var mongodbNodeConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
                         var mongoDbConfigSrvConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
                         mongodbNodeConfig.build.context = relativePath;
@@ -286,7 +290,7 @@ module.exports = yeoman.Base.extend({
                 }
                 // Add search engine configuration
                 var searchEngine = this.appConfigs[i].searchEngine;
-                if (searchEngine != 'no') {
+                if (searchEngine !== 'no') {
                     var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
                     var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
                     delete searchEngineConfig.ports;

@@ -125,7 +125,7 @@ describe('JHipster generator entity', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
-            assert.file([,
+            assert.file([
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java'
             ]);
         });

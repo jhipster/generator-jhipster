@@ -8,7 +8,6 @@ var path = require('path'),
     Insight = require('insight'),
     fs = require('fs'),
     shelljs = require('shelljs'),
-    ejs = require('ejs'),
     packagejs = require('../package.json'),
     semver = require('semver'),
     exec = require('child_process').exec,
@@ -319,7 +318,7 @@ Generator.prototype.addBowerDependency = function (name, version) {
             jsonObj.dependencies[name] = version;
         }, this);
     } catch (e) {
-        console.log(e);
+        this.log(e);
         this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
@@ -338,7 +337,7 @@ Generator.prototype.addBowerOverride = function (bowerPackageName, main, isIgnor
     try {
         jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
             var override = {};
-            if (main != null && main.length > 0) {
+            if (main !== null && main.length > 0) {
                 override['main'] = main;
             }
             if (isIgnored) {
@@ -811,23 +810,23 @@ Generator.prototype.dateFormatForLiquibase = function () {
     var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
     var year = '' + now_utc.getFullYear();
     var month = '' + (now_utc.getMonth() + 1);
-    if (month.length == 1) {
+    if (month.length === 1) {
         month = '0' + month;
     }
     var day = '' + now_utc.getDate();
-    if (day.length == 1) {
+    if (day.length === 1) {
         day = '0' + day;
     }
     var hour = '' + now_utc.getHours();
-    if (hour.length == 1) {
+    if (hour.length === 1) {
         hour = '0' + hour;
     }
     var minute = '' + now_utc.getMinutes();
-    if (minute.length == 1) {
+    if (minute.length === 1) {
         minute = '0' + minute;
     }
     var second = '' + now_utc.getSeconds();
-    if (second.length == 1) {
+    if (second.length === 1) {
         second = '0' + second;
     }
     return year + '' + month + '' + day + '' + hour + '' + minute + '' + second;
@@ -847,14 +846,15 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
 
     _this = _this !== undefined ? _this : this;
     _opt = _opt !== undefined ? _opt : {};
+    var regex;
     switch (action) {
     case 'stripHtml' :
-        var regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
+        regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
             //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
     case 'stripJs' :
-        var regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
+        regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
             //looks for something like mainTranslatePartialLoader: [*]
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
@@ -1033,7 +1033,7 @@ Generator.prototype.getExistingEntities = function (warn) {
             entities.push({name: path.basename(file, '.json'), definition: definition});
         }, this);
     }
-    if (entities.length != unique_dates.size) {
+    if (entities.length !== unique_dates.size) {
         this.log(chalk.yellow('WARNING some of your entities have the same changelog dates so JHipster couldn\'t\n' +
             ' determine the order in which they should be generated. It is recommended to\n' +
             ' edit the changelog dates in the ' + JHIPSTER_CONFIG_DIR + 'folder and to relaunch this\n' +
@@ -1061,7 +1061,7 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     this.copyI18nFilesByName(_this, webappDir, 'user-management.json', lang);
 
     // tracker.json for Websocket
-    if (this.websocket == 'spring-websocket') {
+    if (this.websocket === 'spring-websocket') {
         this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
     }
 
@@ -1112,7 +1112,7 @@ Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
         var content = '.constant(\'LANGUAGES\', [\n';
         for (var i = 0, len = languages.length; i < len; i++) {
             var language = languages[i];
-            content += '            \'' + language + '\'' + (i != languages.length - 1 ? ',' : '') + '\n';
+            content += '            \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
         }
         content +=
             '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
@@ -1220,8 +1220,8 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
         type: 'input',
         name: 'baseName',
         validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input) && input != 'application') return true;
-            if (input == 'application') {
+            if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;
+            if (input === 'application') {
                 return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
             }
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
@@ -1339,15 +1339,15 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
 
 Generator.prototype.contains = _.includes;
 
-var wordwrap = function (text, width, seperator, keepLF) {
+function wordwrap (text, width, seperator, keepLF) {
     var wrappedText = '';
     var rows = text.split('\n');
     for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
-        if (keepLF == true && i != 0) {
+        if (keepLF === true && i !== 0) {
             wrappedText = wrappedText + '\\n';
         }
         wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;
     }
     return wrappedText;
-};
+}

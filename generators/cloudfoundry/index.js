@@ -1,6 +1,5 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     os = require('os'),
     generators = require('yeoman-generator'),
     childProcess = require('child_process'),
@@ -14,7 +13,6 @@ const constants = require('../generator-constants'),
     MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 var exec = childProcess.exec;
-var spawn = childProcess.spawn;
 
 var CloudFoundryGenerator = generators.Base.extend({});
 
@@ -54,29 +52,29 @@ module.exports = CloudFoundryGenerator.extend({
                 name: 'cloudfoundryProfile',
                 message: 'Which profile would you like to use?',
                 choices: [
-                {
-                    value: 'dev',
-                    name: 'dev'
-                },
-                {
-                    value: 'prod',
-                    name: 'prod'
-                }
-            ],
+                    {
+                        value: 'dev',
+                        name: 'dev'
+                    },
+                    {
+                        value: 'prod',
+                        name: 'prod'
+                    }
+                ],
                 default: 0
             },
             {
                 when: function(response) {
-                return databaseType != 'no';
-            },
+                    return databaseType !== 'no';
+                },
                 name: 'cloudfoundryDatabaseServiceName',
                 message: 'What is the name of your database service?',
                 default: 'elephantsql'
             },
             {
                 when: function(response) {
-                return databaseType != 'no';
-            },
+                    return databaseType !== 'no';
+                },
                 name: 'cloudfoundryDatabaseServicePlan',
                 message: 'What is the name of your database plan?',
                 default: 'turtle'
@@ -88,7 +86,7 @@ module.exports = CloudFoundryGenerator.extend({
             this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
             this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
 
-            if ((this.devDatabaseType == 'h2Disk' || this.devDatabaseType == 'h2Memory') && this.cloudfoundryProfile == 'dev') {
+            if ((this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') && this.cloudfoundryProfile === 'dev') {
                 this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
                 this.cloudfoundryProfile = 'prod';
             }
@@ -125,9 +123,7 @@ module.exports = CloudFoundryGenerator.extend({
             var done = this.async();
 
             this.log(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
-            var child = exec('cf app ' + this.cloudfoundryDeployedName + ' ', {}, function (err, stdout, stderr) {
-                var lines = stdout.split('\n');
-                var dist_repo = '';
+            exec('cf app ' + this.cloudfoundryDeployedName + ' ', {}, function (err, stdout, stderr) {
                 // Unauthenticated
                 if (stdout.search('cf login') >= 0) {
                     this.log.error('Error: Not authenticated. Run \'cf login\' to login to your cloudfoundry account and try again.');
@@ -144,7 +140,7 @@ module.exports = CloudFoundryGenerator.extend({
             this.log(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
             var insight = this.insight();
             insight.track('generator', 'cloudfoundry');
-            if (this.databaseType != 'no') {
+            if (this.databaseType !== 'no') {
                 this.log(chalk.bold('Creating the database'));
                 var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, {}, function (err, stdout, stderr) {
                     done();
@@ -215,7 +211,7 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.abort || !this.cloudfoundry_remote_exists) return;
             this.log(chalk.bold('\nRestarting your cloudfoundry app.\n'));
 
-            var child = exec('cf restart ' + this.cloudfoundryDeployedName, function (err, stdout, stderr) {
+            exec('cf restart ' + this.cloudfoundryDeployedName, function (err, stdout, stderr) {
                 this.log(chalk.green('\nYour app should now be live'));
                 if (hasWarning) {
                     this.log(chalk.green('\nYou may need to address the issues mentioned above and restart the server for the app to work correctly \n\t' +

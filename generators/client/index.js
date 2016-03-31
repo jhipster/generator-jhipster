@@ -1,14 +1,11 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
     scriptBase = require('../generator-base'),
     mkdirp = require('mkdirp'),
-    html = require('html-wiring'),
-    packagejs = require('../../package.json'),
-    engine = require('ejs').render;
+    packagejs = require('../../package.json');
 
 var JhipsterClientGenerator = generators.Base.extend({});
 
@@ -142,16 +139,16 @@ module.exports = JhipsterClientGenerator.extend({
                 this.baseName = baseName;
             }
 
-            var clientConfigFound = this.useSass != null;
+            var clientConfigFound = this.useSass !== null;
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
-                if (this.enableTranslation == null) {
+                if (this.enableTranslation === null) {
                     this.enableTranslation = true;
                 }
-                if (this.nativeLanguage == null) {
+                if (this.nativeLanguage === null) {
                     this.nativeLanguage = 'en';
                 }
-                if (this.languages == null) {
+                if (this.languages === null) {
                     this.languages = ['en', 'fr'];
                 }
 
@@ -260,7 +257,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (configOptions.buildTool) {
                 this.buildTool = configOptions.buildTool;
             }
-            if (configOptions.enableSocialSignIn != null) {
+            if (configOptions.enableSocialSignIn !== null) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
             if (configOptions.authenticationType) {
@@ -269,13 +266,13 @@ module.exports = JhipsterClientGenerator.extend({
             if (configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
-            if (configOptions.enableTranslation != null) {
+            if (configOptions.enableTranslation !== null) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
-            if (configOptions.nativeLanguage != null) {
+            if (configOptions.nativeLanguage !== null) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if (configOptions.languages != null) {
+            if (configOptions.languages !== null) {
                 this.languages = configOptions.languages;
             }
 
@@ -378,7 +375,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'account/reset/finish/reset.finish.html', ANGULAR_DIR + 'account/reset/finish/reset.finish.html');
             this.copyJs(ANGULAR_DIR + 'account/reset/finish/_reset.finish.state.js', ANGULAR_DIR + 'account/reset/finish/reset.finish.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/reset/finish/_reset.finish.controller.js', ANGULAR_DIR + 'account/reset/finish/reset.finish.controller.js', this, {});
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
                 this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.js', ANGULAR_DIR + 'account/sessions/sessions.state.js', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_sessions.controller.js', ANGULAR_DIR + 'account/sessions/sessions.controller.js', this, {});
@@ -395,7 +392,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'account/social/_social.service.js', ANGULAR_DIR + 'account/social/social.service.js', this, {});
                 this.copyJs(ANGULAR_DIR + 'account/social/_social.state.js', ANGULAR_DIR + 'account/social/social.state.js', this, {});
 
-                if (this.authenticationType == 'jwt') {
+                if (this.authenticationType === 'jwt') {
                     this.template(ANGULAR_DIR + 'account/social/_social-auth.controller.js', ANGULAR_DIR + 'account/social/social-auth.controller.js', this, {});
                 }
             }
@@ -430,7 +427,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.modal.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.modal.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.service.js', ANGULAR_DIR + 'admin/metrics/metrics.service.js', this, {});
-            if (this.websocket == 'spring-websocket') {
+            if (this.websocket === 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
                 this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.state.js', ANGULAR_DIR + 'admin/tracker/tracker.state.js', this, {});
                 this.template(ANGULAR_DIR + 'admin/tracker/_tracker.controller.js', ANGULAR_DIR + 'admin/tracker/tracker.controller.js', this, {});
@@ -451,7 +448,7 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularGatewayFiles: function () {
-            if (this.applicationType != 'gateway') return;
+            if (this.applicationType !== 'gateway') return;
 
             this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.state.js', ANGULAR_DIR + 'admin/gateway/gateway.state.js', this, {});
@@ -489,7 +486,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.js', ANGULAR_DIR + 'components/util/jhi-item-count.directive.js', this, {});
 
             // interceptor code
-            if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
+            if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt') {
                 this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.js', this, {});
             }
             this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.js', this, {});
@@ -529,9 +526,9 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_has-authority.directive.js', ANGULAR_DIR + 'services/auth/has-authority.directive.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_has-any-authority.directive.js', ANGULAR_DIR + 'services/auth/has-any-authority.directive.js', this, {});
-            if (this.authenticationType == 'oauth2') {
+            if (this.authenticationType === 'oauth2') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
-            } else if (this.authenticationType == 'jwt') {
+            } else if (this.authenticationType === 'jwt') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.jwt.service.js', ANGULAR_DIR + 'services/auth/auth.jwt.service.js', this, {});
             } else {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.js', ANGULAR_DIR + 'services/auth/auth.session.service.js', this, {});
@@ -571,11 +568,11 @@ module.exports = JhipsterClientGenerator.extend({
                 'spec/app/services/auth/_auth.services.spec.js',
                 'spec/app/components/login/_login.controller.spec.js'
             ];
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
             }
             // Create Protractor test files
-            if (this.testFrameworks.indexOf('protractor') != -1) {
+            if (this.testFrameworks.indexOf('protractor') !== -1) {
                 testTemplates.push('e2e/account/_account.js');
                 testTemplates.push('e2e/admin/_administration.js');
                 testTemplates.push('_protractor.conf.js');

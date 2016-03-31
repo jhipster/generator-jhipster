@@ -1,8 +1,6 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     fs = require('fs'),
-    os = require('os'),
     generators = require('yeoman-generator'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
@@ -82,7 +80,7 @@ module.exports = HerokuGenerator.extend({
             var done = this.async();
 
             try {
-                var stats = fs.lstatSync('.git');
+                fs.lstatSync('.git');
                 this.log(chalk.bold('\nUsing existing Git repository'));
                 done();
             } catch (e) {
@@ -121,9 +119,9 @@ module.exports = HerokuGenerator.extend({
             var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
             var dbAddOn = '';
-            if (this.prodDatabaseType == 'postgresql') {
+            if (this.prodDatabaseType === 'postgresql') {
                 dbAddOn = ' --addons heroku-postgresql';
-            } else if (this.prodDatabaseType == 'mysql') {
+            } else if (this.prodDatabaseType === 'mysql') {
                 dbAddOn = ' --addons jawsdb:kitefin';
             }
 
@@ -141,7 +139,7 @@ module.exports = HerokuGenerator.extend({
                                 message: 'The Heroku app "' + chalk.cyan(this.herokuDeployedName) + '" already exists! Use it anyways?',
                                 choices: [{
                                     value: 'Yes',
-                                    name: 'Yes, I have access to it',
+                                    name: 'Yes, I have access to it'
                                 }, {
                                     value: 'No',
                                     name: 'No, generate a random name'
@@ -152,7 +150,7 @@ module.exports = HerokuGenerator.extend({
                         this.log('');
                         this.prompt(prompts, function (props) {
                             var getHerokuAppName = function(def, stdout) { return def; };
-                            if (props.herokuForceName == 'Yes') {
+                            if (props.herokuForceName === 'Yes') {
                                 herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName;
                             } else {
                                 herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
@@ -160,7 +158,7 @@ module.exports = HerokuGenerator.extend({
                                 // Extract from "Created random-app-name-1234... done"
                                 getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); };
                             }
-                            var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
+                            exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
                                 if (err) {
                                     this.abort = true;
                                     this.log.error(err);
@@ -197,7 +195,7 @@ module.exports = HerokuGenerator.extend({
             if (this.abort) return;
             var done = this.async();
 
-            if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+            if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
                 var prompts = [
                     {
                         type: 'input',
@@ -222,8 +220,8 @@ module.exports = HerokuGenerator.extend({
                 }.bind(this));
             } else {
                 this.conflicter.resolve(function (err) {
-                  done();
-              });
+                    done();
+                });
             }
         },
 
@@ -235,7 +233,7 @@ module.exports = HerokuGenerator.extend({
             this.log(chalk.bold('\nCreating Heroku deployment files'));
 
 
-            if (this.prodDatabaseType != 'no') {
+            if (this.prodDatabaseType !== 'no') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
             }
 

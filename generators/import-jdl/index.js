@@ -6,9 +6,6 @@ var util = require('util'),
     jhuml = require('jhipster-uml'),
     scriptBase = require('../generator-base');
 
-const constants = require('../generator-constants'),
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-
 var JDLGenerator = generators.Base.extend({});
 
 util.inherits(JDLGenerator, scriptBase);
@@ -91,7 +88,7 @@ module.exports = JDLGenerator.extend({
                 this.composeWith('jhipster:entity', {
                     options: {
                         regenerate: true,
-                        'skip-install': true,
+                        'skip-install': true
                     },
                     args: [entity.name]
                 }, {

@@ -1,7 +1,5 @@
 'use strict';
 
-const constants = require('./generator-constants');
-
 module.exports = {
     cleanupOldFiles: cleanupOldFiles
 };

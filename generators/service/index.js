@@ -1,7 +1,6 @@
 'use strict';
 var util = require('util'),
     generators = require('yeoman-generator'),
-    chalk = require('chalk'),
     _ = require('lodash'),
     scriptBase = require('../generator-base');
 
