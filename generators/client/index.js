@@ -139,7 +139,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.baseName = baseName;
             }
 
-            var clientConfigFound = this.useSass !== null;
+            var clientConfigFound = this.useSass !== undefined;
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation === null) {
@@ -257,7 +257,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (configOptions.buildTool) {
                 this.buildTool = configOptions.buildTool;
             }
-            if (configOptions.enableSocialSignIn !== null) {
+            if (configOptions.enableSocialSignIn !== undefined) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
             if (configOptions.authenticationType) {
@@ -266,13 +266,13 @@ module.exports = JhipsterClientGenerator.extend({
             if (configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
-            if (configOptions.enableTranslation !== null) {
+            if (configOptions.enableTranslation !== undefined) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
-            if (configOptions.nativeLanguage !== null) {
+            if (configOptions.nativeLanguage !== undefined) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if (configOptions.languages !== null) {
+            if (configOptions.languages !== undefined) {
                 this.languages = configOptions.languages;
             }
 

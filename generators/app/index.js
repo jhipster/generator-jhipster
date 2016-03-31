@@ -171,7 +171,7 @@ module.exports = JhipsterGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
-            var configFound = this.baseName !== null && this.applicationType !== null;
+            var configFound = this.baseName !== undefined && this.applicationType !== undefined;
             if (configFound) {
                 this.existingProject = true;
             }

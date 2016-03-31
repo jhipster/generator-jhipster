@@ -155,18 +155,18 @@ module.exports = JhipsterServerGenerator.extend({
                 this.websocket = 'no';
             }
 
-            var serverConfigFound = this.packageName !== null &&
-                this.authenticationType !== null &&
-                this.hibernateCache !== null &&
-                this.clusteredHttpSession !== null &&
-                this.websocket !== null &&
-                this.databaseType !== null &&
-                this.devDatabaseType !== null &&
-                this.prodDatabaseType !== null &&
-                this.searchEngine !== null &&
-                this.buildTool !== null;
+            var serverConfigFound = this.packageName !== undefined &&
+                this.authenticationType !== undefined &&
+                this.hibernateCache !== undefined &&
+                this.clusteredHttpSession !== undefined &&
+                this.websocket !== undefined &&
+                this.databaseType !== undefined &&
+                this.devDatabaseType !== undefined &&
+                this.prodDatabaseType !== undefined &&
+                this.searchEngine !== undefined &&
+                this.buildTool !== undefined;
 
-            if (this.baseName !== null && serverConfigFound) {
+            if (this.baseName !== undefined && serverConfigFound) {
 
                 // Generate remember me key if key does not already exist in config
                 if (this.authenticationType === 'session' && this.rememberMeKey === null) {
@@ -780,13 +780,13 @@ module.exports = JhipsterServerGenerator.extend({
     default: {
         getSharedConfigOptions: function () {
             this.useSass = configOptions.useSass ? configOptions.useSass : false;
-            if (configOptions.enableTranslation !== null) {
+            if (configOptions.enableTranslation !== undefined) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
-            if (configOptions.nativeLanguage !== null) {
+            if (configOptions.nativeLanguage !== undefined) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if (configOptions.languages !== null) {
+            if (configOptions.languages !== undefined) {
                 this.languages = configOptions.languages;
             }
             if (configOptions.testFrameworks) {

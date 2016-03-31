@@ -337,7 +337,7 @@ Generator.prototype.addBowerOverride = function (bowerPackageName, main, isIgnor
     try {
         jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
             var override = {};
-            if (main !== null && main.length > 0) {
+            if (main !== undefined && main.length > 0) {
                 override['main'] = main;
             }
             if (isIgnored) {

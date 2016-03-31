@@ -10,7 +10,7 @@
         "eol-last": 2,
         "quotes": [2, "single"],
         "semi": [2, "always"],
-        "eqeqeq": 2,
+        "eqeqeq": [2, "smart"],
         "no-use-before-define": [2, "nofunc"],
         "no-unused-vars": [2, {"vars": "local", "args": "none"}],
         "no-multi-str": 2,
