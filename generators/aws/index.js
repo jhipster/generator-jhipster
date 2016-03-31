@@ -38,20 +38,20 @@ module.exports = AwsGenerator.extend({
             var prodDatabaseType = this.config.get('prodDatabaseType');
 
             switch (prodDatabaseType.toLowerCase()) {
-                case 'mysql':
-                    this.dbEngine = 'mysql';
-                    break;
-                case 'postgresql':
-                    this.dbEngine = 'postgres';
-                    break;
-                default:
-                    this.env.error(chalk.red('Sorry deployment for this database is not possible'));
+            case 'mysql':
+                this.dbEngine = 'mysql';
+                break;
+            case 'postgresql':
+                this.dbEngine = 'postgres';
+                break;
+            default:
+                this.env.error(chalk.red('Sorry deployment for this database is not possible'));
             }
         }
     },
     prompting: function () {
         if (this.existingProject) {
-            return
+            return;
         }
 
         var cb = this.async();

@@ -1,6 +1,6 @@
 'use strict';
 var path = require('path'),
-    html = require("html-wiring"),
+    html = require('html-wiring'),
     shelljs = require('shelljs'),
     engine = require('ejs').render,
     _ = require('lodash');
@@ -102,12 +102,12 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
     } else {
         var body = stripContent(source, regex, _this, _opt);
         switch (type) {
-            case 'html' :
-                body = replacePlaceholders(body, _this);
-                break;
-            case 'js' :
-                body = replaceTitle(body, _this, template);
-                break;
+        case 'html' :
+            body = replacePlaceholders(body, _this);
+            break;
+        case 'js' :
+            body = replaceTitle(body, _this, template);
+            break;
         }
         _this.write(dest, body);
     }

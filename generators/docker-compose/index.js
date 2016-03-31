@@ -294,12 +294,12 @@ module.exports = yeoman.Base.extend({
                 }
                 // Dump the file
                 var stringYaml = jsyaml.dump(parentConfiguration, {indent: 4});
-                var array = stringYaml.split("\n");
+                var array = stringYaml.split('\n');
                 for (var j = 0; j < array.length; j++) {
-                    array[j] = "    " + array[j];
+                    array[j] = '    ' + array[j];
                     array[j] = array[j].replace(/\'/g, '');
                 }
-                stringYaml = array.join("\n");
+                stringYaml = array.join('\n');
                 this.appsYaml.push(stringYaml);
             }
         },

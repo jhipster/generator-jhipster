@@ -49,13 +49,13 @@ const expectedFiles = {
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResourceIntTest.java',
         TEST_DIR + 'gatling/simulations/FooGatlingTest.scala'
     ]
-}
+};
 describe('JHipster generator entity', function () {
     describe('no dto, no service, no pagination', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -82,7 +82,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -109,7 +109,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -135,7 +135,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -162,7 +162,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -185,7 +185,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -208,7 +208,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -231,7 +231,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -250,7 +250,7 @@ describe('JHipster generator entity', function () {
             assert.noFile([
                 CLIENT_MAIN_SRC_DIR + 'i18n/en/foo.json',
                 CLIENT_MAIN_SRC_DIR + 'i18n/fr/foo.json'
-            ])
+            ]);
         });
     });
 
@@ -258,7 +258,7 @@ describe('JHipster generator entity', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withOptions({'angular-suffix': 'management'})

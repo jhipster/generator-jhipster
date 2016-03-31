@@ -42,7 +42,7 @@ describe('JHipster generator languages', function () {
             beforeEach(function (done) {
                 helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
-                        fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                        fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                     })
                     .withOptions({'skip-wiredep': true})
                     .withPrompts({
@@ -85,7 +85,7 @@ describe('JHipster generator languages', function () {
                     '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"');
                 assert.fileContent(CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
                     '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"');
-            })
+            });
         });
     });
 
@@ -94,7 +94,7 @@ describe('JHipster generator languages', function () {
             beforeEach(function (done) {
                 helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
-                        fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
+                        fse.copySync(path.join(__dirname, '../test/templates/social'), dir);
                     })
                     .withOptions({'skip-wiredep': true})
                     .withPrompts({

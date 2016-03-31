@@ -6,7 +6,7 @@ var util = require('util'),
     _ = require('lodash'),
     scriptBase = require('../generator-base'),
     mkdirp = require('mkdirp'),
-    html = require("html-wiring"),
+    html = require('html-wiring'),
     packagejs = require('../../package.json'),
     engine = require('ejs').render;
 
@@ -223,7 +223,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         saveConfig: function () {
@@ -302,7 +302,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
-            this.template('_eslintrc.json', '.eslintrc.json', this, {})
+            this.template('_eslintrc.json', '.eslintrc.json', this, {});
             this.template('_eslintignore', '.eslintignore', this, {});
             this.template('gulpfile.js', 'gulpfile.js', this, {});
             this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
@@ -578,7 +578,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.testFrameworks.indexOf('protractor') != -1) {
                 testTemplates.push('e2e/account/_account.js');
                 testTemplates.push('e2e/admin/_administration.js');
-                testTemplates.push('_protractor.conf.js')
+                testTemplates.push('_protractor.conf.js');
             }
             testTemplates.map(function (testTemplatePath) {
                 this.template(TEST_SRC_DIR + testTemplatePath, TEST_SRC_DIR + testTemplatePath.replace(/_/, ''), this, {});

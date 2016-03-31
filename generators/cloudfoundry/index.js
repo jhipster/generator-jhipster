@@ -49,11 +49,11 @@ module.exports = CloudFoundryGenerator.extend({
             message: 'Name to deploy as:',
             default: this.baseName
         },
-        {
-            type: 'list',
-            name: 'cloudfoundryProfile',
-            message: 'Which profile would you like to use?',
-            choices: [
+            {
+                type: 'list',
+                name: 'cloudfoundryProfile',
+                message: 'Which profile would you like to use?',
+                choices: [
                 {
                     value: 'dev',
                     name: 'dev'
@@ -63,24 +63,24 @@ module.exports = CloudFoundryGenerator.extend({
                     name: 'prod'
                 }
             ],
-            default: 0
-        },
-        {
-            when: function(response) {
+                default: 0
+            },
+            {
+                when: function(response) {
                 return databaseType != 'no';
             },
-            name: 'cloudfoundryDatabaseServiceName',
-            message: 'What is the name of your database service?',
-            default: 'elephantsql'
-        },
-        {
-            when: function(response) {
+                name: 'cloudfoundryDatabaseServiceName',
+                message: 'What is the name of your database service?',
+                default: 'elephantsql'
+            },
+            {
+                when: function(response) {
                 return databaseType != 'no';
             },
-            name: 'cloudfoundryDatabaseServicePlan',
-            message: 'What is the name of your database plan?',
-            default: 'turtle'
-        }];
+                name: 'cloudfoundryDatabaseServicePlan',
+                message: 'What is the name of your database plan?',
+                default: 'turtle'
+            }];
 
         this.prompt(prompts, function (props) {
             this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
@@ -124,7 +124,7 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
             var done = this.async();
 
-            this.log(chalk.bold("\nChecking for an existing Cloud Foundry hosting environment..."));
+            this.log(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
             var child = exec('cf app ' + this.cloudfoundryDeployedName + ' ', {}, function (err, stdout, stderr) {
                 var lines = stdout.split('\n');
                 var dist_repo = '';
@@ -141,11 +141,11 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
             var done = this.async();
 
-            this.log(chalk.bold("\nCreating your Cloud Foundry hosting environment, this may take a couple minutes..."));
+            this.log(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
             var insight = this.insight();
             insight.track('generator', 'cloudfoundry');
             if (this.databaseType != 'no') {
-                this.log(chalk.bold("Creating the database"));
+                this.log(chalk.bold('Creating the database'));
                 var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, {}, function (err, stdout, stderr) {
                     done();
                 }.bind(this));
@@ -213,7 +213,7 @@ module.exports = CloudFoundryGenerator.extend({
 
         restartApp: function () {
             if (this.abort || !this.cloudfoundry_remote_exists) return;
-            this.log(chalk.bold("\nRestarting your cloudfoundry app.\n"));
+            this.log(chalk.bold('\nRestarting your cloudfoundry app.\n'));
 
             var child = exec('cf restart ' + this.cloudfoundryDeployedName, function (err, stdout, stderr) {
                 this.log(chalk.green('\nYour app should now be live'));

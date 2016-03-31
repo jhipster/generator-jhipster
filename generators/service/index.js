@@ -38,7 +38,7 @@ module.exports = ServiceGenerator.extend({
                 message: '(1/1) Do you want to use an interface for your service?',
                 default: false
             }
-        ]
+        ];
         this.prompt(prompts, function (props) {
             this.useInterface = props.useInterface;
             cb();

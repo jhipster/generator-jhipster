@@ -50,7 +50,7 @@ module.exports = LanguagesGenerator.extend({
             if (!this.isSupportedLanguage(language)) {
                 this.env.error(chalk.red('\nERROR Unsupported language "' + language + '" passed as argument to language generator.' +
                     '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function (o) {
-                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')'
+                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')';
                     }).join(''))
                 );
             }
@@ -130,7 +130,7 @@ module.exports = LanguagesGenerator.extend({
             if (configOptions.nativeLanguage) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if (configOptions.enableSocialSignIn != null) {
+            if (configOptions.enableSocialSignIn !== undefined) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
             if (configOptions.skipClient) {

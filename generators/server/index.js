@@ -6,7 +6,7 @@ var util = require('util'),
     _ = require('lodash'),
     scriptBase = require('../generator-base'),
     packagejs = require('../../package.json'),
-    crypto = require("crypto"),
+    crypto = require('crypto'),
     mkdirp = require('mkdirp');
 
 var JhipsterServerGenerator = generators.Base.extend({});
@@ -749,7 +749,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             javaDir = this.javaDir = SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             this.testDir = SERVER_TEST_SRC_DIR + this.packageFolder + '/';
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         saveConfig: function () {
@@ -816,32 +816,32 @@ module.exports = JhipsterServerGenerator.extend({
             // Create Docker and Docker Compose files
             this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
             this.template(DOCKER_DIR + '_app.yml', DOCKER_DIR + 'app.yml', this, {});
-            if (this.prodDatabaseType == "mysql") {
+            if (this.prodDatabaseType == 'mysql') {
                 this.template(DOCKER_DIR + '_mysql.yml', DOCKER_DIR + 'mysql.yml', this, {});
             }
-            if (this.prodDatabaseType == "postgresql") {
+            if (this.prodDatabaseType == 'postgresql') {
                 this.template(DOCKER_DIR + '_postgresql.yml', DOCKER_DIR + 'postgresql.yml', this, {});
             }
-            if (this.prodDatabaseType == "mongodb") {
+            if (this.prodDatabaseType == 'mongodb') {
                 this.template(DOCKER_DIR + '_mongodb.yml', DOCKER_DIR + 'mongodb.yml', this, {});
                 this.template(DOCKER_DIR + '_mongodb-cluster.yml', DOCKER_DIR + 'mongodb-cluster.yml', this, {});
                 this.copy(DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', this, {});
             }
-            if (this.applicationType == 'gateway' || this.prodDatabaseType == "cassandra") {
+            if (this.applicationType == 'gateway' || this.prodDatabaseType == 'cassandra') {
                 this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
                 this.template(DOCKER_DIR + '_cassandra-opscenter.yml', DOCKER_DIR + 'cassandra-opscenter.yml', this, {});
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-OpsCenter.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
-                if (this.prodDatabaseType == "cassandra") {
+                if (this.prodDatabaseType == 'cassandra') {
                     this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
                 }
                 this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
-            if (this.searchEngine == "elasticsearch") {
+            if (this.searchEngine == 'elasticsearch') {
                 this.template(DOCKER_DIR + '_elasticsearch.yml', DOCKER_DIR + 'elasticsearch.yml', this, {});
             }
             if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
@@ -853,36 +853,36 @@ module.exports = JhipsterServerGenerator.extend({
         writeServerBuildFiles: function () {
 
             switch (this.buildTool) {
-                case 'gradle':
-                    this.template('_build.gradle', 'build.gradle', this, {});
-                    this.template('_settings.gradle', 'settings.gradle', this, {});
-                    this.template('_gradle.properties', 'gradle.properties', this, {});
-                    if (!this.skipClient) {
+            case 'gradle':
+                this.template('_build.gradle', 'build.gradle', this, {});
+                this.template('_settings.gradle', 'settings.gradle', this, {});
+                this.template('_gradle.properties', 'gradle.properties', this, {});
+                if (!this.skipClient) {
                         this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                     }
-                    this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
-                    this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
-                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                    if (this.testFrameworks.indexOf('gatling') != -1) {
+                this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
+                this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
+                this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                if (this.testFrameworks.indexOf('gatling') != -1) {
                         this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
                     }
-                    if (this.databaseType == "sql") {
+                if (this.databaseType == 'sql') {
                         this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle', this, {});
                     }
-                    this.copy('gradlew', 'gradlew');
-                    this.copy('gradlew.bat', 'gradlew.bat');
-                    this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
-                    this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
-                    break;
-                case 'maven':
-                default :
-                    this.copy('mvnw', 'mvnw');
-                    this.copy('mvnw.cmd', 'mvnw.cmd');
-                    this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
-                    this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
-                    this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
+                this.copy('gradlew', 'gradlew');
+                this.copy('gradlew.bat', 'gradlew.bat');
+                this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
+                this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
+                break;
+            case 'maven':
+            default :
+                this.copy('mvnw', 'mvnw');
+                this.copy('mvnw.cmd', 'mvnw.cmd');
+                this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
+                this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
+                this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
             }
         },
 
@@ -892,10 +892,10 @@ module.exports = JhipsterServerGenerator.extend({
             mkdirp(SERVER_MAIN_RES_DIR);
             this.copy(SERVER_MAIN_RES_DIR + 'banner.txt', SERVER_MAIN_RES_DIR + 'banner.txt');
 
-            if (this.hibernateCache == "ehcache") {
+            if (this.hibernateCache == 'ehcache') {
                 this.template(SERVER_MAIN_RES_DIR + '_ehcache.xml', SERVER_MAIN_RES_DIR + 'ehcache.xml', this, {});
             }
-            if (this.devDatabaseType == "h2Disk" || this.devDatabaseType == "h2Memory") {
+            if (this.devDatabaseType == 'h2Disk' || this.devDatabaseType == 'h2Memory') {
                 this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
             }
 
@@ -908,17 +908,17 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_RES_DIR + 'config/_application-dev.yml', SERVER_MAIN_RES_DIR + 'config/application-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_application-prod.yml', SERVER_MAIN_RES_DIR + 'config/application-prod.yml', this, {});
 
-            if (this.databaseType == "sql") {
+            if (this.databaseType == 'sql') {
                 this.template(SERVER_MAIN_RES_DIR + '/config/liquibase/changelog/_initial_schema.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': INTERPOLATE_REGEX});
                 this.copy(SERVER_MAIN_RES_DIR + '/config/liquibase/master.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml');
             }
 
-            if (this.databaseType == "mongodb") {
+            if (this.databaseType == 'mongodb') {
                 this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/authorities.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/authorities.xml');
                 this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/master.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/master.xml');
             }
 
-            if (this.databaseType == "cassandra" || this.applicationType == 'gateway') {
+            if (this.databaseType == 'cassandra' || this.applicationType == 'gateway') {
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_create-keyspace-prod.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace-prod.cql', this, {});
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_create-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_drop-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql', this, {});
@@ -1088,12 +1088,12 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_CassandraHealthIndicator.java', javaDir + 'config/metrics/CassandraHealthIndicator.java', this, {});
             }
 
-            if (this.hibernateCache == "hazelcast") {
+            if (this.hibernateCache == 'hazelcast') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
             }
 
-            if (this.databaseType == "sql") {
+            if (this.databaseType == 'sql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
             }
@@ -1109,7 +1109,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310LocalDateDeserializer.java', javaDir + 'domain/util/JSR310LocalDateDeserializer.java', this, {});
-            if (this.databaseType == "sql") {
+            if (this.databaseType == 'sql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
                 if (this.prodDatabaseType == 'postgresql') {
@@ -1185,7 +1185,7 @@ module.exports = JhipsterServerGenerator.extend({
 
             mkdirp(testDir);
 
-            if (this.databaseType == "cassandra") {
+            if (this.databaseType == 'cassandra') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/_CassandraKeyspaceUnitTest.java', testDir + 'CassandraKeyspaceUnitTest.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
             }
@@ -1196,11 +1196,11 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_TEST_RES_DIR + '_logback-test.xml', SERVER_TEST_RES_DIR + 'logback-test.xml', this, {});
 
             // Create Gateway tests files
-            if (this.applicationType == "gateway"){
+            if (this.applicationType == 'gateway'){
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
 
-            if (this.hibernateCache == "ehcache") {
+            if (this.hibernateCache == 'ehcache') {
                 this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});
             }
 
@@ -1231,13 +1231,13 @@ module.exports = JhipsterServerGenerator.extend({
             // user management related files
 
             /* User management resources files */
-            if (this.databaseType == "sql") {
+            if (this.databaseType == 'sql') {
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv');
             }
 
-            if (this.databaseType == "mongodb") {
+            if (this.databaseType == 'mongodb') {
                 this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml');
             }
@@ -1291,7 +1291,7 @@ module.exports = JhipsterServerGenerator.extend({
             /* User management java test files */
             var testDir = this.testDir;
 
-            if (this.databaseType == "sql" || this.databaseType == "mongodb") {
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
             }
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
