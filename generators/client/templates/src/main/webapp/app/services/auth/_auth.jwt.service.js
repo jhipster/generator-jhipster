@@ -39,7 +39,7 @@
                 "Authorization" : "Basic d2ViX2FwcDo="
             };
             return $http({
-                url: 'jhipsteruaa/oauth/token',
+                url: 'uaa/oauth/token',
                 method: 'post',
                 data: data,
                 headers: headers,

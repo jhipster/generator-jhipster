@@ -89,7 +89,7 @@ module.exports = yeoman.Base.extend({
                             if(file.isDirectory()) {
                                 if(shelljs.test('-f', file.name + '/.yo-rc.json')) {
                                     var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
-                                    if(fileData['generator-jhipster'].baseName !== undefined) {
+                                    if(fileData['generator-jhipster'].baseName !== undefined || fileData['generator-jhipster'].applicationType == 'uaa') {
                                         this.appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                                     }
                                 }
@@ -154,6 +154,10 @@ module.exports = yeoman.Base.extend({
                     var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
                     var fileData = this.fs.readJSON(path);
                     var config = fileData['generator-jhipster'];
+                    //this currently can happen, because the .yo-rc doesn't have a baseName
+                    if(fileData['generator-jhipster'].baseName === undefined) {
+                        config.baseName = 'uaa';
+                    }
                     this.appConfigs.push(config);
                 }
 
