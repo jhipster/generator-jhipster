@@ -8,14 +8,13 @@ var path = require('path'),
     Insight = require('insight'),
     fs = require('fs'),
     shelljs = require('shelljs'),
-    ejs = require('ejs'),
     packagejs = require('../package.json'),
     semver = require('semver'),
     exec = require('child_process').exec,
     os = require('os'),
     pluralize = require('pluralize');
 
-const JHIPSTER_CONFIG_DIR = ".jhipster";
+const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
 const WORD_WRAP_WIDTH = 80;
 
@@ -229,19 +228,19 @@ Generator.prototype.getAllInstalledLanguages = function () {
         }
     });
     return languages;
-}
+};
 /**
  * get all the languages supported by JHipster
  */
 Generator.prototype.getAllSupportedLanguages = function () {
     return _.map(this.getAllSupportedLanguageOptions(), 'value');
-}
+};
 /**
  * check if a language is supported by JHipster
  */
 Generator.prototype.isSupportedLanguage = function (language) {
     return _.includes(this.getAllSupportedLanguages(), language);
-}
+};
 /**
  * get all the languages options supported by JHipster
  */
@@ -273,7 +272,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Turkish', value: 'tr'},
         {name: 'Tamil', value: 'ta'}
     ];
-}
+};
 
 /**
  * Add new social configuration in the "application.yml".
@@ -319,7 +318,7 @@ Generator.prototype.addBowerDependency = function (name, version) {
             jsonObj.dependencies[name] = version;
         }, this);
     } catch (e) {
-        console.log(e)
+        this.log(e);
         this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
@@ -338,7 +337,7 @@ Generator.prototype.addBowerOverride = function (bowerPackageName, main, isIgnor
     try {
         jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
             var override = {};
-            if (main != null && main.length > 0) {
+            if (main !== undefined && main.length > 0) {
                 override['main'] = main;
             }
             if (isIgnored) {
@@ -388,7 +387,7 @@ Generator.prototype.addAngularJsModule = function (moduleName) {
             file: fullPath,
             needle: 'jhipster-needle-angularjs-add-module',
             splicable: [
-                "'" + moduleName + "',"
+                '\'' + moduleName + '\','
             ]
         }, this);
     } catch (e) {
@@ -490,7 +489,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
     var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
-        var serviceCode = "case '" + socialName + "': return '" + socialParameter + "';";
+        var serviceCode = 'case \'' + socialName + '\': return \'' + socialParameter + '\';';
         jhipsterUtils.rewriteFile({
             file: socialServicefullPath,
             needle: 'jhipster-needle-add-social-button',
@@ -809,28 +808,28 @@ Generator.prototype.applyFromGradleScript = function (name) {
 Generator.prototype.dateFormatForLiquibase = function () {
     var now = new Date();
     var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-    var year = "" + now_utc.getFullYear();
-    var month = "" + (now_utc.getMonth() + 1);
-    if (month.length == 1) {
-        month = "0" + month;
+    var year = '' + now_utc.getFullYear();
+    var month = '' + (now_utc.getMonth() + 1);
+    if (month.length === 1) {
+        month = '0' + month;
     }
-    var day = "" + now_utc.getDate();
-    if (day.length == 1) {
-        day = "0" + day;
+    var day = '' + now_utc.getDate();
+    if (day.length === 1) {
+        day = '0' + day;
     }
-    var hour = "" + now_utc.getHours();
-    if (hour.length == 1) {
-        hour = "0" + hour;
+    var hour = '' + now_utc.getHours();
+    if (hour.length === 1) {
+        hour = '0' + hour;
     }
-    var minute = "" + now_utc.getMinutes();
-    if (minute.length == 1) {
-        minute = "0" + minute;
+    var minute = '' + now_utc.getMinutes();
+    if (minute.length === 1) {
+        minute = '0' + minute;
     }
-    var second = "" + now_utc.getSeconds();
-    if (second.length == 1) {
-        second = "0" + second;
+    var second = '' + now_utc.getSeconds();
+    if (second.length === 1) {
+        second = '0' + second;
     }
-    return year + "" + month + "" + day + "" + hour + "" + minute + "" + second;
+    return year + '' + month + '' + day + '' + hour + '' + minute + '' + second;
 };
 
 /**
@@ -847,22 +846,23 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
 
     _this = _this !== undefined ? _this : this;
     _opt = _opt !== undefined ? _opt : {};
+    var regex;
     switch (action) {
-        case 'stripHtml' :
-            var regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
+    case 'stripHtml' :
+        regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
             //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
-            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
-            break;
-        case 'stripJs' :
-            var regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
+        jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
+        break;
+    case 'stripJs' :
+        regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
             //looks for something like mainTranslatePartialLoader: [*]
-            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
-            break;
-        case 'copy' :
-            _this.copy(source, dest);
-            break;
-        default:
-            _this.template(source, dest, _this, _opt);
+        jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
+        break;
+    case 'copy' :
+        _this.copy(source, dest);
+        break;
+    default:
+        _this.template(source, dest, _this, _opt);
     }
 };
 
@@ -957,7 +957,7 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
             hookFor: hookFor,
             hookType: hookType,
             generatorCallback: generatorCallback
-        }
+        };
         if (shelljs.test('-f', MODULES_HOOK_FILE)) {
             // file is present append to it
             try {
@@ -997,7 +997,7 @@ Generator.prototype.updateEntityConfig = function (file, key, value) {
         this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
     }
 
-}
+};
 
 /**
  * get the module hooks config json
@@ -1013,7 +1013,7 @@ Generator.prototype.getModuleHooks = function () {
     }
 
     return modulesConfig;
-}
+};
 
 /**
  * get sorted list of entities according to changelog date
@@ -1033,7 +1033,7 @@ Generator.prototype.getExistingEntities = function (warn) {
             entities.push({name: path.basename(file, '.json'), definition: definition});
         }, this);
     }
-    if (entities.length != unique_dates.size) {
+    if (entities.length !== unique_dates.size) {
         this.log(chalk.yellow('WARNING some of your entities have the same changelog dates so JHipster couldn\'t\n' +
             ' determine the order in which they should be generated. It is recommended to\n' +
             ' edit the changelog dates in the ' + JHIPSTER_CONFIG_DIR + 'folder and to relaunch this\n' +
@@ -1041,7 +1041,7 @@ Generator.prototype.getExistingEntities = function (warn) {
     }
 
     return entities.sort(isBefore);
-}
+};
 
 Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
@@ -1061,7 +1061,7 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     this.copyI18nFilesByName(_this, webappDir, 'user-management.json', lang);
 
     // tracker.json for Websocket
-    if (this.websocket == 'spring-websocket') {
+    if (this.websocket === 'spring-websocket') {
         this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
     }
 
@@ -1078,7 +1078,7 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
 
 Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
-    var lang_prop = lang.replace(/-/g, "_");
+    var lang_prop = lang.replace(/-/g, '_');
     _this.template(resourceDir + 'i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
 
 };
@@ -1109,14 +1109,14 @@ Generator.prototype.copyEnumI18n = function (language, enumInfo) {
 Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
     var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
     try {
-        var content = ".constant('LANGUAGES', [\n";
+        var content = '.constant(\'LANGUAGES\', [\n';
         for (var i = 0, len = languages.length; i < len; i++) {
             var language = languages[i];
-            content += "            '" + language + "'" + (i != languages.length - 1 ? "," : "") + "\n";
+            content += '            \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
         }
         content +=
-            "            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n" +
-            "        ]";
+            '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
+            '        ]';
 
         jhipsterUtils.replaceContent({
             file: fullPath,
@@ -1147,21 +1147,21 @@ Generator.prototype.insight = function () {
         packageVersion: packagejs.version
     });
     return insight;
-}
+};
 
 Generator.prototype.removefile = function (file) {
     if (shelljs.test('-f', file)) {
         this.log('Removing the file - ' + file);
         shelljs.rm(file);
     }
-}
+};
 
 Generator.prototype.removefolder = function (folder) {
     if (shelljs.test('-d', folder)) {
-        this.log('Removing the folder - ' + folder)
-        shelljs.rm("-rf", folder);
+        this.log('Removing the folder - ' + folder);
+        shelljs.rm('-rf', folder);
     }
-}
+};
 
 Generator.prototype.isJhipsterVersionLessThan = function (version) {
     var jhipsterVersion = this.config.get('jhipsterVersion');
@@ -1169,7 +1169,7 @@ Generator.prototype.isJhipsterVersionLessThan = function (version) {
         return true;
     }
     return semver.lt(jhipsterVersion, version);
-}
+};
 
 Generator.prototype.getDefaultAppName = function () {
     return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd()))) ? path.basename(process.cwd()) : 'jhipster';
@@ -1184,11 +1184,11 @@ Generator.prototype.formatAsFieldJavadoc = function (text) {
 };
 
 Generator.prototype.formatAsApiModel = function (text) {
-    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true)
+    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true);
 };
 
 Generator.prototype.formatAsApiModelProperty = function (text) {
-    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true)
+    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true);
 };
 
 Generator.prototype.printJHipsterLogo = function () {
@@ -1220,8 +1220,8 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
         type: 'input',
         name: 'baseName',
         validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input) && input != 'application') return true;
-            if (input == 'application') {
+            if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;
+            if (input === 'application') {
                 return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
             }
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
@@ -1339,12 +1339,12 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
 
 Generator.prototype.contains = _.includes;
 
-var wordwrap = function (text, width, seperator, keepLF) {
+function wordwrap (text, width, seperator, keepLF) {
     var wrappedText = '';
     var rows = text.split('\n');
     for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
-        if (keepLF == true && i != 0) {
+        if (keepLF === true && i !== 0) {
             wrappedText = wrappedText + '\\n';
         }
         wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;

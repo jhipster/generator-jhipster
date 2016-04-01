@@ -171,7 +171,7 @@ module.exports = JhipsterGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
-            var configFound = this.baseName != null && this.applicationType != null;
+            var configFound = this.baseName !== undefined && this.applicationType !== undefined;
             if (configFound) {
                 this.existingProject = true;
             }
@@ -250,7 +250,7 @@ module.exports = JhipsterGenerator.extend({
             configOptions.baseName = this.baseName;
             configOptions.logo = false;
             this.generatorType = 'app';
-            if (this.applicationType == 'microservice') {
+            if (this.applicationType === 'microservice') {
                 this.skipClient = true;
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = true;
@@ -389,7 +389,7 @@ module.exports = JhipsterGenerator.extend({
                     this.composeWith('jhipster:entity', {
                         options: {
                             regenerate: true,
-                            'skip-install': true,
+                            'skip-install': true
                         },
                         args: [entity.name]
                     }, {
@@ -408,7 +408,7 @@ module.exports = JhipsterGenerator.extend({
                     this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // run through all post app creation module hooks
                     modules.forEach(function (module) {
-                        if (module.hookFor == 'app' && module.hookType == 'post') {
+                        if (module.hookFor === 'app' && module.hookType === 'post') {
                             // compose with the modules callback generator
                             try {
                                 this.composeWith(module.generatorCallback, {

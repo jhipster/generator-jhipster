@@ -1,6 +1,6 @@
 'use strict';
 var path = require('path'),
-    html = require("html-wiring"),
+    html = require('html-wiring'),
     shelljs = require('shelljs'),
     engine = require('ejs').render,
     _ = require('lodash');
@@ -102,12 +102,12 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
     } else {
         var body = stripContent(source, regex, _this, _opt);
         switch (type) {
-            case 'html' :
-                body = replacePlaceholders(body, _this);
-                break;
-            case 'js' :
-                body = replaceTitle(body, _this, template);
-                break;
+        case 'html' :
+            body = replacePlaceholders(body, _this);
+            break;
+        case 'js' :
+            body = replaceTitle(body, _this, template);
+            break;
         }
         _this.write(dest, body);
     }
@@ -128,7 +128,7 @@ function replaceTitle(body, _this, template) {
     var re = /pageTitle[\s]*:[\s]*[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"]/g;
     var match;
 
-    while (match = re.exec(body)) {
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         var key = match[1], target = key;
         var jsonData = geti18nJson(key, _this);
@@ -144,7 +144,7 @@ function replacePlaceholders(body, _this) {
     var re = /placeholder=[\'|\"]([\{]{2}[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"][\s][\|][\s](translate)[\}]{2})[\'|\"]/g;
     var match;
 
-    while (match = re.exec(body)) {
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
         var key = match[2], target = match[1];
         var jsonData = geti18nJson(key, _this);
@@ -161,7 +161,7 @@ function geti18nJson(key, _this, template) {
     var i18nDirectory = LANGUAGES_MAIN_SRC_DIR + 'i18n/en/',
         name = _.kebabCase(key.split('.')[0]),
         filename = i18nDirectory + name + '.json',
-        keyValue, render = template;
+        render = template;
 
     if (!shelljs.test('-f', path.join(_this.sourceRoot(), filename))) {
         filename = i18nDirectory + '_' + name + '.json';
@@ -174,7 +174,7 @@ function geti18nJson(key, _this, template) {
         file = JSON.parse(file);
         return file;
     } catch (err) {
-        console.log('error' + err);
+        this.log('error' + err);
         // 'Error reading translation file!'
         return undefined;
     }
@@ -187,7 +187,7 @@ function deepFind(obj, path, placeholder) {
         paths.pop();
     }
     for (i = 0; i < paths.length; ++i) {
-        if (current[paths[i]] == undefined) {
+        if (current[paths[i]] === undefined) {
             return undefined;
         } else {
             current = current[paths[i]];

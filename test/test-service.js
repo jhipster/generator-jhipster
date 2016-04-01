@@ -14,7 +14,7 @@ describe('JHipster generator service', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/service'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({
@@ -40,7 +40,7 @@ describe('JHipster generator service', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/service'))
                 .inTmpDir(function (dir) {
-                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({

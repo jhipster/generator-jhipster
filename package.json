@@ -28,7 +28,8 @@
     "url": "git://github.com/jhipster/generator-jhipster.git"
   },
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "lint": "eslint ."
   },
   "dependencies": {
     "chalk": "1.1.1",
@@ -46,9 +47,10 @@
     "js-yaml": "3.5.5",
     "yo": "1.7.0",
     "semver": "5.1.0",
-    "jhipster-uml" : "1.6.1"
+    "jhipster-uml": "1.6.1"
   },
   "devDependencies": {
+    "eslint": "2.5.3",
     "fs-extra": "0.26.7",
     "mocha": "2.4.5",
     "yeoman-assert": "2.1.1",
