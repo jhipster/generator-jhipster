@@ -24,7 +24,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    public void configure(HttpSecurity http) throws Exception {
         http
             .csrf()
             .disable()

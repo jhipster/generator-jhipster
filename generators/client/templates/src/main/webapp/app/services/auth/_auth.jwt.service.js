@@ -32,10 +32,31 @@
             var data = {
                 username: credentials.username,
                 password: credentials.password,
-                rememberMe: credentials.rememberMe
+                grant_type: "password"
             };
-            return $http.post('api/authenticate', data).success(authenticateSuccess);
+            var headers = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "Authorization" : "Basic d2ViX2FwcDo="
+            };
+            return $http({
+                url: 'jhipsteruaa/oauth/token',
+                method: 'post',
+                data: data,
+                headers: headers,
+                transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj) {
+                    str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+                }
+                return str.join('&');
+            }
+            }).then(function (data) {
+                var accessToken = data.data["access_token"];
+                if(angular.isDefined(accessToken)) {
+                    service.storeAuthenticationToken(accessToken, credentials.rememberMe);
+                }
 
+            });
             function authenticateSuccess (data, status, headers) {
                 var bearerToken = headers('Authorization');
                 if (angular.isDefined(bearerToken) && bearerToken.slice(0, 7) === 'Bearer ') {

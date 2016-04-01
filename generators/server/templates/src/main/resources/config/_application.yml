@@ -29,7 +29,11 @@ zuul:
 
 spring:
     application:
+        <%_ if (applicationType == 'uaa') { _%>
+        name: uaa
+        <%_ } else { _%>
         name: <%= baseName %>
+        <%_ } _%>
     <%_ if (databaseType == 'sql') { _%>
     jpa:
         open-in-view: false
@@ -93,7 +97,7 @@ jhipster:
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
-                # tokenValidityInSeconds: 86400 //currently not used with uaa-server PRA
+                tokenValidityInSeconds: 86400 //currently not used with uaa-server PRA
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:

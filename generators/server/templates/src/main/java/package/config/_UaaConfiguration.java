@@ -93,6 +93,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .withClient("web_app")
             .scopes("web-app")
             .autoApprove(true)
+            .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
             .and()
             .withClient("internal")
