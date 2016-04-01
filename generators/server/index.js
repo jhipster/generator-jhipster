@@ -643,7 +643,6 @@ module.exports = JhipsterServerGenerator.extend({
                 }
 
                 if (this.authenticationType == 'jwt' || this.applicationType == 'microservice' || this.applicationType == 'uaa') {
-                
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
@@ -653,7 +652,7 @@ module.exports = JhipsterServerGenerator.extend({
                 }
 
                 if(this.applicationType == 'uaa') {
-                    this.baseName = 'JHipsterUAA';
+                    this.baseName = 'UAA';
                 }
 
                 this.packageName = props.packageName;
@@ -951,9 +950,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
 
-
-            if (this.authenticationType == 'jwt' && applicationType == 'monolith') {
-
+            if (this.authenticationType == 'jwt' && this.applicationType == 'monolith') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/jwt/_TokenProvider.java', javaDir + 'security/jwt/TokenProvider.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/jwt/_JWTConfigurer.java', javaDir + 'security/jwt/JWTConfigurer.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/jwt/_JWTFilter.java', javaDir + 'security/jwt/JWTFilter.java', this, {});
@@ -1048,7 +1045,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway') return;
+            if (this.applicationType != 'microservice' && this.applicationType != 'gateway'  && this.applicationType != 'uaa') return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});

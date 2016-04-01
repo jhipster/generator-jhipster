@@ -11,7 +11,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 eureka:
     instance:
         appname: <%= baseName %>
@@ -97,7 +97,7 @@ jhipster:
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
-                tokenValidityInSeconds: 86400 //currently not used with uaa-server PRA
+                tokenValidityInSeconds: 86400
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:

@@ -8,7 +8,7 @@
     Account.$inject = ['$resource'];
 
     function Account ($resource) {
-        var service = $resource(<%= if(applicationType == 'gateway') { %>'uaa/api/account'<%} else { %>'api/account'<% } %>, {}, {
+        var service = $resource(<% if(applicationType == 'gateway') { %>'uaa/api/account'<%} else { %>'api/account'<% } %>, {}, {
             'get': { method: 'GET', params: {}, isArray: false,
                 interceptor: {
                     response: function(response) {
