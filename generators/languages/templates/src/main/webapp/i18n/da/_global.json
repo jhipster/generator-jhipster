@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "Hvis du ønsker at <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
-                "register": "You don't have an account yet? <a class=\"alert-link\" ui-sref=\"register\">Register a new account</a>"
+                "register": "You don't have an account yet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Register a new account</a>"
             },
             "error": {
                 "dontmatch": "Kodeordet og dets bekræftelse matcher ikke!"
