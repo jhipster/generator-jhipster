@@ -90,8 +90,8 @@ jhipster:
         #max-age: 1800
     mail:
         from: <%= baseName %>@localhost
-    security:
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || applicationType == 'uaa') { _%>
+security:
         authentication:
     <%_ if (authenticationType == 'jwt' || applicationType == 'uaa') { _%>
             jwt:
@@ -108,6 +108,7 @@ jhipster:
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
+security:
         rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>

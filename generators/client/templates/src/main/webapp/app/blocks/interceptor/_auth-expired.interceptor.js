@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .factory('authExpiredInterceptor', authExpiredInterceptor);
 
-    <% if (authenticationType === 'oauth2' || authenticationType === 'jwt') { %>
+    <% if (authenticationType === 'oauth2' || authenticationType === 'jwt' || applicationType == 'gateway') { %>
     authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$sessionStorage'];
 
     function authExpiredInterceptor($rootScope, $q, $injector, $localStorage, $sessionStorage) {
