@@ -163,16 +163,16 @@ module.exports = yeoman.Base.extend({
 
         askForClustersMode: function () {
             if(this.abort) return;
-            var done = this.async();
-            var mongoApps = [];
 
+            var mongoApps = [];
             for (var i = 0; i < this.appConfigs.length; i++) {
                 if(this.appConfigs[i].prodDatabaseType === 'mongodb') {
                     mongoApps.push(this.appsFolders[i]);
                 }
             }
-
             if(mongoApps.length===0) return;
+
+            var done = this.async();
 
             var prompts = [{
                 type: 'checkbox',
