@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">인증</a>을 원하시면, 기본 계정을 사용할 수 있습니다:<br/>- 관리자 (아이디=\"admin\", 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\", 비밀번호=\"user\").",
-                "register": "아직 계정이 없습니까? <a class=\"alert-link\" ui-sref=\"register\">새로운 계정을 등록하세요</a>"
+                "register": "아직 계정이 없습니까? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">새로운 계정을 등록하세요</a>"
             },
             "error": {
                 "dontmatch" : "비밀번호가 일치하지 않습니다!"
