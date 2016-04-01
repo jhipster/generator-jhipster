@@ -905,9 +905,13 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_RES_DIR + '_logback-spring.xml', SERVER_MAIN_RES_DIR + 'logback-spring.xml', this, {'interpolate': INTERPOLATE_REGEX});
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_application.yml', SERVER_MAIN_RES_DIR + 'config/application.yml', this, {});
-            this.template(SERVER_MAIN_RES_DIR + 'config/_application-dev.yml', SERVER_MAIN_RES_DIR + 'config/application-dev.yml', this, {});
-            this.template(SERVER_MAIN_RES_DIR + 'config/_application-prod.yml', SERVER_MAIN_RES_DIR + 'config/application-prod.yml', this, {});
-
+            if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+                this.template(SERVER_MAIN_RES_DIR + 'config/_application-dev.yml', SERVER_MAIN_RES_DIR + 'config/' + this.baseName + '-dev.yml', this, {});
+                this.template(SERVER_MAIN_RES_DIR + 'config/_application-prod.yml', SERVER_MAIN_RES_DIR + 'config/' + this.baseName + '-prod.yml', this, {});
+            } else {
+                this.template(SERVER_MAIN_RES_DIR + 'config/_application-dev.yml', SERVER_MAIN_RES_DIR + 'config/application-dev.yml', this, {});
+                this.template(SERVER_MAIN_RES_DIR + 'config/_application-prod.yml', SERVER_MAIN_RES_DIR + 'config/application-prod.yml', this, {});
+            }
             if (this.databaseType == "sql") {
                 this.template(SERVER_MAIN_RES_DIR + '/config/liquibase/changelog/_initial_schema.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': INTERPOLATE_REGEX});
                 this.copy(SERVER_MAIN_RES_DIR + '/config/liquibase/master.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml');

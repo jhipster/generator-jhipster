@@ -13,6 +13,8 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -69,6 +71,19 @@ public class <%= mainClass %> {
         }
     }
 
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    /**
+     * Checks that <%= baseName %> application properties are not stored in resources, they must be moved to Registry.
+     */
+    public static void checkCentralConfigFiles() {
+        Resource config = new ClassPathResource("config/<%= baseName %>.yml");
+        if (config.exists()) {
+            String error= "You must move src/main/resources/config/<%= baseName %>*.yml files to JHipster Registry's central-config folder";
+            throw new IllegalStateException(error);
+        }
+    }
+<%_ } _%>
+
     /**
      * Main method, used to run the application.
      *
@@ -76,6 +91,9 @@ public class <%= mainClass %> {
      * @throws UnknownHostException if the local host name could not be resolved into an address
      */
     public static void main(String[] args) throws UnknownHostException {
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        checkCentralConfigFiles();
+<%_ } _%>
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
         addDefaultProfile(app, source);

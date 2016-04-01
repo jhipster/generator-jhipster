@@ -346,6 +346,8 @@ const expectedFiles = {
     ],
 
     gateway: [
+        SERVER_MAIN_RES_DIR + 'config/jhipster-dev.yml',
+        SERVER_MAIN_RES_DIR + 'config/jhipster-prod.yml',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/GatewayConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingRepository.java',
@@ -358,6 +360,8 @@ const expectedFiles = {
     ],
 
     microservice: [
+        SERVER_MAIN_RES_DIR + 'config/jhipster-dev.yml',
+        SERVER_MAIN_RES_DIR + 'config/jhipster-prod.yml',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java'
     ],
 
