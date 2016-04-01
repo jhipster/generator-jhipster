@@ -135,7 +135,7 @@ liquibase:
     contexts: dev
 
 server:
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     port: <%= serverPort %>
 <%_ } else { _%>
     port: 8080
