@@ -33,35 +33,6 @@ function Generator() {
 util.inherits(Generator, yeoman.Base);
 
 /**
- * A a new message format to the application, in the bower.json file.
- *
- * This is used for internationalization.
- * @param {string} language - name of the messageformat language
- */
-Generator.prototype.addMessageformatLocaleToBowerOverride = function (language) {
-    var fullPath = 'bower.json';
-    try {
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
-            var messageformatLocale = 'locale/' + language + '.js';
-            if (jsonObj.overrides === undefined) {
-                jsonObj.overrides = {};
-            }
-            if (jsonObj.overrides.messageformat === undefined) {
-                jsonObj.overrides.messageformat = {};
-            }
-            if (jsonObj.overrides.messageformat.main === undefined) {
-                jsonObj.overrides.messageformat.main = ['messageformat.js'];
-            }
-            if (!_.includes(jsonObj.overrides.messageformat.main, messageformatLocale)) {
-                jsonObj.overrides.messageformat.main.push(messageformatLocale);
-            }
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Messageformat locale override not added for language: ' + language + ' to ') + 'bower override configuration ' + chalk.yellow(' not added.\n'));
-    }
-};
-
-/**
  * Add a new menu element, at the root of the menu.
  *
  * @param {string} routerName - The name of the AngularJS router that is added to the menu.

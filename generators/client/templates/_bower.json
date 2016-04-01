@@ -32,6 +32,7 @@
     "bootstrap-ui-datetime-picker": "2.2.3",
     "jquery": "2.2.2",
     "json3": "3.3.2",
+    "messageformat": "0.3.1",
     "modernizr": "3.3.1",
     "ng-file-upload": "12.0.4",
     "ngInfiniteScroll": "1.2.2",
