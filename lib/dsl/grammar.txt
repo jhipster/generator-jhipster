@@ -65,8 +65,11 @@ prog
 
 //Entities
 entityDecl
-  = jd:Comment? space* JDLComment? space* "entity" space* e:ENTITYNAME space* eb:entityBody? space* JDLComment? {return {"name" : e, "body":eb, "javadoc":jd};}
+  = jd:Comment? space* JDLComment? space* "entity" space* e:ENTITYNAME space* tableName:entityTableNameDecl? space* eb:entityBody? space* JDLComment? {return {"name" : e, tableName: tableName ? tableName : e, "body":eb, "javadoc":jd};}
   / "entity" space* e:ENTITYNAME space* eb:entityBody? {return {"name" : e, "body":eb, "javadoc":""};}           
+ 
+entityTableNameDecl
+  = '(' space* name:[A-z0..9_-]+ space* ')' {return name.join('');}
  
 entityBody
   = "{" space* JDLComment? space* fdl:fieldDeclList space* JDLComment? space* "}" {return fdl;}
