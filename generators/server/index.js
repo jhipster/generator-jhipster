@@ -194,6 +194,10 @@ module.exports = JhipsterServerGenerator.extend({
                     this.languages = ['en', 'fr'];
                 }
 
+                if(this.applicationType == 'gateway') {
+                    this.skipUserManagement = true;
+                }
+
                 this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
                     'to re-generate the project...\n'));
 
