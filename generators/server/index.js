@@ -156,7 +156,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             var serverConfigFound = this.packageName !== undefined &&
-                this.authenticationType !== undefined &&
+                (this.authenticationType !== undefined || (this.applicationType !== undefined && this.applicationType == 'gateway') )&&
                 this.hibernateCache !== undefined &&
                 this.clusteredHttpSession !== undefined &&
                 this.websocket !== undefined &&
