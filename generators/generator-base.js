@@ -47,7 +47,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             splicable: [
                 '<li ui-sref-active="active" >\n' +
                 '                    <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
-                '                        <span class="glyphicon glyphicon-' + glyphiconName + '></span>&nbsp;\n' +
+                '                        <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
                 '                        <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                    </a>\n' +
                 '                </li>'
@@ -74,7 +74,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             splicable: [
                 '<li ui-sref-active="active" >\n' +
                 '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
-                '                                <span class="glyphicon glyphicon-' + glyphiconName + '></span>&nbsp;\n' +
+                '                                <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
                 '                                <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
                 '                        </li>'
