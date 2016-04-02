@@ -28,6 +28,10 @@ war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
 }<% } %>
 
+task gulpConstantDev(type: GulpTask) {
+    args = ["ngconstant:dev", "--no-notification"]
+}
+
 task setProdProperties(dependsOn: bootRun) << {
     doFirst {
         System.setProperty('spring.profiles.active', profiles)
@@ -42,4 +46,4 @@ processResources {
     }
 }
 
-setProdProperties.dependsOn 'gulp_ngconstant:dev'
+setProdProperties.dependsOn gulpConstantDev
