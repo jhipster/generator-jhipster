@@ -8,7 +8,8 @@
     "DSL"
   ],
   "scripts": {
-    "test": "mocha test/spec/**/*.js"
+    "test": "mocha test/spec/**/*.js",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/spec/**/*.js -- --ui bdd -R spec -t 5000"
   },
   "homepage": "https://github.com/jhipster/jhipster-domain-language#readme",
   "repository": {
@@ -29,7 +30,8 @@
   "devDependencies": {
     "pegjs": "0.9.0",
     "mocha": "2.4.5",
-    "chai": "3.5.0"
+    "chai": "3.5.0",
+    "istanbul": "0.4.2"
   },
   "peerDependencies": {},
   "engines": {
