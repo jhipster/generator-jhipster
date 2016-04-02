@@ -91,7 +91,7 @@ jhipster:
     mail:
         from: <%= baseName %>@localhost
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || applicationType == 'uaa') { _%>
-security:
+    security:
         authentication:
     <%_ if (authenticationType == 'jwt' || applicationType == 'uaa') { _%>
             jwt:
@@ -108,7 +108,7 @@ security:
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
-security:
+    security:
         rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
