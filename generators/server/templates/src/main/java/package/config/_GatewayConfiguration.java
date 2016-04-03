@@ -24,7 +24,7 @@ public class GatewayConfiguration {
     }
 
     @Configuration
-    public static class AccessControlFilter {
+    public static class AccessControlFilterConfiguration {
 
         @Bean
         public AccessControlFilter accessControlFilter(){
