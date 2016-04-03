@@ -267,6 +267,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Portuguese', value: 'pt-pt'},
         {name: 'Romanian', value: 'ro'},
         {name: 'Russian', value: 'ru'},
+        {name: 'Slovak', value: 'sk'},
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
