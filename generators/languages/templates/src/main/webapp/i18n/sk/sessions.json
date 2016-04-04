@@ -1,15 +1,15 @@
 {
     "sessions": {
-        "title": "Active sessions for [<b>{{username}}</b>]",
+        "title": "Aktívne sedenia používateľa [<b>{{username}}</b>]",
         "table": {
-            "ipaddress": "IP address",
+            "ipaddress": "IP adresa",
             "useragent": "User Agent",
-            "date": "Date",
-            "button": "Invalidate"
+            "date": "Dátum",
+            "button": "Zrušiť"
         },
         "messages": {
-            "success": "<strong>Session invalidated!</strong>",
-            "error": "<strong>An error has occurred!</strong> The session could not be invalidated."
+            "success": "<strong>Sedenie bolo zrušené!</strong>",
+            "error": "<strong>Vyskytla sa chyba!</strong> Sedenie nemohlo byť zrušené."
         }
     }
 }

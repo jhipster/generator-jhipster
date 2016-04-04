@@ -1,28 +1,28 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Obnoviť heslo",
             "form": {
-                "button": "Reset password"
+                "button": "Obnoviť heslo"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "Zadajte e-mailovú adresu, ktorú ste použili pri registrácii",
+                "success": "Na Váš e-mail sme Vám poslali informácie o tom ako si môžete obnoviť Vaše heslo.",
+                "notfound": "<strong>E-mailová adresa nebola registrovaná!</strong> Prosím skontrolujte alebo skúste zadať znovu."
 
             }
 
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "Obnoviť heslo",
             "form": {
-                "button": "Validate new password"
+                "button": "Overiť nové heslo"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "info": "Vyberte si nové heslo",
+                "success": "<strong>Vaše heslo bolo obnovené.</strong> Môžete sa <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prihlásiť</a>.",
+                "keymissing": "Chýba kľúč na obnovenie hesla.",
+                "error": "Vaše heslo nemohlo byť obnovené. Požiadavka na obnovenie hesla je platná len 24 hodín."
             }
         }
     }

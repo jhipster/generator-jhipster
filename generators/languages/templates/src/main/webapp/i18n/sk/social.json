@@ -1,13 +1,13 @@
 {
     "social": {
-        "btnLabel": "Sign in with {{ label }}",
+        "btnLabel": "Prihlásiť sa pomocou {{ label }}",
         "register": {
-            "title": "Register with {{ label }}",
-            "errorTitle": "Register with an external account",
+            "title": "Registrovať sa pomocou {{ label }}",
+            "errorTitle": "Registrovať sa pomocou externého účtu",
             "messages": {
-                "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+                "success": "<strong>Registrácia uložená!</strong> Pre potvrdenie registrácie si prosím skontrolujte vašu e-mailovú schránku.",
                 "error": {
-                    "fail": "<strong>Registration failed!</strong> A problem occurred during the validation of your external account, we advise you to try with another connection."
+                    "fail": "<strong>Registrácia zlyhala!</strong> Vyskytol sa problém pri overovaní externého účtu, odporúčame Vám vyskúšať to s iným pripojením."
                 }
             }
         }
