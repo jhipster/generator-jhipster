@@ -159,6 +159,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/configuration/ui").permitAll()
             .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'jwt') { %>;<% } %><% if (authenticationType == 'jwt') { %>
+            <%_ if (applicationType == 'gateway') { _%>
+            .antMatchers("/swagger-resources").permitAll()
+            .antMatchers("/").permitAll()
+            .anyRequest().authenticated() <% } %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
