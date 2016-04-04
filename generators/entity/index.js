@@ -232,6 +232,7 @@ module.exports = EntityGenerator.extend({
         }
         if (this.applicationType === 'gateway'){
             this.microserviceName = this.fileData.microserviceName;
+            this.skipServer = !_.isUndefined(this.microserviceName);
             this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
     },
@@ -1080,7 +1081,6 @@ module.exports = EntityGenerator.extend({
                     }
                     this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
                     this.useConfigurationFile = true;
-                    this.skipServer = true;
                     this._loadJson();
                 }
                 cb();
