@@ -84,7 +84,7 @@ module.exports = LanguagesGenerator.extend({
     },
 
     prompting: function () {
-        if (this.currentLanguages || this.languages) return;
+        //if (this.currentLanguages || this.languages) return;
 
         var cb = this.async();
         var languageOptions = this.getAllSupportedLanguageOptions();
