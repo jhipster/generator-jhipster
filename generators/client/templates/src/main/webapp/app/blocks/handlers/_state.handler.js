@@ -65,7 +65,7 @@
 
             function back() {
                 // If previous state is 'activate' or do not exist go to 'home'
-                if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
+                if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === undefined) {
                     $state.go('home');
                 } else {
                     $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
