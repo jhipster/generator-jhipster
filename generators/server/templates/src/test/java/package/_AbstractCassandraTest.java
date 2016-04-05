@@ -29,7 +29,7 @@ public class AbstractCassandraTest {
         Session session = cluster.connect();
         CQLDataLoader dataLoader = new CQLDataLoader(session);
         dataLoader.load(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "cassandra_unit_keyspace"));
-        applyScripts(dataLoader, "config/cql/", "*_added_entity_*.cql");
+        applyScripts(dataLoader, "config/cql/changelog", "*.cql");
     }
 
     private static void applyScripts(CQLDataLoader dataLoader, String cqlDir, String pattern) throws IOException, URISyntaxException {

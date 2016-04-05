@@ -44,7 +44,6 @@ log "execute migration scripts"
 log "create keyspace and base tables"
 . ./usr/local/bin/init-dev
 
-executeScripts /cql/*_added_entity_*.cql
-executeScripts /cql/migration/V*.cql
+executeScripts /cql/changelog/*.cql
 
 log "migration done"

@@ -1665,8 +1665,8 @@ module.exports = EntityGenerator.extend({
                 this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
             }
             if (this.databaseType === 'cassandra') {
-                this.template(SERVER_MAIN_RES_DIR + 'config/cql/_added_entity.cql',
-                    SERVER_MAIN_RES_DIR + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
+                this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_added_entity.cql',
+                    SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
             }
         },
 
