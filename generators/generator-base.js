@@ -229,18 +229,22 @@ Generator.prototype.getAllInstalledLanguages = function () {
     });
     return languages;
 };
+
 /**
  * get all the languages supported by JHipster
  */
 Generator.prototype.getAllSupportedLanguages = function () {
     return _.map(this.getAllSupportedLanguageOptions(), 'value');
 };
+
 /**
  * check if a language is supported by JHipster
+ * @param {string} language - Key for the language
  */
 Generator.prototype.isSupportedLanguage = function (language) {
     return _.includes(this.getAllSupportedLanguages(), language);
 };
+
 /**
  * get all the languages options supported by JHipster
  */
@@ -838,14 +842,14 @@ Generator.prototype.dateFormatForLiquibase = function () {
  * @param {string} source - path of the source file to copy from
  * @param {string} dest - path of the destination file to copy to
  * @param {string} action - type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
- * @param {object} _this - context that can be used as the generator instance or data to process template
- * @param {object} _opt - options that can be passed to template method
+ * @param {object} generator - context that can be used as the generator instance or data to process template
+ * @param {object} opt - options that can be passed to template method
  * @param {boolean} template - flag to use template method instead of copy method
  */
-Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, template) {
+Generator.prototype.copyTemplate = function (source, dest, action, generator, opt, template) {
 
-    _this = _this !== undefined ? _this : this;
-    _opt = _opt !== undefined ? _opt : {};
+    var _this = generator || this;
+    var _opt = opt || {};
     var regex;
     switch (action) {
     case 'stripHtml' :
@@ -871,12 +875,12 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
  *
  * @param {string} source - path of the source file to copy from
  * @param {string} dest - path of the destination file to copy to
- * @param {object} _this - context that can be used as the generator instance or data to process template
- * @param {object} _opt - options that can be passed to template method
+ * @param {object} generator - context that can be used as the generator instance or data to process template
+ * @param {object} opt - options that can be passed to template method
  * @param {boolean} template - flag to use template method instead of copy
  */
-Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
-    this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
+Generator.prototype.copyHtml = function (source, dest, generator, opt, template) {
+    this.copyTemplate(source, dest, 'stripHtml', generator, opt, template);
 };
 
 /**
@@ -884,12 +888,12 @@ Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
  *
  * @param {string} source - path of the source file to copy from
  * @param {string} dest - path of the destination file to copy to
- * @param {object} _this - context that can be used as the generator instance or data to process template
- * @param {object} _opt - options that can be passed to template method
+ * @param {object} generator - context that can be used as the generator instance or data to process template
+ * @param {object} opt - options that can be passed to template method
  * @param {boolean} template - flag to use template method instead of copy
  */
-Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
-    this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
+Generator.prototype.copyJs = function (source, dest, generator, opt, template) {
+    this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
 };
 
 /**
@@ -1016,11 +1020,10 @@ Generator.prototype.getModuleHooks = function () {
 };
 
 /**
- * get sorted list of entities according to changelog date
+ * get sorted list of entities according to changelog date (i.e. the order in which they were added)
  */
-Generator.prototype.getExistingEntities = function (warn) {
+Generator.prototype.getExistingEntities = function () {
     var entities = [];
-    var unique_dates = new Set();
 
     function isBefore(e1, e2) {
         return e1.definition.changelogDate - e2.definition.changelogDate;
@@ -1029,19 +1032,29 @@ Generator.prototype.getExistingEntities = function (warn) {
     if (shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
         shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach(function (file) {
             var definition = this.fs.readJSON(file);
-            unique_dates.add(definition.changelogDate);
             entities.push({name: path.basename(file, '.json'), definition: definition});
         }, this);
-    }
-    if (entities.length !== unique_dates.size) {
-        this.log(chalk.yellow('WARNING some of your entities have the same changelog dates so JHipster couldn\'t\n' +
-            ' determine the order in which they should be generated. It is recommended to\n' +
-            ' edit the changelog dates in the ' + JHIPSTER_CONFIG_DIR + 'folder and to relaunch this\n' +
-            ' generator.'));
     }
 
     return entities.sort(isBefore);
 };
+
+/**
+ * Copy i18 files for given language
+ *
+ * @param {object} generator - context that can be used as the generator instance or data to process template
+ * @param {string} webappDir - webapp directory path
+ * @param {string} fileToCopy - file name to copy
+ * @param {string} lang - language for which file needs to be copied
+ */
+Generator.prototype.copyI18nFilesByName = function (generator, webappDir, fileToCopy, lang) {
+    var _this = generator || this;
+    _this.copy(webappDir + 'i18n/' + lang + '/' + fileToCopy, webappDir + 'i18n/' + lang + '/' + fileToCopy);
+};
+
+/*========================================================================*/
+/* private methods use within generator (not exposed to modules)*/
+/*========================================================================*/
 
 Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
@@ -1081,10 +1094,6 @@ Generator.prototype.installI18nServerFilesByLanguage = function (_this, resource
     var lang_prop = lang.replace(/-/g, '_');
     _this.template(resourceDir + 'i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
 
-};
-
-Generator.prototype.copyI18nFilesByName = function (_this, webappDir, fileToCopy, lang) {
-    _this.copy(webappDir + 'i18n/' + lang + '/' + fileToCopy, webappDir + 'i18n/' + lang + '/' + fileToCopy);
 };
 
 Generator.prototype.copyI18n = function (language) {
@@ -1176,19 +1185,19 @@ Generator.prototype.getDefaultAppName = function () {
 };
 
 Generator.prototype.formatAsClassJavadoc = function (text) {
-    return '/**' + wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
+    return '/**' + jhipsterUtils.wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
 };
 
 Generator.prototype.formatAsFieldJavadoc = function (text) {
-    return '    /**' + wordwrap(text, WORD_WRAP_WIDTH - 8, '\n     * ', false) + '\n     */';
+    return '    /**' + jhipsterUtils.wordwrap(text, WORD_WRAP_WIDTH - 8, '\n     * ', false) + '\n     */';
 };
 
 Generator.prototype.formatAsApiModel = function (text) {
-    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true);
+    return jhipsterUtils.wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true);
 };
 
 Generator.prototype.formatAsApiModelProperty = function (text) {
-    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true);
+    return jhipsterUtils.wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true);
 };
 
 Generator.prototype.printJHipsterLogo = function () {
@@ -1338,16 +1347,3 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
 };
 
 Generator.prototype.contains = _.includes;
-
-function wordwrap (text, width, seperator, keepLF) {
-    var wrappedText = '';
-    var rows = text.split('\n');
-    for (var i = 0; i < rows.length; i++) {
-        var row = rows[i];
-        if (keepLF === true && i !== 0) {
-            wrappedText = wrappedText + '\\n';
-        }
-        wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;
-    }
-    return wrappedText;
-}
