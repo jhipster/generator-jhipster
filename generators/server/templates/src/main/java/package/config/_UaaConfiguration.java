@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @EnableResourceServer
-    static class ResourceServcerConfiguration extends ResourceServerConfigurerAdapter {
+    static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
         @Inject
         TokenStore tokenStore;
