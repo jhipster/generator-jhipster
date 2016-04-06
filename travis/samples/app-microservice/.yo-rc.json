@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "microservice",
-    "baseName": "sampleDefault",
+    "baseName": "travisMicroservice",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "jwt",
@@ -16,6 +16,8 @@
     "buildTool": "maven",
     "jwtSecretKey": "secret-key",
     "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
     "enableSocialSignIn": false,
     "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
@@ -23,6 +25,7 @@
     ],
     "enableSocialSignIn": false,
     "skipClient": true,
-    "skipUserManagement": true
+    "skipUserManagement": true,
+    "travis": true
   }
 }

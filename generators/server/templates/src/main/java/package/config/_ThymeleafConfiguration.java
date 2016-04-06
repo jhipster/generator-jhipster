@@ -3,9 +3,7 @@ package <%=packageName%>.config;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration

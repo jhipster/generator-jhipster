@@ -10,7 +10,18 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+eureka:
+    client:
+        enabled: false
+    instance:
+        appname: <%= baseName %>
+        instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
+
+<%_ } _%>
 spring:
+    application:
+        name: <%= baseName %>
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
@@ -109,9 +120,11 @@ jhipster:
                 tokenValidityInSeconds: 1800
     <%_ } _%>
 <%_ } _%>
-        rememberme:
+<%_ if (authenticationType == 'session') { _%>
+        rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
+<%_ } _%>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
     swagger:
@@ -119,6 +132,9 @@ jhipster:
         description: <%=baseName%> API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:
+        enabled: false

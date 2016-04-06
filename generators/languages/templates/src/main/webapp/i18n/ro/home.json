@@ -11,9 +11,9 @@
             "stackoverflow": "JHipster pe Stack Overflow",
             "bugtracker": "JHipster bug tracker",
             "chat": "Camera de chat publică pentru JHipster",
-            "contact": "contactează @java_hipster pe Twitter"
+            "follow": "contactează @java_hipster pe Twitter"
         },
         "like": "Dacă iți place JHipster nu uita să ne dai o stea pe",
-        "github": "Github"
+        "github": "GitHub"
     }
 }

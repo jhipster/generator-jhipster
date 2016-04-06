@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "sampleMysql",
+    "baseName": "travisMysql",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
@@ -15,10 +15,14 @@
     "useSass": false,
     "buildTool": "maven",
     "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
     "enableSocialSignIn": false,
-    "rememberMeKey": "338224d584859bd80d093bc4346526637190816b",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
-      "gatling"
-    ]
+      "gatling",
+      "protractor"
+    ],
+    "travis": true
   }
 }

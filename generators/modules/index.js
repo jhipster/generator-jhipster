@@ -1,13 +1,11 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
@@ -16,21 +14,22 @@ var ModulesGenerator = generators.Base.extend({});
 util.inherits(ModulesGenerator, scriptBase);
 
 module.exports = ModulesGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
 
         var jhipsterVar = this.options.jhipsterVar;
         var jhipsterFunc = this.options.jhipsterFunc;
-        if (jhipsterVar == null || jhipsterVar.moduleName == null) {
+        if (jhipsterVar === undefined || jhipsterVar.moduleName === undefined) {
             this.env.error(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
-        };
+        }
+
         this.log('Composing JHipster configuration with module ' + chalk.red(jhipsterVar.moduleName));
 
         var baseName = this.config.get('baseName');
         var packageName = this.config.get('packageName');
         var packageFolder = this.config.get('packageFolder');
 
-        if (!this.options.skipValidation && (baseName == null || packageName == null)) {
+        if (!this.options.skipValidation && (baseName === undefined || packageName === undefined)) {
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
             this.env.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
         }
@@ -50,14 +49,18 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar['useSass'] = this.config.get('useSass');
         jhipsterVar['buildTool'] = this.config.get('buildTool');
         jhipsterVar['enableTranslation'] = this.config.get('enableTranslation');
+        jhipsterVar['nativeLanguage'] = this.config.get('nativeLanguage');
+        jhipsterVar['languages'] = this.config.get('languages');
         jhipsterVar['enableSocialSignIn'] = this.config.get('enableSocialSignIn');
         jhipsterVar['testFrameworks'] = this.config.get('testFrameworks');
+        jhipsterVar['jhiPrefix'] = this.config.get('jhiPrefix');
 
         jhipsterVar['angularAppName'] = this.getAngularAppName();
         jhipsterVar['mainClassName'] = this.getMainClassName();
         jhipsterVar['javaDir'] = SERVER_MAIN_SRC_DIR + packageFolder + '/';
         jhipsterVar['resourceDir'] = SERVER_MAIN_RES_DIR;
         jhipsterVar['webappDir'] = CLIENT_MAIN_SRC_DIR;
+        jhipsterVar['CONSTANTS'] = constants;
 
         // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules
         jhipsterFunc['fs'] = this.fs;
@@ -79,8 +82,6 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc['addMainSCSSStyle'] = this.addMainSCSSStyle;
         jhipsterFunc['addAngularJsModule'] = this.addAngularJsModule;
         jhipsterFunc['addAngularJsInterceptor'] = this.addAngularJsInterceptor;
-        jhipsterFunc['addJavaScriptToIndex'] = this.addJavaScriptToIndex;
-        jhipsterFunc['addMessageformatLocaleToIndex'] = this.addMessageformatLocaleToIndex;
         jhipsterFunc['addElementToMenu'] = this.addElementToMenu;
         jhipsterFunc['addElementToAdminMenu'] = this.addElementToAdminMenu;
         jhipsterFunc['addEntityToMenu'] = this.addEntityToMenu;
@@ -89,9 +90,13 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc['addGlobalTranslationKey'] = this.addGlobalTranslationKey;
         jhipsterFunc['addTranslationKeyToAllLanguages'] = this.addTranslationKeyToAllLanguages;
         jhipsterFunc['getAllSupportedLanguages'] = this.getAllSupportedLanguages;
+        jhipsterFunc['getAllSupportedLanguageOptions'] = this.getAllSupportedLanguageOptions;
+        jhipsterFunc['isSupportedLanguage'] = this.isSupportedLanguage;
         jhipsterFunc['getAllInstalledLanguages'] = this.getAllInstalledLanguages;
         jhipsterFunc['addEntityTranslationKey'] = this.addEntityTranslationKey;
         jhipsterFunc['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
+        jhipsterFunc['addConstraintsChangelogToLiquibase'] = this.addConstraintsChangelogToLiquibase;
+        jhipsterFunc['addLiquibaseChangelogToMaster'] = this.addLiquibaseChangelogToMaster;
         jhipsterFunc['addColumnToLiquibaseEntityChangeset'] = this.addColumnToLiquibaseEntityChangeset;
         jhipsterFunc['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
         jhipsterFunc['copyI18nFilesByName'] = this.copyI18nFilesByName;
@@ -107,7 +112,7 @@ module.exports = ModulesGenerator.extend({
 
     },
 
-    initializing : function () {
+    initializing: function () {
         //at least one method is required for yeoman to initilize the generator
         this.log('Reading the JHipster project configuration for your module');
     }

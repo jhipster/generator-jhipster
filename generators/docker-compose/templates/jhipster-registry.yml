@@ -1,0 +1,17 @@
+version: '2'
+services:
+    jhipster-registry:
+        container_name: jhipster-registry
+        image: jhipster/jhipster-registry:v1.0.0
+        volumes:
+            - ./central-server-config:/central-config
+        # By default the JHipster Registry runs with the "prod" and "native"
+        # Spring profiles.
+        # "native" profile means the filesystem is used to store data, see
+        # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+        # environment:
+            # - SPRING_PROFILES_ACTIVE=prod,native
+            # - GIT_URI=https://github.com/jhipster/jhipster-registry/
+            # - GIT_SEARCH_PATH=central-config
+        ports:
+            - 8761:8761

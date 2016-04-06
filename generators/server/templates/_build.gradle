@@ -7,12 +7,12 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath group: 'org.sonarqube.gradle', name: 'gradle-sonarqube-plugin', version: '1.0'
-        classpath group: 'net.ltgt.gradle', name: 'gradle-apt-plugin', version: '0.4'
+        classpath group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '1.2'
+        classpath group: 'net.ltgt.gradle', name: 'gradle-apt-plugin', version: '0.6'
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: spring_boot_version
         classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'<% if(!skipClient) {%>
-        classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.11'
-  	    classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.11'<% } %>
+        classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.12'
+        classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.12'<% } %>
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -31,6 +31,7 @@ bootRepackage {
 }
 
 war {
+    rootSpec.exclude("**/tomcat-*.jar")
 }
 
 springBoot {
@@ -74,12 +75,13 @@ apply from: 'gradle/liquibase.gradle'<% } %>
 <% if (testFrameworks.indexOf('gatling') != -1) { %>
 apply from: 'gradle/gatling.gradle'<% } %>
 apply from: 'gradle/mapstruct.gradle'
+apply from: 'gradle/docker.gradle'
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_prod.gradle'
 } else {
-  apply from: 'gradle/profile_dev.gradle'
+    apply from: 'gradle/profile_dev.gradle'
 }
 
 group = '<%= packageName %>'
@@ -111,6 +113,9 @@ dependencies {
     compile group: 'io.dropwizard.metrics', name: 'metrics-json', version: dropwizard_metrics_version
     compile (group: 'io.dropwizard.metrics', name: 'metrics-servlets', version: dropwizard_metrics_version) {
         exclude(module: 'metrics-healthchecks')
+    }
+    compile(group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: logstash_logback_encoder_version) {
+        exclude(module: 'ch.qos.logback')
     }
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
@@ -158,11 +163,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch'<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {
-        exclude module: 'spring-boot-starter-tomcat'
-    }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow'
-    <%_ if (websocket == 'spring-websocket') { _%>
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web')<% if (websocket == 'spring-websocket') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'org.springframework.data', name: 'spring-data-cassandra'
@@ -170,11 +171,6 @@ dependencies {
         exclude module: 'com.codahale.metrics'
     }
     compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: datastax_driver_version<% } %>
-    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
-    // This dependency is used to start an embedded Cassandra server.
-    // You can remove this if you have jhipster.gateway.embedded-cassandra.enabled=false
-    compile group: 'info.archinnov', name: 'achilles-embedded', version: '3.2.3'
-    <%_ } _%>
     <%_ if (applicationType == 'gateway') { _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: spring_cloud_version
     <%_ } _%>
@@ -184,6 +180,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: spring_cloud_version
+    compile group: 'org.springframework.retry', name: 'spring-retry'
     <%_ } _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector'
@@ -248,7 +245,7 @@ clean {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.11'
+    gradleVersion = '2.12'
 }
 
 task stage(dependsOn: 'bootRepackage') {

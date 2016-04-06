@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "sampleMongo",
+    "baseName": "travisMongo",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
@@ -15,10 +15,13 @@
     "useSass": false,
     "buildTool": "maven",
     "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
     "enableSocialSignIn": false,
-    "rememberMeKey": "4207b631feea9ca5dc7d09b5dd45cf3c30222854",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
       "gatling"
-    ]
+    ],
+    "travis": true
   }
 }

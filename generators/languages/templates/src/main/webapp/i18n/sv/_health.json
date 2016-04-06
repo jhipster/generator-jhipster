@@ -11,6 +11,11 @@
             "error": "Fel"
         },
         "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
             "diskSpace": "Diskutrymme",
             "mail": "E-post",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>

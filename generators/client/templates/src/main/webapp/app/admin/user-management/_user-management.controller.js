@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('UserManagementController', UserManagementController);
 
-    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'paginationConstants'<% if (enableTranslation) { %>, 'Language'<% } %>];
+    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'paginationConstants'<% if (enableTranslation) { %>, '<%=jhiPrefixCapitalized%>LanguageService'<% } %>];
 
-    function UserManagementController(Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, Language<% } %>) {
+    function UserManagementController(Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %>) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
@@ -26,7 +26,7 @@
         vm.loadAll();
 
         <% if (enableTranslation) { %>
-        Language.getAll().then(function (languages) {
+        <%=jhiPrefixCapitalized%>LanguageService.getAll().then(function (languages) {
             vm.languages = languages;
         });<% } %>
 

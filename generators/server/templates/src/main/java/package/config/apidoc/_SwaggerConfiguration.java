@@ -6,11 +6,13 @@ import <%=packageName%>.config.JHipsterProperties;
 import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -26,7 +28,8 @@ import static springfox.documentation.builders.PathSelectors.regex;
  */
 @Configuration
 @EnableSwagger2
-@Profile("!" + Constants.SPRING_PROFILE_PRODUCTION)
+@Profile("!" + Constants.SPRING_PROFILE_NO_SWAGGER)
+@ConditionalOnProperty(prefix="jhipster.swagger", name="enabled")
 public class SwaggerConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
@@ -44,20 +47,22 @@ public class SwaggerConfiguration {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
+        Contact contact = new Contact(
+            jHipsterProperties.getSwagger().getContactName(),
+            jHipsterProperties.getSwagger().getContactUrl(),
+            jHipsterProperties.getSwagger().getContactEmail());
+
         ApiInfo apiInfo = new ApiInfo(
             jHipsterProperties.getSwagger().getTitle(),
             jHipsterProperties.getSwagger().getDescription(),
             jHipsterProperties.getSwagger().getVersion(),
             jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
-            jHipsterProperties.getSwagger().getContact(),
+            contact,
             jHipsterProperties.getSwagger().getLicense(),
             jHipsterProperties.getSwagger().getLicenseUrl());
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)
-            <%_ if (applicationType == 'microservice') { _%>
-            .pathMapping("/<%= baseName.toLowerCase() %>")
-            <%_ } _%>
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
             .ignoredParameterTypes(Pageable.class)

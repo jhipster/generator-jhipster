@@ -1,0 +1,121 @@
+﻿{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Χρησιμοποείται ένα <strong>απαρχαιωμένο</strong> πρόγραμμα περιήγησης. Παρακαλώ <a href=\"http://browsehappy.com/?locale=en\">αναβαθμίστε το πρόγραμμα περιήγησης σας</a> να βελτιωθεί η εμπειρία σας.",
+        "menu": {
+            "home": "Home",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entities",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+				"main": "Λογαριασμός",
+				"settings": "Ρυθμίσεις",
+				"password": "Κωδικός",
+				"sessions": "Συνδέσεις",
+				"login": "Σύνδεση",
+				"logout": "Αποσύνδεση",
+				"register": "Εγγραφή"
+            },
+            "admin": {
+                "main": "Διαχείριση",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Πύλη",
+                <%_ } _%>
+                "userManagement": "User management",
+                "tracker": "Ιχνηλάτης χρηστών",
+                "metrics": "Μετρήσεις",
+                "health": "Υγεία",
+                "configuration": "Διαμόρφωση",
+                "logs": "Καταγραφές",
+                "audits": "'Ελεγχει",
+                "apidocs": "API",
+                "database": "Βάση Δεδομένων",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Γλώσσα"
+        },
+        "form": {
+            "username": "Όνομα Χρήστη",
+            "username.placeholder": "Το όνομα χρηστη σας",
+            "newpassword": "New password",
+            "newpassword.placeholder": "Καινούργιος κωδικός",
+            "confirmpassword": "Επιβεβαίωση καινούργιου κωδικού",
+            "confirmpassword.placeholder": "Επιβεβαιώστε τον καινούργιο κωδικό σας",
+            "email": "E-mail",
+            "email.placeholder": "Το E-mail σας"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Αν θέλετε να <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">συνδεθείτε</a>, μπορείτε να δοκιμάσετε τους ακολουθους ήδη ύπαρξη λογαριασμούς:<br/>- Διαχειριστής (login=\"admin\" και κωδικός=\"admin\") <br/>- Χρηστης (login=\"user\" και κωδικός=\"user\").",
+                "register": "Δεν έχετε λογαριασμό; <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Δημιουργήστε έναν νέο λογαριασμό</a>"
+            },
+            "error": {
+                "dontmatch": "Ο κωδικός και η επιβεβαίωση του δεν ταιριάζουν"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Ο κωδικός σας είναι υποχρεωτικός.",
+                    "minlength": "Ο κωδικός σας πρέπει να περιέχει τουλάχιστον 5 χαρακτήρες.",
+                    "maxlength": "Ο κωδικός σας δεν μπορεί να περιέχει πάνω από 50 χαρακτήρες.",
+                    "strength": "Ισχύς Κωδικού:"
+                },
+                "confirmpassword": {
+                    "required": "Η επιβεβαίωση του κωδικού σας είναι υποχρεωτική.",
+                    "minlength": "Η επιβεβαίωση του κωδικού σας πρέπει να περιέχει τουλάχιστον 5 χαρακτήρες.",
+                    "maxlength": "Η επιβεβαίωση του κωδικού σας δεν μπορεί να περιέχει πάνω από 50 χαρακτήρες."
+                },
+                "email": {
+                    "required": "Το e-mail σας είναι υποχρεωτικό.",
+                    "invalid": "Το e-mail σας δεν είναι έγκυρο.",
+                    "minlength": "Το e-mail σας πρέπει να περιέχει τουλάχιστον 5 χαρακτήρες.",
+                    "maxlength": "Το e-mail σας δεν μπορεί να περιέχει πάνω από 50 χαρακτήρες."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        }
+    },
+    "entity": {
+        "action": {
+			"addblob": "Προσθήκη blob",
+			"addimage": "Προσθήκη εικόνας",
+			"back": "Επιστροφή",
+			"cancel": "Ακύρωση",
+			"delete": "Διαγραφή",
+			"edit": "Επεξεργασία",
+			"save": "Αποθήκευση",
+			"view": "Λεπτομέρειες"
+        },
+        "detail": {
+            "field": "Πεδίο",
+            "value": "Τιμή"
+        },
+        "delete": {
+            "title": "Επιβεβαίωση διαγραφής"
+        },
+        "validation": {
+            "required": "Αυτό το πεδίο είναι υποχρεωτικό.",
+            "minlength": "Αυτό το πεδίο πρέπει να περιέχει τουλάχιστον {{ min }} χαρακτήρες.",
+            "maxlength": "Αυτό το πεδίο δεν μπορεί να περιέχει πάνω από {{ max }} χαρακτήρες.",
+            "min": "Αυτό το πεδίο πρέπει να είναι παραπάνω από {{ min }}.",
+            "max": "Αυτό το πεδίο δεν πρέπει να είναι παραπάνω από {{ max }}.",
+            "minbytes": "Αυτό το πεδίο πρέπει να είναι μεγαλύτερο από {{ min }} bytes.",
+            "maxbytes": "Αυτό το πεδίο δεν πρέπει να είναι μεγαλύτερο από {{ max }} bytes.",
+            "pattern": "Πρέπει να ακολουθήσετε το ακόλουθο υπόδειγμα {{ pattern }}.",
+            "number": "Αυτό το πεδίο πρέπει να περιχέει μονο ψηφία.",
+            "datetimelocal": "Αυτό το πεδίο πρέπει να περιχέει ημερομηνία και ώρα."
+        }
+    },
+    "error": {
+        "server.not.reachable": "Ο διακομιστής δεν είναι προσβάσιμος",
+        "NotNull": "Το ακόλουθο πεδίο δεν μπορεί να είναι κενό: {{ fieldName }}",
+        "Size": "Το ακόλουθο πεδίο δεν τηρεί της προϋποθέσεις μήκους/χωρητικότητας: {{ fieldName }}",
+        "userexists": "Αυτό το όνομα σύνδεσης είναι ήδη εγγεγραμμένο!",
+        "emailexists": "Αυτό το e-mail είναι ήδη εγγεγραμμένο!",
+        "idexists": "Ένα καινούργιο {{ entityName }} δεν μπορεί να έχει είδη ένα ID."
+    },
+    "footer": "Αυτό είναι το footer σας"
+}

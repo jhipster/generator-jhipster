@@ -4,36 +4,37 @@
   "appPath": "<%= MAIN_SRC_DIR %>",
   "testPath": "<%= TEST_SRC_DIR %>spec",
   "dependencies": {
-    "angular": "1.5.0",
-    "angular-aria": "1.5.0",
-    "angular-bootstrap": "1.1.2",
+    "angular": "1.5.2",
+    "angular-aria": "1.5.2",
+    "angular-bootstrap": "1.2.5",
     "angular-cache-buster": "0.4.3",
-    "angular-cookies": "1.5.0",
+    "angular-cookies": "1.5.2",
     <%_ if (enableTranslation) { _%>
-    "angular-dynamic-locale": "0.1.29",
-    "angular-i18n": "1.5.0",
+    "angular-dynamic-locale": "0.1.30",
+    "angular-i18n": "1.5.2",
     <%_ } _%>
     "ngstorage": "0.3.10",
-    "angular-loading-bar": "0.8.0",
-    "angular-resource": "1.5.0",
-    "angular-sanitize": "1.5.0",
+    "angular-loading-bar": "0.9.0",
+    "angular-resource": "1.5.2",
+    "angular-sanitize": "1.5.2",
     <%_ if (enableTranslation) { _%>
-    "angular-translate": "2.9.2",
-    "angular-translate-interpolation-messageformat": "2.9.2",
-    "angular-translate-loader-partial": "2.9.2",
-    "angular-translate-storage-cookie": "2.9.2",
+    "angular-translate": "2.11.0",
+    "angular-translate-interpolation-messageformat": "2.11.0",
+    "angular-translate-loader-partial": "2.11.0",
+    "angular-translate-storage-cookie": "2.11.0",
     <%_ } _%>
     "angular-ui-router": "0.2.18",
-    <%_ if (!useSass) { _%>
-    "bootstrap": "3.3.6",
-    <%_ } else { _%>
+    <%_ if (useSass) { _%>
     "bootstrap-sass": "3.3.6",
+    <%_ } else { _%>
+    "bootstrap": "3.3.6",
     <%_ } _%>
-    "bootstrap-ui-datetime-picker": "2.2.0",
-    "jquery": "2.2.1",
+    "bootstrap-ui-datetime-picker": "2.2.3",
+    "jquery": "2.2.2",
     "json3": "3.3.2",
+    "messageformat": "0.3.1",
     "modernizr": "3.3.1",
-    "ng-file-upload": "12.0.1",
+    "ng-file-upload": "12.0.4",
     "ngInfiniteScroll": "1.2.2",
     <%_ if (websocket == 'spring-websocket') { _%>
     "sockjs-client": "1.0.3",
@@ -42,23 +43,32 @@
     "swagger-ui": "2.1.4"
   },
   "devDependencies": {
-    "angular-mocks": "1.5.0",
-    "angular-scenario": "1.5.0"
+    "angular-mocks": "1.5.2"
   },
-  <%_ if (!useSass) { _%>
   "overrides": {
-    "bootstrap": {
+    "angular" : {
+      "dependencies": {
+        "jquery": "2.2.2"
+      }
+    },
+    <%_ if (useSass) { _%>
+    "bootstrap-sass": {
       "main": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.css",
-        "less/bootstrap.less"
+        "assets/stylesheets/_bootstrap.scss"
       ]
     }
+    <%_ } else { _%>
+    "bootstrap": {
+      "main": [
+        "dist/css/bootstrap.css"
+      ]
+    }
+    <%_ } _%>
   },
-  <%_ } _%>
   "resolutions": {
-    "angular": "1.5.0",
-    "angular-cookies": "1.5.0",
-    "jquery": "2.1.4"
+    "angular": "1.5.2",
+    "angular-cookies": "1.5.2",
+    "angular-bootstrap": "1.2.5",
+    "jquery": "2.2.2"
   }
 }

@@ -1,9 +1,17 @@
 package <%=packageName%>.config;
 
+<%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
+<%_ } _%>
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
+
+<%_ if (applicationType == 'gateway') { _%>
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+<%_ } _%>
 
 /**
  * Properties specific to JHipster.
@@ -126,7 +134,7 @@ public class JHipsterProperties {
 
         public static class Cache {
 
-            private int timeToLiveInDays = 31;
+            private int timeToLiveInDays = 1461;
 
             public int getTimeToLiveInDays() {
                 return timeToLiveInDays;
@@ -210,16 +218,20 @@ public class JHipsterProperties {
     }
 
     public static class Security {
+        <%_ if (authenticationType == 'session') { _%>
 
-        private final Rememberme rememberme = new Rememberme();
-
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
-        private final Authentication authentication = new Authentication();
-
+        private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-        public Rememberme getRememberme() {
-            return rememberme;
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+
+        private final Authentication authentication = new Authentication();
+        <%_ } _%>
+        <%_ if (authenticationType == 'session') { _%>
+
+        public RememberMe getRememberMe() {
+            return rememberMe;
         }
+        <%_ } _%>
 
         <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         public Authentication getAuthentication() {
@@ -317,7 +329,8 @@ public class JHipsterProperties {
             <%_ } _%>
         }
         <%_ } _%>
-        public static class Rememberme {
+        <%_ if (authenticationType == 'session') { _%>
+        public static class RememberMe {
 
             @NotNull
             private String key;
@@ -330,6 +343,7 @@ public class JHipsterProperties {
                 this.key = key;
             }
         }
+        <%_ } _%>
     }
 
     public static class Swagger {
@@ -342,11 +356,17 @@ public class JHipsterProperties {
 
         private String termsOfServiceUrl;
 
-        private String contact;
+        private String contactName;
+
+        private String contactUrl;
+
+        private String contactEmail;
 
         private String license;
 
         private String licenseUrl;
+
+        private Boolean enabled;
 
         public String getTitle() {
             return title;
@@ -380,12 +400,28 @@ public class JHipsterProperties {
             this.termsOfServiceUrl = termsOfServiceUrl;
         }
 
-        public String getContact() {
-            return contact;
+        public String getContactName() {
+            return contactName;
         }
 
-        public void setContact(String contact) {
-            this.contact = contact;
+        public void setContactName(String contactName) {
+            this.contactName = contactName;
+        }
+
+        public String getContactUrl() {
+            return contactUrl;
+        }
+
+        public void setContactUrl(String contactUrl) {
+            this.contactUrl = contactUrl;
+        }
+
+        public String getContactEmail() {
+            return contactEmail;
+        }
+
+        public void setContactEmail(String contactEmail) {
+            this.contactEmail = contactEmail;
         }
 
         public String getLicense() {
@@ -403,6 +439,14 @@ public class JHipsterProperties {
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
         }
+
+        public Boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
     }
 
     public static class Metrics {
@@ -412,6 +456,8 @@ public class JHipsterProperties {
         private final Spark spark = new Spark();
 
         private final Graphite graphite = new Graphite();
+
+        private final Logs logs = new Logs();
 
         public Jmx getJmx() {
             return jmx;
@@ -424,6 +470,11 @@ public class JHipsterProperties {
         public Graphite getGraphite() {
             return graphite;
         }
+
+        public Logs getLogs() {
+            return logs;
+        }
+
 
         public static class Jmx {
 
@@ -513,7 +564,69 @@ public class JHipsterProperties {
                 this.prefix = prefix;
             }
         }
+
+        public static  class Logs {
+
+            private boolean enabled = false;
+
+            private long reportFrequency = 60;
+
+            public long getReportFrequency() {
+                return reportFrequency;
+            }
+
+            public void setReportFrequency(int reportFrequency) {
+                this.reportFrequency = reportFrequency;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
     }
+
+    private final Logging logging = new Logging();
+
+    public Logging getLogging() { return logging; }
+
+    public static class Logging {
+
+        private final Logstash logstash = new Logstash();
+
+        public Logstash getLogstash() { return logstash; }
+
+        public static class Logstash {
+
+            private boolean enabled = false;
+
+            private String host = "localhost";
+
+            private int port = 5000;
+
+            private int queueSize = 512;
+
+            public boolean isEnabled() { return enabled; }
+
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
+            public String getHost() { return host; }
+
+            public void setHost(String host) { this.host = host; }
+
+            public int getPort() { return port; }
+
+            public void setPort(int port) { this.port = port; }
+
+            public int getQueueSize() { return queueSize; }
+
+            public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
+        }
+    }
+
     <%_ if (enableSocialSignIn) { _%>
     public static class Social {
 
@@ -531,33 +644,20 @@ public class JHipsterProperties {
     public static class Gateway {
 
         private final RateLimiting rateLimiting = new RateLimiting();
-        <%_ if (databaseType != 'cassandra') { _%>
-
-        private final EmbeddedCassandra embeddedCassandra = new EmbeddedCassandra();
-        <%_ } _%>
 
         public RateLimiting getRateLimiting() {
             return rateLimiting;
         }
-        <%_ if (databaseType != 'cassandra') { _%>
 
-        public EmbeddedCassandra getEmbeddedCassandra() {
-            return embeddedCassandra;
+        private Map<String, List<String>> authorizedMicroservicesEndpoints = new LinkedHashMap<>();
+
+        public Map<String, List<String>> getAuthorizedMicroservicesEndpoints() {
+            return authorizedMicroservicesEndpoints;
         }
 
-        public static class EmbeddedCassandra {
-
-            private boolean enabled = false;
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public void setEnabled(boolean enabled) {
-                this.enabled = enabled;
-            }
+        public void setAuthorizedMicroservicesEndpoints(Map<String, List<String>> authorizedMicroservicesEndpoints) {
+            this.authorizedMicroservicesEndpoints = authorizedMicroservicesEndpoints;
         }
-        <%_ } _%>
 
         public static class RateLimiting {
 

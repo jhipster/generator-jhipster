@@ -1,0 +1,23 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized  %>",
+                "createLabel": "नवीन <%= entityClassHumanized %> तयार करा",
+                "createOrEditLabel": "<%= entityClassHumanized %> तयार किंवा संपादित करा",
+                "search": "<%= entityClassHumanized %> शोधा"
+            },
+            "created": "<%= entityClassHumanized %> [identifier: {{ param }}] तयार आहे",
+            "updated": "<%= entityClassHumanized %> [identifier: {{ param }}] सुधारित केले आहे",
+            "deleted": "<%= entityClassHumanized %> [identifier: {{ param }}] हटविले आहे",
+            "delete": {
+                "question": "<%= entityClassHumanized %> [id: {{ id }}] काढून टाकण्याबाबत पुष्टी?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }
+}

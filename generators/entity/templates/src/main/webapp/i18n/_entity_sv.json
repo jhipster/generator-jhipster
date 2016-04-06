@@ -2,22 +2,22 @@
     "<%= angularAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPlural %>",
-                "createLabel": "Skapa en ny <%= entityClass %>",
-                "createOrEditLabel": "Skapa eller ändra en <%= entityClass %>",
-                "search": "Sök efter <%= entityClass %>"
+                "title": "<%= entityClassPluralHumanized  %>",
+                "createLabel": "Skapa en ny <%= entityClassHumanized %>",
+                "createOrEditLabel": "Skapa eller ändra en <%= entityClassHumanized %>",
+                "search": "Sök efter <%= entityClassHumanized %>"
             },
-            "created": "A new <%= entityClass %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClass %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClass %> is deleted with identifier {{ param }}",
+            "created": "En ny <%= entityClassHumanized %> är skapad med id {{ param }}",
+            "updated": "En <%= entityClassHumanized %> är uppdaterad med id  {{ param }}",
+            "deleted": "En <%= entityClassHumanized %> är borttagen med id  {{ param }}",
             "delete": {
-                "question": "Är du säker på att du vill ta bort <%= entityClass %> {{ id }}?"
+                "question": "Är du säker på att du vill ta bort <%= entityClassHumanized %> {{ id }}?"
             },
             "detail": {
-                "title": "<%= entityClass %>"
+                "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) { %>,
-            "<%=fields[idx].fieldName%>": "<%=fields[idx].fieldNameCapitalized%>"<% } %><% for (idx in relationships) { %>,
-            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameCapitalized %>"<% } %>
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
         }
     }
 }

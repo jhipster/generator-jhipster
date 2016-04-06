@@ -33,6 +33,11 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
+    <%_ if (enableSocialSignIn) { _%>
+    @Inject
+    private SocialService socialService;
+    <%_ } _%>
+
     @Inject
     private PasswordEncoder passwordEncoder;
 
@@ -42,6 +47,7 @@ public class UserService {
     @Inject
     private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
 
+
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %><% } %>
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -50,7 +56,7 @@ public class UserService {
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
-        userRepository.findOneByActivationKey(key)
+        return userRepository.findOneByActivationKey(key)
             .map(user -> {
                 // activate given user for the registration key.
                 user.setActivated(true);
@@ -60,7 +66,6 @@ public class UserService {
                 log.debug("Activated user: {}", user);
                 return user;
             });
-        return Optional.empty();
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
@@ -128,7 +133,7 @@ public class UserService {
         user.setLastName(managedUserDTO.getLastName());
         user.setEmail(managedUserDTO.getEmail());
         if (managedUserDTO.getLangKey() == null) {
-            user.setLangKey("en"); // default language is English
+            user.setLangKey("<%= nativeLanguageShortName %>"); // default language
         } else {
             user.setLangKey(managedUserDTO.getLangKey());
         }<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -165,6 +170,9 @@ public class UserService {
 
     public void deleteUserInformation(String login) {
         userRepository.findOneByLogin(login).ifPresent(u -> {
+            <%_ if (enableSocialSignIn) { _%>
+            socialService.deleteUserSocialConnection(u.getLogin());
+            <%_ } _%>
             userRepository.delete(u);<% if (searchEngine == 'elasticsearch') { %>
             userSearchRepository.delete(u);<% } %>
             log.debug("Deleted User: {}", u);

@@ -10,10 +10,10 @@
             "homepage": "JHipster Hauptseite",
             "stackoverflow": "JHipster auf Stack Overflow",
             "bugtracker": "JHipster Fehlereinträge",
-            "chat": "JHipster public chat room",
-            "contact": "kontaktieren Sie uns mit @java_hipster auf Twitter"
+            "chat": "JHipster Chat",
+            "follow": "kontaktieren Sie uns mit @java_hipster auf Twitter"
         },
         "like": "Wenn Sie JHipster mögen, vergessen Sie nicht uns einen Stern zu geben auf",
-        "github": "Github"
+        "github": "GitHub"
     }
 }

@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "samplePsqlEsNoi18n",
+    "baseName": "travisPsqlEsNoi18n",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
@@ -12,13 +12,15 @@
     "devDatabaseType": "postgresql",
     "prodDatabaseType": "postgresql",
     "searchEngine": "elasticsearch",
-    "useSass": false,
+    "useSass": true,
     "buildTool": "maven",
     "enableTranslation": false,
     "enableSocialSignIn": false,
-    "rememberMeKey": "efaf561e5400af2877060b33324f34288d671c97",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
-      "gatling"
-    ]
+      "gatling",
+      "protractor"
+    ],
+    "travis": true
   }
 }

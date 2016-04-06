@@ -103,18 +103,26 @@ jhipster:
                 tokenValidityInSeconds: 1800
     <%_ } _%>
 <%_ } _%>
-        rememberme:
+<%_ if (authenticationType == 'session') { _%>
+        rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
+<%_ } _%>
     swagger:
         title: <%=baseName%> API
         description: <%=baseName%> API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:
 <%_ if (enableSocialSignIn) { _%>
     social:
+        <%_ if (authenticationType == 'jwt') { _%>
+        redirectAfterSignIn: "/#/social-auth"
+        <%_ } else { _%>
         redirectAfterSignIn: "/#/home"
+        <%_ } _%>
 <%_ } _%>

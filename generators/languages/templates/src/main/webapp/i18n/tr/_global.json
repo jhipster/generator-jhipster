@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "<strong>Çok eski</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
         "menu": {
             "home": "Ana Sayfa",
@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
-                "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" ui-sref=\"register\">Yeni hesap oluştur</a>"
+                "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Yeni hesap oluştur</a>"
             },
             "error": {
                 "dontmatch" : "Şifreler eşleşmedi!"

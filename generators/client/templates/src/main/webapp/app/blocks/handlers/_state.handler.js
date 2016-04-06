@@ -5,10 +5,10 @@
         .module('<%=angularAppName%>')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state', <% if (enableTranslation) { %>'$translate', 'Language', 'translationHandler',<% } else { %> '$window', <% } %>
+    stateHandler.$inject = ['$rootScope', '$state', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } else { %> '$window', <% } %>
         'Auth', 'Principal', 'ENV', 'VERSION'];
 
-    function stateHandler($rootScope, $state, <% if (enableTranslation) { %>$translate, Language, translationHandler,<% } else { %> $window, <% } %>
+    function stateHandler($rootScope, $state, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } else { %> $window, <% } %>
         Auth, Principal, ENV, VERSION) {
         return {
             initialize: initialize
@@ -29,7 +29,7 @@
 
                 <% if (enableTranslation) { %>
                 // Update the language
-                Language.getCurrent().then(function (language) {
+                <%=jhiPrefixCapitalized%>LanguageService.getCurrent().then(function (language) {
                     $translate.use(language);
                 });
                 <% } %>
@@ -65,7 +65,7 @@
 
             function back() {
                 // If previous state is 'activate' or do not exist go to 'home'
-                if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
+                if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === undefined) {
                     $state.go('home');
                 } else {
                     $state.go($rootScope.previousStateName, $rootScope.previousStateParams);

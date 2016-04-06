@@ -1,0 +1,21 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+task buildDocker(type: Exec) {
+    doFirst {
+        copy {
+            from "src/main/docker/"
+            into "build/docker/"
+            include "*"
+        }
+        copy {
+            from "build/libs"
+            into "build/docker/"
+            include "*.war*"
+        }
+    }
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', '/c', 'docker', 'build', '-f', 'build/docker/Dockerfile', '-t', '<%= baseName.toLowerCase() %>', 'build/docker/'
+    } else {
+        commandLine 'docker', 'build', '-f', 'build/docker/Dockerfile', '-t', '<%= baseName.toLowerCase() %>', 'build/docker/'
+    }
+}

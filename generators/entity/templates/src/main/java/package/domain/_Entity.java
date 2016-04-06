@@ -119,6 +119,9 @@ public class <%= entityClass %> implements Serializable {
         if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
             joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
         }
+        if(prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+            joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
+        }
         if (otherEntityRelationshipName != null) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -150,8 +153,8 @@ public class <%= entityClass %> implements Serializable {
     <%_     }
             if (ownerSide == true) { _%>
     @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name="<%= getColumnName(name) %>s_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[idx].relationshipName) %>s_id", referencedColumnName="ID"))
+               joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="ID"),
+               inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="ID"))
     <%_     } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldName %>s = new HashSet<>();
 

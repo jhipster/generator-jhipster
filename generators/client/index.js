@@ -1,14 +1,11 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base'),
     mkdirp = require('mkdirp'),
-    html = require("html-wiring"),
-    packagejs = require('../../package.json'),
-    engine = require('ejs').render;
+    packagejs = require('../../package.json');
 
 var JhipsterClientGenerator = generators.Base.extend({});
 
@@ -16,16 +13,18 @@ util.inherits(JhipsterClientGenerator, scriptBase);
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
-    QUESTIONS = constants.QUESTIONS,
+    QUESTIONS = constants.CLIENT_QUESTIONS,
+    DIST_DIR = constants.CLIENT_DIST_DIR,
     MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR =  constants.ANGULAR_DIR;
+    ANGULAR_DIR = constants.ANGULAR_DIR;
 
 var currentQuestion;
+var totalQuestions;
 var configOptions = {};
 
 module.exports = JhipsterClientGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
 
         configOptions = this.options.configOptions || {};
@@ -86,9 +85,15 @@ module.exports = JhipsterClientGenerator.extend({
             type: String
         });
 
+        // This adds support for a `--jhi-prefix` flag
+        this.option('jhi-prefix', {
+            desc: 'Add prefix before services, controllers and states name',
+            type: String,
+            defaults: 'jhi'
+        });
+
         this.skipServer = configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = configOptions.skipUserManagement ||  this.config.get('skipUserManagement');
-        this.i18n = this.options['i18n'];
+        this.skipUserManagement = configOptions.skipUserManagement || this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -97,42 +102,54 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
+        this.jhiPrefix = configOptions.jhiPrefix || this.options['jhi-prefix'];
+        this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         this.testFrameworks = [];
-        this.options['protractor'] &&  this.testFrameworks.push('protractor');
-        var lastQuestion = configOptions.lastQuestion;
-        currentQuestion = lastQuestion ? lastQuestion : 0;
+        this.options['protractor'] && this.testFrameworks.push('protractor');
+        currentQuestion = configOptions.lastQuestion ? configOptions.lastQuestion : 0;
+        totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
-
-        // Make constants available in templates
-        this.MAIN_SRC_DIR = MAIN_SRC_DIR;
-        this.TEST_SRC_DIR = TEST_SRC_DIR;
     },
-    initializing : {
-        displayLogo : function () {
-            if(this.logo){
+
+    initializing: {
+        displayLogo: function () {
+            if (this.logo) {
                 this.printJHipsterLogo();
             }
         },
 
-        setupClientVars : function () {
+        setupClientVars: function () {
+            // Make constants available in templates
+            this.MAIN_SRC_DIR = MAIN_SRC_DIR;
+            this.TEST_SRC_DIR = TEST_SRC_DIR;
+
+            this.serverPort = this.config.get('serverPort') || configOptions.serverPort || 8080;
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
             this.useSass = this.config.get('useSass');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+            this.nativeLanguage = this.config.get('nativeLanguage');
+            this.languages = this.config.get('languages');
             this.packagejs = packagejs;
             var baseName = this.config.get('baseName');
             if (baseName) {
                 this.baseName = baseName;
             }
 
-            var clientConfigFound = this.useSass != null;
+            var clientConfigFound = this.useSass !== undefined;
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
-                if (this.enableTranslation == null) {
+                if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
+                }
+                if (this.nativeLanguage === undefined) {
+                    this.nativeLanguage = 'en';
+                }
+                if (this.languages === undefined) {
+                    this.languages = ['en', 'fr'];
                 }
 
                 this.existingProject = true;
@@ -144,39 +161,44 @@ module.exports = JhipsterClientGenerator.extend({
 
         askForModuleName: function () {
 
-            if(this.baseName) return;
+            if (this.baseName) return;
 
-            this.askModuleName(this, ++currentQuestion, QUESTIONS);
+            this.askModuleName(this, currentQuestion++, totalQuestions);
         },
 
         askForClientSideOpts: function () {
-            if(this.existingProject) return;
+            if (this.existingProject) return;
 
             var done = this.async();
+            var getNumberedQuestion = this.getNumberedQuestion;
             var prompts = [
                 {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: function (response) {
+                        return getNumberedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, true);
+                    },
                     default: false
-                },
-                {
-                    type: 'confirm',
-                    name: 'enableTranslation',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
-                    default: true
                 }
             ];
             this.prompt(prompts, function (props) {
                 this.useSass = props.useSass;
-                this.enableTranslation = props.enableTranslation;
                 done();
             }.bind(this));
         },
 
-        setSharedConfigOptions : function () {
+        askFori18n: function () {
+            if (this.existingProject || configOptions.skipI18nQuestion) return;
+
+            this.aski18n(this, currentQuestion++, totalQuestions);
+        },
+
+        setSharedConfigOptions: function () {
+            configOptions.lastQuestion = currentQuestion;
+            configOptions.totalQuestions = totalQuestions;
             configOptions.useSass = this.useSass;
-            configOptions.enableTranslation = this.enableTranslation;
         }
 
     },
@@ -187,55 +209,86 @@ module.exports = JhipsterClientGenerator.extend({
             insight.track('generator', 'app');
             insight.track('app/useSass', this.useSass);
             insight.track('app/enableTranslation', this.enableTranslation);
+            insight.track('app/nativeLanguage', this.nativeLanguage);
+            insight.track('app/languages', this.languages);
         },
 
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
-            this.camelizedBaseName = _.camelize(this.baseName);
-            this.slugifiedBaseName = _.slugify(this.baseName);
+            this.camelizedBaseName = _.camelCase(this.baseName);
+            this.capitalizedBaseName = _.upperFirst(this.baseName);
+            this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         saveConfig: function () {
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
+                this.config.set('nativeLanguage', this.nativeLanguage);
+                this.config.set('languages', this.languages);
+            }
         }
     },
 
     default: {
 
         getSharedConfigOptions: function () {
-            if(configOptions.hibernateCache) {
+            if (configOptions.hibernateCache) {
                 this.hibernateCache = configOptions.hibernateCache;
             }
-            if(configOptions.websocket) {
+            if (configOptions.websocket) {
                 this.websocket = configOptions.websocket;
             }
-            if(configOptions.databaseType) {
+            if (configOptions.databaseType) {
                 this.databaseType = configOptions.databaseType;
             }
-            if(configOptions.devDatabaseType) {
+            if (configOptions.devDatabaseType) {
                 this.devDatabaseType = configOptions.devDatabaseType;
             }
-            if(configOptions.prodDatabaseType) {
+            if (configOptions.prodDatabaseType) {
                 this.prodDatabaseType = configOptions.prodDatabaseType;
             }
-            if(configOptions.searchEngine) {
+            if (configOptions.searchEngine) {
                 this.searchEngine = configOptions.searchEngine;
             }
-            if(configOptions.buildTool) {
+            if (configOptions.buildTool) {
                 this.buildTool = configOptions.buildTool;
             }
-            if(configOptions.enableSocialSignIn != null) {
+            if (configOptions.enableSocialSignIn !== undefined) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
-            if(configOptions.authenticationType) {
+            if (configOptions.authenticationType) {
                 this.authenticationType = configOptions.authenticationType;
             }
-            if(configOptions.testFrameworks) {
+            if (configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
+            if (configOptions.enableTranslation !== undefined) {
+                this.enableTranslation = configOptions.enableTranslation;
+            }
+            if (configOptions.nativeLanguage !== undefined) {
+                this.nativeLanguage = configOptions.nativeLanguage;
+            }
+            if (configOptions.languages !== undefined) {
+                this.languages = configOptions.languages;
+            }
+
+            // Make dist dir available in templates
+            if (configOptions.buildTool === 'maven') {
+                this.BUILD_DIR = 'target/';
+            } else {
+                this.BUILD_DIR = 'build/';
+            }
+            this.DIST_DIR = this.BUILD_DIR + DIST_DIR;
+        },
+
+        composeLanguages: function () {
+            if (configOptions.skipI18nQuestion) return;
+
+            this.composeLanguagesSub(this, configOptions, 'client');
         }
     },
 
@@ -246,14 +299,17 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
-            this.template('gulpfile.js', 'gulpfile.js', this, {});
-            this.template('_eslintrc.json', '.eslintrc.json', this, {})
+            this.template('_eslintrc.json', '.eslintrc.json', this, {});
             this.template('_eslintignore', '.eslintignore', this, {});
+            this.template('gulpfile.js', 'gulpfile.js', this, {});
             this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
             this.template('gulp/utils.js', 'gulp/utils.js', this, {});
+            this.template('gulp/serve.js', 'gulp/serve.js', this, {});
+            this.template('gulp/config.js', 'gulp/config.js', this, {});
+            this.template('gulp/build.js', 'gulp/build.js', this, {});
         },
 
-        writeCssFiles : function () {
+        writeCssFiles: function () {
             // normal CSS or SCSS?
             if (this.useSass) {
                 this.template(MAIN_SRC_DIR + 'scss/main.scss', MAIN_SRC_DIR + 'scss/main.scss');
@@ -265,32 +321,25 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'content/css/documentation.css', MAIN_SRC_DIR + 'content/css/documentation.css');
         },
 
-        writeCommonWebFiles : function () {
+        writeCommonWebFiles: function () {
             // Create Webapp
             mkdirp(MAIN_SRC_DIR);
 
             // HTML5 BoilerPlate
             this.copy(MAIN_SRC_DIR + 'favicon.ico', MAIN_SRC_DIR + 'favicon.ico');
             this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
-            this.copy(MAIN_SRC_DIR + 'htaccess.txt', MAIN_SRC_DIR + '.htaccess');
             this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
         },
 
-        writei18nFiles : function () {
-            // install all files related to i18n if translation is enabled
-            if (this.enableTranslation) {
-                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'en');
-                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'fr');
-            }
-        },
-
-        writeSwaggerFiles : function () {
+        writeSwaggerFiles: function () {
             // Swagger-ui for Jhipster
             this.template(MAIN_SRC_DIR + 'swagger-ui/_index.html', MAIN_SRC_DIR + 'swagger-ui/index.html', this, {});
             this.copy(MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif', MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif');
         },
 
-        writeAngularAppFiles : function () {
+        writeAngularAppFiles: function () {
+            this.copyHtml(MAIN_SRC_DIR + '_index.html', MAIN_SRC_DIR + 'index.html');
+
             // Angular JS module
             this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
             this.template(ANGULAR_DIR + '_app.state.js', ANGULAR_DIR + 'app.state.js', this, {});
@@ -299,13 +348,15 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'blocks/handlers/_translation.handler.js', ANGULAR_DIR + 'blocks/handlers/translation.handler.js', this, {});
                 this.template(ANGULAR_DIR + 'blocks/config/_translation.config.js', ANGULAR_DIR + 'blocks/config/translation.config.js', this, {});
+                this.template(ANGULAR_DIR + 'blocks/config/_translation-storage.provider.js', ANGULAR_DIR + 'blocks/config/translation-storage.provider.js', this, {});
             }
             this.template(ANGULAR_DIR + 'blocks/config/_alert.config.js', ANGULAR_DIR + 'blocks/config/alert.config.js', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_http.config.js', ANGULAR_DIR + 'blocks/config/http.config.js', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_localstorage.config.js', ANGULAR_DIR + 'blocks/config/localstorage.config.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/config/_compile.config.js', ANGULAR_DIR + 'blocks/config/compile.config.js', this, {});
         },
 
-        writeAngularAuthFiles : function () {
+        writeAngularAuthFiles: function () {
             // account module
             this.template(ANGULAR_DIR + 'account/_account.state.js', ANGULAR_DIR + 'account/account.state.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
@@ -324,7 +375,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'account/reset/finish/reset.finish.html', ANGULAR_DIR + 'account/reset/finish/reset.finish.html');
             this.copyJs(ANGULAR_DIR + 'account/reset/finish/_reset.finish.state.js', ANGULAR_DIR + 'account/reset/finish/reset.finish.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/reset/finish/_reset.finish.controller.js', ANGULAR_DIR + 'account/reset/finish/reset.finish.controller.js', this, {});
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
                 this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.js', ANGULAR_DIR + 'account/sessions/sessions.state.js', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_sessions.controller.js', ANGULAR_DIR + 'account/sessions/sessions.controller.js', this, {});
@@ -339,11 +390,15 @@ module.exports = JhipsterClientGenerator.extend({
                 this.copyHtml(ANGULAR_DIR + 'account/social/_social-register.html', ANGULAR_DIR + 'account/social/social-register.html');
                 this.template(ANGULAR_DIR + 'account/social/_social-register.controller.js', ANGULAR_DIR + 'account/social/social-register.controller.js', this, {});
                 this.template(ANGULAR_DIR + 'account/social/_social.service.js', ANGULAR_DIR + 'account/social/social.service.js', this, {});
-                this.copyJs(ANGULAR_DIR + 'account/social/_social-register.state.js', ANGULAR_DIR + 'account/social/social-register.state.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'account/social/_social.state.js', ANGULAR_DIR + 'account/social/social.state.js', this, {});
+
+                if (this.authenticationType === 'jwt') {
+                    this.template(ANGULAR_DIR + 'account/social/_social-auth.controller.js', ANGULAR_DIR + 'account/social/social-auth.controller.js', this, {});
+                }
             }
         },
 
-        writeAngularAdminModuleFiles : function () {
+        writeAngularAdminModuleFiles: function () {
             // admin modules
             this.template(ANGULAR_DIR + 'admin/_admin.state.js', ANGULAR_DIR + 'admin/admin.state.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.html', ANGULAR_DIR + 'admin/audits/audits.html');
@@ -372,7 +427,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.modal.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.modal.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.service.js', ANGULAR_DIR + 'admin/metrics/metrics.service.js', this, {});
-            if (this.websocket == 'spring-websocket') {
+            if (this.websocket === 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
                 this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.state.js', ANGULAR_DIR + 'admin/tracker/tracker.state.js', this, {});
                 this.template(ANGULAR_DIR + 'admin/tracker/_tracker.controller.js', ANGULAR_DIR + 'admin/tracker/tracker.controller.js', this, {});
@@ -380,7 +435,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
         },
 
-        writeAngularUserMgmntFiles : function () {
+        writeAngularUserMgmntFiles: function () {
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/user-management.html', ANGULAR_DIR + 'admin/user-management/user-management.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');
@@ -392,8 +447,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.js', this, {});
         },
 
-        writeAngularGatewayFiles : function () {
-            if (this.applicationType != 'gateway') return;
+        writeAngularGatewayFiles: function () {
+            if (this.applicationType !== 'gateway') return;
 
             this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.state.js', ANGULAR_DIR + 'admin/gateway/gateway.state.js', this, {});
@@ -401,7 +456,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.routes.service.js', ANGULAR_DIR + 'admin/gateway/gateway.routes.service.js', this, {});
         },
 
-        writeAngularComponentFiles : function () {
+        writeAngularComponentFiles: function () {
             //components
             this.template(ANGULAR_DIR + 'components/form/_show-validation.directive.js', ANGULAR_DIR + 'components/form/show-validation.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.js', ANGULAR_DIR + 'components/form/maxbytes.directive.js', this, {});
@@ -428,9 +483,10 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_pagination-util.service.js', ANGULAR_DIR + 'components/util/pagination-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_sort.directive.js', ANGULAR_DIR + 'components/util/sort.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_sort-by.directive.js', ANGULAR_DIR + 'components/util/sort-by.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.js', ANGULAR_DIR + 'components/util/jhi-item-count.directive.js', this, {});
 
             // interceptor code
-            if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
+            if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt') {
                 this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.js', this, {});
             }
             this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.js', this, {});
@@ -443,7 +499,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/alert/_alert-error.directive.js', ANGULAR_DIR + 'components/alert/alert-error.directive.js', this, {});
         },
 
-        writeAngularMainFiles : function () {
+        writeAngularMainFiles: function () {
             // entities
             this.copyJs(ANGULAR_DIR + 'entities/_entity.state.js', ANGULAR_DIR + 'entities/entity.state.js', this, {});
 
@@ -454,7 +510,7 @@ module.exports = JhipsterClientGenerator.extend({
 
             // layouts
             this.template(ANGULAR_DIR + 'layouts/navbar/_active-link.directive.js', ANGULAR_DIR + 'layouts/navbar/active-link.directive.js', this, {});
-            if(this.enableTranslation) {
+            if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.js', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.js', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
@@ -464,15 +520,15 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.js', ANGULAR_DIR + 'layouts/error/error.state.js', this, {});
         },
 
-        writeAngularAuthServiceFiles : function () {
+        writeAngularAuthServiceFiles: function () {
             // services
             this.template(ANGULAR_DIR + 'services/auth/_auth.service.js', ANGULAR_DIR + 'services/auth/auth.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_has-authority.directive.js', ANGULAR_DIR + 'services/auth/has-authority.directive.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_has-any-authority.directive.js', ANGULAR_DIR + 'services/auth/has-any-authority.directive.js', this, {});
-            if (this.authenticationType == 'oauth2') {
+            if (this.authenticationType === 'oauth2') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
-            } else if (this.authenticationType == 'jwt') {
+            } else if (this.authenticationType === 'jwt') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.jwt.service.js', ANGULAR_DIR + 'services/auth/auth.jwt.service.js', this, {});
             } else {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.js', ANGULAR_DIR + 'services/auth/auth.session.service.js', this, {});
@@ -487,177 +543,11 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
         },
 
-        writeImageFiles : function () {
+        writeImageFiles: function () {
             // Images
             this.copy(MAIN_SRC_DIR + 'content/images/development_ribbon.png', MAIN_SRC_DIR + 'content/images/development_ribbon.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
-
-        },
-
-        updateJsToHtml: function () {
-            // Index page
-            var indexFile = html.readFileAsString(path.join(this.sourceRoot(), MAIN_SRC_DIR + '_index.html'));
-
-            indexFile = engine(indexFile, this, {});
-
-            var appScripts = [
-                'app/app.module.js',
-                'app/app.state.js',
-                'app/app.constants.js',
-                //blocks
-                'app/blocks/handlers/state.handler.js',
-                'app/blocks/config/alert.config.js',
-                'app/blocks/config/http.config.js',
-                'app/blocks/config/localstorage.config.js',
-                'app/blocks/interceptor/auth-expired.interceptor.js',
-                'app/blocks/interceptor/errorhandler.interceptor.js',
-                'app/blocks/interceptor/notification.interceptor.js',
-                // account
-                'app/account/account.state.js',
-                'app/account/activate/activate.state.js',
-                'app/account/activate/activate.controller.js',
-                'app/account/password/password.state.js',
-                'app/account/password/password.controller.js',
-                'app/account/password/password-strength-bar.directive.js',
-                'app/account/register/register.state.js',
-                'app/account/register/register.controller.js',
-                'app/account/settings/settings.state.js',
-                'app/account/settings/settings.controller.js',
-                'app/account/reset/finish/reset.finish.controller.js',
-                'app/account/reset/finish/reset.finish.state.js',
-                'app/account/reset/request/reset.request.controller.js',
-                'app/account/reset/request/reset.request.state.js',
-                // admin
-                'app/admin/admin.state.js',
-                'app/admin/audits/audits.state.js',
-                'app/admin/audits/audits.controller.js',
-                'app/admin/audits/audits.service.js',
-                'app/admin/configuration/configuration.state.js',
-                'app/admin/configuration/configuration.controller.js',
-                'app/admin/configuration/configuration.service.js',
-                'app/admin/docs/docs.state.js',
-                'app/admin/health/health.state.js',
-                'app/admin/health/health.controller.js',
-                'app/admin/health/health.service.js',
-                'app/admin/health/health.modal.controller.js',
-                'app/admin/logs/logs.state.js',
-                'app/admin/logs/logs.controller.js',
-                'app/admin/logs/logs.service.js',
-                'app/admin/metrics/metrics.state.js',
-                'app/admin/metrics/metrics.controller.js',
-                'app/admin/metrics/metrics.service.js',
-                'app/admin/metrics/metrics.modal.controller.js',
-                'app/admin/user-management/user-management-detail.controller.js',
-                'app/admin/user-management/user-management-dialog.controller.js',
-                'app/admin/user-management/user-management-delete-dialog.controller.js',
-                'app/admin/user-management/user-management.controller.js',
-                'app/admin/user-management/user-management.state.js',
-                // components
-                'app/components/form/show-validation.directive.js',
-                'app/components/form/maxbytes.directive.js',
-                'app/components/form/minbytes.directive.js',
-                'app/components/form/uib-pager.config.js',
-                'app/components/form/uib-pagination.config.js',
-                'app/components/form/pagination.constants.js',
-                'app/components/login/login.service.js',
-                'app/components/login/login.controller.js',
-                'app/components/util/truncate-characters.filter.js',
-                'app/components/util/truncate-words.filter.js',
-                'app/components/util/base64.service.js',
-                'app/components/util/capitalize.filter.js',
-                'app/components/alert/alert.service.js',
-                'app/components/alert/alert.directive.js',
-                'app/components/util/parse-links.service.js',
-                'app/components/util/date-util.service.js',
-                'app/components/util/data-util.service.js',
-                'app/components/util/pagination-util.service.js',
-                'app/components/util/sort.directive.js',
-                'app/components/util/sort-by.directive.js',
-                // entities
-                'app/entities/entity.state.js',
-                // home
-                'app/home/home.state.js',
-                'app/home/home.controller.js',
-                // layouts
-                'app/layouts/error/error.state.js',
-                'app/layouts/navbar/active-link.directive.js',
-                'app/layouts/navbar/navbar.controller.js',
-                // services
-                'app/services/auth/auth.service.js',
-                'app/services/auth/principal.service.js',
-                'app/services/auth/has-authority.directive.js',
-                'app/services/auth/has-any-authority.directive.js',
-                'app/services/auth/account.service.js',
-                'app/services/auth/activate.service.js',
-                'app/services/auth/password.service.js',
-                'app/services/auth/password-reset-init.service.js',
-                'app/services/auth/password-reset-finish.service.js',
-                'app/services/auth/register.service.js',
-                'app/services/user/user.service.js'
-            ];
-            if (this.enableTranslation) {
-                appScripts = appScripts.concat([
-                    'bower_components/messageformat/locale/en.js',
-                    'bower_components/messageformat/locale/fr.js',
-                    'app/blocks/handlers/translation.handler.js',
-                    'app/blocks/config/translation.config.js',
-                    'app/components/language/language.service.js',
-                    'app/components/language/language.constants.js',
-                    'app/components/language/language.filter.js',
-                    'app/components/language/language.controller.js',
-                    'app/layouts/navbar/active-menu.directive.js'
-                ]);
-            }
-            if (this.enableSocialSignIn) {
-                appScripts = appScripts.concat([
-                    'app/account/social/directive/social.directive.js',
-                    'app/account/social/social-register.state.js',
-                    'app/account/social/social-register.controller.js',
-                    'app/account/social/social.service.js'
-                ]);
-            }
-            if (this.authenticationType == 'jwt') {
-                appScripts = appScripts.concat([
-                    'app/services/auth/auth.jwt.service.js',
-                    'app/blocks/interceptor/auth.interceptor.js'
-                ]);
-            }
-
-            if (this.authenticationType == 'oauth2') {
-                appScripts = appScripts.concat([
-                    'app/services/auth/auth.oauth2.service.js',
-                    'app/blocks/interceptor/auth.interceptor.js'
-                ]);
-            }
-
-            if (this.authenticationType == 'session') {
-                appScripts = appScripts.concat([
-                    'app/services/auth/sessions.service.js',
-                    'app/services/auth/auth.session.service.js',
-                    'app/account/sessions/sessions.state.js',
-                    'app/account/sessions/sessions.controller.js'
-                ]);
-            }
-
-            if (this.websocket == 'spring-websocket') {
-                appScripts = appScripts.concat([
-                    'app/admin/tracker/tracker.state.js',
-                    'app/admin/tracker/tracker.controller.js',
-                    'app/admin/tracker/tracker.service.js'
-                ]);
-            }
-
-            if (this.applicationType == 'gateway') {
-                appScripts = appScripts.concat([
-                    'app/admin/gateway/gateway.state.js',
-                    'app/admin/gateway/gateway.controller.js',
-                    'app/admin/gateway/gateway.routes.service.js'
-                ]);
-            }
-
-            indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});
-            this.write(MAIN_SRC_DIR + 'index.html', indexFile);
 
         },
 
@@ -678,17 +568,17 @@ module.exports = JhipsterClientGenerator.extend({
                 'spec/app/services/auth/_auth.services.spec.js',
                 'spec/app/components/login/_login.controller.spec.js'
             ];
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
             }
             // Create Protractor test files
-            if (this.testFrameworks.indexOf('protractor') != -1) {
-                testTemplates.push('e2e/_account.js');
-                testTemplates.push('e2e/_administration.js');
-                testTemplates.push('_protractor.conf.js')
+            if (this.testFrameworks.indexOf('protractor') !== -1) {
+                testTemplates.push('e2e/account/_account.js');
+                testTemplates.push('e2e/admin/_administration.js');
+                testTemplates.push('_protractor.conf.js');
             }
-            testTemplates.map(function(testTemplatePath) {
-                this.template(TEST_SRC_DIR + testTemplatePath, TEST_SRC_DIR + testTemplatePath.replace(/_/,''), this, {});
+            testTemplates.map(function (testTemplatePath) {
+                this.template(TEST_SRC_DIR + testTemplatePath, TEST_SRC_DIR + testTemplatePath.replace(/_/, ''), this, {});
             }.bind(this));
 
         }

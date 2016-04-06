@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "sampleGradle",
+    "baseName": "travisGradle",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
@@ -15,10 +15,14 @@
     "useSass": false,
     "buildTool": "gradle",
     "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
     "enableSocialSignIn": false,
-    "rememberMeKey": "0b557a1f94eb8ea76db0a95b5e8b64bec08bb869",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
-      "gatling"
-    ]
+      "gatling",
+      "protractor"
+    ],
+    "travis": true
   }
 }

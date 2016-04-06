@@ -45,7 +45,7 @@
                         predicate: PaginationUtil.parsePredicate($stateParams.sort),
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
-                    }
+                    };
                 }]<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
             <%_ } if (enableTranslation){ _%>
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
@@ -61,7 +61,7 @@
         })
         .state('<%= entityStateName %>-detail', {
             parent: 'entity',
-            url: '/<%= entityUrl %>/{id:<%= entityUrlType %>}',
+            url: '/<%= entityUrl %>/{id}',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
@@ -97,6 +97,7 @@
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                     controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
@@ -115,7 +116,7 @@
                             };
                         }
                     }
-                }).result.then(function(result) {
+                }).result.then(function() {
                     $state.go('<%= entityStateName %>', null, { reload: true });
                 }, function() {
                     $state.go('<%= entityStateName %>');
@@ -124,22 +125,23 @@
         })
         .state('<%= entityStateName %>.edit', {
             parent: '<%= entityStateName %>',
-            url: '/{id:<%= entityUrlType %>}/edit',
+            url: '/{id}/edit',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                     controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
+                    backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: ['<%= entityClass %>', function(<%= entityClass %>) {
                             return <%= entityClass %>.get({id : $stateParams.id});
                         }]
                     }
-                }).result.then(function(result) {
+                }).result.then(function() {
                     $state.go('<%= entityStateName %>', null, { reload: true });
                 }, function() {
                     $state.go('^');
@@ -148,9 +150,9 @@
         })
         .state('<%= entityStateName %>.delete', {
             parent: '<%= entityStateName %>',
-            url: '/{id:<%= entityUrlType %>}/delete',
+            url: '/{id}/delete',
             data: {
-                authorities: ['ROLE_USER'],
+                authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
@@ -163,7 +165,7 @@
                             return <%= entityClass %>.get({id : $stateParams.id});
                         }]
                     }
-                }).result.then(function(result) {
+                }).result.then(function() {
                     $state.go('<%= entityStateName %>', null, { reload: true });
                 }, function() {
                     $state.go('^');

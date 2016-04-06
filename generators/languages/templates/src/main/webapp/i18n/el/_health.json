@@ -1,0 +1,35 @@
+{
+    "health": {
+        "title": "Έλεγχοι υγείας",
+        "refresh.button": "Ανανέωση",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Λεπτομέρειες",
+            "properties": "Ιδιότητες",
+            "name": "Ονομασία",
+            "value": "Τιμή",
+            "error": "Σφάλμα"
+        },
+        "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
+            "diskSpace": "Χώρος σκληρού δίσκου",
+            "mail": "Email"<% if (searchEngine == 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType == 'sql') { %>,
+            "db": "Βάση Δεδομένων"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Υπηρεσία",
+            "status": "Κατάσταση"
+        },
+        "status": {
+            "UP": "ΠΑΝΩ",
+            "DOWN": "ΚΑΤΩ"
+        }
+    }
+}

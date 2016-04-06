@@ -2,9 +2,8 @@
 var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base'),
-    build = require('./lib/build.js'),
     AwsFactory = require('./lib/aws.js');
 
 var AwsGenerator = generators.Base.extend({});
@@ -39,20 +38,20 @@ module.exports = AwsGenerator.extend({
             var prodDatabaseType = this.config.get('prodDatabaseType');
 
             switch (prodDatabaseType.toLowerCase()) {
-                case 'mysql':
-                    this.dbEngine = 'mysql';
-                    break;
-                case 'postgresql':
-                    this.dbEngine = 'postgres';
-                    break;
-                default:
-                    this.env.error(chalk.red('Sorry deployment for this database is not possible'));
+            case 'mysql':
+                this.dbEngine = 'mysql';
+                break;
+            case 'postgresql':
+                this.dbEngine = 'postgres';
+                break;
+            default:
+                this.env.error(chalk.red('Sorry deployment for this database is not possible'));
             }
         }
     },
     prompting: function () {
         if (this.existingProject) {
-            return
+            return;
         }
 
         var cb = this.async();
@@ -130,9 +129,9 @@ module.exports = AwsGenerator.extend({
             }];
 
         this.prompt(prompts, function (props) {
-            this.applicationName = _.slugify(props.applicationName);
-            this.environmentName = _.slugify(props.environmentName);
-            this.bucketName = _.slugify(props.bucketName);
+            this.applicationName = _.kebabCase(props.applicationName);
+            this.environmentName = _.kebabCase(props.environmentName);
+            this.bucketName = _.kebabCase(props.bucketName);
             this.instanceType = props.instanceType;
             this.awsRegion = props.awsRegion;
             this.dbName = props.dbName;
@@ -165,134 +164,137 @@ module.exports = AwsGenerator.extend({
             });
         }
     },
-    productionBuild: function () {
-        var cb = this.async();
-        this.log(chalk.bold('Building application'));
+    default: {
+        productionBuild: function () {
+            var cb = this.async();
+            this.log(chalk.bold('Building application'));
 
-        build.buildProduction(this.buildTool, function (err) {
+            var child = this.buildApplication(this.buildTool, 'prod', function (err) {
                 if (err) {
                     this.env.error(chalk.red(err));
                 } else {
                     cb();
                 }
-            }.bind(this))
-            .on('data', function (data) {
+            }.bind(this));
+
+            child.stdout.on('data', function (data) {
                 this.log(data.toString());
             }.bind(this));
-    },
-    createBucket: function () {
-        var cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create S3 bucket'));
+        },
+        createBucket: function () {
+            var cb = this.async();
+            this.log();
+            this.log(chalk.bold('Create S3 bucket'));
 
-        var s3 = this.awsFactory.getS3();
+            var s3 = this.awsFactory.getS3();
 
-        s3.createBucket({bucket: this.bucketName}, function (err, data) {
-            if (err) {
-                this.env.error(chalk.red(err.message));
-            } else {
-                this.log(data.message);
-                cb();
+            s3.createBucket({bucket: this.bucketName}, function (err, data) {
+                if (err) {
+                    this.env.error(chalk.red(err.message));
+                } else {
+                    this.log(data.message);
+                    cb();
+                }
+            }.bind(this));
+        },
+        uploadWar: function () {
+            var cb = this.async();
+            this.log();
+            this.log(chalk.bold('Upload WAR to S3'));
+
+            var s3 = this.awsFactory.getS3();
+
+            var params = {
+                bucket: this.bucketName,
+                buildTool: this.buildTool
+            };
+
+            s3.uploadWar(params, function (err, data) {
+                if (err) {
+                    this.env.error(chalk.red(err.message));
+                } else {
+                    this.warKey = data.warKey;
+                    this.log(data.message);
+                    cb();
+                }
+            }.bind(this));
+        },
+        createDatabase: function () {
+            var cb = this.async();
+            this.log();
+            this.log(chalk.bold('Create database'));
+
+            var rds = this.awsFactory.getRds();
+
+            var params = {
+                dbInstanceClass: this.dbInstanceClass,
+                dbName: this.dbName,
+                dbEngine: this.dbEngine,
+                dbPassword: this.dbPassword,
+                dbUsername: this.dbUsername
+            };
+
+            rds.createDatabase(params, function (err, data) {
+                if (err) {
+                    this.env.error(chalk.red(err.message));
+                } else {
+                    this.log(data.message);
+                    cb();
+                }
+            }.bind(this));
+        },
+        createDatabaseUrl: function () {
+            var cb = this.async();
+            this.log();
+            this.log(chalk.bold('Waiting for database (This may take several minutes)'));
+
+            if (this.dbEngine === 'postgres') {
+                this.dbEngine = 'postgresql';
             }
-        }.bind(this));
-    },
-    uploadWar: function () {
-        var cb = this.async();
-        this.log();
-        this.log(chalk.bold('Upload WAR to S3'));
 
-        var s3 = this.awsFactory.getS3();
+            var rds = this.awsFactory.getRds();
 
-        var params = {
-            bucket: this.bucketName,
-            buildTool: this.buildTool
-        };
+            var params = {
+                dbName: this.dbName,
+                dbEngine: this.dbEngine
+            };
 
-        s3.uploadWar(params, function (err, data) {
-            if (err) {
-                this.env.error(chalk.red(err.message));
-            } else {
-                this.warKey = data.warKey;
-                this.log(data.message);
-                cb();
-            }
-        }.bind(this));
-    },
-    createDatabase: function () {
-        var cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create database'));
+            rds.createDatabaseUrl(params, function (err, data) {
+                if (err) {
+                    this.env.error(chalk.red(err.message));
+                } else {
+                    this.dbUrl = data.dbUrl;
+                    this.log(data.message);
+                    cb();
+                }
+            }.bind(this));
+        },
+        createApplication: function () {
+            var cb = this.async();
+            this.log();
+            this.log(chalk.bold('Create/Update application'));
 
-        var rds = this.awsFactory.getRds();
+            var eb = this.awsFactory.getEb();
 
-        var params = {
-            dbInstanceClass: this.dbInstanceClass,
-            dbName: this.dbName,
-            dbEngine: this.dbEngine,
-            dbPassword: this.dbPassword,
-            dbUsername: this.dbUsername
-        };
+            var params = {
+                applicationName: this.applicationName,
+                bucketName: this.bucketName,
+                warKey: this.warKey,
+                environmentName: this.environmentName,
+                dbUrl: this.dbUrl,
+                dbUsername: this.dbUsername,
+                dbPassword: this.dbPassword,
+                instanceType: this.instanceType
+            };
 
-        rds.createDatabase(params, function (err, data) {
-            if (err) {
-                this.env.error(chalk.red(err.message));
-            } else {
-                this.log(data.message);
-                cb();
-            }
-        }.bind(this));
-    },
-    createDatabaseUrl: function () {
-        var cb = this.async();
-        this.log();
-        this.log(chalk.bold('Waiting for database (This may take several minutes)'));
-
-        if (this.dbEngine === 'postgres') {
-            this.dbEngine = 'postgresql';
+            eb.createApplication(params, function (err, data) {
+                if (err) {
+                    this.env.error(chalk.red(err.message));
+                } else {
+                    this.log(data.message);
+                    cb();
+                }
+            }.bind(this));
         }
-
-        var rds = this.awsFactory.getRds();
-
-        var params = {
-            dbName: this.dbName,
-            dbEngine: this.dbEngine
-        };
-
-        rds.createDatabaseUrl(params, function (err, data) {
-            if (err) {
-                this.env.error(chalk.red(err.message));
-            } else {
-                this.dbUrl = data.dbUrl;
-                this.log(data.message);
-                cb();
-            }
-        }.bind(this));
-    },
-    createApplication: function () {
-        var cb = this.async();
-        this.log();
-        this.log(chalk.bold('Create/Update application'));
-
-        var eb = this.awsFactory.getEb();
-
-        var params = {
-            applicationName: this.applicationName,
-            bucketName: this.bucketName,
-            warKey: this.warKey,
-            environmentName: this.environmentName,
-            dbUrl: this.dbUrl,
-            dbUsername: this.dbUsername,
-            dbPassword: this.dbPassword,
-            instanceType: this.instanceType
-        };
-
-        eb.createApplication(params, function (err, data) {
-            if (err) {
-                this.env.error(chalk.red(err.message));
-            } else {
-                this.log(data.message);
-                cb();
-            }
-        }.bind(this));
     }
 });

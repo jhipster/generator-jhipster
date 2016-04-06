@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$state', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, 'Tracker'<% } %>];
+    Auth.$inject = ['$rootScope', '$state', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-    function Auth ($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, Tracker<% } %>) {
+    function Auth ($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
         var service = {
             activateAccount: activateAccount,
             authorize: authorize,
@@ -15,6 +15,9 @@
             createAccount: createAccount,
             login: login,
             logout: logout,
+            <%_ if (authenticationType == 'jwt') { _%>
+            loginWithToken: loginWithToken,
+            <%_ } _%>
             resetPasswordFinish: resetPasswordFinish,
             resetPasswordInit: resetPasswordInit,
             updateAccount: updateAccount
@@ -43,7 +46,7 @@
                 var isAuthenticated = Principal.isAuthenticated();
 
                 // an authenticated user can't access to login and register pages
-                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register')) {
+                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register'<% if (authenticationType == 'jwt') { %> || $rootScope.toState.name === 'social-auth'<% } %>)) {
                     $state.go('home');
                 }
 
@@ -114,7 +117,7 @@
                     }
                     <%_ } _%>
                     <%_ if (websocket === 'spring-websocket') { _%>
-                    Tracker.sendActivity();
+                    <%=jhiPrefixCapitalized%>TrackerService.sendActivity();
                     <%_ } _%>
                     deferred.resolve(data);
                 });
@@ -123,6 +126,12 @@
 
             return deferred.promise;
         }
+
+        <%_ if (authenticationType == 'jwt') { _%>
+        function loginWithToken(jwt, rememberMe) {
+            return AuthServerProvider.loginWithToken(jwt, rememberMe);
+        }
+        <%_ } _%>
 
         function logout () {
             AuthServerProvider.logout();

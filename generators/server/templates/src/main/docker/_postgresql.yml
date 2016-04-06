@@ -1,0 +1,12 @@
+version: '2'
+services:
+    <%= baseName.toLowerCase() %>-postgresql:
+        container_name: <%= baseName.toLowerCase() %>-postgresql
+        image: postgres:9.5.1
+        # volumes:
+        #     - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=<%= baseName %>
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432

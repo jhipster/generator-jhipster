@@ -40,13 +40,15 @@
         function responseError(response) {
             // If we have an unauthorized request we redirect to the login page
             // Don't do this check on the account API to avoid infinite loop
-            if (response.status === 401 && angular.isDefined(response.data.path) && response.data.path.indexOf('/api/account') === -1){
+            if (response.status === 401 && angular.isDefined(response.data.path) && response.data.path.indexOf('/api/account') === -1) {
                 var Auth = $injector.get('Auth');
                 var to = $rootScope.toState;
                 var params = $rootScope.toStateParams;
                 Auth.logout();
-                $rootScope.previousStateName = to;
-                $rootScope.previousStateNameParams = params;
+                if (to.name !== 'accessdenied') {
+                    $rootScope.previousStateName = to;
+                    $rootScope.previousStateNameParams = params;
+                }
                 var LoginPopupService = $injector.get('LoginService');
                 LoginPopupService.open();
             } else if (response.status === 403 && response.config.method !== 'GET' && getCSRF() === '') {
@@ -58,14 +60,17 @@
         }
 
         function getCSRF() {
-            var name = 'CSRF-TOKEN=';
-            var ca = $document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) === ' ') {c = c.substring(1);}
+            var doc = $document[0];
+            if (doc) {
+                var name = 'CSRF-TOKEN=';
+                var ca = doc.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) === ' ') {c = c.substring(1);}
 
-                if (c.indexOf(name) !== -1) {
-                    return c.substring(name.length, c.length);
+                    if (c.indexOf(name) !== -1) {
+                        return c.substring(name.length, c.length);
+                    }
                 }
             }
             return '';

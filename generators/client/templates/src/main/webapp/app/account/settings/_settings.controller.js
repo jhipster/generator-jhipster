@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['Principal', 'Auth'<% if (enableTranslation){ %>, 'Language', '$translate'<% } %>];
+    SettingsController.$inject = ['Principal', 'Auth'<% if (enableTranslation){ %>, '<%=jhiPrefixCapitalized%>LanguageService', '$translate'<% } %>];
 
-    function SettingsController (Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
+    function SettingsController (Principal, Auth<% if (enableTranslation){ %>, <%=jhiPrefixCapitalized%>LanguageService, $translate<% } %>) {
         var vm = this;
 
         vm.error = null;
@@ -40,7 +40,7 @@
                 Principal.identity(true).then(function(account) {
                     vm.settingsAccount = copyAccount(account);
                 });<% if (enableTranslation){ %>
-                Language.getCurrent().then(function(current) {
+                <%=jhiPrefixCapitalized%>LanguageService.getCurrent().then(function(current) {
                     if (vm.settingsAccount.langKey !== current) {
                         $translate.use(vm.settingsAccount.langKey);
                     }

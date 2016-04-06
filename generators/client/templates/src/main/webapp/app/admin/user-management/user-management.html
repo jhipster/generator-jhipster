@@ -1,14 +1,12 @@
 <div>
     <h2 translate="userManagement.home.title">Users</h2>
     <jhi-alert></jhi-alert>
-    <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-              <button class="btn btn-primary" ui-sref="user-management.new">
-                  <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
-              </button>
-          </div>
-        </div>
+    <div class="row">
+      <div class="col-md-4">
+          <button class="btn btn-primary" ui-sref="user-management.new">
+              <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
+          </button>
+      </div>
     </div>
     <div class="table-responsive">
         <table class="table table-striped">
@@ -18,11 +16,11 @@
                 <th translate="userManagement.login">Login</th>
                 <th translate="userManagement.email">Email</th>
                 <th></th>
-                <% if (enableTranslation) { %><th translate="userManagement.langKey">LangKey</th><% } %>
+                <% if (enableTranslation) { %><th translate="userManagement.langKey">Lang Key</th><% } %>
                 <th translate="userManagement.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                <th translate="userManagement.createdDate">CreatedDate</th>
-                <th translate="userManagement.lastModifiedBy">LastModifiedBy</th>
-                <th translate="userManagement.lastModifiedDate">LastModifiedDate</th><% } %>
+                <th translate="userManagement.createdDate">Created Date</th>
+                <th translate="userManagement.lastModifiedBy">Last Modified By</th>
+                <th translate="userManagement.lastModifiedDate">Last Modified Date</th><% } %>
                 <th></th>
             </tr>
             </thead>
@@ -47,22 +45,26 @@
                 <td>{{user.lastModifiedBy}}</td>
                 <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
                 <td class="text-right">
-                    <button type="submit"
-                            ui-sref="user-management-detail({login:user.login})"
-                            class="btn btn-info btn-sm">
-                        <span class="glyphicon glyphicon-eye-open"></span>
-                    </button>
-                    <button type="submit"
-                            ui-sref="user-management.edit({login:user.login})"
-                            class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
-                    <button type="submit"
-                            ui-sref="user-management.delete({login:user.login})"
-                            class="btn btn-danger btn-sm"
-                            ng-disabled="vm.currentAccount.login==user.login">
-                        <span class="glyphicon glyphicon-remove-circle"></span>
-                    </button>
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                ui-sref="user-management-detail({login:user.login})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="user-management.edit({login:user.login})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="user-management.delete({login:user.login})"
+                                class="btn btn-danger btn-sm" ng-disabled="vm.currentAccount.login==user.login">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                        </button>
+                    </div>
                 </td>
             </tr>
             </tbody>

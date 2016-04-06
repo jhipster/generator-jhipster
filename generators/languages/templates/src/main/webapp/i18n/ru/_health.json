@@ -1,8 +1,21 @@
 {
     "health": {
         "title": "Состояние",
+        "refresh.button": "Обновить",
         "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Детали",
+            "properties": "Параметры",
+            "name": "Имя",
+            "value": "Значение",
+            "error": "Ошибка"
+        },
         "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
             "diskSpace": "Место на диске",
             "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
@@ -12,7 +25,7 @@
         },
         "table": {
             "service": "Название сервиса",
-            "status": "статус"
+            "status": "Статус"
         },
         "status": {
             "UP": "UP",

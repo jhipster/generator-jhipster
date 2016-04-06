@@ -19,10 +19,13 @@ describe('JHipster generator languages', function () {
         {name: 'Dutch', value: 'nl'},
         {name: 'Galician', value: 'gl'},
         {name: 'German', value: 'de'},
+        {name: 'Greek', value: 'el'},
+        {name: 'Hindi', value: 'hi'},
         {name: 'Hungarian', value: 'hu'},
         {name: 'Italian', value: 'it'},
         {name: 'Japanese', value: 'ja'},
         {name: 'Korean', value: 'ko'},
+        {name: 'Marathi', value: 'mr'},
         {name: 'Polish', value: 'pl'},
         {name: 'Portuguese (Brazilian)', value: 'pt-br'},
         {name: 'Portuguese', value: 'pt-pt'},
@@ -39,8 +42,9 @@ describe('JHipster generator languages', function () {
             beforeEach(function (done) {
                 helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
-                        fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                        fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                     })
+                    .withOptions({'skip-wiredep': true})
                     .withPrompts({
                         languages: [language.value]
                     })
@@ -81,7 +85,7 @@ describe('JHipster generator languages', function () {
                     '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"');
                 assert.fileContent(CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
                     '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"');
-            })
+            });
         });
     });
 
@@ -90,8 +94,9 @@ describe('JHipster generator languages', function () {
             beforeEach(function (done) {
                 helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
-                        fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
+                        fse.copySync(path.join(__dirname, '../test/templates/social'), dir);
                     })
+                    .withOptions({'skip-wiredep': true})
                     .withPrompts({
                         languages: [language.value]
                     })

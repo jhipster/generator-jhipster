@@ -25,8 +25,6 @@ eureka:
 <%_ } _%>
 
 spring:
-    profiles:
-        active: dev
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
@@ -137,8 +135,8 @@ liquibase:
     contexts: dev
 
 server:
-<%_ if (applicationType == 'microservice') { _%>
-    port: 8081
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    port: <%= serverPort %>
 <%_ } else { _%>
     port: 8080
 <%_ } _%>
@@ -150,12 +148,10 @@ server:
 jhipster:
     <%_ if (applicationType == 'gateway') { _%>
     gateway:
-        <%_ if (databaseType != 'cassandra') { _%>
-        embedded-cassandra: # Starts an embedded Cassandra node (not safe for production)
+        rate-limiting: # Read the documentation in the GatewayConfiguration class before enabling.
             enabled: false
-        <%_ } _%>
-        rate-limiting: # Warning! Read the documentation in the GatewayConfiguration class.
-            enabled: false
+        authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+            app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
@@ -182,3 +178,14 @@ jhipster:
             host: localhost
             port: 2003
             prefix: <%= baseName %>
+        logs: # report metrics in the logs
+            enabled: false
+            reportFrequency: 60 # in seconds
+    logging:
+        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+            enabled: false
+            host: localhost
+            port: 5000
+            queueSize: 512
+    swagger: # swagger is enabled. It can be disabled by pasing 'no-swagger' profile at run time as well
+        enabled: true
