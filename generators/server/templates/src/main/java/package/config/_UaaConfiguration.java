@@ -1,6 +1,6 @@
 package <%=packageName%>.config;
 
-import de.stytex.foobar.security.AuthoritiesConstants;
+import <%=packageName%>.security.AuthoritiesConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @EnableResourceServer
-    static class ResourceServcerConfiguration extends ResourceServerConfigurerAdapter {
+    static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
         @Inject
         TokenStore tokenStore;

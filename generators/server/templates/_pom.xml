@@ -89,7 +89,7 @@
         <spring-cloud.version>1.1.0.RC1</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.0.4.RELEASE</spring-security.version>
-        <%_ if (authenticationType == 'oauth2' || (authenticationType == 'jwt' && applicationType != 'monolith')) { _%>
+        <%_ if (authenticationType == 'oauth2' || (authenticationType == 'jwt' && applicationType != 'monolith') || applicationType == 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
         <springfox.version>2.4.0</springfox.version>
@@ -507,7 +507,7 @@
             <version>0.6.0</version>
         </dependency>
         <%_ } _%>
-        <%_ if (authenticationType == 'jwt' && applicationType != 'monolith') { _%>
+        <%_ if (applicationType == 'uaa' || (authenticationType == 'jwt' && applicationType != 'monolith')) { _%>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
