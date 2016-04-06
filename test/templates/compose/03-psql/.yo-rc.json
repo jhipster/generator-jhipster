@@ -10,7 +10,7 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "postgresql",
-    "searchEngine": "no",
+    "searchEngine": "elasticsearch",
     "buildTool": "maven",
     "jwtSecretKey": "5eaa09fd4bce111761b4cecb7831102d846b99b8",
     "enableTranslation": true,
