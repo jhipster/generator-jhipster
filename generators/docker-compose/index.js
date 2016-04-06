@@ -291,7 +291,7 @@ module.exports = yeoman.Base.extend({
                 }
                 // Add search engine configuration
                 var searchEngine = this.appConfigs[i].searchEngine;
-                if (searchEngine !== 'no') {
+                if (searchEngine === 'elasticsearch') {
                     var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
                     var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
                     delete searchEngineConfig.ports;
