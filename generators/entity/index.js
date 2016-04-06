@@ -125,7 +125,7 @@ module.exports = EntityGenerator.extend({
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
             // backward compatibility on testing frameworks
-            if (this.testFrameworks === null) {
+            if (this.testFrameworks === undefined) {
                 this.testFrameworks = ['gatling'];
             }
 

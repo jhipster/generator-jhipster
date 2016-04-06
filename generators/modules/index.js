@@ -19,7 +19,7 @@ module.exports = ModulesGenerator.extend({
 
         var jhipsterVar = this.options.jhipsterVar;
         var jhipsterFunc = this.options.jhipsterFunc;
-        if (jhipsterVar === null || jhipsterVar.moduleName === null) {
+        if (jhipsterVar === undefined || jhipsterVar.moduleName === undefined) {
             this.env.error(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
         }
 
@@ -29,7 +29,7 @@ module.exports = ModulesGenerator.extend({
         var packageName = this.config.get('packageName');
         var packageFolder = this.config.get('packageFolder');
 
-        if (!this.options.skipValidation && (baseName === null || packageName === null)) {
+        if (!this.options.skipValidation && (baseName === undefined || packageName === undefined)) {
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
             this.env.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
         }
