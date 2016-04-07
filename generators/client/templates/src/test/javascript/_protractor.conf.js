@@ -4,7 +4,7 @@ var JasmineReporters = require('jasmine-reporters');
 var prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
 
 exports.config = {
-    seleniumServerJar: prefix + 'node_modules/protractor/selenium/selenium-server-standalone-2.51.0.jar',
+    seleniumServerJar: prefix + 'node_modules/protractor/selenium/selenium-server-standalone-2.52.0.jar',
     chromeDriver: prefix + 'node_modules/protractor/selenium/chromedriver',
     allScriptsTimeout: 20000,
 
@@ -20,7 +20,7 @@ exports.config = {
         'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
 
-    directConnect: false,
+    directConnect: true,
 
     baseUrl: 'http://localhost:8080/',
 
