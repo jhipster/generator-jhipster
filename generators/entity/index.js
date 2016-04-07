@@ -1527,6 +1527,10 @@ module.exports = EntityGenerator.extend({
                     relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
                 }
 
+                 if (_.isUndefined(relationship.relationshipNamePlural)) {
+                    relationship.relationshipNamePlural = pluralize(_.startCase(relationship.relationshipName));
+                }
+
                 if (_.isUndefined(relationship.relationshipFieldName)) {
                     relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
                 }
