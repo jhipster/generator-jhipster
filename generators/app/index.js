@@ -63,9 +63,17 @@ module.exports = JhipsterGenerator.extend({
             defaults: true
         });
 
+        // This adds support for a `--jhi-prefix` flag
+        this.option('jhi-prefix', {
+            desc: 'Add prefix before services, controllers and states name',
+            type: String,
+            defaults: 'jhi'
+        });
+
         this.skipClient = configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
+        this.jhiPrefix = configOptions.jhiPrefix = this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.checkInstall = this.options['check-install'];
 
@@ -163,7 +171,7 @@ module.exports = JhipsterGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
-            var configFound = this.baseName != null && this.applicationType != null;
+            var configFound = this.baseName !== undefined && this.applicationType !== undefined;
             if (configFound) {
                 this.existingProject = true;
             }
@@ -242,7 +250,7 @@ module.exports = JhipsterGenerator.extend({
             configOptions.baseName = this.baseName;
             configOptions.logo = false;
             this.generatorType = 'app';
-            if (this.applicationType == 'microservice') {
+            if (this.applicationType === 'microservice') {
                 this.skipClient = true;
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = true;
@@ -357,6 +365,7 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('applicationType', this.applicationType);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
+            this.config.set('jhiPrefix', this.jhiPrefix);
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);
@@ -380,7 +389,7 @@ module.exports = JhipsterGenerator.extend({
                     this.composeWith('jhipster:entity', {
                         options: {
                             regenerate: true,
-                            'skip-install': true,
+                            'skip-install': true
                         },
                         args: [entity.name]
                     }, {
@@ -399,7 +408,7 @@ module.exports = JhipsterGenerator.extend({
                     this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // run through all post app creation module hooks
                     modules.forEach(function (module) {
-                        if (module.hookFor == 'app' && module.hookType == 'post') {
+                        if (module.hookFor === 'app' && module.hookType === 'post') {
                             // compose with the modules callback generator
                             try {
                                 this.composeWith(module.generatorCallback, {

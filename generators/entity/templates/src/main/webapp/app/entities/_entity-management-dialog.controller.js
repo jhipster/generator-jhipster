@@ -35,11 +35,6 @@
                 }
             } %><% for (idx in queries) { %>
         <%- queries[idx] %><% } %>
-        vm.load = function(id) {
-            <%= entityClass %>.get({id : id}, function(result) {
-                vm.<%= entityInstance %> = result;
-            });
-        };
 
         var onSaveSuccess = function (result) {
             $scope.$emit('<%=angularAppName%>:<%= entityInstance %>Update', result);

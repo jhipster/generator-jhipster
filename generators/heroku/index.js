@@ -1,8 +1,6 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     fs = require('fs'),
-    os = require('os'),
     generators = require('yeoman-generator'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
@@ -47,10 +45,10 @@ module.exports = HerokuGenerator.extend({
                 default: this.baseName
             },
             {
-                type: "list",
+                type: 'list',
                 name: 'herokuRegion',
                 message: 'On which region do you want to deploy ?',
-                choices: ["us", "eu"],
+                choices: ['us', 'eu'],
                 default: 0
             }];
 
@@ -76,175 +74,177 @@ module.exports = HerokuGenerator.extend({
         }
     },
 
-    gitInit: function () {
-        if (this.abort) return;
-        var done = this.async();
+    default: {
+        gitInit: function () {
+            if (this.abort) return;
+            var done = this.async();
 
-        try {
-            var stats = fs.lstatSync('.git');
-            this.log(chalk.bold('\nUsing existing Git repository'));
-            done();
-        } catch (e) {
-            // An exception is thrown if the folder doesn't exist
-            this.log(chalk.bold('\nInitializing Git repository'));
-            var child = exec('git init', {}, function (err, stdout, stderr) {
+            try {
+                fs.lstatSync('.git');
+                this.log(chalk.bold('\nUsing existing Git repository'));
                 done();
-            }.bind(this));
-            child.stdout.on('data', function (data) {
-                this.log(data.toString());
-            }.bind(this));
-        }
-    },
-
-    installHerokuDeployPlugin: function () {
-        if (this.abort) return;
-        var done = this.async();
-        this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-        var child = exec('heroku plugins:install https://github.com/heroku/heroku-deploy', function (err, stdout) {
-            if (err) {
-                this.abort = true;
-                this.log.error(err);
-            }
-            done();
-        }.bind(this));
-
-        child.stdout.on('data', function (data) {
-            this.log(data.toString());
-        }.bind(this));
-    },
-
-    herokuCreate: function () {
-        if (this.abort) return;
-        var done = this.async();
-
-        var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
-
-        var dbAddOn = "";
-        if (this.prodDatabaseType == 'postgresql') {
-          dbAddOn = ' --addons heroku-postgresql'
-        } else if (this.prodDatabaseType == 'mysql') {
-          dbAddOn = ' --addons jawsdb:kitefin'
-        }
-
-        this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-        var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
-        this.log(herokuCreateCmd);
-
-        var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
-            if (err) {
-                if (stderr.indexOf('Name is already taken') > -1) {
-                    var prompts = [
-                        {
-                            type: "list",
-                            name: 'herokuForceName',
-                            message: 'The Heroku app "' + chalk.cyan(this.herokuDeployedName) + '" already exists! Use it anyways?',
-                            choices: [{
-                                value: 'Yes',
-                                name: 'Yes, I have access to it',
-                            }, {
-                                value: 'No',
-                                name: 'No, generate a random name'
-                            }],
-                            default: 0
-                        }];
-
-                    this.log("");
-                    this.prompt(prompts, function (props) {
-                        var getHerokuAppName = function(def, stdout) { return def; }
-                        if (props.herokuForceName == 'Yes') {
-                            herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName
-                        } else {
-                            herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
-
-                            // Extract from "Created random-app-name-1234... done"
-                            getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); }
-                        }
-                        var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
-                            if (err) {
-                                this.abort = true;
-                                this.log.error(err);
-                            } else {
-                                this.herokuDeployedName = getHerokuAppName(this.herokuDeployedName, stdout)
-                                this.log(stdout);
-                            }
-                            done();
-                        }.bind(this));
-                    }.bind(this));
-                } else {
-                    this.abort = true;
-                    this.log.error(err);
-                    done();
-                }
-            } else {
-                done();
-            }
-        }.bind(this));
-
-        child.stdout.on('data', function (data) {
-            var output = data.toString();
-            if (data.search('Heroku credentials') >= 0) {
-                this.abort = true;
-                this.log.error('Error: Not authenticated. Run \'heroku login\' to login to your heroku account and try again.');
-                done();
-            } else {
-                this.log(output);
-            }
-        }.bind(this));
-    },
-
-    configureJHipsterRegistry: function() {
-        if (this.abort) return;
-        var done = this.async();
-
-        if (this.applicationType == "microservice" || this.applicationType == "gateway") {
-            var prompts = [
-                {
-                    type: "input",
-                    name: 'herokuJHipsterRegistry',
-                    message: 'What is the URL of your JHipster Registry?'
-                }];
-
-            this.log("");
-            this.prompt(prompts, function (props) {
-                var configSetCmd = "heroku config:set " + "JHIPSTER_REGISTRY_URL=" + props.herokuJHipsterRegistry + ' --app ' + this.herokuDeployedName;
-                var child = exec(configSetCmd, {}, function (err, stdout, stderr) {
-                    if (err) {
-                        this.abort = true;
-                        this.log.error(err);
-                    }
+            } catch (e) {
+                // An exception is thrown if the folder doesn't exist
+                this.log(chalk.bold('\nInitializing Git repository'));
+                var child = exec('git init', {}, function (err, stdout, stderr) {
                     done();
                 }.bind(this));
-
                 child.stdout.on('data', function (data) {
                     this.log(data.toString());
                 }.bind(this));
+            }
+        },
+
+        installHerokuDeployPlugin: function () {
+            if (this.abort) return;
+            var done = this.async();
+            this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
+            var child = exec('heroku plugins:install https://github.com/heroku/heroku-deploy', function (err, stdout) {
+                if (err) {
+                    this.abort = true;
+                    this.log.error(err);
+                }
+                done();
             }.bind(this));
-        } else {
-          this.conflicter.resolve(function (err) {
-              done();
-          });
+
+            child.stdout.on('data', function (data) {
+                this.log(data.toString());
+            }.bind(this));
+        },
+
+        herokuCreate: function () {
+            if (this.abort) return;
+            var done = this.async();
+
+            var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
+
+            var dbAddOn = '';
+            if (this.prodDatabaseType === 'postgresql') {
+                dbAddOn = ' --addons heroku-postgresql';
+            } else if (this.prodDatabaseType === 'mysql') {
+                dbAddOn = ' --addons jawsdb:kitefin';
+            }
+
+            this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
+            var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
+            this.log(herokuCreateCmd);
+
+            var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
+                if (err) {
+                    if (stderr.indexOf('Name is already taken') > -1) {
+                        var prompts = [
+                            {
+                                type: 'list',
+                                name: 'herokuForceName',
+                                message: 'The Heroku app "' + chalk.cyan(this.herokuDeployedName) + '" already exists! Use it anyways?',
+                                choices: [{
+                                    value: 'Yes',
+                                    name: 'Yes, I have access to it'
+                                }, {
+                                    value: 'No',
+                                    name: 'No, generate a random name'
+                                }],
+                                default: 0
+                            }];
+
+                        this.log('');
+                        this.prompt(prompts, function (props) {
+                            var getHerokuAppName = function(def, stdout) { return def; };
+                            if (props.herokuForceName === 'Yes') {
+                                herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName;
+                            } else {
+                                herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
+
+                                // Extract from "Created random-app-name-1234... done"
+                                getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); };
+                            }
+                            exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
+                                if (err) {
+                                    this.abort = true;
+                                    this.log.error(err);
+                                } else {
+                                    this.herokuDeployedName = getHerokuAppName(this.herokuDeployedName, stdout);
+                                    this.log(stdout);
+                                }
+                                done();
+                            }.bind(this));
+                        }.bind(this));
+                    } else {
+                        this.abort = true;
+                        this.log.error(err);
+                        done();
+                    }
+                } else {
+                    done();
+                }
+            }.bind(this));
+
+            child.stdout.on('data', function (data) {
+                var output = data.toString();
+                if (data.search('Heroku credentials') >= 0) {
+                    this.abort = true;
+                    this.log.error('Error: Not authenticated. Run \'heroku login\' to login to your heroku account and try again.');
+                    done();
+                } else {
+                    this.log(output);
+                }
+            }.bind(this));
+        },
+
+        configureJHipsterRegistry: function() {
+            if (this.abort) return;
+            var done = this.async();
+
+            if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
+                var prompts = [
+                    {
+                        type: 'input',
+                        name: 'herokuJHipsterRegistry',
+                        message: 'What is the URL of your JHipster Registry?'
+                    }];
+
+                this.log('');
+                this.prompt(prompts, function (props) {
+                    var configSetCmd = 'heroku config:set ' + 'JHIPSTER_REGISTRY_URL=' + props.herokuJHipsterRegistry + ' --app ' + this.herokuDeployedName;
+                    var child = exec(configSetCmd, {}, function (err, stdout, stderr) {
+                        if (err) {
+                            this.abort = true;
+                            this.log.error(err);
+                        }
+                        done();
+                    }.bind(this));
+
+                    child.stdout.on('data', function (data) {
+                        this.log(data.toString());
+                    }.bind(this));
+                }.bind(this));
+            } else {
+                this.conflicter.resolve(function (err) {
+                    done();
+                });
+            }
+        },
+
+        copyHerokuFiles: function () {
+            if (this.abort) return;
+            var insight = this.insight();
+            insight.track('generator', 'heroku');
+            var done = this.async();
+            this.log(chalk.bold('\nCreating Heroku deployment files'));
+
+
+            if (this.prodDatabaseType !== 'no') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
+            }
+
+            this.template('_bootstrap-heroku.yml', SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
+            this.template('_application-heroku.yml', SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
+            this.template('_Procfile', 'Procfile');
+
+            this.conflicter.resolve(function (err) {
+                done();
+            });
         }
-    },
-
-    copyHerokuFiles: function () {
-        if (this.abort) return;
-        var insight = this.insight();
-        insight.track('generator', 'heroku');
-        var done = this.async();
-        this.log(chalk.bold('\nCreating Heroku deployment files'));
-
-
-        if (this.prodDatabaseType != 'no') {
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
-        }
-
-        this.template('_bootstrap-heroku.yml', SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
-        this.template('_application-heroku.yml', SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
-        this.template('_Procfile', 'Procfile');
-
-        this.conflicter.resolve(function (err) {
-            done();
-        });
     },
 
     end: {
@@ -281,7 +281,7 @@ module.exports = HerokuGenerator.extend({
 
             herokuDeployCommand += ' --app ' + this.herokuDeployedName;
 
-            this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
+            this.log(chalk.bold('\nUploading your application code.\n This may take ' + chalk.cyan('several minutes') + ' depending on your connection speed...'));
             var child = exec(herokuDeployCommand, function (err, stdout) {
                 if (err) {
                     this.abort = true;

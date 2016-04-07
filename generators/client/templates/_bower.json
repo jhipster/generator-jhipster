@@ -24,14 +24,15 @@
     "angular-translate-storage-cookie": "2.11.0",
     <%_ } _%>
     "angular-ui-router": "0.2.18",
-    <%_ if (!useSass) { _%>
-    "bootstrap": "3.3.6",
-    <%_ } else { _%>
+    <%_ if (useSass) { _%>
     "bootstrap-sass": "3.3.6",
+    <%_ } else { _%>
+    "bootstrap": "3.3.6",
     <%_ } _%>
     "bootstrap-ui-datetime-picker": "2.2.3",
     "jquery": "2.2.2",
     "json3": "3.3.2",
+    "messageformat": "0.3.1",
     "modernizr": "3.3.1",
     "ng-file-upload": "12.0.4",
     "ngInfiniteScroll": "1.2.2",
@@ -42,22 +43,27 @@
     "swagger-ui": "2.1.4"
   },
   "devDependencies": {
-    "angular-mocks": "1.5.2",
-    "angular-scenario": "1.5.2"
+    "angular-mocks": "1.5.2"
   },
   "overrides": {
     "angular" : {
       "dependencies": {
         "jquery": "2.2.2"
       }
-    }<% if (!useSass) { %>,
+    },
+    <%_ if (useSass) { _%>
+    "bootstrap-sass": {
+      "main": [
+        "assets/stylesheets/_bootstrap.scss"
+      ]
+    }
+    <%_ } else { _%>
     "bootstrap": {
       "main": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.css",
-        "less/bootstrap.less"
+        "dist/css/bootstrap.css"
       ]
-    }<% } %>
+    }
+    <%_ } _%>
   },
   "resolutions": {
     "angular": "1.5.2",

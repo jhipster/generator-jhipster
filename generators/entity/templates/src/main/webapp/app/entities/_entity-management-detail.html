@@ -20,7 +20,7 @@
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
             <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
             <%_ } else { _%>
-            <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}<span>
+            <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } _%>
             <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
             <div>{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</div>

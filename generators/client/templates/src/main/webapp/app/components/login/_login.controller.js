@@ -41,6 +41,11 @@
             }).then(function () {
                 vm.authenticationError = false;
                 $uibModalInstance.close();
+                if ($state.current.name === 'register' || $state.current.name === 'activate' ||
+                    $state.current.name === 'finishReset' || $state.current.name === 'requestReset') {
+                    $state.go('home');
+                }
+
                 // If we're redirected to login, our
                 // previousState is already set in the authExpiredInterceptor. When login succesful go to stored state
                 if ($rootScope.redirected && $rootScope.previousStateName) {

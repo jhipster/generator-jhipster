@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "Wenn Sie sich <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
-                "register": "Sie haben noch keinen Zugang? <a class=\"alert-link\" ui-sref=\"register\">Registrieren Sie sich</a>"
+                "register": "Sie haben noch keinen Zugang? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registrieren Sie sich</a>"
             },
             "error": {
                 "dontmatch": "Das bestätigte Passwort entspricht nicht dem neuen Passwort!"

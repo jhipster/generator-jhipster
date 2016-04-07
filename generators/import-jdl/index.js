@@ -1,13 +1,10 @@
 'use strict';
 var util = require('util'),
-shelljs = require('shelljs'),
-generators = require('yeoman-generator'),
-chalk = require('chalk'),
-jhuml = require("jhipster-uml"),
-scriptBase = require('../generator-base');
-
-const constants = require('../generator-constants'),
-SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+    shelljs = require('shelljs'),
+    generators = require('yeoman-generator'),
+    chalk = require('chalk'),
+    jhuml = require('jhipster-uml'),
+    scriptBase = require('../generator-base');
 
 var JDLGenerator = generators.Base.extend({});
 
@@ -41,13 +38,13 @@ module.exports = JDLGenerator.extend({
 
     _initDatabaseTypeHolder: function(databaseTypeName) {
         switch (databaseTypeName) {
-            case 'sql':
+        case 'sql':
             return jhuml.SQLTypes;
-            case 'mongodb':
+        case 'mongodb':
             return jhuml.MongoDBTypes;
-            case 'cassandra':
+        case 'cassandra':
             return jhuml.CassandraTypes;
-            default:
+        default:
             return jhuml.SQLTypes;
         }
     },
@@ -91,7 +88,7 @@ module.exports = JDLGenerator.extend({
                 this.composeWith('jhipster:entity', {
                     options: {
                         regenerate: true,
-                        'skip-install': true,
+                        'skip-install': true
                     },
                     args: [entity.name]
                 }, {

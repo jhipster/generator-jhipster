@@ -1,7 +1,6 @@
 'use strict';
 var util = require('util'),
     generators = require('yeoman-generator'),
-    chalk = require('chalk'),
     _ = require('lodash'),
     scriptBase = require('../generator-base');
 
@@ -38,7 +37,7 @@ module.exports = ServiceGenerator.extend({
                 message: '(1/1) Do you want to use an interface for your service?',
                 default: false
             }
-        ]
+        ];
         this.prompt(prompts, function (props) {
             this.useInterface = props.useInterface;
             cb();

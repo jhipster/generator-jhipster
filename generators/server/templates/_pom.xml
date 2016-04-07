@@ -86,7 +86,7 @@
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-        <spring-cloud.version>1.1.0.M5</spring-cloud.version>
+        <spring-cloud.version>1.1.0.RC1</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.0.4.RELEASE</spring-security.version>
         <%_ if (authenticationType == 'oauth2') { _%>

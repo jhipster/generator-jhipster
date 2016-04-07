@@ -50,7 +50,7 @@ module.exports = LanguagesGenerator.extend({
             if (!this.isSupportedLanguage(language)) {
                 this.env.error(chalk.red('\nERROR Unsupported language "' + language + '" passed as argument to language generator.' +
                     '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function (o) {
-                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')'
+                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')';
                     }).join(''))
                 );
             }
@@ -84,7 +84,7 @@ module.exports = LanguagesGenerator.extend({
     },
 
     prompting: function () {
-        if (this.currentLanguages || this.languages) return;
+        if (this.languages) return;
 
         var cb = this.async();
         var languageOptions = this.getAllSupportedLanguageOptions();
@@ -130,7 +130,7 @@ module.exports = LanguagesGenerator.extend({
             if (configOptions.nativeLanguage) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if (configOptions.enableSocialSignIn != null) {
+            if (configOptions.enableSocialSignIn !== undefined) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
             if (configOptions.skipClient) {
@@ -154,7 +154,6 @@ module.exports = LanguagesGenerator.extend({
         this.languagesToApply && this.languagesToApply.forEach(function (language) {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
-                this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
             }
             if (!this.skipServer) {
                 this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
