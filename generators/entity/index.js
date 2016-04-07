@@ -1540,7 +1540,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
-                    relationship.otherEntityRelationshipNamePlural = pluralize(_.lowerFirst(this.name));
+                    relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                 }
 
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
