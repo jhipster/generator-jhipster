@@ -55,7 +55,9 @@ public class AccessControlFilter extends ZuulFilter {
             if (requestUri.startsWith(serviceUrl.substring(0, serviceUrl.length() - 2))) {
                 if (isAuthorizedRequest(serviceUrl, serviceName, requestUri)) {
                     return false;
-                }
+                }else{
+					return true;
+				}
             }
         }
         return true;
