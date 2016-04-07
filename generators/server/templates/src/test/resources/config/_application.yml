@@ -103,7 +103,7 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
         authentication:
     <%_ if (authenticationType == 'jwt') { _%>

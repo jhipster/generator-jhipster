@@ -8,7 +8,7 @@
     Activate.$inject = ['$resource'];
 
     function Activate ($resource) {
-        var service = $resource(<% if(applicationType == 'gateway') { %>'uaa/api/activate'<%} else { %>'api/activate'<% } %>, {}, {
+        var service = $resource(<% if(authenticationType == 'uaa') { %>'uaa/api/activate'<%} else { %>'api/activate'<% } %>, {}, {
             'get': { method: 'GET', params: {}, isArray: false}
         });
 

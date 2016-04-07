@@ -222,7 +222,7 @@ public class JHipsterProperties {
 
         private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || applicationType == 'uaa' || applicationType == 'gateway') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
 
         private final Authentication authentication = new Authentication();
         <%_ } _%>
@@ -233,7 +233,7 @@ public class JHipsterProperties {
         }
         <%_ } _%>
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || applicationType == 'uaa' || applicationType == 'gateway') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
         public Authentication getAuthentication() {
             return authentication;
         }
@@ -244,7 +244,7 @@ public class JHipsterProperties {
             private final Oauth oauth = new Oauth();
 
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt' || applicationType == 'uaa' || applicationType == 'gateway') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             private final Jwt jwt = new Jwt();
 
             <%_ } _%>
@@ -253,7 +253,7 @@ public class JHipsterProperties {
                 return oauth;
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt' || applicationType == 'uaa' || applicationType == 'gateway') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             public Jwt getJwt() {
                 return jwt;
             }
@@ -293,7 +293,7 @@ public class JHipsterProperties {
                 }
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt' || applicationType == 'uaa' || applicationType == 'gateway') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
 
             public static class Jwt {
 

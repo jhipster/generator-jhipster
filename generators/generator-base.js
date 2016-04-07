@@ -1229,7 +1229,7 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
         type: 'input',
         name: 'baseName',
         when: function (response) {;
-                return generator.applicationType != 'uaa';
+                return generator.applicationType !== 'uaa';
         },
         validate: function (input) {
             if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;

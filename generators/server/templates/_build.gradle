@@ -195,10 +195,10 @@ dependencies {
     <%_ if (authenticationType == 'oauth2') { _%>
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version
     <%_ } _%>
-    <%_ if (authenticationType == 'jwt' && applicationType == 'monolith') { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: jjwt_version
     <%_ } _%>
-    <%_ if (applicationType != 'monolith') { _%>
+    <%_ if (applicationType == 'uaa' || authenticationType == 'uaa') { _%>
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
     compile group: 'org.springframework.security', name: 'spring-security-jwt'
     <%_ } _%>

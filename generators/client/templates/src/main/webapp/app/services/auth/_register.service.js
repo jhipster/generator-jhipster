@@ -8,6 +8,6 @@
     Register.$inject = ['$resource'];
 
     function Register ($resource) {
-        return $resource(<% if(applicationType == 'gateway') { %>'uaa/api/register'<%} else { %>'api/register'<% } %>, {}, {});
+        return $resource(<% if(authenticationType == 'uaa') { %>'uaa/api/register'<%} else { %>'api/register'<% } %>, {}, {});
     }
 })();

@@ -90,10 +90,10 @@ jhipster:
         #max-age: 1800
     mail:
         from: <%= baseName %>@localhost
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || applicationType == 'uaa') { _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt' || applicationType == 'uaa') { _%>
+    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours

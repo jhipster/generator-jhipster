@@ -8,7 +8,7 @@
     Sessions.$inject = ['$resource'];
 
     function Sessions ($resource) {
-        return $resource(<% if(applicationType == 'gateway') { %>'uaa/api/account/sessions/:series'<%} else { %>'api/account/sessions/:series'<% } %>, {}, {
+        return $resource(<% if(authenticationType == 'uaa') { %>'uaa/api/account/sessions/:series'<%} else { %>'api/account/sessions/:series'<% } %>, {}, {
             'getAll': { method: 'GET', isArray: true}
         });
     }

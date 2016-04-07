@@ -22,7 +22,7 @@
             if (token && token.expires_at && token.expires_at > new Date().getTime()) {
                 config.headers.Authorization = 'Bearer ' + token.access_token;
             }
-            <% } %><% if (authenticationType == 'jwt' || applicationType == 'gateway') { %>
+            <% } %><% if (authenticationType == 'jwt' || authenticationType == 'uaa') { %>
             if (token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }

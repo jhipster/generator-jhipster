@@ -8,7 +8,7 @@
     PasswordResetFinish.$inject = ['$resource'];
 
     function PasswordResetFinish($resource) {
-        var service = $resource(<% if(applicationType == 'gateway') { %>'uaa/api/account/reset_password/finish'<%} else { %>'api/account/reset_password/finish'<% } %>, {}, {});
+        var service = $resource(<% if(authenticationType == 'uaa') { %>'uaa/api/account/reset_password/finish'<%} else { %>'api/account/reset_password/finish'<% } %>, {}, {});
 
         return service;
     }
