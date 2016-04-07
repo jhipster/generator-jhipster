@@ -106,12 +106,10 @@ jhipster:
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt') { _%>
             jwt:
                 secret: jwt-secret-key
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
-    <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
                 clientid: <%= baseName %>app

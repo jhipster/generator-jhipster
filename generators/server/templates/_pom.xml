@@ -507,7 +507,7 @@
             <version>0.6.0</version>
         </dependency>
         <%_ } _%>
-        <%_ if (applicationType == 'uaa' || (authenticationType == 'jwt' && applicationType != 'monolith')) { _%>
+        <%_ if (authenticationType == 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>

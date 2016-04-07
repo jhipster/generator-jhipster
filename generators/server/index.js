@@ -284,7 +284,7 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return applicationType === 'gateway';
+                        return applicationType === 'gateway' || applicationType == 'microservice';
                     },
                     type: 'list',
                     name: 'authenticationType',
