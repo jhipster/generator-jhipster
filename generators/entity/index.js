@@ -1528,7 +1528,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                  if (_.isUndefined(relationship.relationshipNamePlural)) {
-                    relationship.relationshipNamePlural = pluralize(_.startCase(relationship.relationshipName));
+                    relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {
