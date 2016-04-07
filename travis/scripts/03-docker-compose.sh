@@ -23,7 +23,6 @@ elif [[ ("$JHIPSTER" == 'app-psql-es-noi18n') ]]; then
 elif [[ ("$JHIPSTER" == 'app-gateway') || ("$JHIPSTER" == 'app-microservice') ]]; then
   if [ -a src/main/docker/jhipster-registry.yml ]; then
     docker-compose -f src/main/docker/jhipster-registry.yml up -d
-    sleep 15
   fi
 fi
 docker ps -a

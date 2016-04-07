@@ -169,28 +169,28 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.baseName !== undefined && serverConfigFound) {
 
                 // Generate remember me key if key does not already exist in config
-                if (this.authenticationType === 'session' && this.rememberMeKey === null) {
+                if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
 
                 // Generate JWT secert key if key does not already exist in config
-                if (this.authenticationType === 'jwt' && this.jwtSecretKey === null) {
+                if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
                 // If social sign in is not defined, it is disabled by default
-                if (this.enableSocialSignIn === null) {
+                if (this.enableSocialSignIn === undefined) {
                     this.enableSocialSignIn = false;
                 }
 
                 // If translation is not defined, it is enabled by default
-                if (this.enableTranslation === null) {
+                if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
                 }
-                if (this.nativeLanguage === null) {
+                if (this.nativeLanguage === undefined) {
                     this.nativeLanguage = 'en';
                 }
-                if (this.languages === null) {
+                if (this.languages === undefined) {
                     this.languages = ['en', 'fr'];
                 }
 
@@ -687,7 +687,7 @@ module.exports = JhipsterServerGenerator.extend({
                     this.prodDatabaseType = 'cassandra';
                     this.hibernateCache = 'no';
                 }
-                if (this.searchEngine === null) {
+                if (this.searchEngine === undefined) {
                     this.searchEngine = 'no';
                 }
 

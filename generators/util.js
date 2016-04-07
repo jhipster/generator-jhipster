@@ -15,7 +15,8 @@ module.exports = {
     replaceContent: replaceContent,
     classify: classify,
     rewriteJSONFile: rewriteJSONFile,
-    copyWebResource: copyWebResource
+    copyWebResource: copyWebResource,
+    wordwrap: wordwrap
 };
 
 function rewriteFile(args, _this) {
@@ -194,4 +195,17 @@ function deepFind(obj, path, placeholder) {
         }
     }
     return current;
+}
+
+function wordwrap (text, width, seperator, keepLF) {
+    var wrappedText = '';
+    var rows = text.split('\n');
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        if (keepLF === true && i !== 0) {
+            wrappedText = wrappedText + '\\n';
+        }
+        wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;
+    }
+    return wrappedText;
 }

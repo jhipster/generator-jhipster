@@ -47,7 +47,7 @@
                 Auth.logout();
                 if (to.name !== 'accessdenied') {
                     $rootScope.previousStateName = to;
-                    $rootScope.previousStateNameParams = params;
+                    $rootScope.previousStateParams = params;
                 }
                 var LoginPopupService = $injector.get('LoginService');
                 LoginPopupService.open();

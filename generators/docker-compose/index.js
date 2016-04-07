@@ -287,6 +287,8 @@ module.exports = yeoman.Base.extend({
                         var mongodbNodeConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
                         var mongoDbConfigSrvConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
                         mongodbNodeConfig.build.context = relativePath;
+                        databaseYamlConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                        delete databaseYamlConfig.ports;
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = mongodbNodeConfig;
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'] = mongoDbConfigSrvConfig;
                     }

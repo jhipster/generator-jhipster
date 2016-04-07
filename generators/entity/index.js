@@ -125,7 +125,7 @@ module.exports = EntityGenerator.extend({
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
             // backward compatibility on testing frameworks
-            if (this.testFrameworks === null) {
+            if (this.testFrameworks === undefined) {
                 this.testFrameworks = ['gatling'];
             }
 
@@ -232,6 +232,7 @@ module.exports = EntityGenerator.extend({
         }
         if (this.applicationType === 'gateway'){
             this.microserviceName = this.fileData.microserviceName;
+            this.skipServer = !_.isUndefined(this.microserviceName);
             this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
     },
@@ -911,15 +912,6 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd === true && response.relationshipType === 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.upperFirst(response.otherEntityName) + '.java'));
-                },
-                type: 'confirm',
-                name: 'noOtherEntity',
-                message: 'WARNING! You are trying to generate a many-to-one relationship on an entity that does not exist. This will probably fail, as you will need to create a foreign key on a table that does not exist. We advise you to create the other side of this relationship first (do the one-to-many before the many-to-one relationship). Are you sure you want to continue?',
-                default: false
-            },
-            {
-                when: function (response) {
                     return (response.relationshipAdd === true && (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'));
                 },
                 type: 'confirm',
@@ -942,16 +934,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd === true && response.ownerSide === true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _.upperFirst(response.otherEntityName) + '.java'));
-                },
-                type: 'confirm',
-                name: 'noOtherEntity2',
-                message: 'WARNING! You have selected that this entity is the owner of a relationship on another entity, that does not exist yet. This will probably fail, as you will need to create a foreign key on a table that does not exist. We advise you to create the other side of this relationship first (do the non-owning side before the owning side). Are you sure you want to continue?',
-                default: false
-            },
-            {
-                when: function (response) {
-                    return (!(response.noOtherEntity === false || response.noOtherEntity2 === false) && response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
+                    return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
                 },
                 type: 'input',
                 name: 'otherEntityField',
@@ -962,10 +945,7 @@ module.exports = EntityGenerator.extend({
             }
         ];
         this.prompt(prompts, function (props) {
-            if (props.noOtherEntity === false || props.noOtherEntity2 === false) {
-                this.log(chalk.red('\nGeneration aborted, as requested by the user.\n'));
-                return;
-            }
+
             if (props.relationshipAdd) {
                 var relationship = {
                     relationshipName: props.relationshipName,
@@ -1080,7 +1060,6 @@ module.exports = EntityGenerator.extend({
                     }
                     this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
                     this.useConfigurationFile = true;
-                    this.skipServer = true;
                     this._loadJson();
                 }
                 cb();

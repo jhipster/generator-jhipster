@@ -142,13 +142,13 @@ module.exports = JhipsterClientGenerator.extend({
             var clientConfigFound = this.useSass !== undefined;
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
-                if (this.enableTranslation === null) {
+                if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
                 }
-                if (this.nativeLanguage === null) {
+                if (this.nativeLanguage === undefined) {
                     this.nativeLanguage = 'en';
                 }
-                if (this.languages === null) {
+                if (this.languages === undefined) {
                     this.languages = ['en', 'fr'];
                 }
 
