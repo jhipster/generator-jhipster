@@ -10,7 +10,7 @@
     function NavbarController ($location, $state, Auth, Principal, ENV, LoginService) {
         var vm = this;
 
-        vm.isNavbarCollapsed = false;
+        vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
         vm.inProduction = ENV === 'prod';
         vm.login = login;
