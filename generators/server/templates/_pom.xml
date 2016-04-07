@@ -500,7 +500,7 @@
             <version>${spring-security-oauth2.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (authenticationType == 'jwt' && applicationType == 'monolith') { _%>
+        <%_ if (authenticationType == 'jwt') { _%>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
