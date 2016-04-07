@@ -8,6 +8,7 @@
     "<%= MAIN_SRC_DIR %>bower_components"
   ],
   "devDependencies": {
+    "bower": "1.7.9",
     "browser-sync": "2.11.2",
     "del": "2.2.0",
     "eslint-config-angular": "0.5.0",
