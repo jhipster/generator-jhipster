@@ -43,13 +43,18 @@
 
         function logout () {<% if (websocket == 'spring-websocket') { %>
             <%=jhiPrefixCapitalized%>TrackerService.disconnect();<% } %>
+
+            <% if(applicationType == 'gateway') { %>
+                delete $localStorage.authenticationToken;
+            <% } else { %>
             // logout from the server
-            $http.post('api/logout').success(function (response) {
+            $http.post('uaa/api/logout').success(function (response) {
                 delete $localStorage.authenticationToken;
                 // to get a new csrf token call the api
                 $http.get('api/account');
                 return response;
             });
+            <% } %>
         }
     }
 })();
