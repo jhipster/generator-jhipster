@@ -60,7 +60,7 @@
                         // send them to the login service, so you can return them when you're done
                         $rootScope.redirected = true;
                         $rootScope.previousStateName = $rootScope.toState;
-                        $rootScope.previousStateNameParams = $rootScope.toStateParams;
+                        $rootScope.previousStateParams = $rootScope.toStateParams;
 
                         // now, send them to the signin state so they can log in
                         $state.go('accessdenied');
@@ -140,7 +140,7 @@
             // Reset state memory if not redirected
             if(!$rootScope.redirected) {
                 $rootScope.previousStateName = undefined;
-                $rootScope.previousStateNameParams = undefined;
+                $rootScope.previousStateParams = undefined;
             }
         }
 
