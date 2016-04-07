@@ -1050,7 +1050,7 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v5.10.1</nodeVersion>
+                                    <nodeVersion>v4.4.2</nodeVersion>
                                     <npmVersion>3.8.3</npmVersion>
                                 </configuration>
                             </execution>
