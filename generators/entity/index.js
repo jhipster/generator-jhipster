@@ -1519,16 +1519,40 @@ module.exports = EntityGenerator.extend({
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }
 
+                if (_.isUndefined(relationship.relationshipNameCapitalizedPlural)) {
+                    relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
+                }
+
                 if (_.isUndefined(relationship.relationshipNameHumanized)) {
                     relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
+                }
+
+                 if (_.isUndefined(relationship.relationshipNamePlural)) {
+                    relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {
                     relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
                 }
 
+                if (_.isUndefined(relationship.relationshipFieldNamePlural)) {
+                    relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
+                }
+
+                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                    relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
+                }
+
+                if (_.isUndefined(relationship.otherEntityNamePlural)) {
+                    relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
+                }
+
                 if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
                     relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
+                }
+
+                if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {
+                    relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
                 }
 
                 if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {

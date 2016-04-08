@@ -66,12 +66,13 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ for (idx in relationships) {
         var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
         relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
         ownerSide = relationships[idx].ownerSide; %><% if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
-    private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldName %>s = new HashSet<>();
+    private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
     private Long <%= relationshipFieldName %>Id;<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
@@ -118,20 +119,23 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ } } _%>
     <%_ for (idx in relationships) {
         relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         otherEntityName = relationships[idx].otherEntityName,
+        otherEntityNamePlural = relationships[idx].otherEntityNamePlural,
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
         relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
+        relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
         ownerSide = relationships[idx].ownerSide;
         if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
-    public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalized %>s() {
-        return <%= relationshipFieldName %>s;
+    public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalizedPlural %>() {
+        return <%= relationshipFieldNamePlural %>;
     }
 
-    public void set<%= relationshipNameCapitalized %>s(Set<<%= otherEntityNameCapitalized %>DTO> <%= otherEntityName %>s) {
-        this.<%= relationshipFieldName %>s = <%= otherEntityName %>s;
+    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>DTO> <%= otherEntityNamePlural %>) {
+        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
     }
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
