@@ -392,7 +392,7 @@ const expectedFiles = {
 };
 
 describe('JHipster generator', function () {
-    this.timeout(5000); //to avoid occassional timeouts
+    this.timeout(5000); //to avoid occassional timeout on windows
 
     describe('default configuration', function () {
         beforeEach(function (done) {
