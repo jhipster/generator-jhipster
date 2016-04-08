@@ -10,7 +10,7 @@
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
-                "main": "Konto",
+                "main": "Účet",
                 "settings": "Nastavenia",
                 "password": "Heslo",
                 "sessions": "Sedenia",
@@ -84,7 +84,7 @@
             "addimage": "Vložiť obrázok",
             "back": "Späť",
             "cancel": "Zrušiť",
-            "delete": "Vymazať",
+            "delete": "Odstrániť",
             "edit": "Upraviť",
             "save": "Uložiť",
             "view": "Detaily"
@@ -94,7 +94,7 @@
             "value": "Hodnota"
         },
         "delete": {
-            "title": "Potvrdenie vymazania"
+            "title": "Potvrdenie odstránenia"
         },
         "validation": {
             "required": "Toto pole je povinné.",
@@ -105,8 +105,8 @@
             "minbytes": "Toto pole musí mať viac ako {{ min }} bajtov.",
             "maxbytes": "Toto pole nemôže mať viac ako {{ max }} bajtov.",
             "pattern": "Toto pole musí spĺňať vzor {{ pattern }}.",
-            "number": "Toto pole by malo byť číslo.",
-            "datetimelocal": "Toto pole by malo byť dátum a čas."
+            "number": "Toto pole by malo obsahovať číslo.",
+            "datetimelocal": "Toto pole by malo obsahovať dátum a čas."
         }
     },
     "error": {

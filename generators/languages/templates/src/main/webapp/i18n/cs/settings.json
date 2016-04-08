@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Nastavenia používateľa [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Meno",
+            "firstname.placeholder": "Vaše meno",
+            "lastname": "Priezvisko",
+            "lastname.placeholder": "Vaše priezvisko",
+            "language": "Jazyk",
+            "button": "Uložiť"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Vyskytla sa chyba!</strong> Nastavenia nemohli byť uložené.",
+                "emailexists": "<strong>E-mailová adresa sa už používa!</strong> Prosím použite inú adresu."
+            },
+            "success": "<strong>Nastavenia boli uložené!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Meno je povinné.",
+                    "minlength": "Meno musí obsahovať aspoň 1 znak",
+                    "maxlength": "Meno nemôže byť dlhšie ako 50 znakov"
+                },
+                "lastname": {
+                    "required": "Priezvisko je povinné.",
+                    "minlength": "Priezvisko musí obsahovať aspoň 1 znak",
+                    "maxlength": "Priezvisko nemôže byť dlhšie ako 50 znakov"
+                }
+            }
+        }
+    }
+}
