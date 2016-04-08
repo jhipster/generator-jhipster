@@ -78,37 +78,39 @@ module.exports = yeoman.Base.extend({
                 type: 'input',
                 name: 'directoryPath',
                 message: 'Enter the root directory where your gateway(s) and microservices are located',
-                default: '../',
-                validate: function (input) {
-                    var path = this.destinationPath(input);
-                    if(shelljs.test('-d', path)) {
-                        var files = shelljs.ls('-l',this.destinationPath(input));
-                        this.appsFolders = [];
-
-                        files.forEach(function(file) {
-                            if(file.isDirectory()) {
-                                if(shelljs.test('-f', file.name + '/.yo-rc.json')) {
-                                    var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
-                                    if(fileData['generator-jhipster'].baseName !== undefined) {
-                                        this.appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
-                                    }
-                                }
-                            }
-                        }, this);
-
-                        if(this.appsFolders.length === 0) {
-                            return 'No microservice or gateway found in ' + this.destinationPath(input);
-                        } else {
-                            return true;
-                        }
-                    } else {
-                        return path + ' is not a directory or doesn\'t exist';
-                    }
-                }.bind(this)
+                default: '../'
             }];
 
             this.prompt(prompts, function (props) {
                 this.directoryPath = props.directoryPath;
+
+                var path = this.destinationPath(this.directoryPath);
+                if(shelljs.test('-d', path)) {
+                    var files = shelljs.ls('-l',this.destinationPath(this.directoryPath));
+                    this.appsFolders = [];
+
+                    files.forEach(function(file) {
+                        if(file.isDirectory()) {
+                            if( (shelljs.test('-f', file.name + '/.yo-rc.json'))
+                                && (shelljs.test('-f', file.name + '/src/main/docker/app.yml')) ) {
+                                try {
+                                    var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
+                                    if(fileData['generator-jhipster'].baseName !== undefined) {
+                                        this.appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
+                                    }
+                                } catch(err) {
+                                    this.log(chalk.red(file + ': this .yo-rc.json can\'t be read'));
+                                }
+                            }
+                        }
+                    }, this);
+
+                    if(this.appsFolders.length === 0) {
+                        this.env.error('No microservice or gateway found in ' + this.destinationPath(this.directoryPath));
+                    }
+                } else {
+                    this.env.error(path + ' is not a directory or doesn\'t exist');
+                }
 
                 //Removing monolithic apps and registry from appsFolders
                 for(var i = 0; i < this.appsFolders.length; i++) {
@@ -224,7 +226,7 @@ module.exports = yeoman.Base.extend({
 
             var imagePath = '';
             var runCommand = '';
-
+            this.warningMessage = 'To generate Docker image, please run:\n';
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].buildTool === 'maven') {
                     imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
@@ -234,13 +236,10 @@ module.exports = yeoman.Base.extend({
                     runCommand = './gradlew -Pprod bootRepackage buildDocker';
                 }
                 if (shelljs.ls(imagePath).length === 0) {
-                    this.log(chalk.red('\nDocker Image not found at ' + imagePath));
-                    this.log(chalk.red('Please run "' + runCommand + '" in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + ' to generate Docker image'));
-                    this.abort = true;
+                    this.warning = true;
+                    this.warningMessage += '  ' + chalk.cyan(runCommand) +  ' in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + '\n';
                 }
             }
-
-            if(!this.abort) this.log(chalk.green('Found Docker images, writing files...\n'));
         },
 
         generateJwtSecret: function() {
@@ -292,7 +291,7 @@ module.exports = yeoman.Base.extend({
                 }
                 // Add search engine configuration
                 var searchEngine = this.appConfigs[i].searchEngine;
-                if (searchEngine !== 'no') {
+                if (searchEngine === 'elasticsearch') {
                     var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
                     var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
                     delete searchEngineConfig.ports;
@@ -342,8 +341,12 @@ module.exports = yeoman.Base.extend({
     },
     end: function() {
         if(this.abort) return;
-
-        this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
+        if (this.warning) {
+            this.log('\n' + chalk.yellow.bold('WARNING!') + ' Docker Compose configuration generated with missing images!');
+            this.log(this.warningMessage);
+        } else {
+            this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
+        }
         this.log('You can launch all your infrastructure by running : ' + chalk.cyan('docker-compose up -d'));
     }
 });
