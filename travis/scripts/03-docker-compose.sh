@@ -5,11 +5,7 @@ set -ev
 #-------------------------------------------------------------------------------
 cd "$HOME"/"$JHIPSTER"
 if [[ ("$JHIPSTER" == 'app-cassandra') && (-a src/main/docker/cassandra.yml) ]]; then
-  # travis is not stable with docker... need to start container with privileged
-  echo '        privileged: true' >> src/main/docker/cassandra.yml
   docker-compose -f src/main/docker/cassandra.yml up -d
-  # wait until the cassandra cluster is started and all migrations scripts have been applied
-  sleep 40
 elif [[ ("$JHIPSTER" == 'app-mongodb') && (-a src/main/docker/mongodb.yml) ]]; then
   docker-compose -f src/main/docker/mongodb.yml up -d
 elif [[ ("$JHIPSTER" == 'app-mysql') && (-a src/main/docker/mysql.yml) ]]; then
