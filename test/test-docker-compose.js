@@ -26,6 +26,8 @@ const expectedFiles = {
 };
 
 describe('JHipster Docker Compose Sub Generator', function () {
+    this.timeout(5000); //to avoid occassional timeout on windows
+
     describe('only gateway', function () {
         beforeEach(function (done) {
             helpers
