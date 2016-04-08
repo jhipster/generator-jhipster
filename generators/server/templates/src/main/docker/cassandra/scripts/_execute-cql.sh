@@ -7,13 +7,11 @@ function log {
 KEYSPACE_NAME=<%= baseName.toLowerCase() %>
 
 #usage checks
-if [ -z "$1" ]
-  then
+if [ -z "$1" ]; then
     echo "usage: ./execute-cql cqlFile.cql"
     exit 1
 fi
-if [ -z "$CASSANDRA_CONTACT_POINT" ]
-  then
+if [ -z "$CASSANDRA_CONTACT_POINT" ]; then
     echo "CASSANDRA_CONTACT_POINT environment variable must be defined"
     exit 1
 fi
@@ -28,5 +26,3 @@ if [ $? -ne 0 ]; then
     log "stop applying database changes"
     exit 1
 fi
-
-exit 0

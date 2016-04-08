@@ -21,12 +21,12 @@ function waitForClusterConnection() {
         cqlsh -e "Describe KEYSPACES;" $CASSANDRA_CONTACT_POINT &>/dev/null
     done
 
-    if [ $? -eq 0 ]; then
-      log "connected to cassandra cluster"
-    else
+    if [ $? -ne 0 ]; then
       log "not connected after " $retryCount " retry. Abort the migration."
       exit 1
     fi
+
+    log "connected to cassandra cluster"
 }
 
 function executeScripts() {
@@ -39,11 +39,12 @@ function executeScripts() {
 
 waitForClusterConnection
 
-log "execute migration scripts"
+log "execute cassandra setup and all migration scripts"
 
 log "create keyspace and base tables"
 . ./usr/local/bin/init-dev
 
-executeScripts /cql/changelog/*.cql
+log "apply all scripts from /cql/changelog/"
+executeScripts "/cql/changelog/*.cql"
 
 log "migration done"
