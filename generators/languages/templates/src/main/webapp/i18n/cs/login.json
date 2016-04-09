@@ -9,7 +9,7 @@
         },
         "messages": {
             "error": {
-                "authentication": "<strong>Přihlášení selhalo!</strong> Prosím skontrolujte vaše přihlašovací údaje a zkuste to znovu."
+                "authentication": "<strong>Přihlášení selhalo!</strong> Prosím zkontrolujte vaše přihlašovací údaje a zkuste to znovu."
             }
         },
         "password" : {

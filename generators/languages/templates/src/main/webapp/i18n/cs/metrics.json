@@ -71,7 +71,7 @@
         },
         "ehcache": {
             "title": "Ehcache statistiky",
-            "cachename": "Meno cache",
+            "cachename": "Název cache",
             "objects": "Objekty",
             "hits": "Zásahy",
             "misses": "Minutí",

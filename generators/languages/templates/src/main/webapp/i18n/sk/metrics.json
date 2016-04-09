@@ -49,7 +49,7 @@
                     "average": "Priemer (Average)"
                 },
                 "code": {
-                    "ok": "Ok",
+                    "ok": "OK",
                     "notfound": "Nebolo nájdené",
                     "servererror": "Chyba Serveru"
                 }

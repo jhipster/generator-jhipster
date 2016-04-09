@@ -67,8 +67,8 @@
                     "maxlength": "Vaše potvrzení hesla nemůže být delší než 50 znaků."
                 },
                 "email": {
-                    "required": "Váš e-mail je povinný.",
-                    "invalid": "Váš e-mail není validný.",
+                    "required": "E-mail je povinný.",
+                    "invalid": "Zadaný E-mail není validný.",
                     "minlength": "Váš e-mail musí mít alespoň 5 znaků.",
                     "maxlength": "Váš e-mail nemůže být delší než 50 znaků."
                 }
@@ -104,7 +104,7 @@
             "max": "Toto pole nemůže mít vyšší hodnotu než {{ max }}.",
             "minbytes": "Toto pole musí mít více než {{ min }} bajtů.",
             "maxbytes": "Toto pole nemůže mít více než {{ max }} bajtů.",
-            "pattern": "Toto pole musí spĺňať vzor {{ pattern }}.",
+            "pattern": "Toto pole musí splňovat vzor {{ pattern }}.",
             "number": "Toto pole by mělo obsahovat číslo.",
             "datetimelocal": "Toto pole by mělo obsahovat datum a čas."
         }
@@ -113,9 +113,9 @@
         "server.not.reachable": "Server je nedostupný",
         "NotNull": "Pole {{ fieldName }} nemůže být prázdné!",
         "Size": "Pole {{ fieldName }} nesplňuje požadavek minimální nebo maximální velikosti!",
-        "idexists": "Nová entita {{ entityName }} ešte nemôže mať ID"
-        "emailexists": "Tento e-mail je již použitý!",
-        "userexists": "Toto uživatelské jméno je již použito!",
+        "idexists": "Nová entita {{ entityName }} ještě nemůže mít ID"
+        "emailexists": "Zadaný e-mail je již použitý!",
+        "userexists": "Zadané uživatelské jméno je již použito!",
     },
     "footer": "Toto je vaše zápatí"
 }

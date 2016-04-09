@@ -2,8 +2,8 @@
     "settings": {
         "title": "Nastavenia používateľa [<b>{{username}}</b>]",
         "form": {
-            "firstname": "Meno",
-            "firstname.placeholder": "Vaše meno",
+            "firstname": "Krstné meno",
+            "firstname.placeholder": "Vaše krstné meno meno",
             "lastname": "Priezvisko",
             "lastname.placeholder": "Vaše priezvisko",
             "language": "Jazyk",

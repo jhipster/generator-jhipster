@@ -37,8 +37,8 @@
             "language": "Jazyk"
         },
         "form": {
-            "username": "Meno používateľa",
-            "username.placeholder": "Vaše meno používateľa",
+            "username": "Používateľské meno",
+            "username.placeholder": "Vaše používateľské meno",
             "newpassword": "Nové heslo",
             "newpassword.placeholder": "Nové heslo",
             "confirmpassword": "Potvrdenie nového hesla",
@@ -67,8 +67,8 @@
                     "maxlength": "Vaše potvrdenie hesla nemôže byť dlhšie ako 50 znakov."
                 },
                 "email": {
-                    "required": "Váš e-mail je povinný.",
-                    "invalid": "Váš e-mail nie je validný.",
+                    "required": "E-mail je povinný.",
+                    "invalid": "Zadaný e-mail nie je validný.",
                     "minlength": "Váš e-mail musí mať aspoň 5 znakov.",
                     "maxlength": "Váš e-mail nemôže byť dlhší ako 50 znakov."
                 }
@@ -113,8 +113,8 @@
         "server.not.reachable": "Server je nedostupný",
         "NotNull": "Pole {{ fieldName }} nemôže byť prázdne!",
         "Size": "Pole {{ fieldName }} nespĺňa požiadavku minimálnej alebo maximálnej veľkosti!",
-        "userexists": "Toto používateľské meno už niekto používa!",
-        "emailexists": "Tento e-mail už niekto používa!",
+        "userexists": "Zadané používateľské meno už niekto používa!",
+        "emailexists": "Zadaný e-mail už niekto používa!",
         "idexists": "Nová entita {{ entityName }} ešte nemôže mať ID"
     },
     "footer": "Toto je vaše zápätie"

@@ -4,7 +4,7 @@
         "nbloggers": "Spustených {{ total }} loggerov.",
         "filter": "Filtrovať",
         "table": {
-            "name": "Meno",
+            "name": "Názov",
             "level": "Úroveň"
         }
     }

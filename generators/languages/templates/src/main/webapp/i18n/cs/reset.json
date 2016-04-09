@@ -22,7 +22,7 @@
                 "info": "Vyberte si nové heslo",
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">přihlásit</a>.",
                 "keymissing": "Chybí klíč na obnovení hesla.",
-                "error": "Vaše heslo nemohlo být obnovené. Požadavek na obnovení hesla je platný pouze 24 hodin."
+                "error": "Vaše heslo nemohlo být obnoveno. Požadavek na obnovení hesla je platný pouze 24 hodin."
             }
         }
     }

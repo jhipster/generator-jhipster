@@ -9,7 +9,7 @@
         },
         "messages": {
             "success": "<strong>Sezení bolo zrušeno!</strong>",
-            "error": "<strong>Vyskytla se chyba!</strong> Sezení nemohlo být zrušené."
+            "error": "<strong>Vyskytla se chyba!</strong> Sezení nemohlo být zrušeno."
         }
     }
 }
