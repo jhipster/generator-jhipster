@@ -1076,9 +1076,6 @@
                                 <fileset>
                                     <directory><%= CLIENT_DIST_DIR %></directory>
                                 </fileset>
-                                <fileset>
-                                    <directory>node_modules</directory>
-                                </fileset>
                             </filesets>
                         </configuration>
                     </plugin>

@@ -6,11 +6,6 @@ set -ev
 cd "$HOME"/"$JHIPSTER"
 if [ "$RUN_APP" == 1 ]; then
   if [ "$JHIPSTER" != "app-gradle" ]; then
-    if [ "$JHIPSTER" == 'app-cassandra' ]; then
-      chmod -R 777 src/main/resources/config/cql/
-      docker cp src/main/resources/config/cql/ traviscassandra-cassandra:/
-      docker exec -it traviscassandra-cassandra init
-    fi
     mvn package -DskipTests=true -P"$PROFILE"
     mv target/*.war target/app.war
     java -jar target/app.war --spring.profiles.active="$PROFILE" &

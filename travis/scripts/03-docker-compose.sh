@@ -5,9 +5,6 @@ set -ev
 #-------------------------------------------------------------------------------
 cd "$HOME"/"$JHIPSTER"
 if [[ ("$JHIPSTER" == 'app-cassandra') && (-a src/main/docker/cassandra.yml) ]]; then
-  # travis is not stable with docker... need to start container with privileged
-  echo '        privileged: true' >> src/main/docker/cassandra.yml
-  docker-compose -f src/main/docker/cassandra.yml build
   docker-compose -f src/main/docker/cassandra.yml up -d
 elif [[ ("$JHIPSTER" == 'app-mongodb') && (-a src/main/docker/mongodb.yml) ]]; then
   docker-compose -f src/main/docker/mongodb.yml up -d

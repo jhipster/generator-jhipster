@@ -169,9 +169,11 @@
             var relationshipType = relationships[idx].relationshipType;
             var ownerSide = relationships[idx].ownerSide;
             var otherEntityName = relationships[idx].otherEntityName;
+            var otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
             var relationshipName = relationships[idx].relationshipName;
             var relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
             var relationshipFieldName = relationships[idx].relationshipFieldName;
+            var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
             var otherEntityField = relationships[idx].otherEntityField;
             var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
             var translationKey = keyPrefix + relationshipName; _%>
@@ -179,11 +181,11 @@
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id">
                 <option value=""></option>
             </select>
                 <%_ } else { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityName.toLowerCase() %>s">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>">
                 <option value=""></option>
             </select>
                 <%_ } _%>
@@ -192,11 +194,11 @@
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldName.toLowerCase() %>s | orderBy:'id' track by <%=otherEntityName %>.id">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id' track by <%=otherEntityName %>.id">
                 <option value=""></option>
             </select>
                 <%_ } else { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldName.toLowerCase() %>s | orderBy:'id'">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id'">
                 <option value=""></option>
             </select>
                 <%_ } _%>
@@ -204,7 +206,7 @@
             <%_ } else if (relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { _%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="vm.<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id"></select>
+            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="vm.<%=entityInstance %>.<%=relationshipFieldNamePlural %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"></select>
         </div>
             <%_ } _%>
         <%_ } _%>
