@@ -113,9 +113,9 @@
         "server.not.reachable": "Server je nedostupný",
         "NotNull": "Pole {{ fieldName }} nemůže být prázdné!",
         "Size": "Pole {{ fieldName }} nesplňuje požadavek minimální nebo maximální velikosti!",
-        "idexists": "Nová entita {{ entityName }} ještě nemůže mít ID"
-        "emailexists": "Zadaný e-mail je již použitý!",
         "userexists": "Zadané uživatelské jméno je již použito!",
+        "emailexists": "Zadaný e-mail je již použitý!",
+        "idexists": "Nová entita {{ entityName }} ještě nemůže mít ID"
     },
     "footer": "Toto je vaše zápatí"
 }
