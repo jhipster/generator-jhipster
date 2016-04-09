@@ -64,14 +64,13 @@ module.exports = yeoman.Base.extend({
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
             if(this.defaultAppsFolders !== undefined) {
-                //this.regenerate = true; //TODO regenerate based on existing config properly
                 this.log('\nFound .yo-rc.json config file...');
             }
         }
     },
 
     _getAppFolders: function (input) {
-        var files = shelljs.ls('-l',this.destinationPath(input));
+        var files = shelljs.ls('-l', this.destinationPath(input));
         var appsFolders = [];
 
         files.forEach(function(file) {
