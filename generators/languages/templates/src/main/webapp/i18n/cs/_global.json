@@ -14,7 +14,7 @@
                 "settings": "Nastavení",
                 "password": "Heslo",
                 "sessions": "Sezení",
-                "login": "Přihlásit se",
+                "login": "Přihlášení",
                 "logout": "Odhlásit se",
                 "register": "Registrace"
             },
@@ -68,7 +68,7 @@
                 },
                 "email": {
                     "required": "E-mail je povinný.",
-                    "invalid": "Zadaný E-mail není validný.",
+                    "invalid": "Zadaný e-mail není validný.",
                     "minlength": "Váš e-mail musí mít alespoň 5 znaků.",
                     "maxlength": "Váš e-mail nemůže být delší než 50 znaků."
                 }

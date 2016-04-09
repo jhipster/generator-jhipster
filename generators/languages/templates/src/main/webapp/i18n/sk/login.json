@@ -1,6 +1,6 @@
 {
     "login": {
-        "title": "Prihlásiť sa",
+        "title": "Prihlásenie",
         "form": {
             "password": "Heslo",
             "password.placeholder": "Vaše heslo",
