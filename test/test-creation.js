@@ -374,12 +374,15 @@ const expectedFiles = {
 
     dockerCassandra: [
         DOCKER_DIR + 'cassandra/Cassandra.Dockerfile',
+        DOCKER_DIR + 'cassandra/Cassandra-Cluster.Dockerfile',
         DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile',
+        DOCKER_DIR + 'cassandra/scripts/autoMigrate.sh',
+        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
+        DOCKER_DIR + 'cassandra/scripts/execute-cql.sh',
         DOCKER_DIR + 'cassandra/scripts/init-dev.sh',
         DOCKER_DIR + 'cassandra/scripts/init-prod.sh',
-        DOCKER_DIR + 'cassandra/scripts/entities.sh',
-        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
         DOCKER_DIR + 'opscenter/Dockerfile',
+        DOCKER_DIR + 'cassandra-cluster.yml',
         DOCKER_DIR + 'cassandra-opscenter.yml',
         DOCKER_DIR + 'cassandra.yml'
     ],
