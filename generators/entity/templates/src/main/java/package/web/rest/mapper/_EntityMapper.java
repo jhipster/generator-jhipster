@@ -30,11 +30,12 @@ for (idx in relationships) {
 for (idx in relationships) {
     var relationshipType = relationships[idx].relationshipType;
     var relationshipName = relationships[idx].relationshipName;
+    var relationshipNamePlural = relationships[idx].relationshipNamePlural;
     var ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { %>
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")<% } else if (relationshipType == 'many-to-many' && ownerSide == false) { %>
-    @Mapping(target = "<%= relationshipName %>s", ignore = true)<% } else if (relationshipType == 'one-to-many') { %>
-    @Mapping(target = "<%= relationshipName %>s", ignore = true)<% } else if (relationshipType == 'one-to-one' && ownerSide == false) { %>
+    @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType == 'one-to-many') { %>
+    @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType == 'one-to-one' && ownerSide == false) { %>
     @Mapping(target = "<%= relationshipName %>", ignore = true)<% } } %>
     <%= entityClass %> <%= entityInstance %>DTOTo<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO);
 

@@ -374,12 +374,15 @@ const expectedFiles = {
 
     dockerCassandra: [
         DOCKER_DIR + 'cassandra/Cassandra.Dockerfile',
+        DOCKER_DIR + 'cassandra/Cassandra-Cluster.Dockerfile',
         DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile',
+        DOCKER_DIR + 'cassandra/scripts/autoMigrate.sh',
+        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
+        DOCKER_DIR + 'cassandra/scripts/execute-cql.sh',
         DOCKER_DIR + 'cassandra/scripts/init-dev.sh',
         DOCKER_DIR + 'cassandra/scripts/init-prod.sh',
-        DOCKER_DIR + 'cassandra/scripts/entities.sh',
-        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
         DOCKER_DIR + 'opscenter/Dockerfile',
+        DOCKER_DIR + 'cassandra-cluster.yml',
         DOCKER_DIR + 'cassandra-opscenter.yml',
         DOCKER_DIR + 'cassandra.yml'
     ],
@@ -392,7 +395,7 @@ const expectedFiles = {
 };
 
 describe('JHipster generator', function () {
-    this.timeout(5000); //to avoid occassional timeouts
+    this.timeout(5000); //to avoid occassional timeout on windows
 
     describe('default configuration', function () {
         beforeEach(function (done) {

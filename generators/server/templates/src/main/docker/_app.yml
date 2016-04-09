@@ -74,13 +74,13 @@ services:
     <%_ if (prodDatabaseType == 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:
         extends:
-            file: cassandra.yml
+            file: cassandra-cluster.yml
             service: <%= baseName.toLowerCase() %>-cassandra
     <%_ } _%>
     <%_ if (applicationType == 'gateway' && prodDatabaseType != 'cassandra') { _%>
         # Uncomment to have Cassandra working with the gateway
         # extends:
-        #     file: cassandra.yml
+        #     file: cassandra-cluster.yml
         #     service: <%= baseName.toLowerCase() %>-cassandra
     <%_ } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>

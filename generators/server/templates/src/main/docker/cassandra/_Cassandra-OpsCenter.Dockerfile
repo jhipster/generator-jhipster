@@ -10,15 +10,13 @@ RUN echo "stomp_interface: opscenter" >> /opt/datastax-agent/conf/address.yaml
 ADD cassandra/scripts/cassandra.sh /cassandra.sh
 RUN chmod a+x /cassandra.sh
 
-# script to initialize the database
-ADD cassandra/scripts/init-prod.sh /usr/local/bin/init
-RUN chmod 755 /usr/local/bin/init
-<%_ if (databaseType == 'cassandra') { _%>
+# script to create the keyspace and all the basic tables
+ADD cassandra/scripts/init-prod.sh /usr/local/bin/init-prod
+RUN chmod 755 /usr/local/bin/init-prod
 
-# script to add new tables
-ADD cassandra/scripts/entities.sh /usr/local/bin/entities
-RUN chmod 755 /usr/local/bin/entities
-<%_ } _%>
+# script to run any cql script from src/main/resources/config/cql
+ADD cassandra/scripts/execute-cql.sh  /usr/local/bin/execute-cql
+RUN chmod 755 /usr/local/bin/execute-cql
 
 ENTRYPOINT ["/cassandra.sh"]
 CMD ["cassandra", "-f"]

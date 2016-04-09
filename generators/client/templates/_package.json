@@ -35,7 +35,7 @@
     "gulp-notify": "2.2.0",
     "gulp-plumber": "1.1.0",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
-    "gulp-protractor": "2.1.0",
+    "gulp-protractor": "2.3.0",
     "gulp-util": "3.0.7",
     <%_ } _%>
     "gulp-rev": "7.0.0",
@@ -60,10 +60,10 @@
     "lazypipe": "1.0.1",
     "lodash": "4.6.1",
     "map-stream": "0.0.6",
-    "phantomjs-prebuilt": "2.1.4",
+    "phantomjs-prebuilt": "2.1.7",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
-    "protractor": "3.1.1",
-    "protractor-jasmine2-screenshot-reporter": "0.3.0",
+    "protractor": "3.2.2",
+    "protractor-jasmine2-screenshot-reporter": "0.3.1",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.1.5",

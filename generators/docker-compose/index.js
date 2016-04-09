@@ -60,44 +60,58 @@ module.exports = yeoman.Base.extend({
         loadConfig: function() {
 
             this.defaultAppsFolders = this.config.get('appsFolders');
+            this.directoryPath = this.config.get('directoryPath');
+            this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.useElk = this.config.get('useElk');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
             if(this.defaultAppsFolders !== undefined) {
-                this.regenerate = true;
                 this.log('\nFound .yo-rc.json config file...');
             }
         }
     },
 
+    _getAppFolders: function (input) {
+        var files = shelljs.ls('-l', this.destinationPath(input));
+        var appsFolders = [];
+
+        files.forEach(function(file) {
+            if(file.isDirectory()) {
+                if( (shelljs.test('-f', file.name + '/.yo-rc.json'))
+                    && (shelljs.test('-f', file.name + '/src/main/docker/app.yml')) ) {
+                    try {
+                        var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
+                        if(fileData['generator-jhipster'].baseName !== undefined) {
+                            appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
+                        }
+                    } catch(err) {
+                        this.log(chalk.red(file + ': this .yo-rc.json can\'t be read'));
+                    }
+                }
+            }
+        }, this);
+
+        return appsFolders;
+    },
+
     prompting: {
         askForPath: function() {
+            if (this.regenerate) return;
+
             var done = this.async();
 
             var prompts = [{
                 type: 'input',
                 name: 'directoryPath',
                 message: 'Enter the root directory where your gateway(s) and microservices are located',
-                default: '../',
+                default: this.directoryPath || '../',
                 validate: function (input) {
                     var path = this.destinationPath(input);
                     if(shelljs.test('-d', path)) {
-                        var files = shelljs.ls('-l',this.destinationPath(input));
-                        this.appsFolders = [];
+                        var appsFolders = this._getAppFolders(input);
 
-                        files.forEach(function(file) {
-                            if(file.isDirectory()) {
-                                if(shelljs.test('-f', file.name + '/.yo-rc.json')) {
-                                    var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
-                                    if(fileData['generator-jhipster'].baseName !== undefined || fileData['generator-jhipster'].applicationType == 'uaa') {
-                                        this.appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
-                                    }
-                                }
-                            }
-                        }, this);
-
-                        if(this.appsFolders.length === 0) {
-                            return 'No microservice or gateway found in ' + this.destinationPath(input);
+                        if(appsFolders.length === 0) {
+                            return 'No microservice or gateway found in ' + path;
                         } else {
                             return true;
                         }
@@ -109,6 +123,8 @@ module.exports = yeoman.Base.extend({
 
             this.prompt(prompts, function (props) {
                 this.directoryPath = props.directoryPath;
+
+                this.appsFolders = this._getAppFolders(this.directoryPath);
 
                 //Removing monolithic apps and registry from appsFolders
                 for(var i = 0; i < this.appsFolders.length; i++) {
@@ -128,7 +144,8 @@ module.exports = yeoman.Base.extend({
         },
 
         askForApps: function() {
-            if(this.abort) return;
+            if (this.regenerate) return;
+
             var done = this.async();
 
             var prompts = [{
@@ -166,7 +183,7 @@ module.exports = yeoman.Base.extend({
         },
 
         askForClustersMode: function () {
-            if(this.abort) return;
+            if (this.regenerate) return;
 
             var mongoApps = [];
             for (var i = 0; i < this.appConfigs.length; i++) {
@@ -182,10 +199,12 @@ module.exports = yeoman.Base.extend({
                 type: 'checkbox',
                 name: 'clusteredDbApps',
                 message: 'Which applications do you want to use with clustered databases (only available with MongoDB)?',
-                choices: mongoApps
+                choices: mongoApps,
+                default: this.clusteredDbApps
             }];
 
             this.prompt(prompts, function (props) {
+                this.clusteredDbApps = props.clusteredDbApps;
                 for (var i = 0; i < this.appsFolders.length; i++) {
                     for (var j = 0; j < props.clusteredDbApps.length; j++) {
                         if(this.appsFolders[i] === props.clusteredDbApps[j]) {
@@ -202,7 +221,8 @@ module.exports = yeoman.Base.extend({
         },
 
         askForElk: function() {
-            if(this.abort) return;
+            if (this.regenerate) return;
+
             var done = this.async();
 
             var prompts = [{
@@ -214,7 +234,6 @@ module.exports = yeoman.Base.extend({
 
             this.prompt(prompts, function(props) {
                 this.useElk = props.elk;
-
                 done();
             }.bind(this));
         }
@@ -222,13 +241,12 @@ module.exports = yeoman.Base.extend({
 
     configuring: {
         checkImages: function() {
-            if(this.abort) return;
 
             this.log('\nChecking Docker images in applications\' directories...');
 
             var imagePath = '';
             var runCommand = '';
-
+            this.warningMessage = 'To generate Docker image, please run:\n';
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].buildTool === 'maven') {
                     imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
@@ -238,13 +256,10 @@ module.exports = yeoman.Base.extend({
                     runCommand = './gradlew -Pprod bootRepackage buildDocker';
                 }
                 if (shelljs.ls(imagePath).length === 0) {
-                    this.log(chalk.red('\nDocker Image not found at ' + imagePath));
-                    this.log(chalk.red('Please run "' + runCommand + '" in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + ' to generate Docker image'));
-                    this.abort = true;
+                    this.warning = true;
+                    this.warningMessage += '  ' + chalk.cyan(runCommand) +  ' in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + '\n';
                 }
             }
-
-            if(!this.abort) this.log(chalk.green('Found Docker images, writing files...\n'));
         },
 
         generateJwtSecret: function() {
@@ -296,7 +311,7 @@ module.exports = yeoman.Base.extend({
                 }
                 // Add search engine configuration
                 var searchEngine = this.appConfigs[i].searchEngine;
-                if (searchEngine !== 'no') {
+                if (searchEngine === 'elasticsearch') {
                     var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
                     var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
                     delete searchEngineConfig.ports;
@@ -315,8 +330,9 @@ module.exports = yeoman.Base.extend({
         },
 
         saveConfig: function() {
-            if(this.abort) return;
             this.config.set('appsFolders', this.appsFolders);
+            this.config.set('directoryPath', this.directoryPath);
+            this.config.set('clusteredDbApps', this.clusteredDbApps);
             this.config.set('useElk', this.useElk);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
         }
@@ -324,20 +340,16 @@ module.exports = yeoman.Base.extend({
 
     writing: {
         writeDockerCompose: function() {
-            if(this.abort) return;
-
             this.template('_docker-compose.yml', 'docker-compose.yml');
         },
 
         writeRegistryFiles: function() {
-            if(this.abort) return;
-
             this.copy('jhipster-registry.yml', 'jhipster-registry.yml');
             this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
         },
 
         writeElkFiles: function() {
-            if(!this.useElk || this.abort) return;
+            if(!this.useElk) return;
 
             this.copy('elk.yml', 'elk.yml');
             this.copy('log-monitoring/log-config/logstash.conf', 'log-monitoring/log-config/logstash.conf');
@@ -345,9 +357,12 @@ module.exports = yeoman.Base.extend({
         }
     },
     end: function() {
-        if(this.abort) return;
-
-        this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
+        if (this.warning) {
+            this.log('\n' + chalk.yellow.bold('WARNING!') + ' Docker Compose configuration generated with missing images!');
+            this.log(this.warningMessage);
+        } else {
+            this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
+        }
         this.log('You can launch all your infrastructure by running : ' + chalk.cyan('docker-compose up -d'));
     }
 });
