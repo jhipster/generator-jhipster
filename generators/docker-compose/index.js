@@ -60,6 +60,8 @@ module.exports = yeoman.Base.extend({
         loadConfig: function() {
 
             this.defaultAppsFolders = this.config.get('appsFolders');
+            this.directoryPath = this.config.get('directoryPath');
+            this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.useElk = this.config.get('useElk');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
@@ -102,7 +104,7 @@ module.exports = yeoman.Base.extend({
                 type: 'input',
                 name: 'directoryPath',
                 message: 'Enter the root directory where your gateway(s) and microservices are located',
-                default: '../',
+                default: this.directoryPath || '../',
                 validate: function (input) {
                     var path = this.destinationPath(input);
                     if(shelljs.test('-d', path)) {
@@ -193,10 +195,12 @@ module.exports = yeoman.Base.extend({
                 type: 'checkbox',
                 name: 'clusteredDbApps',
                 message: 'Which applications do you want to use with clustered databases (only available with MongoDB)?',
-                choices: mongoApps
+                choices: mongoApps,
+                default: this.clusteredDbApps
             }];
 
             this.prompt(prompts, function (props) {
+                this.clusteredDbApps = props.clusteredDbApps;
                 for (var i = 0; i < this.appsFolders.length; i++) {
                     for (var j = 0; j < props.clusteredDbApps.length; j++) {
                         if(this.appsFolders[i] === props.clusteredDbApps[j]) {
@@ -226,7 +230,6 @@ module.exports = yeoman.Base.extend({
 
             this.prompt(prompts, function(props) {
                 this.useElk = props.elk;
-
                 done();
             }.bind(this));
         }
@@ -324,6 +327,8 @@ module.exports = yeoman.Base.extend({
 
         saveConfig: function() {
             this.config.set('appsFolders', this.appsFolders);
+            this.config.set('directoryPath', this.directoryPath);
+            this.config.set('clusteredDbApps', this.clusteredDbApps);
             this.config.set('useElk', this.useElk);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
         }
