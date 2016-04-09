@@ -82,6 +82,7 @@
                             var relationshipType = relationships[idx].relationshipType;
                             var ownerSide = relationships[idx].ownerSide;
                             var relationshipFieldName = relationships[idx].relationshipFieldName;
+                            var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
                             var otherEntityName = relationships[idx].otherEntityName;
                             var otherEntityStateName = relationships[idx].otherEntityStateName;
                             var otherEntityField = relationships[idx].otherEntityField;
@@ -92,7 +93,7 @@
                     <td>
                             <%_ if (otherEntityName == 'user') { _%>
                                 <%_ if (relationshipType == 'many-to-many') { _%>
-                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
                         <span>
                                 <%_ } else { _%>
@@ -104,7 +105,7 @@
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType == 'many-to-many') { _%>
-                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                             <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                         <span>
                                 <%_ } else { _%>

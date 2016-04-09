@@ -828,17 +828,21 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', this, {});
             }
             if (this.applicationType === 'gateway' || this.prodDatabaseType === 'cassandra') {
+                // docker-compose files
                 this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
+                this.template(DOCKER_DIR + '_cassandra-cluster.yml', DOCKER_DIR + 'cassandra-cluster.yml', this, {});
                 this.template(DOCKER_DIR + '_cassandra-opscenter.yml', DOCKER_DIR + 'cassandra-opscenter.yml', this, {});
+                // dockerfiles
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Cluster.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Cluster.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-OpsCenter.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
+                // scripts
+                this.template(DOCKER_DIR + 'cassandra/scripts/_autoMigrate.sh', DOCKER_DIR + 'cassandra/scripts/autoMigrate.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_execute-cql.sh', DOCKER_DIR + 'cassandra/scripts/execute-cql.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
-                if (this.prodDatabaseType === 'cassandra') {
-                    this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
-                }
-                this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
-                this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
             if (this.searchEngine === 'elasticsearch') {
                 this.template(DOCKER_DIR + '_elasticsearch.yml', DOCKER_DIR + 'elasticsearch.yml', this, {});
@@ -922,6 +926,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_create-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_drop-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql', this, {});
                 this.copy(SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql');
+                this.copy(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.dateFormatForLiquibase() + '_insert_default_users.cql');
             }
         },
 
