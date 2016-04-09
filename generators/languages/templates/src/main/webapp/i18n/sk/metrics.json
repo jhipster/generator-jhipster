@@ -2,7 +2,7 @@
     "metrics": {
         "title": "Metriky aplikácie",
         "refresh.button": "Aktualizovať",
-        "updating": "Aktualizovanie...",
+        "updating": "Aktualizácia...",
         "jvm": {
             "title": "JVM Metriky",
             "memory": {
@@ -27,8 +27,8 @@
                     "waitedcount": "Počet Čakaní",
                     "lockname": "Názov zámku",
                     "stacktrace": "Stacktrace",
-                    "show": "Zobraz Stacktrace",
-                    "hide": "Schovaj Stacktrace"
+                    "show": "Zobrazit Stacktrace",
+                    "hide": "Skryť Stacktrace"
                 }
             },
             "gc": {
@@ -39,9 +39,9 @@
                 "scavengetime": "Čas Scavenge"
             },
             "http": {
-                "title": "HTTP requesty (udalostí za sekundu)",
-                "active": "Aktívne requesty:",
-                "total": "Celkové requesty:",
+                "title": "HTTP požiadavky (udalostí za sekundu)",
+                "active": "Aktívne požiadavky:",
+                "total": "Všetky požiadavky:",
                 "table": {
                     "code": "Kód",
                     "count": "Počet",

@@ -1,30 +1,30 @@
 {
     "settings": {
-        "title": "Nastavenia používateľa [<b>{{username}}</b>]",
+        "title": "Nastavení uživatele [<b>{{username}}</b>]",
         "form": {
-            "firstname": "Meno",
-            "firstname.placeholder": "Vaše meno",
-            "lastname": "Priezvisko",
-            "lastname.placeholder": "Vaše priezvisko",
+            "firstname": "Jméno",
+            "firstname.placeholder": "Vaše jméno",
+            "lastname": "Příjmení",
+            "lastname.placeholder": "Vaše příjmení",
             "language": "Jazyk",
-            "button": "Uložiť"
+            "button": "Uložit"
         },
         "messages": {
             "error": {
-                "fail": "<strong>Vyskytla sa chyba!</strong> Nastavenia nemohli byť uložené.",
-                "emailexists": "<strong>E-mailová adresa sa už používa!</strong> Prosím použite inú adresu."
+                "fail": "<strong>Vyskytla se chyba!</strong> Nastavení nelze uložit.",
+                "emailexists": "<strong>E-mailová adresa je již používána!</strong> Prosím použjite jinou adresu."
             },
-            "success": "<strong>Nastavenia boli uložené!</strong>",
+            "success": "<strong>Nastavení bylo uloženo!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Meno je povinné.",
-                    "minlength": "Meno musí obsahovať aspoň 1 znak",
-                    "maxlength": "Meno nemôže byť dlhšie ako 50 znakov"
+                    "required": "Křestní jméno je povinné.",
+                    "minlength": "Křestní jméno musí obsahovat alespoň 1 znak",
+                    "maxlength": "Křestní jméno nemůže být delší než 50 znaků"
                 },
                 "lastname": {
-                    "required": "Priezvisko je povinné.",
-                    "minlength": "Priezvisko musí obsahovať aspoň 1 znak",
-                    "maxlength": "Priezvisko nemôže byť dlhšie ako 50 znakov"
+                    "required": "Příjmení je povinné.",
+                    "minlength": "Příjmení musí obsahovat alespoň 1 znak",
+                    "maxlength": "Příjmení nemůže být delší než 50 znaků"
                 }
             }
         }

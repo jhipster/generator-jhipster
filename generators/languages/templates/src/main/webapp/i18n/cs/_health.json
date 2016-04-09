@@ -1,12 +1,12 @@
 {
     "health": {
         "title": "Kontrola stavu",
-        "refresh.button": "Obnoviť",
+        "refresh.button": "Obnovit",
         "stacktrace": "Stacktrace",
         "details": {
             "details": "Detaily",
             "properties": "Vlastnosti",
-            "name": "Meno",
+            "name": "Jméno",
             "value": "Hodnota",
             "error": "Chyba"
         },
@@ -16,20 +16,20 @@
             "refreshScope": "Microservice obnovovací rozsah",
             "configServer": "Microservice konfiguračný server",
             <%_ } _%>
-            "diskSpace": "Diskový priestor",
+            "diskSpace": "Diskový prostor",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "Databáza"<% } %><% if (databaseType === 'mongodb') { %>
+            "db": "Databáze"<% } %><% if (databaseType === 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {
-            "service": "Názov služby",
+            "service": "Název služby",
             "status": "Stav"
         },
         "status": {
-            "UP": "Spustené",
-            "DOWN": "Zastavené"
+            "UP": "Spuštěno",
+            "DOWN": "Zastaveno"
         }
     }
 }

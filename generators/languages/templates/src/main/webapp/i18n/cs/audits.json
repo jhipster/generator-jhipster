@@ -2,25 +2,25 @@
 	"audits": {
 		"title": "Audity",
 		"filter": {
-			"title": "Filtrovať podľa dátumu",
+			"title": "Filtrovat podle data",
 			"from": "od",
 			"to": "do",
 			"button": {
-				"weeks": "Týždne",
+				"weeks": "Týdny",
 				"today": "dnes",
-				"clear": "vymazať",
-				"close": "zatvoriť"
+				"clear": "Smazat",
+				"close": "zavřít"
 			}
 		},
 		"table": {
 			"header": {
-				"principal": "Používateľ",
-				"date": "Dátum",
+				"principal": "Uživatel",
+				"date": "Datum",
 				"status": "Stav",
-				"data": "Doplňujúce informácie"
+				"data": "Doplňující informace"
 			},
 			"data": {
-				"remoteAddress": "Vzdialená adresa:"
+				"remoteAddress": "Vzdálená adresa:"
 			}
 		}
 	}

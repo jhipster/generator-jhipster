@@ -1,9 +1,9 @@
 {
     "activate": {
-        "title": "Aktivácia",
+        "title": "Aktivace",
         "messages": {
-            "success": "<strong>Váš používateľský účet bol aktivovaný.</strong><a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Prihláste sa</a>.",
-            "error": "<strong>Váš používateľský účet nemohol byť aktivovaný.</strong> Prosím použite registračný formulár pre prihlásenie."
+            "success": "<strong>Váš uživatelský účet byl aktivován.</strong><a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Přihlašte sa</a>.",
+            "error": "<strong>Váš uživatelský účet nemohl být aktivován.</strong> Prosím použijte registračný formulář pro přihlášení."
         }
     }
 }

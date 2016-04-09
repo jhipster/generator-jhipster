@@ -1,9 +1,9 @@
 {
     "configuration": {
-        "title": "Konfigurácia",
-        "filter": "Filtrovať (podľa predpony)",
+        "title": "Konfigurace",
+        "filter": "Filtrovat (podle předpony)",
         "table": {
-            "prefix": "Predpona",
+            "prefix": "Předpona",
             "properties": "Vlastnosti"
         }
     }

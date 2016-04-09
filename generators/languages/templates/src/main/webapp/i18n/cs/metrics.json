@@ -1,66 +1,66 @@
 {
     "metrics": {
-        "title": "Metriky aplikácie",
-        "refresh.button": "Aktualizovať",
-        "updating": "Aktualizovanie...",
+        "title": "Metriky aplikace",
+        "refresh.button": "Aktualizovat",
+        "updating": "Aktualizace...",
         "jvm": {
             "title": "JVM Metriky",
             "memory": {
-                "title": "Pamäť",
-                "total": "Celková Pamäť",
-                "heap": "Heap Pamäť",
-                "nonheap": "Non-Heap Pamäť"
+                "title": "Paměť",
+                "total": "Celková Paměť",
+                "heap": "Heap Paměť",
+                "nonheap": "Non-Heap Paměť"
             },
             "threads": {
                 "title": "Vlákna",
-                "all": "Všetky",
+                "all": "Všechny",
                 "runnable": "Runnable",
-                "timedwaiting": "Čas čakania",
-                "waiting": "Čakanie",
+                "timedwaiting": "Čas čekání",
+                "waiting": "Čekání",
                 "blocked": "Blokovaný",
                 "dump": {
                     "title": "Threads dump",
                     "id": "Id: ",
-                    "blockedtime": "Čas Blokovania",
-                    "blockedcount": "Počet Blokovaní",
-                    "waitedtime": "Čas Čakania",
-                    "waitedcount": "Počet Čakaní",
-                    "lockname": "Názov zámku",
+                    "blockedtime": "Čas Blokování",
+                    "blockedcount": "Počet Blokování",
+                    "waitedtime": "Čas Čekání",
+                    "waitedcount": "Počet Čekání",
+                    "lockname": "Název zámku",
                     "stacktrace": "Stacktrace",
-                    "show": "Zobraz Stacktrace",
-                    "hide": "Schovaj Stacktrace"
+                    "show": "Zobrazit Stacktrace",
+                    "hide": "Skrýt Stacktrace"
                 }
             },
             "gc": {
-                "title": "Garbage kolekcie",
+                "title": "Garbage kolekce",
                 "marksweepcount": "Počet Mark Sweep",
                 "marksweeptime": "Čas Mark Sweep",
                 "scavengecount": "Počet Scavenge",
                 "scavengetime": "Čas Scavenge"
             },
             "http": {
-                "title": "HTTP requesty (udalostí za sekundu)",
-                "active": "Aktívne requesty:",
-                "total": "Celkové requesty:",
+                "title": "HTTP požadavky (událostí za sekundu)",
+                "active": "Aktivní požadavky:",
+                "total": "Všechny požadavky:",
                 "table": {
                     "code": "Kód",
                     "count": "Počet",
-                    "mean": "Priemer (Mean)",
-                    "average": "Priemer (Average)"
+                    "mean": "Průměr (Mean)",
+                    "average": "Průměr (Average)"
                 },
                 "code": {
                     "ok": "Ok",
-                    "notfound": "Nebolo nájdené",
+                    "notfound": "Nebylo nalezeno",
                     "servererror": "Chyba Serveru"
                 }
             }
         },
         "servicesstats": {
-            "title": "Štatistika služieb (čas v milisekundách)",
+            "title": "Statistika služeb (čas v milisekundách)",
             "table": {
-                "name": "Názov služby",
+                "name": "Název služby",
                 "count": "Počet",
-                "mean": "Priemer",
+                "mean": "Průměr",
                 "min": "Min",
                 "max": "Max",
                 "p50": "p50",
@@ -70,20 +70,20 @@
             }
         },
         "ehcache": {
-            "title": "Ehcache štatistiky",
+            "title": "Ehcache statistiky",
             "cachename": "Meno cache",
             "objects": "Objekty",
             "hits": "Zásahy",
-            "misses": "Minutia",
+            "misses": "Minutí",
             "evictioncount": "Počet eviction",
-            "mean": "Priemerný čas odozvy (ms)"
+            "mean": "Průměrný čas odezvy (ms)"
         },
         "datasource": {
-        	"usage": "Používanie",
-            "title": "DataSource štatistiky (čas v milisekundách)",
-            "name": "Využitie poolu",
+        	"usage": "Používání",
+            "title": "DataSource statistiky (čas v milisekundách)",
+            "name": "Využití poolu",
             "count": "Počet",
-            "mean": "Priemer",
+            "mean": "Průměr",
             "min": "Min",
             "max": "Max",
             "p50": "p50",

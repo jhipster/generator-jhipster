@@ -1,10 +1,10 @@
 {
     "logs": {
         "title": "Logy",
-        "nbloggers": "Spustených {{ total }} loggerov.",
-        "filter": "Filtrovať",
+        "nbloggers": "Spuštěných {{ total }} loggerov.",
+        "filter": "Filtrovat",
         "table": {
-            "name": "Meno",
+            "name": "Jméno",
             "level": "Úroveň"
         }
     }

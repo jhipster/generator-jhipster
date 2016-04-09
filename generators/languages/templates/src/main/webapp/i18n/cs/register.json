@@ -1,23 +1,23 @@
 {
     "register": {
-        "title": "Registrácia",
+        "title": "Registrace",
         "form": {
-            "button": "Registrovať"
+            "button": "Registrovat"
         },
         "messages": {
             "validate": {
                 "login": {
-                    "required": "Používateľské meno už existuje.",
-                    "minlength": "Používateľské meno musí mať aspoň 1 znak.",
-                    "maxlength": "Používateľské meno nesmie byť dlhšie ako 50 znakov.",
-                    "pattern": "Používateľské meno môže obsahovať len malé písmená a číslice."
+                    "required": "Uživatelské jméno už existuje.",
+                    "minlength": "Uživatelské jméno musí mít alespoň 1 znak.",
+                    "maxlength": "Uživatelské jméno nesmí být delší než 50 znaků.",
+                    "pattern": "Uživatelské jméno může obsahovat pouze malá písmena a číslice."
                 }
             },
-            "success": "<strong>Registrácia uložená!</strong> Pre potvrdenie registrácie si prosím skontrolujte vašu e-mailovú schránku.",
+            "success": "<strong>Registrace uložená!</strong> Pro potvrzení registrace si prosím zkontrolujte vaši e-mailovú schránku.",
             "error": {
-                "fail": "<strong>Registrácia zlyhala!</strong> Vyskúšajte to prosím neskôr.",
-                "userexists": "<strong>Používateľské meno už existuje!</strong> Prosím, zvoľte iné meno.",
-                "emailexists": "<strong>E-mail sa už používa!</strong> Prosím, zvoľte iný e-mail."
+                "fail": "<strong>Registrace selhala!</strong> Prosím zkuste to znovu později.",
+                "userexists": "<strong>Uživatelské jméno již existuje!</strong> Prosím, zvolte jiné jméno.",
+                "emailexists": "<strong>E-mail se již používá!</strong> Prosím, zvolte jiný e-mail."
             }
         }
     }

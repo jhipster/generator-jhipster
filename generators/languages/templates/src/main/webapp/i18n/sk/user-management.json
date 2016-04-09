@@ -15,7 +15,7 @@
             "title": "Používateľ"
         },
         "login": "Používateľské meno",
-        "firstName": "Meno",
+        "firstName": "Krstné meno",
         "lastName": "Priezvisko",
         "email": "Email",
         "activated": "Aktívny",
