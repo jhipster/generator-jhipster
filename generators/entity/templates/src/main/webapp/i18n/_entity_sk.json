@@ -3,15 +3,15 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
-                "createLabel": "Create a new <%= entityClassHumanized %>",
-                "createOrEditLabel": "Create or edit a <%= entityClassHumanized %>",
-                "search": "Search for <%= entityClassHumanized %>"
+                "createLabel": "Pridať <%= entityClassHumanized %>",
+                "createOrEditLabel": "Pridať alebo upraviť <%= entityClassHumanized %>",
+                "search": "Vyhľadať <%= entityClassHumanized %>"
             },
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",
+            "created": "Bol vytvorený potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }}",
+            "updated": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol upravený.",
+            "deleted": "Potomok entity <%= entityClassHumanized %> s identifikátorom {{ param }} bol vymazaný.",
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClassHumanized %> {{ id }}?"
+                "question": "Ste si istý, že chcete vymazať <%= entityClassHumanized %> {{ id }}?"
             },
             "detail": {
                 "title": "<%= entityClassHumanized %>"
