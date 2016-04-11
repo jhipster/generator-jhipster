@@ -9,6 +9,7 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
+import <%=packageName%>.web.rest.dto.ManagedUserDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import org.junit.Before;
 import org.junit.Test;
@@ -146,21 +147,25 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterValid() throws Exception {
-        UserDTO u = new UserDTO(
+        ManagedUserDTO validUser = new ManagedUserDTO(
+            null,                   // id
             "joe",                  // login
             "password",             // password
             "Joe",                  // firstName
             "Shmoe",                // lastName
             "joe@example.com",      // e-mail
             true,                   // activated
-            "<%= nativeLanguageShortName %>",                   // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
-        );
+            "<%= nativeLanguageShortName %>",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
 
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(u)))
+                .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
         Optional<User> user = userRepository.findOneByLogin("joe");
@@ -170,21 +175,25 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterInvalidLogin() throws Exception {
-        UserDTO u = new UserDTO(
+        ManagedUserDTO invalidUser = new ManagedUserDTO(
+            null,                   // id
             "funky-log!n",          // login <-- invalid
             "password",             // password
             "Funky",                // firstName
             "One",                  // lastName
             "funky@example.com",    // e-mail
             true,                   // activated
-            "<%= nativeLanguageShortName %>",                   // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
-        );
+            "<%= nativeLanguageShortName %>",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
 
         restUserMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(u)))
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneByEmail("funky@example.com");
@@ -194,7 +203,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterInvalidEmail() throws Exception {
-        UserDTO u = new UserDTO(
+        ManagedUserDTO invalidUser = new ManagedUserDTO(
+            null,                   // id
             "bob",              // login
             "password",         // password
             "Bob",              // firstName
@@ -202,13 +212,16 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "invalid",          // e-mail <-- invalid
             true,               // activated
             "<%= nativeLanguageShortName %>",               // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
-        );
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
 
         restUserMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(u)))
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneByLogin("bob");
@@ -217,8 +230,37 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
+    public void testRegisterInvalidPassword() throws Exception {
+        ManagedUserDTO invalidUser = new ManagedUserDTO(
+            null,                   // id
+            "bob",              // login
+            "123",              // password with only 3 digits
+            "Bob",              // firstName
+            "Green",            // lastName
+            "bob@example.com",  // e-mail
+            true,               // activated
+            "<%= nativeLanguageShortName %>",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
+
+        restUserMockMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
+            .andExpect(status().isBadRequest());
+
+        Optional<User> user = userRepository.findOneByLogin("bob");
+        assertThat(user.isPresent()).isFalse();
+    }    
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterEmailEmpty() throws Exception {
-        UserDTO u = new UserDTO(
+        ManagedUserDTO invalidUser = new ManagedUserDTO(
+            null,                   // id
             "bob",              // login
             "password",         // password
             "Bob",              // firstName
@@ -226,13 +268,16 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "",                 // e-mail <-- empty
             true,               // activated
             "<%= nativeLanguageShortName %>",               // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
-        );
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
 
         restUserMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(u)))
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
 
         Optional<User> user = userRepository.findOneByLogin("bob");
@@ -243,33 +288,37 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Transactional<% } %>
     public void testRegisterDuplicateLogin() throws Exception {
         // Good
-        UserDTO u = new UserDTO(
+        ManagedUserDTO validUser = new ManagedUserDTO(
+            null,                   // id
             "alice",                // login
             "password",             // password
             "Alice",                // firstName
             "Something",            // lastName
             "alice@example.com",    // e-mail
             true,                   // activated
-            "<%= nativeLanguageShortName %>",                   // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
-        );
+            "<%= nativeLanguageShortName %>",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
 
         // Duplicate login, different e-mail
-        UserDTO dup = new UserDTO(u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(),
-            "alicejr@example.com", true, u.getLangKey(), u.getAuthorities());
+        ManagedUserDTO duplicatedUser = new ManagedUserDTO(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+            "alicejr@example.com", true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(u)))
+                .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
         // Duplicate login
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dup)))
+                .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
             .andExpect(status().is4xxClientError());
 
         Optional<User> userDup = userRepository.findOneByEmail("alicejr@example.com");
@@ -280,33 +329,37 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Transactional<% } %>
     public void testRegisterDuplicateEmail() throws Exception {
         // Good
-        UserDTO u = new UserDTO(
+        ManagedUserDTO validUser = new ManagedUserDTO(
+            null,                   // id
             "john",                 // login
             "password",             // password
             "John",                 // firstName
             "Doe",                  // lastName
             "john@example.com",     // e-mail
             true,                   // activated
-            "<%= nativeLanguageShortName %>",                   // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
-        );
+            "<%= nativeLanguageShortName %>",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
 
         // Duplicate e-mail, different login
-        UserDTO dup = new UserDTO("johnjr", u.getPassword(), u.getLogin(), u.getLastName(),
-            u.getEmail(), true, u.getLangKey(), u.getAuthorities());
+        ManagedUserDTO duplicatedUser = new ManagedUserDTO(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+            validUser.getEmail(), true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(u)))
+                .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
         // Duplicate e-mail
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(dup)))
+                .content(TestUtil.convertObjectToJsonBytes(duplicatedUser)))
             .andExpect(status().is4xxClientError());
 
         Optional<User> userDup = userRepository.findOneByLogin("johnjr");
@@ -316,21 +369,25 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterAdminIsIgnored() throws Exception {
-        UserDTO u = new UserDTO(
+        ManagedUserDTO validUser = new ManagedUserDTO(
+            null,                   // id
             "badguy",               // login
             "password",             // password
             "Bad",                  // firstName
             "Guy",                  // lastName
             "badguy@example.com",   // e-mail
             true,                   // activated
-            "<%= nativeLanguageShortName %>",                   // langKey
-            new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN)) // <-- only admin should be able to do that
-        );
+            "<%= nativeLanguageShortName %>",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdDate
+            null,                   // lastModifiedBy
+            null                    // lastModifiedDate 
+        <% } %>);
 
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(u)))
+                .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
@@ -338,4 +395,27 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         assertThat(userDup.get().getAuthorities()).hasSize(1)
             .containsExactly(<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>authorityRepository.findOne(AuthoritiesConstants.USER)<% } %><% if (databaseType == 'cassandra') { %>AuthoritiesConstants.USER<% } %>);
     }
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>    
+    public void testSaveInvalidLogin() throws Exception {
+        UserDTO invalidUser = new UserDTO(
+            "funky-log!n",          // login <-- invalid
+            "Funky",                // firstName
+            "One",                  // lastName
+            "funky@example.com",    // e-mail
+            true,                   // activated
+            "<%= nativeLanguageShortName %>",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
+        );
+
+        restUserMockMvc.perform(
+            post("/api/account")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
+            .andExpect(status().isBadRequest());
+
+        Optional<User> user = userRepository.findOneByEmail("funky@example.com");
+        assertThat(user.isPresent()).isFalse();
+    }    
 }
