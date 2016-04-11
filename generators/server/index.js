@@ -208,9 +208,7 @@ module.exports = JhipsterServerGenerator.extend({
     prompting: {
 
         askForModuleName: function () {
-            //need this for having a concrete name in gateway app to build urls like "/jhipster-uaa/api/account"
-            // @TODO read this application name from gateway during its generation
-            if (this.baseName || this.applicationType == 'uaa') return;
+            if (this.baseName) return;
 
             this.askModuleName(this, currentQuestion++, totalQuestions);
 
@@ -304,6 +302,23 @@ module.exports = JhipsterServerGenerator.extend({
                         }
                     ],
                     default: 0
+                },
+                {
+                    when: function (response) {
+                        return (applicationType === 'gateway' && response.authenticationType === 'uaa');
+                    },
+                    type: 'input',
+                    name: 'uaaBaseName',
+                    validate: function (input) {
+                        if (true) return true; //@TODO check it really
+                        return 'Could not finde UAA application "' + input + '"';
+                    },
+                    message: function (response) {
+                        return getNumberedQuestion('What is the path of your UAA application?.', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, true);
+                    },
+                    default: 'uaa'
                 },
                 {
                     when: function (response) {
@@ -677,8 +692,8 @@ module.exports = JhipsterServerGenerator.extend({
                     this.skipUserManagement = true;
                 }
 
-                if(this.applicationType == 'uaa') {
-                    this.baseName = 'UAA';
+                if(applicationType == 'uaa') {
+                    this.authenticationType = 'uaa';
                 }
 
                 this.packageName = props.packageName;
@@ -695,6 +710,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.searchEngine = props.searchEngine;
                 this.buildTool = props.buildTool;
                 this.enableSocialSignIn = props.enableSocialSignIn;
+                this.uaaBaseName = props.uaaBaseName;
 
                 if (this.databaseType === 'no') {
                     this.devDatabaseType = 'no';
@@ -736,6 +752,7 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
+            configOptions.uaaBaseName = this.uaaBaseName;
             configOptions.serverPort = this.serverPort;
 
             // Make dist dir available in templates
@@ -797,6 +814,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('packageFolder', this.packageFolder);
             this.config.set('serverPort', this.serverPort);
             this.config.set('authenticationType', this.authenticationType);
+            this.config.set('uaaBaseName', this.uaaBaseName);
             this.config.set('hibernateCache', this.hibernateCache);
             this.config.set('clusteredHttpSession', this.clusteredHttpSession);
             this.config.set('websocket', this.websocket);

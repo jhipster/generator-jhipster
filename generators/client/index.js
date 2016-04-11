@@ -276,6 +276,10 @@ module.exports = JhipsterClientGenerator.extend({
                 this.languages = configOptions.languages;
             }
 
+            if(configOptions.uaaBaseName !== undefined) {
+                this.uaaBaseName = configOptions.uaaBaseName;
+            }
+
             // Make dist dir available in templates
             if (configOptions.buildTool === 'maven') {
                 this.BUILD_DIR = 'target/';

@@ -26,7 +26,7 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 apply plugin: 'io.spring.dependency-management'
 dependencyManagement {
   imports {
@@ -185,11 +185,11 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul'
     <%_ } _%>
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-ribbon', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: spring_cloud_version
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-ribbon'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
     compile group: 'org.springframework.retry', name: 'spring-retry'
     <%_ } _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
