@@ -54,7 +54,7 @@ describe('Controller Tests', function() {
 
             // then
             expect(MockTimeout).toHaveBeenCalledWith(jasmine.any(Function));
-            expect(MockAngular.element).toHaveBeenCalledWith($('#email'));
+            expect(MockAngular.element).toHaveBeenCalledWith($('#email').val());
             expect(MockElement.focus).toHaveBeenCalled();
         });
 
