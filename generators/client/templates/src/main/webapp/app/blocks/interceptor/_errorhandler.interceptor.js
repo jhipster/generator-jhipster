@@ -15,7 +15,7 @@
         return service;
 
         function responseError (response) {
-            if (!(response.status === 401 && (response.data === '' || response.data.path.indexOf('/api/account') === 0 ))) {
+            if (!(response.status === 401 && (response.data === '' || ((typeof response.data.path!='undefined') && (response.data.path.indexOf('/api/account') === 0 ))))) {
                 $rootScope.$emit('<%=angularAppName%>.httpError', response);
             }
             return $q.reject(response);

@@ -4,6 +4,8 @@ import <%=packageName%>.security.jwt.JWTConfigurer;
 import <%=packageName%>.security.jwt.TokenProvider;
 import <%=packageName%>.web.rest.dto.LoginDTO;
 
+import java.util.Collections;
+
 import com.codahale.metrics.annotation.Timed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +45,7 @@ public class UserJWTController {
             response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
             return ResponseEntity.ok(new JWTToken(jwt));
         } catch (AuthenticationException exception) {
-            return new ResponseEntity<>(exception.getLocalizedMessage(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(Collections.singletonMap("AuthenticationException",exception.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
         }
     }
 }
