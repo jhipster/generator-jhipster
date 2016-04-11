@@ -13,6 +13,8 @@ buildscript {
         classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'<% if(!skipClient) {%>
         classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.12'
         classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.12'<% } %>
+        classpath group: 'se.transmode.gradle', name: 'gradle-docker', version: '1.2'
+        classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -24,6 +26,14 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+apply plugin: 'io.spring.dependency-management'
+dependencyManagement {
+  imports {
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+spring_cloud_version
+  }
+}
+<%_ } _%>
 defaultTasks 'bootRun'
 
 bootRepackage {
@@ -172,14 +182,14 @@ dependencies {
     }
     compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: datastax_driver_version<% } %>
     <%_ if (applicationType == 'gateway') { _%>
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: spring_cloud_version
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul'
     <%_ } _%>
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-ribbon', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: spring_cloud_version
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: spring_cloud_version
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-ribbon'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
     compile group: 'org.springframework.retry', name: 'spring-retry'
     <%_ } _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
