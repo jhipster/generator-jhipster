@@ -4,7 +4,7 @@
     "baseName": "travisDefault",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
-    "authenticationType" : "uaa",
+    "authenticationType" : "jwt",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
     "websocket": "no",
