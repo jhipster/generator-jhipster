@@ -282,7 +282,7 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return applicationType === 'gateway' || applicationType == 'microservice';
+                        return applicationType === 'gateway' || applicationType === 'microservice';
                     },
                     type: 'list',
                     name: 'authenticationType',
@@ -298,7 +298,7 @@ module.exports = JhipsterServerGenerator.extend({
                         },
                         {
                             value: 'uaa',
-                            name: 'Authentication via JHipster UAA (you will have to generate one separately)'
+                            name: 'Authentication via JHipster UAA (you will have to generate app separately)'
                         }
                     ],
                     default: 0
@@ -316,9 +316,9 @@ module.exports = JhipsterServerGenerator.extend({
                     message: function (response) {
                         return getNumberedQuestion('What is the path of your UAA application?.', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
-                        }, true);
+                        }, applicationType === 'gateway' && response.authenticationType === 'uaa');
                     },
-                    default: 'uaa'
+                    default: 'jhipsterUAA'
                 },
                 {
                     when: function (response) {
@@ -685,11 +685,11 @@ module.exports = JhipsterServerGenerator.extend({
                 }
 
                 //this now is job for uaa
-                if(this.applicationType == 'gateway' && this.authenticationType == 'uaa') {
+                if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
 
-                if(applicationType == 'uaa') {
+                if(applicationType === 'uaa') {
                     this.authenticationType = 'uaa';
                 }
 
@@ -902,7 +902,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + '_elasticsearch.yml', DOCKER_DIR + 'elasticsearch.yml', this, {});
             }
 
-            if (this.applicationType == 'microservice' || this.applicationType == 'gateway' || this.applicationType == 'uaa') {
+            if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
                 this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
             }
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
@@ -1005,7 +1005,7 @@ module.exports = JhipsterServerGenerator.extend({
             /* Skip the code below for --skip-user-management */
             if (this.skipUserManagement) return;
 
-            if(this.applicationType == 'uaa') {
+            if(this.applicationType === 'uaa') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaWebSecurityConfiguration.java', javaDir + 'config/UaaWebSecurityConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaConfiguration.java', javaDir + 'config/UaaConfiguration.java', this, {});
             } else {
@@ -1022,7 +1022,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
 
-            if (this.authenticationType == 'jwt') {
+            if (this.authenticationType === 'jwt') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoginDTO.java', javaDir + 'web/rest/dto/LoginDTO.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_JWTToken.java', javaDir + 'web/rest/JWTToken.java', this, {});

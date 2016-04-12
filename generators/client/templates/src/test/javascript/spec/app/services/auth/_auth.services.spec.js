@@ -16,7 +16,7 @@ describe('Service Tests', function () {
             sessionStorageService = $sessionStorage;
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
-            <%_ if (authenticationType != 'jwt' && authenticationType != 'uaa') { _%>
+            <%_ if (authenticationType !== 'jwt' && authenticationType !== 'uaa') { _%>
             $httpBackend.expectPOST(/api\/logout\?cacheBuster=\d+/).respond(200, '');
             <%_ } _%>
         }));

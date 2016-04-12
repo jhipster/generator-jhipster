@@ -29,11 +29,7 @@ zuul:
 
 spring:
     application:
-        <%_ if (applicationType == 'uaa') { _%>
-        name: uaa
-        <%_ } else { _%>
         name: <%= baseName %>
-        <%_ } _%>
     <%_ if (databaseType == 'sql') { _%>
     jpa:
         open-in-view: false

@@ -29,7 +29,7 @@
         }
 
         function login (credentials) {
-            <% if(authenticationType == 'uaa') { %>
+            <% if(authenticationType === 'uaa') { %>
               var data = {
                 username: credentials.username,
                 password: credentials.password,

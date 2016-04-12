@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('AuthServerProvider', AuthServerProvider);
 
-    AuthServerProvider.$inject = ['$http', '$localStorage' <% if (websocket == 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
+    AuthServerProvider.$inject = ['$http', '$localStorage' <% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-    function AuthServerProvider ($http, $localStorage <% if (websocket == 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
+    function AuthServerProvider ($http, $localStorage <% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
         var service = {
             getToken: getToken,
             hasValidToken: hasValidToken,
@@ -41,10 +41,10 @@
             });
         }
 
-        function logout () {<% if (websocket == 'spring-websocket') { %>
+        function logout () {<% if (websocket === 'spring-websocket') { %>
             <%=jhiPrefixCapitalized%>TrackerService.disconnect();<% } %>
 
-            <% if(authenticationType == 'uaa') { %>
+            <% if(authenticationType === 'uaa') { %>
                 delete $localStorage.authenticationToken;
             <% } else { %>
             // logout from the server
