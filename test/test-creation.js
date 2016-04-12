@@ -934,7 +934,6 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with the microservice application type', function () {
-            //assert.file(expectedFiles.jwt); //not anymore
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.microserviceGradle);
             assert.file(expectedFiles.containerizeWithDocker);

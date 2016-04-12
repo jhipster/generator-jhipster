@@ -674,11 +674,8 @@ module.exports = JhipsterServerGenerator.extend({
             ];
 
             this.prompt(prompts, function (props) {
-                if (this.applicationType == 'microservice') {
-                    this.authenticationType = 'jwt';
-                } else {
-                    this.authenticationType = props.authenticationType;
-                }
+                this.authenticationType = props.authenticationType;
+
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
