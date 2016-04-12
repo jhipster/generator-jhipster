@@ -832,7 +832,6 @@ module.exports = EntityGenerator.extend({
      * ask question for a relationship creation
      */
     _askForRelationship: function (cb) {
-        var packageFolder = this.packageFolder;
         var name = this.name;
         this.log(chalk.green('\nGenerating relationships to other entities\n'));
         var prompts = [
@@ -1527,7 +1526,7 @@ module.exports = EntityGenerator.extend({
                     relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
                 }
 
-                 if (_.isUndefined(relationship.relationshipNamePlural)) {
+                if (_.isUndefined(relationship.relationshipNamePlural)) {
                     relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
                 }
 
