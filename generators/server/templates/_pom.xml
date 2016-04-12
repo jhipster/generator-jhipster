@@ -116,6 +116,7 @@
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
+        <skip-install-nodenpm>true</skip-install-nodenpm>
     </properties>
 
     <dependencies>
@@ -1052,6 +1053,7 @@
                                 <configuration>
                                     <nodeVersion>v4.4.2</nodeVersion>
                                     <npmVersion>3.8.3</npmVersion>
+                                    <skip>${skip-install-nodenpm}</skip>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1117,6 +1119,12 @@
             <properties>
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
+            </properties>
+        </profile>
+        <profile>
+            <id>ci</id>
+            <properties>
+                <skip-install-nodenpm>false</skip-install-nodenpm>
             </properties>
         </profile>
     </profiles>
