@@ -19,7 +19,7 @@
         vm.resetAccount = {};
         vm.success = null;
 
-        $timeout(function (){angular.element('[ng-model="vm.resetAccount.password"]').focus();});
+        $timeout(function (){angular.element('#password').focus();});
 
         function finishReset() {
             if (vm.resetAccount.password !== vm.confirmPassword) {

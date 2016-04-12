@@ -20,7 +20,7 @@
         vm.requestResetPassword = requestResetPassword;
         vm.username = null;
 
-        $timeout(function (){angular.element('[ng-model="vm.username"]').focus();});
+        $timeout(function (){angular.element('#username').focus();});
 
         function cancel () {
             vm.credentials = {
