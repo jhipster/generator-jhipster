@@ -289,7 +289,7 @@ module.exports = JhipsterServerGenerator.extend({
                     message: function (response) {
                         return getNumberedQuestion('Which *type* of authentication would you like to use?', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
-                        }, applicationType === 'monolith');
+                        }, applicationType === 'gateway' || applicationType === 'microservice');
                     },
                     choices: [
                         {
