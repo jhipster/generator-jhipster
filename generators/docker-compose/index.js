@@ -170,8 +170,8 @@ module.exports = yeoman.Base.extend({
                     var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
                     var fileData = this.fs.readJSON(path);
                     var config = fileData['generator-jhipster'];
-                    this.log(config.applicationType);
-                    if(config.applicationType === 'monolithic') {
+
+                    if(config.applicationType === 'monolith') {
                         this.monolithicNb++;
                     }
                     if(config.applicationType === 'gateway') {
@@ -282,6 +282,8 @@ module.exports = yeoman.Base.extend({
 
         setAppsYaml: function() {
             this.appsYaml = [];
+
+            var portIndex=8080;
             for (var i = 0; i < this.appsFolders.length; i++) {
                 var parentConfiguration = {};
                 var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
@@ -289,6 +291,12 @@ module.exports = yeoman.Base.extend({
                 // Add application configuration
                 var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
                 var yamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
+                this.log(this.appConfigs[i].applicationType);
+                if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
+                    yamlConfig.ports[0] = portIndex + ':' + portIndex;
+                    portIndex++;
+                }
+
                 parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
 
                 // Add database configuration
