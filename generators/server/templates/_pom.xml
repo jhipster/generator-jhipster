@@ -1078,7 +1078,7 @@
                                     <goal>gulp</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>build --no-notification</arguments>
+                                    <arguments>build test --no-notification</arguments>
                                 </configuration>
                             </execution>
                         </executions>
