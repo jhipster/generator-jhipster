@@ -224,6 +224,10 @@ module.exports = JhipsterGenerator.extend({
                         name: 'Microservice application'
                     },
                     {
+                        value: 'uaa',
+                        name: 'Microservice UAA service'
+                    },
+                    {
                         value: 'gateway',
                         name: 'Microservice gateway'
                     }
@@ -254,6 +258,12 @@ module.exports = JhipsterGenerator.extend({
                 this.skipClient = true;
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = true;
+            }
+            if (this.applicationType == 'uaa') {
+                this.skipClient = true;
+                this.generatorType = 'server';
+                this.skipUserManagement = configOptions.skipUserManagement = false;
+                //this.authenticationType = configOptions.authenticationType = 'uaa';
             }
             if (this.skipClient) {
                 // defaults to use when skipping client

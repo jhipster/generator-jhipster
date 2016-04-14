@@ -180,6 +180,10 @@ module.exports = DockerComposeGenerator.extend({
                     var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
                     var fileData = this.fs.readJSON(path);
                     var config = fileData['generator-jhipster'];
+                    //this currently can happen, because the .yo-rc doesn't have a baseName
+                    if(fileData['generator-jhipster'].baseName === undefined) {
+                        config.baseName = 'uaa';
+                    }
                     this.appConfigs.push(config);
                 }
 
