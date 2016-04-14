@@ -95,6 +95,11 @@ module.exports = CloudFoundryGenerator.extend({
     },
 
     configuring: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'cloudfoundry');
+        },
+
         copyCloudFoundryFiles: function () {
             if (this.abort) return;
             this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
@@ -138,8 +143,7 @@ module.exports = CloudFoundryGenerator.extend({
             var done = this.async();
 
             this.log(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
-            var insight = this.insight();
-            insight.track('generator', 'cloudfoundry');
+
             if (this.databaseType !== 'no') {
                 this.log(chalk.bold('Creating the database'));
                 var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, {}, function (err, stdout, stderr) {

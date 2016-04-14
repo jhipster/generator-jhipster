@@ -711,7 +711,7 @@ module.exports = JhipsterServerGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'server');
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);
             insight.track('app/clusteredHttpSession', this.clusteredHttpSession);

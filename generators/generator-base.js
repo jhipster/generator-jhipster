@@ -1157,6 +1157,17 @@ Generator.prototype.insight = function () {
         packageName: packagejs.name,
         packageVersion: packagejs.version
     });
+
+    insight.trackWithEvent = function (category, action) {
+        insight.track(category, action);
+        insight.trackEvent({
+            category: category,
+            action: action,
+            label: category + ' ' + action,
+            value: 1
+        });
+    };
+
     return insight;
 };
 

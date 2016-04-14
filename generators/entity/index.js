@@ -1583,7 +1583,7 @@ module.exports = EntityGenerator.extend({
             // track insights
             var insight = this.insight();
 
-            insight.track('generator', 'entity');
+            insight.trackWithEvent('generator', 'entity');
             insight.track('entity/fields', this.fields.length);
             insight.track('entity/relationships', this.relationships.length);
             insight.track('entity/pagination', this.pagination);

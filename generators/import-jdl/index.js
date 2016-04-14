@@ -49,6 +49,10 @@ module.exports = JDLGenerator.extend({
         }
     },
     default: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'import-jdl');
+        },
 
         parseJDL: function () {
 

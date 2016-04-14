@@ -206,7 +206,7 @@ module.exports = JhipsterClientGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'client');
             insight.track('app/useSass', this.useSass);
             insight.track('app/enableTranslation', this.enableTranslation);
             insight.track('app/nativeLanguage', this.nativeLanguage);

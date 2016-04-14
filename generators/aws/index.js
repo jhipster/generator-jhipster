@@ -148,7 +148,7 @@ module.exports = AwsGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'aws');
+            insight.trackWithEvent('generator', 'aws');
         },
         createAwsFactory: function () {
             var cb = this.async();

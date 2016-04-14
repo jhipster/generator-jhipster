@@ -350,7 +350,7 @@ module.exports = JhipsterGenerator.extend({
 
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
             insight.track('app/testFrameworks', this.testFrameworks);
         },
