@@ -1034,6 +1034,8 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_SpectatorLogMetricWriter.java', javaDir + 'config/metrics/SpectatorLogMetricWriter.java', this, {});
         },
 
         writeServerJavaAppFiles: function () {
@@ -1086,7 +1088,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/locale/_package-info.java', javaDir + 'config/locale/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java', this, {});
 
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_LogMetricWriter.java', javaDir + 'config/metrics/LogMetricWriter.java', this, {});
             if (this.databaseType === 'cassandra') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
