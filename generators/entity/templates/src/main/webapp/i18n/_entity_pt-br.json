@@ -2,16 +2,16 @@
     "<%= angularAppName %>": {
         "<%= entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPluralHumanized  %>",
-                "createLabel": "Create a new <%= entityClassHumanized %>",
-                "createOrEditLabel": "Create or edit a <%= entityClassHumanized %>",
-                "search": "Search for <%= entityClassHumanized %>"
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Criar novo <%= entityClassHumanized %>",
+                "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>",
+                "search": "Pesquisar por <%= entityClassHumanized %>"
             },
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",
+            "created": "Um novo <%= entityClassHumanized %> é criado com o identificador {{ param }}",
+            "updated": "Um <%= entityClassHumanized %> é atualizado com o identificador {{ param }}",
+            "deleted": "Um <%= entityClassHumanized %> é deletado com o identificador {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClassHumanized %> {{ id }}?"
+                "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
             },
             "detail": {
                 "title": "<%= entityClassHumanized %>"
