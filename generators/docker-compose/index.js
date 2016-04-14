@@ -164,6 +164,7 @@ module.exports = yeoman.Base.extend({
                 this.appConfigs = [];
                 this.gatewayNb = 0;
                 this.monolithicNb = 0;
+                this.microserviceNb = 0;
 
                 //Loading configs
                 for(var i = 0; i < this.appsFolders.length; i++) {
@@ -173,9 +174,10 @@ module.exports = yeoman.Base.extend({
 
                     if(config.applicationType === 'monolith') {
                         this.monolithicNb++;
-                    }
-                    if(config.applicationType === 'gateway') {
+                    } else if(config.applicationType === 'gateway') {
                         this.gatewayNb++;
+                    } else if(config.applicationType === 'microservice') {
+                        this.microserviceNb++;
                     }
 
                     this.portsToBind = this.monolithicNb + this.gatewayNb;
@@ -363,7 +365,7 @@ module.exports = yeoman.Base.extend({
         },
 
         writeRegistryFiles: function() {
-            if(this.gatewayNb === 0) return;
+            if(this.gatewayNb === 0 && this.microserviceNb === 0) return;
 
             this.copy('jhipster-registry.yml', 'jhipster-registry.yml');
             this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
