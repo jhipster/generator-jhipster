@@ -206,7 +206,7 @@ module.exports = JhipsterClientGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'client');
             insight.track('app/useSass', this.useSass);
             insight.track('app/enableTranslation', this.enableTranslation);
             insight.track('app/nativeLanguage', this.nativeLanguage);
@@ -440,6 +440,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularUserMgmntFiles: function () {
+            if (this.skipUserManagement) return;
+
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/user-management.html', ANGULAR_DIR + 'admin/user-management/user-management.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');

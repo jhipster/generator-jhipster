@@ -64,7 +64,7 @@ Rds.prototype.createDatabaseUrl = function createDatabaseUrl(params, callback) {
     });
 };
 
-var createRdsSecurityGroup = function createRdsSecurityGroup(params, callback) {
+function createRdsSecurityGroup(params, callback) {
     var ec2 = new aws.EC2();
 
     var securityGroupParams = {
@@ -81,9 +81,9 @@ var createRdsSecurityGroup = function createRdsSecurityGroup(params, callback) {
             callback(null, {rdsSecurityGroupId: data.GroupId});
         }
     });
-};
+}
 
-var authorizeSecurityGroupIngress = function authorizeSecurityGroupIngress(params, callback) {
+function authorizeSecurityGroupIngress(params, callback) {
     var ec2 = new aws.EC2();
 
     var securityGroupParams = {
@@ -101,9 +101,9 @@ var authorizeSecurityGroupIngress = function authorizeSecurityGroupIngress(param
             callback(null, {message: 'Create security group successful'});
         }
     });
-};
+}
 
-var createDbInstance = function createDbInstance(params, callback) {
+function createDbInstance(params, callback) {
     var rds = new aws.RDS();
 
     var dbInstanceParams = {
@@ -128,4 +128,4 @@ var createDbInstance = function createDbInstance(params, callback) {
             callback(null, {message: 'Database created successful'});
         }
     });
-};
+}

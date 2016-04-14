@@ -6,7 +6,9 @@ var util = require('util'),
     scriptBase = require('../generator-base'),
     packagejs = require('../../package.json'),
     crypto = require('crypto'),
-    mkdirp = require('mkdirp');
+    mkdirp = require('mkdirp'),
+    path = require('path'),
+    shelljs = require('shelljs');
 
 var JhipsterServerGenerator = generators.Base.extend({});
 
@@ -139,6 +141,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
+            this.uaaBaseName = this.config.get('uaaBaseName');
             var testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
@@ -192,7 +195,7 @@ module.exports = JhipsterServerGenerator.extend({
                 if (this.languages === undefined) {
                     this.languages = ['en', 'fr'];
                 }
-
+                // user-management will be handled by UAA app
                 if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
@@ -202,6 +205,24 @@ module.exports = JhipsterServerGenerator.extend({
 
                 this.existingProject = true;
             }
+        }
+    },
+
+    _getUaaAppName : function (input) {
+        var fromPath = '';
+        if(path.isAbsolute(input)) {
+            fromPath = input + '/' + '.yo-rc.json';
+        } else {
+            fromPath = this.destinationPath(input + '/' + '.yo-rc.json');
+        }
+
+        if (shelljs.test('-f', fromPath)) {
+            var fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData['generator-jhipster']) {
+                return fileData['generator-jhipster'];
+            } else return false;
+        } else {
+            return false;
         }
     },
 
@@ -298,7 +319,7 @@ module.exports = JhipsterServerGenerator.extend({
                         },
                         {
                             value: 'uaa',
-                            name: 'Authentication via JHipster UAA (you will have to generate app separately)'
+                            name: 'Authentication via JHipster UAA server (you will have to generate the app separately)'
                         }
                     ],
                     default: 0
@@ -309,16 +330,24 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'input',
                     name: 'uaaBaseName',
-                    validate: function (input) {
-                        if (true) return true; //@TODO check it really
-                        return 'Could not finde UAA application "' + input + '"';
-                    },
                     message: function (response) {
-                        return getNumberedQuestion('What is the path of your UAA application?.', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('What is the folder path of your UAA application?.', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, applicationType === 'gateway' && response.authenticationType === 'uaa');
                     },
-                    default: 'jhipsterUAA'
+                    default: '../jhipsterUAA',
+                    filter: function (input) {
+                        return this._getUaaAppName(input).baseName;
+                    }.bind(this),
+                    validate: function (input) {
+                        var uaaAppData = this._getUaaAppName(input);
+
+                        if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
+                            return true;
+                        } else {
+                            return 'Could not find a valid JHipster UAA application in path "' + input + '"';
+                        }
+                    }.bind(this)
                 },
                 {
                     when: function (response) {
@@ -580,7 +609,7 @@ module.exports = JhipsterServerGenerator.extend({
                             name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
                         }
                     ],
-                    default: (applicationType === 'gateway' || applicationType === 'microservice') ? 2 : 1
+                    default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 2 : 1
                 },
                 {
                     when: function (response) {
@@ -684,12 +713,12 @@ module.exports = JhipsterServerGenerator.extend({
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
-                //this now is job for uaa
+                //this will be handled by the UAA app
                 if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
 
-                if(applicationType === 'uaa') {
+                if(this.applicationType === 'uaa') {
                     this.authenticationType = 'uaa';
                 }
 
@@ -764,7 +793,7 @@ module.exports = JhipsterServerGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'server');
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);
             insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
@@ -1091,7 +1120,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType != 'microservice' && this.applicationType != 'gateway'  && this.applicationType != 'uaa') return;
+            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway'  && this.applicationType !== 'uaa') return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});

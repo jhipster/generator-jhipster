@@ -6,13 +6,6 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fse = require('fs-extra');
 
-const constants = require('../generators/generator-constants'),
-    TEST_DIR = constants.TEST_DIR,
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-
 const expectedFiles = {
     dockercompose : [
         'docker-compose.yml',
@@ -26,7 +19,6 @@ const expectedFiles = {
 };
 
 describe('JHipster Docker Compose Sub Generator', function () {
-    this.timeout(5000); //to avoid occassional timeout on windows
 
     describe('only gateway', function () {
         beforeEach(function (done) {

@@ -11,6 +11,7 @@
         function findLanguageFromKeyFilter(lang) {
             return {
                 'ca': 'Català',
+                'cs': 'Český',
                 'da': 'Dansk',
                 'de': 'Deutsch',
                 'el': 'Ελληνικά',
@@ -30,6 +31,7 @@
                 'pt-pt': 'Português',
                 'ro': 'Română',
                 'ru': 'Русский',
+                'sk': 'Slovenský',
                 'sv': 'Svenska',
                 'ta': 'தமிழ்',
                 'tr': 'Türkçe',

@@ -224,12 +224,12 @@ module.exports = JhipsterGenerator.extend({
                         name: 'Microservice application'
                     },
                     {
-                        value: 'uaa',
-                        name: 'Microservice UAA service'
-                    },
-                    {
                         value: 'gateway',
                         name: 'Microservice gateway'
+                    },
+                    {
+                        value: 'uaa',
+                        name: 'Microservice UAA service'
                     }
                 ],
                 default: 'monolith'
@@ -259,11 +259,11 @@ module.exports = JhipsterGenerator.extend({
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = true;
             }
-            if (this.applicationType == 'uaa') {
+            if (this.applicationType === 'uaa') {
                 this.skipClient = true;
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = false;
-                //this.authenticationType = configOptions.authenticationType = 'uaa';
+                this.authenticationType = configOptions.authenticationType = 'uaa';
             }
             if (this.skipClient) {
                 // defaults to use when skipping client
@@ -360,7 +360,7 @@ module.exports = JhipsterGenerator.extend({
 
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
             insight.track('app/testFrameworks', this.testFrameworks);
         },

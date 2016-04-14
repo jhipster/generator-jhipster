@@ -1,14 +1,23 @@
 'use strict';
-var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
-var shelljs = require('shelljs');
-var crypto = require('crypto');
-var _ = require('lodash');
-var jsyaml = require('js-yaml');
-var pathjs = require('path');
+var generators = require('yeoman-generator'),
+    chalk = require('chalk'),
+    shelljs = require('shelljs'),
+    crypto = require('crypto'),
+    _ = require('lodash'),
+    jsyaml = require('js-yaml'),
+    pathjs = require('path'),
+    util = require('util'),
+    scriptBase = require('../generator-base');
 
+var DockerComposeGenerator = generators.Base.extend({});
 
-module.exports = yeoman.Base.extend({
+util.inherits(DockerComposeGenerator, scriptBase);
+
+module.exports = DockerComposeGenerator.extend({
+    constructor: function () {
+        generators.Base.apply(this, arguments);
+    },
+
     initializing: {
         sayHello: function() {
             this.log(chalk.white('Welcome to the JHipster Docker Compose Sub-Generator '));
@@ -171,10 +180,6 @@ module.exports = yeoman.Base.extend({
                     var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
                     var fileData = this.fs.readJSON(path);
                     var config = fileData['generator-jhipster'];
-                    //this currently can happen, because the .yo-rc doesn't have a baseName
-                    if(fileData['generator-jhipster'].baseName === undefined) {
-                        config.baseName = 'uaa';
-                    }
                     this.appConfigs.push(config);
                 }
 
@@ -240,6 +245,11 @@ module.exports = yeoman.Base.extend({
     },
 
     configuring: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'docker-compose');
+        },
+
         checkImages: function() {
 
             this.log('\nChecking Docker images in applications\' directories...');

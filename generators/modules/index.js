@@ -114,6 +114,9 @@ module.exports = ModulesGenerator.extend({
 
     initializing: function () {
         //at least one method is required for yeoman to initilize the generator
+        var insight = this.insight();
+        insight.trackWithEvent('generator', 'modules');
+
         this.log('Reading the JHipster project configuration for your module');
     }
 });

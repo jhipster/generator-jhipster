@@ -253,6 +253,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Catalan', value: 'ca'},
         {name: 'Chinese (Simplified)', value: 'zh-cn'},
         {name: 'Chinese (Traditional)', value: 'zh-tw'},
+        {name: 'Czech', value: 'cs'},
         {name: 'Danish', value: 'da'},
         {name: 'Dutch', value: 'nl'},
         {name: 'English', value: 'en'},
@@ -271,6 +272,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Portuguese', value: 'pt-pt'},
         {name: 'Romanian', value: 'ro'},
         {name: 'Russian', value: 'ru'},
+        {name: 'Slovak', value: 'sk'},
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
@@ -1155,6 +1157,17 @@ Generator.prototype.insight = function () {
         packageName: packagejs.name,
         packageVersion: packagejs.version
     });
+
+    insight.trackWithEvent = function (category, action) {
+        insight.track(category, action);
+        insight.trackEvent({
+            category: category,
+            action: action,
+            label: category + ' ' + action,
+            value: 1
+        });
+    };
+
     return insight;
 };
 
