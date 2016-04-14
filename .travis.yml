@@ -49,7 +49,7 @@ script:
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/c77e712c44b0a4914b7c
+      - https://webhooks.gitter.im/e/479b810ad42c816679fb
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: false     # default: false
