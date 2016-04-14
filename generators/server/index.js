@@ -141,6 +141,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
+            this.uaaBaseName = this.config.get('uaaBaseName');
             var testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
@@ -712,12 +713,12 @@ module.exports = JhipsterServerGenerator.extend({
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
-                //this now is job for uaa
+                //this will be handled by the UAA app
                 if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
 
-                if(applicationType === 'uaa') {
+                if(this.applicationType === 'uaa') {
                     this.authenticationType = 'uaa';
                 }
 
@@ -1120,7 +1121,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType != 'microservice' && this.applicationType != 'gateway'  && this.applicationType != 'uaa') return;
+            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway'  && this.applicationType !== 'uaa') return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});
