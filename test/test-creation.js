@@ -859,7 +859,7 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with the gateway application type', function () {
-            //assert.file(expectedFiles.jwt); //not anymore
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
             assert.file(expectedFiles.containerizeWithDocker);
         });
@@ -894,7 +894,7 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with the microservice application type', function () {
-            //assert.file(expectedFiles.jwt); //not anymore
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.dockerServicesDev);
             assert.file(expectedFiles.dockerServicesProd);
@@ -933,6 +933,7 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with the microservice application type', function () {
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.microserviceGradle);
             assert.file(expectedFiles.containerizeWithDocker);

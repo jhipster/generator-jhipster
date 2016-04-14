@@ -36,7 +36,7 @@ elif [ "$JHIPSTER" == "app-cassandra" ]; then
   moveEntity CassTestServiceClassEntity
   moveEntity CassTestServiceImplEntity
 
-elif [[ ("$JHIPSTER" == "app-microservice") || ("$JHIPSTER" == "app-gateway")]]; then
+elif [ "$JHIPSTER" == "app-microservice" ]; then
   moveEntity MicroserviceBankAccount
   moveEntity MicroserviceOperation
   moveEntity MicroserviceLabel
