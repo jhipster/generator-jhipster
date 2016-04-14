@@ -6,7 +6,9 @@ var util = require('util'),
     scriptBase = require('../generator-base'),
     packagejs = require('../../package.json'),
     crypto = require('crypto'),
-    mkdirp = require('mkdirp');
+    mkdirp = require('mkdirp'),
+    path = require('path'),
+    shelljs = require('shelljs');
 
 var JhipsterServerGenerator = generators.Base.extend({});
 
@@ -192,7 +194,7 @@ module.exports = JhipsterServerGenerator.extend({
                 if (this.languages === undefined) {
                     this.languages = ['en', 'fr'];
                 }
-
+                // user-management will be handled by UAA app
                 if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
@@ -202,6 +204,24 @@ module.exports = JhipsterServerGenerator.extend({
 
                 this.existingProject = true;
             }
+        }
+    },
+
+    _getUaaAppName : function (input) {
+        var fromPath = '';
+        if(path.isAbsolute(input)) {
+            fromPath = input + '/' + '.yo-rc.json';
+        } else {
+            fromPath = this.destinationPath(input + '/' + '.yo-rc.json');
+        }
+
+        if (shelljs.test('-f', fromPath)) {
+            var fileData = this.fs.readJSON(fromPath);
+            if (fileData && fileData['generator-jhipster']) {
+                return fileData['generator-jhipster'];
+            } else return false;
+        } else {
+            return false;
         }
     },
 
@@ -298,7 +318,7 @@ module.exports = JhipsterServerGenerator.extend({
                         },
                         {
                             value: 'uaa',
-                            name: 'Authentication via JHipster UAA (you will have to generate app separately)'
+                            name: 'Authentication via JHipster UAA server (you will have to generate the app separately)'
                         }
                     ],
                     default: 0
@@ -309,16 +329,24 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'input',
                     name: 'uaaBaseName',
-                    validate: function (input) {
-                        if (true) return true; //@TODO check it really
-                        return 'Could not finde UAA application "' + input + '"';
-                    },
                     message: function (response) {
-                        return getNumberedQuestion('What is the path of your UAA application?.', currentQuestion, totalQuestions, function (current) {
+                        return getNumberedQuestion('What is the folder path of your UAA application?.', currentQuestion, totalQuestions, function (current) {
                             currentQuestion = current;
                         }, applicationType === 'gateway' && response.authenticationType === 'uaa');
                     },
-                    default: 'jhipsterUAA'
+                    default: 'jhipsterUAA',
+                    filter: function (input) {
+                        return this._getUaaAppName(input).baseName;
+                    }.bind(this),
+                    validate: function (input) {
+                        var uaaAppData = this._getUaaAppName(input);
+
+                        if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
+                            return true;
+                        } else {
+                            return 'Could not find a valid JHipster UAA application in path "' + input + '"';
+                        }
+                    }.bind(this)
                 },
                 {
                     when: function (response) {
@@ -751,6 +779,7 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.authenticationType = this.authenticationType;
             configOptions.uaaBaseName = this.uaaBaseName;
             configOptions.serverPort = this.serverPort;
+            configOptions.skipUserManagement = this.skipUserManagement;
 
             // Make dist dir available in templates
             if (this.buildTool === 'maven') {

@@ -259,11 +259,11 @@ module.exports = JhipsterGenerator.extend({
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = true;
             }
-            if (this.applicationType == 'uaa') {
+            if (this.applicationType === 'uaa') {
                 this.skipClient = true;
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = false;
-                //this.authenticationType = configOptions.authenticationType = 'uaa';
+                this.authenticationType = configOptions.authenticationType = 'uaa';
             }
             if (this.skipClient) {
                 // defaults to use when skipping client
