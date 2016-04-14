@@ -291,9 +291,11 @@ module.exports = yeoman.Base.extend({
                 // Add application configuration
                 var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
                 var yamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
-                this.log(this.appConfigs[i].applicationType);
+
                 if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    yamlConfig.ports[0] = portIndex + ':' + portIndex;
+                    var ports = yamlConfig.ports[0].split(':');
+                    ports[0] = portIndex;
+                    yamlConfig.ports[0] = ports.join(':');
                     portIndex++;
                 }
 
