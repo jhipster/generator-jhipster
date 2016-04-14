@@ -335,7 +335,7 @@ module.exports = JhipsterServerGenerator.extend({
                             currentQuestion = current;
                         }, applicationType === 'gateway' && response.authenticationType === 'uaa');
                     },
-                    default: 'jhipsterUAA',
+                    default: '../jhipsterUAA',
                     filter: function (input) {
                         return this._getUaaAppName(input).baseName;
                     }.bind(this),
@@ -609,7 +609,7 @@ module.exports = JhipsterServerGenerator.extend({
                             name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
                         }
                     ],
-                    default: (applicationType === 'gateway' || applicationType === 'microservice') ? 2 : 1
+                    default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 2 : 1
                 },
                 {
                     when: function (response) {
@@ -780,7 +780,6 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.authenticationType = this.authenticationType;
             configOptions.uaaBaseName = this.uaaBaseName;
             configOptions.serverPort = this.serverPort;
-            configOptions.skipUserManagement = this.skipUserManagement;
 
             // Make dist dir available in templates
             if (this.buildTool === 'maven') {

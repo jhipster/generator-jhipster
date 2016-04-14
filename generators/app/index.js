@@ -224,12 +224,12 @@ module.exports = JhipsterGenerator.extend({
                         name: 'Microservice application'
                     },
                     {
-                        value: 'uaa',
-                        name: 'Microservice UAA service'
-                    },
-                    {
                         value: 'gateway',
                         name: 'Microservice gateway'
+                    },
+                    {
+                        value: 'uaa',
+                        name: 'Microservice UAA service'
                     }
                 ],
                 default: 'monolith'
