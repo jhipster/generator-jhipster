@@ -440,8 +440,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularUserMgmntFiles: function () {
-            if (!this.skipUserManagement) return;
-            
+            if (this.skipUserManagement) return;
+
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/user-management.html', ANGULAR_DIR + 'admin/user-management/user-management.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');
