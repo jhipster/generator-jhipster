@@ -639,6 +639,40 @@ describe('JHipster generator', function () {
         });
     });
 
+    describe('cassandra noi18n', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'no',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'cassandra',
+                    'devDatabaseType': 'cassandra',
+                    'prodDatabaseType': 'cassandra',
+                    'useSass': false,
+                    'enableTranslation': false,
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false,
+                    'skipClient': false,
+                    'skipUserManagement': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with "Cassandra"', function () {
+            assert.file(expectedFiles.dockerCassandra);
+            assert.noFile(expectedFiles.i18n);
+            assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
+        });
+    });
+
     describe('i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
