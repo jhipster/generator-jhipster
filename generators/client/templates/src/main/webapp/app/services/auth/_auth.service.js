@@ -50,7 +50,7 @@
                     $state.go('home');
                 }
 
-                // recover previousState after redirect
+                // recover and clear previousState after external login redirect (e.g. oauth2)
                 if (isAuthenticated && !$rootScope.fromState.name && $sessionStorage.previousStateName) {
                     var previousStateName = $sessionStorage.previousStateName;
                     var previousStateParams = $sessionStorage.previousStateParams;

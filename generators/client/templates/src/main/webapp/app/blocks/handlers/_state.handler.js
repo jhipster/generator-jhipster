@@ -17,7 +17,6 @@
         function initialize() {
             $rootScope.ENV = ENV;
             $rootScope.VERSION = VERSION;
-            $rootScope.back = back;
 
             var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
                 $rootScope.toState = toState;
@@ -60,17 +59,6 @@
                     stateChangeSuccess();
                 }
             });
-
-            function back() {
-                // If previous state is 'activate' or do not exist go to 'home'
-                var previousStateName = $sessionStorage.previousStateName;
-                var previousStateParams = $sessionStorage.previousStateParams;
-                if (previousStateName === 'activate' || angular.isUndefined($state.get(previousStateName))) {
-                    $state.go('home');
-                } else {
-                    $state.go(previousStateName, previousStateParams);
-                }
-            }
         }
     }
 })();

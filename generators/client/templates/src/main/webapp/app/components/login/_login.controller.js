@@ -46,12 +46,16 @@
                     $state.go('home');
                 }
 
-                // If we're redirected to login, our
-                // previousState is already set in the authExpiredInterceptor. When login succesful go to stored state
+                $rootScope.$broadcast('authenticationSuccess');
+
+                // previousState was set in the authExpiredInterceptor before being redirected to login modal.
+                // since login is succesful, go to stored previousState and clear previousState
                 if ($sessionStorage.previousStateName) {
-                    $state.go($sessionStorage.previousStateName, $sessionStorage.previousStateParams);
-                } else {
-                    $rootScope.$broadcast('authenticationSuccess');
+                    var previousStateName = $sessionStorage.previousStateName;
+                    var previousStateParams = $sessionStorage.previousStateParams;
+                    delete $sessionStorage.previousStateName;
+                    delete $sessionStorage.previousStateParams;
+                    $state.go(previousStateName, previousStateParams);
                 }
             }).catch(function () {
                 vm.authenticationError = true;
