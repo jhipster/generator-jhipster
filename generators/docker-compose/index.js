@@ -401,8 +401,8 @@ module.exports = DockerComposeGenerator.extend({
             this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
         }
         this.log('You can launch all your infrastructure by running : ' + chalk.cyan('docker-compose up -d'));
-        if (this.gatewayNb+this.monolithicNb>1) {
-            this.log('\nYour applications will be accessible on those URLs:');
+        if (this.gatewayNb + this.monolithicNb > 1) {
+            this.log('\nYour applications will be accessible on these URLs:');
             var portIndex = 8080;
             for (var i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
