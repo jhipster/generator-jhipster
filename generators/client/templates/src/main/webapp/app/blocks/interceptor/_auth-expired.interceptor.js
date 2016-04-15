@@ -30,7 +30,7 @@
     }<% } %><% if (authenticationType === 'session') { %>
     authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$document'];
 
-    function authExpiredInterceptor($rootScope, $q, $injector, $document) {
+    function authExpiredInterceptor($rootScope, $q, $injector, $localStorage, $document) {
         var service = {
             responseError: responseError
         };
