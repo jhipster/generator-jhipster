@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$state', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
+    Auth.$inject = ['$rootScope', '$state', '$localStorage', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-    function Auth ($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
+    function Auth ($rootScope, $state, $localStorage, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
         var service = {
             activateAccount: activateAccount,
             authorize: authorize,
@@ -50,6 +50,15 @@
                     $state.go('home');
                 }
 
+                // recover previousState after redirect
+                if (isAuthenticated && !$rootScope.fromState.name && $localStorage.previousStateName) {
+                    var previousStateName = $localStorage.previousStateName;
+                    var previousStateParams = $localStorage.previousStateParams;
+                    delete $localStorage.previousStateName;
+                    delete $localStorage.previousStateParams;
+                    $state.go(previousStateName, previousStateParams);
+                }
+
                 if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
                     if (isAuthenticated) {
                         // user is signed in but not authorized for desired state
@@ -58,13 +67,13 @@
                     else {
                         // user is not authenticated. stow the state they wanted before you
                         // send them to the login service, so you can return them when you're done
-                        $rootScope.redirected = true;
-                        $rootScope.previousStateName = $rootScope.toState;
-                        $rootScope.previousStateParams = $rootScope.toStateParams;
+                        $localStorage.previousStateName = $rootScope.toState.name;
+                        $localStorage.previousStateParams = $rootScope.toStateParams;
 
                         // now, send them to the signin state so they can log in
-                        $state.go('accessdenied');
-                        LoginService.open();
+                        $state.go('accessdenied').then(function() {
+                            LoginService.open();
+                        });
                     }
                 }
             }
@@ -136,12 +145,6 @@
         function logout () {
             AuthServerProvider.logout();
             Principal.authenticate(null);
-
-            // Reset state memory if not redirected
-            if(!$rootScope.redirected) {
-                $rootScope.previousStateName = undefined;
-                $rootScope.previousStateParams = undefined;
-            }
         }
 
         function resetPasswordFinish (keyAndPassword, callback) {

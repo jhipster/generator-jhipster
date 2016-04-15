@@ -5,10 +5,10 @@
         .module('<%=angularAppName%>')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } else { %> '$window', <% } %>
+    stateHandler.$inject = ['$rootScope', '$state', '$localStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } %> '$window',
         'Auth', 'Principal', 'ENV', 'VERSION'];
 
-    function stateHandler($rootScope, $state, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } else { %> $window, <% } %>
+    function stateHandler($rootScope, $state, $localStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } %> $window,
         Auth, Principal, ENV, VERSION) {
         return {
             initialize: initialize
@@ -19,9 +19,16 @@
             $rootScope.VERSION = VERSION;
             $rootScope.back = back;
 
-            var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
+            var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
                 $rootScope.toState = toState;
                 $rootScope.toStateParams = toStateParams;
+                $rootScope.fromState = fromState;
+
+                // Redirect to a state with an external URL (http://stackoverflow.com/a/30221248/1098564)
+                if (toState.external) {
+                    event.preventDefault();
+                    $window.open(toState.url, '_self');
+                }
 
                 if (Principal.isIdentityResolved()) {
                     Auth.authorize();
@@ -37,15 +44,6 @@
 
             var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
                 var titleKey =<% if (enableTranslation) { %> 'global.title' <% }else { %> '<%= baseName %>' <% } %>;
-
-                // Remember previous state unless we've been redirected to login or we've just
-                // reset the state memory after logout. If we're redirected to login, our
-                // previousState is already set in the authExpiredInterceptor. If we're going
-                // to login directly, we don't want to be sent to some previous state anyway
-                if (!$rootScope.redirected && $rootScope.previousStateName) {
-                    $rootScope.previousStateName = fromState.name;
-                    $rootScope.previousStateParams = fromParams;
-                }
 
                 // Set the page title key to the one configured in state or use default one
                 if (toState.data.pageTitle) {
@@ -65,10 +63,12 @@
 
             function back() {
                 // If previous state is 'activate' or do not exist go to 'home'
-                if ($rootScope.previousStateName === 'activate' || angular.isUndefined($state.get($rootScope.previousStateName))) {
+                var previousStateName = $localStorage.previousStateName;
+                var previousStateParams = $localStorage.previousStateParams;
+                if (previousStateName === 'activate' || angular.isUndefined($state.get(previousStateName))) {
                     $state.go('home');
                 } else {
-                    $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
+                    $state.go(previousStateName, previousStateParams);
                 }
             }
         }
