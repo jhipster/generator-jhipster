@@ -1,6 +1,6 @@
 {
   "version": "0.0.0",
-  "name": "<%= camelizedBaseName %>",
+  "name": "<%= dasherizedBaseName %>",
   "appPath": "<%= MAIN_SRC_DIR %>",
   "testPath": "<%= TEST_SRC_DIR %>spec",
   "dependencies": {
