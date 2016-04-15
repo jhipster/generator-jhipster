@@ -59,6 +59,7 @@
     "karma-script-launcher": "0.2.0",
     "lazypipe": "1.0.1",
     "lodash": "4.6.1",
+    "main-bower-files": "2.11.1",
     "map-stream": "0.0.6",
     "phantomjs-prebuilt": "2.1.7",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>

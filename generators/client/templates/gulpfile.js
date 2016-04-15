@@ -15,8 +15,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     protractor = require('gulp-protractor').protractor,<% } %>
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
-    del = require('del'),
-    wiredep = require('wiredep').stream,
+    del = require('del'),    
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync'),
     KarmaServer = require('karma').Server,
@@ -125,44 +124,40 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('inject', function () {
+gulp.task('inject', ['inject:app','inject:test', 'inject:vendor']);
+
+gulp.task('inject:app', function () {
     return gulp.src(config.app + 'index.html')
         .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
         .pipe(gulp.dest(config.app));
 });
 
-gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
 
-gulp.task('wiredep:app', function () {
+gulp.task('inject:vendor', function () {
     var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(wiredep())
+        .pipe(inject(gulp.src(bowerFiles()),{
+            name:'vendor',
+            transform: function (filepath, file, i, length) {
+                return '<script src="bower_components' + filepath.replace(config.bower,'') + '"></script>';
+            }
+        }))
         .pipe(gulp.dest(config.app));
-
+        
     return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(wiredep({
+        .pipe(inject(gulp.src(config.bower,{
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
-        }))
+        })))
         .pipe(gulp.dest(config.scss)));<% } else { %>stream;<% } %>
 });
 
-gulp.task('wiredep:test', function () {
+gulp.task('inject:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(wiredep({
-            ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected JavaScript files
-            devDependencies: true,
-            fileTypes: {
-                js: {
-                    block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
-                    detect: {
-                        js: /'(.*\.js)'/gi
-                    },
-                    replace: {
-                        js: '\'src/{{filePath}}\','
-                    }
-                }
+        .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
+            transform: function (filepath, file, i, length) {
+                return '"' + filepath + '",';
             }
         }))
         .pipe(gulp.dest(config.test));
