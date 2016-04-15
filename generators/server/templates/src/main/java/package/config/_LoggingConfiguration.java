@@ -60,6 +60,7 @@ public class LoggingConfiguration {
         // Limit the maximum length of the forwarded stacktrace so that it won't exceed the 8KB UDP limit of logstash
         ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
         throwableConverter.setMaxLength(7500);
+        throwableConverter.setRootCauseFirst(true);
         logstashAppender.setThrowableConverter(throwableConverter);
 
         logstashAppender.start();
