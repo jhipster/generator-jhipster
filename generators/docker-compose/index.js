@@ -317,10 +317,10 @@ module.exports = DockerComposeGenerator.extend({
 
                 // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
                 if(this.appConfigs[i].applicationType === 'monolith' && this.useElk) {
-                    yamlConfig.environment.push("JHIPSTER_LOGGING_LOGSTASH_ENABLED=true")
-                    yamlConfig.environment.push("JHIPSTER_LOGGING_LOGSTASH_HOST=elk-logstash")
-                    yamlConfig.environment.push("JHIPSTER_METRICS_LOGS_ENABLED=true")
-                    yamlConfig.environment.push("JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60");
+                    yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true')
+                    yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=elk-logstash')
+                    yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true')
+                    yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
                 }
 
                 parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
