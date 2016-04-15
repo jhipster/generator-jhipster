@@ -976,7 +976,6 @@ describe('JHipster generator', function () {
 });
 
 describe('JHipster server generator', function () {
-    this.timeout(4000); //to avoid occassional timeouts
     describe('generate server', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/server'))
@@ -1012,7 +1011,6 @@ describe('JHipster server generator', function () {
 });
 
 describe('JHipster client generator', function () {
-    this.timeout(4000); //to avoid occassional timeouts
     describe('generate client', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
