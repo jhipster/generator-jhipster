@@ -592,7 +592,7 @@ module.exports = JhipsterClientGenerator.extend({
                     'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
                     '\n' +
                     '\nInject your front end dependencies into your source code:' +
-                    '\n ' + chalk.yellow.bold('gulp wiredep') +
+                    '\n ' + chalk.yellow.bold('gulp inject') +
                     '\n' +
                     '\nGenerate the Angular constants:' +
                     '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +

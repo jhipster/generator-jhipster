@@ -46,7 +46,7 @@ describe('JHipster generator languages', function () {
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                     })
-                    .withOptions({'skip-wiredep': true})
+                    .withOptions({'skip-inject': true})
                     .withPrompts({
                         languages: [language.value]
                     })
@@ -98,7 +98,7 @@ describe('JHipster generator languages', function () {
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir);
                     })
-                    .withOptions({'skip-wiredep': true})
+                    .withOptions({'skip-inject': true})
                     .withPrompts({
                         languages: [language.value]
                     })

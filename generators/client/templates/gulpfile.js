@@ -238,7 +238,7 @@ gulp.task('eslint:fix', function () {
         .pipe(gulpIf(util.isLintFixed, gulp.dest(config.app + 'app')));
 });
 
-gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
+gulp.task('test', ['inject:test', 'ngconstant:dev'], function (done) {
     new KarmaServer({
         configFile: __dirname + '/' + config.test + 'karma.conf.js',
         singleRun: true
@@ -271,12 +271,12 @@ gulp.task('watch', function () {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
-    gulp.watch(config.app + 'app/**/*.js', ['inject']);
+    gulp.watch(config.app + 'app/**/*.js', ['inject:app']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('install', function () {
-    runSequence(['wiredep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject');
+    runSequence(['inject', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app');
 });
 
 gulp.task('serve', function () {
@@ -284,7 +284,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'wiredep:app', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject', 'assets:prod', cb);
+    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject:app', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);
