@@ -28,9 +28,9 @@
             return $q.reject(response);
         }
     }<% } %><% if (authenticationType === 'session') { %>
-    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$document'];
+    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document', '$sessionStorage'];
 
-    function authExpiredInterceptor($rootScope, $q, $injector, $localStorage, $document) {
+    function authExpiredInterceptor($rootScope, $q, $injector, $document, $sessionStorage) {
         var service = {
             responseError: responseError
         };
@@ -46,8 +46,8 @@
                 var params = $rootScope.toStateParams;
                 Auth.logout();
                 if (to.name !== 'accessdenied') {
-                    $localStorage.previousStateName = to.name;
-                    $localStorage.previousStateParams = params;
+                    $sessionStorage.previousStateName = to.name;
+                    $sessionStorage.previousStateParams = params;
                 }
                 var LoginService = $injector.get('LoginService');
                 LoginService.open();

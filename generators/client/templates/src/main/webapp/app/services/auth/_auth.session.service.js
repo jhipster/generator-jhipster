@@ -46,9 +46,6 @@
             // logout from the server
             $http.post('api/logout').success(function (response) {
                 delete $localStorage.authenticationToken;
-                // Reset state memory
-                delete $localStorage.previousStateName;
-                delete $localStorage.previousStateParams;
                 // to get a new csrf token call the api
                 $http.get('api/account');
                 return response;

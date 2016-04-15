@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$rootScope', '$state', '$localStorage', '$timeout', 'Auth', '$uibModalInstance'];
+    LoginController.$inject = ['$rootScope', '$state', '$sessionStorage', '$timeout', 'Auth', '$uibModalInstance'];
 
-    function LoginController ($rootScope,$state, $localStorage, $timeout, Auth, $uibModalInstance) {
+    function LoginController ($rootScope, $state, $sessionStorage, $timeout, Auth, $uibModalInstance) {
         var vm = this;
 
         vm.authenticationError = false;
@@ -48,8 +48,8 @@
 
                 // If we're redirected to login, our
                 // previousState is already set in the authExpiredInterceptor. When login succesful go to stored state
-                if ($localStorage.previousStateName) {
-                    $state.go($localStorage.previousStateName, $localStorage.previousStateParams);
+                if ($sessionStorage.previousStateName) {
+                    $state.go($sessionStorage.previousStateName, $sessionStorage.previousStateParams);
                 } else {
                     $rootScope.$broadcast('authenticationSuccess');
                 }

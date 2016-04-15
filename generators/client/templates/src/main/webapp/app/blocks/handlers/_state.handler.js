@@ -5,10 +5,10 @@
         .module('<%=angularAppName%>')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state', '$localStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } %> '$window',
+    stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } %> '$window',
         'Auth', 'Principal', 'ENV', 'VERSION'];
 
-    function stateHandler($rootScope, $state, $localStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } %> $window,
+    function stateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } %> $window,
         Auth, Principal, ENV, VERSION) {
         return {
             initialize: initialize
@@ -63,8 +63,8 @@
 
             function back() {
                 // If previous state is 'activate' or do not exist go to 'home'
-                var previousStateName = $localStorage.previousStateName;
-                var previousStateParams = $localStorage.previousStateParams;
+                var previousStateName = $sessionStorage.previousStateName;
+                var previousStateParams = $sessionStorage.previousStateParams;
                 if (previousStateName === 'activate' || angular.isUndefined($state.get(previousStateName))) {
                     $state.go('home');
                 } else {
