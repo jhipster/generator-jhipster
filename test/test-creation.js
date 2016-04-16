@@ -372,7 +372,12 @@ const expectedFiles = {
         DOCKER_DIR + 'sonar.yml'
     ],
 
-    dockerCassandra: [
+    cassandra: [
+        SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace-prod.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_insert_default_users.cql',
         DOCKER_DIR + 'cassandra/Cassandra.Dockerfile',
         DOCKER_DIR + 'cassandra/Cassandra-Cluster.Dockerfile',
         DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile',
@@ -635,7 +640,7 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with "Cassandra"', function () {
-            assert.file(expectedFiles.dockerCassandra);
+            assert.file(expectedFiles.cassandra);
         });
     });
 
@@ -667,7 +672,7 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with "Cassandra"', function () {
-            assert.file(expectedFiles.dockerCassandra);
+            assert.file(expectedFiles.cassandra);
             assert.noFile(expectedFiles.i18n);
             assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
         });
