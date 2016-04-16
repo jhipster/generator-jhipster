@@ -17,9 +17,10 @@
             "configServer": "Microservice Config Server",
             <%_ } _%>
             "diskSpace": "Espazo en disco",
-            "mail": "Email",<% if (databaseType == 'sql') { %>
-            "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email"<% if (databaseType === 'sql') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

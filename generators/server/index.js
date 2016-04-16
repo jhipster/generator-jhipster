@@ -1010,7 +1010,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_create-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_drop-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql', this, {});
                 this.copy(SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql');
-                this.copy(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.dateFormatForLiquibase() + '_insert_default_users.cql');
+                this.copy(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_insert_default_users.cql');
             }
         },
 
@@ -1106,6 +1106,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_GatewayConfiguration.java', javaDir + 'config/GatewayConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_GatewaySwaggerResourcesProvider.java', javaDir + 'config/apidoc/GatewaySwaggerResourcesProvider.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingFilter.java', javaDir + 'gateway/ratelimiting/RateLimitingFilter.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/_TokenRelayFilter.java', javaDir + 'gateway/TokenRelayFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingRepository.java', javaDir + 'gateway/ratelimiting/RateLimitingRepository.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/accesscontrol/_AccessControlFilter.java', javaDir + 'gateway/accesscontrol/AccessControlFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilter.java', javaDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilter.java', this, {});

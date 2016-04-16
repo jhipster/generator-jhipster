@@ -135,12 +135,9 @@ module.exports = DockerComposeGenerator.extend({
 
                 this.appsFolders = this._getAppFolders(this.directoryPath);
 
-                //Removing monolithic apps and registry from appsFolders
+                //Removing registry from appsFolders
                 for(var i = 0; i < this.appsFolders.length; i++) {
-                    var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
-                    var fileData = this.fs.readJSON(path);
-                    var config = fileData['generator-jhipster'];
-                    if (config.applicationType === 'monolith' || this.appsFolders[i]==='jhipster-registry' || this.appsFolders[i] === 'registry') {
+                    if (this.appsFolders[i]==='jhipster-registry' || this.appsFolders[i] === 'registry') {
                         this.appsFolders.splice(i,1);
                         i--;
                     }
@@ -174,12 +171,25 @@ module.exports = DockerComposeGenerator.extend({
                 this.appsFolders = props.chosenApps;
 
                 this.appConfigs = [];
+                this.gatewayNb = 0;
+                this.monolithicNb = 0;
+                this.microserviceNb = 0;
 
                 //Loading configs
                 for(var i = 0; i < this.appsFolders.length; i++) {
                     var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
                     var fileData = this.fs.readJSON(path);
                     var config = fileData['generator-jhipster'];
+
+                    if(config.applicationType === 'monolith') {
+                        this.monolithicNb++;
+                    } else if(config.applicationType === 'gateway') {
+                        this.gatewayNb++;
+                    } else if(config.applicationType === 'microservice') {
+                        this.microserviceNb++;
+                    }
+
+                    this.portsToBind = this.monolithicNb + this.gatewayNb;
                     this.appConfigs.push(config);
                 }
 
@@ -288,13 +298,33 @@ module.exports = DockerComposeGenerator.extend({
 
         setAppsYaml: function() {
             this.appsYaml = [];
+
+            var portIndex=8080;
             for (var i = 0; i < this.appsFolders.length; i++) {
                 var parentConfiguration = {};
                 var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+
                 // Add application configuration
                 var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
                 var yamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
+
+                if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
+                    var ports = yamlConfig.ports[0].split(':');
+                    ports[0] = portIndex;
+                    yamlConfig.ports[0] = ports.join(':');
+                    portIndex++;
+                }
+
+                // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
+                if(this.appConfigs[i].applicationType === 'monolith' && this.useElk) {
+                    yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
+                    yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=elk-logstash');
+                    yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
+                    yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
+                }
+
                 parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
+
                 // Add database configuration
                 var database = this.appConfigs[i].prodDatabaseType;
                 if (database !== 'no') {
@@ -302,10 +332,12 @@ module.exports = DockerComposeGenerator.extend({
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
                     var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
                     delete databaseYamlConfig.ports;
+
                     if(database === 'cassandra') {
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         databaseYamlConfig.build.context = relativePath;
                     }
+
                     if(this.appConfigs[i].clusteredDb) {
                         var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
@@ -317,6 +349,7 @@ module.exports = DockerComposeGenerator.extend({
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = mongodbNodeConfig;
                         parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'] = mongoDbConfigSrvConfig;
                     }
+
                     parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
                 }
                 // Add search engine configuration
@@ -354,6 +387,8 @@ module.exports = DockerComposeGenerator.extend({
         },
 
         writeRegistryFiles: function() {
+            if(this.gatewayNb === 0 && this.microserviceNb === 0) return;
+
             this.copy('jhipster-registry.yml', 'jhipster-registry.yml');
             this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
         },
@@ -374,5 +409,16 @@ module.exports = DockerComposeGenerator.extend({
             this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
         }
         this.log('You can launch all your infrastructure by running : ' + chalk.cyan('docker-compose up -d'));
+        if (this.gatewayNb + this.monolithicNb > 1) {
+            this.log('\nYour applications will be accessible on these URLs:');
+            var portIndex = 8080;
+            for (var i = 0; i < this.appsFolders.length; i++) {
+                if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
+                    this.log('\t- '+this.appConfigs[i].baseName + ':' + ' http://localhost:'+portIndex);
+                    portIndex++;
+                }
+            }
+            this.log();
+        }
     }
 });

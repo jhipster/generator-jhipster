@@ -10,6 +10,7 @@ import <%=packageName%>.web.filter.CachingHttpHeadersFilter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
@@ -171,14 +172,14 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     @Bean
+    @ConditionalOnProperty(name = "jhipster.cors.allowed-origins")
     public CorsFilter corsFilter() {
+        log.debug("Registering CORS filter");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
-        if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
-            source.registerCorsConfiguration("/api/**", config);
-            source.registerCorsConfiguration("/v2/api-docs", config);
-            source.registerCorsConfiguration("/oauth/**", config);
-        }
+        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/v2/api-docs", config);
+        source.registerCorsConfiguration("/oauth/**", config);
         return new CorsFilter(source);
     }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
 
