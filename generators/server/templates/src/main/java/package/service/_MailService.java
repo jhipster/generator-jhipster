@@ -43,11 +43,6 @@ public class MailService {
     @Inject
     private SpringTemplateEngine templateEngine;
 
-    /**
-     * System default email address that sends the e-mails.
-     */
-    private String from;
-
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
