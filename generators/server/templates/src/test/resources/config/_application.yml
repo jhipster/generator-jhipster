@@ -103,14 +103,22 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
-<%_ if (authenticationType == 'oauth2') { _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
         authentication:
+    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+            jwt:
+                secret: <%= jwtSecretKey %>
+                # Token is valid 24 hours
+                tokenValidityInSeconds: 86400
+    <%_ } _%>
+    <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
                 clientid: <%= baseName %>app
                 secret: mySecretOAuthSecret
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
+    <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
     security:
