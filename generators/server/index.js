@@ -926,7 +926,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_create-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_drop-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql', this, {});
                 this.copy(SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql');
-                this.copy(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.dateFormatForLiquibase() + '_insert_default_users.cql');
+                this.copy(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_insert_default_users.cql');
             }
         },
 
