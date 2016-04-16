@@ -19,8 +19,8 @@
             "diskSpace": "Diskový prostor",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "Databáze"<% } %><% if (databaseType === 'mongodb') { %>
-            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>
+            "db": "Databáze"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

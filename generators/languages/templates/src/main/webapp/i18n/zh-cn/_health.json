@@ -17,10 +17,10 @@
             "configServer": "Microservice Config Server",
             <%_ } _%>
             "diskSpace": "硬盘空间",
-            "mail": "电子邮件",<% if (searchEngine == 'elasticsearch') { %>
-            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
-            "db": "数据库"<% } %><% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "电子邮件"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "数据库"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %>
         },
         "table": {
