@@ -48,20 +48,22 @@
   var dto = {};
   var pagination = {};
   var service = {};
+  var microservice = {};
 }
 
 start = p:prog { return p; }
   
 prog
-  = space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / space* rd:relationDecl space* p:prog {return {"entities" : p.entities, "relationships" : flattenArray(concat([rd],p.relationships)), "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / space* end:enumDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": concat([end], p.enums), "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / space* dto:dtoDecl space* p:prog {return {"entities": p.entities, "relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / space* pagination:pagiDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / space* service:serviceDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / space* Comment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / space* JDLComment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service};}
-  / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service};}                                                                 
+  = space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* rd:relationDecl space* p:prog {return {"entities" : p.entities, "relationships" : flattenArray(concat([rd],p.relationships)), "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* end:enumDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": concat([end], p.enums), "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* dto:dtoDecl space* p:prog {return {"entities": p.entities, "relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* pagination:pagiDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* service:serviceDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* Comment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* JDLComment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / space* microservice:microserviceDecl1 space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice};}
+  / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service, "microservice": microservice};}                                                                 
 
 //Entities
 entityDecl
@@ -120,7 +122,7 @@ exclusionSub
 dtoDecl
   = 'dto' space+ decl:subDtoDecl space* ex:exclusion? space* JDLComment? {
     dto[decl[decl.length - 1]] = dto[decl[decl.length - 1]] || { list: [], excluded: [] };
-    concat(dto[decl[decl.length - 1]].list, decl.slice(0, decl.length-1));
+    concat(dto[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
     	concat(dto[decl[decl.length - 1]].excluded, ex);
     }
@@ -136,7 +138,7 @@ subDtoDecl
 pagiDecl
   = 'paginate' space+ decl:subPagiDecl space* ex:exclusion? space* JDLComment? {
   	pagination[decl[decl.length - 1]] = pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
-    concat(pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length-1));
+    concat(pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
     	concat(pagination[decl[decl.length - 1]].excluded, ex);
     }
@@ -152,18 +154,33 @@ subPagiDecl
 serviceDecl
   = 'service' space+ decl:subServiceDecl space* ex:exclusion? space* JDLComment? {
   	service[decl[decl.length - 1]] = service[decl[decl.length - 1]] || { list: [], excluded: [] };
-    concat(service[decl[decl.length - 1]].list, decl.slice(0, decl.length-1));
+    concat(service[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
     	concat(service[decl[decl.length - 1]].excluded, ex);
     }
   }
-
+  
 subServiceDecl
   = e:ENTITYNAME space* ',' space* sub:subServiceDecl {return concat([e], sub);}
   / '*' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
   / 'all' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
   / e:ENTITYNAME space* 'with' space* method:([A-z-]+) {return [e, method.toString().replace(/,/g,'')];}
 
+// first way of declaring microservices 
+microserviceDecl1
+  = 'microservice' space+ decl:subMicroserviceDecl1 space* ex:exclusion? space* JDLComment? {
+    microservice[decl[decl.length - 1]] = microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
+    concat(microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+    if (ex) {
+        concat(microservice[decl[decl.length - 1]].excluded, ex);
+    }
+  }
+
+subMicroserviceDecl1
+  = e:ENTITYNAME space* ',' space* sub:subMicroserviceDecl1 {return concat([e], sub);}
+  / '*' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
+  / 'all' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
+  / e:ENTITYNAME space* 'with' space* method:([A-z0-9-]+) {return [e, method.toString().replace(/,/g,'')];}
 
 relationshipType = "OneToOne" {return "one-to-one";} / "OneToMany" {return "one-to-many";} / "ManyToOne" {return "many-to-one";} / "ManyToMany" {return "many-to-many";}
 
