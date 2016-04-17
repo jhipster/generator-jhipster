@@ -1,6 +1,6 @@
 {
   "name": "jhipster-domain-language",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JHipster's own domain language",
   "main": "module/index.js",
   "keywords": [
