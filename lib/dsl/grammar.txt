@@ -55,23 +55,25 @@
   var microservice = {};
   var searchEngine = {};
   var noClient = { list: [], excluded: [] };
+  var noServer = { list: [], excluded: [] };
 }
 
 start = p:prog { return p; }
   
 prog
-  = space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* rd:relationDecl space* p:prog {return {"entities" : p.entities, "relationships" : flattenArray(concat([rd],p.relationships)), "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* end:enumDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": concat([end], p.enums), "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* dto:dtoDecl space* p:prog {return {"entities": p.entities, "relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* pagination:pagiDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* service:serviceDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* Comment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* JDLComment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* microservice:microserviceDecl1 space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* searchEngine:searchEngineDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / space* noClient:noClientDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}
-  / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient};}                                                                 
+  = space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* rd:relationDecl space* p:prog {return {"entities" : p.entities, "relationships" : flattenArray(concat([rd],p.relationships)), "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* end:enumDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": concat([end], p.enums), "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* dto:dtoDecl space* p:prog {return {"entities": p.entities, "relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* pagination:pagiDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* service:serviceDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* Comment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* JDLComment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* microservice:microserviceDecl1 space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* searchEngine:searchEngineDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* noClient:noClientDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / space* noServer:noServerDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}
+  / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer};}                                                                 
 
 //Entities
 entityDecl
@@ -214,12 +216,29 @@ noClientDecl
         concat(noClient.excluded, ex);
     }
   }
-  
+
 subNoClientDecl
   = e:ENTITYNAME space* ',' space* sub:subNoClientDecl {return concat([e], sub);}
   / '*' {return ['*'];}
   / 'all'{return ['*'];}
   / e:ENTITYNAME {return [e];}
+
+
+// skipServer option
+noServerDecl
+  = 'skipServer for' space* decl:subNoServerDecl space* ex:exclusion? space* JDLComment? {
+    concat(noServer.list, decl);
+    if (ex) {
+        concat(noServer.excluded, ex);
+    }
+  }
+
+subNoServerDecl
+  = e:ENTITYNAME space* ',' space* sub:subNoServerDecl {return concat([e], sub);}
+  / '*' {return ['*'];}
+  / 'all'{return ['*'];}
+  / e:ENTITYNAME {return [e];}
+
 
 
 relationshipType = "OneToOne" {return "one-to-one";} / "OneToMany" {return "one-to-many";} / "ManyToOne" {return "many-to-one";} / "ManyToMany" {return "many-to-many";}
