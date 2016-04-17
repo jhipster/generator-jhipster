@@ -132,7 +132,7 @@ exclusionSub
 
 // DTO
 dtoDecl
-  = 'dto' space+ decl:subDtoDecl space* ex:exclusion? space* JDLComment? {
+  = 'dto' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
     dto[decl[decl.length - 1]] = dto[decl[decl.length - 1]] || { list: [], excluded: [] };
     concat(dto[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -140,15 +140,9 @@ dtoDecl
     }
   }
 
-subDtoDecl
- = e:ENTITYNAME space* ',' space* sub:subDtoDecl {return concat([e], sub);}
- / '*' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
- / 'all' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
- / e:ENTITYNAME space* 'with' space* method:([A-z-]+) {return [e, method.toString().replace(/,/g,'')];}
-
 // Pagination
 pagiDecl
-  = 'paginate' space+ decl:subPagiDecl space* ex:exclusion? space* JDLComment? {
+  = 'paginate' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
   	pagination[decl[decl.length - 1]] = pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
     concat(pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -156,31 +150,19 @@ pagiDecl
     }
   }
 
-subPagiDecl
-  = e:ENTITYNAME space* ',' space* sub:subPagiDecl {return concat([e], sub);}
-  / '*' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / 'all' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / e:ENTITYNAME space* 'with' space* method:([A-z-]+) {return [e, method.toString().replace(/,/g,'')];}
-
 // Service
 serviceDecl
-  = 'service' space+ decl:subServiceDecl space* ex:exclusion? space* JDLComment? {
+  = 'service' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
   	service[decl[decl.length - 1]] = service[decl[decl.length - 1]] || { list: [], excluded: [] };
     concat(service[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
     	concat(service[decl[decl.length - 1]].excluded, ex);
     }
   }
-  
-subServiceDecl
-  = e:ENTITYNAME space* ',' space* sub:subServiceDecl {return concat([e], sub);}
-  / '*' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / 'all' space* 'with' space* method:([A-z-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / e:ENTITYNAME space* 'with' space* method:([A-z-]+) {return [e, method.toString().replace(/,/g,'')];}
 
 // first way of declaring microservices 
 microserviceDecl1
-  = 'microservice' space+ decl:subMicroserviceDecl1 space* ex:exclusion? space* JDLComment? {
+  = 'microservice' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
     microservice[decl[decl.length - 1]] = microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
     concat(microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -188,27 +170,15 @@ microserviceDecl1
     }
   }
 
-subMicroserviceDecl1
-  = e:ENTITYNAME space* ',' space* sub:subMicroserviceDecl1 {return concat([e], sub);}
-  / '*' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / 'all' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / e:ENTITYNAME space* 'with' space* method:([A-z0-9-]+) {return [e, method.toString().replace(/,/g,'')];}
-
 // searchEngine
 searchEngineDecl
-  = 'search' space+ decl:subSearchEngineDecl space* ex:exclusion? space* JDLComment? {
+  = 'search' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
     searchEngine[decl[decl.length - 1]] = searchEngine[decl[decl.length - 1]] || { list: [], excluded: [] };
     concat(searchEngine[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
         concat(searchEngine[decl[decl.length - 1]].excluded, ex);
     }
   }
-
-subSearchEngineDecl
-  = e:ENTITYNAME space* ',' space* sub:subSearchEngineDecl {return concat([e], sub);}
-  / '*' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / 'all' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / e:ENTITYNAME space* 'with' space* method:([A-z0-9-]+) {return [e, method.toString().replace(/,/g,'')];}
 
 // skipClient option
 noClientDecl
@@ -244,7 +214,7 @@ subNoServerDecl
 
 // angularSuffix option
 angularSuffixDecl
-  = 'angularSuffix' space* decl:subAngularSuffixDecl space* ex:exclusion? space* JDLComment? {
+  = 'angularSuffix' space* decl:entityList space* ex:exclusion? space* JDLComment? {
     angularSuffixes[decl[decl.length - 1]] = angularSuffixes[decl[decl.length - 1]] || { list: [], excluded: [] };
     concat(angularSuffixes[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -252,12 +222,12 @@ angularSuffixDecl
     }
   }
 
-subAngularSuffixDecl
-  = e:ENTITYNAME space* ',' space* sub:subAngularSuffixDecl {return concat([e], sub);}
+// common way to declare an entity list
+entityList
+  = e:ENTITYNAME space* ',' space* sub:entityList {return concat([e], sub);}
   / '*' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
   / 'all' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
   / e:ENTITYNAME space* 'with' space* method:([A-z0-9-]+) {return [e, method.toString().replace(/,/g,'')];}
-
 
 
 relationshipType = "OneToOne" {return "one-to-one";} / "OneToMany" {return "one-to-many";} / "ManyToOne" {return "many-to-one";} / "ManyToMany" {return "many-to-many";}
