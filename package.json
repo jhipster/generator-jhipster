@@ -16,7 +16,11 @@
     "type": "git",
     "url": "git+https://github.com/jhipster/jhipster-domain-language.git"
   },
-  "author": "",
+  "author": {
+    "name": "Mathieu Abou-Aichi",
+    "email": "",
+    "url": "https://github.com/MathieuAA"
+  },
   "bugs": {
     "url": "https://github.com/jhipster/jhipster-domain-language/issues"
   },
