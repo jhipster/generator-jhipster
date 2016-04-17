@@ -118,7 +118,7 @@
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
     </properties>
 
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     <dependencyManagement>
         <dependencies>
             <dependency>
