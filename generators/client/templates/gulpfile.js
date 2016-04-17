@@ -160,7 +160,7 @@ gulp.task('inject:test', function () {
             starttag: '// bower:js',
             endtag: '// endbower',
             transform: function (filepath, file, i, length) {
-                return '"' + filepath + '",';
+                return '"' + filepath.substring(1,filepath.length) + '",';
             }
         }))
         .pipe(gulp.dest(config.test));
