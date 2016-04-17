@@ -23,7 +23,8 @@ var gulp = require('gulp'),<% if(useSass) { %>
     changed = require('gulp-changed'),
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
-    angularFilesort = require('gulp-angular-filesort');
+    angularFilesort = require('gulp-angular-filesort'),
+    bowerFiles = require('main-bower-files');
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
