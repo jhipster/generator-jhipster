@@ -157,6 +157,8 @@ gulp.task('inject:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
+            starttag: '// bower:js',
+            endtag: '// endbower',
             transform: function (filepath, file, i, length) {
                 return '"' + filepath + '",';
             }
