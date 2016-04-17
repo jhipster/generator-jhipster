@@ -232,7 +232,7 @@ entityList
 
 relationshipType = "OneToOne" {return "one-to-one";} / "OneToMany" {return "one-to-many";} / "ManyToOne" {return "many-to-one";} / "ManyToMany" {return "many-to-many";}
 
-type "a type" = head:[A-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));} //we must check afterward if the type is acceptable.
+type "a type" = head:[A-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
 
 validation 
   = "required" {return {key:'required', value:''};}
@@ -253,22 +253,24 @@ REGEXP "a regular expression"
   = word:[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* {return makeString(word);}
 
 ENUMNAME "an enum name"
-  = head:[A-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));}
+  = head:[A-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
 
 ENUMPROP "an enum property"
-  = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {return makeString(concat(concat(underscore,[head]), tail));}
+  = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {
+  	return underscore.join('') + head + tail.join('');
+  }
 
 INTEGER "integer"
   = int:[0-9]+ {return parseInt(int.join(""), 10);} 
 
 INJECTEDFIELDNAME "an injected field"
-  = head:[a-zA-Z]tail:[a-zA-Z0-9()]* {return makeString(concat([head],tail));}
+  = head:[a-zA-Z]tail:[a-zA-Z0-9()]* {return head + tail.join('');}
 
 ENTITYNAME "an entity name"  
-  = head:[A-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));}
+  = head:[A-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
 
 FIELDNAME "a field name"
-  = head:[a-zA-Z]tail:[a-zA-Z0-9]* {return makeString(concat([head],tail));}               
+  = head:[a-zA-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}               
 
 space "a space"
   = space:['\n'|'\t'|'\r'|' '|\u2028|\u2029]+ 
