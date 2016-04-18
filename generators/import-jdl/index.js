@@ -4,6 +4,7 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     jhuml = require('jhipster-uml'),
+    jdl = require('jhipster-domain-language'),
     scriptBase = require('../generator-base');
 
 var JDLGenerator = generators.Base.extend({});
@@ -13,14 +14,17 @@ util.inherits(JDLGenerator, scriptBase);
 module.exports = JDLGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
-        this.argument('jdlFile', {type: String, required: true});
+        this.argument('jdlFiles', {type: Array, required: true});
+
     },
 
     initializing: {
         validate: function () {
-            if (!shelljs.test('-f', this.jdlFile)) {
-                this.env.error(chalk.red('\nCould not find ' + this.jdlFile + ', make sure the path is correct!\n'));
-            }
+            this.jdlFiles && this.jdlFiles.forEach(function (key) {
+                if (!shelljs.test('-f', key)) {
+                    this.env.error(chalk.red('\nCould not find ' + key + ', make sure the path is correct!\n'));
+                }
+            }, this);
         },
 
         getConfig: function () {
@@ -38,8 +42,6 @@ module.exports = JDLGenerator.extend({
 
     _initDatabaseTypeHolder: function(databaseTypeName) {
         switch (databaseTypeName) {
-        case 'sql':
-            return jhuml.SQLTypes;
         case 'mongodb':
             return jhuml.MongoDBTypes;
         case 'cassandra':
@@ -62,7 +64,7 @@ module.exports = JDLGenerator.extend({
 
             var types = this._initDatabaseTypeHolder(this.databaseType);
 
-            var parser = new Editors.Parsers['dsl'](this.jdlFile, types);
+            var parser = new Editors.Parsers.dsl(jdl.parseFromFiles(this.jdlFiles), types);
             var parsedData = parser.parse();
             var scheduler = new ClassScheduler(
                 Object.keys(parsedData.classes),
@@ -78,7 +80,8 @@ module.exports = JDLGenerator.extend({
             var creator = new EntitiesCreator(
                 parsedData,
                 parser.databaseTypes,
-                [], {}, {});
+                [], {}, {}
+            );
 
             creator.createEntities();
             if (!this.options['force']) {
