@@ -7,9 +7,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 <%_ if (applicationType == 'gateway') { _%>
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 <%_ } _%>
 
@@ -597,7 +599,11 @@ public class JHipsterProperties {
 
         private final Logstash logstash = new Logstash();
 
+        private final ActuatorMetrics actuatorMetrics = new ActuatorMetrics();
+
         public Logstash getLogstash() { return logstash; }
+
+        public ActuatorMetrics getActuatorMetrics() { return actuatorMetrics; }
 
         public static class Logstash {
 
@@ -624,6 +630,22 @@ public class JHipsterProperties {
             public int getQueueSize() { return queueSize; }
 
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
+        }
+
+
+        public static class ActuatorMetrics {
+
+            private boolean enabled = false;
+
+            private List<String> prefixExclusionList = new ArrayList<String>(Arrays.asList("jvm.", "com.", "net.", "HikariPool", "cache."));
+
+            public boolean isEnabled() { return enabled; }
+
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
+            public List<String> getPrefixExclusionList() { return prefixExclusionList; }
+
+            public void setPrefixExclusionList(List<String> prefixExclusionList) { this.prefixExclusionList = prefixExclusionList; }
         }
     }
 

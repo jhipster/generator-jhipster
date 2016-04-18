@@ -1,5 +1,6 @@
 package <%=packageName%>.config;
 
+import <%=packageName%>.config.metrics.LogMetricWriter;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
@@ -12,7 +13,12 @@ import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import fr.ippon.spark.metrics.SparkReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.autoconfigure.ExportMetricWriter;
+import org.springframework.boot.actuate.endpoint.MetricsEndpoint;
+import org.springframework.boot.actuate.endpoint.MetricsEndpointMetricReader;
+import org.springframework.boot.actuate.metrics.writer.MetricWriter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -132,5 +138,21 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                 sparkReporter.start(1, TimeUnit.MINUTES);
             }
         }
+    }
+
+
+    /* Spring Boot Actuator metrics log reporting */
+    @Bean
+    @ConditionalOnProperty("jhipster.logging.actuator-metrics.enabled")
+    public MetricsEndpointMetricReader metricsEndpointMetricReader(MetricsEndpoint metricsEndpoint) {
+        log.info("Initializing Actuator Metrics Log reporting");
+        return new MetricsEndpointMetricReader(metricsEndpoint);
+    }
+
+    @Bean
+    @ExportMetricWriter
+    @ConditionalOnProperty("jhipster.logging.actuator-metrics.enabled")
+    MetricWriter metricWriter() {
+        return new LogMetricWriter();
     }
 }
