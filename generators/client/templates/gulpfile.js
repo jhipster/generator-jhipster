@@ -156,7 +156,7 @@ gulp.task('inject:vendor', function () {
 gulp.task('inject:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles({filter:['**/*.js','!**/ngStorage.js','!**/angular-cache-buster.js']}).concat(['**/ngStorage.js','**/angular-cache-buster.js'])), {
+        .pipe(inject(gulp.src(['**/dist/jquery.js','**/angular.js'].concat(bowerFiles({filter:['**/*.js','!**/jquery.js','!**/angular.js']}))), {
             starttag: '// bower:js',
             endtag: '// endbower',
             transform: function (filepath, file, i, length) {
