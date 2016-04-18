@@ -98,7 +98,7 @@ describe('JHipster generator languages', function () {
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir);
                     })
-                    .withOptions({'skip-inject': true})
+                    .withOptions({'skip-wiredep': true})
                     .withPrompts({
                         languages: [language.value]
                     })

@@ -156,13 +156,13 @@ gulp.task('inject:vendor', function () {
 gulp.task('inject:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
+        .pipe(inject(gulp.src(bowerFiles({filter:['**/*.js','!**/ngStorage.js','!**/angular-cache-buster.js']}).concat(['**/ngStorage.js','**/angular-cache-buster.js'])), {
             starttag: '// bower:js',
             endtag: '// endbower',
             transform: function (filepath, file, i, length) {
                 return '"' + filepath.substring(1,filepath.length) + '",';
             }
-        }))
+        }))        
         .pipe(gulp.dest(config.test));
 });
 
@@ -279,7 +279,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function () {
-    runSequence(['inject', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app');
+    runSequence(['inject:vendor', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app');
 });
 
 gulp.task('serve', function () {
