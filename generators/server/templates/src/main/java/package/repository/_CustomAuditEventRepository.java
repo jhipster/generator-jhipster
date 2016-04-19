@@ -24,7 +24,7 @@ public class CustomAuditEventRepository implements AuditEventRepository {
 
     private static final String AUTHORIZATION_FAILURE = "AUTHORIZATION_FAILURE";
 
-    private static final String ANONYMOUS_USER = "anonymousUser";
+    private static final String ANONYMOUS_USER = "anonymoususer";
 
     @Inject
     private PersistenceAuditEventRepository persistenceAuditEventRepository;

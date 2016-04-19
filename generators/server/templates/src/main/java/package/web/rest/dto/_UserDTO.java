@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = "^[_'.@A-Za-z0-9-]*$")
     @NotNull
     @Size(min = 1, max = 50)
     private String login;
@@ -49,7 +49,7 @@ public class UserDTO {
     public UserDTO(String login, String firstName, String lastName,
         String email, boolean activated, String langKey, Set<String> authorities) {
 
-        this.login = login;        
+        this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

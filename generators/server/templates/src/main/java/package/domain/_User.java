@@ -48,7 +48,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @NotNull<% if (enableSocialSignIn) { %>
     @Size(min = 1, max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100, unique = true, nullable = false)<% } %><% } else { %>
-    @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
+    @Pattern(regexp = "^[_'.@A-Za-z0-9-]*$|(anonmyoususer)")
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
     @Column(length = 50, unique = true, nullable = false)<% } %><% } %>
     private String login;
@@ -135,7 +135,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        this.login = login.toLowerCase();
     }
 
     public String getPassword() {

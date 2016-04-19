@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
  */
 public class LoginDTO {
 
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = "^[_'.@A-Za-z0-9-]*$")
     @NotNull
     @Size(min = 1, max = 50)
     private String username;
