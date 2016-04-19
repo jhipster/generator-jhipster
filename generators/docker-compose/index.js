@@ -333,12 +333,18 @@ module.exports = DockerComposeGenerator.extend({
                     var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
                     delete databaseYamlConfig.ports;
 
-                    if(database === 'cassandra') {
+                    if (database === 'cassandra') {
+                        var cassandraDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        databaseYamlConfig.build.context = relativePath;
+                        var cassandraConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                        cassandraConfig.build.context = relativePath;
+                        var cassandraNodeConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
+                        databaseYamlConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                        delete databaseYamlConfig.ports;
+                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = cassandraNodeConfig;
                     }
 
-                    if(this.appConfigs[i].clusteredDb) {
+                    if (this.appConfigs[i].clusteredDb) {
                         var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
                         var mongodbNodeConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];

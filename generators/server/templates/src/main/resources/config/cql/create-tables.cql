@@ -1,4 +1,4 @@
-<%_ if (databaseType == 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra' && !skipUserManagement) { _%>
 CREATE TABLE IF NOT EXISTS user (
     id text,
     login text,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS persistent_token_by_user (
 );
 
 <%_ } _%>
-<% if (applicationType == 'gateway') { %>
+<%_ if (applicationType === 'gateway') { _%>
 CREATE TABLE IF NOT EXISTS gateway_ratelimiting (
     id text,
     time_unit text,
