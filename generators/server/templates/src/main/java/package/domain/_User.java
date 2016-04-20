@@ -136,7 +136,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     //Lowercase the login before saving it in database
     public void setLogin(String login) {
-        this.login = login.toLowerCase();
+        this.login = login.toLowerCase(Locale.ENGLISH);
     }
 
     public String getPassword() {
