@@ -321,7 +321,7 @@ public class SocialServiceIntTest {
 
         //Verify
         User userToVerify = userRepository.findOneByEmail("mail@mail.com").get();
-        assertThat(userToVerify.getLogin()).isEqualTo("@OTHER_LOGIN");
+        assertThat(userToVerify.getLogin()).isEqualTo("@other_login");
         assertThat(userToVerify.getFirstName()).isEqualTo("OTHER_FIRST_NAME");
         assertThat(userToVerify.getLastName()).isEqualTo("OTHER_LAST_NAME");
 

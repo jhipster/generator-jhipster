@@ -21,6 +21,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import java.time.ZonedDateTime;<% } %>
 
