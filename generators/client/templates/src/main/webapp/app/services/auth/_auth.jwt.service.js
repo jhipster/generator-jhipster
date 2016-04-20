@@ -49,11 +49,10 @@
         function loginWithToken(jwt, rememberMe) {
             var deferred = $q.defer();
 
-            if (jwt !== undefined) {
+            if (angular.isDefined(jwt)) {
                 this.storeAuthenticationToken(jwt, rememberMe);
                 deferred.resolve(jwt);
-            }
-            else {
+            } else {
                 deferred.reject();
             }
 
