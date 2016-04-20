@@ -48,7 +48,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @NotNull<% if (enableSocialSignIn) { %>
     @Size(min = 1, max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100, unique = true, nullable = false)<% } %><% } else { %>
-    @Pattern(regexp = "^[_'.@A-Za-z0-9-]*$|(anonymoususer)")
+    @Pattern(regexp = "^[_'.@A-Za-z0-9-]*$")
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
     @Column(length = 50, unique = true, nullable = false)<% } %><% } %>
     private String login;
