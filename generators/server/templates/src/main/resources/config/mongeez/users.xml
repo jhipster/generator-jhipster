@@ -20,7 +20,7 @@
             db.jhi_user.insert(
             {
                 "_id" : "user-1",
-                "login" : "anonmyoususer",
+                "login" : "anonymoususer",
                 "password" : "$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO",
                 "first_name": "Anonymous",
                 "last_name": "User",

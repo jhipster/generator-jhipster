@@ -40,6 +40,11 @@
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');<% } else { %>
             User.query({}, function (result) {<% } %>
+                for(var i in result) {
+                    if(result[i]['login'] === 'anonymoususer') {
+                        result.splice(i,1);
+                    }
+                }
                 vm.users = result;
             });
         }
