@@ -40,6 +40,8 @@
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');<% } else { %>
             User.query({}, function (result) {<% } %>
+
+                //hide anonymous user from user management: it's a required user for Spring Security
                 for(var i in result) {
                     if(result[i]['login'] === 'anonymoususer') {
                         result.splice(i,1);
