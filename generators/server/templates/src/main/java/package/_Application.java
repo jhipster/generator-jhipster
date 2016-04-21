@@ -40,6 +40,8 @@ import java.util.Collection;
 public class <%= mainClass %> {
 
     private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);
+    
+    private static final String MIS_CONFIGURED_APPLICATION = "You have misconfigured your application! It should not run with both the '{}' and '{}' profiles at the same time.";
 
     @Inject
     private Environment env;
@@ -59,12 +61,10 @@ public class <%= mainClass %> {
             log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
             Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
             if (activeProfiles.contains(Constants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(Constants.SPRING_PROFILE_PRODUCTION)) {
-                log.error("You have misconfigured your application! " +
-                    "It should not run with both the 'dev' and 'prod' profiles at the same time.");
+                log.error(MIS_CONFIGURED_APPLICATION, "dev", "prod");
             }
             if (activeProfiles.contains(Constants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(Constants.SPRING_PROFILE_CLOUD)) {
-                log.error("You have misconfigured your application! " +
-                    "It should not run with both the 'dev' and 'cloud' profiles at the same time.");
+                log.error(MIS_CONFIGURED_APPLICATION, "dev", "cloud");
             }
         }
     }
@@ -103,7 +103,6 @@ public class <%= mainClass %> {
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active") &&
                 !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
-
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }
