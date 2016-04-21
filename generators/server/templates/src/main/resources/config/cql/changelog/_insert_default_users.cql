@@ -5,10 +5,10 @@ INSERT INTO user_by_login (login, id)
 VALUES('system','1');
 
 INSERT INTO user (id, login, password , firstname, lastname ,email ,activated ,lang_key, activation_key, authorities)
-VALUES('2','anonymousUser','$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO','','Anonymous','anonymous@localhost',true,'<%= nativeLanguageShortName %>','', {});
+VALUES('2','anonymoususer','$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO','','Anonymous','anonymous@localhost',true,'<%= nativeLanguageShortName %>','', {});
 
 INSERT INTO user_by_login (login, id)
-VALUES('anonymousUser','2');
+VALUES('anonymoususer','2');
 
 INSERT INTO user (id, login, password , firstname, lastname ,email ,activated ,lang_key, activation_key, authorities)
 VALUES('3','admin','$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC','','Administrator','admin@localhost',true,'<%= nativeLanguageShortName %>','', {'ROLE_USER', 'ROLE_ADMIN'});

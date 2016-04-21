@@ -1,4 +1,6 @@
 package <%=packageName%>.web.rest.dto;
+
+import <%=packageName%>.config.Constants;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = Constants.LOGIN_REGEX)
     @NotNull
     @Size(min = 1, max = 50)
     private String login;
@@ -49,7 +51,7 @@ public class UserDTO {
     public UserDTO(String login, String firstName, String lastName,
         String email, boolean activated, String langKey, Set<String> authorities) {
 
-        this.login = login;        
+        this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
