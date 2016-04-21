@@ -169,11 +169,11 @@ module.exports = LanguagesGenerator.extend({
     },
 
     install: function () {
-        var wiredepAddedBowerOverrides = function () {
-            this.spawnCommand('gulp', ['wiredep']);
+        var injectAddedBowerOverrides = function () {
+            this.spawnCommand('gulp', ['inject:vendor']);
         };
         if (!this.options['skip-install'] && !this.skipClient) {
-            wiredepAddedBowerOverrides.call(this);
+            injectAddedBowerOverrides.call(this);
         }
     }
 });
