@@ -74,7 +74,7 @@ module.exports = JhipsterServerGenerator.extend({
         });
 
         this.skipClient = !this.options['client-hook'] || configOptions.skipClient || this.config.get('skipClient');
-        this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
+        this.skipUserManagement = configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.enableTranslation = this.options['i18n'];
         this.testFrameworks = [];
         this.options['gatling'] && this.testFrameworks.push('gatling');
