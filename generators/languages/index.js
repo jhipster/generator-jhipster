@@ -169,8 +169,9 @@ module.exports = LanguagesGenerator.extend({
     },
 
     install: function () {
+
         var injectAddedBowerOverrides = function () {
-            this.spawnCommand('gulp', ['inject:vendor']);
+            this.spawnCommand('gulp', ['inject:dep']);
         };
         if (!this.options['skip-install'] && !this.skipClient) {
             injectAddedBowerOverrides.call(this);
