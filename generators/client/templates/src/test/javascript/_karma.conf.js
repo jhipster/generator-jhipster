@@ -1,6 +1,17 @@
 // Karma configuration
 // http://karma-runner.github.io/0.10/config/configuration-file.html
 
+var sourcePreprocessors = ['coverage'];
+
+function isDebug() {
+    return process.argv.indexOf('--debug') >= 0;
+}
+
+if (isDebug()) {
+    // Disable JS minification if Karma is run with debug option.
+    sourcePreprocessors = [];
+}
+
 module.exports = function (config) {
     config.set({
         // base path, that will be used to resolve files and exclude
@@ -27,7 +38,7 @@ module.exports = function (config) {
         exclude: [<% if (testFrameworks.indexOf('protractor') > -1) { %>'<%= TEST_SRC_DIR %>e2e/**'<% } %>],
 
         preprocessors: {
-            './**/*.js': ['coverage']
+            './**/*.js': sourcePreprocessors
         },
 
         reporters: ['dots', 'jenkins', 'coverage', 'progress'],

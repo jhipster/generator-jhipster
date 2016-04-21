@@ -28,9 +28,9 @@
             return $q.reject(response);
         }
     }<% } %><% if (authenticationType === 'session') { %>
-    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document'];
+    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document', '$sessionStorage'];
 
-    function authExpiredInterceptor($rootScope, $q, $injector, $document) {
+    function authExpiredInterceptor($rootScope, $q, $injector, $document, $sessionStorage) {
         var service = {
             responseError: responseError
         };
@@ -46,11 +46,11 @@
                 var params = $rootScope.toStateParams;
                 Auth.logout();
                 if (to.name !== 'accessdenied') {
-                    $rootScope.previousStateName = to;
-                    $rootScope.previousStateParams = params;
+                    $sessionStorage.previousStateName = to.name;
+                    $sessionStorage.previousStateParams = params;
                 }
-                var LoginPopupService = $injector.get('LoginService');
-                LoginPopupService.open();
+                var LoginService = $injector.get('LoginService');
+                LoginService.open();
             } else if (response.status === 403 && response.config.method !== 'GET' && getCSRF() === '') {
                 // If the CSRF token expired, then try to get a new CSRF token and retry the old request
                 var $http = $injector.get('$http');

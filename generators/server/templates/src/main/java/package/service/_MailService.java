@@ -30,6 +30,9 @@ import java.util.Locale;
 public class MailService {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
+    
+    private static final String USER = "user";
+    private static final String BASE_URL = "baseUrl";
 
     @Inject
     private JHipsterProperties jHipsterProperties;
@@ -42,11 +45,6 @@ public class MailService {
 
     @Inject
     private SpringTemplateEngine templateEngine;
-
-    /**
-     * System default email address that sends the e-mails.
-     */
-    private String from;
 
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
@@ -73,8 +71,8 @@ public class MailService {
         log.debug("Sending activation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
-        context.setVariable("user", user);
-        context.setVariable("baseUrl", baseUrl);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, baseUrl);
         String content = templateEngine.process("activationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -85,8 +83,8 @@ public class MailService {
         log.debug("Sending creation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
-        context.setVariable("user", user);
-        context.setVariable("baseUrl", baseUrl);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, baseUrl);
         String content = templateEngine.process("creationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -97,8 +95,8 @@ public class MailService {
         log.debug("Sending password reset e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
-        context.setVariable("user", user);
-        context.setVariable("baseUrl", baseUrl);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, baseUrl);
         String content = templateEngine.process("passwordResetEmail", context);
         String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -109,7 +107,7 @@ public class MailService {
         log.debug("Sending social registration validation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
-        context.setVariable("user", user);
+        context.setVariable(USER, user);
         context.setVariable("provider", WordUtils.capitalize(provider));
         String content = templateEngine.process("socialRegistrationValidationEmail", context);
         String subject = messageSource.getMessage("email.social.registration.title", null, locale);

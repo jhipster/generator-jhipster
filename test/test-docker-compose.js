@@ -172,4 +172,30 @@ describe('JHipster Docker Compose Sub Generator', function () {
             assert.file(expectedFiles.elk);
         });
     });
+
+    describe('gateway and 1 microservice, with cassandra cluster', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withPrompts({
+                    directoryPath: './',
+                    'chosenApps': [
+                        '01-gateway',
+                        '05-cassandra'
+                    ],
+                    clusteredDbApps: [],
+                    elk: true
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('creates expected elk files', function () {
+            assert.file(expectedFiles.elk);
+        });
+    });
 });
