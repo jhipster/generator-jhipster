@@ -4,6 +4,7 @@ module.exports = {
     test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
     scss: '<%= MAIN_SRC_DIR %>scss/',
     sassSrc: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
+    sassVendor: 'src/main/webapp/scss/vendor.scss',
     cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>,
     bower: '<%= MAIN_SRC_DIR %>bower_components/',
     tmp: '<%= BUILD_DIR %>tmp',

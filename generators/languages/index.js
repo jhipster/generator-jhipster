@@ -166,14 +166,5 @@ module.exports = LanguagesGenerator.extend({
         if (!this.skipClient) {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
         }
-    },
-
-    install: function () {
-        var wiredepAddedBowerOverrides = function () {
-            this.spawnCommand('gulp', ['wiredep']);
-        };
-        if (!this.options['skip-install'] && !this.skipClient) {
-            wiredepAddedBowerOverrides.call(this);
-        }
     }
 });
