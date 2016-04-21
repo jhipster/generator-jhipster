@@ -125,6 +125,7 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('inject', ['inject:dep', 'inject:app']);
 gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
 gulp.task('inject:app', function () {
@@ -143,12 +144,16 @@ gulp.task('inject:vendor', function () {
         }))
         .pipe(gulp.dest(config.app));
 
-    return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassSrc)
+    return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassVendor)
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(config.bower, {
-            read: false,
-            ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
-        })))
+        .pipe(inject(gulp.src(bowerFiles({filter:['**/*.{scss,sass}']}), {read: false}), {
+            starttag: '// bower:scss',
+            endtag: '// endinject',
+            relative: true,
+            transform: function (filepath) {
+                return '@import "' + filepath + '";';
+            }
+        }))
         .pipe(gulp.dest(config.scss)));<% } else { %>stream;<% } %>
 });
 
@@ -159,7 +164,7 @@ gulp.task('inject:test', function () {
             starttag: '// bower:js',
             endtag: '// endbower',
             transform: function (filepath) {
-                return '"' + filepath.substring(1, filepath.length) + '",';
+                return '\'' + filepath.substring(1, filepath.length) + '\',';
             }
         }))
         .pipe(gulp.dest(config.test));

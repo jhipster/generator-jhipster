@@ -166,15 +166,5 @@ module.exports = LanguagesGenerator.extend({
         if (!this.skipClient) {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
         }
-    },
-
-    install: function () {
-
-        var injectAddedBowerOverrides = function () {
-            this.spawnCommand('gulp', ['inject:dep']);
-        };
-        if (!this.options['skip-install'] && !this.skipClient) {
-            injectAddedBowerOverrides.call(this);
-        }
     }
 });
