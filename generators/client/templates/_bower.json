@@ -51,7 +51,18 @@
         "jquery": "2.2.2"
       }
     },
-    <%_ if (useSass) { _%>
+    "angular-cache-buster" : {
+      "dependencies": {
+        "angular": "1.5.2"
+      }
+    },
+    <%_ if (enableTranslation) { _%>
+    "angular-dynamic-locale" : {
+      "dependencies": {
+        "angular": "1.5.2"
+      }
+    },
+    <%_ } if (useSass) { _%>
     "bootstrap-sass": {
       "main": [
         "assets/stylesheets/_bootstrap.scss"

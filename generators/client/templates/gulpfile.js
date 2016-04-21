@@ -137,17 +137,16 @@ gulp.task('inject:app', function () {
 gulp.task('inject:vendor', function () {
     var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles()),{
-            name:'vendor',
-            transform: function (filepath, file, i, length) {
-                return '<script src="bower_components' + filepath.replace(config.bower,'') + '"></script>';
-            }
+        .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
+            name: 'bower',
+            relative: true
         }))
         .pipe(gulp.dest(config.app));
 
     return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(inject(gulp.src(config.bower, {
+            read: false,
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
         })))
         .pipe(gulp.dest(config.scss)));<% } else { %>stream;<% } %>
@@ -156,10 +155,10 @@ gulp.task('inject:vendor', function () {
 gulp.task('inject:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles({includeDev: true, filter: ['**/*.js']})), {
+        .pipe(inject(gulp.src(bowerFiles({includeDev: true, filter: ['**/*.js']}), {read: false}), {
             starttag: '// bower:js',
             endtag: '// endbower',
-            transform: function (filepath, file, i, length) {
+            transform: function (filepath) {
                 return '"' + filepath.substring(1, filepath.length) + '",';
             }
         }))
