@@ -85,7 +85,7 @@ public class MongoDBTokenStore implements TokenStore {
     public void removeRefreshToken(OAuth2RefreshToken token) {
         OAuth2AuthenticationRefreshToken refreshToken = oAuth2RefreshTokenRepository.findByTokenId(token.getValue());
         if (refreshToken != null) {
-            oAuth2AccessTokenRepository.delete(refreshToken);
+            oAuth2RefreshTokenRepository.delete(refreshToken);
         }
     }
 
