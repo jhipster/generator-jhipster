@@ -30,10 +30,7 @@ war {
 
 task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
-}
-<% } %>
-
-
+}<% } %>
 
 task setProdProperties(dependsOn: bootRun) << {
     doFirst {
@@ -49,4 +46,4 @@ processResources {
     }
 }
 <% if (!skipClient) { %>
-setProdProperties.dependsOn gulpConstantDev}<% } %>
+setProdProperties.dependsOn gulpConstantDev<% } %>
