@@ -625,8 +625,22 @@ public class JHipsterProperties {
 
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
-    }
 
+    <%_ if (applicationType == 'gateway' || applicationType == 'microservice') { _%>
+        private final SpectatorMetrics spectatorMetrics = new SpectatorMetrics();
+
+        public SpectatorMetrics getSpectatorMetrics() { return spectatorMetrics; }
+        
+        public static class SpectatorMetrics {
+
+            private boolean enabled = false;
+
+            public boolean isEnabled() { return enabled; }
+
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+        }
+    <%_ } _%>
+    }
     <%_ if (enableSocialSignIn) { _%>
     public static class Social {
 

@@ -178,7 +178,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: <%= baseName %>
-        logs: # report metrics in the logs
+        logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds
     logging:
@@ -187,5 +187,10 @@ jhipster:
             host: localhost
             port: 5000
             queueSize: 512
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+            enabled: false
+            # edit spring.metrics.export.delay-millis to set report frequency
+    <%_ } _%>
     swagger: # swagger is enabled. It can be disabled by pasing 'no-swagger' profile at run time as well
         enabled: true
