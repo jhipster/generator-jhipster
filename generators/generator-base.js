@@ -1054,6 +1054,19 @@ Generator.prototype.copyI18nFilesByName = function (generator, webappDir, fileTo
     _this.copy(webappDir + 'i18n/' + lang + '/' + fileToCopy, webappDir + 'i18n/' + lang + '/' + fileToCopy);
 };
 
+/**
+ * Check if the JHipster version used to generate an existing project is less than the passed version argument
+ *
+ * @param {string} version - A valid semver version string
+ */
+Generator.prototype.isJhipsterVersionLessThan = function (version) {
+    var jhipsterVersion = this.config.get('jhipsterVersion');
+    if (!jhipsterVersion) {
+        return true;
+    }
+    return semver.lt(jhipsterVersion, version);
+};
+
 /*========================================================================*/
 /* private methods use within generator (not exposed to modules)*/
 /*========================================================================*/
@@ -1183,14 +1196,6 @@ Generator.prototype.removefolder = function (folder) {
         this.log('Removing the folder - ' + folder);
         shelljs.rm('-rf', folder);
     }
-};
-
-Generator.prototype.isJhipsterVersionLessThan = function (version) {
-    var jhipsterVersion = this.config.get('jhipsterVersion');
-    if (!jhipsterVersion) {
-        return true;
-    }
-    return semver.lt(jhipsterVersion, version);
 };
 
 Generator.prototype.getDefaultAppName = function () {
