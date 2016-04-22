@@ -3,6 +3,10 @@ package <%=packageName%>.config;
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
 import <%=packageName%>.config.metrics.SpectatorLogMetricWriter;
 import com.netflix.spectator.api.Registry;
+import org.springframework.boot.actuate.autoconfigure.ExportMetricReader;
+import org.springframework.boot.actuate.autoconfigure.ExportMetricWriter;
+import org.springframework.boot.actuate.metrics.writer.MetricWriter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.metrics.spectator.SpectatorMetricReader;
 <%_ } _%>
 
@@ -18,11 +22,7 @@ import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import fr.ippon.spark.metrics.SparkReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.actuate.autoconfigure.ExportMetricReader;
-import org.springframework.boot.actuate.autoconfigure.ExportMetricWriter;
-import org.springframework.boot.actuate.metrics.writer.MetricWriter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
