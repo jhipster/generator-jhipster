@@ -25,6 +25,7 @@ import java.util.UUID;<% } %>
  */<% } %><% if (databaseType=='cassandra') { %>/**
  * Cassandra repository for the <%= entityClass %> entity.
  */<% } %><% if (databaseType=='sql' || databaseType=='mongodb') { %>
+@SuppressWarnings("unused")
 public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {<% for (idx in relationships) { %><% if (relationships[idx].relationshipType == 'many-to-one' && relationships[idx].otherEntityName == 'user') { %>
 
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal<% if (authenticationType != 'jwt') { %>.username<% } %>}")

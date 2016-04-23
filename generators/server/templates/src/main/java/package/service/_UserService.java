@@ -1,7 +1,6 @@
 package <%=packageName%>.service;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
-import <%=packageName%>.domain.PersistentToken;<% } %><% } %>
+import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
@@ -11,8 +10,6 @@ import <%=packageName%>.security.AuthoritiesConstants;<% } %>
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.dto.ManagedUserDTO;
-import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import java.time.LocalDate;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import java.time.LocalDate;<% } %>
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
