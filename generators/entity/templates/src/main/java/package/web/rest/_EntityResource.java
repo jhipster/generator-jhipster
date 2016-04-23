@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;<% } %>
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;<% if (dto == 'mapstruct') { %>
