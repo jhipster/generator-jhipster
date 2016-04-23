@@ -7,13 +7,13 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '1.2'
-        classpath group: 'net.ltgt.gradle', name: 'gradle-apt-plugin', version: '0.6'
-        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: spring_boot_version
-        classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'<% if(!skipClient) {%>
-        classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.12'
-        classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.12'<% } %>
-        classpath group: 'se.transmode.gradle', name: 'gradle-docker', version: '1.2'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:1.2'
+        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.6'
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'<% if(!skipClient) {%>
+        classpath 'com.moowork.gradle:gradle-node-plugin:0.12'
+        classpath 'com.moowork.gradle:gradle-gulp-plugin:0.12'<% } %>
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
         classpath 'io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE'
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
@@ -113,138 +113,138 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.dropwizard.metrics', name: 'metrics-core'<% if (hibernateCache == 'ehcache') { %>
-    compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: dropwizard_metrics_version
-    compile group: 'io.dropwizard.metrics', name: 'metrics-ehcache', version: dropwizard_metrics_version<% } %>
-    compile group: 'io.dropwizard.metrics', name: 'metrics-graphite', version: dropwizard_metrics_version
-    compile group: 'io.dropwizard.metrics', name: 'metrics-healthchecks', version: dropwizard_metrics_version
-    compile group: 'io.dropwizard.metrics', name: 'metrics-jvm', version: dropwizard_metrics_version
-    compile group: 'io.dropwizard.metrics', name: 'metrics-servlet', version: dropwizard_metrics_version
-    compile group: 'io.dropwizard.metrics', name: 'metrics-json', version: dropwizard_metrics_version
-    compile (group: 'io.dropwizard.metrics', name: 'metrics-servlets', version: dropwizard_metrics_version) {
+    compile 'io.dropwizard.metrics:metrics-core'<% if (hibernateCache == 'ehcache') { %>
+    compile "io.dropwizard.metrics:metrics-annotation:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-ehcache:${dropwizard_metrics_version}"<% } %>
+    compile "io.dropwizard.metrics:metrics-graphite:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-healthchecks:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
+    compile "io.dropwizard.metrics:metrics-json:${dropwizard_metrics_version}"
+    compile ("io.dropwizard.metrics:metrics-servlets:${dropwizard_metrics_version}") {
         exclude(module: 'metrics-healthchecks')
     }
-    compile(group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: logstash_logback_encoder_version) {
+    compile("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
         exclude(module: 'ch.qos.logback')
     }
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jackson_version
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: jackson_version
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jackson_version
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
-    compile (group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version) {
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:${jackson_version}"
+    compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
         exclude(module: 'metrics-core')
         exclude(module: 'metrics-healthchecks')
     } <% if (hibernateCache == 'hazelcast') { %>
-    compile group: 'com.hazelcast', name: 'hazelcast', version: hazelcast_version
-    compile group: 'com.hazelcast', name: 'hazelcast-hibernate4', version: hazelcast_version
-    compile group: 'com.hazelcast', name: 'hazelcast-spring', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
-    compile group: 'com.hazelcast', name: 'hazelcast', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
-    compile group: 'com.hazelcast', name: 'hazelcast-wm', version: hazelcast_version<% } %>
+    compile "com.hazelcast:hazelcast:${hazelcast_version}"
+    compile "com.hazelcast:hazelcast-hibernate4:${hazelcast_version}"
+    compile "com.hazelcast:hazelcast-spring:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
+    compile "com.hazelcast:hazelcast:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+    compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
-    compile(group: 'com.zaxxer', name: 'HikariCP', version: HikariCP_version) {
+    compile("com.zaxxer:HikariCP:${HikariCP_version}") {
         exclude(module: 'tools')
     }
     <%_ } _%>
-    compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
-    compile group: 'commons-io', name: 'commons-io', version: commons_io_version
-    compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
-    compile group: 'javax.transaction', name: 'javax.transaction-api'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
-    compile group: 'net.jpountz.lz4', name: 'lz4', version: lz4_version<% } %>
-    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version
-    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
+    compile "commons-lang:commons-lang:${commons_lang_version}"
+    compile "commons-io:commons-io:${commons_io_version}"
+    compile "javax.inject:javax.inject:${javax_inject_version}"
+    compile "javax.transaction:javax.transaction-api"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
+    compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
+    compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
+    compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
     <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-    compile (group: 'org.hibernate', name: 'hibernate-ehcache') {
+    compile ("org.hibernate:hibernate-ehcache") {
         exclude(module: 'ehcache-core')
     }<% } %>
-    compile group: 'org.hibernate', name: 'hibernate-envers'
-    compile group: 'org.hibernate', name: 'hibernate-validator'<% if (databaseType == 'sql') { %>
-    compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
+    compile "org.hibernate:hibernate-envers"
+    compile "org.hibernate:hibernate-validator"<% if (databaseType == 'sql') { %>
+    compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
         exclude(module: 'jetty-servlet')
     }
-    compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-actuator'
-    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
-    compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'<% if (databaseType == 'sql') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'<% } %><% if (searchEngine == 'elasticsearch') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch'<% } %><% if (databaseType == 'mongodb') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'<% } %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web')<% if (websocket == 'spring-websocket') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'<% } %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
-    compile group: 'org.springframework.data', name: 'spring-data-cassandra'
-    compile(group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: datastax_driver_version) {
+    compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %>
+    compile "org.springframework.boot:spring-boot-actuator"
+    compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.springframework.boot:spring-boot-loader-tools"
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-starter-aop"<% if (databaseType == 'sql') { %>
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"<% } %><% if (searchEngine == 'elasticsearch') { %>
+    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"<% } %><% if (databaseType == 'mongodb') { %>
+    compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-web"<% if (websocket == 'spring-websocket') { %>
+    compile "org.springframework.boot:spring-boot-starter-websocket"<% } %>
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
+    compile "org.springframework.data:spring-data-cassandra"
+    compile("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {
         exclude module: 'com.codahale.metrics'
     }
-    compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: datastax_driver_version<% } %>
+    compile "com.datastax.cassandra:cassandra-driver-mapping:${datastax_driver_version}"<% } %>
     <%_ if (applicationType == 'gateway') { _%>
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul'
+    compile "org.springframework.cloud:spring-cloud-starter-zuul"
     <%_ } _%>
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-ribbon'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
-    compile group: 'org.springframework.retry', name: 'spring-retry'
+    compile "org.springframework.cloud:spring-cloud-starter"
+    compile "org.springframework.cloud:spring-cloud-starter-ribbon"
+    compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    compile "org.springframework.cloud:spring-cloud-starter-hystrix"
+    compile "org.springframework.cloud:spring-cloud-starter-config"
+    compile "org.springframework.retry:spring-retry"
     <%_ } _%>
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-localconfig-connector'
-    compile(group: 'org.springframework', name: 'spring-context-support') {
+    compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector"
+    compile "org.springframework.cloud:spring-cloud-spring-service-connector"
+    compile "org.springframework.cloud:spring-cloud-localconfig-connector"
+    compile ("org.springframework:spring-context-support") {
         exclude(module: 'quartz')
     }
-    compile group: 'org.springframework.security', name: 'spring-security-config', version: spring_security_version
-    compile group: 'org.springframework.security', name: 'spring-security-data', version: spring_security_version
-    compile group: 'org.springframework.security', name: 'spring-security-web', version: spring_security_version<% if (websocket == 'spring-websocket') { %>
-    compile group: 'org.springframework.security', name: 'spring-security-messaging', version: spring_security_version <% } %>
+    compile "org.springframework.security:spring-security-config:${spring_security_version}"
+    compile "org.springframework.security:spring-security-data:${spring_security_version}"
+    compile "org.springframework.security:spring-security-web:${spring_security_version}"<% if (websocket == 'spring-websocket') { %>
+    compile "org.springframework.security:spring-security-messaging:${spring_security_version}" <% } %>
     <%_ if (authenticationType == 'oauth2') { _%>
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version
+    compile "org.springframework.security.oauth:spring-security-oauth2:${spring_security_oauth2_version}"
     <%_ } _%>
     <%_ if (authenticationType == 'jwt') { _%>
-    compile group: 'io.jsonwebtoken', name: 'jjwt', version: jjwt_version
+    compile "io.jsonwebtoken:jjwt:${jjwt_version}"
     <%_ } _%>
     <%_ if (databaseType == 'mongodb') { _%>
-    compile group: 'org.mongeez', name: 'mongeez', version: mongeez_version<% } %>
-    compile(group: 'io.springfox', name: 'springfox-swagger2', version: springfox_version){
+    compile "org.mongeez:mongeez:${mongeez_version}"<% } %>
+    compile("io.springfox:springfox-swagger2:${springfox_version}"){
         exclude module: 'mapstruct'
     }
     <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
-    compile group: 'mysql', name: 'mysql-connector-java'<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
-    compile group: 'com.h2database', name: 'h2'<% } %>
-    compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
-    compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version<% if (enableSocialSignIn) { %>
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpclient_version
-    compile group: 'org.springframework.social', name: 'spring-social-security', version: spring_social_security_version
-    compile group: 'org.springframework.social', name: 'spring-social-google', version: spring_social_google_version
-    compile group: 'org.springframework.social', name: 'spring-social-facebook', version: spring_social_facebook_version
-    compile group: 'org.springframework.social', name: 'spring-social-twitter', version: spring_social_twitter_version<% } %>
-    testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
-    testCompile group: 'com.jayway.jsonpath', name: 'json-path'<% if (databaseType == 'cassandra') { %>
-    testCompile(group: 'org.cassandraunit', name: 'cassandra-unit-spring', version: cassandra_unit_spring_version) {
+    compile "mysql:mysql-connector-java"<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+    compile "org.postgresql:postgresql:${postgresql_version}"<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+    compile "com.h2database:h2"<% } %>
+    compile "fr.ippon.spark.metrics:metrics-spark-reporter:${metrics_spark_reporter_version}"
+    compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"<% if (enableSocialSignIn) { %>
+    compile "org.apache.httpcomponents:httpclient:${httpclient_version}"
+    compile "org.springframework.social:spring-social-security:${spring_social_security_version}"
+    compile "org.springframework.social:spring-social-google:${spring_social_google_version}"
+    compile "org.springframework.social:spring-social-facebook:${spring_social_facebook_version}"
+    compile "org.springframework.social:spring-social-twitter:${spring_social_twitter_version}"<% } %>
+    testCompile "com.jayway.awaitility:awaitility:${awaility_version}"
+    testCompile "com.jayway.jsonpath:json-path"<% if (databaseType == 'cassandra') { %>
+    testCompile("org.cassandraunit'cassandra-unit-spring:${cassandra_unit_spring_version}") {
         exclude(module: 'org.slf4j')
     }<% } %><% if (testFrameworks.indexOf('cucumber') != -1) { %>
-    testCompile group: 'info.cukes', name: 'cucumber-junit', version: cucumber_version
-    testCompile group: 'info.cukes', name: 'cucumber-spring', version: cucumber_version<% } %>
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-	  testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
-    testCompile group: 'junit', name: 'junit'
-    testCompile group: 'org.mockito', name: 'mockito-core'<% if (databaseType == 'sql') { %>
-    testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
-    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo'<% } %>
-    testCompile group: 'org.hamcrest', name: 'hamcrest-library'
+    testCompile "info.cukes:cucumber-junit:${cucumber_version}"
+    testCompile "info.cukes:cucumber-spring:${cucumber_version}"<% } %>
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.assertj:assertj-core:${assertj_core_version}"
+    testCompile "junit:junit"
+    testCompile "org.mockito:mockito-core"<% if (databaseType == 'sql') { %>
+    testCompile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %><% if (databaseType == 'mongodb') { %>
+    testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"<% } %>
+    testCompile "org.hamcrest:hamcrest-library"
     <% if (testFrameworks.indexOf('gatling') != -1) { %>
-    testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version<% } %>
+    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"<% } %>
     <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
-    testCompile group: 'com.h2database', name: 'h2'<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
     runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
     runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
-    optional group: 'org.springframework.boot', name:'spring-boot-configuration-processor', version: spring_boot_version
+    optional "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
