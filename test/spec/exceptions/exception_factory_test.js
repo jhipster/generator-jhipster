@@ -5,7 +5,7 @@ const expect = require('chai').expect,
     exceptions = require('../../../lib/exceptions/exception_factory').exceptions;
 
 describe('ExceptionFactory', function () {
-  describe('#buildException', function () {
+  describe('::buildException', function () {
     it("adds the 'Exception' suffix to the names", function () {
       let exception = buildException('Working', null);
       expect(exception.name).to.eq('WorkingException');

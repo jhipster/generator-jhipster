@@ -6,7 +6,7 @@ var expect = require('chai').expect,
     read = require('../../../lib/reader/jdl_reader').read,
     readFiles = require('../../../lib/reader/jdl_reader').readFiles;
 
-describe('#readContent', function () {
+describe('::readContent', function () {
   describe('when passing invalid parameters', function () {
     describe('such as nil', function () {
       it('throws an error', function () {
@@ -39,7 +39,7 @@ describe('#readContent', function () {
     });
   });
 });
-describe('#readFiles', function() {
+describe('::readFiles', function() {
   describe('when passing invalid parameters', function () {
     describe('such as nil', function () {
       it('throws an error', function () {
