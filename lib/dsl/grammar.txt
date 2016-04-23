@@ -238,8 +238,8 @@ validation
   = "required" {return {key:'required', value:''};}
   / "minlength" space* "(" space* int:INTEGER space* ")" {return {key:'minlength', value:int};}
   / "maxlength" space* "(" space* int:INTEGER space* ")" {return {key:'maxlength', value:int};}
-  / "minbytes" space* "(" space* int:INTEGER space* ")" {return {key:'minlength', value:int};}
-  / "maxbytes" space* "(" space* int:INTEGER space* ")" {return {key:'maxlength', value:int};}
+  / "minbytes" space* "(" space* int:INTEGER space* ")" {return {key:'minbytes', value:int};}
+  / "maxbytes" space* "(" space* int:INTEGER space* ")" {return {key:'maxbytes', value:int};}
   / "max" space* "(" space* int:INTEGER space* ")" {return {key:'max', value:int};}
   / "min" space* "(" space* int:INTEGER space* ")" {return {key:'min', value:int};}
   / "pattern" space* "("  apostrophe regexp:REGEXP  apostrophe space* ")" {return {key:'pattern' , value:regexp};}
