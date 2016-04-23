@@ -26,11 +26,11 @@ bootRun {
 <% if (!skipClient) { %>
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
-}<% } %>
+}
 
 task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
-}
+}<% } %>
 
 task setProdProperties(dependsOn: bootRun) << {
     doFirst {
@@ -45,5 +45,5 @@ processResources {
         }
     }
 }
-
-setProdProperties.dependsOn gulpConstantDev
+<% if (!skipClient) { %>
+setProdProperties.dependsOn gulpConstantDev<% } %>
