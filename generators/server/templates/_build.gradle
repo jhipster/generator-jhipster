@@ -113,7 +113,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.dropwizard.metrics:metrics-core'<% if (hibernateCache == 'ehcache') { %>
+    compile "io.dropwizard.metrics:metrics-core"<% if (hibernateCache == 'ehcache') { %>
     compile "io.dropwizard.metrics:metrics-annotation:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-ehcache:${dropwizard_metrics_version}"<% } %>
     compile "io.dropwizard.metrics:metrics-graphite:${dropwizard_metrics_version}"
