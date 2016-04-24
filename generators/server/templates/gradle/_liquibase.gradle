@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    liquibase group: 'org.liquibase.ext', name: 'liquibase-hibernate4', version: liquibase_hibernate4_version
+    liquibase "org.liquibase.ext:liquibase-hibernate4:${liquibase_hibernate4_version}"
 }
 
 task liquibaseDiffChangelog(dependsOn: compileJava, type: JavaExec) {

@@ -1,5 +1,5 @@
 apply plugin: "net.ltgt.apt"
 
 dependencies {
-    apt group: 'org.mapstruct', name: 'mapstruct-processor', version: mapstruct_version
+    apt "org.mapstruct:mapstruct-processor:${mapstruct_version}"
 }
