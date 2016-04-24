@@ -26,7 +26,6 @@
             <div>{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</div>
             <%_ } _%>
         </dd>
-        <hr>
         <%_ } _%>
         <%_ for (idx in relationships) {
                 var relationshipType = relationships[idx].relationshipType;
@@ -70,7 +69,6 @@
                 <%_ } _%>
             <%_ } _%>
         </dd>
-        <hr>
         <%_ } _%>
         <%_ } _%>
     </dl>

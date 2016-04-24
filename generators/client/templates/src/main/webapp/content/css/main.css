@@ -304,8 +304,24 @@ Social Buttons
 }
 
 .datetime-picker-dropdown > li.date-picker-menu div > table:focus,
-.uib-datepicker-popup  > li > div.uib-datepicker > table:focus{
+.uib-datepicker-popup  > li > div.uib-datepicker > table:focus {
     outline: none;
+}
+
+.dl-horizontal > dd {
+    margin-bottom: 15px;
+}
+
+@media screen and (min-width: 768px) {
+    .dl-horizontal > dt {
+        margin-bottom: 15px;
+    }
+
+    .dl-horizontal > dd {
+        border-bottom: 1px solid #eee;
+        padding-left: 180px;
+        margin-left: 0;
+    }
 }
 /* end of ui bootstrap tweaks */
 
