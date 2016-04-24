@@ -2,7 +2,7 @@
 <div>
     <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <hr>
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal jh-entity-details">
         <%_ for (idx in fields) {
             var fieldName = fields[idx].fieldName;
             var fieldType = fields[idx].fieldType;

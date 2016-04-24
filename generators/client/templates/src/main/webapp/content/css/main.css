@@ -291,6 +291,22 @@ Social Buttons
     cursor: pointer;
 }
 
+.dl-horizontal.jh-entity-details > dd {
+    margin-bottom: 15px;
+}
+
+@media screen and (min-width: 768px) {
+    .dl-horizontal.jh-entity-details > dt {
+        margin-bottom: 15px;
+    }
+
+    .dl-horizontal.jh-entity-details > dd {
+        border-bottom: 1px solid #eee;
+        padding-left: 180px;
+        margin-left: 0;
+    }
+}
+
 /* end of entity tables helpers */
 
 /* ui bootstrap tweaks */
@@ -308,21 +324,6 @@ Social Buttons
     outline: none;
 }
 
-.dl-horizontal > dd {
-    margin-bottom: 15px;
-}
-
-@media screen and (min-width: 768px) {
-    .dl-horizontal > dt {
-        margin-bottom: 15px;
-    }
-
-    .dl-horizontal > dd {
-        border-bottom: 1px solid #eee;
-        padding-left: 180px;
-        margin-left: 0;
-    }
-}
 /* end of ui bootstrap tweaks */
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
