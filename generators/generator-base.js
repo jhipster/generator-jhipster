@@ -482,7 +482,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
 };
 
 /**
- * Add a new social connection factory in the SocialConfiguration.java file.
+ * Add a new social button in the login and register modules
  *
  * @param {string} socialName - name of the social module. ex: 'facebook'
  * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
