@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Optional;
 
 /**
