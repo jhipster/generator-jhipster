@@ -1,0 +1,26 @@
+# ===================================================================
+# Spring Boot configuration for the "heroku" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
+
+eureka:
+<%_ if (applicationType != 'gateway') { _%>
+  instance:
+    hostname: <%= herokuDeployedName %>.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+<%_ } _%>
+  client:
+    serviceUrl:
+      defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
+
+spring:
+  datasource:
+    maximumPoolSize: 10

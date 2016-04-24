@@ -1,30 +1,36 @@
 package <%=packageName%>.config.apidoc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.netflix.zuul.filters.ProxyRouteLocator;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
-import springfox.documentation.swagger.web.SwaggerResource;
-import springfox.documentation.swagger.web.SwaggerResourcesProvider;
-
-import javax.inject.Inject;
+import <%=packageName%>.config.Constants;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.*;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.netflix.zuul.filters.Route;
+import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
+import springfox.documentation.swagger.web.SwaggerResource;
+import springfox.documentation.swagger.web.SwaggerResourcesProvider;
 
 /**
  * Retrieves all registered microservices Swagger resources.
  */
 @Component
 @Primary
+@Profile("!" + Constants.SPRING_PROFILE_NO_SWAGGER)
+@ConditionalOnProperty(value="jhipster.swagger.enabled")
 public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
     private final Logger log = LoggerFactory.getLogger(GatewaySwaggerResourcesProvider.class);
 
     @Inject
-    private ProxyRouteLocator routeLocator;
+    private RouteLocator routeLocator;
 
     @Inject
     private DiscoveryClient discoveryClient;
@@ -37,9 +43,9 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
         resources.add(swaggerResource("default", "/v2/api-docs"));
 
         //Add the registered microservices swagger docs as additional swagger resources
-        Map<String, String> routes = routeLocator.getRoutes();
-        routes.forEach((path, serviceId) -> {
-            resources.add(swaggerResource(serviceId, path.replace("**","v2/api-docs")));
+        List<Route> routes = routeLocator.getRoutes();
+        routes.forEach(route -> {
+            resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v2/api-docs")));
         });
 
         return resources;
@@ -52,5 +58,4 @@ public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider
         swaggerResource.setSwaggerVersion("2.0");
         return swaggerResource;
     }
-
 }

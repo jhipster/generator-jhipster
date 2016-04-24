@@ -1,24 +1,26 @@
 'use strict';
 
+var chalk = require('chalk');
+
 var aws;
-try {
-    var uuid = require('node-uuid');
-} catch (e) {
-    console.log(
-        'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n' +
-        'WINDOWS\n' +
-        'cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
-        'npm install aws-sdk progress node-uuid\n\n' +
-        'LINUX / MAC\n' +
-        'cd /usr/local/lib/node_modules/generator-jhipster\n' +
-        'npm install aws-sdk progress node-uuid'
-    );
-    process.exit(e.code);
-}
+var uuid;
 
 
-var Eb = module.exports = function Eb(Aws) {
+var Eb = module.exports = function Eb(Aws, generator) {
     aws = Aws;
+    try {
+        uuid = require('node-uuid');
+    } catch (e) {
+        generator.env.error(chalk.red(
+            'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n') +
+            chalk.yellow('WINDOWS\n') +
+            chalk.green('cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
+            'npm install aws-sdk progress node-uuid\n\n') +
+            chalk.yellow('LINUX / MAC\n') +
+            chalk.green('cd /usr/local/lib/node_modules/generator-jhipster\n' +
+            'npm install aws-sdk progress node-uuid')
+        );
+    }
 };
 
 Eb.prototype.createApplication = function createApplication(params, callback) {
@@ -80,7 +82,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
     });
 };
 
-var createApplicationVersion = function createApplicationVersion(params, callback) {
+function createApplicationVersion(params, callback) {
     var applicationName = params.applicationName,
         versionLabel = params.versionLabel,
         bucketName = params.bucketName,
@@ -105,9 +107,9 @@ var createApplicationVersion = function createApplicationVersion(params, callbac
             callback(null, {message: 'Application version ' + applicationName + ' created successful'});
         }
     });
-};
+}
 
-var checkEnvironment = function checkEnvironment(params, callback) {
+function checkEnvironment(params, callback) {
     var applicationName = params.applicationName,
         environmentName = params.environmentName;
 
@@ -128,9 +130,9 @@ var checkEnvironment = function checkEnvironment(params, callback) {
         }
     });
 
-};
+}
 
-var createEnvironment = function createEnvironment(params, callback) {
+function createEnvironment(params, callback) {
     var applicationName = params.applicationName,
         environmentName = params.environmentName,
         dbUrl = params.dbUrl,
@@ -193,9 +195,9 @@ var createEnvironment = function createEnvironment(params, callback) {
             else callback(null, {message: 'Environment ' + environmentName + ' created successful'});
         });
     });
-};
+}
 
-var getLatestSolutionStackName = function (callback) {
+function getLatestSolutionStackName(callback) {
     var elasticbeanstalk = new aws.ElasticBeanstalk();
 
     elasticbeanstalk.listAvailableSolutionStacks(function (err, data) {
@@ -211,9 +213,9 @@ var getLatestSolutionStackName = function (callback) {
     function filterCriteria(element) {
         return element.indexOf('Tomcat 8') > -1;
     }
-};
+}
 
-var updateEnvironment = function updateEnvironment(params, callback) {
+function updateEnvironment(params, callback) {
     var environmentName = params.environmentName,
         instanceType = params.instanceType,
         versionLabel = params.versionLabel;
@@ -239,4 +241,4 @@ var updateEnvironment = function updateEnvironment(params, callback) {
             callback(null, {message: 'Environment ' + environmentName + ' updated successful'});
         }
     });
-};
+}

@@ -1,0 +1,35 @@
+{
+    "health": {
+        "title": "स्वास्थ्य जाँच",
+        "refresh.button": "ताज़ा करें",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "विवरण",
+            "properties": "गुण",
+            "name": "नाम",
+            "value": "मान",
+            "error": "त्रुटि"
+        },
+        "indicator": {
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            <%_ } _%>
+            "diskSpace": "डिस्क स्थान",
+            "mail": "ईमेल"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "सेवा का नाम",
+            "status": "स्थिति"
+        },
+        "status": {
+            "UP": "ऊपर",
+            "DOWN": "नीचे"
+        }
+    }
+}

@@ -1,8 +1,7 @@
 'use strict';
 var util = require('util'),
     generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
@@ -38,19 +37,23 @@ module.exports = ServiceGenerator.extend({
                 message: '(1/1) Do you want to use an interface for your service?',
                 default: false
             }
-        ]
+        ];
         this.prompt(prompts, function (props) {
             this.useInterface = props.useInterface;
             cb();
         }.bind(this));
     },
+    default: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'service');
+            insight.track('service/interface', this.useInterface);
+        }
+    },
 
     writing: function () {
-        this.serviceClass = _.capitalize(this.name);
+        this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = this.name.toLowerCase();
-        var insight = this.insight();
-        insight.track('generator', 'service');
-        insight.track('service/interface', this.useInterface);
 
         this.template(SERVER_MAIN_SRC_DIR + 'package/service/_Service.java',
             SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.serviceClass + 'Service.java');

@@ -1,6 +1,6 @@
 ﻿{
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "Χρησιμοποείται ένα <strong>απαρχαιωμένο</strong> πρόγραμμα περιήγησης. Παρακαλώ <a href=\"http://browsehappy.com/?locale=en\">αναβαθμίστε το πρόγραμμα περιήγησης σας</a> να βελτιωθεί η εμπειρία σας.",
         "menu": {
             "home": "Home",
@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "Αν θέλετε να <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">συνδεθείτε</a>, μπορείτε να δοκιμάσετε τους ακολουθους ήδη ύπαρξη λογαριασμούς:<br/>- Διαχειριστής (login=\"admin\" και κωδικός=\"admin\") <br/>- Χρηστης (login=\"user\" και κωδικός=\"user\").",
-                "register": "Δεν έχετε λογαριασμό; <a class=\"alert-link\" ui-sref=\"register\">Δημιουργήστε έναν νέο λογαριασμό</a>"
+                "register": "Δεν έχετε λογαριασμό; <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Δημιουργήστε έναν νέο λογαριασμό</a>"
             },
             "error": {
                 "dontmatch": "Ο κωδικός και η επιβεβαίωση του δεν ταιριάζουν"

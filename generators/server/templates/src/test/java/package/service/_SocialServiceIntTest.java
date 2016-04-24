@@ -20,6 +20,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -67,6 +69,26 @@ public class SocialServiceIntTest {
         ReflectionTestUtils.setField(socialService, "mailService", mockMailService);
         ReflectionTestUtils.setField(socialService, "userRepository", userRepository);
         ReflectionTestUtils.setField(socialService, "usersConnectionRepository", mockUsersConnectionRepository);
+    }
+
+    @Test
+    public void testDeleteUserSocialConnection() throws Exception {
+        // Setup
+        Connection<?> connection = createConnection("@LOGIN",
+            "mail@mail.com",
+            "FIRST_NAME",
+            "LAST_NAME",
+            "PROVIDER");
+        socialService.createSocialUser(connection, "fr");
+        MultiValueMap<String, Connection<?>> connectionsByProviderId = new LinkedMultiValueMap<>();
+        connectionsByProviderId.put("PROVIDER", null);
+        when(mockConnectionRepository.findAllConnections()).thenReturn(connectionsByProviderId);
+
+        // Exercise
+        socialService.deleteUserSocialConnection("@LOGIN");
+
+        // Verify
+        verify(mockConnectionRepository, times(1)).removeConnections("PROVIDER");
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -258,7 +280,7 @@ public class SocialServiceIntTest {
     @Test
     public void testCreateSocialUserShouldNotCreateUserIfEmailAlreadyExist() {
         // Setup
-        User user = createExistingUser("@OTHER_LOGIN",
+        createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
             "OTHER_LAST_NAME");
@@ -283,8 +305,7 @@ public class SocialServiceIntTest {
     @Test
     public void testCreateSocialUserShouldNotChangeUserIfEmailAlreadyExist() {
         // Setup
-        long initialUserCount = userRepository.count();
-        User user = createExistingUser("@OTHER_LOGIN",
+        createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
             "OTHER_LAST_NAME");
@@ -299,7 +320,7 @@ public class SocialServiceIntTest {
 
         //Verify
         User userToVerify = userRepository.findOneByEmail("mail@mail.com").get();
-        assertThat(userToVerify.getLogin()).isEqualTo("@OTHER_LOGIN");
+        assertThat(userToVerify.getLogin()).isEqualTo("@other_login");
         assertThat(userToVerify.getFirstName()).isEqualTo("OTHER_FIRST_NAME");
         assertThat(userToVerify.getLastName()).isEqualTo("OTHER_LAST_NAME");
 

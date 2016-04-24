@@ -1,0 +1,14 @@
+Description:
+    Creates all required Docker deployment configuration for the selected applications.
+
+Example:
+    yo jhipster:docker-compose
+
+
+    This will create:
+        docker-compose.yml
+        jhipster-registry.yml
+        elk.yml
+        central-server-config/application.yml
+        log-monitoring/log-congig/logstash.config
+        log-monitoring/log-data/

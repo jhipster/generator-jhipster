@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "Ön <strong>elavult</strong> böngészőt használ. Kérjük <a href=\"http://browsehappy.com/?locale=hu\">frissítse böngészőjét</a> hogy javuljon a felhasználói élménye.",
         "menu": {
             "home": "Kezdőpont",
@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "Ha be akar <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
-                "register": "Nincs még hozzáférése? <a class=\"alert-link\" ui-sref=\"register\">Regisztráljon</a>"
+                "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Regisztráljon</a>"
             },
             "error": {
                 "dontmatch" : "A jelszó és a jelszó megerősítés nem egyezik meg!"

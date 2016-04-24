@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "<%= capitalizedBaseName %>",
         "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby poprawić wrażenia z użytkowania tej aplikacji.",
         "menu": {
             "home": "Strona domowa",
@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "Jeśli chcesz się <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
-                "register": "Nie masz jeszcze konta? <a class=\"alert-link\" ui-sref=\"register\">Zarejestruj się</a>"
+                "register": "Nie masz jeszcze konta? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Zarejestruj się</a>"
             },
             "error": {
                 "dontmatch": "Hasło i potwierdzenie nie zgadzają się!"

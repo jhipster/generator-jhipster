@@ -3,21 +3,21 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPlural %>",
-                "createLabel": "Egy új <%= entityClass %> létrehozása",
-                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClass %>t",
-                "search": "Search for <%= entityClass %>"
+                "createLabel": "Egy új <%= entityClassHumanized %> létrehozása",
+                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClassHumanized %>t",
+                "search": "Search for <%= entityClassHumanized %>"
             },
-            "created": "A new <%= entityClass %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClass %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClass %> is deleted with identifier {{ param }}",
+            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
+            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
+            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",
             "delete": {
-                "question": "Biztos benne, hogy törölni szeretné az <%= entityClass %>t {{ id }} azonosítóval?"
+                "question": "Biztos benne, hogy törölni szeretné az <%= entityClassHumanized %>t {{ id }} azonosítóval?"
             },
             "detail": {
-                "title": "<%= entityClass %>"
+                "title": "<%= entityClassHumanized %>"
             }<% for (idx in fields) { %>,
-            "<%=fields[idx].fieldName%>": "<%=fields[idx].fieldNameCapitalized%>"<% } %><% for (idx in relationships) { %>,
-            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameCapitalized %>"<% } %>
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
         }
     }
 }

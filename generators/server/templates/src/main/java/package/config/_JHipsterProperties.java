@@ -1,6 +1,8 @@
 package <%=packageName%>.config;
 
+<%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
+<%_ } _%>
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
@@ -364,6 +366,8 @@ public class JHipsterProperties {
 
         private String licenseUrl;
 
+        private Boolean enabled;
+
         public String getTitle() {
             return title;
         }
@@ -434,6 +438,14 @@ public class JHipsterProperties {
 
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
+        }
+
+        public Boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
         }
     }
 
@@ -613,8 +625,22 @@ public class JHipsterProperties {
 
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
-    }
 
+    <%_ if (applicationType == 'gateway' || applicationType == 'microservice') { _%>
+        private final SpectatorMetrics spectatorMetrics = new SpectatorMetrics();
+
+        public SpectatorMetrics getSpectatorMetrics() { return spectatorMetrics; }
+        
+        public static class SpectatorMetrics {
+
+            private boolean enabled = false;
+
+            public boolean isEnabled() { return enabled; }
+
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+        }
+    <%_ } _%>
+    }
     <%_ if (enableSocialSignIn) { _%>
     public static class Social {
 

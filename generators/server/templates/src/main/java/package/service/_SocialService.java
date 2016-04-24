@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -40,6 +41,15 @@ public class SocialService {
     @Inject
     private MailService mailService;
 
+    public void deleteUserSocialConnection(String login) {
+        ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(login);
+        connectionRepository.findAllConnections().keySet().stream()
+            .forEach(providerId -> {
+                connectionRepository.removeConnections(providerId);
+                log.debug("Delete user social connection providerId: {}", providerId);
+            });
+    }
+
     public void createSocialUser(Connection<?> connection, String langKey) {
         if (connection == null) {
             log.error("Cannot create social user because connection is null");
@@ -54,7 +64,7 @@ public class SocialService {
 
     private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId) {
         String email = userProfile.getEmail();
-        String userName = userProfile.getUsername();
+        String userName = userProfile.getUsername().toLowerCase(Locale.ENGLISH);
         if (StringUtils.isBlank(email) && StringUtils.isBlank(userName)) {
             log.error("Cannot create social user because email and login are null");
             throw new IllegalArgumentException("Email and login cannot be null");

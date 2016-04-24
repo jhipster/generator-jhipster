@@ -13,20 +13,7 @@ module.exports = function () {
     // redirect. This is required for some endpoints for proxy-middleware
     // to correctly handle them.
     var proxyRoutes = [
-        '/api',
-        '/health',
-        '/configprops',
-        '/env',
-        '/v2/api-docs',
-        '/swagger-ui',
-        '/configuration/security',
-        '/configuration/ui',
-        '/swagger-resources',
-        '/metrics',
-        '/websocket/tracker',
-        '/dump'<% if (authenticationType == 'oauth2') { %>,
-        '/oauth/token'<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>,
-        '/console/'<% } %>
+        '/'
     ];
 
     var requireTrailingSlash = proxyRoutes.filter(function (r) {

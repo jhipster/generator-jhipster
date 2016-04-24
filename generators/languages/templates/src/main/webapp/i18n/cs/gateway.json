@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Brána",
+        "routes": {
+            "title": "Stávající směrování",
+            "url": "URL",
+            "service": "služba",
+            "servers": "Dostupné servery",
+            "error": "Upozornění: žádný server není dostupný!"
+        },
+        "refresh": {
+            "button": "Aktualizovat"
+        }
+    }
+}

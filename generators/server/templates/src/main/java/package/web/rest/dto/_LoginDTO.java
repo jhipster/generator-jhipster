@@ -1,5 +1,6 @@
 package <%=packageName%>.web.rest.dto;
 
+import <%=packageName%>.config.Constants;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -9,13 +10,13 @@ import javax.validation.constraints.Size;
  */
 public class LoginDTO {
 
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = Constants.LOGIN_REGEX)
     @NotNull
     @Size(min = 1, max = 50)
     private String username;
 
     @NotNull
-    @Size(min = UserDTO.PASSWORD_MIN_LENGTH, max = UserDTO.PASSWORD_MAX_LENGTH)
+    @Size(min = ManagedUserDTO.PASSWORD_MIN_LENGTH, max = ManagedUserDTO.PASSWORD_MAX_LENGTH)
     private String password;
 
     private Boolean rememberMe;

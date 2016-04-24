@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$state', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
+    Auth.$inject = ['$rootScope', '$state', '$sessionStorage', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-    function Auth ($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
+    function Auth ($rootScope, $state, $sessionStorage, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
         var service = {
             activateAccount: activateAccount,
             authorize: authorize,
@@ -15,6 +15,9 @@
             createAccount: createAccount,
             login: login,
             logout: logout,
+            <%_ if (authenticationType == 'jwt') { _%>
+            loginWithToken: loginWithToken,
+            <%_ } _%>
             resetPasswordFinish: resetPasswordFinish,
             resetPasswordInit: resetPasswordInit,
             updateAccount: updateAccount
@@ -43,8 +46,17 @@
                 var isAuthenticated = Principal.isAuthenticated();
 
                 // an authenticated user can't access to login and register pages
-                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register')) {
+                if (isAuthenticated && $rootScope.toState.parent === 'account' && ($rootScope.toState.name === 'login' || $rootScope.toState.name === 'register'<% if (authenticationType == 'jwt') { %> || $rootScope.toState.name === 'social-auth'<% } %>)) {
                     $state.go('home');
+                }
+
+                // recover and clear previousState after external login redirect (e.g. oauth2)
+                if (isAuthenticated && !$rootScope.fromState.name && $sessionStorage.previousStateName) {
+                    var previousStateName = $sessionStorage.previousStateName;
+                    var previousStateParams = $sessionStorage.previousStateParams;
+                    delete $sessionStorage.previousStateName;
+                    delete $sessionStorage.previousStateParams;
+                    $state.go(previousStateName, previousStateParams);
                 }
 
                 if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
@@ -55,13 +67,13 @@
                     else {
                         // user is not authenticated. stow the state they wanted before you
                         // send them to the login service, so you can return them when you're done
-                        $rootScope.redirected = true;
-                        $rootScope.previousStateName = $rootScope.toState;
-                        $rootScope.previousStateNameParams = $rootScope.toStateParams;
+                        $sessionStorage.previousStateName = $rootScope.toState.name;
+                        $sessionStorage.previousStateParams = $rootScope.toStateParams;
 
                         // now, send them to the signin state so they can log in
-                        $state.go('accessdenied');
-                        LoginService.open();
+                        $state.go('accessdenied').then(function() {
+                            LoginService.open();
+                        });
                     }
                 }
             }
@@ -124,15 +136,19 @@
             return deferred.promise;
         }
 
+        <%_ if (authenticationType == 'jwt') { _%>
+        function loginWithToken(jwt, rememberMe) {
+            return AuthServerProvider.loginWithToken(jwt, rememberMe);
+        }
+        <%_ } _%>
+
         function logout () {
             AuthServerProvider.logout();
             Principal.authenticate(null);
 
-            // Reset state memory if not redirected
-            if(!$rootScope.redirected) {
-                $rootScope.previousStateName = undefined;
-                $rootScope.previousStateNameParams = undefined;
-            }
+            // Reset state memory
+            delete $sessionStorage.previousStateName;
+            delete $sessionStorage.previousStateParams;
         }
 
         function resetPasswordFinish (keyAndPassword, callback) {

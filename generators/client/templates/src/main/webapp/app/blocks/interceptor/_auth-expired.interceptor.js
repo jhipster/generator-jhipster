@@ -28,9 +28,9 @@
             return $q.reject(response);
         }
     }<% } %><% if (authenticationType === 'session') { %>
-    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document'];
+    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document', '$sessionStorage'];
 
-    function authExpiredInterceptor($rootScope, $q, $injector, $document) {
+    function authExpiredInterceptor($rootScope, $q, $injector, $document, $sessionStorage) {
         var service = {
             responseError: responseError
         };
@@ -40,15 +40,17 @@
         function responseError(response) {
             // If we have an unauthorized request we redirect to the login page
             // Don't do this check on the account API to avoid infinite loop
-            if (response.status === 401 && angular.isDefined(response.data.path) && response.data.path.indexOf('/api/account') === -1){
+            if (response.status === 401 && angular.isDefined(response.data.path) && response.data.path.indexOf('/api/account') === -1) {
                 var Auth = $injector.get('Auth');
                 var to = $rootScope.toState;
                 var params = $rootScope.toStateParams;
                 Auth.logout();
-                $rootScope.previousStateName = to;
-                $rootScope.previousStateNameParams = params;
-                var LoginPopupService = $injector.get('LoginService');
-                LoginPopupService.open();
+                if (to.name !== 'accessdenied') {
+                    $sessionStorage.previousStateName = to.name;
+                    $sessionStorage.previousStateParams = params;
+                }
+                var LoginService = $injector.get('LoginService');
+                LoginService.open();
             } else if (response.status === 403 && response.config.method !== 'GET' && getCSRF() === '') {
                 // If the CSRF token expired, then try to get a new CSRF token and retry the old request
                 var $http = $injector.get('$http');

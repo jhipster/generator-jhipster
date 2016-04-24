@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label class="control-label" for="login" translate="global.form.username">Username</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="{{'global.form.username.placeholder' | translate}}"
-                           ng-model="vm.registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
+                           ng-model="vm.registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.@A-Za-z0-9-]*$/" required>
                     <div ng-show="form.login.$dirty && form.login.$invalid">
                         <p class="help-block"
                                ng-show="form.login.$error.required" translate="register.messages.validate.login.required">
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <label class="control-label" for="password" translate="global.form.newpassword">New password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
-                           ng-model="vm.registerAccount.password" ng-minlength=5 ng-maxlength=50 required>
+                           ng-model="vm.registerAccount.password" ng-minlength=4 ng-maxlength=50 required>
                     <div ng-show="form.password.$dirty && form.password.$invalid">
                         <p class="help-block"
                                ng-show="form.password.$error.required" translate="global.messages.validate.newpassword.required">
@@ -87,7 +87,7 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.password.$error.minlength" translate="global.messages.validate.newpassword.minlength">
-                            Your password is required to be at least 5 characters.
+                            Your password is required to be at least 4 characters.
                         </p>
                         <p class="help-block"
                                ng-show="form.password.$error.maxlength" translate="global.messages.validate.newpassword.maxlength">
@@ -99,7 +99,7 @@
                 <div class="form-group">
                     <label class="control-label" for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
-                           ng-model="vm.confirmPassword" ng-minlength=5 ng-maxlength=50 required>
+                           ng-model="vm.confirmPassword" ng-minlength=4 ng-maxlength=50 required>
                     <div ng-show="form.confirmPassword.$dirty && form.confirmPassword.$invalid">
                         <p class="help-block"
                                ng-show="form.confirmPassword.$error.required" translate="global.messages.validate.confirmpassword.required">
@@ -107,7 +107,7 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.confirmPassword.$error.minlength" translate="global.messages.validate.confirmpassword.minlength">
-                            Your confirmation password is required to be at least 5 characters.
+                            Your confirmation password is required to be at least 4 characters.
                         </p>
                         <p class="help-block"
                                ng-show="form.confirmPassword.$error.maxlength" translate="global.messages.validate.confirmpassword.maxlength">
@@ -120,7 +120,7 @@
             </form>
             <p></p>
             <div class="alert alert-warning" translate="global.messages.info.authenticated" translate-compile>
-                If you want to <a class="alert-link" href="" ng-click="login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+                If you want to <a class="alert-link" href="" ng-click="vm.login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
             </div>
         </div>
         <%_ if (enableSocialSignIn) { _%>
@@ -130,6 +130,7 @@
             <jh-social ng-provider="facebook"></jh-social>
             <jh-social ng-provider="twitter"></jh-social>
             <!-- jhipster-needle-add-social-button -->
+        </div>
         <%_ } _%>
     </div>
 </div>

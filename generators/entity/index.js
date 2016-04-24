@@ -4,36 +4,11 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
-    _s = require('underscore.string'),
     shelljs = require('shelljs'),
     pluralize = require('pluralize'),
     scriptBase = require('../generator-base');
 
 /* constants used througout */
-const RESERVED_WORDS_JAVA = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSERT", "DEFAULT", "GOTO", "PACKAGE", "SYNCHRONIZED", "BOOLEAN", "DO", "IF", "PRIVATE", "THIS", "BREAK", "DOUBLE", "IMPLEMENTS", "PROTECTED", "THROW", "BYTE", "ELSE", "IMPORT", "PUBLIC", "THROWS", "CASE", "ENUM", "INSTANCEOF", "RETURN", "TRANSIENT", "CATCH", "EXTENDS", "INT", "SHORT", "TRY", "CHAR", "FINAL", "INTERFACE", "STATIC", "VOID", "CLASS", "FINALLY", "LONG", "STRICTFP", "VOLATILE", "CONST", "FLOAT", "NATIVE", "SUPER", "WHILE"];
-
-const RESERVED_WORDS_MYSQL = ["ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC", "ASENSITIVE", "BEFORE", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY", "CALL", "CASCADE", "CASE", "CHANGE", "CHAR", "CHARACTER", "CHECK", "COLLATE", "COLUMN", "CONDITION", "CONSTRAINT", "CONTINUE", "CONVERT", "CREATE", "CROSS", "CURRENT_DATE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "DATABASE", "DATABASES", "DAY_HOUR", "DAY_MICROSECOND", "DAY_MINUTE", "DAY_SECOND", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT", "DISTINCTROW", "DIV", "DOUBLE", "DROP", "DUAL", "EACH", "ELSE", "ELSEIF", "ENCLOSED", "ESCAPED", "EXISTS", "EXIT", "EXPLAIN", "FALSE", "FETCH", "FLOAT", "FLOAT4", "FLOAT8", "FOR", "FORCE", "FOREIGN", "FROM", "FULLTEXT", "GRANT", "GROUP", "HAVING", "HIGH_PRIORITY", "HOUR_MICROSECOND", "HOUR_MINUTE", "HOUR_SECOND", "IF", "IGNORE", "IN", "INDEX", "INFILE", "INNER", "INOUT", "INSENSITIVE", "INSERT", "INT", "INT1", "INT2", "INT3", "INT4", "INT8", "INTEGER", "INTERVAL", "INTO", "IS", "ITERATE", "JOIN", "KEY", "KEYS", "KILL", "LEADING", "LEAVE", "LEFT", "LIKE", "LIMIT", "LINEAR", "LINES", "LOAD", "LOCALTIME", "LOCALTIMESTAMP", "LOCK", "LONG", "LONGBLOB", "LONGTEXT", "LOOP", "LOW_PRIORITY", "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB", "MEDIUMINT", "MEDIUMTEXT", "MIDDLEINT", "MINUTE_MICROSECOND", "MINUTE_SECOND", "MOD", "MODIFIES", "NATURAL", "NOT", "NO_WRITE_TO_BINLOG", "NULL", "NUMERIC", "ON", "OPTIMIZE", "OPTION", "OPTIONALLY", "OR", "ORDER", "OUT", "OUTER", "OUTFILE", "PRECISION", "PRIMARY", "PROCEDURE", "PURGE", "RANGE", "READ", "READS", "READ_WRITE", "REAL", "REFERENCES", "REGEXP", "RELEASE", "RENAME", "REPEAT", "REPLACE", "REQUIRE", "RESIGNAL", "RESTRICT", "RETURN", "REVOKE", "RIGHT", "RLIKE", "SCHEMA", "SCHEMAS", "SECOND_MICROSECOND", "SELECT", "SENSITIVE", "SEPARATOR", "SET", "SHOW", "SIGNAL", "SMALLINT", "SPATIAL", "SPECIFIC", "SQL", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "SQL_BIG_RESULT", "SQL_CALC_FOUND_ROWS", "SQL_SMALL_RESULT", "SSL", "STARTING", "STRAIGHT_JOIN", "TABLE", "TERMINATED", "THEN", "TINYBLOB", "TINYINT", "TINYTEXT", "TO", "TRAILING", "TRIGGER", "TRUE", "UNDO", "UNION", "UNIQUE", "UNLOCK", "UNSIGNED", "UPDATE", "USAGE", "USE", "USING", "UTC_DATE", "UTC_TIME", "UTC_TIMESTAMP", "VALUES", "VARBINARY", "VARCHAR", "VARCHARACTER", "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL", "GENERAL", "IGNORE_SERVER_IDS", "MASTER_HEARTBEAT_PERIOD", "MAXVALUE", "RESIGNAL", "SIGNAL", "SLOW"];
-
-const RESERVED_WORDS_POSGRES = ["ALL", "ANALYSE", "ANALYZE", "AND", "ANY", "ARRAY", "AS", "ASC", "ASYMMETRIC", "AUTHORIZATION", "BINARY", "BOTH", "CASE", "CAST", "CHECK", "COLLATE", "COLLATION", "COLUMN", "CONCURRENTLY", "CONSTRAINT", "CREATE", "CROSS", "CURRENT_CATALOG", "CURRENT_DATE", "CURRENT_ROLE", "CURRENT_SCHEMA", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "DEFAULT", "DEFERRABLE", "DESC", "DISTINCT", "DO", "ELSE", "END", "EXCEPT", "FALSE", "FETCH", "FOR", "FOREIGN", "FROM", "FULL", "GRANT", "GROUP", "HAVING", "ILIKE", "IN", "INITIALLY", "INNER", "INTERSECT", "INTO", "IS", "ISNULL", "JOIN", "LATERAL", "LEADING", "LEFT", "LIKE", "LIMIT", "LOCALTIME", "LOCALTIMESTAMP", "NATURAL", "NOT", "NOTNULL", "NULL", "OFFSET", "ON", "ONLY", "OR", "ORDER", "OUTER", "OVERLAPS", "PLACING", "PRIMARY", "REFERENCES", "RETURNING", "RIGHT", "SELECT", "SESSION_USER", "SIMILAR", "SOME", "SYMMETRIC", "TABLE", "THEN", "TO", "TRAILING", "TRUE", "UNION", "UNIQUE", "USER", "USING", "VARIADIC", "VERBOSE", "WHEN", "WHERE", "WINDOW", "WITH"];
-
-const RESERVED_WORDS_CASSANDRA = ["ADD", "ALL", "ALTER", "AND", "ANY", "APPLY", "AS", "ASC", "ASCII", "AUTHORIZE", "BATCH", "BEGIN", "BIGINT", "BLOB", "BOOLEAN", "BY", "CLUSTERING", "COLUMNFAMILY", "COMPACT", "CONSISTENCY", "COUNT", "COUNTER", "CREATE", "DECIMAL", "DELETE", "DESC", "DOUBLE", "DROP", "EACH_QUORUM", "FLOAT", "FROM", "GRANT", "IN", "INDEX", "CUSTOM", "INSERT", "INT", "INTO", "KEY", "KEYSPACE", "LEVEL", "LIMIT", "LOCAL_ONE", "LOCAL_QUORUM", "MODIFY", "NORECURSIVE", "NOSUPERUSER", "OF", "ON", "ONE", "ORDER", "PASSWORD", "PERMISSION", "PERMISSIONS", "PRIMARY", "QUORUM", "REVOKE", "SCHEMA", "SELECT", "SET", "STORAGE", "SUPERUSER", "TABLE", "TEXT", "TIMESTAMP", "TIMEUUID", "THREE", "TOKEN", "TRUNCATE", "TTL", "TWO", "TYPE", "UPDATE", "USE", "USER", "USERS", "USING", "UUID", "VALUES", "VARCHAR", "VARINT", "WHERE", "WITH", "WRITETIME", "DISTINCT", "BYTE", "SMALLINT", "COMPLEX", "ENUM", "DATE", "INTERVAL", "MACADDR", "BITSTRING"];
-
-const RESERVED_WORDS_ORACLE = ["ACCESS", "ACCOUNT", "ACTIVATE", "ADD", "ADMIN", "ADVISE", "AFTER", "ALL", "ALL_ROWS", "ALLOCATE", "ALTER", "ANALYZE", "AND", "ANY", "ARCHIVE", "ARCHIVELOG", "ARRAY", "AS", "ASC", "AT", "AUDIT", "AUTHENTICATED", "AUTHORIZATION", "AUTOEXTEND", "AUTOMATIC", "BACKUP", "BECOME", "BEFORE", "BEGIN", "BETWEEN", "BFILE", "BITMAP", "BLOB", "BLOCK", "BODY", "BY", "CACHE", "CACHE_INSTANCES", "CANCEL", "CASCADE", "CAST", "CFILE", "CHAINED", "CHANGE", "CHAR", "CHAR_CS", "CHARACTER", "CHECK", "CHECKPOINT", "CHOOSE", "CHUNK", "CLEAR", "CLOB", "CLONE", "CLOSE", "CLOSE_CACHED_OPEN_CURSORS", "CLUSTER", "COALESCE", "COLUMN", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPATIBILITY", "COMPILE", "COMPLETE", "COMPOSITE_LIMIT", "COMPRESS", "COMPUTE", "CONNECT", "CONNECT_TIME", "CONSTRAINT", "CONSTRAINTS", "CONTENTS", "CONTINUE", "CONTROLFILE", "CONVERT", "COST", "CPU_PER_CALL", "CPU_PER_SESSION", "CREATE", "CURRENT", "CURRENT_SCHEMA", "CURREN_USER", "CURSOR", "CYCLE", " ", "DANGLING", "DATABASE", "DATAFILE", "DATAFILES", "DATAOBJNO", "DATE", "DBA", "DBHIGH", "DBLOW", "DBMAC", "DEALLOCATE", "DEBUG", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DEFERRABLE", "DEFERRED", "DEGREE", "DELETE", "DEREF", "DESC", "DIRECTORY", "DISABLE", "DISCONNECT", "DISMOUNT", "DISTINCT", "DISTRIBUTED", "DML", "DOUBLE", "DROP", "DUMP", "EACH", "ELSE", "ENABLE", "END", "ENFORCE", "ENTRY", "ESCAPE", "EXCEPT", "EXCEPTIONS", "EXCHANGE", "EXCLUDING", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXPIRE", "EXPLAIN", "EXTENT", "EXTENTS", "EXTERNALLY", "FAILED_LOGIN_ATTEMPTS", "FALSE", "FAST", "FILE", "FIRST_ROWS", "FLAGGER", "FLOAT", "FLOB", "FLUSH", "FOR", "FORCE", "FOREIGN", "FREELIST", "FREELISTS", "FROM", "FULL", "FUNCTION", "GLOBAL", "GLOBALLY", "GLOBAL_NAME", "GRANT", "GROUP", "GROUPS", "HASH", "HASHKEYS", "HAVING", "HEADER", "HEAP", "IDENTIFIED", "IDGENERATORS", "IDLE_TIME", "IF", "IMMEDIATE", "IN", "INCLUDING", "INCREMENT", "INDEX", "INDEXED", "INDEXES", "INDICATOR", "IND_PARTITION", "INITIAL", "INITIALLY", "INITRANS", "INSERT", "INSTANCE", "INSTANCES", "INSTEAD", "INT", "INTEGER", "INTERMEDIATE", "INTERSECT", "INTO", "IS", "ISOLATION", "ISOLATION_LEVEL", "KEEP", "KEY", "KILL", "LABEL", "LAYER", "LESS", "LEVEL", "LIBRARY", "LIKE", "LIMIT", "LINK", "LIST", "LOB", "LOCAL", "LOCK", "LOCKED", "LOG", "LOGFILE", "LOGGING", "LOGICAL_READS_PER_CALL", "LOGICAL_READS_PER_SESSION", "LONG", "MANAGE", "MASTER", "MAX", "MAXARCHLOGS", "MAXDATAFILES", "MAXEXTENTS", "MAXINSTANCES", "MAXLOGFILES", "MAXLOGHISTORY", "MAXLOGMEMBERS", "MAXSIZE", "MAXTRANS", "MAXVALUE", "MIN", "MEMBER", "MINIMUM", "MINEXTENTS", "MINUS", "MINVALUE", "MLSLABEL", "MLS_LABEL_FORMAT", "MODE", "MODIFY", "MOUNT", "MOVE", "MTS_DISPATCHERS", "MULTISET", "NATIONAL", "NCHAR", "NCHAR_CS", "NCLOB", "NEEDED", "NESTED", "NETWORK", "NEW", "NEXT", "NOARCHIVELOG", "NOAUDIT", "NOCACHE", "NOCOMPRESS", "NOCYCLE", "NOFORCE", "NOLOGGING", "NOMAXVALUE", "NOMINVALUE", "NONE", "NOORDER", "NOOVERRIDE", "NOPARALLEL", "NOPARALLEL", "NOREVERSE", "NORMAL", "NOSORT", "NOT", "NOTHING", "NOWAIT", "NULL", "NUMBER", "NUMERIC", "NVARCHAR2", "OBJECT", "OBJNO", "OBJNO_REUSE", "OF", "OFF", "OFFLINE", "OID", "OIDINDEX", "OLD", "ON", "ONLINE", "ONLY", "OPCODE", "OPEN", "OPTIMAL", "OPTIMIZER_GOAL", "OPTION", "OR", "ORDER", "ORGANIZATION", "OSLABEL", "OVERFLOW", "OWN", "PACKAGE", "PARALLEL", "PARTITION", "PASSWORD", "PASSWORD_GRACE_TIME", "PASSWORD_LIFE_TIME", "PASSWORD_LOCK_TIME", "PASSWORD_REUSE_MAX", "PASSWORD_REUSE_TIME", "PASSWORD_VERIFY_FUNCTION", "PCTFREE", "PCTINCREASE", "PCTTHRESHOLD", "PCTUSED", "PCTVERSION", "PERCENT", "PERMANENT", "PLAN", "PLSQL_DEBUG", "POST_TRANSACTION", "PRECISION", "PRESERVE", "PRIMARY", "PRIOR", "PRIVATE", "PRIVATE_SGA", "PRIVILEGE", "PRIVILEGES", "PROCEDURE", "PROFILE", "PUBLIC", "PURGE", "QUEUE", "QUOTA", "RANGE", "RAW", "RBA", "READ", "READUP", "REAL", "REBUILD", "RECOVER", "RECOVERABLE", "RECOVERY", "REF", "REFERENCES", "REFERENCING", "REFRESH", "RENAME", "REPLACE", "RESET", "RESETLOGS", "RESIZE", "RESOURCE", "RESTRICTED", "RETURN", "RETURNING", "REUSE", "REVERSE", "REVOKE", "ROLE", "ROLES", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWS", "RULE", "SAMPLE", "SAVEPOINT", "SB4", "SCAN_INSTANCES", "SCHEMA", "SCN", "SCOPE", "SD_ALL", "SD_INHIBIT", "SD_SHOW", "SEGMENT", "SEG_BLOCK", "SEG_FILE", "SELECT", "SEQUENCE", "SERIALIZABLE", "SESSION", "SESSION_CACHED_CURSORS", "SESSIONS_PER_USER", "SET", "SHARE", "SHARED", "SHARED_POOL", "SHRINK", "SIZE", "SKIP", "SKIP_UNUSABLE_INDEXES", "SMALLINT", "SNAPSHOT", "SOME", "SORT", "SPECIFICATION", "SPLIT", "SQL_TRACE", "STANDBY", "START", "STATEMENT_ID", "STATISTICS", "STOP", "STORAGE", "STORE", "STRUCTURE", "SUCCESSFUL", "SWITCH", "SYS_OP_ENFORCE_NOT_NULL$", "SYS_OP_NTCIMG$", "SYNONYM", "SYSDATE", "SYSDBA", "SYSOPER", "SYSTEM", "TABLE", "TABLES", "TABLESPACE", "TABLESPACE_NO", "TABNO", "TEMPORARY", "THAN", "THE", "THEN", "THREAD", "TIMESTAMP", "TIME", "TO", "TOPLEVEL", "TRACE", "TRACING", "TRANSACTION", "TRANSITIONAL", "TRIGGER", "TRIGGERS", "TRUE", "TRUNCATE", "TX", "TYPE", "UB2", "UBA", "UID", "UNARCHIVED", "UNDO", "UNION", "UNIQUE", "UNLIMITED", "UNLOCK", "UNRECOVERABLE", "UNTIL", "UNUSABLE", "UNUSED", "UPDATABLE", "UPDATE", "USAGE", "USE", "USER", "USING", "VALIDATE", "VALIDATION", "VALUE", "VALUES", "VARCHAR", "VARCHAR2", "VARYING", "VIEW", "WHEN", "WHENEVER", "WHERE", "WITH", "WITHOUT", "WORK", "WRITE", "WRITEDOWN", "WRITEUP", "XID", "YEAR", "ZONE"];
-
-const RESERVED_WORDS_MONGO = ["DOCUMENT"];
-
-const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
-
-// enum-specific vars
-var enums = [];
-
-var existingEnum = false;
-
-var fieldNamesUnderscored = ['id'];
-var fieldNameChoices = [], relNameChoices = []; // this variable will hold field and relationship names for question options during update
-var databaseType;
-var prodDatabaseType;
-
 const constants = require('../generator-constants'),
     INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
@@ -42,7 +17,23 @@ const constants = require('../generator-constants'),
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR,
-    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
+    RESERVED_WORDS_JAVA = constants.RESERVED_WORDS_JAVA,
+    RESERVED_WORDS_MYSQL = constants.RESERVED_WORDS_MYSQL,
+    RESERVED_WORDS_POSGRES = constants.RESERVED_WORDS_POSGRES,
+    RESERVED_WORDS_CASSANDRA = constants.RESERVED_WORDS_CASSANDRA,
+    RESERVED_WORDS_ORACLE = constants.RESERVED_WORDS_ORACLE,
+    RESERVED_WORDS_MONGO = constants.RESERVED_WORDS_MONGO,
+    SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
+
+// enum-specific vars
+var enums = [];
+
+var existingEnum = false;
+
+var fieldNamesUnderscored = ['id'];
+var fieldNameChoices = [], relNameChoices = []; // this variable will hold field and relationship names for question options during update
+var databaseType, prodDatabaseType;
 
 var EntityGenerator = generators.Base.extend({});
 
@@ -59,7 +50,7 @@ module.exports = EntityGenerator.extend({
             description: 'Entity name'
         });
         // remove extention if feeding json files
-        if (this.name != undefined) {
+        if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');
         }
 
@@ -84,15 +75,22 @@ module.exports = EntityGenerator.extend({
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
-            desc: 'Skip the server-side application generation',
+            desc: 'Skip the server-side code generation',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skip the client-side code generation',
             type: Boolean,
             defaults: false
         });
 
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
-        this.entityNameCapitalized = _s.capitalize(this.name);
-        this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
+        this.entityNameCapitalized = _.upperFirst(this.name);
+        this.entityTableName = _.snakeCase(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
@@ -119,11 +117,11 @@ module.exports = EntityGenerator.extend({
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
             // backward compatibility on testing frameworks
-            if (this.testFrameworks == null) {
+            if (this.testFrameworks === undefined) {
                 this.testFrameworks = ['gatling'];
             }
 
-            this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient');
+            this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
@@ -137,16 +135,22 @@ module.exports = EntityGenerator.extend({
             }
         },
 
+        validateDbExistence: function () {
+            if(this.databaseType === 'no') {
+                this.env.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
+            }
+        },
+
         validateEntityName: function () {
             databaseType = this.databaseType;
             prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
                 this.env.error(chalk.red('The entity name cannot contain special characters'));
-            } else if (this.name == '') {
+            } else if (this.name === '') {
                 this.env.error(chalk.red('The entity name cannot be empty'));
-            } else if (this.name.indexOf("Detail", this.name.length - "Detail".length) !== -1) {
+            } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
                 this.env.error(chalk.red('The entity name cannot end with \'Detail\''));
-            } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) != -1) {
+            } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) !== -1) {
                 this.env.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
             }
         },
@@ -156,19 +160,19 @@ module.exports = EntityGenerator.extend({
             prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
                 this.env.error(chalk.red('The table name cannot contain special characters'));
-            } else if (this.entityTableName == '') {
+            } else if (this.entityTableName === '') {
                 this.env.error(chalk.red('The table name cannot be empty'));
-            } else if (prodDatabaseType == 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.entityTableName.toUpperCase()) != -1) {
+            } else if (prodDatabaseType === 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.entityTableName.toUpperCase()) !== -1) {
                 this.env.error(chalk.red('The table name cannot contain a MySQL reserved keyword'));
-            } else if (prodDatabaseType == 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.entityTableName.toUpperCase()) != -1) {
+            } else if (prodDatabaseType === 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.entityTableName.toUpperCase()) !== -1) {
                 this.env.error(chalk.red('The table name cannot contain a PostgreSQL reserved keyword'));
-            } else if (prodDatabaseType == 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(this.entityTableName.toUpperCase()) != -1) {
+            } else if (prodDatabaseType === 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(this.entityTableName.toUpperCase()) !== -1) {
                 this.env.error(chalk.red('The table name cannot contain a Cassandra reserved keyword'));
-            } else if (prodDatabaseType == 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.entityTableName.toUpperCase()) != -1) {
+            } else if (prodDatabaseType === 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.entityTableName.toUpperCase()) !== -1) {
                 this.env.error(chalk.red('The table name cannot contain a Oracle reserved keyword'));
-            } else if (prodDatabaseType == 'oracle' && _s.underscored(this.entityTableName).length > 26) {
+            } else if (prodDatabaseType === 'oracle' && _.snakeCase(this.entityTableName).length > 26) {
                 this.env.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
-            } else if (prodDatabaseType == 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.entityTableName.toUpperCase()) != -1) {
+            } else if (prodDatabaseType === 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.entityTableName.toUpperCase()) !== -1) {
                 this.env.error(chalk.red('The table name cannot contain a MongoDB reserved keyword'));
             }
         },
@@ -207,9 +211,9 @@ module.exports = EntityGenerator.extend({
         this.service = this.fileData.service;
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
-        this.entityTableName = this.fileData.entityTableName || _s.underscored(this.name).toLowerCase();
+        this.entityTableName = this.fileData.entityTableName || _.snakeCase(this.name).toLowerCase();
         this.fields && this.fields.forEach(function (field) {
-            fieldNamesUnderscored.push(_s.underscored(field.fieldName));
+            fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
         }, this);
         this.relationships && this.relationships.forEach(function (rel) {
@@ -218,8 +222,9 @@ module.exports = EntityGenerator.extend({
         if (this.fileData.angularJSSuffix !== undefined){
             this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
         }
-        if (this.applicationType == 'gateway'){
+        if (this.applicationType === 'gateway'){
             this.microserviceName = this.fileData.microserviceName;
+            this.skipServer = !_.isUndefined(this.microserviceName);
             this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
     },
@@ -235,29 +240,29 @@ module.exports = EntityGenerator.extend({
             this.fields.forEach(function (field) {
                 var validationDetails = '';
                 var fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
-                if (fieldValidate == true) {
-                    if (field.fieldValidateRules.indexOf('required') != -1) {
+                if (fieldValidate === true) {
+                    if (field.fieldValidateRules.indexOf('required') !== -1) {
                         validationDetails = 'required ';
                     }
-                    if (field.fieldValidateRules.indexOf('minlength') != -1) {
+                    if (field.fieldValidateRules.indexOf('minlength') !== -1) {
                         validationDetails += 'minlength=\'' + field.fieldValidateRulesMinlength + '\' ';
                     }
-                    if (field.fieldValidateRules.indexOf('maxlength') != -1) {
+                    if (field.fieldValidateRules.indexOf('maxlength') !== -1) {
                         validationDetails += 'maxlength=\'' + field.fieldValidateRulesMaxlength + '\' ';
                     }
-                    if (field.fieldValidateRules.indexOf('pattern') != -1) {
+                    if (field.fieldValidateRules.indexOf('pattern') !== -1) {
                         validationDetails += 'pattern=\'' + field.fieldValidateRulesPattern + '\' ';
                     }
-                    if (field.fieldValidateRules.indexOf('min') != -1) {
+                    if (field.fieldValidateRules.indexOf('min') !== -1) {
                         validationDetails += 'min=\'' + field.fieldValidateRulesMin + '\' ';
                     }
-                    if (field.fieldValidateRules.indexOf('max') != -1) {
+                    if (field.fieldValidateRules.indexOf('max') !== -1) {
                         validationDetails += 'max=\'' + field.fieldValidateRulesMax + '\' ';
                     }
-                    if (field.fieldValidateRules.indexOf('minbytes') != -1) {
+                    if (field.fieldValidateRules.indexOf('minbytes') !== -1) {
                         validationDetails += 'minbytes=\'' + field.fieldValidateRulesMinbytes + '\' ';
                     }
-                    if (field.fieldValidateRules.indexOf('maxbytes') != -1) {
+                    if (field.fieldValidateRules.indexOf('maxbytes') !== -1) {
                         validationDetails += 'maxbytes=\'' + field.fieldValidateRulesMaxbytes + '\' ';
                     }
                 }
@@ -268,7 +273,7 @@ module.exports = EntityGenerator.extend({
         if (this.relationships.length > 0) {
             this.log(chalk.white('Relationships'));
             this.relationships.forEach(function (relationship) {
-                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _s.capitalize(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
+                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
             }, this);
             this.log();
         }
@@ -287,32 +292,32 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true;
+                    return response.fieldAdd === true;
                 },
                 type: 'input',
                 name: 'fieldName',
                 validate: function (input) {
                     if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                         return 'Your field name cannot contain special characters';
-                    } else if (input == '') {
+                    } else if (input === '') {
                         return 'Your field name cannot be empty';
-                    } else if (input.charAt(0) == input.charAt(0).toUpperCase()) {
+                    } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your field name cannot start with a upper case letter';
-                    } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                    } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                         return 'Your field name cannot use an already existing field name';
-                    } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
+                    } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your field name cannot contain a Java reserved keyword';
-                    } else if (prodDatabaseType == 'mysql' && RESERVED_WORDS_MYSQL.indexOf(input.toUpperCase()) != -1) {
+                    } else if (prodDatabaseType === 'mysql' && RESERVED_WORDS_MYSQL.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your field name cannot contain a MySQL reserved keyword';
-                    } else if (prodDatabaseType == 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(input.toUpperCase()) != -1) {
+                    } else if (prodDatabaseType === 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your field name cannot contain a PostgreSQL reserved keyword';
-                    } else if (prodDatabaseType == 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(input.toUpperCase()) != -1) {
+                    } else if (prodDatabaseType === 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your field name cannot contain a Cassandra reserved keyword';
-                    } else if (prodDatabaseType == 'oracle' && RESERVED_WORDS_ORACLE.indexOf(input.toUpperCase()) != -1) {
+                    } else if (prodDatabaseType === 'oracle' && RESERVED_WORDS_ORACLE.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your field name cannot contain a Oracle reserved keyword';
-                    } else if (prodDatabaseType == 'oracle' && input.length > 30) {
+                    } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                         return 'The field name cannot be of more than 30 characters';
-                    } else if (prodDatabaseType == 'mongodb' && RESERVED_WORDS_MONGO.indexOf(input.toUpperCase()) != -1) {
+                    } else if (prodDatabaseType === 'mongodb' && RESERVED_WORDS_MONGO.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your field name cannot contain a MongoDB reserved keyword';
                     }
                     return true;
@@ -321,7 +326,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb');
+                    return response.fieldAdd === true && (databaseType === 'sql' || databaseType === 'mongodb');
                 },
                 type: 'list',
                 name: 'fieldType',
@@ -376,7 +381,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    if (response.fieldType == 'enum') {
+                    if (response.fieldType === 'enum') {
                         response.fieldIsEnum = true;
                         return true;
                     } else {
@@ -387,10 +392,10 @@ module.exports = EntityGenerator.extend({
                 type: 'input',
                 name: 'fieldType',
                 validate: function (input) {
-                    if (input == '') {
+                    if (input === '') {
                         return 'Your class name cannot be empty.';
                     }
-                    if (enums.indexOf(input) != -1) {
+                    if (enums.indexOf(input) !== -1) {
                         existingEnum = true;
                     } else {
                         enums.push(input);
@@ -406,11 +411,11 @@ module.exports = EntityGenerator.extend({
                 type: 'input',
                 name: 'fieldValues',
                 validate: function (input) {
-                    if (input == '' && existingEnum) {
+                    if (input === '' && existingEnum) {
                         existingEnum = false;
                         return true;
                     }
-                    if (input == '') {
+                    if (input === '') {
                         return 'You must specify values for your enumeration';
                     }
                     if (!/^[A-Za-z0-9_,\s]*$/.test(input)) {
@@ -424,7 +429,7 @@ module.exports = EntityGenerator.extend({
                         if (/^[0-9].*/.test(enums[i])) {
                             return 'Enum value "' + enums[i] + '" cannot start with a number';
                         }
-                        if (enums[i] == '') {
+                        if (enums[i] === '') {
                             return 'Enum value cannot be empty (did you accidently type "," twice in a row?)';
                         }
                     }
@@ -440,7 +445,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true && databaseType == 'cassandra';
+                    return response.fieldAdd === true && databaseType === 'cassandra';
                 },
                 type: 'list',
                 name: 'fieldType',
@@ -487,8 +492,8 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldType == 'byte[]';
+                    return response.fieldAdd === true &&
+                        response.fieldType === 'byte[]';
                 },
                 type: 'list',
                 name: 'fieldTypeBlobContent',
@@ -511,7 +516,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true;
+                    return response.fieldAdd === true;
                 },
                 type: 'confirm',
                 name: 'fieldValidate',
@@ -520,9 +525,9 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldType == 'String';
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldType === 'String';
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -549,14 +554,14 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        (response.fieldType == 'Integer' ||
-                        response.fieldType == 'Long' ||
-                        response.fieldType == 'Float' ||
-                        response.fieldType == 'Double' ||
-                        response.fieldType == 'BigDecimal' ||
-                        response.fieldTypeBlobContent == 'text');
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        (response.fieldType === 'Integer' ||
+                        response.fieldType === 'Long' ||
+                        response.fieldType === 'Float' ||
+                        response.fieldType === 'Double' ||
+                        response.fieldType === 'BigDecimal' ||
+                        response.fieldTypeBlobContent === 'text');
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -579,10 +584,10 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldType == 'byte[]' &&
-                        response.fieldTypeBlobContent != 'text';
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldType === 'byte[]' &&
+                        response.fieldTypeBlobContent !== 'text';
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -605,14 +610,14 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        (response.fieldType == 'LocalDate' ||
-                        response.fieldType == 'ZonedDateTime' ||
-                        response.fieldType == 'UUID' ||
-                        response.fieldType == 'Date' ||
-                        response.fieldType == 'Boolean' ||
-                        response.fieldIsEnum == true);
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        (response.fieldType === 'LocalDate' ||
+                        response.fieldType === 'ZonedDateTime' ||
+                        response.fieldType === 'UUID' ||
+                        response.fieldType === 'Date' ||
+                        response.fieldType === 'Boolean' ||
+                        response.fieldIsEnum === true);
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -627,9 +632,9 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldValidateRules.indexOf('minlength') != -1;
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('minlength') !== -1;
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMinlength',
@@ -642,9 +647,9 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldValidateRules.indexOf('maxlength') != -1;
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('maxlength') !== -1;
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMaxlength',
@@ -657,9 +662,9 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldValidateRules.indexOf('pattern') != -1;
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('pattern') !== -1;
                 },
                 type: 'input',
                 name: 'fieldValidateRulesPattern',
@@ -668,15 +673,15 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldValidateRules.indexOf('min') != -1 &&
-                        (response.fieldType == 'Integer' ||
-                        response.fieldType == 'Long' ||
-                        response.fieldType == 'Float' ||
-                        response.fieldType == 'Double' ||
-                        response.fieldTypeBlobContent == 'text' ||
-                        response.fieldType == 'BigDecimal');
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('min') !== -1 &&
+                        (response.fieldType === 'Integer' ||
+                        response.fieldType === 'Long' ||
+                        response.fieldType === 'Float' ||
+                        response.fieldType === 'Double' ||
+                        response.fieldTypeBlobContent === 'text' ||
+                        response.fieldType === 'BigDecimal');
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMin',
@@ -689,15 +694,15 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldValidateRules.indexOf('max') != -1 &&
-                        (response.fieldType == 'Integer' ||
-                        response.fieldType == 'Long' ||
-                        response.fieldType == 'Float' ||
-                        response.fieldType == 'Double' ||
-                        response.fieldTypeBlobContent == 'text' ||
-                        response.fieldType == 'BigDecimal');
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('max') !== -1 &&
+                        (response.fieldType === 'Integer' ||
+                        response.fieldType === 'Long' ||
+                        response.fieldType === 'Float' ||
+                        response.fieldType === 'Double' ||
+                        response.fieldTypeBlobContent === 'text' ||
+                        response.fieldType === 'BigDecimal');
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMax',
@@ -710,11 +715,11 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldValidateRules.indexOf('minbytes') != -1 &&
-                        response.fieldType == 'byte[]' &&
-                        response.fieldTypeBlobContent != 'text';
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('minbytes') !== -1 &&
+                        response.fieldType === 'byte[]' &&
+                        response.fieldTypeBlobContent !== 'text';
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMinbytes',
@@ -727,11 +732,11 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldAdd == true &&
-                        response.fieldValidate == true &&
-                        response.fieldValidateRules.indexOf('maxbytes') != -1 &&
-                        response.fieldType == 'byte[]' &&
-                        response.fieldTypeBlobContent != 'text';
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('maxbytes') !== -1 &&
+                        response.fieldType === 'byte[]' &&
+                        response.fieldTypeBlobContent !== 'text';
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMaxbytes',
@@ -746,7 +751,7 @@ module.exports = EntityGenerator.extend({
         this.prompt(prompts, function (props) {
             if (props.fieldAdd) {
                 if (props.fieldIsEnum) {
-                    props.fieldType = _s.capitalize(props.fieldType);
+                    props.fieldType = _.upperFirst(props.fieldType);
                 }
 
                 var field = {
@@ -765,7 +770,7 @@ module.exports = EntityGenerator.extend({
                     fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes
                 };
 
-                fieldNamesUnderscored.push(_s.underscored(props.fieldName));
+                fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
                 this.fields.push(field);
             }
             this._logFieldsAndRelationships();
@@ -790,7 +795,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.fieldsToRemove != 'none';
+                    return response.fieldsToRemove !== 'none';
                 },
                 type: 'confirm',
                 name: 'confirmRemove',
@@ -805,8 +810,8 @@ module.exports = EntityGenerator.extend({
                 for (i = this.fields.length - 1; i >= 0; i -= 1) {
                     var field = this.fields[i];
                     if (props.fieldsToRemove.filter(function (val) {
-                            return val == field.fieldName;
-                        }).length > 0) {
+                        return val === field.fieldName;
+                    }).length > 0) {
                         this.fields.splice(i, 1);
                     }
                 }
@@ -819,7 +824,6 @@ module.exports = EntityGenerator.extend({
      * ask question for a relationship creation
      */
     _askForRelationship: function (cb) {
-        var packageFolder = this.packageFolder;
         var name = this.name;
         this.log(chalk.green('\nGenerating relationships to other entities\n'));
         var prompts = [
@@ -831,16 +835,16 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.relationshipAdd == true;
+                    return response.relationshipAdd === true;
                 },
                 type: 'input',
                 name: 'otherEntityName',
                 validate: function (input) {
                     if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                         return 'Your other entity name cannot contain special characters';
-                    } else if (input == '') {
+                    } else if (input === '') {
                         return 'Your other entity name cannot be empty';
-                    } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
+                    } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your other entity name cannot contain a Java reserved keyword';
                     }
                     return true;
@@ -849,30 +853,30 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.relationshipAdd == true;
+                    return response.relationshipAdd === true;
                 },
                 type: 'input',
                 name: 'relationshipName',
                 validate: function (input) {
                     if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                         return 'Your relationship cannot contain special characters';
-                    } else if (input == '') {
+                    } else if (input === '') {
                         return 'Your relationship cannot be empty';
-                    } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                    } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                         return 'Your relationship cannot use an already existing field name';
-                    } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
+                    } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) !== -1) {
                         return 'Your relationship cannot contain a Java reserved keyword';
                     }
                     return true;
                 },
                 message: 'What is the name of the relationship?',
                 default: function (response) {
-                    return _s.decapitalize(response.otherEntityName);
+                    return _.lowerFirst(response.otherEntityName);
                 }
             },
             {
                 when: function (response) {
-                    return response.relationshipAdd == true;
+                    return response.relationshipAdd === true;
                 },
                 type: 'list',
                 name: 'relationshipType',
@@ -899,16 +903,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
-                },
-                type: 'confirm',
-                name: 'noOtherEntity',
-                message: 'WARNING! You are trying to generate a many-to-one relationship on an entity that does not exist. This will probably fail, as you will need to create a foreign key on a table that does not exist. We advise you to create the other side of this relationship first (do the one-to-many before the many-to-one relationship). Are you sure you want to continue?',
-                default: false
-            },
-            {
-                when: function (response) {
-                    return (response.relationshipAdd == true && (response.relationshipType == 'many-to-many' || response.relationshipType == 'one-to-one'));
+                    return (response.relationshipAdd === true && (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'));
                 },
                 type: 'confirm',
                 name: 'ownerSide',
@@ -917,60 +912,48 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd == true && (response.relationshipType == 'one-to-many' ||
-                    (response.relationshipType == 'many-to-many' && response.ownerSide == false) ||
-                    (response.relationshipType == 'one-to-one' && response.otherEntityName.toLowerCase() != "user")));
+                    return (response.relationshipAdd === true && (response.relationshipType === 'one-to-many' ||
+                    (response.relationshipType === 'many-to-many' && response.ownerSide === false) ||
+                    (response.relationshipType === 'one-to-one' && response.otherEntityName.toLowerCase() !== 'user')));
                 },
                 type: 'input',
                 name: 'otherEntityRelationshipName',
                 message: 'What is the name of this relationship in the other entity?',
                 default: function (response) {
-                    return _s.decapitalize(name);
+                    return _.lowerFirst(name);
                 }
             },
             {
                 when: function (response) {
-                    return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
-                },
-                type: 'confirm',
-                name: 'noOtherEntity2',
-                message: 'WARNING! You have selected that this entity is the owner of a relationship on another entity, that does not exist yet. This will probably fail, as you will need to create a foreign key on a table that does not exist. We advise you to create the other side of this relationship first (do the non-owning side before the owning side). Are you sure you want to continue?',
-                default: false
-            },
-            {
-                when: function (response) {
-                    return (!(response.noOtherEntity == false || response.noOtherEntity2 == false) && response.relationshipAdd == true && (response.relationshipType == 'many-to-one' || (response.relationshipType == 'many-to-many' && response.ownerSide == true) || (response.relationshipType == 'one-to-one' && response.ownerSide == true)));
+                    return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
                 },
                 type: 'input',
                 name: 'otherEntityField',
                 message: function (response) {
-                    return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?'
+                    return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?';
                 },
                 default: 'id'
             }
         ];
         this.prompt(prompts, function (props) {
-            if (props.noOtherEntity == false || props.noOtherEntity2 == false) {
-                this.log(chalk.red('\nGeneration aborted, as requested by the user.\n'));
-                return;
-            }
+
             if (props.relationshipAdd) {
                 var relationship = {
                     relationshipName: props.relationshipName,
-                    otherEntityName: _s.decapitalize(props.otherEntityName),
+                    otherEntityName: _.lowerFirst(props.otherEntityName),
                     relationshipType: props.relationshipType,
                     otherEntityField: props.otherEntityField,
                     ownerSide: props.ownerSide,
                     otherEntityRelationshipName: props.otherEntityRelationshipName
-                }
-                fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
+                };
+                fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
                 this.relationships.push(relationship);
             }
             this._logFieldsAndRelationships();
             if (props.relationshipAdd) {
                 this._askForRelationship(cb);
             } else {
-                this.log('\n')
+                this.log('\n');
                 cb();
             }
         }.bind(this));
@@ -989,7 +972,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.relsToRemove != 'none';
+                    return response.relsToRemove !== 'none';
                 },
                 type: 'confirm',
                 name: 'confirmRemove',
@@ -1004,8 +987,8 @@ module.exports = EntityGenerator.extend({
                 for (i = this.relationships.length - 1; i >= 0; i -= 1) {
                     var rel = this.relationships[i];
                     if (props.relsToRemove.filter(function (val) {
-                            return val == rel.relationshipName + ':' + rel.relationshipType;
-                        }).length > 0) {
+                        return val === rel.relationshipName + ':' + rel.relationshipType;
+                    }).length > 0) {
                         this.relationships.splice(i, 1);
                     }
                 }
@@ -1020,7 +1003,7 @@ module.exports = EntityGenerator.extend({
     prompting: {
         /* pre entity hook needs to be written here */
         askForMicroserviceJson: function(){
-            if (this.applicationType != 'gateway' || this.useConfigurationFile) {
+            if (this.applicationType !== 'gateway' || this.useConfigurationFile) {
                 return;
             }
 
@@ -1035,7 +1018,7 @@ module.exports = EntityGenerator.extend({
                 },
                 {
                     when: function(response) {
-                        return response.useMicroserviceJson == true;
+                        return response.useMicroserviceJson === true;
                     },
                     type: 'input',
                     name: 'microservicePath',
@@ -1068,7 +1051,6 @@ module.exports = EntityGenerator.extend({
                     }
                     this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
                     this.useConfigurationFile = true;
-                    this.skipServer = true;
                     this._loadJson();
                 }
                 cb();
@@ -1104,14 +1086,14 @@ module.exports = EntityGenerator.extend({
                         {
                             value: 'none',
                             name: 'No, exit'
-                        },
+                        }
                     ],
                     default: 0
                 }
             ];
             this.prompt(prompts, function (props) {
                 this.updateEntity = props.updateEntity;
-                if (this.updateEntity == 'none') {
+                if (this.updateEntity === 'none') {
                     this.env.error(chalk.green('Aborting entity update, no changes were made.'));
                 }
                 cb();
@@ -1121,11 +1103,11 @@ module.exports = EntityGenerator.extend({
 
         askForFields: function() {
             // don't prompt if data is imported from a file
-            if (this.useConfigurationFile && this.updateEntity != 'add') {
+            if (this.useConfigurationFile && this.updateEntity !== 'add') {
                 return;
             }
 
-            if (this.updateEntity == 'add') {
+            if (this.updateEntity === 'add') {
                 this._logFieldsAndRelationships();
             }
 
@@ -1136,7 +1118,7 @@ module.exports = EntityGenerator.extend({
 
         askForFieldsToRemove: function () {
             // prompt only if data is imported from a file
-            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+            if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
                 return;
             }
             var cb = this.async();
@@ -1146,10 +1128,10 @@ module.exports = EntityGenerator.extend({
 
         askForRelationships: function () {
             // don't prompt if data is imported from a file
-            if (this.useConfigurationFile && this.updateEntity != 'add') {
+            if (this.useConfigurationFile && this.updateEntity !== 'add') {
                 return;
             }
-            if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
+            if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
                 return;
             }
 
@@ -1160,10 +1142,10 @@ module.exports = EntityGenerator.extend({
 
         askForRelationsToRemove: function () {
             // prompt only if data is imported from a file
-            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+            if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
                 return;
             }
-            if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
+            if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
                 return;
             }
 
@@ -1241,7 +1223,7 @@ module.exports = EntityGenerator.extend({
             if (this.useConfigurationFile) {
                 return;
             }
-            if (this.databaseType == 'cassandra') {
+            if (this.databaseType === 'cassandra') {
                 return;
             }
             var cb = this.async();
@@ -1330,7 +1312,7 @@ module.exports = EntityGenerator.extend({
             }
 
             // Validate entity json relationship content
-            for (var idx in this.relationships) {
+            for (idx in this.relationships) {
                 var relationship = this.relationships[idx];
                 if (_.isUndefined(relationship.relationshipName)) {
                     relationship.relationshipName = relationship.otherEntityName;
@@ -1342,13 +1324,13 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityRelationshipName)
-                    && (relationship.relationshipType == 'one-to-many' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == false) || (relationship.relationshipType == 'one-to-one'))) {
-                    relationship.otherEntityRelationshipName = _s.decapitalize(this.name);
-                    this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _s.decapitalize(this.name) + ' as fallback'));
+                    && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                    relationship.otherEntityRelationshipName = _.lowerFirst(this.name);
+                    this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _.lowerFirst(this.name) + ' as fallback'));
                 }
 
                 if (_.isUndefined(relationship.otherEntityField)
-                    && (relationship.relationshipType == 'many-to-one' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) || (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true))) {
+                    && (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true) || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))) {
                     this.log(chalk.yellow('WARNING otherEntityField is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using id as fallback'));
                     relationship.otherEntityField = 'id';
                 }
@@ -1358,14 +1340,14 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.ownerSide)
-                    && (relationship.relationshipType == 'one-to-one' || relationship.relationshipType == 'many-to-many')) {
+                    && (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')) {
                     this.env.error(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
             }
 
             // Validate root entity json content
             if (_.isUndefined(this.changelogDate)
-                && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
+                && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 var currentDate = this.dateFormatForLiquibase();
                 this.log(chalk.yellow('WARNING changelogDate is missing in .jhipster/' + this.name + '.json, using ' + currentDate + ' as fallback'));
                 this.changelogDate = currentDate;
@@ -1379,7 +1361,7 @@ module.exports = EntityGenerator.extend({
                 this.service = 'no';
             }
             if (_.isUndefined(this.pagination)) {
-                if (databaseType == 'sql' || databaseType == 'mongodb') {
+                if (databaseType === 'sql' || databaseType === 'mongodb') {
                     this.log(chalk.yellow('WARNING pagination is missing in .jhipster/' + this.name + '.json, using no as fallback'));
                     this.pagination = 'no';
                 } else {
@@ -1390,11 +1372,11 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEntityJson: function () {
-            if (this.useConfigurationFile && this.updateEntity == 'regenerate') {
+            if (this.useConfigurationFile && this.updateEntity === 'regenerate') {
                 return; //do not update if regenerating entity
             }
             // store informations in a file for further use.
-            if (!this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
+            if (!this.useConfigurationFile && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 this.changelogDate = this.dateFormatForLiquibase();
             }
             this.data = {};
@@ -1404,14 +1386,14 @@ module.exports = EntityGenerator.extend({
             this.data.dto = this.dto;
             this.data.service = this.service;
             this.data.entityTableName = this.entityTableName;
-            if (databaseType == 'sql' || databaseType == 'mongodb') {
+            if (databaseType === 'sql' || databaseType === 'mongodb') {
                 this.data.pagination = this.pagination;
             }
             this.data.javadoc = this.javadoc;
             if (this.entityAngularJSSuffix) {
                 this.data.angularJSSuffix = this.entityAngularJSSuffix;
             }
-            if (this.applicationType == 'microservice'){
+            if (this.applicationType === 'microservice'){
                 this.data.microserviceName = this.baseName;
                 this.data.searchEngine = this.searchEngine;
             }
@@ -1419,29 +1401,68 @@ module.exports = EntityGenerator.extend({
         },
 
         loadInMemoryData: function () {
+            var entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
+            var entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
+
+            this.entityClass = this.entityNameCapitalized;
+            this.entityClassHumanized = _.startCase(this.entityNameCapitalized);
+            this.entityClassPlural = pluralize(this.entityClass);
+            this.entityClassPluralHumanized = _.startCase(this.entityClassPlural);
+            this.entityInstance = _.lowerFirst(this.name);
+            this.entityInstancePlural = pluralize(this.entityInstance);
+            this.entityApiUrl = entityNamePluralizedAndSpinalCased;
+            this.entityFolderName = entityNameSpinalCased;
+            this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
+            this.entityServiceFileName = entityNameSpinalCased;
+            this.entityAngularJSName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
+            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityTranslationKey = this.entityInstance;
+            this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
+
+            this.fieldsContainZonedDateTime = false;
+            this.fieldsContainLocalDate = false;
+            this.fieldsContainDate = false;
+            this.fieldsContainBigDecimal = false;
+            this.fieldsContainBlob = false;
+            this.validation = false;
+            this.fieldsContainOwnerManyToMany = false;
+            this.fieldsContainNoOwnerOneToOne = false;
+            this.fieldsContainOwnerOneToOne = false;
+            this.fieldsContainOneToMany = false;
+            this.fieldsContainManyToOne = false;
+            this.differentTypes = [this.entityClass];
+            if (!this.relationships) {
+                this.relationships = [];
+            }
 
             // Load in-memory data for fields
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-
+            this.fields && this.fields.forEach( function (field) {
                 // Migration from JodaTime to Java Time
-                if (field.fieldType == 'DateTime') {
+                if (field.fieldType === 'DateTime') {
                     field.fieldType = 'ZonedDateTime';
                 }
+                var fieldType = field.fieldType;
+
                 var nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType);
-                if ((databaseType == 'sql' || databaseType == 'mongodb') && !nonEnumType) {
+                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], fieldType);
+                if ((databaseType === 'sql' || databaseType === 'mongodb') && !nonEnumType) {
                     field.fieldIsEnum = true;
                 } else {
                     field.fieldIsEnum = false;
                 }
 
                 if (_.isUndefined(field.fieldNameCapitalized)) {
-                    field.fieldNameCapitalized = _s.capitalize(field.fieldName);
+                    field.fieldNameCapitalized = _.upperFirst(field.fieldName);
                 }
 
                 if (_.isUndefined(field.fieldNameUnderscored)) {
-                    field.fieldNameUnderscored = _s.underscored(field.fieldName);
+                    field.fieldNameUnderscored = _.snakeCase(field.fieldName);
+                }
+
+                if (_.isUndefined(field.fieldNameHumanized)) {
+                    field.fieldNameHumanized = _.startCase(field.fieldName);
                 }
 
                 if (_.isUndefined(field.fieldInJavaBeanMethod)) {
@@ -1450,13 +1471,13 @@ module.exports = EntityGenerator.extend({
                     if (field.fieldName.length > 1) {
                         var firstLetter = field.fieldName.charAt(0);
                         var secondLetter = field.fieldName.charAt(1);
-                        if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
+                        if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
                             field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
                         } else {
-                            field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
+                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                         }
                     } else {
-                        field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
+                        field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                     }
                 }
 
@@ -1465,145 +1486,96 @@ module.exports = EntityGenerator.extend({
                 } else {
                     field.fieldValidate = false;
                 }
-            }
+
+                if (fieldType === 'ZonedDateTime') {
+                    this.fieldsContainZonedDateTime = true;
+                } else if (fieldType === 'LocalDate') {
+                    this.fieldsContainLocalDate = true;
+                } else if (fieldType === 'Date') {
+                    this.fieldsContainDate = true;
+                } else if (fieldType === 'BigDecimal') {
+                    this.fieldsContainBigDecimal = true;
+                } else if (fieldType === 'byte[]') {
+                    this.fieldsContainBlob = true;
+                }
+
+                if (field.fieldValidate) {
+                    this.validation = true;
+                }
+            }, this);
 
             // Load in-memory data for relationships
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-
+            this.relationships && this.relationships.forEach( function (relationship) {
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
-                    relationship.relationshipNameCapitalized = _s.capitalize(relationship.relationshipName);
+                    relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
+                }
+
+                if (_.isUndefined(relationship.relationshipNameCapitalizedPlural)) {
+                    relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
+                }
+
+                if (_.isUndefined(relationship.relationshipNameHumanized)) {
+                    relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
+                }
+
+                if (_.isUndefined(relationship.relationshipNamePlural)) {
+                    relationship.relationshipNamePlural = pluralize(relationship.relationshipName);
                 }
 
                 if (_.isUndefined(relationship.relationshipFieldName)) {
-                    relationship.relationshipFieldName = _s.decapitalize(relationship.relationshipName);
+                    relationship.relationshipFieldName = _.lowerFirst(relationship.relationshipName);
+                }
+
+                if (_.isUndefined(relationship.relationshipFieldNamePlural)) {
+                    relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
+                }
+
+                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                    relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
+                }
+
+                if (_.isUndefined(relationship.otherEntityNamePlural)) {
+                    relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                 }
 
                 if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
-                    relationship.otherEntityNameCapitalized = _s.capitalize(relationship.otherEntityName);
+                    relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
+                }
+
+                if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {
+                    relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
                 }
 
                 if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
-                    relationship.otherEntityFieldCapitalized = _s.capitalize(relationship.otherEntityField);
+                    relationship.otherEntityFieldCapitalized = _.upperFirst(relationship.otherEntityField);
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
-                    relationship.otherEntityStateName = _s.trim(_s.dasherize(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
+                    relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
                 }
-            }
-
-            // Load in-memory data for root
-            this.fieldsContainOwnerManyToMany = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) {
+                // Load in-memory data for root
+                if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
                     this.fieldsContainOwnerManyToMany = true;
-                }
-            }
-            this.fieldsContainNoOwnerOneToOne = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == false) {
+                } else if (relationship.relationshipType === 'one-to-one' && !relationship.ownerSide) {
                     this.fieldsContainNoOwnerOneToOne = true;
-                }
-            }
-            this.fieldsContainOwnerOneToOne = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true) {
+                } else if (relationship.relationshipType === 'one-to-one' && relationship.ownerSide) {
                     this.fieldsContainOwnerOneToOne = true;
-                }
-            }
-            this.fieldsContainOneToMany = false;
-            for (var idx in this.relationships) {
-                var relationship = this.relationships[idx];
-                if (relationship.relationshipType == 'one-to-many') {
+                } else if (relationship.relationshipType === 'one-to-many') {
                     this.fieldsContainOneToMany = true;
+                } else if (relationship.relationshipType === 'many-to-one') {
+                    this.fieldsContainManyToOne = true;
                 }
-            }
-            this.fieldsContainZonedDateTime = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'ZonedDateTime') {
-                    this.fieldsContainZonedDateTime = true;
+
+                var entityType = relationship.otherEntityNameCapitalized;
+                if (this.differentTypes.indexOf(entityType) === -1) {
+                    this.differentTypes.push(entityType);
                 }
-            }
-            this.fieldsContainLocalDate = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'LocalDate') {
-                    this.fieldsContainLocalDate = true;
-                }
-            }
-            this.fieldsContainDate = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'Date') {
-                    this.fieldsContainDate = true;
-                }
-            }
-            this.fieldsContainBigDecimal = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'BigDecimal') {
-                    this.fieldsContainBigDecimal = true;
-                }
-            }
-            this.fieldsContainBlob = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldType == 'byte[]') {
-                    this.fieldsContainBlob = true;
-                }
-            }
-            this.validation = false;
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldValidate == true) {
-                    this.validation = true;
-                }
-            }
+            }, this);
+
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
                 this.pkType = 'String';
             } else {
                 this.pkType = 'Long';
-            }
-
-            var entityNameSpinalCased = _s.dasherize(_s.decapitalize(this.name));
-            var entityNamePluralizedAndSpinalCased = _s.dasherize(_s.decapitalize(pluralize(this.name)));
-
-            this.entityClass = this.entityNameCapitalized;
-            this.entityClassPlural = pluralize(this.entityClass);
-            this.entityInstance = _s.decapitalize(this.name);
-            this.entityInstancePlural = pluralize(this.entityInstance);
-            this.entityApiUrl = entityNamePluralizedAndSpinalCased;
-
-            this.entityFolderName = entityNameSpinalCased;
-            this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
-            this.entityServiceFileName = entityNameSpinalCased;
-            this.entityAngularJSName = this.entityClass + _s.camelize(this.entityAngularJSSuffix);
-            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
-            if (databaseType == 'sql') {
-                this.entityUrlType = 'int';
-            } else if (databaseType == 'mongodb') {
-                this.entityUrlType = '[0-9a-fA-F]{24}';
-            } else if (databaseType == 'cassandra') {
-                this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
-            }
-            this.entityTranslationKey = this.entityInstance;
-            this.entityTranslationKeyMenu = _s.camelize(this.entityStateName);
-
-            this.differentTypes = [this.entityClass];
-            if (this.relationships == undefined) {
-                this.relationships = [];
-            }
-            for (var idx in this.relationships) {
-                var entityType = this.relationships[idx].otherEntityNameCapitalized;
-                if (this.differentTypes.indexOf(entityType) == -1) {
-                    this.differentTypes.push(entityType);
-                }
             }
         },
 
@@ -1611,7 +1583,7 @@ module.exports = EntityGenerator.extend({
             // track insights
             var insight = this.insight();
 
-            insight.track('generator', 'entity');
+            insight.trackWithEvent('generator', 'entity');
             insight.track('entity/fields', this.fields.length);
             insight.track('entity/relationships', this.relationships.length);
             insight.track('entity/pagination', this.pagination);
@@ -1624,7 +1596,7 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.microservicePath)) {
                 return;
             }
-            
+
             this.copy(this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json', this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
         },
 
@@ -1633,13 +1605,13 @@ module.exports = EntityGenerator.extend({
 
             for (var idx in this.fields) {
                 var field = this.fields[idx];
-                if (field.fieldIsEnum == true) {
+                if (field.fieldIsEnum === true) {
                     var fieldType = field.fieldType;
                     var enumInfo = new Object();
                     enumInfo.packageName = this.packageName;
                     enumInfo.enumName = fieldType;
                     enumInfo.enumValues = field.fieldValues;
-                    field.enumInstance = _s.decapitalize(enumInfo.enumName);
+                    field.enumInstance = _.lowerFirst(enumInfo.enumName);
                     enumInfo.enumInstance = field.enumInstance;
                     enumInfo.angularAppName = this.angularAppName;
                     enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
@@ -1667,23 +1639,23 @@ module.exports = EntityGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_EntityRepository.java',
                 SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java', this, {});
 
-            if (this.searchEngine == 'elasticsearch') {
+            if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_EntitySearchRepository.java',
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java', this, {});
             }
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_EntityResource.java',
                 SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'Resource.java', this, {});
-            if (this.service == 'serviceImpl') {
+            if (this.service === 'serviceImpl') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/service/_EntityService.java',
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.entityClass + 'ServiceImpl.java', this, {});
-            } else if (this.service == 'serviceClass') {
+            } else if (this.service === 'serviceClass') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
             }
-            if (this.dto == 'mapstruct') {
+            if (this.dto === 'mapstruct') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_EntityDTO.java',
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/dto/' + this.entityClass + 'DTO.java', this, {});
 
@@ -1695,15 +1667,21 @@ module.exports = EntityGenerator.extend({
         writeDbFiles: function() {
             if (this.skipServer) return;
 
-            if (this.databaseType == "sql") {
+            if (this.databaseType === 'sql') {
                 this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
                     SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
 
+                if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
+                    this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity_constraints.xml',
+                        SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_constraints_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.addConstraintsChangelogToLiquibase(this.changelogDate + '_added_entity_constraints_' + this.entityClass);
+                }
+
                 this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
             }
-            if (this.databaseType == "cassandra") {
-                this.template(SERVER_MAIN_RES_DIR + 'config/cql/_added_entity.cql',
-                    SERVER_MAIN_RES_DIR + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
+            if (this.databaseType === 'cassandra') {
+                this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_added_entity.cql',
+                    SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
             }
         },
 
@@ -1724,7 +1702,7 @@ module.exports = EntityGenerator.extend({
             this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js', this, {});
             this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js', this, {});
             this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
-            if (this.searchEngine == 'elasticsearch') {
+            if (this.searchEngine === 'elasticsearch') {
                 this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
             }
 
@@ -1743,29 +1721,29 @@ module.exports = EntityGenerator.extend({
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
             // Create Protractor test files
-            if (this.testFrameworks.indexOf('protractor') != -1) {
+            if (this.testFrameworks.indexOf('protractor') !== -1) {
                 this.template(CLIENT_TEST_SRC_DIR + 'e2e/entities/_entity.js', CLIENT_TEST_SRC_DIR + 'e2e/entities/' + this.entityFileName + '.js', this, {});
             }
         },
 
         writeTestFiles: function() {
-            if (this.skipServer) return;
 
-            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
-                SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
+            if (!this.skipServer) {
+                this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
+                    SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
+            }
 
-            if (this.testFrameworks.indexOf('gatling') != -1) {
+            if (this.testFrameworks.indexOf('gatling') !== -1) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
                     TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }
-
         }
     },
 
     install: function () {
         var injectJsFilesToIndex = function () {
             this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
-            this.spawnCommand('gulp', ['inject']);
+            this.spawnCommand('gulp', ['inject:app']);
         };
         if (!this.options['skip-install'] && !this.skipClient) {
             injectJsFilesToIndex.call(this);
@@ -1803,12 +1781,11 @@ module.exports = EntityGenerator.extend({
                         entityServiceFileName: this.entityServiceFileName,
                         entityStateName: this.entityStateName,
                         entityUrl: this.entityUrl,
-                        entityUrlType: this.entityUrlType,
                         entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
                     modules.forEach(function (module) {
-                        if (module.hookFor == 'entity' && module.hookType == 'post') {
+                        if (module.hookFor === 'entity' && module.hookType === 'post') {
                             // compose with the modules callback generator
                             try {
                                 this.composeWith(module.generatorCallback, {

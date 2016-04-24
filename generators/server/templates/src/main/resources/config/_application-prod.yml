@@ -24,13 +24,6 @@ eureka:
             defaultZone: http://localhost:8761/eureka/
 <%_ } _%>
 
-<%_ if (applicationType == 'gateway') { _%>
-# Prevent services from being automatically added to new routes
-# In production, routes should be explictly defined in the config server's gateway-prod.yml
-zuul:
-    ignoredServices: '*'
-<%_ } _%>
-
 spring:
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
@@ -183,7 +176,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: <%= baseName %>
-        logs: # report metrics in the logs
+        logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds
     logging:
@@ -192,3 +185,10 @@ jhipster:
             host: localhost
             port: 5000
             queueSize: 512
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+            enabled: false
+            # edit spring.metrics.export.delay-millis to set report frequency
+    <%_ } _%>
+    swagger: # swagger is disabled. It can be disabled by pasing 'no-swagger' profile at run time as well
+        enabled: false

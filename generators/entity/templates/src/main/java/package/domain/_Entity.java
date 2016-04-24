@@ -110,8 +110,10 @@ public class <%= entityClass %> implements Serializable {
     }
     for (idx in relationships) {
         var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
+        otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural,
         relationshipName = relationships[idx].relationshipName,
         relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         joinTableName = entityTableName + '_'+ getTableName(relationshipName),
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
@@ -136,14 +138,14 @@ public class <%= entityClass %> implements Serializable {
     <%_     if (hibernateCache != 'no') { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     } _%>
-    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldName %>s = new HashSet<>();
+    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else if (relationshipType == 'many-to-one') { _%>
     @ManyToOne
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType == 'many-to-many') { _%>
-    @ManyToMany<% if (ownerSide == false) { %>(mappedBy = "<%= otherEntityRelationshipName %>s")
+    @ManyToMany<% if (ownerSide == false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")
     @JsonIgnore
     <%_     } else { _%>
 
@@ -153,10 +155,10 @@ public class <%= entityClass %> implements Serializable {
     <%_     }
             if (ownerSide == true) { _%>
     @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name="<%= getColumnName(name) %>s_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[idx].relationshipName) %>s_id", referencedColumnName="ID"))
+               joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="ID"),
+               inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="ID"))
     <%_     } _%>
-    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldName %>s = new HashSet<>();
+    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else { _%>
     <%_     if (ownerSide) { _%>
@@ -213,17 +215,20 @@ public class <%= entityClass %> implements Serializable {
 <% } %><%
     for (idx in relationships) {
         var relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
-        otherEntityName = relationships[idx].otherEntityName;
+        relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
+        otherEntityName = relationships[idx].otherEntityName,
+        otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
     %><% if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') { %>
-    public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalized %>s() {
-        return <%= relationshipFieldName %>s;
+    public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalizedPlural %>() {
+        return <%= relationshipFieldNamePlural %>;
     }
 
-    public void set<%= relationshipNameCapitalized %>s(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityName %>s) {
-        this.<%= relationshipFieldName %>s = <%= otherEntityName %>s;
+    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
+        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
     }<% } else { %>
     public <%= otherEntityNameCapitalized %> get<%= relationshipNameCapitalized %>() {
         return <%= relationshipFieldName %>;

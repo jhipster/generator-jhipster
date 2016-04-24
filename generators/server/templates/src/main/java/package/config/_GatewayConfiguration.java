@@ -11,9 +11,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-
 @Configuration
 public class GatewayConfiguration {
 
@@ -27,7 +24,7 @@ public class GatewayConfiguration {
     }
 
     @Configuration
-    public static class AccessControlFilter {
+    public static class AccessControlFilterConfiguration {
 
         @Bean
         public AccessControlFilter accessControlFilter(){
@@ -39,7 +36,7 @@ public class GatewayConfiguration {
      * Configures the Zuul filter that limits the number of API calls per user.
      * <p>
      * For this filter to work, you need to have:
-     * <p><ul>
+     * <ul>
      * <li>A working Cassandra cluster
      * <li>A schema with the JHipster rate-limiting tables configured, using the
      * "create_keyspace.cql" and "create_tables.cql" scripts from the
@@ -49,7 +46,7 @@ public class GatewayConfiguration {
      * <li>Spring Data Cassandra running, by removing in your application-*.yml the
      * "spring.autoconfigure.exclude" key that excludes the Cassandra and Spring Data
      * Cassandra auto-configuration.
-     * </ul><p>
+     * </ul>
      */
     @Configuration
     @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")

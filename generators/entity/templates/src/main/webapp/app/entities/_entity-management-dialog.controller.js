@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('<%= entityAngularJSName %>DialogController', <%= entityAngularJSName %>DialogController);
 
-    <%= entityAngularJSName %>DialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance'<% if (fieldsContainOwnerOneToOne) { %>, '$q'<% } %><% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>];
+    <%= entityAngularJSName %>DialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance'<% if (fieldsContainOwnerOneToOne) { %>, '$q'<% } %><% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>];
 
-    function <%= entityAngularJSName %>DialogController ($scope, $stateParams, $uibModalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
+    function <%= entityAngularJSName %>DialogController ($timeout, $scope, $stateParams, $uibModalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
         var vm = this;
         vm.<%= entityInstance %> = entity;<%
             var queries = [];
@@ -25,21 +25,20 @@
                 + "\n            }"
                 + "\n            return " + relationships[idx].otherEntityNameCapitalized + ".get({id : vm." + entityInstance + "." + relationships[idx].relationshipFieldName + (dto == 'no' ? ".id" : "Id") + "}).$promise;"
                 + "\n        }).then(function(" + relationships[idx].relationshipFieldName + ") {"
-                + "\n            vm." + relationships[idx].relationshipFieldName.toLowerCase() + "s.push(" + relationships[idx].relationshipFieldName + ");"
+                + "\n            vm." + relationships[idx].relationshipFieldNamePlural.toLowerCase() + ".push(" + relationships[idx].relationshipFieldName + ");"
                 + "\n        });";
                 } else {
-                    query = 'vm.' + relationships[idx].otherEntityNameCapitalized.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + '.query();';
+                    query = 'vm.' + relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase() + ' = ' + relationships[idx].otherEntityNameCapitalized + '.query();';
                 }
                 if (!contains(queries, query)) {
                     queries.push(query);
                 }
             } %><% for (idx in queries) { %>
         <%- queries[idx] %><% } %>
-        vm.load = function(id) {
-            <%= entityClass %>.get({id : id}, function(result) {
-                vm.<%= entityInstance %> = result;
-            });
-        };
+
+        $timeout(function (){
+            angular.element('.form-group:eq(1)>input').focus();
+        });
 
         var onSaveSuccess = function (result) {
             $scope.$emit('<%=angularAppName%>:<%= entityInstance %>Update', result);
@@ -63,14 +62,14 @@
         vm.clear = function() {
             $uibModalInstance.dismiss('cancel');
         };
-        <%_ if (fieldsContainBlob) { _%>
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate || fieldsContainDate) { _%>
 
-        vm.openFile = DataUtils.openFile;
-
-        vm.byteSize = DataUtils.byteSize;
+        vm.datePickerOpenStatus = {};
         <%_ } _%>
         <%_ for (idx in fields) {
-            if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+            if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
+        vm.datePickerOpenStatus.<%= fields[idx].fieldName %> = false;
+        <%_ } else if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
 
         vm.set<%= fields[idx].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
             <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>
@@ -79,27 +78,25 @@
             }
             <%_ } _%>
             if ($file) {
-                var fileReader = new FileReader();
-                fileReader.readAsDataURL($file);
-                fileReader.onload = function (e) {
-                    var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+                DataUtils.toBase64($file, function(base64Data) {
                     $scope.$apply(function() {
                         <%= entityInstance %>.<%= fields[idx].fieldName %> = base64Data;
                         <%= entityInstance %>.<%= fields[idx].fieldName %>ContentType = $file.type;
                     });
-                };
+                });
             }
         };
-        <%_ } else if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
-        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %> = {};
-
-        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status = {
-            opened: false
-        };
-
-        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>Open = function() {
-            vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status.opened = true;
-        };
         <%_ } } _%>
+        <%_ if (fieldsContainBlob) { _%>
+
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
+        <%_ } _%>
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate || fieldsContainDate) { _%>
+
+        vm.openCalendar = function(date) {
+            vm.datePickerOpenStatus[date] = true;
+        };
+        <%_ } _%>
     }
 })();

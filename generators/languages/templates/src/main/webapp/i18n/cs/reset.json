@@ -1,0 +1,30 @@
+{
+    "reset": {
+        "request": {
+            "title": "Obnovit heslo",
+            "form": {
+                "button": "Obnovit heslo"
+            },
+            "messages": {
+                "info": "Zadejte e-mailovou adresu, kterou jste použili při registraci",
+                "success": "Na Váš e-mail sme Vám poslali informace o tom jak si můžete obnovit Vaše heslo.",
+                "notfound": "<strong>E-mailová adresa nebyla registrována!</strong> Prosím zkontrolujte nebo zkuste zadat znovu."
+
+            }
+
+        },
+        "finish" : {
+            "title": "Obnovit heslo",
+            "form": {
+                "button": "Ověřit nové heslo"
+            },
+            "messages": {
+                "info": "Vyberte si nové heslo",
+                "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">přihlásit</a>.",
+                "keymissing": "Chybí klíč na obnovení hesla.",
+                "error": "Vaše heslo nemohlo být obnoveno. Požadavek na obnovení hesla je platný pouze 24 hodin."
+            }
+        }
+    }
+
+}

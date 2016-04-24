@@ -50,7 +50,7 @@ module.exports = LanguagesGenerator.extend({
             if (!this.isSupportedLanguage(language)) {
                 this.env.error(chalk.red('\nERROR Unsupported language "' + language + '" passed as argument to language generator.' +
                     '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function (o) {
-                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')'
+                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')';
                     }).join(''))
                 );
             }
@@ -72,6 +72,7 @@ module.exports = LanguagesGenerator.extend({
             }
             this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
+            this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.websocket = this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
             this.searchEngine = this.config.get('searchEngine');
@@ -83,7 +84,7 @@ module.exports = LanguagesGenerator.extend({
     },
 
     prompting: function () {
-        if (this.currentLanguages || this.languages) return;
+        if (this.languages) return;
 
         var cb = this.async();
         var languageOptions = this.getAllSupportedLanguageOptions();
@@ -106,6 +107,10 @@ module.exports = LanguagesGenerator.extend({
     },
 
     default: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'languages');
+        },
 
         getSharedConfigOptions: function () {
             if (configOptions.applicationType) {
@@ -129,7 +134,7 @@ module.exports = LanguagesGenerator.extend({
             if (configOptions.nativeLanguage) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if (configOptions.enableSocialSignIn != null) {
+            if (configOptions.enableSocialSignIn !== undefined) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
             if (configOptions.skipClient) {
@@ -149,11 +154,9 @@ module.exports = LanguagesGenerator.extend({
 
     writing: function () {
         var insight = this.insight();
-        insight.track('generator', 'languages');
         this.languagesToApply && this.languagesToApply.forEach(function (language) {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
-                this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
             }
             if (!this.skipServer) {
                 this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
@@ -162,15 +165,6 @@ module.exports = LanguagesGenerator.extend({
         }, this);
         if (!this.skipClient) {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
-        }
-    },
-
-    install: function () {
-        var wiredepAddedBowerOverrides = function () {
-            this.spawnCommand('gulp', ['wiredep']);
-        };
-        if (!this.options['skip-install'] && !this.skipClient) {
-            wiredepAddedBowerOverrides.call(this);
         }
     }
 });

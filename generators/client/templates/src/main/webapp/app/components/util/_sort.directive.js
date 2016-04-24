@@ -31,7 +31,7 @@
         vm.sort = sort;
         vm.triggerApply = triggerApply;
 
-        $scope.$watchGroup(['predicate', 'ascending'], vm.triggerApply);
+        $scope.$watchGroup(['vm.predicate', 'vm.ascending'], vm.triggerApply);
         vm.triggerApply();
 
         function applyClass (element) {
@@ -67,7 +67,7 @@
             }
             vm.predicate = field;
             $scope.$apply();
-            $scope.callback();
+            vm.callback();
         }
 
         function triggerApply (values)  {

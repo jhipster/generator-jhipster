@@ -1,11 +1,11 @@
-<div>
+<div class="table-responsive">
     <h2 translate="logs.title">Logs</h2>
 
     <p translate="logs.nbloggers" translate-values="{total: '{{ vm.loggers.length }}'}">There are {{ vm.loggers.length }} loggers.</p>
 
     <span translate="logs.filter">Filter</span> <input type="text" ng-model="filter" class="form-control">
 
-    <table class="table table-condensed table-striped table-bordered table-responsive">
+    <table class="table table-condensed table-striped table-bordered">
         <thead>
         <tr title="click to order">
             <th ng-click="predicate = 'name'; reverse=!reverse"><span translate="logs.table.name">Name</span></th>

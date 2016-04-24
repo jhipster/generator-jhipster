@@ -1,7 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-cat /cql/create-keyspace.cql > create-keyspace-tables.cql
-echo "USE <%= baseName %>;" >> create-keyspace-tables.cql
-cat /cql/create-tables.cql >> create-keyspace-tables.cql
-
-cqlsh -f create-keyspace-tables.cql
+KEYSPACE_NAME=<%= baseName.toLowerCase() %>
+cqlsh -f /cql/create-keyspace.cql $CASSANDRA_CONTACT_POINT
+cqlsh -k $KEYSPACE_NAME -f /cql/create-tables.cql $CASSANDRA_CONTACT_POINT

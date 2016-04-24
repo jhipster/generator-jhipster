@@ -1,0 +1,20 @@
+version: '2'
+services:
+    mscassandra-app:
+        image: mscassandra
+        external_links:
+            - mscassandra-cassandra:cassandra
+            - jhipster-registry:registry
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8761/eureka/
+            - SPRING_CLOUD_CONFIG_URI=http://registry:8761/config
+            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
+    mscassandra-cassandra:
+        extends:
+            file: cassandra-cluster.yml
+            service: mscassandra-cassandra
+    jhipster-registry:
+        extends:
+            file: jhipster-registry.yml
+            service: jhipster-registry

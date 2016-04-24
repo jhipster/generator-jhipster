@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "वापरकर्ता सेटिंग्ज [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "नाव",
+            "firstname.placeholder": "आपले नाव",
+            "lastname": "आडनाव",
+            "lastname.placeholder": "आपले आडनाव",
+            "language": "भाषा",
+            "button": "जतन करा"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>त्रुटी आली!</strong> सेटिंग्ज जतन केली जाऊ शकत नाही.",
+                "emailexists": "<strong>ई-मेल आधीच वापरात आहे!</strong> कृपया दुसरे नाव निवडा."
+            },
+            "success": "<strong>सेटिंग्ज जतन!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "आपले पहिले नाव आवश्यक आहे.",
+                    "minlength": "आपले पहिले नाव किमान 1 वर्ण असणे आवश्यक आहे",
+                    "maxlength": "आपले पहिले नाव 50 वर्णांपेक्षा होऊ शकत नाही"
+                },
+                "lastname": {
+                    "required": "आपले आडनाव आवश्यक आहे.",
+                    "minlength": "आपले आडनाव कमीत कमी 1 वर्ण असणे आवश्यक आहे",
+                    "maxlength": "आपल्या शेवटच्या नाव 50 वर्णांपेक्षा होऊ शकत नाही"
+                }
+            }
+        }
+    }
+}

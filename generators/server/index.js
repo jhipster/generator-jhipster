@@ -1,12 +1,11 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base'),
     packagejs = require('../../package.json'),
-    crypto = require("crypto"),
+    crypto = require('crypto'),
     mkdirp = require('mkdirp');
 
 var JhipsterServerGenerator = generators.Base.extend({});
@@ -15,7 +14,7 @@ util.inherits(JhipsterServerGenerator, scriptBase);
 
 /* Constants used throughout */
 const constants = require('../generator-constants'),
-    QUESTIONS = constants.QUESTIONS,
+    QUESTIONS = constants.SERVER_QUESTIONS,
     INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
     DOCKER_DIR = constants.DOCKER_DIR,
     MAIN_DIR = constants.MAIN_DIR,
@@ -29,6 +28,7 @@ const constants = require('../generator-constants'),
     SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
 var currentQuestion;
+var totalQuestions;
 var configOptions = {};
 var javaDir;
 
@@ -66,14 +66,21 @@ module.exports = JhipsterServerGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--skip-user-management` flag
+        this.option('skip-user-management', {
+            desc: 'Skip the user management module during app generation',
+            type: Boolean,
+            defaults: false
+        });
+
         this.skipClient = !this.options['client-hook'] || configOptions.skipClient || this.config.get('skipClient');
-        this.skipUserManagement = configOptions.skipUserManagement || this.config.get('skipUserManagement');
+        this.skipUserManagement = configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.enableTranslation = this.options['i18n'];
         this.testFrameworks = [];
         this.options['gatling'] && this.testFrameworks.push('gatling');
         this.options['cucumber'] && this.testFrameworks.push('cucumber');
-        var lastQuestion = configOptions.lastQuestion;
-        currentQuestion = lastQuestion ? lastQuestion : 0;
+        currentQuestion = configOptions.lastQuestion ? configOptions.lastQuestion : 0;
+        totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
         this.logo = configOptions.logo;
         this.baseName = configOptions.baseName;
     },
@@ -103,23 +110,23 @@ module.exports = JhipsterServerGenerator.extend({
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packageName = this.config.get('packageName');
             this.serverPort = this.config.get('serverPort');
-            if (this.serverPort == undefined) {
-                this.serverPort = 8080;
+            if (this.serverPort === undefined) {
+                this.serverPort = '8080';
             }
             this.authenticationType = this.config.get('authenticationType');
             this.clusteredHttpSession = this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine');
             this.websocket = this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
-            if (this.databaseType == 'mongodb') {
+            if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';
                 this.prodDatabaseType = 'mongodb';
                 this.hibernateCache = 'no';
-            } else if (this.databaseType == 'cassandra') {
+            } else if (this.databaseType === 'cassandra') {
                 this.devDatabaseType = 'cassandra';
                 this.prodDatabaseType = 'cassandra';
                 this.hibernateCache = 'no';
-            } else if (this.databaseType == 'no') {
+            } else if (this.databaseType === 'no') {
                 // no database, only available for microservice applications
                 this.devDatabaseType = 'no';
                 this.prodDatabaseType = 'no';
@@ -134,7 +141,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 this.rememberMeKey = this.config.get('rememberMeKey');
             }
             this.jwtSecretKey = this.config.get('jwtSecretKey');
@@ -150,47 +157,47 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             // force variables unused by microservice applications
-            if (this.applicationType == 'microservice') {
+            if (this.applicationType === 'microservice') {
                 this.clusteredHttpSession = 'no';
                 this.websocket = 'no';
             }
 
-            var serverConfigFound = this.packageName != null &&
-                this.authenticationType != null &&
-                this.hibernateCache != null &&
-                this.clusteredHttpSession != null &&
-                this.websocket != null &&
-                this.databaseType != null &&
-                this.devDatabaseType != null &&
-                this.prodDatabaseType != null &&
-                this.searchEngine != null &&
-                this.buildTool != null;
+            var serverConfigFound = this.packageName !== undefined &&
+                this.authenticationType !== undefined &&
+                this.hibernateCache !== undefined &&
+                this.clusteredHttpSession !== undefined &&
+                this.websocket !== undefined &&
+                this.databaseType !== undefined &&
+                this.devDatabaseType !== undefined &&
+                this.prodDatabaseType !== undefined &&
+                this.searchEngine !== undefined &&
+                this.buildTool !== undefined;
 
-            if (this.baseName != null && serverConfigFound) {
+            if (this.baseName !== undefined && serverConfigFound) {
 
                 // Generate remember me key if key does not already exist in config
-                if (this.authenticationType == 'session' && this.rememberMeKey == null) {
+                if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
 
                 // Generate JWT secert key if key does not already exist in config
-                if (this.authenticationType == 'jwt' && this.jwtSecretKey == null) {
+                if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
                 // If social sign in is not defined, it is disabled by default
-                if (this.enableSocialSignIn == null) {
+                if (this.enableSocialSignIn === undefined) {
                     this.enableSocialSignIn = false;
                 }
 
                 // If translation is not defined, it is enabled by default
-                if (this.enableTranslation == null) {
+                if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
                 }
-                if (this.nativeLanguage == null) {
+                if (this.nativeLanguage === undefined) {
                     this.nativeLanguage = 'en';
                 }
-                if (this.languages == null) {
+                if (this.languages === undefined) {
                     this.languages = ['en', 'fr'];
                 }
 
@@ -207,21 +214,19 @@ module.exports = JhipsterServerGenerator.extend({
         askForModuleName: function () {
             if (this.baseName) return;
 
-            this.askModuleName(this, ++currentQuestion, QUESTIONS);
+            this.askModuleName(this, currentQuestion++, totalQuestions);
         },
 
         askForServerSideOpts: function () {
             if (this.existingProject) return;
 
             var done = this.async();
+            var getNumberedQuestion = this.getNumberedQuestion;
             var applicationType = this.applicationType;
             var prompts = [
                 {
                     when: function (response) {
-                        if (applicationType == 'monolith') {
-                            ++currentQuestion; //skip the question for monoliths
-                        }
-                        return (applicationType == 'gateway' || applicationType == 'microservice');
+                        return (applicationType === 'gateway' || applicationType === 'microservice');
                     },
                     type: 'input',
                     name: 'serverPort',
@@ -229,8 +234,12 @@ module.exports = JhipsterServerGenerator.extend({
                         if (/^([0-9]*)$/.test(input)) return true;
                         return 'This is not a valid port number.';
                     },
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
-                    default: '8080'
+                    message: function (response) {
+                        return getNumberedQuestion('As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType === 'gateway' || applicationType === 'microservice');
+                    },
+                    default: applicationType === 'gateway' ? '8080' : '8081'
                 },
                 {
                     type: 'input',
@@ -239,25 +248,29 @@ module.exports = JhipsterServerGenerator.extend({
                         if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                         return 'The package name you have provided is not a valid Java package name.';
                     },
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') What is your default Java package name?',
+                    message: function (response) {
+                        return getNumberedQuestion('What is your default Java package name?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, true);
+                    },
                     default: 'com.mycompany.myapp',
                     store: true
                 },
                 {
                     when: function (response) {
-                        return applicationType == 'monolith';
+                        return applicationType === 'monolith';
                     },
                     type: 'list',
                     name: 'authenticationType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *type* of authentication would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType === 'monolith');
+                    },
                     choices: [
                         {
                             value: 'session',
                             name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
-                        },
-                        {
-                            value: 'session-social',
-                            name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this doesn\'t work with Cassandra!'
                         },
                         {
                             value: 'oauth2',
@@ -272,11 +285,38 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return applicationType == 'microservice';
+                        return applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt');
+                    },
+                    type: 'list',
+                    name: 'enableSocialSignIn',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt'));
+                    },
+                    choices: [
+                        {
+                            value: false,
+                            name: 'No'
+                        },
+                        {
+                            value: true,
+                            name: 'Yes, use social login'
+                        }
+                    ],
+                    default: false
+                },
+                {
+                    when: function (response) {
+                        return applicationType === 'microservice';
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType === 'microservice');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -299,11 +339,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.authenticationType == 'session-social';
+                        return response.enableSocialSignIn;
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.authenticationType === 'session-social');
+                    },
                     choices: [
                         {
                             value: 'sql',
@@ -318,11 +362,38 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.authenticationType != 'session-social' && applicationType != 'microservice';
+                        return response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice';
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.authenticationType !== 'session-social' && applicationType !== 'microservice');
+                    },
+                    choices: [
+                        {
+                            value: 'sql',
+                            name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                        },
+                        {
+                            value: 'mongodb',
+                            name: 'MongoDB'
+                        }
+                    ],
+                    default: 0
+                },
+                {
+                    when: function (response) {
+                        return response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice';
+                    },
+                    type: 'list',
+                    name: 'databaseType',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *type* of database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.authenticationType !== 'session-social' && applicationType !== 'microservice');
+                    },
                     choices: [
                         {
                             value: 'sql',
@@ -341,11 +412,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.databaseType == 'sql';
+                        return response.databaseType === 'sql';
                     },
                     type: 'list',
                     name: 'prodDatabaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *production* database would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *production* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType === 'sql');
+                    },
                     choices: [
                         {
                             value: 'mysql',
@@ -364,11 +439,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return (response.databaseType == 'sql' && response.prodDatabaseType == 'mysql');
+                        return (response.databaseType === 'sql' && response.prodDatabaseType === 'mysql');
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType === 'sql' && response.prodDatabaseType === 'mysql');
+                    },
                     choices: [
                         {
                             value: 'h2Disk',
@@ -387,11 +466,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return (response.databaseType == 'sql' && response.prodDatabaseType == 'postgresql');
+                        return (response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql');
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql');
+                    },
                     choices: [
                         {
                             value: 'h2Disk',
@@ -410,11 +493,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return (response.databaseType == 'sql' && response.prodDatabaseType == 'oracle');
+                        return (response.databaseType === 'sql' && response.prodDatabaseType === 'oracle');
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType === 'sql' && response.prodDatabaseType === 'oracle');
+                    },
                     choices: [
                         {
                             value: 'h2Disk',
@@ -433,11 +520,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.databaseType == 'sql';
+                        return response.databaseType === 'sql';
                     },
                     type: 'list',
                     name: 'hibernateCache',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType === 'sql');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -452,15 +543,19 @@ module.exports = JhipsterServerGenerator.extend({
                             name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
                         }
                     ],
-                    default: 1
+                    default: (applicationType === 'gateway' || applicationType === 'microservice') ? 2 : 1
                 },
                 {
                     when: function (response) {
-                        return response.databaseType == 'sql';
+                        return response.databaseType === 'sql';
                     },
                     type: 'list',
                     name: 'searchEngine',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use a search engine in your application?',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use a search engine in your application?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType === 'sql');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -475,11 +570,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return applicationType == 'monolith' || applicationType == 'gateway';
+                        return applicationType === 'monolith' || applicationType === 'gateway';
                     },
                     type: 'list',
                     name: 'clusteredHttpSession',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use clustered HTTP sessions?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType === 'monolith' || applicationType === 'gateway');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -494,11 +593,15 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return applicationType == 'monolith' || applicationType == 'gateway';
+                        return applicationType === 'monolith' || applicationType === 'gateway';
                     },
                     type: 'list',
                     name: 'websocket',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use WebSockets?',
+                    message: function (response) {
+                        return getNumberedQuestion('Do you want to use WebSockets?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, applicationType === 'monolith' || applicationType === 'gateway');
+                    },
                     choices: [
                         {
                             value: 'no',
@@ -514,7 +617,11 @@ module.exports = JhipsterServerGenerator.extend({
                 {
                     type: 'list',
                     name: 'buildTool',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
+                    message: function (response) {
+                        return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, true);
+                    },
                     choices: [
                         {
                             value: 'maven',
@@ -530,29 +637,23 @@ module.exports = JhipsterServerGenerator.extend({
             ];
 
             this.prompt(prompts, function (props) {
-                if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+                if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
                     this.authenticationType = 'jwt';
                 } else {
-                    // Read the authenticationType to extract the enableSocialSignIn
-                    // This allows to have only one authenticationType question for the moment
-                    if (props.authenticationType == 'session-social') {
-                        this.authenticationType = 'session';
-                        this.enableSocialSignIn = true;
-                    } else {
-                        this.authenticationType = props.authenticationType;
-                        this.enableSocialSignIn = false;
-                    }
-                    props.enableSocialSignIn = this.enableSocialSignIn;
+                    this.authenticationType = props.authenticationType;
                 }
-                if (this.authenticationType == 'session') {
+                if (this.authenticationType === 'session') {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
-                if (this.authenticationType == 'jwt') {
+                if (this.authenticationType === 'jwt') {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
                 this.packageName = props.packageName;
                 this.serverPort = props.serverPort;
+                if (this.serverPort === undefined) {
+                    this.serverPort = '8080';
+                }
                 this.hibernateCache = props.hibernateCache;
                 this.clusteredHttpSession = props.clusteredHttpSession;
                 this.websocket = props.websocket;
@@ -563,20 +664,20 @@ module.exports = JhipsterServerGenerator.extend({
                 this.buildTool = props.buildTool;
                 this.enableSocialSignIn = props.enableSocialSignIn;
 
-                if (this.databaseType == 'no') {
+                if (this.databaseType === 'no') {
                     this.devDatabaseType = 'no';
                     this.prodDatabaseType = 'no';
                     this.hibernateCache = 'no';
-                } else if (this.databaseType == 'mongodb') {
+                } else if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
                     this.hibernateCache = 'no';
-                } else if (this.databaseType == 'cassandra') {
+                } else if (this.databaseType === 'cassandra') {
                     this.devDatabaseType = 'cassandra';
                     this.prodDatabaseType = 'cassandra';
                     this.hibernateCache = 'no';
                 }
-                if (this.searchEngine == null) {
+                if (this.searchEngine === undefined) {
                     this.searchEngine = 'no';
                 }
 
@@ -586,11 +687,12 @@ module.exports = JhipsterServerGenerator.extend({
 
         askFori18n: function () {
             if (this.existingProject || configOptions.skipI18nQuestion) return;
-            this.aski18n(this, ++currentQuestion, QUESTIONS);
+            this.aski18n(this, currentQuestion++, totalQuestions);
         },
 
         setSharedConfigOptions: function () {
             configOptions.lastQuestion = currentQuestion;
+            configOptions.totalQuestions = totalQuestions;
             configOptions.packageName = this.packageName;
             configOptions.hibernateCache = this.hibernateCache;
             configOptions.clusteredHttpSession = this.clusteredHttpSession;
@@ -602,6 +704,7 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
+            configOptions.serverPort = this.serverPort;
 
             // Make dist dir available in templates
             if (this.buildTool === 'maven') {
@@ -615,7 +718,7 @@ module.exports = JhipsterServerGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'server');
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);
             insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
@@ -631,8 +734,8 @@ module.exports = JhipsterServerGenerator.extend({
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
-            this.camelizedBaseName = _.camelize(this.baseName);
-            this.dasherizedBaseName = _.dasherize(_.camelize(this.baseName,true));
+            this.camelizedBaseName = _.camelCase(this.baseName);
+            this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.mainClass = this.getMainClassName();
 
@@ -652,7 +755,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             javaDir = this.javaDir = SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             this.testDir = SERVER_TEST_SRC_DIR + this.packageFolder + '/';
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         saveConfig: function () {
@@ -684,13 +787,13 @@ module.exports = JhipsterServerGenerator.extend({
     default: {
         getSharedConfigOptions: function () {
             this.useSass = configOptions.useSass ? configOptions.useSass : false;
-            if (configOptions.enableTranslation != null) {
+            if (configOptions.enableTranslation !== undefined) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
-            if (configOptions.nativeLanguage != null) {
+            if (configOptions.nativeLanguage !== undefined) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if (configOptions.languages != null) {
+            if (configOptions.languages !== undefined) {
                 this.languages = configOptions.languages;
             }
             if (configOptions.testFrameworks) {
@@ -716,68 +819,80 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeDockerFiles: function () {
-            // Create docker-compose file
-            this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
-            if ((this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") || this.applicationType == 'gateway') {
-                this.template(DOCKER_DIR + '_db.dev.yml', DOCKER_DIR + 'db.dev.yml', this, {});
+            // Create Docker and Docker Compose files
+            this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
+            this.template(DOCKER_DIR + '_app.yml', DOCKER_DIR + 'app.yml', this, {});
+            if (this.prodDatabaseType === 'mysql') {
+                this.template(DOCKER_DIR + '_mysql.yml', DOCKER_DIR + 'mysql.yml', this, {});
             }
-            if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch" || this.applicationType == 'gateway') {
-                this.template(DOCKER_DIR + '_db.prod.yml', DOCKER_DIR + 'db.prod.yml', this, {});
+            if (this.prodDatabaseType === 'postgresql') {
+                this.template(DOCKER_DIR + '_postgresql.yml', DOCKER_DIR + 'postgresql.yml', this, {});
             }
-            if (this.applicationType == 'gateway' || this.devDatabaseType == "cassandra") {
-                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Dev.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
-                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Prod.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
+            if (this.prodDatabaseType === 'mongodb') {
+                this.template(DOCKER_DIR + '_mongodb.yml', DOCKER_DIR + 'mongodb.yml', this, {});
+                this.template(DOCKER_DIR + '_mongodb-cluster.yml', DOCKER_DIR + 'mongodb-cluster.yml', this, {});
+                this.copy(DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', this, {});
+            }
+            if (this.applicationType === 'gateway' || this.prodDatabaseType === 'cassandra') {
+                // docker-compose files
+                this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
+                this.template(DOCKER_DIR + '_cassandra-cluster.yml', DOCKER_DIR + 'cassandra-cluster.yml', this, {});
+                this.template(DOCKER_DIR + '_cassandra-opscenter.yml', DOCKER_DIR + 'cassandra-opscenter.yml', this, {});
+                // dockerfiles
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Cluster.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Cluster.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-OpsCenter.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
+                // scripts
+                this.template(DOCKER_DIR + 'cassandra/scripts/_autoMigrate.sh', DOCKER_DIR + 'cassandra/scripts/autoMigrate.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_execute-cql.sh', DOCKER_DIR + 'cassandra/scripts/execute-cql.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
                 this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
-                if (this.devDatabaseType == "cassandra") {
-                    this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
-                }
-                this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
-                this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
-            if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+            if (this.searchEngine === 'elasticsearch') {
+                this.template(DOCKER_DIR + '_elasticsearch.yml', DOCKER_DIR + 'elasticsearch.yml', this, {});
+            }
+            if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
                 this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
-                this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
-                this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
-                this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
             }
+            this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
         },
 
         writeServerBuildFiles: function () {
 
             switch (this.buildTool) {
-                case 'gradle':
-                    this.template('_build.gradle', 'build.gradle', this, {});
-                    this.template('_settings.gradle', 'settings.gradle', this, {});
-                    this.template('_gradle.properties', 'gradle.properties', this, {});
-                    if (!this.skipClient) {
-                        this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
-                    }
-                    this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
-                    if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
-                        this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
-                    }
-                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                    if (this.testFrameworks.indexOf('gatling') != -1) {
-                        this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
-                    }
-                    if (this.databaseType == "sql") {
-                        this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle', this, {});
-                    }
-                    this.copy('gradlew', 'gradlew');
-                    this.copy('gradlew.bat', 'gradlew.bat');
-                    this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
-                    this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
-                    break;
-                case 'maven':
-                default :
-                    this.copy('mvnw', 'mvnw');
-                    this.copy('mvnw.cmd', 'mvnw.cmd');
-                    this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
-                    this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
-                    this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
+            case 'gradle':
+                this.template('_build.gradle', 'build.gradle', this, {});
+                this.template('_settings.gradle', 'settings.gradle', this, {});
+                this.template('_gradle.properties', 'gradle.properties', this, {});
+                if (!this.skipClient) {
+                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
+                }
+                this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
+                this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
+                this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                if (this.testFrameworks.indexOf('gatling') !== -1) {
+                    this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
+                }
+                if (this.databaseType === 'sql') {
+                    this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle', this, {});
+                }
+                this.copy('gradlew', 'gradlew');
+                this.copy('gradlew.bat', 'gradlew.bat');
+                this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
+                this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
+                break;
+            case 'maven':
+            default :
+                this.copy('mvnw', 'mvnw');
+                this.copy('mvnw.cmd', 'mvnw.cmd');
+                this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
+                this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
+                this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
             }
         },
 
@@ -787,10 +902,10 @@ module.exports = JhipsterServerGenerator.extend({
             mkdirp(SERVER_MAIN_RES_DIR);
             this.copy(SERVER_MAIN_RES_DIR + 'banner.txt', SERVER_MAIN_RES_DIR + 'banner.txt');
 
-            if (this.hibernateCache == "ehcache") {
+            if (this.hibernateCache === 'ehcache') {
                 this.template(SERVER_MAIN_RES_DIR + '_ehcache.xml', SERVER_MAIN_RES_DIR + 'ehcache.xml', this, {});
             }
-            if (this.devDatabaseType == "h2Disk" || this.devDatabaseType == "h2Memory") {
+            if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
             }
 
@@ -803,21 +918,24 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_RES_DIR + 'config/_application-dev.yml', SERVER_MAIN_RES_DIR + 'config/application-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_application-prod.yml', SERVER_MAIN_RES_DIR + 'config/application-prod.yml', this, {});
 
-            if (this.databaseType == "sql") {
+            if (this.databaseType === 'sql') {
                 this.template(SERVER_MAIN_RES_DIR + '/config/liquibase/changelog/_initial_schema.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': INTERPOLATE_REGEX});
                 this.copy(SERVER_MAIN_RES_DIR + '/config/liquibase/master.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml');
             }
 
-            if (this.databaseType == "mongodb") {
+            if (this.databaseType === 'mongodb') {
                 this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/authorities.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/authorities.xml');
                 this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/master.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/master.xml');
             }
 
-            if (this.databaseType == "cassandra" || this.applicationType == 'gateway') {
+            if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_create-keyspace-prod.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace-prod.cql', this, {});
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_create-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_drop-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql', this, {});
                 this.copy(SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql');
+                if (this.applicationType !== 'microservice') {
+                    this.copy(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_insert_default_users.cql');
+                }
             }
         },
 
@@ -826,13 +944,13 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerJavaAuthConfigFiles: function () {
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
             }
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
 
-            if (this.authenticationType == 'jwt') {
+            if (this.authenticationType === 'jwt') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/jwt/_TokenProvider.java', javaDir + 'security/jwt/TokenProvider.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/jwt/_JWTConfigurer.java', javaDir + 'security/jwt/JWTConfigurer.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/jwt/_JWTFilter.java', javaDir + 'security/jwt/JWTFilter.java', this, {});
@@ -843,7 +961,7 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
 
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
             }
@@ -852,17 +970,17 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
-            if (this.authenticationType == 'jwt') {
+            if (this.authenticationType === 'jwt') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoginDTO.java', javaDir + 'web/rest/dto/LoginDTO.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_JWTToken.java', javaDir + 'web/rest/JWTToken.java', this, {});
             }
 
-            if (this.authenticationType == 'oauth2') {
+            if (this.authenticationType === 'oauth2') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
             }
 
-            if (this.databaseType == 'mongodb' && this.authenticationType == 'oauth2') {
+            if (this.databaseType === 'mongodb' && this.authenticationType === 'oauth2') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_OAuth2AuthenticationAccessToken.java', javaDir + 'domain/OAuth2AuthenticationAccessToken.java', this, {});
@@ -872,15 +990,15 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
             }
-            if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
+            if (this.authenticationType === 'session' || this.authenticationType === 'oauth2') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
             }
 
-            if (this.authenticationType == 'session') {
+            if (this.authenticationType === 'session') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomAccessDeniedHandler.java', javaDir + 'security/CustomAccessDeniedHandler.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
@@ -902,11 +1020,12 @@ module.exports = JhipsterServerGenerator.extend({
 
         writeServerJavaGatewayFiles: function () {
 
-            if (this.applicationType != 'gateway') return;
+            if (this.applicationType !== 'gateway') return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_GatewayConfiguration.java', javaDir + 'config/GatewayConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_GatewaySwaggerResourcesProvider.java', javaDir + 'config/apidoc/GatewaySwaggerResourcesProvider.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingFilter.java', javaDir + 'gateway/ratelimiting/RateLimitingFilter.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/_TokenRelayFilter.java', javaDir + 'gateway/TokenRelayFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingRepository.java', javaDir + 'gateway/ratelimiting/RateLimitingRepository.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/accesscontrol/_AccessControlFilter.java', javaDir + 'gateway/accesscontrol/AccessControlFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilter.java', javaDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilter.java', this, {});
@@ -915,16 +1034,18 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerMicroserviceFiles: function () {
-            if (this.applicationType != 'microservice') return;
+            if (this.applicationType !== 'microservice') return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MicroserviceSecurityConfiguration.java', javaDir + 'config/MicroserviceSecurityConfiguration.java', this, {});
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType != 'microservice' && this.applicationType != 'gateway') return;
+            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway') return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_SpectatorLogMetricWriter.java', javaDir + 'config/metrics/SpectatorLogMetricWriter.java', this, {});
         },
 
         writeServerJavaAppFiles: function () {
@@ -951,11 +1072,11 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
 
-            if (this.databaseType == 'mongodb') {
+            if (this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             }
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
@@ -969,7 +1090,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ThymeleafConfiguration.java', javaDir + 'config/ThymeleafConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java', this, {});
-            if (this.websocket == 'spring-websocket') {
+            if (this.websocket === 'spring-websocket') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_WebsocketSecurityConfiguration.java', javaDir + 'config/WebsocketSecurityConfiguration.java', this, {});
             }
@@ -977,22 +1098,22 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/locale/_package-info.java', javaDir + 'config/locale/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java', this, {});
 
-            if (this.databaseType == 'cassandra') {
+            if (this.databaseType === 'cassandra') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_CassandraHealthIndicator.java', javaDir + 'config/metrics/CassandraHealthIndicator.java', this, {});
             }
 
-            if (this.hibernateCache == "hazelcast") {
+            if (this.hibernateCache === 'hazelcast') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
             }
 
-            if (this.databaseType == "sql") {
+            if (this.databaseType === 'sql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
             }
-            if (this.searchEngine == 'elasticsearch') {
+            if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
             }
         },
@@ -1004,14 +1125,14 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310LocalDateDeserializer.java', javaDir + 'domain/util/JSR310LocalDateDeserializer.java', this, {});
-            if (this.databaseType == "sql") {
+            if (this.databaseType === 'sql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
-                if (this.prodDatabaseType == 'postgresql') {
+                if (this.prodDatabaseType === 'postgresql') {
                     this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});
                 }
             }
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
             }
@@ -1019,7 +1140,7 @@ module.exports = JhipsterServerGenerator.extend({
 
         writeServerJavaRepoFiles: function () {
 
-            if (this.searchEngine == 'elasticsearch') {
+            if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
             }
             this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_package-info.java', javaDir + 'repository/package-info.java', this, {});
@@ -1054,7 +1175,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
 
@@ -1064,7 +1184,7 @@ module.exports = JhipsterServerGenerator.extend({
 
         writeServerJavaWebsocketFiles: function () {
 
-            if (this.websocket != 'spring-websocket') return;
+            if (this.websocket !== 'spring-websocket') return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java', this, {});
@@ -1080,7 +1200,7 @@ module.exports = JhipsterServerGenerator.extend({
 
             mkdirp(testDir);
 
-            if (this.databaseType == "cassandra") {
+            if (this.databaseType === 'cassandra') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/_CassandraKeyspaceUnitTest.java', testDir + 'CassandraKeyspaceUnitTest.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
             }
@@ -1091,16 +1211,16 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_TEST_RES_DIR + '_logback-test.xml', SERVER_TEST_RES_DIR + 'logback-test.xml', this, {});
 
             // Create Gateway tests files
-            if (this.applicationType == "gateway"){
+            if (this.applicationType === 'gateway'){
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
 
-            if (this.hibernateCache == "ehcache") {
+            if (this.hibernateCache === 'ehcache') {
                 this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});
             }
 
             // Create Gatling test files
-            if (this.testFrameworks.indexOf('gatling') != -1) {
+            if (this.testFrameworks.indexOf('gatling') !== -1) {
                 this.copy(TEST_DIR + 'gatling/conf/gatling.conf', TEST_DIR + 'gatling/conf/gatling.conf');
                 mkdirp(TEST_DIR + 'gatling/data');
                 mkdirp(TEST_DIR + 'gatling/bodies');
@@ -1108,10 +1228,15 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             // Create Cucumber test files
-            if (this.testFrameworks.indexOf('cucumber') != -1) {
+            if (this.testFrameworks.indexOf('cucumber') !== -1) {
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_StepDefs.java', testDir + 'cucumber/stepdefs/StepDefs.java', this, {});
                 mkdirp(TEST_DIR + 'features/');
+            }
+
+            // Create ElasticSearch test files
+            if (this.searchEngine === 'elasticsearch') {
+                this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_IndexReinitializer.java', testDir + 'config/elasticsearch/IndexReinitializer.java', this, {});
             }
         },
 
@@ -1121,13 +1246,13 @@ module.exports = JhipsterServerGenerator.extend({
             // user management related files
 
             /* User management resources files */
-            if (this.databaseType == "sql") {
+            if (this.databaseType === 'sql') {
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv');
             }
 
-            if (this.databaseType == "mongodb") {
+            if (this.databaseType === 'mongodb') {
                 this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml');
             }
@@ -1143,15 +1268,15 @@ module.exports = JhipsterServerGenerator.extend({
             /* User management java domain files */
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_User.java', javaDir + 'domain/User.java', this, {});
 
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
             }
 
             /* User management java repo files */
-            if (this.searchEngine == 'elasticsearch') {
+            if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
             }
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
@@ -1162,7 +1287,7 @@ module.exports = JhipsterServerGenerator.extend({
             /* User management java service files */
             this.template(SERVER_MAIN_SRC_DIR + 'package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
             }
 
@@ -1171,17 +1296,18 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/mapper/_UserMapper.java', javaDir + 'web/rest/mapper/UserMapper.java', this, {});
 
 
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
             }
 
             /* User management java test files */
             var testDir = this.testDir;
 
-            if (this.databaseType == "sql" || this.databaseType == "mongodb") {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
             }
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
@@ -1193,11 +1319,11 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_AccountResourceIntTest.java', testDir + 'web/rest/AccountResourceIntTest.java', this, {});
             this.template(SERVER_TEST_SRC_DIR + 'package/security/_SecurityUtilsUnitTest.java', testDir + 'security/SecurityUtilsUnitTest.java', this, {});
 
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_AuditResourceIntTest.java', testDir + 'web/rest/AuditResourceIntTest.java', this, {});
             }
             //Cucumber user management tests
-            if (this.testFrameworks.indexOf('cucumber') != -1) {
+            if (this.testFrameworks.indexOf('cucumber') !== -1) {
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_UserStepDefs.java', testDir + 'cucumber/stepdefs/UserStepDefs.java', this, {});
                 this.copy('src/test/features/user/user.feature', 'src/test/features/user/user.feature');
             }

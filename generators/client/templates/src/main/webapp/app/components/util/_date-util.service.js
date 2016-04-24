@@ -11,8 +11,8 @@
 
         var service = {
             convertDateTimeFromServer : convertDateTimeFromServer,
-            convertLocaleDateFromServer : convertLocaleDateFromServer,
-            convertLocaleDateToServer : convertLocaleDateToServer,
+            convertLocalDateFromServer : convertLocalDateFromServer,
+            convertLocalDateToServer : convertLocalDateToServer,
             dateformat : dateformat
         };
 
@@ -26,7 +26,7 @@
             }
         }
 
-        function convertLocaleDateFromServer (date) {
+        function convertLocalDateFromServer (date) {
             if (date) {
                 var dateString = date.split('-');
                 return new Date(dateString[0], dateString[1] - 1, dateString[2]);
@@ -34,7 +34,7 @@
             return null;
         }
 
-        function convertLocaleDateToServer (date) {
+        function convertLocalDateToServer (date) {
             if (date) {
                 return $filter('date')(date, 'yyyy-MM-dd');
             } else {

@@ -54,7 +54,7 @@ describe('Controller Tests', function() {
 
             // then
             expect(MockTimeout).toHaveBeenCalledWith(jasmine.any(Function));
-            expect(MockAngular.element).toHaveBeenCalledWith('[ng-model="resetAccount.email"]');
+            expect(MockAngular.element).toHaveBeenCalledWith('#email');
             expect(MockElement.focus).toHaveBeenCalled();
         });
 

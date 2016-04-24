@@ -1,18 +1,18 @@
 <% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div>
-    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{vm.<%= entityInstance %>.id}}</h2>
+    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
         <%_ for (idx in fields) {
             var fieldName = fields[idx].fieldName;
             var fieldType = fields[idx].fieldType;
             var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameCapitalized %></dt></dt>
+        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
-            <img data-ng-src="{{'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
+            <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
             <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
             <%_ } else if (fieldType == 'LocalDate') { _%>
@@ -20,7 +20,7 @@
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
             <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
             <%_ } else { _%>
-            <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}<span>
+            <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } _%>
             <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
             <div>{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</div>
@@ -33,6 +33,8 @@
                 var ownerSide = relationships[idx].ownerSide;
                 var relationshipName = relationships[idx].relationshipName;
                 var relationshipFieldName = relationships[idx].relationshipFieldName;
+                var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                var relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
                 var otherEntityName = relationships[idx].otherEntityName;
                 var otherEntityStateName = relationships[idx].otherEntityStateName;
                 var otherEntityField = relationships[idx].otherEntityField;
@@ -40,11 +42,11 @@
                 if (relationshipType == 'many-to-one'
                     || (relationshipType == 'one-to-one' && ownerSide == true)
                     || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
-        <dt><span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span></dt>
+        <dt><span translate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
         <dd>
             <%_ if (otherEntityName == 'user') { _%>
                 <%_ if (relationshipType == 'many-to-many') { _%>
-            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldName %>s">
+            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                 {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
             </span>
                 <%_ } else { _%>
@@ -56,7 +58,7 @@
                 <%_ } _%>
             <%_ } else { _%>
                 <%_ if (relationshipType == 'many-to-many') { _%>
-            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldName %>s">
+            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                 <a ui-sref="<%= otherEntityStateName %>-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
             </span>
                 <%_ } else { _%>

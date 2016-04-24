@@ -1,0 +1,25 @@
+version: '2'
+services:
+<%_ for(var i = 0; i < appConfigs.length; i++) { _%>
+<%- appsYaml[i] %>
+<%_ } _%>
+<%_ if (gatewayNb > 0) { _%>
+    jhipster-registry:
+        extends:
+            file: jhipster-registry.yml
+            service: jhipster-registry
+<%_ } _%>
+<%_ if (useElk) { _%>
+    elk-elasticsearch:
+        extends:
+            file: elk.yml
+            service: elk-elasticsearch
+    elk-logstash:
+        extends:
+          file: elk.yml
+          service: elk-logstash
+    jhipster-console:
+        extends:
+            file: elk.yml
+            service: jhipster-console
+<%_ } _%>

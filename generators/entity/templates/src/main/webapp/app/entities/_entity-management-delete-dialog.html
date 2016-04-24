@@ -7,7 +7,7 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <p translate="<%= keyPrefix %>delete.question" translate-values="{id: '{{vm.<%= entityInstance %>.id}}'}">Are you sure you want to delete this <%= entityClass %>?</p>
+        <p translate="<%= keyPrefix %>delete.question" translate-values="{id: '{{vm.<%= entityInstance %>.id}}'}">Are you sure you want to delete this <%= entityClassHumanized %>?</p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

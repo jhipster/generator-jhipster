@@ -31,7 +31,7 @@
             var loc = $window.location;
             var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType == 'oauth2') { %>
             /*jshint camelcase: false */
-            var authToken = JSON.parse($localStorage.authenticationToken).access_token;
+            var authToken = angular.fromJson($localStorage.authenticationToken).access_token;
             url += '?access_token=' + authToken;<% } %><% if (authenticationType == 'jwt') { %>
             var authToken = AuthServerProvider.getToken();
             if(authToken){
