@@ -291,6 +291,9 @@ Social Buttons
     cursor: pointer;
 }
 
+/* end of entity tables helpers */
+
+/* entity detail page css */
 .dl-horizontal.jh-entity-details > dd {
     margin-bottom: 15px;
 }
@@ -307,7 +310,7 @@ Social Buttons
     }
 }
 
-/* end of entity tables helpers */
+/* end of entity detail page css */
 
 /* ui bootstrap tweaks */
 .nav, .pagination, .carousel, .panel-title a {
