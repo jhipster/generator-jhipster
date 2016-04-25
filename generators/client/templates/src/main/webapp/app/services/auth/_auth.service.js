@@ -145,9 +145,6 @@
         function logout () {
             AuthServerProvider.logout();
             Principal.authenticate(null);
-
-            // Reset state memory
-            resetPreviousState();
         }
 
         function resetPasswordFinish (keyAndPassword, callback) {
