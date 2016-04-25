@@ -226,6 +226,10 @@ module.exports = JhipsterGenerator.extend({
                     {
                         value: 'gateway',
                         name: 'Microservice gateway'
+                    },
+                    {
+                        value: 'uaa',
+                        name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
                     }
                 ],
                 default: 'monolith'
@@ -254,6 +258,12 @@ module.exports = JhipsterGenerator.extend({
                 this.skipClient = true;
                 this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = true;
+            }
+            if (this.applicationType === 'uaa') {
+                this.skipClient = true;
+                this.generatorType = 'server';
+                this.skipUserManagement = configOptions.skipUserManagement = false;
+                this.authenticationType = configOptions.authenticationType = 'uaa';
             }
             if (this.skipClient) {
                 // defaults to use when skipping client

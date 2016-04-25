@@ -10,7 +10,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 eureka:
     client:
         enabled: false
@@ -103,14 +103,14 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         authentication:
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             jwt:
-                secret: jwt-secret-key
-                # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
+                secret: <%= jwtSecretKey %>
+                # Token is valid 24 hours
+                tokenValidityInSeconds: 86400
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
@@ -121,6 +121,7 @@ jhipster:
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
+    security:
         rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>

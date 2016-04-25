@@ -27,7 +27,7 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 apply plugin: 'io.spring.dependency-management'
 dependencyManagement {
   imports {
@@ -81,7 +81,7 @@ cucumberTest.finalizedBy(testReport)
 <% if(!skipClient) {%>
 apply from: 'gradle/yeoman.gradle'<% } %>
 apply from: 'gradle/sonar.gradle'
-<% if (databaseType == 'sql') { %>
+<% if (databaseType === 'sql') { %>
 apply from: 'gradle/liquibase.gradle'<% } %>
 <% if (testFrameworks.indexOf('gatling') != -1) { %>
 apply from: 'gradle/gatling.gradle'<% } %>
@@ -188,7 +188,7 @@ dependencies {
     <%_ if (applicationType == 'gateway') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-zuul"
     <%_ } _%>
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-ribbon"
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
@@ -203,6 +203,7 @@ dependencies {
     compile ("org.springframework:spring-context-support") {
         exclude(module: 'quartz')
     }
+<<<<<<< HEAD
     compile "org.springframework.security:spring-security-config:${spring_security_version}"
     compile "org.springframework.security:spring-security-data:${spring_security_version}"
     compile "org.springframework.security:spring-security-web:${spring_security_version}"<% if (websocket == 'spring-websocket') { %>
@@ -212,6 +213,10 @@ dependencies {
     <%_ } _%>
     <%_ if (authenticationType == 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt:${jjwt_version}"
+    <%_ } _%>
+    <%_ if (authenticationType === 'uaa') { _%>
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
+    compile group: 'org.springframework.security', name: 'spring-security-jwt'
     <%_ } _%>
     <%_ if (databaseType == 'mongodb') { _%>
     compile "org.mongeez:mongeez:${mongeez_version}"<% } %>
