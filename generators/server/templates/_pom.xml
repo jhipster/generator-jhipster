@@ -86,7 +86,7 @@
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Brixton.RC1</spring-cloud.version>
+        <spring-cloud.version>Brixton.RC2</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.0.4.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
