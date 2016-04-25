@@ -51,9 +51,9 @@
                 // previousState was set in the authExpiredInterceptor before being redirected to login modal.
                 // since login is succesful, go to stored previousState and clear previousState
                 if (Auth.getPreviousState()) {
-                    var ps = Auth.getPreviousState();
+                    var previousState = Auth.getPreviousState();
                     Auth.resetPreviousState();
-                    $state.go(ps.previousStateName, ps.previousStateParams);
+                    $state.go(previousState.name, previousState.params);
                 }
             }).catch(function () {
                 vm.authenticationError = true;

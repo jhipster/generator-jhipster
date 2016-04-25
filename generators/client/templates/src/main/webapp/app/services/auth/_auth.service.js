@@ -55,9 +55,9 @@
 
                 // recover and clear previousState after external login redirect (e.g. oauth2)
                 if (isAuthenticated && !$rootScope.fromState.name && getPreviousState()) {
-                    var ps = getPreviousState();
+                    var previousState = getPreviousState();
                     resetPreviousState();
-                    $state.go(ps.previousStateName, ps.previousStateParams);
+                    $state.go(previousState.name, previousState.params);
                 }
 
                 if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
@@ -180,24 +180,17 @@
         }
 
         function getPreviousState() {
-            var previousStateName = $sessionStorage.previousStateName;
-            var previousStateParams = $sessionStorage.previousStateParams;
-
-            if(!previousStateName) {
-                return null;
-            }
-
-            return { "previousStateName": previousStateName, "previousStateParams": previousStateParams };
+            var previousState = $sessionStorage.previousState;
+            return previousState;
         }
 
         function resetPreviousState() {
-            delete $sessionStorage.previousStateName;
-            delete $sessionStorage.previousStateParams;
+            delete $sessionStorage.previousState;
         }
 
         function storePreviousState(previousStateName, previousStateParams) {
-            $sessionStorage.previousStateName = previousStateName;
-            $sessionStorage.previousStateParams = previousStateParams;
+            var previousState = { "name": previousStateName, "params": previousStateParams };
+            $sessionStorage.previousState = previousState;
         }
     }
 })();
