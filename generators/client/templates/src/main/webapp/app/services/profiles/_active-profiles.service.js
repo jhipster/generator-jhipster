@@ -3,67 +3,55 @@
 
     angular
         .module('<%=angularAppName%>')
-        .service('ActiveProfiles', ActiveProfiles);
+        .factory('ActiveProfiles', ActiveProfiles);
 
-    ActiveProfiles.$inject = ['$q','$resource'];
+    ActiveProfiles.$inject = ['$q', '$resource'];
 
-    function ActiveProfiles ($q, $resource) {
+    function ActiveProfiles($q, $resource) {
 
-        var _activeProfiles,_ribbonEnv,_inProduction,_response;
+        var _activeProfiles;
 
-	    var service = {
-	    	activeProfiles: activeProfiles,	    		
-	    	ribbonEnv: ribbonEnv,
-	        inProduction: inProduction,
-	        fetch:fetch
-	    };
+        var service = {
+            activeProfiles : activeProfiles
+        };
 
-	    return service;
-    	
-	    function fetch() {
-	        var deferred = $q.defer();
-	        if (angular.isDefined(_response)) {
-	        	deferred.resolve(_response);
-	        	return deferred.promise;
-	        }
-	        
-	    	rest().get(function(result) {
-	            if (result.data.activeProfiles) {
-        			var response = {};
-        			response.activeProfiles=result.data.activeProfiles;
-        			response.ribbonEnv=result.data.ribbonEnv;
-        			response.inProduction=result.data.activeProfiles.indexOf("prod")!=-1;
-        			_response = response;
-        			deferred.resolve(response)
-	            }
-	        })
-	        
-	        return deferred.promise;	    	
-	    }
-    	
-        function rest() { 
-        	
-        	return $resource('api/activeProfiles', {}, {
-        		'get': { method: 'GET', params: {}, isArray: false,
-                interceptor: {
-                    response: function(response) {
-                        // expose response
-                        return response;
+        return service;
+
+        function rest() {
+
+            return $resource('api/activeProfiles', {}, {
+                'get' : {
+                    method : 'GET',
+                    params : {},
+                    isArray : false,
+                    interceptor : {
+                        response : function(response) {
+                            // expose response
+                            return response;
+                        }
                     }
                 }
-            }});
+            });
         }
-        
-        function inProduction() {
-        	return _inProduction;
-        }
-        
-        function ribbonEnv() {
-        	return _ribbonEnv;
-        }
-        
+
         function activeProfiles() {
-        	return _activeProfiles;
+            var deferred = $q.defer();
+            if (angular.isDefined(_activeProfiles)) {
+                deferred.resolve(_activeProfiles);
+            } else {
+                rest().get(function(result) {
+                    if (result.data.activeProfiles) {
+                        var response = {};
+                        response.activeProfiles = result.data.activeProfiles;
+                        response.ribbonEnv = result.data.ribbonEnv;
+                        response.inProduction = result.data.activeProfiles.indexOf("prod") !== -1;
+                        _activeProfiles = response;
+                        deferred.resolve(response);
+                    }
+                });
+            }
+
+            return deferred.promise;
         }
     }
 })();

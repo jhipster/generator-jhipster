@@ -12,11 +12,10 @@
 
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
-        
-        ActiveProfiles.fetch().then(function(response) {
-                vm.inProduction = response.inProduction;
-        })
 
+        ActiveProfiles.activeProfiles().then(function(response) {
+            vm.inProduction = response.inProduction;
+        });
 
         vm.login = login;
         vm.logout = logout;
@@ -24,22 +23,22 @@
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
 
-        function login () {
+        function login() {
             collapseNavbar();
             LoginService.open();
         }
 
-        function logout () {
+        function logout() {
             collapseNavbar();
             Auth.logout();
             $state.go('home');
         }
 
-        function toggleNavbar () {
+        function toggleNavbar() {
             vm.isNavbarCollapsed = !vm.isNavbarCollapsed;
         }
 
-        function collapseNavbar () {
+        function collapseNavbar() {
             vm.isNavbarCollapsed = true;
         }
     }
