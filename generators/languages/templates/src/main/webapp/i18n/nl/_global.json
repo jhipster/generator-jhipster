@@ -113,5 +113,10 @@
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
     },
-    "footer": "Dit is uw voettekst"
+    "footer": "Dit is uw voettekst",
+    "ribbon": {
+        "dev":"Ontwikkeling",
+        "test":"Test omgeving",
+        "uat":"Gebruikers Acceptatie"
+    }
 }

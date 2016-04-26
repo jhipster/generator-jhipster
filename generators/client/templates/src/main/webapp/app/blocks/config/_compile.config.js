@@ -5,13 +5,15 @@
         .module('<%=angularAppName%>')
         .config(compileServiceConfig);
 
-    compileServiceConfig.$inject = ['$compileProvider', 'ENV'];
+    compileServiceConfig.$inject = ['$compileProvider'];
 
-    function compileServiceConfig($compileProvider, ENV) {
+    function compileServiceConfig($compileProvider) {
         // disable debug data on prod profile to improve performance
-        if(ENV === 'prod'){
-            $compileProvider.debugInfoEnabled(false);
-        }
+        
+        // TODO: Howto fetch the dynamic profile in this config.... can this be done elsewhere ?
+        // if(ENV === 'prod'){
+        //     $compileProvider.debugInfoEnabled(false);
+        // }
 
         /*
         If you wish to debug an application with this information
