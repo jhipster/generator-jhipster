@@ -134,7 +134,7 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:${jackson_version}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"
     compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
@@ -224,15 +224,15 @@ dependencies {
     }
     <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile "mysql:mysql-connector-java"<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile "org.postgresql:postgresql:${postgresql_version}"<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+    compile "org.postgresql:postgresql"<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
     compile "com.h2database:h2"<% } %>
     compile "fr.ippon.spark.metrics:metrics-spark-reporter:${metrics_spark_reporter_version}"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"<% if (enableSocialSignIn) { %>
-    compile "org.apache.httpcomponents:httpclient:${httpclient_version}"
-    compile "org.springframework.social:spring-social-security:${spring_social_security_version}"
+    compile "org.apache.httpcomponents:httpclient"
+    compile "org.springframework.social:spring-social-security"
     compile "org.springframework.social:spring-social-google:${spring_social_google_version}"
-    compile "org.springframework.social:spring-social-facebook:${spring_social_facebook_version}"
-    compile "org.springframework.social:spring-social-twitter:${spring_social_twitter_version}"<% } %>
+    compile "org.springframework.social:spring-social-facebook"
+    compile "org.springframework.social:spring-social-twitter"<% } %>
     testCompile "com.jayway.awaitility:awaitility:${awaility_version}"
     testCompile "com.jayway.jsonpath:json-path"<% if (databaseType == 'cassandra') { %>
     testCompile("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
