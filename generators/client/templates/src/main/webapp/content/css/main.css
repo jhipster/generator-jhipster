@@ -293,6 +293,25 @@ Social Buttons
 
 /* end of entity tables helpers */
 
+/* entity detail page css */
+.dl-horizontal.jh-entity-details > dd {
+    margin-bottom: 15px;
+}
+
+@media screen and (min-width: 768px) {
+    .dl-horizontal.jh-entity-details > dt {
+        margin-bottom: 15px;
+    }
+
+    .dl-horizontal.jh-entity-details > dd {
+        border-bottom: 1px solid #eee;
+        padding-left: 180px;
+        margin-left: 0;
+    }
+}
+
+/* end of entity detail page css */
+
 /* ui bootstrap tweaks */
 .nav, .pagination, .carousel, .panel-title a {
     cursor: pointer;
@@ -304,9 +323,10 @@ Social Buttons
 }
 
 .datetime-picker-dropdown > li.date-picker-menu div > table:focus,
-.uib-datepicker-popup  > li > div.uib-datepicker > table:focus{
+.uib-datepicker-popup  > li > div.uib-datepicker > table:focus {
     outline: none;
 }
+
 /* end of ui bootstrap tweaks */
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */

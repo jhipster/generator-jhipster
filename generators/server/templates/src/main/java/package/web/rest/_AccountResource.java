@@ -1,7 +1,7 @@
 package <%=packageName%>.web.rest;
 
-import com.codahale.metrics.annotation.Timed;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<% } %><% if (authenticationType == 'session') { %>
+import com.codahale.metrics.annotation.Timed;
+<% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
