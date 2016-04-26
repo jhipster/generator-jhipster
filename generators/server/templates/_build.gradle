@@ -130,7 +130,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jackson_version
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: jackson_version
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jackson_version
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
     compile (group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version) {
@@ -215,15 +215,15 @@ dependencies {
     }
     <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile group: 'mysql', name: 'mysql-connector-java'<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+    compile group: 'org.postgresql', name: 'postgresql'<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
     compile group: 'com.h2database', name: 'h2'<% } %>
     compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
     compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version<% if (enableSocialSignIn) { %>
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: httpclient_version
-    compile group: 'org.springframework.social', name: 'spring-social-security', version: spring_social_security_version
+    compile group: 'org.apache.httpcomponents', name: 'httpclient'
+    compile group: 'org.springframework.social', name: 'spring-social-security'
     compile group: 'org.springframework.social', name: 'spring-social-google', version: spring_social_google_version
-    compile group: 'org.springframework.social', name: 'spring-social-facebook', version: spring_social_facebook_version
-    compile group: 'org.springframework.social', name: 'spring-social-twitter', version: spring_social_twitter_version<% } %>
+    compile group: 'org.springframework.social', name: 'spring-social-facebook'
+    compile group: 'org.springframework.social', name: 'spring-social-twitter'<% } %>
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path'<% if (databaseType == 'cassandra') { %>
     testCompile(group: 'org.cassandraunit', name: 'cassandra-unit-spring', version: cassandra_unit_spring_version) {
