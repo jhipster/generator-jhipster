@@ -235,7 +235,7 @@ dependencies {
     compile "org.springframework.social:spring-social-twitter:${spring_social_twitter_version}"<% } %>
     testCompile "com.jayway.awaitility:awaitility:${awaility_version}"
     testCompile "com.jayway.jsonpath:json-path"<% if (databaseType == 'cassandra') { %>
-    testCompile("org.cassandraunit'cassandra-unit-spring:${cassandra_unit_spring_version}") {
+    testCompile("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
         exclude(module: 'org.slf4j')
     }<% } %><% if (testFrameworks.indexOf('cucumber') != -1) { %>
     testCompile "info.cukes:cucumber-junit:${cucumber_version}"
