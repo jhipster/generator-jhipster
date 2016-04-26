@@ -274,7 +274,7 @@ module.exports = EntityGenerator.extend({
             this.log(chalk.white('Relationships'));
             this.relationships.forEach(function (relationship) {
                 var validationDetails = '';
-                var relationshipValidate = _.isArray(relationship.relationshipValidateRules) && relationship.relationshipValidateRules.length >= 1;
+                var relationshipValidate = relationship.relationshipValidateRules && relationship.relationshipValidateRules.length >= 1;
                 if (relationshipValidate === true) {
                     if (relationship.relationshipValidateRules.indexOf('required') !== -1) {
                         validationDetails = 'required ';
@@ -932,19 +932,27 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
-                    return response.relationshipAdd === true &&
-                        response.relationshipType === 'many-to-one';
+                    return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
+                },
+                type: 'input',
+                name: 'otherEntityField',
+                message: function (response) {
+                    return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?';
+                },
+                default: 'id'
+            },
+            {
+                when: function (response) {
+                    return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
                 },
                 type: 'confirm',
                 name: 'relationshipValidate',
-                message: 'Do you want to add validation rules to your relationship?',
+                message: 'Do you want add any validation rules to this relationship?',
                 default: false
             },
             {
                 when: function (response) {
-                    return response.relationshipAdd === true &&
-                        response.relationshipValidate === true &&
-                        response.relationshipType === 'many-to-one';
+                    return (response.relationshipValidate === true && (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true))));
                 },
                 type: 'checkbox',
                 name: 'relationshipValidateRules',
@@ -956,17 +964,6 @@ module.exports = EntityGenerator.extend({
                     }
                 ],
                 default: 0
-            },
-            {
-                when: function (response) {
-                    return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
-                },
-                type: 'input',
-                name: 'otherEntityField',
-                message: function (response) {
-                    return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?';
-                },
-                default: 'id'
             }
         ];
         this.prompt(prompts, function (props) {
@@ -1601,7 +1598,7 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainManyToOne = true;
                 }
 
-                if (_.isArray(relationship.relationshipValidateRules) && relationship.relationshipValidateRules.length >= 1) {
+                if (relationship.relationshipValidateRules) {
                     relationship.relationshipValidate = true;
                 } else {
                     relationship.relationshipValidate = false;
@@ -1784,7 +1781,7 @@ module.exports = EntityGenerator.extend({
     install: function () {
         var injectJsFilesToIndex = function () {
             this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
-            this.spawnCommand('gulp', ['inject']);
+            this.spawnCommand('gulp', ['inject:app']);
         };
         if (!this.options['skip-install'] && !this.skipClient) {
             injectJsFilesToIndex.call(this);
