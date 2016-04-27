@@ -197,7 +197,6 @@ gulp.task('ngconstant:dev', function () {
             '    {%= __ngModule %}\n' +
             '})();\n',
         constants: {
-            ENV: 'dev',
             VERSION: util.parseVersion()
         }
     })
@@ -218,7 +217,6 @@ gulp.task('ngconstant:prod', function () {
             '    {%= __ngModule %}\n' +
             '})();\n',
         constants: {
-            ENV: 'prod',
             VERSION: util.parseVersion()
         }
     })
