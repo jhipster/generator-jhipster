@@ -203,7 +203,7 @@ module.exports = JhipsterServerGenerator.extend({
                     this.languages = ['en', 'fr'];
                 }
                 // user-management will be handled by UAA app
-                if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+                if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
 
@@ -215,9 +215,9 @@ module.exports = JhipsterServerGenerator.extend({
         }
     },
 
-    _getUaaAppName : function (input) {
+    _getUaaAppName: function (input) {
         var fromPath = '';
-        if(path.isAbsolute(input)) {
+        if (path.isAbsolute(input)) {
             fromPath = input + '/' + '.yo-rc.json';
         } else {
             fromPath = this.destinationPath(input + '/' + '.yo-rc.json');
@@ -721,11 +721,11 @@ module.exports = JhipsterServerGenerator.extend({
                 }
 
                 //this will be handled by the UAA app
-                if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+                if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
 
-                if(this.applicationType === 'uaa') {
+                if (this.applicationType === 'uaa') {
                     this.authenticationType = 'uaa';
                 }
 
@@ -947,36 +947,36 @@ module.exports = JhipsterServerGenerator.extend({
         writeServerBuildFiles: function () {
 
             switch (this.buildTool) {
-            case 'gradle':
-                this.template('_build.gradle', 'build.gradle', this, {});
-                this.template('_settings.gradle', 'settings.gradle', this, {});
-                this.template('_gradle.properties', 'gradle.properties', this, {});
-                if (!this.skipClient) {
-                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
-                }
-                this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
-                this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
-                this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                if (this.testFrameworks.indexOf('gatling') !== -1) {
-                    this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
-                }
-                if (this.databaseType === 'sql') {
-                    this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle', this, {});
-                }
-                this.copy('gradlew', 'gradlew');
-                this.copy('gradlew.bat', 'gradlew.bat');
-                this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
-                this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
-                break;
-            case 'maven':
-            default :
-                this.copy('mvnw', 'mvnw');
-                this.copy('mvnw.cmd', 'mvnw.cmd');
-                this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
-                this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
-                this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
+                case 'gradle':
+                    this.template('_build.gradle', 'build.gradle', this, {});
+                    this.template('_settings.gradle', 'settings.gradle', this, {});
+                    this.template('_gradle.properties', 'gradle.properties', this, {});
+                    if (!this.skipClient) {
+                        this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
+                    }
+                    this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
+                    this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
+                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    if (this.testFrameworks.indexOf('gatling') !== -1) {
+                        this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
+                    }
+                    if (this.databaseType === 'sql') {
+                        this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle', this, {});
+                    }
+                    this.copy('gradlew', 'gradlew');
+                    this.copy('gradlew.bat', 'gradlew.bat');
+                    this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
+                    this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
+                    break;
+                case 'maven':
+                default :
+                    this.copy('mvnw', 'mvnw');
+                    this.copy('mvnw.cmd', 'mvnw.cmd');
+                    this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
+                    this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
+                    this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
             }
         },
 
@@ -1008,8 +1008,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.databaseType === 'mongodb') {
-                this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/authorities.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/authorities.xml');
-                this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/master.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/master.xml');
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/InitialSetupMigration.java', SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/InitialSetupMigration.java', this, {});
             }
 
             if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
@@ -1043,7 +1042,7 @@ module.exports = JhipsterServerGenerator.extend({
             /* Skip the code below for --skip-user-management */
             if (this.skipUserManagement) return;
 
-            if(this.applicationType === 'uaa') {
+            if (this.applicationType === 'uaa') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaWebSecurityConfiguration.java', javaDir + 'config/UaaWebSecurityConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaConfiguration.java', javaDir + 'config/UaaConfiguration.java', this, {});
             } else {
@@ -1130,7 +1129,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway'  && this.applicationType !== 'uaa') return;
+            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway' && this.applicationType !== 'uaa') return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});
@@ -1301,7 +1300,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_TEST_RES_DIR + '_logback-test.xml', SERVER_TEST_RES_DIR + 'logback-test.xml', this, {});
 
             // Create Gateway tests files
-            if (this.applicationType === 'gateway'){
+            if (this.applicationType === 'gateway') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
 
@@ -1340,11 +1339,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv');
-            }
-
-            if (this.databaseType === 'mongodb') {
-                this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml');
-                this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml');
             }
 
             // Email templates
