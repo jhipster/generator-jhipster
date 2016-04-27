@@ -1042,7 +1042,7 @@
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
-                        <version>0.0.29</version>
+                        <version>1.0</version>
                         <executions>
                             <execution>
                                 <id>install node and npm</id>
