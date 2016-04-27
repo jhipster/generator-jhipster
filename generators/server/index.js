@@ -1008,7 +1008,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.databaseType === 'mongodb') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/InitialSetupMigration.java', SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/InitialSetupMigration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/_InitialSetupMigration.java', javaDir + 'config/dbmigrations/InitialSetupMigration.java', this, {});
             }
 
             if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
