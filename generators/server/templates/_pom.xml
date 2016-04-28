@@ -187,7 +187,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate4</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -419,7 +418,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -654,12 +652,10 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-security</artifactId>
-            <version>${spring-social-security.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
@@ -669,12 +665,10 @@
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-facebook</artifactId>
-            <version>${spring-social-facebook.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-twitter</artifactId>
-            <version>${spring-social-twitter.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
