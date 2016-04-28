@@ -62,6 +62,7 @@ test {
     reports.html.enabled = false
 }
 
+<% if (testFrameworks.indexOf('cucumber') != -1) { %>
 task cucumberTest(type: Test) {
     include '**/CucumberTest*'
 
@@ -69,15 +70,16 @@ task cucumberTest(type: Test) {
     reports.html.enabled = false
 }
 
-test.finalizedBy(cucumberTest)
+test.finalizedBy(cucumberTest)<% } %>
 
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
-    reportOn test
-    reportOn cucumberTest
+    reportOn test<% if (testFrameworks.indexOf('cucumber') != -1) { %>
+    reportOn cucumberTest<% } %>
 }
 
-cucumberTest.finalizedBy(testReport)
+<% if (testFrameworks.indexOf('cucumber') != -1) { %>
+cucumberTest.finalizedBy(testReport)<% } %>
 <% if(!skipClient) {%>
 apply from: 'gradle/yeoman.gradle'<% } %>
 apply from: 'gradle/sonar.gradle'
