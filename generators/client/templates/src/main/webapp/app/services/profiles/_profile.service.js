@@ -35,7 +35,7 @@
         }
 
         function profileInfo() {
-            if (dataPromise==null) {
+            if (dataPromise===null) {
                 dataPromise = rest().get().$promise.then(function(result) {
                     if (result.data.activeProfiles) {
                         var response = {};
