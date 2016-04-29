@@ -8,7 +8,7 @@
     AuditsService.$inject = ['$resource'];
 
     function AuditsService ($resource) {
-        var service = $resource('api/audits/:id', {}, {
+        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName %>/api/audits/:id'<%} else { %>'api/audits/:id'<% } %>, {}, {
             'get': {
                 method: 'GET',
                 isArray: true
