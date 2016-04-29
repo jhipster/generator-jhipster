@@ -1125,7 +1125,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerMicroserviceFiles: function () {
-            if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa') return;
+            if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa')) return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MicroserviceSecurityConfiguration.java', javaDir + 'config/MicroserviceSecurityConfiguration.java', this, {});
         },
