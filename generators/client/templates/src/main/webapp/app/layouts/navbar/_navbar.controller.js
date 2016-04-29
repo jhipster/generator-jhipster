@@ -5,15 +5,15 @@
         .module('<%=angularAppName%>')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ActiveProfiles', 'LoginService'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
 
-    function NavbarController ($state, Auth, Principal, ActiveProfiles, LoginService) {
+    function NavbarController ($state, Auth, Principal, ProfileService, LoginService) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
 
-        ActiveProfiles.activeProfiles().then(function(response) {
+        ProfileService.profileInfo().then(function(response) {
             vm.inProduction = response.inProduction;
         });
 

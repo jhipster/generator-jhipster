@@ -558,7 +558,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularProfileServiceFiles: function () {
             // services
-            this.template(ANGULAR_DIR + 'services/profiles/_active-profiles.service.js', ANGULAR_DIR + 'services/profiles/active-profiles.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/profiles/_profile.service.js', ANGULAR_DIR + 'services/profiles/profile.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/profiles/_page-ribbon.directive.js', ANGULAR_DIR + 'services/profiles/page-ribbon.directive.js', this, {});
         },        
 

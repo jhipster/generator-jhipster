@@ -3,16 +3,16 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('ActiveProfiles', ActiveProfiles);
+        .factory('ProfileService', ProfileService);
 
-    ActiveProfiles.$inject = ['$q', '$resource'];
+    ProfileService.$inject = ['$q', '$resource'];
 
-    function ActiveProfiles($q, $resource) {
+    function ProfileService($q, $resource) {
 
-        var _activeProfiles;
+        var dataPromise;
 
         var service = {
-            activeProfiles : activeProfiles
+            profileInfo : profileInfo
         };
 
         return service;
@@ -34,24 +34,19 @@
             });
         }
 
-        function activeProfiles() {
-            var deferred = $q.defer();
-            if (angular.isDefined(_activeProfiles)) {
-                deferred.resolve(_activeProfiles);
-            } else {
-                rest().get(function(result) {
+        function profileInfo() {
+            if (dataPromise==null) {
+                dataPromise = rest().get().$promise.then(function(result) {
                     if (result.data.activeProfiles) {
                         var response = {};
                         response.activeProfiles = result.data.activeProfiles;
                         response.ribbonEnv = result.data.ribbonEnv;
                         response.inProduction = result.data.activeProfiles.indexOf("prod") !== -1;
-                        _activeProfiles = response;
-                        deferred.resolve(response);
+                        return response;
                     }
                 });
             }
-
-            return deferred.promise;
+            return dataPromise;
         }
     }
 })();
