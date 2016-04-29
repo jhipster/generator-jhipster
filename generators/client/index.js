@@ -227,7 +227,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         saveConfig: function () {
@@ -278,6 +277,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
             if (configOptions.nativeLanguage !== undefined) {
                 this.nativeLanguage = configOptions.nativeLanguage;
+                this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
             }
             if (configOptions.languages !== undefined) {
                 this.languages = configOptions.languages;

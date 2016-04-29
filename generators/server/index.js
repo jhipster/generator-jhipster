@@ -837,7 +837,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             javaDir = this.javaDir = SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             this.testDir = SERVER_TEST_SRC_DIR + this.packageFolder + '/';
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         saveConfig: function () {
@@ -875,6 +874,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (configOptions.nativeLanguage !== undefined) {
                 this.nativeLanguage = configOptions.nativeLanguage;
+                this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
             }
             if (configOptions.languages !== undefined) {
                 this.languages = configOptions.languages;
