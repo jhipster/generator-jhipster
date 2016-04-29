@@ -644,7 +644,7 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('cassandra noi18n', function () {
+    describe('cassandra no i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -678,7 +678,7 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('i18n', function () {
+    describe('no i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})

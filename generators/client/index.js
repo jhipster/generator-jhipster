@@ -277,7 +277,6 @@ module.exports = JhipsterClientGenerator.extend({
             }
             if (configOptions.nativeLanguage !== undefined) {
                 this.nativeLanguage = configOptions.nativeLanguage;
-                this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
             }
             if (configOptions.languages !== undefined) {
                 this.languages = configOptions.languages;
@@ -287,6 +286,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.uaaBaseName = configOptions.uaaBaseName;
             }
 
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
             // Make dist dir available in templates
             if (configOptions.buildTool === 'maven') {
                 this.BUILD_DIR = 'target/';

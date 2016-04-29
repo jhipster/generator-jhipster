@@ -874,7 +874,6 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (configOptions.nativeLanguage !== undefined) {
                 this.nativeLanguage = configOptions.nativeLanguage;
-                this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
             }
             if (configOptions.languages !== undefined) {
                 this.languages = configOptions.languages;
@@ -882,6 +881,7 @@ module.exports = JhipsterServerGenerator.extend({
             if (configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         composeLanguages: function () {
