@@ -19,7 +19,7 @@ env:
     - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
     - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0
-    - JHIPSTER=app-gradle PROTRACTOR=1
+    - JHIPSTER=app-gradle
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-social-websocket PROTRACTOR=1
