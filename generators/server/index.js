@@ -1421,7 +1421,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeProfilesRestFiles: function () {
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_ActiveProfilesResource.java', javaDir + 'web/rest/ActiveProfilesResource.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_ProfileInfoResource.java', javaDir + 'web/rest/ProfileInfoResource.java', this, {});
         }
     },
 
