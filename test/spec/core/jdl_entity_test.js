@@ -56,20 +56,33 @@ describe('JDLEntity', function () {
     });
   });
   describe('::isValid', function() {
-    describe('when checking the validity of an object', function() {
-      it('returns false', function() {
-        expect(JDLEntity.isValid(null)).to.be.false;
-        expect(JDLEntity.isValid(undefined)).to.be.false;
+    describe('when checking the validity of an invalid object', function() {
+      describe('because it is nil or invalid', function() {
+        it('returns false', function() {
+          expect(JDLEntity.isValid(null)).to.be.false;
+          expect(JDLEntity.isValid(undefined)).to.be.false;
+        });
+      });
+      describe('without a name attribute', function() {
+        it('returns false', function() {
+          expect(
+              JDLEntity.isValid({tableName: 'Something', fields: []})
+          ).to.be.false;
+        });
+      });
+      describe('without a table name', function() {
+        it('returns false', function() {
+          expect(
+              JDLEntity.isValid({name: 'Something', fields: []})
+          ).to.be.false;
+        });
       });
     });
-    describe('when checking the validity of an object without a name attribute', function() {
-      it('returns false', function() {
-        expect(JDLEntity.isValid({})).to.be.false;
-      });
-    });
-    describe('when checking the validity of an object with a name attribute', function() {
+    describe('when checking the validity of a valid object', function() {
       it('returns true', function() {
-        expect(JDLEntity.isValid({name: 'valid'})).to.be.true;
+        expect(
+            JDLEntity.isValid({name: 'Valid', tableName: 't_valid', fields: []})
+        ).to.be.true;
       });
     });
   });
