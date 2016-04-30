@@ -127,3 +127,5 @@ jhipster:
         redirectAfterSignIn: "/#/home"
         <%_ } _%>
 <%_ } _%>
+    ribbon:
+        displayOnActiveProfiles: dev,test,uat

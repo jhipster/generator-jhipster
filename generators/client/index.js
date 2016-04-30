@@ -556,12 +556,16 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
         },
 
+        writeAngularProfileServiceFiles: function () {
+            // services
+            this.template(ANGULAR_DIR + 'services/profiles/_profile.service.js', ANGULAR_DIR + 'services/profiles/profile.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/profiles/_page-ribbon.directive.js', ANGULAR_DIR + 'services/profiles/page-ribbon.directive.js', this, {});
+        },        
+
         writeImageFiles: function () {
             // Images
-            this.copy(MAIN_SRC_DIR + 'content/images/development_ribbon.png', MAIN_SRC_DIR + 'content/images/development_ribbon.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
-
         },
 
         writeClientTestFwFiles: function () {

@@ -193,8 +193,8 @@ gulp.task('ngconstant:dev', function () {
             '    {%= __ngModule %}\n' +
             '})();\n',
         constants: {
-            ENV: 'dev',
-            VERSION: util.parseVersion()
+            VERSION: util.parseVersion(),
+            DEBUG_INFO_ENABLED: true
         }
     })
     .pipe(gulp.dest(config.app + 'app/'));
@@ -214,8 +214,8 @@ gulp.task('ngconstant:prod', function () {
             '    {%= __ngModule %}\n' +
             '})();\n',
         constants: {
-            ENV: 'prod',
-            VERSION: util.parseVersion()
+            VERSION: util.parseVersion(),
+            DEBUG_INFO_ENABLED: false
         }
     })
     .pipe(gulp.dest(config.app + 'app/'));

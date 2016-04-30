@@ -47,6 +47,8 @@ public class JHipsterProperties {
     private final Gateway gateway = new Gateway();
     <%_ } _%>
 
+    private final Ribbon ribbon = new Ribbon();
+
     public Async getAsync() {
         return async;
     }
@@ -90,6 +92,10 @@ public class JHipsterProperties {
         return gateway;
     }
     <%_ } _%>
+
+    public Ribbon getRibbon() {
+        return ribbon;
+    }
 
     public static class Async {
 
@@ -697,4 +703,18 @@ public class JHipsterProperties {
         }
     }
 <%_ } _%>
+
+    public static class Ribbon {
+
+        private String[] displayOnActiveProfiles;
+
+        public String[] getDisplayOnActiveProfiles() {
+            return displayOnActiveProfiles;
+        }
+        
+        public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
+            this.displayOnActiveProfiles = displayOnActiveProfiles;
+        }
+    }  
+
 }

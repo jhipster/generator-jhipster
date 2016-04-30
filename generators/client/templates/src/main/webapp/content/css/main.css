@@ -14,18 +14,35 @@ Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 /* ==========================================================================
 Developement Ribbon
 ========================================================================== */
-.development {
+.ribbon {
+    background-color: #a00;
+    box-shadow: 0 0 10px #888;
+    left: -3.5em;
+    moz-box-shadow: 0 0 10px #888;
+    moz-transform: rotate(-45deg);
+    ms-transform: rotate(-45deg);
+    o-transform: rotate(-45deg);
+    overflow: hidden;
     position: absolute;
-    width: 149px;
-    height: 149px;
-    top: 0;
-    left: 0;
-    border: 0;
-    z-index: 1000;
-    background-image: url("../images/development_ribbon.png");
-    background-position: center center;
-    background-repeat: no-repeat;
-    pointer-events: none;
+    top: 40px;
+    transform: rotate(-45deg);
+    webkit-box-shadow: 0 0 10px #888;
+    webkit-transform: rotate(-45deg);
+    white-space: nowrap;
+    width: 15em;
+    z-index: 9999;
+}
+
+.ribbon a {
+    border: 1px solid #faa;
+    color: #fff;
+    display: block;
+    font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 1px 0;
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 0 5px #444;
 }
 
 /* ==========================================================================
