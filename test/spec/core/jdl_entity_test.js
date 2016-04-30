@@ -56,7 +56,7 @@ describe('JDLEntity', function () {
     });
   });
   describe('::isValid', function() {
-    describe('when checking the validity of a object', function() {
+    describe('when checking the validity of an object', function() {
       it('returns false', function() {
         expect(JDLEntity.isValid(null)).to.be.false;
         expect(JDLEntity.isValid(undefined)).to.be.false;
