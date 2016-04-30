@@ -50,7 +50,7 @@ describe('JDLField', function () {
     });
   });
   describe('::isValid', function() {
-    describe('when checking the validity of a object', function() {
+    describe('when checking the validity of an object', function() {
       it('returns false', function() {
         expect(JDLField.isValid(null)).to.be.false;
         expect(JDLField.isValid(undefined)).to.be.false;
