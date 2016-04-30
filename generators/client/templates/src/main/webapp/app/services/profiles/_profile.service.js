@@ -19,7 +19,7 @@
 
         function getProfileInfo() {
             if (!angular.isDefined(dataPromise)) {
-                dataPromise = $http.get('api/activeProfiles').then(function(result) {
+                dataPromise = $http.get('api/profile-info').then(function(result) {
                     if (result.data.activeProfiles) {
                         var response = {};
                         response.activeProfiles = result.data.activeProfiles;
