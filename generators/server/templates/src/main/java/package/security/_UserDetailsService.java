@@ -1,6 +1,4 @@
 package <%=packageName%>.security;
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<%}%>
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import org.slf4j.Logger;

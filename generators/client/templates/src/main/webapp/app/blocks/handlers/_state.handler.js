@@ -6,16 +6,15 @@
         .factory('stateHandler', stateHandler);
 
     stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } %> '$window',
-        'Auth', 'Principal', 'ENV', 'VERSION'];
+        'Auth', 'Principal', 'VERSION'];
 
     function stateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } %> $window,
-        Auth, Principal, ENV, VERSION) {
+        Auth, Principal, VERSION) {
         return {
             initialize: initialize
         };
 
         function initialize() {
-            $rootScope.ENV = ENV;
             $rootScope.VERSION = VERSION;
 
             var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {

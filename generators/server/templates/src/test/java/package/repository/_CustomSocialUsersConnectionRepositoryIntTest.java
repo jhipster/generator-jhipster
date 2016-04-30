@@ -176,8 +176,9 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
         providerUsers.add("twitter", "1");
         MultiValueMap<String, Connection<?>> connectionsForUsers = connectionRepository.findConnectionsToUsers(providerUsers);
         assertEquals(2, connectionsForUsers.size());
-        assertEquals("10", connectionsForUsers.getFirst("facebook").getKey().getProviderUserId());
-        assertFacebookConnection((Connection<TestFacebookApi>) connectionsForUsers.get("facebook").get(1));
+        String providerId=connectionsForUsers.getFirst("facebook").getKey().getProviderUserId();
+        assertTrue("10".equals(providerId) || "9".equals(providerId) );
+        assertFacebookConnection((Connection<TestFacebookApi>) connectionRepository.getConnection(new ConnectionKey("facebook", "9")));
         assertTwitterConnection((Connection<TestTwitterApi>) connectionsForUsers.getFirst("twitter"));
     }
 
@@ -278,6 +279,7 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
         Connection<TestFacebookApi> connection = connectionFactory.createConnection(new AccessGrant("123456789", null, "987654321", 3600L));
         connectionRepository.addConnection(connection);
         connectionRepository.addConnection(connection);
+        socialUserConnectionRepository.flush();    
     }
 
     @Test
