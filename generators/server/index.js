@@ -1418,6 +1418,10 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_UserStepDefs.java', testDir + 'cucumber/stepdefs/UserStepDefs.java', this, {});
                 this.copy('src/test/features/user/user.feature', 'src/test/features/user/user.feature');
             }
+        },
+
+        writeProfilesRestFiles: function () {
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_ProfileInfoResource.java', javaDir + 'web/rest/ProfileInfoResource.java', this, {});
         }
     },
 

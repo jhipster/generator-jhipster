@@ -127,3 +127,6 @@ jhipster:
         redirectAfterSignIn: "/#/home"
         <%_ } _%>
 <%_ } _%>
+    ribbon:
+        # comma seperated list of profiles to show a ribbon on the GUI
+        displayOnActiveProfiles: dev

@@ -144,7 +144,7 @@
                                 <span translate="global.menu.admin.logs">Logs</span>
                             </a>
                         </li>
-                        <li ng-hide="vm.inProduction" ui-sref-active="active">
+                        <li ng-hide="vm.inProduction || vm.swaggerDisabled" ui-sref-active="active">
                             <a ui-sref="docs" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-book"></span>&nbsp;
                                 <span translate="global.menu.admin.apidocs">API</span>
