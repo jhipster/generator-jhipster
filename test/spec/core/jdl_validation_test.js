@@ -23,6 +23,24 @@ describe('JDLValidation', function () {
       });
     });
   });
+  describe('::isValid', function() {
+    describe('when checking the validity of an object', function() {
+      it('returns false', function() {
+        expect(JDLValidation.isValid(null)).to.be.false;
+        expect(JDLValidation.isValid(undefined)).to.be.false;
+      });
+    });
+    describe('when checking the validity of an object without a name attribute', function() {
+      it('returns false', function() {
+        expect(JDLValidation.isValid({})).to.be.false;
+      });
+    });
+    describe('when checking the validity of an object with a name attribute', function() {
+      it('returns true', function() {
+        expect(JDLValidation.isValid({name: 'required'})).to.be.true;
+      });
+    });
+  });
   describe('#toString', function () {
     describe('with no value', function () {
       it('stringifies its content', function () {
