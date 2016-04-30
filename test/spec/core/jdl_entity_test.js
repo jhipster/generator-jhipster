@@ -55,6 +55,24 @@ describe('JDLEntity', function () {
       });
     });
   });
+  describe('::isValid', function() {
+    describe('when checking the validity of a object', function() {
+      it('returns false', function() {
+        expect(JDLEntity.isValid(null)).to.be.false;
+        expect(JDLEntity.isValid(undefined)).to.be.false;
+      });
+    });
+    describe('when checking the validity of an object without a name attribute', function() {
+      it('returns false', function() {
+        expect(JDLEntity.isValid({})).to.be.false;
+      });
+    });
+    describe('when checking the validity of an object with a name attribute', function() {
+      it('returns true', function() {
+        expect(JDLEntity.isValid({name: 'valid'})).to.be.true;
+      });
+    });
+  });
   describe('#toString', function () {
     describe('without a comment', function () {
       it('stringifies its content', function () {
@@ -78,7 +96,8 @@ describe('JDLEntity', function () {
 `/**
  * ${args.comment}
  */
-entity ${args.name} (${args.tableName})`);
+entity ${args.name} (${args.tableName})`
+        );
       });
     });
     describe('with fields', function () {
