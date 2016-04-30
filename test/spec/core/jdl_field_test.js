@@ -50,23 +50,25 @@ describe('JDLField', function () {
     });
   });
   describe('::isValid', function() {
-    describe('when checking the validity of an object', function() {
-      it('returns false', function() {
-        expect(JDLField.isValid(null)).to.be.false;
-        expect(JDLField.isValid(undefined)).to.be.false;
+    describe('when checking the validity of an invalid object', function() {
+      describe('because it is nil or undefined', function() {
+        it('returns false', function() {
+          expect(JDLField.isValid(null)).to.be.false;
+          expect(JDLField.isValid(undefined)).to.be.false;
+        });
+      });
+      describe('without a name attribute', function() {
+        it('returns false', function() {
+          expect(JDLField.isValid({type: 'String'})).to.be.false;
+        });
+      });
+      describe('without a type attribute', function() {
+        it('returns false', function() {
+          expect(JDLField.isValid({name: 'myField'})).to.be.false;
+        });
       });
     });
-    describe('when checking the validity of an object without a name attribute', function() {
-      it('returns false', function() {
-        expect(JDLField.isValid({type: 'String'})).to.be.false;
-      });
-    });
-    describe('when checking the validity of an object without a type attribute', function() {
-      it('returns false', function() {
-        expect(JDLField.isValid({name: 'myField'})).to.be.false;
-      });
-    });
-    describe('when checking the validity of an object with a name and a type attribute', function() {
+    describe('when checking the validity of a valid object', function() {
       it('returns true', function() {
         expect(JDLField.isValid({name: 'myField', type: 'String'})).to.be.true;
       });
