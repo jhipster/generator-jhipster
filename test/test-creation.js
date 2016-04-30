@@ -306,7 +306,6 @@ const expectedFiles = {
         CLIENT_TEST_SRC_DIR + 'spec/app/account/reset/request/reset.request.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/services/auth/auth.services.spec.js',
         CLIENT_MAIN_SRC_DIR + 'content/css/documentation.css',
-        CLIENT_MAIN_SRC_DIR + 'content/images/development_ribbon.png',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster.png',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster2x.png'
     ],
@@ -372,14 +371,22 @@ const expectedFiles = {
         DOCKER_DIR + 'sonar.yml'
     ],
 
-    dockerCassandra: [
+    cassandra: [
+        SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace-prod.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_insert_default_users.cql',
         DOCKER_DIR + 'cassandra/Cassandra.Dockerfile',
+        DOCKER_DIR + 'cassandra/Cassandra-Cluster.Dockerfile',
         DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile',
+        DOCKER_DIR + 'cassandra/scripts/autoMigrate.sh',
+        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
+        DOCKER_DIR + 'cassandra/scripts/execute-cql.sh',
         DOCKER_DIR + 'cassandra/scripts/init-dev.sh',
         DOCKER_DIR + 'cassandra/scripts/init-prod.sh',
-        DOCKER_DIR + 'cassandra/scripts/entities.sh',
-        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
         DOCKER_DIR + 'opscenter/Dockerfile',
+        DOCKER_DIR + 'cassandra-cluster.yml',
         DOCKER_DIR + 'cassandra-opscenter.yml',
         DOCKER_DIR + 'cassandra.yml'
     ],
@@ -392,7 +399,6 @@ const expectedFiles = {
 };
 
 describe('JHipster generator', function () {
-    this.timeout(5000); //to avoid occassional timeouts
 
     describe('default configuration', function () {
         beforeEach(function (done) {
@@ -633,11 +639,45 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with "Cassandra"', function () {
-            assert.file(expectedFiles.dockerCassandra);
+            assert.file(expectedFiles.cassandra);
         });
     });
 
-    describe('i18n', function () {
+    describe('cassandra no i18n', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'no',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'cassandra',
+                    'devDatabaseType': 'cassandra',
+                    'prodDatabaseType': 'cassandra',
+                    'useSass': false,
+                    'enableTranslation': false,
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false,
+                    'skipClient': false,
+                    'skipUserManagement': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with "Cassandra"', function () {
+            assert.file(expectedFiles.cassandra);
+            assert.noFile(expectedFiles.i18n);
+            assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
+        });
+    });
+
+    describe('no i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -940,7 +980,6 @@ describe('JHipster generator', function () {
 });
 
 describe('JHipster server generator', function () {
-    this.timeout(4000); //to avoid occassional timeouts
     describe('generate server', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/server'))
@@ -976,7 +1015,6 @@ describe('JHipster server generator', function () {
 });
 
 describe('JHipster client generator', function () {
-    this.timeout(4000); //to avoid occassional timeouts
     describe('generate client', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))

@@ -107,6 +107,10 @@ module.exports = LanguagesGenerator.extend({
     },
 
     default: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'languages');
+        },
 
         getSharedConfigOptions: function () {
             if (configOptions.applicationType) {
@@ -150,7 +154,6 @@ module.exports = LanguagesGenerator.extend({
 
     writing: function () {
         var insight = this.insight();
-        insight.track('generator', 'languages');
         this.languagesToApply && this.languagesToApply.forEach(function (language) {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
@@ -162,15 +165,6 @@ module.exports = LanguagesGenerator.extend({
         }, this);
         if (!this.skipClient) {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
-        }
-    },
-
-    install: function () {
-        var wiredepAddedBowerOverrides = function () {
-            this.spawnCommand('gulp', ['wiredep']);
-        };
-        if (!this.options['skip-install'] && !this.skipClient) {
-            wiredepAddedBowerOverrides.call(this);
         }
     }
 });

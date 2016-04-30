@@ -24,12 +24,12 @@ services:
         <%_ if (searchEngine == 'elasticsearch') { _%>
             - <%= baseName.toLowerCase() %>-elasticsearch:elasticsearch
         <%_ } _%>
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
             - jhipster-registry:registry
         <%_ } _%>
         environment:
             - SPRING_PROFILES_ACTIVE=prod
-            <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+            <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
             - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry:8761/eureka/
             - SPRING_CLOUD_CONFIG_URI=http://registry:8761/config
             <%_ } _%>
@@ -74,13 +74,13 @@ services:
     <%_ if (prodDatabaseType == 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:
         extends:
-            file: cassandra.yml
+            file: cassandra-cluster.yml
             service: <%= baseName.toLowerCase() %>-cassandra
     <%_ } _%>
     <%_ if (applicationType == 'gateway' && prodDatabaseType != 'cassandra') { _%>
         # Uncomment to have Cassandra working with the gateway
         # extends:
-        #     file: cassandra.yml
+        #     file: cassandra-cluster.yml
         #     service: <%= baseName.toLowerCase() %>-cassandra
     <%_ } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>
@@ -89,7 +89,7 @@ services:
             file: elasticsearch.yml
             service: <%= baseName.toLowerCase() %>-elasticsearch
     <%_ } _%>
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     jhipster-registry:
         extends:
             file: jhipster-registry.yml

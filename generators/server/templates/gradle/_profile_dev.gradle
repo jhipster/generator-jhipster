@@ -5,8 +5,8 @@ ext {
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
 }
 
 def profiles = 'dev'
@@ -26,11 +26,11 @@ bootRun {
 <% if (!skipClient) { %>
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
-}<% } %>
+}
 
 task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
-}
+}<% } %>
 
 task setProdProperties(dependsOn: bootRun) << {
     doFirst {
@@ -46,4 +46,5 @@ processResources {
     }
 }
 
-setProdProperties.dependsOn gulpConstantDev
+<% if (!skipClient) { %>
+setProdProperties.dependsOn gulpConstantDev<% } %>

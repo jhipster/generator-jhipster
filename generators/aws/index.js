@@ -12,6 +12,9 @@ util.inherits(AwsGenerator, scriptBase);
 
 module.exports = AwsGenerator.extend({
     initializing: {
+        initAws: function () {
+            this.awsFactory = new AwsFactory(this);
+        },
         getGlobalConfig: function () {
             this.existingProject = false;
             this.baseName = this.config.get('baseName');
@@ -145,11 +148,11 @@ module.exports = AwsGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'aws');
+            insight.trackWithEvent('generator', 'aws');
         },
         createAwsFactory: function () {
             var cb = this.async();
-            this.awsFactory = new AwsFactory({region: this.awsRegion});
+            this.awsFactory.init({region: this.awsRegion});
             cb();
         },
         saveConfig: function () {

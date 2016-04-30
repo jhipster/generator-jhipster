@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 public class CustomSignInAdapter implements SignInAdapter {
 
+    @SuppressWarnings("unused")
     private final Logger log = LoggerFactory.getLogger(CustomSignInAdapter.class);
 
     @Inject

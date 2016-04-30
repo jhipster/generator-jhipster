@@ -92,8 +92,15 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: 'jhi'
         });
 
+        // This adds support for a `--skip-user-management` flag
+        this.option('skip-user-management', {
+            desc: 'Skip the user management module during app generation',
+            type: Boolean,
+            defaults: false
+        });
+
         this.skipServer = configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = configOptions.skipUserManagement || this.config.get('skipUserManagement');
+        this.skipUserManagement = configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -206,7 +213,7 @@ module.exports = JhipsterClientGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'client');
             insight.track('app/useSass', this.useSass);
             insight.track('app/enableTranslation', this.enableTranslation);
             insight.track('app/nativeLanguage', this.nativeLanguage);
@@ -220,7 +227,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         saveConfig: function () {
@@ -276,6 +282,11 @@ module.exports = JhipsterClientGenerator.extend({
                 this.languages = configOptions.languages;
             }
 
+            if(configOptions.uaaBaseName !== undefined) {
+                this.uaaBaseName = configOptions.uaaBaseName;
+            }
+
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
             // Make dist dir available in templates
             if (configOptions.buildTool === 'maven') {
                 this.BUILD_DIR = 'target/';
@@ -436,6 +447,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularUserMgmntFiles: function () {
+            if (this.skipUserManagement) return;
+
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/user-management.html', ANGULAR_DIR + 'admin/user-management/user-management.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');
@@ -486,7 +499,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.js', ANGULAR_DIR + 'components/util/jhi-item-count.directive.js', this, {});
 
             // interceptor code
-            if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt') {
+            if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
                 this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.js', this, {});
             }
             this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.js', this, {});
@@ -528,7 +541,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/auth/_has-any-authority.directive.js', ANGULAR_DIR + 'services/auth/has-any-authority.directive.js', this, {});
             if (this.authenticationType === 'oauth2') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
-            } else if (this.authenticationType === 'jwt') {
+            } else if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.jwt.service.js', ANGULAR_DIR + 'services/auth/auth.jwt.service.js', this, {});
             } else {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.js', ANGULAR_DIR + 'services/auth/auth.session.service.js', this, {});
@@ -543,12 +556,16 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
         },
 
+        writeAngularProfileServiceFiles: function () {
+            // services
+            this.template(ANGULAR_DIR + 'services/profiles/_profile.service.js', ANGULAR_DIR + 'services/profiles/profile.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/profiles/_page-ribbon.directive.js', ANGULAR_DIR + 'services/profiles/page-ribbon.directive.js', this, {});
+        },        
+
         writeImageFiles: function () {
             // Images
-            this.copy(MAIN_SRC_DIR + 'content/images/development_ribbon.png', MAIN_SRC_DIR + 'content/images/development_ribbon.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
-
         },
 
         writeClientTestFwFiles: function () {
@@ -592,7 +609,7 @@ module.exports = JhipsterClientGenerator.extend({
                     'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
                     '\n' +
                     '\nInject your front end dependencies into your source code:' +
-                    '\n ' + chalk.yellow.bold('gulp wiredep') +
+                    '\n ' + chalk.yellow.bold('gulp inject') +
                     '\n' +
                     '\nGenerate the Angular constants:' +
                     '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +

@@ -253,6 +253,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Catalan', value: 'ca'},
         {name: 'Chinese (Simplified)', value: 'zh-cn'},
         {name: 'Chinese (Traditional)', value: 'zh-tw'},
+        {name: 'Czech', value: 'cs'},
         {name: 'Danish', value: 'da'},
         {name: 'Dutch', value: 'nl'},
         {name: 'English', value: 'en'},
@@ -271,6 +272,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Portuguese', value: 'pt-pt'},
         {name: 'Romanian', value: 'ro'},
         {name: 'Russian', value: 'ru'},
+        {name: 'Slovak', value: 'sk'},
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
@@ -480,7 +482,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
 };
 
 /**
- * Add a new social connection factory in the SocialConfiguration.java file.
+ * Add a new social button in the login and register modules
  *
  * @param {string} socialName - name of the social module. ex: 'facebook'
  * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
@@ -755,7 +757,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             file: fullPath,
             needle: 'jhipster-needle-gradle-buildscript-dependency',
             splicable: [
-                'classpath group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
+                'classpath \'' + group + ':' + name + ':' + version + '\''
             ]
         }, this);
     } catch (e) {
@@ -778,7 +780,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             file: fullPath,
             needle: 'jhipster-needle-gradle-dependency',
             splicable: [
-                scope + ' group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
+                scope + ' \'' + group + ':' + name + ':' + version + '\''
             ]
         }, this);
     } catch (e) {
@@ -1052,6 +1054,19 @@ Generator.prototype.copyI18nFilesByName = function (generator, webappDir, fileTo
     _this.copy(webappDir + 'i18n/' + lang + '/' + fileToCopy, webappDir + 'i18n/' + lang + '/' + fileToCopy);
 };
 
+/**
+ * Check if the JHipster version used to generate an existing project is less than the passed version argument
+ *
+ * @param {string} version - A valid semver version string
+ */
+Generator.prototype.isJhipsterVersionLessThan = function (version) {
+    var jhipsterVersion = this.config.get('jhipsterVersion');
+    if (!jhipsterVersion) {
+        return true;
+    }
+    return semver.lt(jhipsterVersion, version);
+};
+
 /*========================================================================*/
 /* private methods use within generator (not exposed to modules)*/
 /*========================================================================*/
@@ -1155,6 +1170,17 @@ Generator.prototype.insight = function () {
         packageName: packagejs.name,
         packageVersion: packagejs.version
     });
+
+    insight.trackWithEvent = function (category, action) {
+        insight.track(category, action);
+        insight.trackEvent({
+            category: category,
+            action: action,
+            label: category + ' ' + action,
+            value: 1
+        });
+    };
+
     return insight;
 };
 
@@ -1170,14 +1196,6 @@ Generator.prototype.removefolder = function (folder) {
         this.log('Removing the folder - ' + folder);
         shelljs.rm('-rf', folder);
     }
-};
-
-Generator.prototype.isJhipsterVersionLessThan = function (version) {
-    var jhipsterVersion = this.config.get('jhipsterVersion');
-    if (!jhipsterVersion) {
-        return true;
-    }
-    return semver.lt(jhipsterVersion, version);
 };
 
 Generator.prototype.getDefaultAppName = function () {

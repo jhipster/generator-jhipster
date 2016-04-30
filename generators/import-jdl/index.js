@@ -49,6 +49,10 @@ module.exports = JDLGenerator.extend({
         }
     },
     default: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'import-jdl');
+        },
 
         parseJDL: function () {
 
@@ -101,7 +105,7 @@ module.exports = JDLGenerator.extend({
     install: function () {
         var injectJsFilesToIndex = function () {
             this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
-            this.spawnCommand('gulp', ['inject']);
+            this.spawnCommand('gulp', ['inject:app']);
         };
         if (!this.options['skip-install'] && !this.skipClient) {
             injectJsFilesToIndex.call(this);

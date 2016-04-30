@@ -16,7 +16,7 @@
         vm.resetAccount = {};
         vm.success = null;
 
-        $timeout(function (){angular.element('[ng-model="resetAccount.email"]').focus();});
+        $timeout(function (){angular.element('#email').focus();});
 
         function requestReset () {
 

@@ -17,10 +17,10 @@
             "configServer": "Microservice Config Server",
             <%_ } _%>
             "diskSpace": "Schijfruimte",
-            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
-            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
-            "db": "Databank"<% } %><% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "Databank"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

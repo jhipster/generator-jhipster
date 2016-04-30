@@ -11,9 +11,15 @@
 # ===================================================================
 
 eureka:
-    client:
-        serviceUrl:
-            defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
+<%_ if (applicationType != 'gateway') { _%>
+  instance:
+    hostname: <%= herokuDeployedName %>.herokuapp.com
+    non-secure-port: 80
+    prefer-ip-address: false
+<%_ } _%>
+  client:
+    serviceUrl:
+      defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 
 spring:
   datasource:

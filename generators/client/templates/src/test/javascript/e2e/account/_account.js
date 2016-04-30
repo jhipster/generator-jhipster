@@ -10,7 +10,6 @@ describe('account', function () {
 
     beforeAll(function () {
         browser.get('/');
-        browser.driver.wait(protractor.until.elementIsVisible(element(by.css('h1'))));
     });
 
     it('should fail to login with bad password', function () {
