@@ -9,16 +9,16 @@
         var directive = {
             replace : true,
             restrict : 'AE',
-            template : '<div class="ribbon hidden"><a href="#" <% if (enableTranslation) { %>translate="{{ribbonTitle}}"<% } %>>{{ribbonTitle}}</a></div>',
+            template : '<div class="ribbon hidden"><a href="" <% if (enableTranslation) { %>translate="global.ribbon.{{ribbonEnv}}"<% } %>>{{ribbonEnv}}</a></div>',
             link : linkFunc
         };
 
         return directive;
 
         function linkFunc(scope, element, attrs) {
-            ProfileService.profileInfo().then(function(response) {
+            ProfileService.getProfileInfo().then(function(response) {
                 if (response.ribbonEnv) {
-                    scope.ribbonTitle = "ribbon." + response.ribbonEnv;
+                    scope.ribbonEnv = response.ribbonEnv;
                     element.addClass(response.ribbonEnv);
                     element.removeClass('hidden');
                 }

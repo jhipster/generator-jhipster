@@ -76,6 +76,9 @@
         },
         "field": {
             "id": "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -117,10 +120,5 @@
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{ entityName }} cannot already have an ID"
     },
-    "footer": "This is your footer",
-    "ribbon": {
-        "dev":"Development",
-        "test":"Test",
-        "uat":"User Acceptance"
-    }
+    "footer": "This is your footer"
 }

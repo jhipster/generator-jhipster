@@ -13,8 +13,9 @@
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
 
-        ProfileService.profileInfo().then(function(response) {
+        ProfileService.getProfileInfo().then(function(response) {
             vm.inProduction = response.inProduction;
+            vm.swaggerDisabled = response.swaggerDisabled;
         });
 
         vm.login = login;

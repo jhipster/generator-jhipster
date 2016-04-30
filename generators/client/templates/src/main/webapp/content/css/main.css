@@ -31,6 +31,7 @@ Developement Ribbon
     white-space: nowrap;
     width: 15em;
     z-index: 9999;
+    pointer-events: none;
 }
 
 .ribbon a {
@@ -43,6 +44,7 @@ Developement Ribbon
     text-align: center;
     text-decoration: none;
     text-shadow: 0 0 5px #444;
+    pointer-events: none;
 }
 
 /* ==========================================================================
