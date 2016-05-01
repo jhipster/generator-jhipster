@@ -41,10 +41,16 @@ describe('JDLValidation', function () {
           expect(JDLValidation.isValid({name: 'something'})).to.be.false;
         });
       });
+      describe('with a valid name but an invalid value', function() {
+        it('returns false', function() {
+          expect(JDLValidation.isValid({name: 'min'})).to.be.false;
+        });
+      });
     });
     describe('when checking the validity of a valid object', function() {
       it('returns true', function() {
         expect(JDLValidation.isValid({name: 'required'})).to.be.true;
+        expect(JDLValidation.isValid({name: 'minlength', value: 42})).to.be.true;
       });
     });
   });
