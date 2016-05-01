@@ -181,11 +181,12 @@
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"<%_ if (relationshipType == 'many-to-one' && relationships[idx].relationshipValidateRules.indexOf('required') != -1) { _%>required<%_ } _%>>
                 <option value=""></option>
             </select>
                 <%_ } else { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>"
+            <%_ if (relationshipType == 'many-to-one' && relationships[idx].relationshipValidateRules.indexOf('required') != -1) { _%>required<%_ } _%>>
                 <option value=""></option>
             </select>
                 <%_ } _%>
@@ -210,6 +211,16 @@
         </div>
             <%_ } _%>
         <%_ } _%>
+        <%_ if (relationships[idx].relationshipValidate == true) { _%>
+            <div ng-show="editForm.<%= relationshipName %>.$invalid">
+                <%_ if (relationshipType == 'many-to-one' && relationships[idx].relationshipValidateRules.indexOf('required') != -1) { _%>
+                <p class="help-block"
+                    ng-show="editForm.<%= relationshipName %>.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <%_ } _%>
+             </div>
+            <%_ } _%>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

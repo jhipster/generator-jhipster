@@ -109,13 +109,15 @@ public class <%= entityClass %> implements Serializable {
     <%_ }
     }
     for (idx in relationships) {
-        var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
+		var relationshipValidate = relationships[idx].relationshipValidate,
+        otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
         otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural,
         relationshipName = relationships[idx].relationshipName,
         relationshipFieldName = relationships[idx].relationshipFieldName,
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         joinTableName = entityTableName + '_'+ getTableName(relationshipName),
         relationshipType = relationships[idx].relationshipType,
+		relationshipValidateRules = relationships[idx].relationshipValidateRules,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         ownerSide = relationships[idx].ownerSide;
         if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
@@ -135,6 +137,7 @@ public class <%= entityClass %> implements Serializable {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
+	
     <%_     if (hibernateCache != 'no') { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     } _%>
@@ -142,7 +145,15 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationshipType == 'many-to-one') { _%>
     @ManyToOne
+	<%_ 
+	if (relationshipValidate == true) {
+    if (relationshipValidate == true && relationshipType == 'many-to-one' && relationshipValidateRules.indexOf('required') != -1) { _%>
+	<%- include relationship_validators -%>
+    <%_ }_%>
+	
+	<%_}_%>
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
+	
 
     <%_ } else if (relationshipType == 'many-to-many') { _%>
     @ManyToMany<% if (ownerSide == false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")

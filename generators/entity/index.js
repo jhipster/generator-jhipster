@@ -273,7 +273,14 @@ module.exports = EntityGenerator.extend({
         if (this.relationships.length > 0) {
             this.log(chalk.white('Relationships'));
             this.relationships.forEach(function (relationship) {
-                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
+            	var validationDetails = '';
+                var relationshipValidate = _.isArray(relationship.relationshipValidateRules) && relationship.relationshipValidateRules.length >= 1;
+                if (relationshipValidate === true) {
+                    if (relationship.relationshipValidateRules.indexOf('required') !== -1) {
+                        validationDetails = 'required ';
+                    }
+                }
+                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType)+' ' + chalk.cyan(validationDetails));
             }, this);
             this.log();
         }
@@ -563,11 +570,11 @@ module.exports = EntityGenerator.extend({
                         response.fieldType === 'BigDecimal' ||
                         response.fieldTypeBlobContent === 'text');
                 },
-                type: 'checkbox',
-                name: 'fieldValidateRules',
-                message: 'Which validation rules do you want to add?',
-                choices: [
-                    {
+                    type: 'checkbox',
+            name: 'fieldValidateRules',
+            message: 'Which validation rules do you want to add?',
+            choices: [
+            {
                         name: 'Required',
                         value: 'required'
                     },
@@ -925,6 +932,33 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function (response) {
+                    return response.relationshipAdd === true &&
+                        response.relationshipType === 'many-to-one';
+                },
+                type: 'confirm',
+                name: 'relationshipValidate',
+                message: 'Do you want to add validation rules to your relationship?',
+                default: false
+            },
+            {
+                when: function (response) {
+                    return response.relationshipAdd === true &&
+                        response.relationshipValidate === true &&
+                        response.relationshipType === 'many-to-one';
+                },
+                type: 'checkbox',
+                name: 'relationshipValidateRules',
+                message: 'Which validation rules do you want to add?',
+                choices: [
+                    {
+                        name: 'Required',
+                        value: 'required'
+                    }
+                ],
+                default: 0
+            },
+            {
+                when: function (response) {
                     return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
                 },
                 type: 'input',
@@ -942,6 +976,7 @@ module.exports = EntityGenerator.extend({
                     relationshipName: props.relationshipName,
                     otherEntityName: _.lowerFirst(props.otherEntityName),
                     relationshipType: props.relationshipType,
+                    relationshipValidateRules: props.relationshipValidateRules,
                     otherEntityField: props.otherEntityField,
                     ownerSide: props.ownerSide,
                     otherEntityRelationshipName: props.otherEntityRelationshipName
@@ -1566,6 +1601,12 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainManyToOne = true;
                 }
 
+                if (_.isArray(relationship.relationshipValidateRules) && relationship.relationshipValidateRules.length >= 1) {
+                    relationship.relationshipValidate = true;
+                } else {
+                    relationship.relationshipValidate = false;
+                }
+
                 var entityType = relationship.otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
@@ -1743,7 +1784,7 @@ module.exports = EntityGenerator.extend({
     install: function () {
         var injectJsFilesToIndex = function () {
             this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
-            this.spawnCommand('gulp', ['inject:app']);
+            this.spawnCommand('gulp', ['inject']);
         };
         if (!this.options['skip-install'] && !this.skipClient) {
             injectJsFilesToIndex.call(this);
