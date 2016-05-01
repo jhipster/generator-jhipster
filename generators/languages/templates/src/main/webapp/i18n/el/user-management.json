@@ -18,6 +18,7 @@
         "firstName": "Μικρό Όνομα",
         "lastName": "Επίθετο",
         "email": "Email",
+        "status": "Status",
         "activated": "Ένεργοποιημένo",
         "deactivated": "Άπενεργοποιημένo",
         "profiles": "Προφίλ",
