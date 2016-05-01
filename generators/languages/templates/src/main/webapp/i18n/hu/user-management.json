@@ -18,6 +18,7 @@
         "firstName": "Keresztnév",
         "lastName": "Vezetéknév",
         "email": "Email",
+        "status": "Status",
         "activated": "Aktivált",
         "deactivated": "Deaktivált",
         "profiles": "Profil",
