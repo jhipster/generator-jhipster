@@ -18,6 +18,7 @@
         "firstName": "Förnamn",
         "lastName": "Efternamn",
         "email": "Mailadress",
+        "status": "Status",
         "activated": "Aktiverad",
         "deactivated": "Inaktiverad",
         "profiles": "Profiler",
