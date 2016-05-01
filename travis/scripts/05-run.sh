@@ -7,7 +7,7 @@ launchProtractor() {
 
     rep=$(curl -v "$httpUrl")
     status=$?
-    while [ "$status" -ne 0 ] && [ "$retryCount" -gt "$maxRetry" ]; do
+    while [ "$status" -ne 0 ] && [ "$retryCount" -le "$maxRetry" ]; do
         echo "[$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
         sleep 10
