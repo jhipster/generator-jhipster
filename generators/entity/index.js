@@ -1598,10 +1598,12 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainManyToOne = true;
                 }
 
-                if (relationship.relationshipValidateRules) {
+                if (_.isArray(relationship.relationshipValidateRules) && relationship.relationshipValidateRules.length >= 1) {
                     relationship.relationshipValidate = true;
-                } else {
-                    relationship.relationshipValidate = false;
+                }
+                
+                if(relationship.relationshipValidate){
+                    this.validation = true;
                 }
 
                 var entityType = relationship.otherEntityNameCapitalized;
