@@ -1,7 +1,7 @@
 'use strict';
 
 const expect = require('chai').expect,
-    JDLValidation = require('../../../lib/core/jdl_validation');
+    JDLValidation = require('../../../lib/core/jdl_validation').JDLValidation;
 
 describe('JDLValidation', function () {
   describe('::new', function () {

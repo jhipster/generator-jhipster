@@ -3,7 +3,7 @@
 const expect = require('chai').expect,
     fail = expect.fail,
     JDLField = require('../../../lib/core/jdl_field'),
-    JDLValidation = require('../../../lib/core/jdl_validation');
+    JDLValidation = require('../../../lib/core/jdl_validation').JDLValidation;
 
 describe('JDLField', function () {
   describe('::new', function () {

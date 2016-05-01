@@ -4,7 +4,7 @@ const expect = require('chai').expect,
     fail = expect.fail,
     JDLEntity = require('../../../lib/core/jdl_entity'),
     JDLField = require('../../../lib/core/jdl_field'),
-    JDLValidation = require('../../../lib/core/jdl_validation');
+    JDLValidation = require('../../../lib/core/jdl_validation').JDLValidation;
 
 describe('JDLEntity', function () {
   describe('::new', function () {
