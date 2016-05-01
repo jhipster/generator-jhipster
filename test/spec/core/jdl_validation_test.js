@@ -36,6 +36,11 @@ describe('JDLValidation', function () {
           expect(JDLValidation.isValid({})).to.be.false;
         });
       });
+      describe('without a valid name attribute', function() {
+        it('returns false', function() {
+          expect(JDLValidation.isValid({name: 'something'})).to.be.false;
+        });
+      });
     });
     describe('when checking the validity of a valid object', function() {
       it('returns true', function() {
