@@ -100,11 +100,15 @@ validationList
 
 //Relationship
 relationDecl
-  = 'relationship' space rt:relationshipType space* "{" space* JDLComment? space* rb:relationshipBody space* subrb:subRelationshipBodies? "}" {rb.cardinality = rt; addCardinalityToRelationships(rt, subrb); return concat([rb], subrb);}  
+  = 'relationship' space rt:relationshipType space* "{" space* JDLComment? space* bodies:relationshipBodies space* "}" {
+  		console.log(bodies);
+        addCardinalityToRelationships(rt, bodies);
+        return concat([], bodies);
+    }  
 
-subRelationshipBodies
-  = ','? space* rb:relationshipBody space* morerb:subRelationshipBodies? { return concat([rb], morerb); }
-  / ','? space* rb:relationshipBody { return rb; }
+relationshipBodies
+  = rb:relationshipBody space* ',' space* morerb:relationshipBodies { return concat([rb], morerb); }
+  / rb:relationshipBody { return [rb]; }
 
 relationshipBody
   = from:relationshipSide space* JDLComment? space* "to" space* JDLComment? space* to:relationshipSide space* JDLComment? {return {"from" : from , "to" : to};}
