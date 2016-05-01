@@ -18,6 +18,7 @@
         "firstName": "Křestní jméno",
         "lastName": "Příjmení",
         "email": "Email",
+        "status": "Status",
         "activated": "Aktivní",
         "deactivated": "Neaktivní",
         "profiles": "Profily",
