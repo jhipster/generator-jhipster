@@ -18,6 +18,7 @@
         "firstName": "प्रथम नाम",
         "lastName": "अंतिम नाम",
         "email": "ईमेल",
+        "status": "Status",
         "activated": "सक्रिय",
         "deactivated": "निष्क्रिय",
         "profiles": "प्रोफाइल",
