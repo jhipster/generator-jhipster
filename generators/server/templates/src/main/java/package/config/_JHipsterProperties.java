@@ -47,6 +47,8 @@ public class JHipsterProperties {
     private final Gateway gateway = new Gateway();
     <%_ } _%>
 
+    private final Ribbon ribbon = new Ribbon();
+
     public Async getAsync() {
         return async;
     }
@@ -90,6 +92,10 @@ public class JHipsterProperties {
         return gateway;
     }
     <%_ } _%>
+
+    public Ribbon getRibbon() {
+        return ribbon;
+    }
 
     public static class Async {
 
@@ -222,7 +228,7 @@ public class JHipsterProperties {
 
         private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
 
         private final Authentication authentication = new Authentication();
         <%_ } _%>
@@ -233,7 +239,7 @@ public class JHipsterProperties {
         }
         <%_ } _%>
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
         public Authentication getAuthentication() {
             return authentication;
         }
@@ -244,7 +250,7 @@ public class JHipsterProperties {
             private final Oauth oauth = new Oauth();
 
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             private final Jwt jwt = new Jwt();
 
             <%_ } _%>
@@ -253,7 +259,7 @@ public class JHipsterProperties {
                 return oauth;
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             public Jwt getJwt() {
                 return jwt;
             }
@@ -293,7 +299,7 @@ public class JHipsterProperties {
                 }
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
 
             public static class Jwt {
 
@@ -697,4 +703,18 @@ public class JHipsterProperties {
         }
     }
 <%_ } _%>
+
+    public static class Ribbon {
+
+        private String[] displayOnActiveProfiles;
+
+        public String[] getDisplayOnActiveProfiles() {
+            return displayOnActiveProfiles;
+        }
+        
+        public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
+            this.displayOnActiveProfiles = displayOnActiveProfiles;
+        }
+    }  
+
 }

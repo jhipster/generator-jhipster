@@ -2,7 +2,7 @@
 <div>
     <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <hr>
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal jh-entity-details">
         <%_ for (idx in fields) {
             var fieldName = fields[idx].fieldName;
             var fieldType = fields[idx].fieldType;
@@ -26,7 +26,6 @@
             <div>{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</div>
             <%_ } _%>
         </dd>
-        <hr>
         <%_ } _%>
         <%_ for (idx in relationships) {
                 var relationshipType = relationships[idx].relationshipType;
@@ -70,7 +69,6 @@
                 <%_ } _%>
             <%_ } _%>
         </dd>
-        <hr>
         <%_ } _%>
         <%_ } _%>
     </dl>

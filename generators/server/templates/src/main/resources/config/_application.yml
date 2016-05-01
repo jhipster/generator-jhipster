@@ -11,7 +11,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 eureka:
     instance:
         appname: <%= baseName %>
@@ -86,10 +86,10 @@ jhipster:
         #max-age: 1800
     mail:
         from: <%= baseName %>@localhost
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         authentication:
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
@@ -104,6 +104,7 @@ jhipster:
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
+    security:
         rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
@@ -126,3 +127,6 @@ jhipster:
         redirectAfterSignIn: "/#/home"
         <%_ } _%>
 <%_ } _%>
+    ribbon:
+        # comma seperated list of profiles to show a ribbon on the GUI
+        displayOnActiveProfiles: dev

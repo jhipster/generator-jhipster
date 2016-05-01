@@ -1,30 +1,30 @@
 {
     "userManagement": {
         "home": {
-            "title": "Users",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "title": "用户",
+            "createLabel": "创建新用户",
+            "createOrEditLabel": "创建或编辑用户"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "ID 为 {{ param }} 的用户被创建",
+        "updated": "ID 为 {{ param }} 的用户被更新",
+        "deleted": "ID 为 {{ param }} 的用户被删除",
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "你确定要删除用户 {{ login }}?"
         },
         "detail": {
-            "title": "User"
+            "title": "用户"
         },
-        "login": "Login",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "email": "Email",
-        "activated": "Activated",
-        "deactivated": "Deactivated",
-        "profiles": "Profiles",
-        "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date"
+        "login": "登录",
+        "firstName": "名字",
+        "lastName": "姓氏",
+        "email": "邮箱",
+        "activated": "已激活",
+        "deactivated": "失效",
+        "profiles": "资料",
+        "langKey": "语言",
+        "createdBy": "创建于",
+        "createdDate": "创建时间",
+        "lastModifiedBy": "修改于",
+        "lastModifiedDate": "修改时间"
     }
 }

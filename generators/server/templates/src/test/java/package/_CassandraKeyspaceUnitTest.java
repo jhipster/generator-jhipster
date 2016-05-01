@@ -25,8 +25,10 @@ public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
     private Session session;
 
     @Test
-    public void shouldHaveUserTableCreated() throws Exception {
-        ResultSet result = session.execute("select * from user");
-        assertThat(result.all()).hasSize(4);
+    public void shouldListCassandraUnitKeyspace() throws Exception {
+        ResultSet result = session.execute("SELECT * FROM system.schema_keyspaces;");
+        assertThat(result.all())
+            .extracting(row -> row.getString("keyspace_name"))
+            .containsOnlyOnce((CASSANDRA_UNIT_KEYSPACE));
     }
 }

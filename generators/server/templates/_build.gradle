@@ -27,7 +27,7 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 apply plugin: 'io.spring.dependency-management'
 dependencyManagement {
   imports {
@@ -62,6 +62,7 @@ test {
     reports.html.enabled = false
 }
 
+<% if (testFrameworks.indexOf('cucumber') != -1) { %>
 task cucumberTest(type: Test) {
     include '**/CucumberTest*'
 
@@ -69,19 +70,20 @@ task cucumberTest(type: Test) {
     reports.html.enabled = false
 }
 
-test.finalizedBy(cucumberTest)
+test.finalizedBy(cucumberTest)<% } %>
 
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
-    reportOn test
-    reportOn cucumberTest
+    reportOn test<% if (testFrameworks.indexOf('cucumber') != -1) { %>
+    reportOn cucumberTest<% } %>
 }
 
-cucumberTest.finalizedBy(testReport)
+<% if (testFrameworks.indexOf('cucumber') != -1) { %>
+cucumberTest.finalizedBy(testReport)<% } %>
 <% if(!skipClient) {%>
 apply from: 'gradle/yeoman.gradle'<% } %>
 apply from: 'gradle/sonar.gradle'
-<% if (databaseType == 'sql') { %>
+<% if (databaseType === 'sql') { %>
 apply from: 'gradle/liquibase.gradle'<% } %>
 <% if (testFrameworks.indexOf('gatling') != -1) { %>
 apply from: 'gradle/gatling.gradle'<% } %>
@@ -102,6 +104,11 @@ description = ''
 
 configurations {
     providedRuntime
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
+    // netty's native is pulled by spring-cloud-starter-ribbon, but is useless unless you explicitly add the native binary dependency.
+    // Having it in the classpath without the binary can cause warnings
+    all*.exclude group: 'io.netty', module: 'netty-transport-native-epoll'
+    <%_ } _%>
 }
 
 repositories {
@@ -134,7 +141,7 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4:${jackson_version}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"
     compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
@@ -188,11 +195,12 @@ dependencies {
     <%_ if (applicationType == 'gateway') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-zuul"
     <%_ } _%>
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-ribbon"
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
     compile "org.springframework.cloud:spring-cloud-starter-hystrix"
+    compile "org.springframework.cloud:spring-cloud-starter-spectator"
     compile "org.springframework.cloud:spring-cloud-starter-config"
     compile "org.springframework.retry:spring-retry"
     <%_ } _%>
@@ -212,6 +220,10 @@ dependencies {
     <%_ if (authenticationType == 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt:${jjwt_version}"
     <%_ } _%>
+    <%_ if (authenticationType === 'uaa') { _%>
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
+    compile group: 'org.springframework.security', name: 'spring-security-jwt'
+    <%_ } _%>
     <%_ if (databaseType == 'mongodb') { _%>
     compile "org.mongeez:mongeez:${mongeez_version}"<% } %>
     compile("io.springfox:springfox-swagger2:${springfox_version}"){
@@ -219,18 +231,18 @@ dependencies {
     }
     <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile "mysql:mysql-connector-java"<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile "org.postgresql:postgresql:${postgresql_version}"<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+    compile "org.postgresql:postgresql"<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
     compile "com.h2database:h2"<% } %>
     compile "fr.ippon.spark.metrics:metrics-spark-reporter:${metrics_spark_reporter_version}"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"<% if (enableSocialSignIn) { %>
-    compile "org.apache.httpcomponents:httpclient:${httpclient_version}"
-    compile "org.springframework.social:spring-social-security:${spring_social_security_version}"
+    compile "org.apache.httpcomponents:httpclient"
+    compile "org.springframework.social:spring-social-security"
     compile "org.springframework.social:spring-social-google:${spring_social_google_version}"
-    compile "org.springframework.social:spring-social-facebook:${spring_social_facebook_version}"
-    compile "org.springframework.social:spring-social-twitter:${spring_social_twitter_version}"<% } %>
+    compile "org.springframework.social:spring-social-facebook"
+    compile "org.springframework.social:spring-social-twitter"<% } %>
     testCompile "com.jayway.awaitility:awaitility:${awaility_version}"
     testCompile "com.jayway.jsonpath:json-path"<% if (databaseType == 'cassandra') { %>
-    testCompile("org.cassandraunit'cassandra-unit-spring:${cassandra_unit_spring_version}") {
+    testCompile("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
         exclude(module: 'org.slf4j')
     }<% } %><% if (testFrameworks.indexOf('cucumber') != -1) { %>
     testCompile "info.cukes:cucumber-junit:${cucumber_version}"
@@ -259,7 +271,7 @@ clean {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.12'
+    gradleVersion = '2.13'
 }
 
 task stage(dependsOn: 'bootRepackage') {

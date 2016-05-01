@@ -306,7 +306,6 @@ const expectedFiles = {
         CLIENT_TEST_SRC_DIR + 'spec/app/account/reset/request/reset.request.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/services/auth/auth.services.spec.js',
         CLIENT_MAIN_SRC_DIR + 'content/css/documentation.css',
-        CLIENT_MAIN_SRC_DIR + 'content/images/development_ribbon.png',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster.png',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster2x.png'
     ],
@@ -644,7 +643,7 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('cassandra noi18n', function () {
+    describe('cassandra no i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -678,7 +677,7 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('i18n', function () {
+    describe('no i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
