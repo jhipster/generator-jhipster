@@ -409,9 +409,9 @@
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
-            <groupId>org.mongeez</groupId>
-            <artifactId>mongeez</artifactId>
-            <version>0.9.6</version>
+            <groupId>com.github.mongobee</groupId>
+            <artifactId>mongobee</artifactId>
+            <version>0.10</version>
         </dependency>
         <%_ } _%>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>

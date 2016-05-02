@@ -225,7 +225,7 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-jwt'
     <%_ } _%>
     <%_ if (databaseType == 'mongodb') { _%>
-    compile "org.mongeez:mongeez:${mongeez_version}"<% } %>
+    compile "com.github.mongobee:mongobee:${mongobee_version}"<% } %>
     compile("io.springfox:springfox-swagger2:${springfox_version}"){
         exclude module: 'mapstruct'
     }

@@ -1008,8 +1008,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.databaseType === 'mongodb') {
-                this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/authorities.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/authorities.xml');
-                this.copy(SERVER_MAIN_RES_DIR + '/config/mongeez/master.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/master.xml');
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/_InitialSetupMigration.java', javaDir + 'config/dbmigrations/InitialSetupMigration.java', this, {});
             }
 
             if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
@@ -1341,11 +1340,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv');
-            }
-
-            if (this.databaseType === 'mongodb') {
-                this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/users.xml');
-                this.copy(SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml', SERVER_MAIN_RES_DIR + 'config/mongeez/social_user_connections.xml');
             }
 
             // Email templates
