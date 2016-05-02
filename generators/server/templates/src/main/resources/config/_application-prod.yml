@@ -164,6 +164,29 @@ jhipster:
             maxBytesLocalHeap: 256M
         <%_ } _%>
     <%_ } _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+    security:
+        authentication:
+    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+            jwt:
+                secret: <%= jwtSecretKey %>
+                # Token is valid 24 hours
+                tokenValidityInSeconds: 86400
+    <%_ } _%>
+    <%_ if (authenticationType == 'oauth2') { _%>
+            oauth:
+                clientid: <%= baseName %>app
+                secret: my-secret-token-to-change-in-production
+                # Token is valid 30 minutes
+                tokenValidityInSeconds: 1800
+    <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationType == 'session') { _%>
+    security:
+        rememberMe:
+            # security key (this key should be unique for your application, and kept secret)
+            key: <%= rememberMeKey %>
+<%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
