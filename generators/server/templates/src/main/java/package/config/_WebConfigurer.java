@@ -137,18 +137,16 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     /**
-     *  Resolve path prefix to static resources
+     *  Resolve path prefix to static resources.
      */
     private String resolvePathPrefix() {
         String fullExecutablePath = this.getClass().getResource("").getPath();
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
-
         int extractionEndIndex = extractedPath.indexOf("<% if (buildTool == 'gradle') { %>build/<% } else { %>target/<% } %>");
         if(extractionEndIndex <= 0) {
             return "";
         }
-
         return extractedPath.substring(0, extractionEndIndex);
     }
 
@@ -206,7 +204,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
 
     /**
-     * Initializes H2 console
+     * Initializes H2 console.
      */
     private void initH2Console(ServletContext servletContext) {
         log.debug("Initialize H2 console");
