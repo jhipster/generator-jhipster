@@ -1511,7 +1511,11 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.relationshipNameCapitalizedPlural)) {
-                    relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
+                    if (relationship.relationshipName.length > 1) {
+                        relationship.relationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.relationshipName));
+                    } else {
+                        relationship.relationshipNameCapitalizedPlural = _.upperFirst(pluralize(relationship.relationshipName));
+                    }
                 }
 
                 if (_.isUndefined(relationship.relationshipNameHumanized)) {

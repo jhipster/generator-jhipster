@@ -140,6 +140,7 @@ public class <%= entityClass %>DTO implements Serializable {
     }
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
+    <%_ if (relationshipNameCapitalized.length > 1) { _%>
     public Long get<%= relationshipNameCapitalized %>Id() {
         return <%= relationshipFieldName %>Id;
     }
@@ -147,6 +148,15 @@ public class <%= entityClass %>DTO implements Serializable {
     public void set<%= relationshipNameCapitalized %>Id(Long <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
+    <%_ } else { // special case when the entity name has one character _%>
+    public Long get<%= relationshipNameCapitalized.toLowerCase() %>Id() {
+        return <%= relationshipFieldName %>Id;
+    }
+
+    public void set<%= relationshipNameCapitalized.toLowerCase() %>Id(Long <%= otherEntityName %>Id) {
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
+    }
+    <%_ } _%>
 <% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
 
     public String get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() {
