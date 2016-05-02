@@ -16,14 +16,12 @@ import java.util.Map;
 @ChangeLog(order = "001")
 public class InitialSetupMigration {
 
-
     private Map<String, String>[] authoritiesUser = new Map[]{new HashMap<>()};
 
     private Map<String, String>[] authoritiesAdminAndUser = new Map[]{new HashMap<>(), new HashMap<>()};
 
     {
         authoritiesUser[0].put("_id", "ROLE_USER");
-
         authoritiesAdminAndUser[0].put("_id", "ROLE_USER");
         authoritiesAdminAndUser[1].put("_id", "ROLE_ADMIN");
     }
@@ -40,7 +38,6 @@ public class InitialSetupMigration {
                 .add("_id", "ROLE_USER")
                 .get());
     }
-
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")
     public void addUsers(DB db) {
@@ -104,7 +101,7 @@ public class InitialSetupMigration {
             .get()
         );
     }
-
+<%_ if (enableSocialSignIn) { _%>
     @ChangeSet(author = "initiator", id = "03-addSocialUserConnection", order = "03")
     public void addSocialUserConnection(DB db) {
         DBCollection socialUserConnectionCollection = db.getCollection("jhi_social_user_connection");
@@ -115,4 +112,5 @@ public class InitialSetupMigration {
                 .get(),
             "user-prov-provusr-idx", true);
     }
+<%_ } _%>
 }
