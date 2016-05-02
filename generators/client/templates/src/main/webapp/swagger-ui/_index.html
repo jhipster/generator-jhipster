@@ -81,22 +81,22 @@
                 });
 
                 function addApiKeyAuthorization(){
-                <% if (authenticationType == 'session') { %>
+                <% if (authenticationType === 'session') { %>
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-CSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
-                <% if (authenticationType == 'oauth2') { %>
+                <% if (authenticationType === 'oauth2') { %>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken")).access_token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
-                <% if (authenticationType == 'xauth') { %>
+                <% if (authenticationType === 'xauth') { %>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken")).token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-Auth-Token", authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
-                <% if (authenticationType == 'jwt') { %>
+                <% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken") || sessionStorage.getItem("jhi-authenticationToken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
