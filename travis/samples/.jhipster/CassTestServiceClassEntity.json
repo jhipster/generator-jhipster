@@ -25,19 +25,7 @@
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
-            ],,
-            {
-                "fieldName": "picture",
-                "fieldType": "ByteBuffer",
-                "fieldTypeBlobContent": "image",
-                "fieldValidateRules": [
-                    "required"
-                ]
-            },
-            {
-                "fieldName": "operationsFile",
-                "fieldType": "ByteBuffer",
-            }
+            ],
             "fieldValidateRulesMaxlength": 20
         },
         {
