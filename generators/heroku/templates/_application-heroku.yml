@@ -12,15 +12,21 @@
 
 eureka:
 <%_ if (applicationType != 'gateway') { _%>
-  instance:
-    hostname: <%= herokuDeployedName %>.herokuapp.com
-    non-secure-port: 80
-    prefer-ip-address: false
+    instance:
+        hostname: <%= herokuDeployedName %>.herokuapp.com
+        non-secure-port: 80
+        prefer-ip-address: false
 <%_ } _%>
-  client:
-    serviceUrl:
-      defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
+    client:
+        serviceUrl:
+            defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 
 spring:
-  datasource:
-    maximumPoolSize: 10
+<%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql') { _%>
+    datasource:
+        maximumPoolSize: 10
+<%_ } else if (prodDatabaseType === 'mongodb') { _%>
+    data:
+        mongodb:
+            uri: ${MONGODB_URI}
+<%_ } _%>
