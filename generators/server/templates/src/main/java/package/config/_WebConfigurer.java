@@ -22,7 +22,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 <% if (!skipClient) { %>
-import java.io.File;<% } %>
+import java.io.File;
+import java.nio.file.Paths;<% } %>
 import java.util.*;
 import javax.inject.Inject;
 import javax.servlet.*;
@@ -119,16 +120,37 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         container.setMimeMappings(mappings);<% if (!skipClient) { %>
 
         // When running in an IDE or with <% if (buildTool == 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
+        setLocationForStaticAssets(container);<% } %>
+    }<% if (!skipClient) { %>
+
+    private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
         File root;
+        String prefixPath = resolvePathPrefix();
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            root = new File("<%= CLIENT_DIST_DIR %>");
+            root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
         } else {
-            root = new File("<%= CLIENT_MAIN_SRC_DIR %>");
+            root = new File(prefixPath + "<%= CLIENT_MAIN_SRC_DIR %>");
         }
         if (root.exists() && root.isDirectory()) {
             container.setDocumentRoot(root);
-        }<% } %>
-    }<% if (!skipClient) { %>
+        }
+    }
+
+    /**
+     *  Resolve path prefix to static resources
+     */
+    private String resolvePathPrefix() {
+        String fullExecutablePath = this.getClass().getResource("").getPath();
+        String rootPath = Paths.get(".").toUri().normalize().getPath();
+        String extractedPath = fullExecutablePath.replace(rootPath, "");
+
+        int extractionEndIndex = extractedPath.indexOf("<% if (buildTool == 'gradle') { %>build/<% } else { %>target/<% } %>");
+        if(extractionEndIndex <= 0) {
+            return "";
+        }
+
+        return extractedPath.substring(0, extractionEndIndex);
+    }
 
     /**
      * Initializes the caching HTTP Headers Filter.
