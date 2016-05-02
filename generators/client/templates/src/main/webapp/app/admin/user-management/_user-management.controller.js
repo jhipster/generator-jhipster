@@ -18,6 +18,8 @@
         vm.loadAll = loadAll;
         vm.loadPage = loadPage;
         vm.page = 1;
+        vm.predicate = 'id';
+        vm.reverse = true;
         vm.setActive = setActive;
         vm.totalItems = null;
         vm.users = [];
@@ -36,7 +38,7 @@
 
 
         function loadAll () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            User.query({page: vm.page - 1, size: paginationConstants.itemsPerPage}, function (result, headers) {
+            User.query({page: vm.page - 1, size: paginationConstants.itemsPerPage, sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']}, function (result, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');<% } else { %>
             User.query({}, function (result) {<% } %>
