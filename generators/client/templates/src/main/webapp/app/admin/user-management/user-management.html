@@ -11,16 +11,16 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th translate="global.field.id">ID</th>
-                <th translate="userManagement.login">Login</th>
-                <th translate="userManagement.email">Email</th>
-                <th></th>
-                <% if (enableTranslation) { %><th translate="userManagement.langKey">Lang Key</th><% } %>
+            <tr jh-sort="predicate" ascending="reverse" callback="loadAll()">
+                <th jh-sort-by="id"><span translate="global.field.id">ID</span><span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="login"><span translate="userManagement.login">Login</span><span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="email"><span translate="userManagement.email">Email</span><span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="activated"><span translate="user-management.status">Status</span><span class="glyphicon glyphicon-sort"></span></th>
+                <% if (enableTranslation) { %><th jh-sort-by="langKey"><span translate="userManagement.langKey">Lang Key</span><span class="glyphicon glyphicon-sort"></span></th><% } %>
                 <th translate="userManagement.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                <th translate="userManagement.createdDate">Created Date</th>
-                <th translate="userManagement.lastModifiedBy">Last Modified By</th>
-                <th translate="userManagement.lastModifiedDate">Last Modified Date</th><% } %>
+                <th jh-sort-by="createdDate"><span translate="userManagement.createdDate">Created Date</span><span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedBy"><span translate="userManagement.lastModifiedBy">Last Modified By</span><span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedDate"><span translate="userManagement.lastModifiedDate">Last Modified Date</span><span class="glyphicon glyphicon-sort"></span></th><% } %>
                 <th></th>
             </tr>
             </thead>
