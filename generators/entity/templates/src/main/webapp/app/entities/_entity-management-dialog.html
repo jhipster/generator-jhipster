@@ -30,10 +30,10 @@
                 fieldInputType = 'datetime-local';
             } else if (fieldType == 'Boolean') {
                 fieldInputType = 'checkbox';
-            } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
+            } else if ((fieldType == 'byte[]' || fieldType == 'ByteBuffer') && fieldTypeBlobContent != 'text') {
                 fieldInputType = 'hidden';
             } _%>
-        <div class="form-group"<% if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
+        <div class="form-group"<% if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
             <label class="control-label" translate="<%= translationKey %>" for="field_<%= fieldName %>"><%= fieldNameHumanized %></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fieldName %>" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>"<% if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
@@ -45,7 +45,7 @@
                 <%_ } _%>
             </select>
             <%_ } else { _%>
-                <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+                <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <div>
                     <%_ if (fieldTypeBlobContent == 'image') { _%>
                 <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + vm.<%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
@@ -92,7 +92,7 @@
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>"
                     <%- include ng_validators %> />
-                    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+                    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>ContentType" />
                     <%_ } _%>

@@ -61,11 +61,11 @@
                         var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
                         var fieldType = fields[idx].fieldType;
                         var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-                        <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
+                        <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
                     <td>
                         <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fieldName %>"/> {{<%= entityInstance %>.<%= fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                     </td>
-                        <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
+                        <%_ } else if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
                     <td><a ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
                         {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>

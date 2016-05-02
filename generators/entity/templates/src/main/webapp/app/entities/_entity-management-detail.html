@@ -11,18 +11,18 @@
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
-            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
+            <%_ } else if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
             <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
             <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
             <%_ } else if (fieldType == 'LocalDate') { _%>
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
-            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
+            <%_ } else if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
             <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
             <%_ } else { _%>
             <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } _%>
-            <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+            <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <div>{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</div>
             <%_ } _%>
         </dd>
