@@ -25,7 +25,19 @@
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
-            ],
+            ],,
+            {
+                "fieldName": "picture",
+                "fieldType": "ByteBuffer",
+                "fieldTypeBlobContent": "image",
+                "fieldValidateRules": [
+                    "required"
+                ]
+            },
+            {
+                "fieldName": "operationsFile",
+                "fieldType": "ByteBuffer",
+            }
             "fieldValidateRulesMaxlength": 20
         },
         {
@@ -185,6 +197,18 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "picture",
+            "fieldType": "ByteBuffer",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "operationsFile",
+            "fieldType": "ByteBuffer",
         }
     ],
     "changelogDate": "20160208184031",
