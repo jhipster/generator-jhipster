@@ -75,7 +75,8 @@ public class <%= entityClass %>DTO implements Serializable {
     private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
-    private Long <%= relationshipFieldName %>Id;<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
+    private Long <%= relationshipFieldName %>Id;
+    <% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
@@ -145,7 +146,8 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void set<%= relationshipNameCapitalized %>Id(Long <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
-    }<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
+    }
+<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
 
     public String get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() {
         return <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
