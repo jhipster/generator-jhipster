@@ -144,7 +144,7 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationshipType == 'many-to-one') { _%>
     @ManyToOne
-    <%_ if (relationshipValidate == true && relationshipType == 'many-to-one' && relationshipValidateRules.indexOf('required') != -1) { _%>
+    <%_ if (relationshipRequired) { _%>
     <%- include relationship_validators -%>
     <%_ }_%>
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
@@ -159,7 +159,7 @@ public class <%= entityClass %> implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     }
             if (ownerSide == true) { _%>
-    <%_ if (relationshipValidate == true && relationshipValidateRules.indexOf('required') != -1) { _%>
+    <%_ if (relationshipRequired) { _%>
     <%- include relationship_validators -%>
     <%_ }_%>            
     @JoinTable(name = "<%= joinTableName %>",
@@ -171,7 +171,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else { _%>
     <%_     if (ownerSide) { _%>
     @OneToOne
-    <%_ if (relationshipValidate == true && relationshipType == 'one-to-one' && relationshipValidateRules.indexOf('required') != -1) { _%>
+    <%_ if (relationshipRequired) { _%>
     <%- include relationship_validators -%>
     <%_ }_%>
     @JoinColumn(unique = true)

@@ -5,7 +5,7 @@ var result = '';
 if (relationship.relationshipValidate == true) {
     var rules = relationship.relationshipValidateRules;
     var validators = [];
-    if (rules.indexOf('required') != -1) {
+    if (relationshipRequired) {
         validators.push('@NotNull');
     }
     result =  validators.join('\n    ');

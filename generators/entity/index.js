@@ -274,11 +274,8 @@ module.exports = EntityGenerator.extend({
             this.log(chalk.white('Relationships'));
             this.relationships.forEach(function (relationship) {
                 var validationDetails = '';
-                var relationshipValidate = relationship.relationshipValidateRules && relationship.relationshipValidateRules.length >= 1;
-                if (relationshipValidate === true) {
-                    if (relationship.relationshipValidateRules.indexOf('required') !== -1) {
+                if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
                         validationDetails = 'required ';
-                    }
                 }
                 this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType)+' ' + chalk.cyan(validationDetails));
             }, this);
@@ -1459,6 +1456,7 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainBigDecimal = false;
             this.fieldsContainBlob = false;
             this.validation = false;
+            this.relationshipRequired = false;
             this.fieldsContainOwnerManyToMany = false;
             this.fieldsContainNoOwnerOneToOne = false;
             this.fieldsContainOwnerOneToOne = false;
@@ -1598,12 +1596,16 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainManyToOne = true;
                 }
 
-                if (_.isArray(relationship.relationshipValidateRules) && relationship.relationshipValidateRules.length >= 1) {
+                if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.length >= 1) {
                     relationship.relationshipValidate = true;
                 }
                 
                 if(relationship.relationshipValidate){
                     this.validation = true;
+                }
+                
+                if(this.validation = true){
+                	this.relationshipRequired = true;
                 }
 
                 var entityType = relationship.otherEntityNameCapitalized;
