@@ -182,9 +182,7 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
     @Bean
     public Mongobee mongobee() {
-
         log.debug("Configuring Mongobee");
-
         Mongobee mongobee = new Mongobee(mongo);
         mongobee.setDbName(mongoProperties.getDatabase());
         // package to scan for migrations
