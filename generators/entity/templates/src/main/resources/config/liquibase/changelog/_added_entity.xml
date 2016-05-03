@@ -72,12 +72,19 @@
             <%
 
             } %><% for (idx in relationships) {
-                var relationshipType = relationships[idx].relationshipType,
+                var nullable_relation = true,
+                relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName;
+                if (relationships[idx].relationshipValidate == true && relationships[idx].relationshipValidateRules.indexOf('required') != -1) {
+                    nullable_relation = false;
+                }
                 if (relationships[idx].relationshipType == 'many-to-one') { %>
-            <column name="<%=getColumnName(relationshipName) %>_id" type="bigint"/><% } else if (relationshipType == 'one-to-one' && relationships[idx].ownerSide == true) { %>
             <column name="<%=getColumnName(relationshipName) %>_id" type="bigint">
-                <constraints unique="true"/>
+                <constraints nullable="<%= nullable_relation %>" />
+            </column>
+            <% } else if (relationshipType == 'one-to-one' && relationships[idx].ownerSide == true) { %>
+            <column name="<%=getColumnName(relationshipName) %>_id" type="bigint">
+                <constraints unique="true" nullable="<%= nullable_relation %>" />
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
@@ -100,7 +107,7 @@
                     joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
                 }
           _%>
-
+          
         <createTable tableName="<%= joinTableName %>">
             <column name="<%= getPluralColumnName(relationshipName) %>_id" type="bigint">
                 <constraints nullable="false"/>
