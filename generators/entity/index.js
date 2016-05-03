@@ -275,7 +275,7 @@ module.exports = EntityGenerator.extend({
             this.relationships.forEach(function (relationship) {
                 var validationDetails = '';
                 if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
-                        validationDetails = 'required ';
+                    validationDetails = 'required ';
                 }
                 this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType)+' ' + chalk.cyan(validationDetails));
             }, this);
@@ -944,12 +944,12 @@ module.exports = EntityGenerator.extend({
                 },
                 type: 'confirm',
                 name: 'relationshipValidate',
-                message: 'Do you want add any validation rules to this relationship?',
+                message: 'Do you want to add any validation rules to this relationship?',
                 default: false
             },
             {
                 when: function (response) {
-                    return (response.relationshipValidate === true && (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true))));
+                    return (response.relationshipValidate === true);
                 },
                 type: 'checkbox',
                 name: 'relationshipValidateRules',
@@ -1456,7 +1456,6 @@ module.exports = EntityGenerator.extend({
             this.fieldsContainBigDecimal = false;
             this.fieldsContainBlob = false;
             this.validation = false;
-            this.relationshipRequired = false;
             this.fieldsContainOwnerManyToMany = false;
             this.fieldsContainNoOwnerOneToOne = false;
             this.fieldsContainOwnerOneToOne = false;
@@ -1600,16 +1599,8 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainManyToOne = true;
                 }
 
-                if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.length >= 1) {
-                    relationship.relationshipValidate = true;
-                }
-                
-                if(relationship.relationshipValidate){
-                    this.validation = true;
-                }
-                
-                if(this.validation = true){
-                	this.relationshipRequired = true;
+                if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
+                    relationship.relationshipValidate = relationship.relationshipRequired = this.validation = true;
                 }
 
                 var entityType = relationship.otherEntityNameCapitalized;

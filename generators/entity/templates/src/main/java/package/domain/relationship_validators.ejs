@@ -2,10 +2,9 @@
 <%
 var relationship = relationships[idx];
 var result = '';
-if (relationship.relationshipValidate == true) {
-    var rules = relationship.relationshipValidateRules;
+if (relationship.relationshipValidate === true) {
     var validators = [];
-    if (relationshipRequired) {
+    if (relationship.relationshipRequired) {
         validators.push('@NotNull');
     }
     result =  validators.join('\n    ');
