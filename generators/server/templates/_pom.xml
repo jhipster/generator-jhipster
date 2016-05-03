@@ -1116,7 +1116,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>gulp build</id>
+                                <id>gulp test</id>
                                 <goals>
                                     <goal>gulp</goal>
                                 </goals>
