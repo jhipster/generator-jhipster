@@ -116,6 +116,7 @@ public class <%= entityClass %> implements Serializable {
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         joinTableName = entityTableName + '_'+ getTableName(relationshipName),
         relationshipType = relationships[idx].relationshipType,
+        relationshipValidate = relationships[idx].relationshipValidate,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         ownerSide = relationships[idx].ownerSide;
         if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
@@ -142,6 +143,9 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationshipType == 'many-to-one') { _%>
     @ManyToOne
+    <%_ if (relationshipValidate) { _%>
+    <%- include relationship_validators -%>
+    <%_ }_%>
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType == 'many-to-many') { _%>
@@ -154,6 +158,9 @@ public class <%= entityClass %> implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     }
             if (ownerSide == true) { _%>
+    <%_ if (relationshipValidate) { _%>
+    <%- include relationship_validators -%>
+    <%_ }_%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="ID"))
@@ -163,6 +170,9 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else { _%>
     <%_     if (ownerSide) { _%>
     @OneToOne
+    <%_ if (relationshipValidate) { _%>
+    <%- include relationship_validators -%>
+    <%_ }_%>
     @JoinColumn(unique = true)
     <%_    } else { _%>
     @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")

@@ -273,7 +273,11 @@ module.exports = EntityGenerator.extend({
         if (this.relationships.length > 0) {
             this.log(chalk.white('Relationships'));
             this.relationships.forEach(function (relationship) {
-                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
+                var validationDetails = '';
+                if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
+                    validationDetails = 'required ';
+                }
+                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType)+' ' + chalk.cyan(validationDetails));
             }, this);
             this.log();
         }
@@ -933,6 +937,30 @@ module.exports = EntityGenerator.extend({
                     return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?';
                 },
                 default: 'id'
+            },
+            {
+                when: function (response) {
+                    return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
+                },
+                type: 'confirm',
+                name: 'relationshipValidate',
+                message: 'Do you want to add any validation rules to this relationship?',
+                default: false
+            },
+            {
+                when: function (response) {
+                    return (response.relationshipValidate === true);
+                },
+                type: 'checkbox',
+                name: 'relationshipValidateRules',
+                message: 'Which validation rules do you want to add?',
+                choices: [
+                    {
+                        name: 'Required',
+                        value: 'required'
+                    }
+                ],
+                default: 0
             }
         ];
         this.prompt(prompts, function (props) {
@@ -942,6 +970,7 @@ module.exports = EntityGenerator.extend({
                     relationshipName: props.relationshipName,
                     otherEntityName: _.lowerFirst(props.otherEntityName),
                     relationshipType: props.relationshipType,
+                    relationshipValidateRules: props.relationshipValidateRules,
                     otherEntityField: props.otherEntityField,
                     ownerSide: props.ownerSide,
                     otherEntityRelationshipName: props.otherEntityRelationshipName
@@ -1568,6 +1597,10 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainOneToMany = true;
                 } else if (relationship.relationshipType === 'many-to-one') {
                     this.fieldsContainManyToOne = true;
+                }
+
+                if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
+                    relationship.relationshipValidate = relationship.relationshipRequired = this.validation = true;
                 }
 
                 var entityType = relationship.otherEntityNameCapitalized;
