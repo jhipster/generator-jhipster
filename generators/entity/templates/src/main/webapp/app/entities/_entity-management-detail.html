@@ -12,18 +12,23 @@
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
-            <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
+            <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
+                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)">
+                    <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;"/>
+                </a>
+                {{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}
+            </div>
             <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
             <%_ } else if (fieldType == 'LocalDate') { _%>
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
-            <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
+            <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
+                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)">open</a>
+                {{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}
+            </div>
             <%_ } else { _%>
             <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
-            <%_ } _%>
-            <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
-            <div>{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</div>
             <%_ } _%>
         </dd>
         <%_ } _%>
