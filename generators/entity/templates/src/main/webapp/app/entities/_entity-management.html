@@ -70,7 +70,7 @@
                     </td>
                         <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
                     <td>
-                        <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">open</a>
+                        <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a>
                         <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>

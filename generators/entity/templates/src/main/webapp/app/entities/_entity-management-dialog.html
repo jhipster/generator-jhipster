@@ -52,7 +52,7 @@
                     <%_ } _%>
                 <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>" class="help-block clearfix">
                     <%_ if (fieldTypeBlobContent == 'any') { _%>
-                    <a class="pull-left" ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)">open</a><br>
+                    <a class="pull-left" ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a><br>
                     <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } else { _%>
                     <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>

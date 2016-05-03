@@ -24,7 +24,7 @@
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
             <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
-                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)">open</a>
+                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a>
                 {{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}
             </div>
             <%_ } else { _%>
