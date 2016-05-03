@@ -10,7 +10,7 @@ import org.springframework.http.HttpHeaders;
  */
 public class HeaderUtil {
 
-    private final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
 
     public static HttpHeaders createAlert(String message, String param) {
         HttpHeaders headers = new HttpHeaders();
