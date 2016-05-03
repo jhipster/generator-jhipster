@@ -865,6 +865,11 @@
                     <defaultOutputDirectory>
                         ${project.build.directory}/generated-sources
                     </defaultOutputDirectory>
+                    <additionalSourceDirectories>
+                        <additionalSourceDirectory>
+                            ${project.build.directory}/generated-sources
+                        </additionalSourceDirectory>
+                    </additionalSourceDirectories>
                     <processors>
                         <processor>org.mapstruct.ap.MappingProcessor</processor>
                     </processors>
