@@ -994,15 +994,18 @@
                                 </pluginExecution><% if(!skipClient) {%>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>com.github.trecloux</groupId>
+                                        <groupId>com.github.eirslett</groupId>
                                         <artifactId>
-                                            yeoman-maven-plugin
+                                            frontend-maven-plugin
                                         </artifactId>
                                         <versionRange>
-                                            [0.5,)
+                                            [0.0.27,)
                                         </versionRange>
                                         <goals>
-                                            <goal>build</goal>
+                                            <goal>install-node-and-npm</goal>
+                                            <goal>npm</goal>
+                                            <goal>bower</goal>
+                                            <goal>gulp</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -1062,25 +1065,57 @@
             <build>
                 <plugins><% if(!skipClient) {%>
                     <plugin>
-                        <groupId>com.github.trecloux</groupId>
-                        <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.5</version>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>1.0</version>
                         <executions>
                             <execution>
-                                <id>run-frontend-build</id>
-                                <phase>generate-resources</phase>
+                                <id>install node and npm</id>
                                 <goals>
-                                    <goal>build</goal>
+                                    <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <buildTool>gulp</buildTool>
-                                    <buildArgs>build --no-notification</buildArgs>
+                                    <nodeVersion>v4.4.3</nodeVersion>
+                                    <npmVersion>3.8.3</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution><% if(useSass) {%>
+                            <execution>
+                                <id>npm rebuild node-sass</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>rebuild node-sass</arguments>
+                                </configuration>
+                            </execution><% } %>
+                            <execution>
+                                <id>bower install</id>
+                                <goals>
+                                    <goal>bower</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install --no-color</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>gulp build</id>
+                                <goals>
+                                    <goal>gulp</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>build test --no-notification</arguments>
                                 </configuration>
                             </execution>
                         </executions>
-                        <configuration>
-                            <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
-                        </configuration>
                     </plugin><% } %>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
