@@ -998,9 +998,9 @@
                                         <artifactId>
                                             frontend-maven-plugin
                                         </artifactId>
-                                        <versionRange>
-                                            [0.0.27,)
-                                        </versionRange>
+                                        <version>
+                                            1.0
+                                        </version>
                                         <goals>
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
@@ -1112,9 +1112,19 @@
                                     <goal>gulp</goal>
                                 </goals>
                                 <configuration>
-                                    <arguments>build test --no-notification</arguments>
+                                    <arguments>build --no-notification</arguments>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>gulp build</id>
+                                <goals>
+                                    <goal>gulp</goal>
+                                </goals>
+                                <phase>test</phase>
+                                <configuration>
+                                    <arguments>test --no-notification</arguments>
+                                </configuration>
+                            </execution>                            
                         </executions>
                     </plugin><% } %>
                     <plugin>
