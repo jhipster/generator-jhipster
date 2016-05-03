@@ -24,6 +24,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
     angularFilesort = require('gulp-angular-filesort'),
+    naturalSort = require('gulp-natural-sort'),
     bowerFiles = require('main-bower-files');
 
 var handleErrors = require('./gulp/handleErrors'),
@@ -130,7 +131,9 @@ gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
 gulp.task('inject:app', function () {
     return gulp.src(config.app + 'index.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js')
+            .pipe(naturalSort())
+            .pipe(angularFilesort()), {relative: true}))
         .pipe(gulp.dest(config.app));
 });
 

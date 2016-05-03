@@ -30,6 +30,7 @@
     "gulp-if": "2.0.0",
     "gulp-imagemin": "2.4.0",
     "gulp-inject": "4.0.0",
+    "gulp-natural-sort": "0.1.1",
     "gulp-ng-annotate": "2.0.0",
     "gulp-ng-constant-fork": "0.4.1",
     "gulp-notify": "2.2.0",
