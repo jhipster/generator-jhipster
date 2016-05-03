@@ -1,5 +1,7 @@
 package <%=packageName%>.web.rest.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 
 /**
@@ -7,6 +9,8 @@ import org.springframework.http.HttpHeaders;
  *
  */
 public class HeaderUtil {
+
+    private final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
 
     public static HttpHeaders createAlert(String message, String param) {
         HttpHeaders headers = new HttpHeaders();
@@ -40,6 +44,7 @@ public class HeaderUtil {
     }
 
     public static HttpHeaders createFailureAlert(String entityName, String errorKey, String defaultMessage) {
+        log.warning("Entity creation failed, {}", defaultMessage);
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-<%=angularAppName%>-error", <%- errorMessage %>);
         headers.add("X-<%=angularAppName%>-params", entityName);
