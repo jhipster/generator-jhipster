@@ -28,5 +28,5 @@ spring:
 <%_ } else if (prodDatabaseType === 'mongodb') { _%>
     data:
         mongodb:
-            uri: ${MONGODB_URI}
+            uri: ${MONGODB_URI}?authMode=scram-sha1
 <%_ } _%>
