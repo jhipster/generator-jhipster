@@ -49,6 +49,9 @@
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
+        <%_ if (!skipClient) { _%>
+        <frontend-maven-plugin.version>1.0</frontend-maven-plugin.version>
+        <%_ } _%>
         <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <gatling.version>2.1.7</gatling.version>
         <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
@@ -982,7 +985,7 @@
                                             jacoco-maven-plugin
                                         </artifactId>
                                         <versionRange>
-                                            [0.7.4,)
+                                            ${jacoco-maven-plugin.version}
                                         </versionRange>
                                         <goals>
                                             <goal>prepare-agent</goal>
@@ -998,9 +1001,9 @@
                                         <artifactId>
                                             frontend-maven-plugin
                                         </artifactId>
-                                        <version>
-                                            1.0
-                                        </version>
+                                        <versionRange>
+                                            ${frontend-maven-plugin.version}
+                                        </versionRange>
                                         <goals>
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
