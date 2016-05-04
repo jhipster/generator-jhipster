@@ -4,11 +4,11 @@
         "refresh.button": "重整",
         "stacktrace": "堆疊追蹤",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "詳細信息",
+            "properties": "屬性",
+            "name": "名",
+            "value": "值",
+            "error": "錯誤"
         },
         "indicator": {
             <%_ if (applicationType === 'gateway') { _%>
