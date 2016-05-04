@@ -243,7 +243,7 @@ module.exports = DockerComposeGenerator.extend({
             var prompts = [{
                 type: 'confirm',
                 name: 'elk',
-                message: 'Do you want ELK to monitor your applications ?',
+                message: 'Do you want the JHipster Console (based on ELK) to monitor your applications?',
                 default: this.useElk && true
             }];
 
