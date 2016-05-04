@@ -50,15 +50,14 @@
                     <%_ if (fieldTypeBlobContent == 'image') { _%>
                 <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + vm.<%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
                     <%_ } _%>
-                <div class="help-block clearfix">
+                <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>" class="help-block clearfix">
                     <%_ if (fieldTypeBlobContent == 'any') { _%>
-                    <a class="pull-left" ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a><br>
-                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    <a class="pull-left" ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a><br>
+                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } else { _%>
-                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } _%>
                     <button ng-click="vm.<%= entityInstance %>.<%= fieldName %>=null;vm.<%= entityInstance %>.<%= fieldName %>ContentType=null;"
-                            ng-if="vm.<%= entityInstance %>.<%= fieldName %>"
                             class="btn btn-default btn-xs pull-right">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
