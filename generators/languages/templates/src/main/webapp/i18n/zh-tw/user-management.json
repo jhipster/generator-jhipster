@@ -15,8 +15,8 @@
             "title": "使用者"
         },
         "login": "登錄",
-        "firstName": "名",
-        "lastName": "姓",
+        "firstName": "名字",
+        "lastName": "姓氏",
         "email": "電子郵件",
         "activated": "已啟用",
         "deactivated": "已停用",
