@@ -21,7 +21,7 @@ eureka:
         registerWithEureka: true
         fetchRegistry: true
         serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+            defaultZone: http://admin:admin@localhost:8761/eureka/
 <%_ } _%>
 
 spring:

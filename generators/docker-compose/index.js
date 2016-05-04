@@ -72,6 +72,7 @@ module.exports = DockerComposeGenerator.extend({
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.useElk = this.config.get('useElk');
+            this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
             if(this.defaultAppsFolders !== undefined) {
@@ -251,6 +252,29 @@ module.exports = DockerComposeGenerator.extend({
                 this.useElk = props.elk;
                 done();
             }.bind(this));
+        },
+
+        askForAdminPassword: function() {
+            if (this.regenerate) return;
+
+            var done = this.async();
+
+            var prompts = [{
+                type: 'input',
+                name: 'adminPassword',
+                message: 'Enter the admin password used to secure the JHipster Registry',
+                default: 'admin',
+                validate: function (input) {
+                    if(input.length < 5) {
+                        return 'The password must have at least 5 characters';
+                    } else return true;
+                }
+            }];
+
+            this.prompt(prompts, function(props) {
+                this.adminPassword = props.adminPassword;
+                done();
+            }.bind(this));
         }
     },
 
@@ -308,7 +332,7 @@ module.exports = DockerComposeGenerator.extend({
                 var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
                 var yamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
 
-                if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
+                if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
                     var ports = yamlConfig.ports[0].split(':');
                     ports[0] = portIndex;
                     yamlConfig.ports[0] = ports.join(':');
@@ -316,11 +340,22 @@ module.exports = DockerComposeGenerator.extend({
                 }
 
                 // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
-                if(this.appConfigs[i].applicationType === 'monolith' && this.useElk) {
+                if (this.appConfigs[i].applicationType === 'monolith' && this.useElk) {
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=elk-logstash');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
+                }
+
+                // Configure the JHipster Registry
+                for (var envindex = 0; envindex < yamlConfig.environment.length; envindex++) {
+                    if (yamlConfig.environment[envindex].startsWith('SPRING_CLOUD_CONFIG_URI')) {
+                        yamlConfig.environment[envindex] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
+                            this.adminPassword + '@registry:8761/config';
+                    } else if (yamlConfig.environment[envindex].startsWith('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE')) {
+                        yamlConfig.environment[envindex] = 'EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:' +
+                            this.adminPassword + '@registry:8761/eureka';
+                    }
                 }
 
                 parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
@@ -383,6 +418,7 @@ module.exports = DockerComposeGenerator.extend({
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
             this.config.set('useElk', this.useElk);
+            this.config.set('adminPassword', this.adminPassword);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
         }
     },
@@ -395,7 +431,7 @@ module.exports = DockerComposeGenerator.extend({
         writeRegistryFiles: function() {
             if(this.gatewayNb === 0 && this.microserviceNb === 0) return;
 
-            this.copy('jhipster-registry.yml', 'jhipster-registry.yml');
+            this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
             this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
         },
 
