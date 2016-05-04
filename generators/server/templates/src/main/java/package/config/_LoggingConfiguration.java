@@ -28,6 +28,7 @@ public class LoggingConfiguration {
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     @Value("${eureka.instance.instanceId}")
     private String instanceId;
+
     <%_ } _%>
     @Inject
     private JHipsterProperties jHipsterProperties;
