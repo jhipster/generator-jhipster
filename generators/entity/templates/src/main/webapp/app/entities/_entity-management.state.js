@@ -107,7 +107,7 @@
                                 <%= fields[idx].fieldName %>: false,
                                     <%_ } else { _%>
                                 <%= fields[idx].fieldName %>: null,
-                                        <%_ if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
+                                        <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
                                 <%= fields[idx].fieldName %>ContentType: null,
                                         <%_ } _%>
                                     <%_ } _%>

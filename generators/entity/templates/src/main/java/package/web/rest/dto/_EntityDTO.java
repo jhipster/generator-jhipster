@@ -4,7 +4,8 @@ import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %
 import java.time.ZonedDateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
+import java.nio.ByteBuffer;<% } %><% if (fieldsContainDate == true) { %>
 import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
@@ -59,7 +60,7 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ } else { _%>
     private String <%= fieldName %>;
     <%_ } %>
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
     private String <%= fieldName %>ContentType;
         <%_ } _%>
     <%_ } _%>
@@ -108,7 +109,7 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;

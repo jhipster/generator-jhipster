@@ -69,11 +69,16 @@ public class <%= entityClass %>Repository {
                 for (idx in fields) {
                     var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
                     var fieldName = fields[idx].fieldName;
+                    var fieldNameUnderscored = fields[idx].fieldNameUnderscored;
                     if (fields[idx].fieldType == 'Integer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'BigDecimal') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Boolean') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBool("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Text') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'ByteBuffer') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBytes("<%= fieldName %>"));
+                <%_ if (fields[idx].fieldTypeBlobContent !== 'text') { _%>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>ContentType(row.getString("<%= fieldNameUnderscored %>_content_type"));
+                <%_ } _%><% } else { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get<%= fields[idx].fieldType %>("<%= fieldName %>"));<% } } %>
                 return <%= entityInstance %>;
             }
