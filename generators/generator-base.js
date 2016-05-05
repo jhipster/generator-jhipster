@@ -1184,14 +1184,14 @@ Generator.prototype.insight = function () {
     return insight;
 };
 
-Generator.prototype.removefile = function (file) {
+Generator.prototype.removeFile = function (file) {
     if (shelljs.test('-f', file)) {
         this.log('Removing the file - ' + file);
         shelljs.rm(file);
     }
 };
 
-Generator.prototype.removefolder = function (folder) {
+Generator.prototype.removeFolder = function (folder) {
     if (shelljs.test('-d', folder)) {
         this.log('Removing the folder - ' + folder);
         shelljs.rm('-rf', folder);
