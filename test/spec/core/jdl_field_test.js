@@ -67,6 +67,18 @@ describe('JDLField', function () {
           expect(JDLField.isValid({name: 'myField'})).to.be.false;
         });
       });
+      describe('because its validations are invalid', function() {
+        it('returns false', function() {
+          expect(
+              JDLField.isValid({
+                name: 'myField',
+                type: 'String',
+                validations: [{
+                  value: 42
+                }]})
+          ).to.be.false;
+        });
+      });
     });
     describe('when checking the validity of a valid object', function() {
       it('returns true', function() {
