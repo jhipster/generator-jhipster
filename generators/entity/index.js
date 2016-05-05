@@ -222,9 +222,13 @@ module.exports = EntityGenerator.extend({
         if (this.fileData.angularJSSuffix !== undefined){
             this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
         }
-        if (this.applicationType === 'gateway'){
+        this.useMicroserviceJson = this.useMicroserviceJson || !_.isUndefined(this.fileData.microserviceName);
+        if (this.applicationType === 'gateway' && this.useMicroserviceJson){
             this.microserviceName = this.fileData.microserviceName;
-            this.skipServer = !_.isUndefined(this.microserviceName);
+            if (!this.microserviceName) {
+                this.env.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
+            }
+            this.skipServer = true;
             this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
     },
@@ -1105,6 +1109,7 @@ module.exports = EntityGenerator.extend({
                     }
                     this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
                     this.useConfigurationFile = true;
+                    this.useMicroserviceJson = true;
                     this._loadJson();
                 }
                 cb();
@@ -1789,11 +1794,10 @@ module.exports = EntityGenerator.extend({
         },
 
         writeTestFiles: function() {
+            if (this.skipServer) return;
 
-            if (!this.skipServer) {
-                this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
+            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
                     SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
-            }
 
             if (this.testFrameworks.indexOf('gatling') !== -1) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
