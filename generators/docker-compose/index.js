@@ -27,7 +27,7 @@ module.exports = DockerComposeGenerator.extend({
         checkDocker: function() {
             var done = this.async();
 
-            shelljs.exec('docker -v', {silent:true},function(code, stdout, stderr) {
+            shelljs.exec('docker -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
                     this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
                         '         Read http://docs.docker.com/engine/installation/#installation\n');
@@ -136,11 +136,10 @@ module.exports = DockerComposeGenerator.extend({
 
                 this.appsFolders = this._getAppFolders(this.directoryPath);
 
-                //Removing registry from appsFolders
-                for(var i = 0; i < this.appsFolders.length; i++) {
-                    if (this.appsFolders[i]==='jhipster-registry' || this.appsFolders[i] === 'registry') {
+                //Removing registry from appsFolders, using reverse for loop
+                for(var i = this.appsFolders.length - 1; i >= 0; i--) {
+                    if (this.appsFolders[i] === 'jhipster-registry' || this.appsFolders[i] === 'registry') {
                         this.appsFolders.splice(i,1);
-                        i--;
                     }
                 }
 
@@ -177,8 +176,8 @@ module.exports = DockerComposeGenerator.extend({
                 this.microserviceNb = 0;
 
                 //Loading configs
-                for(var i = 0; i < this.appsFolders.length; i++) {
-                    var path = this.destinationPath(this.directoryPath + this.appsFolders[i]+'/.yo-rc.json');
+                this.appsFolders.forEach(function (appFolder) {
+                    var path = this.destinationPath(this.directoryPath + appFolder +'/.yo-rc.json');
                     var fileData = this.fs.readJSON(path);
                     var config = fileData['generator-jhipster'];
 
@@ -192,7 +191,7 @@ module.exports = DockerComposeGenerator.extend({
 
                     this.portsToBind = this.monolithicNb + this.gatewayNb;
                     this.appConfigs.push(config);
-                }
+                }, this);
 
                 done();
             }.bind(this));
@@ -202,11 +201,11 @@ module.exports = DockerComposeGenerator.extend({
             if (this.regenerate) return;
 
             var mongoApps = [];
-            for (var i = 0; i < this.appConfigs.length; i++) {
-                if(this.appConfigs[i].prodDatabaseType === 'mongodb') {
-                    mongoApps.push(this.appsFolders[i]);
+            this.appConfigs.forEach(function (appConfig, index) {
+                if(appConfig.prodDatabaseType === 'mongodb') {
+                    mongoApps.push(this.appsFolders[index]);
                 }
-            }
+            }, this);
             if(mongoApps.length===0) return;
 
             var done = this.async();
@@ -223,12 +222,7 @@ module.exports = DockerComposeGenerator.extend({
                 this.clusteredDbApps = props.clusteredDbApps;
                 for (var i = 0; i < this.appsFolders.length; i++) {
                     for (var j = 0; j < props.clusteredDbApps.length; j++) {
-                        if(this.appsFolders[i] === props.clusteredDbApps[j]) {
-                            this.appConfigs[i].clusteredDb = true;
-                        }
-                        else {
-                            this.appConfigs[i].clusteredDb = false;
-                        }
+                        this.appConfigs[i].clusteredDb = this.appsFolders[i] === props.clusteredDbApps[j];
                     }
                 }
 
@@ -291,19 +285,20 @@ module.exports = DockerComposeGenerator.extend({
             var imagePath = '';
             var runCommand = '';
             this.warningMessage = 'To generate Docker image, please run:\n';
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                if(this.appConfigs[i].buildTool === 'maven') {
-                    imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
+            this.appsFolders.forEach(function (appsFolder, index) {
+                var appConfig = this.appConfigs[index];
+                if(appConfig.buildTool === 'maven') {
+                    imagePath = this.destinationPath(this.directoryPath + appsFolder + '/target/docker/' + _.kebabCase(appConfig.baseName) + '-*.war');
                     runCommand = './mvnw package -Pprod docker:build';
                 } else {
-                    imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
+                    imagePath = this.destinationPath(this.directoryPath + appsFolder + '/build/docker/' + _.kebabCase(appConfig.baseName) + '-*.war');
                     runCommand = './gradlew -Pprod bootRepackage buildDocker';
                 }
                 if (shelljs.ls(imagePath).length === 0) {
                     this.warning = true;
-                    this.warningMessage += '  ' + chalk.cyan(runCommand) +  ' in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + '\n';
+                    this.warningMessage += '  ' + chalk.cyan(runCommand) +  ' in ' + this.destinationPath(this.directoryPath + appsFolder) + '\n';
                 }
-            }
+            }, this);
         },
 
         generateJwtSecret: function() {
@@ -314,25 +309,27 @@ module.exports = DockerComposeGenerator.extend({
 
         setAppsFolderPaths: function() {
             this.appsFolderPaths = [];
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+            this.appsFolders.forEach(function (appsFolder) {
+                var path = this.destinationPath(this.directoryPath + appsFolder);
                 this.appsFolderPaths.push(path);
-            }
+            }, this);
         },
 
         setAppsYaml: function() {
             this.appsYaml = [];
 
             var portIndex=8080;
-            for (var i = 0; i < this.appsFolders.length; i++) {
+            this.appsFolders.forEach(function (appsFolder, index) {
+                var appConfig = this.appConfigs[index];
+                var lowercaseBaseName = appConfig.baseName.toLowerCase();
                 var parentConfiguration = {};
-                var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+                var path = this.destinationPath(this.directoryPath + appsFolder);
 
                 // Add application configuration
                 var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
-                var yamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
+                var yamlConfig = yaml.services[lowercaseBaseName + '-app'];
 
-                if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
+                if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
                     var ports = yamlConfig.ports[0].split(':');
                     ports[0] = portIndex;
                     yamlConfig.ports[0] = ports.join(':');
@@ -340,7 +337,7 @@ module.exports = DockerComposeGenerator.extend({
                 }
 
                 // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
-                if (this.appConfigs[i].applicationType === 'monolith' && this.useElk) {
+                if (appConfig.applicationType === 'monolith' && this.useElk) {
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=elk-logstash');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
@@ -348,69 +345,69 @@ module.exports = DockerComposeGenerator.extend({
                 }
 
                 // Configure the JHipster Registry
-                for (var envindex = 0; envindex < yamlConfig.environment.length; envindex++) {
-                    if (yamlConfig.environment[envindex].startsWith('SPRING_CLOUD_CONFIG_URI')) {
-                        yamlConfig.environment[envindex] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
+                yamlConfig.environment.forEach(function (env, index, envArr) {
+                    if (env.startsWith('SPRING_CLOUD_CONFIG_URI')) {
+                        envArr[index] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
                             this.adminPassword + '@registry:8761/config';
-                    } else if (yamlConfig.environment[envindex].startsWith('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE')) {
-                        yamlConfig.environment[envindex] = 'EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:' +
+                    } else if (env.startsWith('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE')) {
+                        envArr[index] = 'EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:' +
                             this.adminPassword + '@registry:8761/eureka';
                     }
-                }
+                }, this);
 
-                parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
+                parentConfiguration[lowercaseBaseName + '-app'] = yamlConfig;
 
                 // Add database configuration
-                var database = this.appConfigs[i].prodDatabaseType;
+                var database = appConfig.prodDatabaseType;
                 if (database !== 'no') {
                     var relativePath = '';
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
-                    var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                    var databaseYamlConfig = databaseYaml.services[lowercaseBaseName + '-' + database];
                     delete databaseYamlConfig.ports;
 
                     if (database === 'cassandra') {
                         var cassandraDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var cassandraConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                        var cassandraConfig = cassandraDbYaml.services[lowercaseBaseName + '-' + database];
                         cassandraConfig.build.context = relativePath;
-                        var cassandraNodeConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
-                        databaseYamlConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                        var cassandraNodeConfig = cassandraDbYaml.services[lowercaseBaseName + '-' + database + '-node'];
+                        databaseYamlConfig = cassandraDbYaml.services[lowercaseBaseName + '-' + database];
                         delete databaseYamlConfig.ports;
-                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = cassandraNodeConfig;
+                        parentConfiguration[lowercaseBaseName + '-' + database + '-node'] = cassandraNodeConfig;
                     }
 
-                    if (this.appConfigs[i].clusteredDb) {
+                    if (appConfig.clusteredDb) {
                         var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var mongodbNodeConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
-                        var mongoDbConfigSrvConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
+                        var mongodbNodeConfig = clusterDbYaml.services[lowercaseBaseName + '-' + database + '-node'];
+                        var mongoDbConfigSrvConfig = clusterDbYaml.services[lowercaseBaseName + '-' + database + '-config'];
                         mongodbNodeConfig.build.context = relativePath;
-                        databaseYamlConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
+                        databaseYamlConfig = clusterDbYaml.services[lowercaseBaseName + '-' + database];
                         delete databaseYamlConfig.ports;
-                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = mongodbNodeConfig;
-                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'] = mongoDbConfigSrvConfig;
+                        parentConfiguration[lowercaseBaseName + '-' + database + '-node'] = mongodbNodeConfig;
+                        parentConfiguration[lowercaseBaseName + '-' + database + '-config'] = mongoDbConfigSrvConfig;
                     }
 
-                    parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
+                    parentConfiguration[lowercaseBaseName + '-' + database] = databaseYamlConfig;
                 }
                 // Add search engine configuration
-                var searchEngine = this.appConfigs[i].searchEngine;
+                var searchEngine = appConfig.searchEngine;
                 if (searchEngine === 'elasticsearch') {
                     var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
-                    var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
+                    var searchEngineConfig = searchEngineYaml.services[lowercaseBaseName + '-' + searchEngine];
                     delete searchEngineConfig.ports;
-                    parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine] = searchEngineConfig;
+                    parentConfiguration[lowercaseBaseName + '-' + searchEngine] = searchEngineConfig;
                 }
                 // Dump the file
-                var stringYaml = jsyaml.dump(parentConfiguration, {indent: 4});
-                var array = stringYaml.split('\n');
-                for (var j = 0; j < array.length; j++) {
-                    array[j] = '    ' + array[j];
-                    array[j] = array[j].replace(/\'/g, '');
+                var yamlString = jsyaml.dump(parentConfiguration, {indent: 4});
+                var yamlArray = yamlString.split('\n');
+                for (var j = 0; j < yamlArray.length; j++) {
+                    yamlArray[j] = '    ' + yamlArray[j];
+                    yamlArray[j] = yamlArray[j].replace(/\'/g, '');
                 }
-                stringYaml = array.join('\n');
-                this.appsYaml.push(stringYaml);
-            }
+                yamlString = yamlArray.join('\n');
+                this.appsYaml.push(yamlString);
+            }, this);
         },
 
         saveConfig: function() {
@@ -454,13 +451,13 @@ module.exports = DockerComposeGenerator.extend({
         if (this.gatewayNb + this.monolithicNb > 1) {
             this.log('\nYour applications will be accessible on these URLs:');
             var portIndex = 8080;
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    this.log('\t- '+this.appConfigs[i].baseName + ':' + ' http://localhost:'+portIndex);
+            this.appConfigs.forEach(function (appConfig) {
+                if(appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+                    this.log('\t- ' + appConfig.baseName + ':' + ' http://localhost:'+ portIndex);
                     portIndex++;
                 }
-            }
-            this.log();
+            }, this);
+            this.log('\n');
         }
     }
 });

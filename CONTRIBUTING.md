@@ -204,7 +204,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
 * AngularJS files **must follow** [John Papa's Angular 1 style guide] (https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
 
-Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request.
+Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 
 ## <a name="templates"></a> Template Guidelines
 
