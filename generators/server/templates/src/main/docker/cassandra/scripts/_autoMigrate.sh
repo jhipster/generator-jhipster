@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Orchestrate the automatic execution of all the cql migration scripts when starting the cluster
 # for local development
@@ -10,12 +10,16 @@ function log {
     echo "[$(date)]: $*"
 }
 
+function logDebug {
+    ((DEBUG_LOG)) && echo "[DEBUG][$(date)]: $*"
+}
+
 function waitForClusterConnection() {
     retryCount=0
     maxRetry=20
     cqlsh -e "Describe KEYSPACES;" $CASSANDRA_CONTACT_POINT &>/dev/null
     while [ $? -ne 0 ] && [ "$retryCount" -ne "$maxRetry" ]; do
-        log 'cassandra not reachable yet. sleep and retry. retryCount =' $retryCount
+        logDebug 'cassandra not reachable yet. sleep and retry. retryCount =' $retryCount
         sleep 5
         ((retryCount+=1))
         cqlsh -e "Describe KEYSPACES;" $CASSANDRA_CONTACT_POINT &>/dev/null
@@ -29,22 +33,31 @@ function waitForClusterConnection() {
     log "connected to cassandra cluster"
 }
 
-function executeScripts() {
-    local filePattern=$1
-    # loop over migration scripts
-    for cqlFile in $filePattern; do
-        . ./usr/local/bin/execute-cql $cqlFile
-    done
-}
-
 waitForClusterConnection
 
 log "execute cassandra setup and all migration scripts"
 
-log "create keyspace and base tables"
-. ./usr/local/bin/init-dev
+CQL_FILES_PATH="/cql/changelog/"
+EXECUTE_CQL_SCRIPT="./usr/local/bin/execute-cql"
+if [ "$#" -eq 1 ]; then
+    log "overriding for local usage"
+    CQL_FILES_PATH=$1
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    EXECUTE_CQL_SCRIPT=$SCRIPT_DIR'/execute-cql.sh'
+else
+    log "create keyspace and base tables"
+    . ./usr/local/bin/init-dev
+fi
 
-log "apply all scripts from /cql/changelog/"
-executeScripts "/cql/changelog/*.cql"
+function executeScripts() {
+    local filePattern=$1
+    # loop over migration scripts
+    for cqlFile in $filePattern; do
+        . $EXECUTE_CQL_SCRIPT $cqlFile
+    done
+}
+
+log "executed all non already executed scripts from $CQL_FILES_PATH"
+executeScripts "$CQL_FILES_PATH*.cql"
 
 log "migration done"
