@@ -28,7 +28,6 @@ module.exports = JDLGenerator.extend({
         },
 
         getConfig: function () {
-            this.log('The jdl is being imported.');
             this.baseName = this.config.get('baseName');
             this.databaseType = this.config.get('databaseType');
         }
@@ -57,7 +56,7 @@ module.exports = JDLGenerator.extend({
         },
 
         parseJDL: function () {
-
+            this.log('The jdl is being parsed.');
             var Editors = jhuml.editors;
             var EntitiesCreator = jhuml.EntitiesCreator;
             var ClassScheduler = jhuml.ClassScheduler;
@@ -87,10 +86,12 @@ module.exports = JDLGenerator.extend({
             if (!this.options['force']) {
                 scheduledClasses = creator.filterOutUnchangedEntities(scheduledClasses);
             }
+            this.log('Writing entity JSON files.');
             creator.writeJSON(scheduledClasses);
         },
 
         generateEntities: function () {
+            this.log('Generating entities.');
             this.getExistingEntities().forEach(function (entity) {
                 this.composeWith('jhipster:entity', {
                     options: {
