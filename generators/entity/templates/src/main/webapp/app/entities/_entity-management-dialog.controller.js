@@ -69,7 +69,7 @@
         <%_ for (idx in fields) {
             if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
         vm.datePickerOpenStatus.<%= fields[idx].fieldName %> = false;
-        <%_ } else if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+        <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
 
         vm.set<%= fields[idx].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
             <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>

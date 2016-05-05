@@ -18,7 +18,8 @@ import org.springframework.data.elasticsearch.annotations.Document;<% } %>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
+import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %><% if (fieldsContainDate == true) { %>
 import java.util.Date;<% } %><% if (importSet == true) { %>
@@ -99,15 +100,21 @@ public class <%= entityClass %> implements Serializable {
     private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%><%_ if (databaseType == 'sql') { _%>
-    @Column(name = "<%=fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
-    <% if (databaseType == 'mongodb') { %>@Field("<%=fieldNameUnderscored %>_content_type")
-    <%_ } _%>
-
+    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
+      <%_ if (databaseType == 'sql' || databaseType === 'cassandra') { _%>
+    @Column(name = "<%=fieldNameUnderscored %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
+        <%_ if (required && databaseType === 'cassandra') { _%>
+    @NotNull
+        <%_ } _%>
+      <%_ } _%>
+      <%_ if (databaseType == 'mongodb') { _%>
+    @Field("<%=fieldNameUnderscored %>_content_type")
+      <%_ } _%>
     private String <%= fieldName %>ContentType;
 
     <%_ }
     }
+
     for (idx in relationships) {
         var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
         otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural,
@@ -212,7 +219,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
@@ -277,7 +284,7 @@ public class <%= entityClass %> implements Serializable {
                 var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                 var fieldName = fields[idx].fieldName; _%>
             ", <%= fieldName %>='" + <%= fieldName %> + "'" +
-                <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+                <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
                 <%_ } _%>
             <%_ } _%>

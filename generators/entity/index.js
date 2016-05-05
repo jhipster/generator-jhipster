@@ -490,6 +490,10 @@ module.exports = EntityGenerator.extend({
                     {
                         value: 'Boolean',
                         name: 'Boolean'
+                    },
+                    {
+                        value: 'ByteBuffer',
+                        name: '[BETA] blob'
                     }
                 ],
                 default: 0
@@ -514,6 +518,26 @@ module.exports = EntityGenerator.extend({
                     {
                         value: 'text',
                         name: 'A CLOB (Text field)'
+                    }
+                ],
+                default: 0
+            },
+            {
+                when: function (response) {
+                    return response.fieldAdd === true &&
+                        response.fieldType === 'ByteBuffer';
+                },
+                type: 'list',
+                name: 'fieldTypeBlobContent',
+                message: 'What is the content of the Blob field?',
+                choices: [
+                    {
+                        value: 'image',
+                        name: 'An image'
+                    },
+                    {
+                        value: 'any',
+                        name: 'A binary file'
                     }
                 ],
                 default: 0
@@ -621,6 +645,7 @@ module.exports = EntityGenerator.extend({
                         response.fieldType === 'UUID' ||
                         response.fieldType === 'Date' ||
                         response.fieldType === 'Boolean' ||
+                        response.fieldType === 'ByteBuffer' ||
                         response.fieldIsEnum === true);
                 },
                 type: 'checkbox',
@@ -1524,7 +1549,7 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainDate = true;
                 } else if (fieldType === 'BigDecimal') {
                     this.fieldsContainBigDecimal = true;
-                } else if (fieldType === 'byte[]') {
+                } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
                     this.fieldsContainBlob = true;
                 }
 
