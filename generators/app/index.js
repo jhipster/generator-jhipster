@@ -73,7 +73,7 @@ module.exports = JhipsterGenerator.extend({
         this.skipClient = configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.jhiPrefix = configOptions.jhiPrefix = this.options['jhi-prefix'];
+        this.jhiPrefix = configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.checkInstall = this.options['check-install'];
 

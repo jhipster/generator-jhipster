@@ -109,7 +109,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
-        this.jhiPrefix = configOptions.jhiPrefix || this.options['jhi-prefix'];
+        this.jhiPrefix = configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         this.testFrameworks = [];
         this.options['protractor'] && this.testFrameworks.push('protractor');
