@@ -1,15 +1,15 @@
 {
     "gateway": {
-        "title": "Gateway",
+        "title": "閘道",
         "routes": {
-            "title": "Current routes",
+            "title": "當前路徑",
             "url": "URL",
-            "service": "service",
-            "servers": "Available servers",
-            "error": "Warning: no server available!"
+            "service": "服務",
+            "servers": "可用伺服器",
+            "error": "警告：沒有可用的伺服器！"
         },
         "refresh": {
-            "button": "Refresh"
+            "button": "重新整理"
         }
     }
 }
