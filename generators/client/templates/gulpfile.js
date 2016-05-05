@@ -137,7 +137,6 @@ gulp.task('inject:app', function () {
         .pipe(gulp.dest(config.app));
 });
 
-
 gulp.task('inject:vendor', function () {
     var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
@@ -167,6 +166,21 @@ gulp.task('inject:test', function () {
             }
         }))
         .pipe(gulp.dest(config.test));
+});
+
+gulp.task('inject:troubleshoot', function () {
+    /* this task removes the troubleshooting content from index.html*/
+    return gulp.src(config.app + 'index.html')
+        .pipe(plumber({errorHandler: handleErrors}))
+        /* having empty src as we dont have to read any files*/
+        .pipe(inject(gulp.src('', {read: false}), {
+            starttag: '<!-- inject:troubleshoot -->',
+            removeTags: true,
+            transform: function () {
+                return '<!-- Angular views -->';
+            }
+        }))
+        .pipe(gulp.dest(config.app));
 });
 
 gulp.task('assets:prod', ['images', 'styles', 'html'], build);
@@ -282,7 +296,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function () {
-    runSequence(['inject:dep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app');
+    runSequence(['inject:dep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app', 'inject:troubleshoot');
 });
 
 gulp.task('serve', function () {
@@ -290,7 +304,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject:app', 'assets:prod', cb);
+    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);
