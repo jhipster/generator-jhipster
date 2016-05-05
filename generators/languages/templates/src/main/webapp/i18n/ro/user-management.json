@@ -18,6 +18,7 @@
         "firstName": "Prenume",
         "lastName": "Nume",
         "email": "Email",
+        "status": "Status",
         "activated": "Activat",
         "deactivated": "Dezactivat",
         "profiles": "Profile",

@@ -18,6 +18,7 @@
         "firstName": "Ad",
         "lastName": "Soyad",
         "email": "Eposta",
+        "status": "Status",
         "activated": "Aktif",
         "deactivated": "Deaktif",
         "profiles": "Profiller",

@@ -18,6 +18,7 @@
         "firstName": "Имя",
         "lastName": "Фамилия",
         "email": "Email",
+        "status": "Status",
         "activated": "Активен",
         "deactivated": "Неактивен",
         "profiles": "Профили",

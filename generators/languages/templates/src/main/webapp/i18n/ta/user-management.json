@@ -18,6 +18,7 @@
         "firstName": "முதற்பெயர்",
         "lastName": "குடும்பப்பெயர்",
         "email": "மின்னஞ்சல்",
+        "status": "Status",
         "activated": "செயல்ப்படுத்து",
         "deactivated": "செயலிழக்க",
         "profiles": "சுயவிவரம்",

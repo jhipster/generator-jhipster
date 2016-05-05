@@ -18,6 +18,7 @@
         "firstName": "名字",
         "lastName": "姓氏",
         "email": "邮箱",
+        "status": "Status",
         "activated": "已激活",
         "deactivated": "失效",
         "profiles": "资料",

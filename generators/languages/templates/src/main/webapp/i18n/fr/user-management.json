@@ -17,6 +17,7 @@
         "login": "Login",
         "firstName": "Prénom",
         "lastName": "Nom",
+        "status": "Statut",
         "email": "Email",
         "activated": "Activé",
         "deactivated": "Désactivé",

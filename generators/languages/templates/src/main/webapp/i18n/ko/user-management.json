@@ -18,6 +18,7 @@
         "firstName": "이름",
         "lastName": "성",
         "email": "이메일",
+        "status": "Status",
         "activated": "활성",
         "deactivated": "비활성",
         "profiles": "Profiles",

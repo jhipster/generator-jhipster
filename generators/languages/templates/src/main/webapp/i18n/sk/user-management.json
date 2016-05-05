@@ -18,6 +18,7 @@
         "firstName": "Krstné meno",
         "lastName": "Priezvisko",
         "email": "Email",
+        "status": "Status",
         "activated": "Aktívny",
         "deactivated": "Neaktívny",
         "profiles": "Profily",
