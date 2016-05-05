@@ -57,13 +57,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Heslo je povinné.",
-                    "minlength": "Vaše heslo musí mít alespoň 5 znaků.",
+                    "minlength": "Vaše heslo musí mít alespoň 4 znaky.",
                     "maxlength": "Vaše heslo nemůže být delší než 50 znaků.",
                     "strength": "Sila hesla:"
                 },
                 "confirmpassword": {
                     "required": "Potvrzení hesla je povinné.",
-                    "minlength": "Vaše potvrzení hesla musí mít alespoň 5 znaků.",
+                    "minlength": "Vaše potvrzení hesla musí mít alespoň 4 znaky.",
                     "maxlength": "Vaše potvrzení hesla nemůže být delší než 50 znaků."
                 },
                 "email": {
