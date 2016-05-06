@@ -87,10 +87,10 @@ module.exports = DockerComposeGenerator.extend({
 
         files.forEach(function(file) {
             if(file.isDirectory()) {
-                if( (shelljs.test('-f', file.name + '/.yo-rc.json'))
-                    && (shelljs.test('-f', file.name + '/src/main/docker/app.yml')) ) {
+                if( (shelljs.test('-f', input + file.name + '/.yo-rc.json'))
+                    && (shelljs.test('-f', input + file.name + '/src/main/docker/app.yml')) ) {
                     try {
-                        var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
+                        var fileData = this.fs.readJSON(input + file.name + '/.yo-rc.json');
                         if(fileData['generator-jhipster'].baseName !== undefined) {
                             appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                         }
@@ -344,16 +344,31 @@ module.exports = DockerComposeGenerator.extend({
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
                 }
 
-                // Configure the JHipster Registry
+                // Re-configure the JHipster Registry if it is already configured
+                var spring_cloud_config_uri_configured = false;
+                var eureka_client_serviceurl_defaultzone_configured = false;
                 yamlConfig.environment.forEach(function (env, index, envArr) {
+
                     if (env.startsWith('SPRING_CLOUD_CONFIG_URI')) {
                         envArr[index] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
                             this.adminPassword + '@registry:8761/config';
-                    } else if (env.startsWith('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE')) {
+                        spring_cloud_config_uri_configured = true;
+                    }
+                    if (env.startsWith('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE')) {
                         envArr[index] = 'EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:' +
                             this.adminPassword + '@registry:8761/eureka';
+                        eureka_client_serviceurl_defaultzone_configured = true;
                     }
                 }, this);
+                // Configure the JHipster Registry if it is not already configured
+                if (!spring_cloud_config_uri_configured) {
+                    yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
+                        this.adminPassword + '@registry:8761/config');
+                }
+                if (!eureka_client_serviceurl_defaultzone_configured) {
+                    yamlConfig.environment.push('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:' +
+                        this.adminPassword + '@registry:8761/eureka');
+                }
 
                 parentConfiguration[lowercaseBaseName + '-app'] = yamlConfig;
 
@@ -400,12 +415,16 @@ module.exports = DockerComposeGenerator.extend({
                 }
                 // Dump the file
                 var yamlString = jsyaml.dump(parentConfiguration, {indent: 4});
+
+                // Fix the output file which is totally broken!!!
                 var yamlArray = yamlString.split('\n');
                 for (var j = 0; j < yamlArray.length; j++) {
                     yamlArray[j] = '    ' + yamlArray[j];
                     yamlArray[j] = yamlArray[j].replace(/\'/g, '');
                 }
                 yamlString = yamlArray.join('\n');
+                yamlString = yamlString.replace('>-\n                ', '');
+                yamlString = yamlString.replace('>-\n                ', '');
                 this.appsYaml.push(yamlString);
             }, this);
         },
