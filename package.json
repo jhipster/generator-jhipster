@@ -28,7 +28,6 @@
     "url": "git://github.com/jhipster/generator-jhipster.git"
   },
   "scripts": {
-    "pretest": "eslint .",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
     "test": "mocha --timeout 20000 --reporter spec"
