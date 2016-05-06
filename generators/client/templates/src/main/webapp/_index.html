@@ -28,7 +28,19 @@
     <page-ribbon></page-ribbon>
     <div ui-view="navbar" ng-cloak></div>
     <div class="container">
-        <div class="well" ui-view="content"></div>
+        <div class="well" ui-view="content">
+            <!-- inject:troubleshoot -->
+            <!-- This content is for troubleshooting purpose and will be removed by `gulp install` task -->
+            <p>If you are seeing this, it means something went wrong during the initial setup of the application.</p>
+            <p>Please make sure the below steps have completed successfully, else please run the steps in below order</p>
+            <ol>
+                <li>Install npm dependency with command <code style="color:red">npm install</code></li>
+                <li>Install bower dependency with command <code style="color:red">bower install</code></li>
+                <li>Run initial setup using gulp with command <code style="color:red">gulp install</code></li>
+            </ol>
+            <p>If you are re generating an existing JHipster application then please use command <code style="color:red">yo jhipster --with-entities</code> to regenerate your entities along with application.</p>
+            <!-- endinject -->
+        </div>
 
         <div class="footer" ng-cloak>
             <p translate="footer">This is your footer</p>
