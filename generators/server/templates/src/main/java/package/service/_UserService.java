@@ -132,7 +132,7 @@ public class UserService {
         user.setLastName(managedUserDTO.getLastName());
         user.setEmail(managedUserDTO.getEmail());
         if (managedUserDTO.getLangKey() == null) {
-            user.setLangKey("<%= nativeLanguageShortName %>"); // default language
+            user.setLangKey("<%= nativeLanguage %>"); // default language
         } else {
             user.setLangKey(managedUserDTO.getLangKey());
         }<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
