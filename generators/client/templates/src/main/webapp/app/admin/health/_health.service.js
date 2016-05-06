@@ -15,7 +15,7 @@
         return service;
 
         function checkHealth () {
-            return $http.get('health').then(function (response) {
+            return $http.get('management/health').then(function (response) {
                 return response.data;
             });
         }

@@ -43,7 +43,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } _%>
 <%_ if (authenticationType == 'oauth2') { _%>
 
-    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:mySecretOAuthSecret".getBytes(StandardCharsets.UTF_8))
+    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:my-secret-token-to-change-in-production".getBytes(StandardCharsets.UTF_8))
 
     val headers_http_authentication = Map(
         "Content-Type" -> """application/x-www-form-urlencoded""",
@@ -91,7 +91,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("password", "admin")
         .formParam("grant_type", "password")
         .formParam("scope", "read write")
-        .formParam("client_secret", "mySecretOAuthSecret")
+        .formParam("client_secret", "my-secret-token-to-change-in-production")
         .formParam("client_id", "<%= baseName%>app")
         .formParam("submit", "Login")
         .check(jsonPath("$.access_token").saveAs("access_token"))).exitHereIfFailed

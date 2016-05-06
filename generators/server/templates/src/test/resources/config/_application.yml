@@ -115,7 +115,7 @@ jhipster:
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
                 clientid: <%= baseName %>app
-                secret: mySecretOAuthSecret
+                secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     <%_ } _%>

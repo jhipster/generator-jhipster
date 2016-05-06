@@ -20,12 +20,14 @@ eureka:
 ribbon:
     eureka:
         enabled: true
+
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
-
 zuul:
 
 <%_ } _%>
+management:
+    context-path: /management
 
 spring:
     application:

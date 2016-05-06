@@ -52,25 +52,9 @@ package <%=packageName%>.config;
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()
               .authorizeRequests()
-
-              .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
               .antMatchers("/api/**").authenticated()
-              .antMatchers("/metrics/**").permitAll()
-              .antMatchers("/health/**").permitAll()
-              .antMatchers("/trace/**").permitAll()
-              .antMatchers("/dump/**").permitAll()
-              .antMatchers("/shutdown/**").permitAll()
-              .antMatchers("/beans/**").permitAll()
-              .antMatchers("/configprops/**").permitAll()
-              .antMatchers("/info/**").permitAll()
-              .antMatchers("/autoconfig/**").permitAll()
-              .antMatchers("/env/**").permitAll()
-              .antMatchers("/mappings/**").permitAll()
-              .antMatchers("/liquibase/**").permitAll()
-              .antMatchers("/v2/api-docs/**").permitAll()
-              .antMatchers("/configuration/security").permitAll()
+              .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
               .antMatchers("/configuration/ui").permitAll()
-              .antMatchers("/protected/**").authenticated()
           .and()
               .apply(securityConfigurerAdapter());
 
@@ -123,25 +107,9 @@ package <%=packageName%>.config;
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()
               .authorizeRequests()
-
-              .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
               .antMatchers("/api/**").authenticated()
-              .antMatchers("/metrics/**").permitAll()
-              .antMatchers("/health/**").permitAll()
-              .antMatchers("/trace/**").permitAll()
-              .antMatchers("/dump/**").permitAll()
-              .antMatchers("/shutdown/**").permitAll()
-              .antMatchers("/beans/**").permitAll()
-              .antMatchers("/configprops/**").permitAll()
-              .antMatchers("/info/**").permitAll()
-              .antMatchers("/autoconfig/**").permitAll()
-              .antMatchers("/env/**").permitAll()
-              .antMatchers("/mappings/**").permitAll()
-              .antMatchers("/liquibase/**").permitAll()
-              .antMatchers("/v2/api-docs/**").permitAll()
-              .antMatchers("/configuration/security").permitAll()
-              .antMatchers("/configuration/ui").permitAll()
-              .antMatchers("/protected/**").authenticated();
+              .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+              .antMatchers("/configuration/ui").permitAll();
 
       }
 
