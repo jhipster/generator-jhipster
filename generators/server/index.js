@@ -837,6 +837,10 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             javaDir = this.javaDir = SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             this.testDir = SERVER_TEST_SRC_DIR + this.packageFolder + '/';
+            if (!this.nativeLanguage) {
+                // set to english when translation is set to false
+                this.nativeLanguage = 'en';
+            }
         },
 
         saveConfig: function () {

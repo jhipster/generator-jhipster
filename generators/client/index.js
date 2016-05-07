@@ -227,6 +227,10 @@ module.exports = JhipsterClientGenerator.extend({
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
+            if (!this.nativeLanguage) {
+                // set to english when translation is set to false
+                this.nativeLanguage = 'en';
+            }
         },
 
         saveConfig: function () {
