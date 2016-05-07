@@ -31,7 +31,7 @@ apply plugin: 'propdeps'
 apply plugin: 'io.spring.dependency-management'
 dependencyManagement {
   imports {
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+spring_cloud_version
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+ spring_cloud_version
   }
 }
 <%_ } _%>
