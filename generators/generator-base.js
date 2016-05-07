@@ -17,6 +17,7 @@ var path = require('path'),
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
 const WORD_WRAP_WIDTH = 80;
+const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const constants = require('./generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
@@ -953,7 +954,7 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
     try {
         var modules;
         var error, duplicate;
-        var moduleName = _.startCase(npmPackageName.replace('generator-jhipster-', ''));
+        var moduleName = _.startCase(npmPackageName.replace(GENERATOR_JHIPSTER + '-', ''));
         var generatorName = npmPackageName.replace('generator-', '');
         var generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app');
         var moduleConfig = {
@@ -1224,10 +1225,29 @@ Generator.prototype.printJHipsterLogo = function () {
         chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
         chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
         chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
-        chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
+        chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n')
+    );
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+    if (this.checkInstall) this.checkForNewVersion();
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
     this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
+};
+
+Generator.prototype.checkForNewVersion = function () {
+    try {
+        shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, stdout, stderr) {
+            if (!stderr && semver.lt(packagejs.version, stdout)) {
+                this.log(
+                    chalk.yellow(' ______________________________________________________________________________\n\n') +
+                    chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n','')) + chalk.gray(' (current: ' + packagejs.version + ')') + '\n' +
+                    chalk.yellow('  Run ' + chalk.magenta('npm install -g ' + GENERATOR_JHIPSTER ) + ' to update.\n') +
+                    chalk.yellow(' ______________________________________________________________________________\n')
+                );
+            }
+        }.bind(this));
+    } catch (err) {
+        // fail silently as this function doesnt affect normal generator flow
+    }
 };
 
 Generator.prototype.getAngularAppName = function () {
