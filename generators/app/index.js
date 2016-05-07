@@ -58,7 +58,7 @@ module.exports = JhipsterGenerator.extend({
 
         // This adds support for a `--[no-]check-install` flag
         this.option('check-install', {
-            desc: 'Check the installation',
+            desc: 'Check the status of the required tools',
             type: Boolean,
             defaults: true
         });
