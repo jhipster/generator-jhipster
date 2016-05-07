@@ -13,7 +13,7 @@
             urlTemplate: 'i18n/{lang}/{part}.json'
         });
 
-        $translateProvider.preferredLanguage('<%= nativeLanguageShortName %>');
+        $translateProvider.preferredLanguage('<%= nativeLanguage %>');
         $translateProvider.useStorage('translationStorageProvider');
         $translateProvider.useSanitizeValueStrategy('escaped');
         $translateProvider.addInterpolation('$translateMessageFormatInterpolation');

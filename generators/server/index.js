@@ -881,7 +881,6 @@ module.exports = JhipsterServerGenerator.extend({
             if (configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
         },
 
         composeLanguages: function () {
