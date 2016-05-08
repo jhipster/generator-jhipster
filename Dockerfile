@@ -1,8 +1,5 @@
 FROM ubuntu:xenial
 
-ENV JAVA_VERSION 8
-ENV JAVA_HOME /usr/lib/jvm/java-${JAVA_VERSION}-openjdk-amd64
-
 RUN \
   # configure the "jhipster" user
   groupadd jhipster && \
