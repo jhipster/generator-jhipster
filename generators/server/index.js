@@ -216,6 +216,7 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     _getUaaAppName : function (input) {
+        input = input.trim();
         var fromPath = '';
         if(path.isAbsolute(input)) {
             fromPath = input + '/' + '.yo-rc.json';
@@ -1272,6 +1273,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_ProfileInfoResource.java', javaDir + 'web/rest/ProfileInfoResource.java', this, {});
 
         },
 
@@ -1415,10 +1417,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_UserStepDefs.java', testDir + 'cucumber/stepdefs/UserStepDefs.java', this, {});
                 this.copy('src/test/features/user/user.feature', 'src/test/features/user/user.feature');
             }
-        },
-
-        writeProfilesRestFiles: function () {
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_ProfileInfoResource.java', javaDir + 'web/rest/ProfileInfoResource.java', this, {});
         }
     },
 

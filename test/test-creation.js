@@ -343,6 +343,11 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/TokenProvider.java'
     ],
 
+    uaa: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/UaaConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/UaaWebSecurityConfiguration.java'
+    ],
+
     gateway: [
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/GatewayConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java',
@@ -906,7 +911,7 @@ describe('JHipster generator', function () {
     describe('microservice', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false, skipClient: true, skipUserManagement: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     'applicationType': 'microservice',
                     'baseName': 'jhipster',
@@ -974,6 +979,82 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.microserviceGradle);
+            assert.file(expectedFiles.containerizeWithDocker);
+        });
+    });
+
+    describe('UAA server', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'applicationType': 'uaa',
+                    'baseName': 'jhipster-uaa',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'serverPort': '9999',
+                    'authenticationType': 'uaa',
+                    'hibernateCache': 'no',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'mysql',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the UAA application type', function () {
+            assert.file(expectedFiles.uaa);
+            assert.file(expectedFiles.dockerServicesDev);
+            assert.file(expectedFiles.dockerServicesProd);
+            assert.file(expectedFiles.containerizeWithDocker);
+        });
+    });
+
+    describe('Gateway with UAA server', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'applicationType': 'gateway',
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'serverPort': '8080',
+                    'authenticationType': 'uaa',
+                    'uaaBaseName': 'uaa',
+                    'hibernateCache': 'hazelcast',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'mysql',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for UAA auth with the Gateway application type', function () {
+            assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.gateway);
+            assert.file(expectedFiles.dockerServicesDev);
+            assert.file(expectedFiles.dockerServicesProd);
             assert.file(expectedFiles.containerizeWithDocker);
         });
     });
