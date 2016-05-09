@@ -113,6 +113,33 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
     });
 
+    describe('gateway, uaa server and one microservice, with elk', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withPrompts({
+                    directoryPath: './',
+                    'chosenApps': [
+                        '01-gateway',
+                        '02-mysql',
+                        '06-uaa'
+                    ],
+                    clusteredDbApps: [],
+                    elk: true
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('creates expected elk files', function () {
+            assert.file(expectedFiles.elk);
+        });
+    });
+
     describe('gateway and multi microservices, with elk', function () {
         beforeEach(function (done) {
             helpers
@@ -128,9 +155,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '03-psql',
                         '04-mongo'
                     ],
-                    clusteredDbApps: [
-                        '04-mongo'
-                    ],
+                    clusteredDbApps: [],
                     elk: true
                 })
                 .on('end', done);
