@@ -216,6 +216,8 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     _getUaaAppName : function (input) {
+        if (!input) return false;
+        
         input = input.trim();
         var fromPath = '';
         if(path.isAbsolute(input)) {
@@ -344,9 +346,6 @@ module.exports = JhipsterServerGenerator.extend({
                         }, applicationType === 'gateway' && response.authenticationType === 'uaa');
                     },
                     default: '../uaa',
-                    filter: function (input) {
-                        return this._getUaaAppName(input).baseName;
-                    }.bind(this),
                     validate: function (input) {
                         var uaaAppData = this._getUaaAppName(input);
 
@@ -744,7 +743,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.searchEngine = props.searchEngine;
                 this.buildTool = props.buildTool;
                 this.enableSocialSignIn = props.enableSocialSignIn;
-                this.uaaBaseName = props.uaaBaseName;
+                this.uaaBaseName = this._getUaaAppName(props.uaaBaseName).baseName;
 
                 if (this.databaseType === 'no') {
                     this.devDatabaseType = 'no';
