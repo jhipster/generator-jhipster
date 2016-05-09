@@ -941,9 +941,6 @@
                     Enable the line below to have remote debugging of your application on port 5005
                     <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
                     -->
-                    <arguments>
-                        <argument>--spring.profiles.active=dev</argument>
-                    </arguments>
                 </configuration>
             </plugin>
             <plugin>
@@ -1030,6 +1027,8 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
+                <!--  default profile(s) -->
+                <spring.profiles.default>dev</spring.profiles.default>
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
             </properties>
@@ -1059,6 +1058,12 @@
         </profile>
         <profile>
             <id>prod</id>
+            <properties>
+                <!--  default profile(s) -->
+                <spring.profiles.default>prod</spring.profiles.default>
+                <!-- log configuration -->
+                <logback.loglevel>INFO</logback.loglevel>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -1154,17 +1159,10 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <executable>true</executable>
-                            <arguments>
-                                <argument>--spring.profiles.active=prod</argument>
-                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <!-- log configuration -->
-                <logback.loglevel>INFO</logback.loglevel>
-            </properties>
         </profile>
     </profiles>
 

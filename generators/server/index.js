@@ -987,6 +987,7 @@ module.exports = JhipsterServerGenerator.extend({
 
             // Create Java resource files
             mkdirp(SERVER_MAIN_RES_DIR);
+            this.copy(SERVER_MAIN_RES_DIR + 'build-properties.xml', SERVER_MAIN_RES_DIR + '.build-properties.xml');
             this.copy(SERVER_MAIN_RES_DIR + 'banner.txt', SERVER_MAIN_RES_DIR + 'banner.txt');
 
             if (this.hibernateCache === 'ehcache') {
@@ -1161,6 +1162,7 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_package-info.java', javaDir + 'config/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_BuildProperties.java', javaDir + 'config/BuildProperties.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});

@@ -22,7 +22,7 @@ if (project.hasProperty('no-cache')) {
 }
 
 bootRun {
-    args = ["--spring.profiles.active=" + profiles]
+    args = []
 }
 <% if (!skipClient) { %>
 task gulpBuildWithOpts(type: GulpTask) {
@@ -34,6 +34,11 @@ war {
 }<% } %>
 
 processResources {
+    filesMatching('**/.build-properties.xml') {
+        filter {
+            it.replace('@spring.profiles.default@', profiles)
+        }
+    }
     filesMatching('**/logback-spring.xml') {
         filter {
             it.replace('@logback.loglevel@', logbackLoglevel)
@@ -41,11 +46,6 @@ processResources {
     }
 }
 
-task setProdProperties(dependsOn: bootRun) << {
-    doFirst {
-        System.setProperty('spring.profiles.active', profiles)
-    }
-}
 <% if (!skipClient) { %>
 gulp_build.dependsOn 'npmInstall'
 gulp_build.dependsOn 'bower'

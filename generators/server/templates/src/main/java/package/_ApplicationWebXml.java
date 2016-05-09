@@ -1,6 +1,6 @@
 package <%=packageName%>;
 
-import <%=packageName%>.config.Constants;
+import <%=packageName%>.config.BuildProperties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,24 +16,24 @@ public class ApplicationWebXml extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.profiles(addDefaultProfile())
+        return application.profiles(getDefaultProfiles())
             .sources(<%= mainClass %>.class);
     }
 
     /**
-     * Set a default profile if it has not been set.
+     * Set default profile(s) if none have been set. The default is provided by Maven/Gradle, or "dev" otherwise.
      * <p>
-     * Please use -Dspring.profiles.active=dev
+     * Spring profiles can be configured with a System property; -Dspring.profiles.active=your,active,profiles
      * </p>
      */
-    private String addDefaultProfile() {
-        String profile = System.getProperty("spring.profiles.active");
-        if (profile != null) {
-            log.info("Running with Spring profile(s) : {}", profile);
-            return profile;
+    private String[] getDefaultProfiles() {
+        String profiles = System.getProperty("spring.profiles.active");
+        if (profiles != null) {
+            log.info("Running with Spring profile(s) : {}", profiles);
+            return profiles.split("\\s*,\\s*");
         }
 
         log.warn("No Spring profile configured, running with default configuration");
-        return Constants.SPRING_PROFILE_DEVELOPMENT;
+        return BuildProperties.getDefaultProfiles();
     }
 }
