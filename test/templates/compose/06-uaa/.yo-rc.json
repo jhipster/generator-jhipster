@@ -1,25 +1,26 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "3.2.1",
-    "baseName": "uaa",
+    "jhipsterVersion": "3.0.0",
+    "baseName": "uaaserver",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
-    "serverPort": "9999",
-    "authenticationType": "uaa",
+    "serverPort": "8081",
+    "authenticationType": "jwt",
     "hibernateCache": "hazelcast",
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
     "searchEngine": "no",
     "buildTool": "maven",
-    "jwtSecretKey": "833e45c1a2175b009364f08058f7a294006372e4",
+    "jwtSecretKey": "c6b5316a091620462170221f08507f3a43237b09",
     "enableTranslation": true,
-    "applicationType": "uaa",
+    "applicationType": "microservice",
     "testFrameworks": [
       "gatling"
     ],
     "jhiPrefix": "jhi",
     "skipClient": true,
+    "skipUserManagement": true,
     "nativeLanguage": "en",
     "languages": [
       "en"

@@ -120,6 +120,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({force: true})
                 .withPrompts({
                     directoryPath: './',
                     'chosenApps': [
