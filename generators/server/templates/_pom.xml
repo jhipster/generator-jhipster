@@ -63,7 +63,7 @@
         <hibernate.version>4.3.11.Final</hibernate.version>
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-        <datastax-driver.version>2.1.7.1</datastax-driver.version>
+        <datastax-driver.version>3.0.1</datastax-driver.version>
         <%_ } _%>
         <java.version>1.<%= javaVersion %></java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -367,7 +367,7 @@
         <dependency>
             <groupId>org.cassandraunit</groupId>
             <artifactId>cassandra-unit-spring</artifactId>
-            <version>2.1.3.1</version>
+            <version>3.0.0.1</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -534,10 +534,6 @@
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-cassandra</artifactId>
-        </dependency>
         <!-- DataStax driver -->
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
@@ -549,6 +545,11 @@
                     <artifactId>metrics-core</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-extras</artifactId>
+            <version>${datastax-driver.version}</version>
         </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>

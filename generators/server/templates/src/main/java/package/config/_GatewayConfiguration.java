@@ -43,9 +43,6 @@ public class GatewayConfiguration {
      * "src/main/resources/config/cql" directory
      * <li>Your cluster configured in your application-*.yml files, using the
      * "spring.data.cassandra" keys
-     * <li>Spring Data Cassandra running, by removing in your application-*.yml the
-     * "spring.autoconfigure.exclude" key that excludes the Cassandra and Spring Data
-     * Cassandra auto-configuration.
      * </ul>
      */
     @Configuration

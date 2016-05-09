@@ -27,7 +27,7 @@ eureka:
 spring:
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
-        exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
+        exclude: org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
     <%_ } _%>
     devtools:
         restart:
