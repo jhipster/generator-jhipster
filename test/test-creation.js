@@ -4,6 +4,7 @@
 var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
+var fse = require('fs-extra');
 
 const constants = require('../generators/generator-constants'),
     TEST_DIR = constants.TEST_DIR,
@@ -1024,6 +1025,9 @@ describe('JHipster generator', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
+                })
                 .withPrompts({
                     'applicationType': 'gateway',
                     'baseName': 'jhipster',
@@ -1031,7 +1035,7 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'serverPort': '8080',
                     'authenticationType': 'uaa',
-                    'uaaBaseName': 'uaa',
+                    'uaaBaseName': './uaa/',
                     'hibernateCache': 'hazelcast',
                     'clusteredHttpSession': 'no',
                     'websocket': 'no',
