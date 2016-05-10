@@ -1384,4 +1384,20 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
     return child;
 };
 
+Generator.prototype.isNumber = function (input, decimal) {
+    if (isNaN(this.filterNumber(input, decimal))) {
+        return false;
+    }
+    return true;
+};
+
+Generator.prototype.filterNumber = function (input, decimal) {
+    if (decimal) {
+        if (/^(\-|\+)?([0-9]+(\.[0-9]+)?)$/.test(input)) return Number(input);
+    } else {
+        if (/^(\-|\+)?([0-9]+)$/.test(input)) return Number(input);
+    }
+    return NaN;
+};
+
 Generator.prototype.contains = _.includes;

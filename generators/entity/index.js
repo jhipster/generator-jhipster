@@ -672,9 +672,9 @@ module.exports = EntityGenerator.extend({
                 type: 'input',
                 name: 'fieldValidateRulesMinlength',
                 validate: function (input) {
-                    if (/^([0-9]*)$/.test(input)) return true;
+                    if (this.isNumber(input)) return true;
                     return 'Minimum length must be a number';
-                },
+                }.bind(this),
                 message: 'What is the minimum length of your field?',
                 default: 0
             },
@@ -687,22 +687,11 @@ module.exports = EntityGenerator.extend({
                 type: 'input',
                 name: 'fieldValidateRulesMaxlength',
                 validate: function (input) {
-                    if (/^([0-9]*)$/.test(input)) return true;
+                    if (this.isNumber(input)) return true;
                     return 'Maximum length must be a number';
-                },
+                }.bind(this),
                 message: 'What is the maximum length of your field?',
                 default: 20
-            },
-            {
-                when: function (response) {
-                    return response.fieldAdd === true &&
-                        response.fieldValidate === true &&
-                        response.fieldValidateRules.indexOf('pattern') !== -1;
-                },
-                type: 'input',
-                name: 'fieldValidateRulesPattern',
-                message: 'What is the regular expression pattern you want to apply on your field?',
-                default: '^[a-zA-Z0-9]*$'
             },
             {
                 when: function (response) {
@@ -720,9 +709,9 @@ module.exports = EntityGenerator.extend({
                 name: 'fieldValidateRulesMin',
                 message: 'What is the minimum of your field?',
                 validate: function (input) {
-                    if (/^([0-9]*)$/.test(input)) return true;
+                    if (this.isNumber(input)) return true;
                     return 'Minimum must be a number';
-                },
+                }.bind(this),
                 default: 0
             },
             {
@@ -741,9 +730,9 @@ module.exports = EntityGenerator.extend({
                 name: 'fieldValidateRulesMax',
                 message: 'What is the maximum of your field?',
                 validate: function (input) {
-                    if (/^([0-9]*)$/.test(input)) return true;
+                    if (this.isNumber(input)) return true;
                     return 'Maximum must be a number';
-                },
+                }.bind(this),
                 default: 100
             },
             {
@@ -779,6 +768,17 @@ module.exports = EntityGenerator.extend({
                     return 'Maximum byte size must be a number';
                 },
                 default: 5000000
+            },
+            {
+                when: function (response) {
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('pattern') !== -1;
+                },
+                type: 'input',
+                name: 'fieldValidateRulesPattern',
+                message: 'What is the regular expression pattern you want to apply on your field?',
+                default: '^[a-zA-Z0-9]*$'
             }
         ];
         this.prompt(prompts, function (props) {
