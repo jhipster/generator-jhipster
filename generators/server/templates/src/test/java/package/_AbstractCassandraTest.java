@@ -33,7 +33,6 @@ public class AbstractCassandraTest {
         Cluster cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(9142).build();
         Session session = cluster.connect();
         CQLDataLoader dataLoader = new CQLDataLoader(session);
-        dataLoader.load(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, CASSANDRA_UNIT_KEYSPACE));
         applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
     }
 
@@ -43,10 +42,12 @@ public class AbstractCassandraTest {
             return;
         }
 
+        boolean keyspaceCreation = true;
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dirUrl.toURI()), pattern)) {
             for (Path entry : stream) {
                 String fileName = entry.getFileName().toString();
-                dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
+                dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, keyspaceCreation, false, CASSANDRA_UNIT_KEYSPACE));
+                keyspaceCreation = false; // Only create the keyspace on the first cql script run
             }
         }
     }

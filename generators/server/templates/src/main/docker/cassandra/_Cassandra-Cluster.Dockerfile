@@ -1,6 +1,6 @@
 FROM cassandra:2.2.5
 
-# script to create the keyspace and all the basic tables
+# script to create the keyspace
 ADD cassandra/scripts/init-prod.sh /usr/local/bin/init-prod
 RUN chmod 755 /usr/local/bin/init-prod
 

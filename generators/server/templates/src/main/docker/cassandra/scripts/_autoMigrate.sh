@@ -45,7 +45,7 @@ if [ "$#" -eq 1 ]; then
     SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     EXECUTE_CQL_SCRIPT=$SCRIPT_DIR'/execute-cql.sh'
 else
-    log "create keyspace and base tables"
+    log "create keyspace if necessary"
     . ./usr/local/bin/init-dev
 fi
 
@@ -57,7 +57,7 @@ function executeScripts() {
     done
 }
 
-log "executed all non already executed scripts from $CQL_FILES_PATH"
+log "execute all non already executed scripts from $CQL_FILES_PATH"
 executeScripts "$CQL_FILES_PATH*.cql"
 
 log "migration done"
