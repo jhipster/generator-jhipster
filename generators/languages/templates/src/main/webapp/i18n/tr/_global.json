@@ -115,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Sunucuya ulaşılamıyor",
+        "url.not.found": "Not found",
         "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
         "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
         "userexists": "Login name already used!",

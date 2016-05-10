@@ -115,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Server je nedostupný",
+        "url.not.found": "Not found",
         "NotNull": "Pole {{ fieldName }} nemůže být prázdné!",
         "Size": "Pole {{ fieldName }} nesplňuje požadavek minimální nebo maximální velikosti!",
         "userexists": "Zadané uživatelské jméno je již použito!",

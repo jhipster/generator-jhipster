@@ -115,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "सर्वर पहुँच योग्य नहीं",
+        "url.not.found": "Not found",
         "NotNull": "यह  {{ fieldName }} रिक्त नहीं हो सकता!",
         "Size": "यह {{ fieldName }} न्यूनतम/अधिकतम आकार की आवश्यकताओं को पूरा नहीं करता है!",
         "userexists": "लॉगिन नाम पहले से ही इस्तेमाल किया!",

@@ -115,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "A szerver nem elérhető",
+        "url.not.found": "Not found",
         "NotNull": "Az {{fieldName}} mező nem lehet üres!",
         "Size": "A {{fieldName}} mező nem teljesíti a minimum/maximum hossz követelményeket!",
         "userexists": "Login name already used!",

@@ -115,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Serwer jest nieosiągalny",
+        "url.not.found": "Not found",
         "NotNull": "Wartość {{fieldName}} nie może być pusta!",
         "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
         "userexists": "Login name already used!",

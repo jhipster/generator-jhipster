@@ -115,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "伺服器無法訪問",
+        "url.not.found": "Not found",
         "NotNull": "欄位 {{fieldName}} 不能為空！",
         "Size": "欄位 {{fieldName}} 不符合最小/最大要求！",
         "userexists": "使用者名稱已被使用！",

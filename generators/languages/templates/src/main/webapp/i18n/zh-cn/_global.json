@@ -115,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "服务器不可达",
+        "url.not.found": "Not found",
         "NotNull": "域 {{fieldName}} 不能为空!",
         "Size": "域 {{fieldName}} 不满足最大/最小值限制!",
         "userexists": "该用户名已存在!",
