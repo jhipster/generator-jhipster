@@ -74,7 +74,7 @@ public class <%= entityClass %> implements Serializable {
         if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
             required = true;
         } _%>
-    <%- include field_validators -%>
+    <%- include ../common/field_validators -%>
     <%_ } _%>
     <%_ if (databaseType == 'sql') {
         if (fields[idx].fieldIsEnum) { _%>

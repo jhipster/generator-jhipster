@@ -23,6 +23,7 @@ public class <%= entityClass %>DTO implements Serializable {
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     private UUID id;<% } %>
+
     <%_ for (idx in fields) {
         var fieldValidate = fields[idx].fieldValidate;
         var fieldValidateRules = fields[idx].fieldValidateRules;
@@ -38,23 +39,14 @@ public class <%= entityClass %>DTO implements Serializable {
         var fieldName = fields[idx].fieldName;
         if (fieldValidate == true) {
             var required = false;
-            var MAX_VALUE = 2147483647;
             if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
                 required = true;
-            }
-            if (required) { _%>
-
-    @NotNull<% } %><% if (fieldValidateRules.indexOf('minlength') != -1 && fieldValidateRules.indexOf('maxlength') == -1) { %>
-    @Size(min = <%= fieldValidateRulesMinlength %>)<% } %><% if (fieldValidateRules.indexOf('maxlength') != -1 && fieldValidateRules.indexOf('minlength') == -1) { %>
-    @Size(max = <%= fieldValidateRulesMaxlength %>)<% } %><% if (fieldValidateRules.indexOf('minlength') != -1 && fieldValidateRules.indexOf('maxlength') != -1) { %>
-    @Size(min = <%= fieldValidateRulesMinlength %>, max = <%= fieldValidateRulesMaxlength %>)<% } %><% if (fieldValidateRules.indexOf('minbytes') != -1 && fieldValidateRules.indexOf('maxbytes') == -1) { %>
-    @Size(min = <%= fieldValidateRulesMinbytes %>)<% } %><% if (fieldValidateRules.indexOf('maxbytes') != -1 && fieldValidateRules.indexOf('minbytes') == -1) { %>
-    @Size(max = <%= fieldValidateRulesMaxbytes %>)<% } %><% if (fieldValidateRules.indexOf('minbytes') != -1 && fieldValidateRules.indexOf('maxbytes') != -1) { %>
-    @Size(min = <%= fieldValidateRulesMinbytes %>, max = <%= fieldValidateRulesMaxbytes %>)<% } %><% if (fieldValidateRules.indexOf('min') != -1) { %>
-    @Min(value = <%= fieldValidateRulesMin %>)<% } %><% if (fieldValidateRules.indexOf('max') != -1) { %>
-    @Max(value = <%= fieldValidateRulesMax %><%= (fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fieldValidateRulesPatternJava %>")<% } } %><% if (fieldType == 'byte[]' && databaseType === 'sql') { %>
-    @Lob<% } %>
+            } _%>
+    <%- include ../../../common/field_validators -%>
+    <%_ } _%>
+    <%_ if (fieldType == 'byte[]' && databaseType === 'sql') { _%>
+    @Lob
+    <%_ } _%>
     <%_ if (fieldTypeBlobContent != 'text') { _%>
     private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>

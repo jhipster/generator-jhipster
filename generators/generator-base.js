@@ -1384,19 +1384,34 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
     return child;
 };
 
-Generator.prototype.isNumber = function (input, decimal) {
-    if (isNaN(this.filterNumber(input, decimal))) {
+Generator.prototype.isNumber = function (input) {
+    if (isNaN(this.filterNumber(input))) {
         return false;
     }
     return true;
 };
 
-Generator.prototype.filterNumber = function (input, decimal) {
-    if (decimal) {
-        if (/^(\-|\+)?([0-9]+(\.[0-9]+)?)$/.test(input)) return Number(input);
-    } else {
-        if (/^(\-|\+)?([0-9]+)$/.test(input)) return Number(input);
+Generator.prototype.isSignedNumber = function (input) {
+    if (isNaN(this.filterNumber(input, true))) {
+        return false;
     }
+    return true;
+};
+
+Generator.prototype.isSignedDecimalNumber = function (input) {
+    if (isNaN(this.filterNumber(input, true, true))) {
+        return false;
+    }
+    return true;
+};
+
+Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
+    var signed = isSigned ? "(\\-|\\+)?" : "";
+    var decimal = isDecimal ? "(\\.[0-9]+)?" : "";
+    var regex = new RegExp("^" + signed + "([0-9]+" + decimal + ")$");
+
+    if (regex.test(input)) return Number(input);
+
     return NaN;
 };
 

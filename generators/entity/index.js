@@ -673,7 +673,7 @@ module.exports = EntityGenerator.extend({
                 name: 'fieldValidateRulesMinlength',
                 validate: function (input) {
                     if (this.isNumber(input)) return true;
-                    return 'Minimum length must be a number';
+                    return 'Minimum length must be a positive number';
                 }.bind(this),
                 message: 'What is the minimum length of your field?',
                 default: 0
@@ -688,7 +688,7 @@ module.exports = EntityGenerator.extend({
                 name: 'fieldValidateRulesMaxlength',
                 validate: function (input) {
                     if (this.isNumber(input)) return true;
-                    return 'Maximum length must be a number';
+                    return 'Maximum length must be a positive number';
                 }.bind(this),
                 message: 'What is the maximum length of your field?',
                 default: 20
@@ -700,16 +700,13 @@ module.exports = EntityGenerator.extend({
                         response.fieldValidateRules.indexOf('min') !== -1 &&
                         (response.fieldType === 'Integer' ||
                         response.fieldType === 'Long' ||
-                        response.fieldType === 'Float' ||
-                        response.fieldType === 'Double' ||
-                        response.fieldTypeBlobContent === 'text' ||
-                        response.fieldType === 'BigDecimal');
+                        response.fieldTypeBlobContent === 'text');
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMin',
                 message: 'What is the minimum of your field?',
                 validate: function (input) {
-                    if (this.isNumber(input)) return true;
+                    if (this.isSignedNumber(input)) return true;
                     return 'Minimum must be a number';
                 }.bind(this),
                 default: 0
@@ -721,17 +718,50 @@ module.exports = EntityGenerator.extend({
                         response.fieldValidateRules.indexOf('max') !== -1 &&
                         (response.fieldType === 'Integer' ||
                         response.fieldType === 'Long' ||
-                        response.fieldType === 'Float' ||
+                        response.fieldTypeBlobContent === 'text');
+                },
+                type: 'input',
+                name: 'fieldValidateRulesMax',
+                message: 'What is the maximum of your field?',
+                validate: function (input) {
+                    if (this.isSignedNumber(input)) return true;
+                    return 'Maximum must be a number';
+                }.bind(this),
+                default: 100
+            },
+            {
+                when: function (response) {
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('min') !== -1 &&
+                        (response.fieldType === 'Float' ||
                         response.fieldType === 'Double' ||
-                        response.fieldTypeBlobContent === 'text' ||
+                        response.fieldType === 'BigDecimal');
+                },
+                type: 'input',
+                name: 'fieldValidateRulesMin',
+                message: 'What is the minimum of your field?',
+                validate: function (input) {
+                    if (this.isSignedDecimalNumber(input, true)) return true;
+                    return 'Minimum must be a decimal number';
+                }.bind(this),
+                default: 0
+            },
+            {
+                when: function (response) {
+                    return response.fieldAdd === true &&
+                        response.fieldValidate === true &&
+                        response.fieldValidateRules.indexOf('max') !== -1 &&
+                        (response.fieldType === 'Float' ||
+                        response.fieldType === 'Double' ||
                         response.fieldType === 'BigDecimal');
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMax',
                 message: 'What is the maximum of your field?',
                 validate: function (input) {
-                    if (this.isNumber(input)) return true;
-                    return 'Maximum must be a number';
+                    if (this.isSignedDecimalNumber(input, true)) return true;
+                    return 'Maximum must be a decimal number';
                 }.bind(this),
                 default: 100
             },
@@ -747,9 +777,9 @@ module.exports = EntityGenerator.extend({
                 name: 'fieldValidateRulesMinbytes',
                 message: 'What is the minimum byte size of your field?',
                 validate: function (input) {
-                    if (/^([0-9]*)$/.test(input)) return true;
-                    return 'Minimum byte size must be a number';
-                },
+                    if (this.isNumber(input)) return true;
+                    return 'Minimum byte size must be a positive number';
+                }.bind(this),
                 default: 0
             },
             {
@@ -764,9 +794,9 @@ module.exports = EntityGenerator.extend({
                 name: 'fieldValidateRulesMaxbytes',
                 message: 'What is the maximum byte size of your field?',
                 validate: function (input) {
-                    if (/^([0-9]*)$/.test(input)) return true;
-                    return 'Maximum byte size must be a number';
-                },
+                    if (this.isNumber(input)) return true;
+                    return 'Maximum byte size must be a positive number';
+                }.bind(this),
                 default: 5000000
             },
             {
