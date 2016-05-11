@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS schema_version (
     PRIMARY KEY(script_name)
 );
 <%_ if (databaseType === 'cassandra' && !skipUserManagement) { _%>
+
 CREATE TABLE IF NOT EXISTS user (
     id text,
     login text,
@@ -70,9 +71,9 @@ CREATE TABLE IF NOT EXISTS persistent_token_by_user (
     persistent_token_series text,
     PRIMARY KEY(user_id)
 );
-
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
+
 CREATE TABLE IF NOT EXISTS gateway_ratelimiting (
     id text,
     time_unit text,
