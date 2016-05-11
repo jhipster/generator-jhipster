@@ -48,12 +48,14 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @PartitionKey
     private String id;<% } %>
 
-    @NotNull<% if (enableSocialSignIn) { %>
-    @Size(min = 1, max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100, unique = true, nullable = false)<% } %><% } else { %>
+    <%_ var columnMax = 50;
+        if (enableSocialSignIn) {
+            columnMax = 100;
+        } _%>
+    @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50, unique = true, nullable = false)<% } %><% } %>
+    @Size(min = 1, max = <%=columnMax %>)<% if (databaseType == 'sql') { %>
+    @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %>
     private String login;
 
     @JsonIgnore

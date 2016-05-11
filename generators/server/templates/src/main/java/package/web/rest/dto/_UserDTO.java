@@ -15,9 +15,13 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    @Pattern(regexp = Constants.LOGIN_REGEX)
+    <%_ var columnMax = 50;
+        if (enableSocialSignIn) {
+            columnMax = 100;
+        } _%>
     @NotNull
-    @Size(min = 1, max = 50)
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = <%=columnMax %>)
     private String login;
 
     @Size(max = 50)
