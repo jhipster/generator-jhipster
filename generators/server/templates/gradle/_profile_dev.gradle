@@ -21,7 +21,7 @@ if (project.hasProperty('no-cache')) {
 }
 
 bootRun {
-    args = ["--spring.profiles.active=" + profiles]
+    args = []
 }
 <% if (!skipClient) { %>
 war {
@@ -32,13 +32,12 @@ task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
 }<% } %>
 
-task setProdProperties(dependsOn: bootRun) << {
-    doFirst {
-        System.setProperty('spring.profiles.active', profiles)
-    }
-}
-
 processResources {
+    filesMatching('**/.build-properties.xml') {
+        filter {
+            it.replace('@spring.profiles.default@', profiles)
+        }
+    }
     filesMatching('**/logback-spring.xml') {
         filter {
             it.replace('@logback.loglevel@', logbackLoglevel)
@@ -46,5 +45,3 @@ processResources {
     }
 }
 
-<% if (!skipClient) { %>
-setProdProperties.dependsOn gulpConstantDev<% } %>

@@ -1,5 +1,6 @@
 package <%=packageName%>;
 
+import <%=packageName%>.config.BuildProperties;
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.config.JHipsterProperties;
 
@@ -47,7 +48,7 @@ public class <%= mainClass %> {
     /**
      * Initializes <%= baseName %>.
      * <p>
-     * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
+     * Spring profiles can be configured with a program argument; --spring.profiles.active=your,active,profiles
      * <p>
      * You can find more information on how profiles work with JHipster on <a href="http://jhipster.github.io/profiles/">http://jhipster.github.io/profiles/</a>.
      */
@@ -98,13 +99,13 @@ public class <%= mainClass %> {
     }
 
     /**
-     * If no profile has been configured, set by default the "dev" profile.
+     * Set default profile(s) if none have been set. The default is provided by Maven/Gradle, or "dev" otherwise.
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active") &&
                 !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
 
-            app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
+            app.setAdditionalProfiles(BuildProperties.getDefaultProfiles());
         }
     }
 }
