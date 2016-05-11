@@ -1406,9 +1406,9 @@ Generator.prototype.isSignedDecimalNumber = function (input) {
 };
 
 Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
-    var signed = isSigned ? "(\\-|\\+)?" : "";
-    var decimal = isDecimal ? "(\\.[0-9]+)?" : "";
-    var regex = new RegExp("^" + signed + "([0-9]+" + decimal + ")$");
+    var signed = isSigned ? '(\\-|\\+)?' : '';
+    var decimal = isDecimal ? '(\\.[0-9]+)?' : '';
+    var regex = new RegExp('^' + signed + '([0-9]+' + decimal + ')$');
 
     if (regex.test(input)) return Number(input);
 
