@@ -4,6 +4,7 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('lodash'),
     scriptBase = require('../generator-base'),
+    prompts = require('./prompts'),
     mkdirp = require('mkdirp'),
     packagejs = require('../../package.json');
 
@@ -19,15 +20,11 @@ const constants = require('../generator-constants'),
     TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     ANGULAR_DIR = constants.ANGULAR_DIR;
 
-var currentQuestion;
-var totalQuestions;
-var configOptions = {};
-
 module.exports = JhipsterClientGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
 
-        configOptions = this.options.configOptions || {};
+        this.configOptions = this.options.configOptions || {};
 
         // This adds support for a `--protractor` flag
         this.option('protractor', {
@@ -99,8 +96,8 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: false
         });
 
-        this.skipServer = configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
+        this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
+        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -109,14 +106,14 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
-        this.jhiPrefix = configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
+        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         this.testFrameworks = [];
         this.options['protractor'] && this.testFrameworks.push('protractor');
-        currentQuestion = configOptions.lastQuestion ? configOptions.lastQuestion : 0;
-        totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
-        this.baseName = configOptions.baseName;
-        this.logo = configOptions.logo;
+        this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
+        this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
+        this.baseName = this.configOptions.baseName;
+        this.logo = this.configOptions.logo;
     },
 
     initializing: {
@@ -131,8 +128,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.MAIN_SRC_DIR = MAIN_SRC_DIR;
             this.TEST_SRC_DIR = TEST_SRC_DIR;
 
-            this.serverPort = this.config.get('serverPort') || configOptions.serverPort || 8080;
-            this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
+            this.serverPort = this.config.get('serverPort') || this.configOptions.serverPort || 8080;
+            this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
@@ -166,46 +163,16 @@ module.exports = JhipsterClientGenerator.extend({
 
     prompting: {
 
-        askForModuleName: function () {
+        askForModuleName: prompts.askForModuleName,
 
-            if (this.baseName) return;
+        askForClientSideOpts: prompts.askForClientSideOpts,
 
-            this.askModuleName(this, currentQuestion++, totalQuestions);
-        },
-
-        askForClientSideOpts: function () {
-            if (this.existingProject) return;
-
-            var done = this.async();
-            var getNumberedQuestion = this.getNumberedQuestion;
-            var prompts = [
-                {
-                    type: 'confirm',
-                    name: 'useSass',
-                    message: function (response) {
-                        return getNumberedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', currentQuestion, totalQuestions, function (current) {
-                            currentQuestion = current;
-                        }, true);
-                    },
-                    default: false
-                }
-            ];
-            this.prompt(prompts, function (props) {
-                this.useSass = props.useSass;
-                done();
-            }.bind(this));
-        },
-
-        askFori18n: function () {
-            if (this.existingProject || configOptions.skipI18nQuestion) return;
-
-            this.aski18n(this, currentQuestion++, totalQuestions);
-        },
+        askFori18n: prompts.askFori18n,
 
         setSharedConfigOptions: function () {
-            configOptions.lastQuestion = currentQuestion;
-            configOptions.totalQuestions = totalQuestions;
-            configOptions.useSass = this.useSass;
+            this.configOptions.lastQuestion = this.currentQuestion;
+            this.configOptions.totalQuestions = this.totalQuestions;
+            this.configOptions.useSass = this.useSass;
         }
 
     },
@@ -236,7 +203,7 @@ module.exports = JhipsterClientGenerator.extend({
         saveConfig: function () {
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
-            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
+            if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
@@ -246,52 +213,52 @@ module.exports = JhipsterClientGenerator.extend({
     default: {
 
         getSharedConfigOptions: function () {
-            if (configOptions.hibernateCache) {
-                this.hibernateCache = configOptions.hibernateCache;
+            if (this.configOptions.hibernateCache) {
+                this.hibernateCache = this.configOptions.hibernateCache;
             }
-            if (configOptions.websocket) {
-                this.websocket = configOptions.websocket;
+            if (this.configOptions.websocket) {
+                this.websocket = this.configOptions.websocket;
             }
-            if (configOptions.databaseType) {
-                this.databaseType = configOptions.databaseType;
+            if (this.configOptions.databaseType) {
+                this.databaseType = this.configOptions.databaseType;
             }
-            if (configOptions.devDatabaseType) {
-                this.devDatabaseType = configOptions.devDatabaseType;
+            if (this.configOptions.devDatabaseType) {
+                this.devDatabaseType = this.configOptions.devDatabaseType;
             }
-            if (configOptions.prodDatabaseType) {
-                this.prodDatabaseType = configOptions.prodDatabaseType;
+            if (this.configOptions.prodDatabaseType) {
+                this.prodDatabaseType = this.configOptions.prodDatabaseType;
             }
-            if (configOptions.searchEngine) {
-                this.searchEngine = configOptions.searchEngine;
+            if (this.configOptions.searchEngine) {
+                this.searchEngine = this.configOptions.searchEngine;
             }
-            if (configOptions.buildTool) {
-                this.buildTool = configOptions.buildTool;
+            if (this.configOptions.buildTool) {
+                this.buildTool = this.configOptions.buildTool;
             }
-            if (configOptions.enableSocialSignIn !== undefined) {
-                this.enableSocialSignIn = configOptions.enableSocialSignIn;
+            if (this.configOptions.enableSocialSignIn !== undefined) {
+                this.enableSocialSignIn = this.configOptions.enableSocialSignIn;
             }
-            if (configOptions.authenticationType) {
-                this.authenticationType = configOptions.authenticationType;
+            if (this.configOptions.authenticationType) {
+                this.authenticationType = this.configOptions.authenticationType;
             }
-            if (configOptions.testFrameworks) {
-                this.testFrameworks = configOptions.testFrameworks;
+            if (this.configOptions.testFrameworks) {
+                this.testFrameworks = this.configOptions.testFrameworks;
             }
-            if (configOptions.enableTranslation !== undefined) {
-                this.enableTranslation = configOptions.enableTranslation;
+            if (this.configOptions.enableTranslation !== undefined) {
+                this.enableTranslation = this.configOptions.enableTranslation;
             }
-            if (configOptions.nativeLanguage !== undefined) {
-                this.nativeLanguage = configOptions.nativeLanguage;
+            if (this.configOptions.nativeLanguage !== undefined) {
+                this.nativeLanguage = this.configOptions.nativeLanguage;
             }
-            if (configOptions.languages !== undefined) {
-                this.languages = configOptions.languages;
+            if (this.configOptions.languages !== undefined) {
+                this.languages = this.configOptions.languages;
             }
 
-            if(configOptions.uaaBaseName !== undefined) {
-                this.uaaBaseName = configOptions.uaaBaseName;
+            if(this.configOptions.uaaBaseName !== undefined) {
+                this.uaaBaseName = this.configOptions.uaaBaseName;
             }
 
             // Make dist dir available in templates
-            if (configOptions.buildTool === 'maven') {
+            if (this.configOptions.buildTool === 'maven') {
                 this.BUILD_DIR = 'target/';
             } else {
                 this.BUILD_DIR = 'build/';
@@ -300,9 +267,9 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         composeLanguages: function () {
-            if (configOptions.skipI18nQuestion) return;
+            if (this.configOptions.skipI18nQuestion) return;
 
-            this.composeLanguagesSub(this, configOptions, 'client');
+            this.composeLanguagesSub(this, this.configOptions, 'client');
         }
     },
 

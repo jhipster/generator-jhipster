@@ -15,11 +15,11 @@ util.inherits(JhipsterGenerator, scriptBase);
 /* Constants use throughout */
 const constants = require('../generator-constants');
 
-var totalQuestions = constants.QUESTIONS;
-
 module.exports = JhipsterGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
+
+        this.configOptions = {};
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
@@ -68,8 +68,9 @@ module.exports = JhipsterGenerator.extend({
             type: String,
             defaults: 'jhi'
         });
-        this.configOptions = {};
+
         this.currentQuestion = 0;
+        this.totalQuestions = constants.QUESTIONS;
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
@@ -250,7 +251,7 @@ module.exports = JhipsterGenerator.extend({
 
         setSharedConfigOptions: function () {
             this.configOptions.lastQuestion = this.currentQuestion;
-            this.configOptions.totalQuestions = totalQuestions;
+            this.configOptions.totalQuestions = this.totalQuestions;
             this.configOptions.testFrameworks = this.testFrameworks;
             this.configOptions.enableTranslation = this.enableTranslation;
             this.configOptions.nativeLanguage = this.nativeLanguage;

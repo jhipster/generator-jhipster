@@ -2,10 +2,6 @@
 
 var chalk = require('chalk');
 
-const constants = require('../generator-constants');
-
-var totalQuestions = constants.QUESTIONS;
-
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
@@ -47,7 +43,7 @@ function askForApplicationType() {
         type: 'list',
         name: 'applicationType',
         message: function (response) {
-            return getNumberedQuestion('Which *type* of application would you like to create?', generator.currentQuestion, totalQuestions, function (current) {
+            return getNumberedQuestion('Which *type* of application would you like to create?', generator.currentQuestion, generator.totalQuestions, function (current) {
                 generator.currentQuestion = current;
             }, true);
         },
@@ -79,16 +75,16 @@ function askForApplicationType() {
 function askForModuleName() {
     if (this.existingProject) return;
 
-    this.askModuleName(this, this.currentQuestion++, totalQuestions);
+    this.askModuleName(this, this.currentQuestion++, this.totalQuestions);
     this.configOptions.lastQuestion = this.currentQuestion;
-    this.configOptions.totalQuestions = totalQuestions;
+    this.configOptions.totalQuestions = this.totalQuestions;
 }
 
 function askFori18n() {
     this.currentQuestion = this.configOptions.lastQuestion;
-    totalQuestions = this.configOptions.totalQuestions;
+    this.totalQuestions = this.configOptions.totalQuestions;
     if (this.skipI18n || this.existingProject) return;
-    this.aski18n(this, this.currentQuestion++, totalQuestions);
+    this.aski18n(this, this.currentQuestion++, this.totalQuestions);
 }
 
 function askForTestOpts() {
@@ -116,7 +112,7 @@ function askForTestOpts() {
         type: 'checkbox',
         name: 'testFrameworks',
         message: function (response) {
-            return getNumberedQuestion('Which testing frameworks would you like to use?', generator.currentQuestion, totalQuestions, function (current) {
+            return getNumberedQuestion('Which testing frameworks would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
                 generator.currentQuestion = current;
             }, true);
         },
