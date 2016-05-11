@@ -44,11 +44,7 @@ spring:
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } _%>
         name:
-        <%_ if (prodDatabaseType == 'mysql') { _%>
-        username: root
-        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
-        username: <%= baseName %>
-        <%_ } _%>
+        username: <% if (prodDatabaseType === 'mysql') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         password:
         <%_ if (prodDatabaseType == 'mysql') { _%>
         hikari:

@@ -48,7 +48,7 @@ spring:
         url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         <%_ } _%>
         name:
-        username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory' ) { %><%= baseName %><% } %>
+        username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %><%= baseName %><% } %>
         password:
         <%_ if (devDatabaseType == 'mysql') { _%>
         hikari:
