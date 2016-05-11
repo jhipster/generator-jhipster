@@ -18,16 +18,10 @@ services:
         environment:
             - CASSANDRA_SEEDS=seed
     <%=baseName.toLowerCase()%>-cassandra-migration:
-        container_name: <%=baseName.toLowerCase()%>-cassandra-migration
+        extends:
+            file: cassandra-migration.yml
+            service: mvncass-cassandra-migration
         links:
             - <%=baseName.toLowerCase()%>-cassandra
         environment:
-            - CASSANDRA_CONTACT_POINT=<%=baseName.toLowerCase()%>-cassandra
             - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
-            - USER=docker-cassandra-migration
-            # - DEBUG_LOG=1 ## uncomment to show debug logs in the migration
-        build:
-            context: .
-            dockerfile: cassandra/Cassandra-Migration.Dockerfile
-        volumes:
-            - ../resources/config/cql:/cql:ro
