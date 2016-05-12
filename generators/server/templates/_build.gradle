@@ -158,6 +158,9 @@ dependencies {
         exclude(module: 'tools')
     }
     <%_ } _%>
+    <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+    compile "commons-codec:commons-codec:${commons_codec_version}"
+    <%_ } _%>
     compile "commons-lang:commons-lang:${commons_lang_version}"
     compile "commons-io:commons-io:${commons_io_version}"
     compile "javax.inject:javax.inject:${javax_inject_version}"

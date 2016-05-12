@@ -44,6 +44,9 @@
         <%_ } _%>
         <assertj-core.version>3.3.0</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
+        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+        <commons-codec.version>1.10</commons-codec.version>
+        <%_ } _%>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
@@ -307,6 +310,13 @@
         </dependency>
         -->
         <%_ } %>
+        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
