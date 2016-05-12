@@ -18,7 +18,7 @@
         return service;
 
         function getProfileInfo() {
-            if (!angular.isDefined(dataPromise)) {
+            if (angular.isUndefined(dataPromise)) {
                 dataPromise = $http.get('api/profile-info').then(function(result) {
                     if (result.data.activeProfiles) {
                         var response = {};
