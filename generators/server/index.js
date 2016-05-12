@@ -217,7 +217,7 @@ module.exports = JhipsterServerGenerator.extend({
 
     _getUaaAppName : function (input) {
         if (!input) return false;
-        
+
         input = input.trim();
         var fromPath = '';
         if(path.isAbsolute(input)) {
@@ -1195,6 +1195,10 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/metrics/_CassandraHealthIndicator.java', javaDir + 'config/metrics/CassandraHealthIndicator.java', this, {});
+            }
+
+            if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CassandraConfiguration.java', javaDir + 'config/CassandraConfiguration.java', this, {});
             }
 
             if (this.hibernateCache === 'hazelcast') {

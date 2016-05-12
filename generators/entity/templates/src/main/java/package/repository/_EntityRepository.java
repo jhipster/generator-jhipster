@@ -72,7 +72,8 @@ public class <%= entityClass %>Repository {
                     var fieldNameUnderscored = fields[idx].fieldNameUnderscored;
                     if (fields[idx].fieldType == 'Integer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'BigDecimal') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Boolean') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Date') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getTimestamp("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Boolean') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBool("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Text') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'ByteBuffer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBytes("<%= fieldName %>"));

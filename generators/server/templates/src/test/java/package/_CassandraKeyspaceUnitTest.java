@@ -26,7 +26,7 @@ public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
 
     @Test
     public void shouldListCassandraUnitKeyspace() throws Exception {
-        ResultSet result = session.execute("SELECT * FROM system.schema_keyspaces;");
+        ResultSet result = session.execute("SELECT * FROM system_schema.keyspaces;");
         assertThat(result.all())
             .extracting(row -> row.getString("keyspace_name"))
             .containsOnlyOnce((CASSANDRA_UNIT_KEYSPACE));

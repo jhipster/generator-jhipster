@@ -187,10 +187,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"<% if (websocket == 'spring-websocket') { %>
     compile "org.springframework.boot:spring-boot-starter-websocket"<% } %>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
-    compile "org.springframework.data:spring-data-cassandra"
     compile("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {
         exclude module: 'com.codahale.metrics'
     }
+    compile "com.datastax.cassandra:cassandra-driver-extras:${datastax_driver_version}"
     compile "com.datastax.cassandra:cassandra-driver-mapping:${datastax_driver_version}"<% } %>
     <%_ if (applicationType == 'gateway') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-zuul"
