@@ -32,6 +32,10 @@ management:
 spring:
     application:
         name: <%= baseName %>
+    profiles:
+        # The commented value for `active` can be replaced with valid spring profiles to load.
+        # This will be overwritten by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
+        active: #spring.profiles.active#
     <%_ if (databaseType == 'sql') { _%>
     jpa:
         open-in-view: false
