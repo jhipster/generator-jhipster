@@ -99,7 +99,7 @@ spring:
     <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         cassandra:
             contactPoints: localhost
-            protocolVersion: V2
+            protocolVersion: V4
             compression: LZ4
             keyspaceName: <%= baseName %>
     <%_ if (applicationType == 'gateway') { _%>
