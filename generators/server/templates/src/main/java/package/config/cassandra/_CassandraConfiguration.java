@@ -1,4 +1,4 @@
-package <%=packageName%>.config;
+package <%=packageName%>.config.cassandra;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,13 +74,12 @@ public class CassandraConfiguration {
 
         Cluster cluster = builder.build();
 
-        TupleType tupleType = cluster.getMetadata()
-                .newTupleType(DataType.timestamp(), DataType.varchar());
         cluster.getConfiguration().getCodecRegistry()
                 .register(LocalDateCodec.instance)
-                .register(new ZonedDateTimeCodec(tupleType));
+                .register(CustomZonedDateTimeCodec.instance);
 
         if (metricRegistry != null) {
+            cluster.init();
             metricRegistry.registerAll(cluster.getMetrics().getRegistry());
         }
 

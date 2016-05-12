@@ -1201,7 +1201,9 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CassandraConfiguration.java', javaDir + 'config/CassandraConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/cassandra/_CassandraConfiguration.java', javaDir + 'config/cassandra/CassandraConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/cassandra/_CustomZonedDateTimeCodec.java', javaDir + 'config/cassandra/CustomZonedDateTimeCodec.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/cassandra/_package-info.java', javaDir + 'config/cassandra/package-info.java', this, {});
             }
 
             if (this.hibernateCache === 'hazelcast') {
