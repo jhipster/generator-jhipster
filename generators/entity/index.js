@@ -1477,6 +1477,8 @@ module.exports = EntityGenerator.extend({
             this.data.entityTableName = this.entityTableName;
             if (databaseType === 'sql' || databaseType === 'mongodb') {
                 this.data.pagination = this.pagination;
+            } else {
+                this.data.pagination = 'no';
             }
             this.data.javadoc = this.javadoc;
             if (this.entityAngularJSSuffix) {
