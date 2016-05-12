@@ -42,7 +42,7 @@
             "newpassword": "Új jelszó",
             "newpassword.placeholder": "Új jelszava",
             "confirmpassword": "Új jelszó megerősítése",
-            "confirmpassword.placeholder": "Írja újra be a jelszavát",
+            "confirmpassword.placeholder": "Írja be újra a jelszavát",
             "email": "E-mail",
             "email.placeholder": "Az Ön email címe"
         },
