@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
     <%= fieldName %> bigint,<% } else if (fieldType == 'Float') { %>
     <%= fieldName %> float,<% } else if (fieldType == 'Double') { %>
     <%= fieldName %> double,<% } else if (fieldType == 'BigDecimal') { %>
-    <%= fieldName %> decimal,<% } else if (fieldType == 'Date') { %>
+    <%= fieldName %> decimal,<% } else if (fieldType == 'LocalDate') { %>
+    <%= fieldName %> date,<% } else if (fieldType == 'ZonedDateTime') { %>
     <%= fieldName %> timestamp,<% } else if (fieldType == 'Boolean') { %>
     <%= fieldName %> boolean,<% } else if (fieldType === 'ByteBuffer') { %>
     <%= fieldName %> blob,<% if (fieldTypeBlobContent !== 'text') { %>

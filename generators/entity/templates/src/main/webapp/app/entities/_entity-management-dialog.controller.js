@@ -62,7 +62,7 @@
         vm.clear = function() {
             $uibModalInstance.dismiss('cancel');
         };
-        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate || fieldsContainDate) { _%>
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 
         vm.datePickerOpenStatus = {};
         <%_ } _%>
@@ -92,7 +92,7 @@
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate || fieldsContainDate) { _%>
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 
         vm.openCalendar = function(date) {
             vm.datePickerOpenStatus[date] = true;

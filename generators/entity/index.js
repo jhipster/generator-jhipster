@@ -488,8 +488,12 @@ module.exports = EntityGenerator.extend({
                         name: 'BigDecimal'
                     },
                     {
-                        value: 'Date',
-                        name: 'Date'
+                        value: 'LocalDate',
+                        name: 'LocalDate (Warning: only compatible with cassandra v3)'
+                    },
+                    {
+                        value: 'ZonedDateTime',
+                        name: 'ZonedDateTime'
                     },
                     {
                         value: 'Boolean',
@@ -647,7 +651,6 @@ module.exports = EntityGenerator.extend({
                         (response.fieldType === 'LocalDate' ||
                         response.fieldType === 'ZonedDateTime' ||
                         response.fieldType === 'UUID' ||
-                        response.fieldType === 'Date' ||
                         response.fieldType === 'Boolean' ||
                         response.fieldType === 'ByteBuffer' ||
                         response.fieldIsEnum === true);
@@ -1514,7 +1517,6 @@ module.exports = EntityGenerator.extend({
 
             this.fieldsContainZonedDateTime = false;
             this.fieldsContainLocalDate = false;
-            this.fieldsContainDate = false;
             this.fieldsContainBigDecimal = false;
             this.fieldsContainBlob = false;
             this.validation = false;
@@ -1531,7 +1533,7 @@ module.exports = EntityGenerator.extend({
             // Load in-memory data for fields
             this.fields && this.fields.forEach( function (field) {
                 // Migration from JodaTime to Java Time
-                if (field.fieldType === 'DateTime') {
+                if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                     field.fieldType = 'ZonedDateTime';
                 }
                 var fieldType = field.fieldType;
@@ -1582,8 +1584,6 @@ module.exports = EntityGenerator.extend({
                     this.fieldsContainZonedDateTime = true;
                 } else if (fieldType === 'LocalDate') {
                     this.fieldsContainLocalDate = true;
-                } else if (fieldType === 'Date') {
-                    this.fieldsContainDate = true;
                 } else if (fieldType === 'BigDecimal') {
                     this.fieldsContainBigDecimal = true;
                 } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
@@ -1866,7 +1866,6 @@ module.exports = EntityGenerator.extend({
                         fieldsContainOneToMany: this.fieldsContainOneToMany,
                         fieldsContainZonedDateTime: this.fieldsContainZonedDateTime,
                         fieldsContainLocalDate: this.fieldsContainLocalDate,
-                        fieldsContainDate: this.fieldsContainDate,
                         fieldsContainBigDecimal: this.fieldsContainBigDecimal,
                         fieldsContainBlob: this.fieldsContainBlob,
                         pkType: this.pkType,

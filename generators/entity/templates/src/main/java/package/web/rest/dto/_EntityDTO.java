@@ -5,8 +5,7 @@ import java.time.ZonedDateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (fieldsContainDate == true) { %>
-import java.util.Date;<% } %><% if (relationships.length > 0) { %>
+import java.nio.ByteBuffer;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
