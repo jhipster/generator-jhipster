@@ -51,7 +51,9 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
+        if (env.getActiveProfiles().length != 0) {
+            log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
+        }
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);<% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
         initMetrics(servletContext, disps);<% if (!skipClient) { %>
