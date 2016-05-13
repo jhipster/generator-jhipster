@@ -959,6 +959,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
                 this.template(DOCKER_DIR + '_cassandra-cluster.yml', DOCKER_DIR + 'cassandra-cluster.yml', this, {});
                 this.template(DOCKER_DIR + '_cassandra-opscenter.yml', DOCKER_DIR + 'cassandra-opscenter.yml', this, {});
+                this.template(DOCKER_DIR + '_cassandra-migration.yml', DOCKER_DIR + 'cassandra-migration.yml', this, {});
                 // dockerfiles
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-Migration.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Migration.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-OpsCenter.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile', this, {});

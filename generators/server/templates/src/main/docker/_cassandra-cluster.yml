@@ -20,7 +20,7 @@ services:
     <%=baseName.toLowerCase()%>-cassandra-migration:
         extends:
             file: cassandra-migration.yml
-            service: mvncass-cassandra-migration
+            service: <%=baseName.toLowerCase()%>-cassandra-migration
         links:
             - <%=baseName.toLowerCase()%>-cassandra
         environment:
