@@ -24,7 +24,7 @@
             var translationKey = keyPrefix + fieldName;
             if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') {
                 fieldInputType = 'number';
-            } else if (fieldType == 'LocalDate' || fieldType == 'Date') {
+            } else if (fieldType == 'LocalDate') {
                 fieldInputType = 'date';
             } else if (fieldType == 'ZonedDateTime') {
                 fieldInputType = 'datetime-local';
@@ -68,7 +68,7 @@
                 </button>
             </div>
                 <%_ } _%>
-                <%_ if (fieldType == 'LocalDate' || fieldType == 'Date') { _%>
+                <%_ if (fieldType == 'LocalDate') { _%>
                 <div class="input-group">
                     <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" uib-datepicker-popup="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
                     <%- include ng_validators %>/>
@@ -153,7 +153,7 @@
                     This field should be a number.
                 </p>
                 <%_ } _%>
-                <%_ if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
+                <%_ if (fieldType == 'ZonedDateTime') { _%>
                 <p class="help-block"
                     ng-show="editForm.<%= fieldName %>.$error.ZonedDateTimelocal" translate="entity.validation.ZonedDateTimelocal">
                     This field should be a date and time.

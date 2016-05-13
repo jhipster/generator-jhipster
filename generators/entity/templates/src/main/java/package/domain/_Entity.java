@@ -21,8 +21,7 @@ import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
 import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
-import java.time.ZonedDateTime;<% } %><% if (fieldsContainDate == true) { %>
-import java.util.Date;<% } %><% if (importSet == true) { %>
+import java.time.ZonedDateTime;<% } %><% if (importSet == true) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
