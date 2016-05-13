@@ -7,13 +7,7 @@
                 <strong>Settings saved!</strong>
             </div>
 
-            <div class="alert alert-danger" ng-show="vm.errorEmailExists" translate="settings.messages.error.emailexists">
-                <strong>E-mail is already in use!</strong> Please choose another one.
-            </div>
-
-            <div class="alert alert-danger" ng-show="vm.error" translate="settings.messages.error.fail">
-                <strong>An error has occurred!</strong> Settings could not be saved.
-            </div>
+           <jhi-alert-error></jhi-alert-error>
 
             <form name="form" role="form" novalidate ng-submit="vm.save()" show-validation>
 
