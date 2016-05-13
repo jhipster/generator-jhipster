@@ -61,7 +61,7 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
         Mongobee mongobee = new Mongobee(mongo());
         mongobee.setDbName(getDatabaseName());
         // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("io.github.jhipster.cms.config.dbmigrations");
+        mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
     }
