@@ -1,0 +1,7 @@
+Description:
+    Updates Jhipster version, and upgrades generated application 
+
+Example:
+    yo jhipster:upgrade
+
+    This will update Jhipster and upgrade app

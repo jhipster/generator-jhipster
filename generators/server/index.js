@@ -21,6 +21,7 @@ const constants = require('../generator-constants'),
     DOCKER_DIR = constants.DOCKER_DIR,
     MAIN_DIR = constants.MAIN_DIR,
     TEST_DIR = constants.TEST_DIR,
+    JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR,
     CLIENT_DIST_DIR = constants.CLIENT_DIST_DIR,
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
@@ -902,6 +903,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
             this.template('_travis.yml', '.travis.yml', this, {});
+            this.copy(JHIPSTER_CONFIG_DIR + 'upgrade.sh', JHIPSTER_CONFIG_DIR + 'upgrade.sh');
         },
 
         writeDockerFiles: function () {
