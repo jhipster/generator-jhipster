@@ -380,17 +380,14 @@ const expectedFiles = {
     cassandra: [
         SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace-prod.cql',
         SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql',
-        SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql',
         SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql',
-        SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_insert_default_users.cql',
-        DOCKER_DIR + 'cassandra/Cassandra.Dockerfile',
-        DOCKER_DIR + 'cassandra/Cassandra-Cluster.Dockerfile',
+        SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_create-tables.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000001_insert_default_users.cql',
+        DOCKER_DIR + 'cassandra/Cassandra-Migration.Dockerfile',
         DOCKER_DIR + 'cassandra/scripts/autoMigrate.sh',
-        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
         DOCKER_DIR + 'cassandra/scripts/execute-cql.sh',
-        DOCKER_DIR + 'cassandra/scripts/init-dev.sh',
-        DOCKER_DIR + 'cassandra/scripts/init-prod.sh',
         DOCKER_DIR + 'cassandra-cluster.yml',
+        DOCKER_DIR + 'cassandra-migration.yml',
         DOCKER_DIR + 'cassandra.yml'
     ],
 
