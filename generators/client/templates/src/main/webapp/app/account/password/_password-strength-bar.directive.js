@@ -88,6 +88,10 @@
                         .css({ 'background-color': '#DDD' })
                         .slice(0, c.idx)
                         .css({ 'background-color': c.col });
+                }else {
+                    if (!iElement.hasClass('ng-hide')){
+                        iElement.addClass('ng-hide');
+                    }
                 }
             });
         }
