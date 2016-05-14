@@ -24,11 +24,11 @@ module.exports = UpgradeGenerator.extend({
 
         this.currentVersion = packagejs.version;
         this.force = true;
+        this.git = new Git();
 
         this.gitCheckout = function(branch) {
-            var git = new Git();
             var done = this.async();
-            git.exec('checkout', {q: true}, [branch], function(err, msg) {
+            this.git.exec('checkout', {q: true}, [branch], function(err, msg) {
                 if (err != null) throw new Error(err);
                 this.log('Checked out branch ' + branch);
                 done();
@@ -65,23 +65,20 @@ module.exports = UpgradeGenerator.extend({
         },
 
         assertNoLocalChanges: function() {
-            var git = new Git();
             var done = this.async();
-            git.exec('status', {}, ['--porcelain'], function(err, msg) {
+            this.git.exec('status', {}, ['--porcelain'], function(err, msg) {
                 if (err != null) throw new Error(err);
                 if (msg != null && msg !== '') {
                     this.log(chalk.yellow.bold('WARNING!') + ' local changes found.\n',
-                        ' Please initialize commit/stash them before upgrading');
+                        ' Please commit/stash them before upgrading');
                     return;
-                } else {
-                    this.log('No local changes found');
                 }
                 done();
             }.bind(this));
         },
 
         checkLatestVersion: function() {
-            this.log(chalk.green.bold('Looking for latest ' + GENERATOR_JHIPSTER + ' version\n'));
+            this.log('Looking for latest ' + GENERATOR_JHIPSTER + ' version...');
             var done = this.async();
             shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, stdout, stderr) {
                 this.latestVersion = stdout.replace('\n','');
@@ -96,30 +93,24 @@ module.exports = UpgradeGenerator.extend({
         },
 
         detectCurrentBranch: function() {
-//            this.log(chalk.green.bold('detectCurrentBranch\n'));
-            var git = new Git();
             var done = this.async();
-            git.exec('rev-parse', {q: true}, ['--abbrev-ref', 'HEAD'], function(err, msg) {
+            this.git.exec('rev-parse', {q: true}, ['--abbrev-ref', 'HEAD'], function(err, msg) {
+                if (err != null) throw new Error(err);
                 this.currentBranch = msg;
-//                this.log(chalk.green.bold('current branch: ' + this.currentBranch));
                 done();
             }.bind(this));
         },
 
         prepareUpgradeBranch: function() {
-            this.log(chalk.green.bold('prepareUpgradeBranch\n'));
-            var git = new Git();
             var done = this.async();
             var createUpgradeBranch = function() {
-                this.log(chalk.green.bold('create branch'));
-                git.exec('branch', {q: true}, [UPGRADE_BRANCH], function(err, msg) {
+                this.git.exec('branch', {q: true}, [UPGRADE_BRANCH], function(err, msg) {
                     if (err != null) throw new Error(err);
                     this.log('Created branch ' + UPGRADE_BRANCH);
                 }.bind(this));
             }.bind(this);
-            git.exec('rev-parse', {q: true}, ['--verify', UPGRADE_BRANCH], function(err, msg) {
+            this.git.exec('rev-parse', {q: true}, ['--verify', UPGRADE_BRANCH], function(err, msg) {
                 if (err != null) createUpgradeBranch();
-                else this.log('Branch ' + UPGRADE_BRANCH + ' already exists');
                 done();
             }.bind(this));
         },
@@ -136,28 +127,32 @@ module.exports = UpgradeGenerator.extend({
         },
 
         updateJhipster: function() {
-            this.log(chalk.green.bold('Update ' + GENERATOR_JHIPSTER));
+            this.log('Updating ' + GENERATOR_JHIPSTER + '...');
             var done = this.async();
             shelljs.exec('npm uninstall -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, stdout, stderr) {
             }.bind(this));
             shelljs.exec('npm install -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, stdout, stderr) {
                 done();
             }.bind(this));
-            this.log(chalk.green.bold('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
+            this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
+        },
+
+        cleanUp: function() {
+            var done = this.async();
+            this.git.exec('rm', {q: true}, ['-rf', '--ignore-unmatch', '*'], function(err, msg) {
+                if (err != null) throw new Error(err);
+            }.bind(this));
+            shelljs.exec('rm -rf *', {silent:true}, function (code, stdout, stderr) {
+                this.log('Removed everything in directory');
+                done();
+            }.bind(this));
         },
 
         generate: function() {
-            this.log(chalk.green.bold('Regenerate app with jhipster ' + this.currentVersion));
-            this.log('Remove all resources in folder');
-            var git = new Git();
+            this.log('Regenerating app with jhipster ' + this.latestVersion + '...');
             var done = this.async();
-            git.exec('rm', {q: true}, ['-rf', '--ignore-unmatch', '*'], function(err, msg) {
-                if (err != null) throw new Error(err);
-                this.log('Removed every git resource in directory');
-            }.bind(this));
-            shelljs.exec('rm -rf *', {silent:true}, function (code, stdout, stderr) {
-            }.bind(this));
             shelljs.exec('yo jhipster --force --with-entities', {silent:true}, function (code, stdout, stderr) {
+                this.log(chalk.green('Successfully regenerated app with jhipster ' + this.latestVersion + ' !'));
                 done();
             }.bind(this));
         },
@@ -168,9 +163,8 @@ module.exports = UpgradeGenerator.extend({
 
         mergeChangesBack: function() {
             this.log(chalk.green.bold('Merging changes back to ' + this.currentBranch + '...'));
-            var git = new Git();
             var done = this.async();
-            git.exec('merge', {q: true}, [UPGRADE_BRANCH], function(err, msg) {
+            this.git.exec('merge', {q: true}, [UPGRADE_BRANCH], function(err, msg) {
                 if (err != null) throw new Error(err);
                 this.log('Please now fix conflicts if any, and commit !');
                 done();
