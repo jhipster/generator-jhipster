@@ -1,0 +1,13 @@
+version: '2'
+services:
+    <%= baseName.toLowerCase() %>-mariadb:
+        container_name: <%= baseName.toLowerCase() %>-mariadb
+        image: mariadb:10.1.14
+        # volumes:
+        #     - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
+        environment:
+            - MYSQL_USER=root
+            - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+            - MYSQL_DATABASE=<%=baseName.toLowerCase()%>
+        ports:
+            - 3306:3306

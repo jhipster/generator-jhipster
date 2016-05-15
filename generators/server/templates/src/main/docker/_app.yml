@@ -8,6 +8,9 @@ services:
         <%_ if (prodDatabaseType == 'mysql') { _%>
             - <%= baseName.toLowerCase() %>-mysql:mysql
         <%_ } _%>
+        <%_ if (prodDatabaseType == 'mariadb') { _%>
+            - <%= baseName.toLowerCase() %>-mariadb:mariadb
+        <%_ } _%>
         <%_ if (prodDatabaseType == 'postgresql') { _%>
             - <%= baseName.toLowerCase() %>-postgresql:postgresql
         <%_ } _%>
@@ -35,6 +38,9 @@ services:
             <%_ if (prodDatabaseType == 'mysql') { _%>
             - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
             <%_ } _%>
+            <%_ if (prodDatabaseType == 'mariadb') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/<%= baseName.toLowerCase() %>
+            <%_ } _%>
             <%_ if (prodDatabaseType == 'postgresql') { _%>
             - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/<%= baseName %>
             <%_ } _%>
@@ -57,6 +63,12 @@ services:
         extends:
             file: mysql.yml
             service: <%= baseName.toLowerCase() %>-mysql
+    <%_ } _%>
+    <%_ if (prodDatabaseType == 'mariadb') { _%>
+    <%= baseName.toLowerCase() %>-mariadb:
+        extends:
+            file: mariadb.yml
+            service: <%= baseName.toLowerCase() %>-mariadb
     <%_ } _%>
     <%_ if (prodDatabaseType == 'postgresql') { _%>
     <%= baseName.toLowerCase() %>-postgresql:

@@ -444,6 +444,44 @@ describe('JHipster generator', function () {
         });
     });
 
+    describe('mariadb configuration', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Disk',
+                    'prodDatabaseType': 'mariadb',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false,
+                    'skipClient': false,
+                    'skipUserManagement': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
+            assert.file(expectedFiles.client);
+            assert.file(expectedFiles.dockerServicesProd);
+            assert.file(['gulpfile.js']);
+        });
+    });
+
     describe('default gradle configuration', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
