@@ -129,12 +129,6 @@ spring:
         port: 25
         username:
         password:
-        protocol: smtp
-        # tls:
-        # properties.mail.smtp:
-            # auth:
-            # starttls.enable:
-            # ssl.trust:
     messages:
         cache-seconds: 1
     thymeleaf:
