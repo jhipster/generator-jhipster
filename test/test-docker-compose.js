@@ -154,7 +154,8 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '01-gateway',
                         '02-mysql',
                         '03-psql',
-                        '04-mongo'
+                        '04-mongo',
+                        '07-mariadb'
                     ],
                     clusteredDbApps: [],
                     elk: true
