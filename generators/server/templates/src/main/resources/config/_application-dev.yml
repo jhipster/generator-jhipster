@@ -130,6 +130,9 @@ spring:
     <%_ } _%>
     mail:
         host: localhost
+        port: 25
+        username:
+        password:
     messages:
         cache-seconds: 1
     thymeleaf:
