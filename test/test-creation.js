@@ -8,7 +8,6 @@ var fse = require('fs-extra');
 
 const constants = require('../generators/generator-constants'),
     TEST_DIR = constants.TEST_DIR,
-    JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR,
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
@@ -141,8 +140,7 @@ const expectedFiles = {
         SERVER_TEST_RES_DIR + 'logback-test.xml',
         SERVER_TEST_RES_DIR + 'ehcache.xml',
         TEST_DIR + 'gatling/conf/gatling.conf',
-        '.editorconfig',
-        JHIPSTER_CONFIG_DIR + 'upgrade.sh'
+        '.editorconfig'
     ],
 
     client: [
