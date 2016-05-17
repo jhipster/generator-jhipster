@@ -6,8 +6,8 @@ var util = require('util'),
     packagejs = require('../../package.json'),
     fs = require('fs'),
     shelljs = require('shelljs'),
-    exec = require('child_process').exec,
     semver = require('semver'),
+    rimraf = require('rimraf'),
     Git = require('git-wrapper');
 
 var UpgradeGenerator = generators.Base.extend({});
@@ -56,9 +56,9 @@ module.exports = UpgradeGenerator.extend({
                 callback();
             }.bind(this));
         }.bind(this);
-        /*TODO change: temporary workaround due to https://github.com/pvorb/node-git-wrapper/pull/7*/
-        exec('git add -A', {maxBuffer: 1024 * 500}, function(err, msg) {
-            if (err != null) this.error('Unable to add resources in git:\n' + err);
+        /* TODO change: temporary workaround due to https://github.com/pvorb/node-git-wrapper/pull/7 */
+        shelljs.exec('git add -A', {maxBuffer: 1024 * 500}, function(code, stdout, stderr) {
+            if (code !== 0) this.error('Unable to add resources in git:\n' + stderr);
             commit();
         }.bind(this));
     },
@@ -152,30 +152,25 @@ module.exports = UpgradeGenerator.extend({
             this.log('Updating ' + GENERATOR_JHIPSTER + '. This might take some time...');
             var done = this.async();
             shelljs.exec('npm install -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, stdout, stderr) {
-                if (!stderr) this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
-                else this.error('Something went wrong!')
+                if (code === 0) this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
+                else this.error('Something went wrong while updating generator! ' + stderr);
                 done();
             }.bind(this));
         },
 
         cleanUp: function() {
             var done = this.async();
-            this.git.exec('rm', {q: true}, ['-rf', '--ignore-unmatch', '*'], function(err, msg) {
-                if (err != null) return this.error('Unable to cleanup directory:\n' + err);
-                shelljs.exec('ls -al | grep -E -v \'.yo-rc.json|.git\' | xargs rm -rf +', {silent:true},
-                    function (code, stdout, stderr) {
-                        this.log('Cleaned up directory');
-                        done();
-                    }.bind(this));
-            }.bind(this));
+            shelljs.rm('-rf', '!(.yo-rc.json|.git)');
+            this.log('Cleaned up directory');
+            done();
         },
 
         generate: function() {
             this.log('Regenerating app with jhipster ' + this.latestVersion + '...');
             var done = this.async();
             shelljs.exec('yo jhipster --force --with-entities', {silent:false}, function (code, stdout, stderr) {
-                if (!stderr) this.log(chalk.green('Successfully regenerated app with jhipster ' + this.latestVersion));
-                else this.error('Something went wrong!')
+                if (code === 0) this.log(chalk.green('Successfully regenerated app with jhipster ' + this.latestVersion));
+                else this.error('Something went wrong while generating project! '+ stderr);
                 done();
             }.bind(this));
         },
