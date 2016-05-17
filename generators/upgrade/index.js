@@ -28,29 +28,6 @@ module.exports = UpgradeGenerator.extend({
         this.logo = configOptions.logo;
         this.git = new Git();
 
-        this.gitCheckout = function(branch) {
-            var done = this.async();
-            this.git.exec('checkout', {q: true}, [branch], function(err, msg) {
-                if (err != null) this.error('Unable to checkout branch ' + branch + ':\n' + err);
-                this.log('Checked out branch \'' + branch + '\'');
-                done();
-            }.bind(this));
-        };
-
-        this.gitCommitAll = function(commitMsg, callback) {
-            var commit = function() {
-                this.git.exec('commit', {q: true}, ['-m \"' + commitMsg + '\"', '-a', '--allow-empty'], function(err, msg) {
-                    if (err != null) return this.error('Unable to commit in git:\n' + err);
-                    this.log('Committed: ' + commitMsg);
-                    callback();
-                }.bind(this));
-            }.bind(this);
-            this.git.exec('add', {}, ['-A'], function(err, msg) {
-                if (err != null) return this.error('Unable to add resources in git:\n' + err);
-                commit();
-            }.bind(this));
-        };
-
         // This adds support for a `--force` flag
         this.option('force', {
             desc: 'Force re-generation even if now update available',
@@ -66,6 +43,29 @@ module.exports = UpgradeGenerator.extend({
                 this.printJHipsterLogo();
             }
         }
+    },
+
+    _gitCheckout: function(branch) {
+        var done = this.async();
+        this.git.exec('checkout', {q: true}, [branch], function(err, msg) {
+            if (err != null) this.error('Unable to checkout branch ' + branch + ':\n' + err);
+            this.log('Checked out branch \'' + branch + '\'');
+            done();
+        }.bind(this));
+    },
+
+    _gitCommitAll: function(commitMsg, callback) {
+        var commit = function() {
+            this.git.exec('commit', {q: true}, ['-m \"' + commitMsg + '\"', '-a', '--allow-empty'], function(err, msg) {
+                if (err != null) return this.error('Unable to commit in git:\n' + err);
+                this.log('Committed: ' + commitMsg);
+                callback();
+            }.bind(this));
+        }.bind(this);
+        this.git.exec('add', {}, ['-A'], function(err, msg) {
+            if (err != null) return this.error('Unable to add resources in git:\n' + err);
+            commit();
+        }.bind(this));
     },
 
     configuring: {
@@ -101,7 +101,7 @@ module.exports = UpgradeGenerator.extend({
                 this.git.exec('init', {}, [], function(err, msg) {
                     if (err != null) return this.error('Unable to initialize a new git repository:\n' + err);
                     this.log('Initialized a new git repository');
-                    this.gitCommitAll('Initial', function() {done();});
+                    this._gitCommitAll('Initial', function() {done();});
                 }.bind(this));
             }
         },
@@ -140,7 +140,7 @@ module.exports = UpgradeGenerator.extend({
         },
 
         checkoutUpgradeBranch: function() {
-            this.gitCheckout(UPGRADE_BRANCH);
+            this._gitCheckout(UPGRADE_BRANCH);
         }
     },
 
@@ -182,11 +182,11 @@ module.exports = UpgradeGenerator.extend({
 
         commitChanges: function() {
             var done = this.async();
-            this.gitCommitAll('Upgrade to ' + this.latestVersion, function() {done();});
+            this._gitCommitAll('Upgrade to ' + this.latestVersion, function() {done();});
         },
 
         checkoutSourceBranch: function() {
-            this.gitCheckout(this.sourceBranch);
+            this._gitCheckout(this.sourceBranch);
         },
 
         mergeChangesBack: function() {
