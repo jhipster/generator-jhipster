@@ -1415,4 +1415,12 @@ Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
     return NaN;
 };
 
+Generator.prototype.error = function(msg) {
+    return this.env.error(chalk.red.bold('ERROR! ') + msg);
+};
+
+Generator.prototype.warning = function(msg) {
+    return this.env.error(chalk.yellow.bold('WARNING! ') + msg);
+};
+
 Generator.prototype.contains = _.includes;
