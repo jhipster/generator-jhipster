@@ -11,18 +11,13 @@ services:
             - 7199:7199
             - 9042:9042
             - 9160:9160
-    mscassandra-cassandra-node:
-        image: cassandra:2.2.5
-        links:
-            - mscassandra-cassandra:seed
-        environment:
-            - CASSANDRA_SEEDS=seed
     mscassandra-cassandra-migration:
         container_name: mscassandra-cassandra-migration
         links:
             - mscassandra-cassandra
         environment:
             - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
+            - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql
         build:
             context: .
             dockerfile: cassandra/Cassandra.Dockerfile
