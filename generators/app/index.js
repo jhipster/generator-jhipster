@@ -105,7 +105,7 @@ module.exports = JhipsterGenerator.extend({
             this.isGitInstalled(function () {
                 this.gitInstalled = true;
                 done();
-            }, function () {
+            }.bind(this), function () {
                 done();
             });
         },

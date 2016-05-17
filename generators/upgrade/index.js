@@ -25,14 +25,13 @@ module.exports = UpgradeGenerator.extend({
         generators.Base.apply(this, arguments);
 
         this.git = new Git();
-
         this.force = this.options['force'];
     },
 
     initializing: {
         displayLogo: function () {
-            this.log(chalk.white('Welcome to the JHipster Upgrade Sub-Generator '));
-            this.log(chalk.white('This will upgrade your current application codebase to the latest JHipster version');
+            this.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator '));
+            this.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
         },
 
         getCurrentJHVersion: function () {
@@ -57,7 +56,8 @@ module.exports = UpgradeGenerator.extend({
                 callback();
             }.bind(this));
         }.bind(this);
-        this.git.exec('add', {}, ['-A'], function(err, msg) {
+        /*TODO change: temporary workaround due to https://github.com/pvorb/node-git-wrapper/pull/7*/
+        exec('git add -A', {maxBuffer: 1024 * 500}, function(err, msg) {
             if (err != null) this.error('Unable to add resources in git:\n' + err);
             commit();
         }.bind(this));
@@ -127,20 +127,18 @@ module.exports = UpgradeGenerator.extend({
 
         prepareUpgradeBranch: function() {
             var done = this.async();
-            var createUpgradeBranch = function() {
+            var createUpgradeBranch = function(callback) {
                 this.git.exec('branch', {q: true}, [UPGRADE_BRANCH], function(err, msg) {
                     if (err != null) this.error('Unable to create ' + UPGRADE_BRANCH + ':\n' + err);
                     this.log('Created branch ' + UPGRADE_BRANCH);
+                    this._gitCheckout(UPGRADE_BRANCH);
+                    callback();
                 }.bind(this));
             }.bind(this);
             this.git.exec('rev-parse', {q: true}, ['--verify', UPGRADE_BRANCH], function(err, msg) {
-                if (err != null) createUpgradeBranch();
-                done();
+                if (err != null) createUpgradeBranch(done);
+                else done();
             }.bind(this));
-        },
-
-        checkoutUpgradeBranch: function() {
-            this._gitCheckout(UPGRADE_BRANCH);
         }
     },
 
@@ -154,7 +152,8 @@ module.exports = UpgradeGenerator.extend({
             this.log('Updating ' + GENERATOR_JHIPSTER + '. This might take some time...');
             var done = this.async();
             shelljs.exec('npm install -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, stdout, stderr) {
-                this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
+                if (!stderr) this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
+                else this.error('Something went wrong!')
                 done();
             }.bind(this));
         },
@@ -163,7 +162,7 @@ module.exports = UpgradeGenerator.extend({
             var done = this.async();
             this.git.exec('rm', {q: true}, ['-rf', '--ignore-unmatch', '*'], function(err, msg) {
                 if (err != null) return this.error('Unable to cleanup directory:\n' + err);
-                shelljs.exec('ls -a1 | grep -E -v \'.yo-rc.json|.git\|node_modules\' | xargs rm -rf +', {silent:true},
+                shelljs.exec('ls -al | grep -E -v \'.yo-rc.json|.git\' | xargs rm -rf +', {silent:true},
                     function (code, stdout, stderr) {
                         this.log('Cleaned up directory');
                         done();
