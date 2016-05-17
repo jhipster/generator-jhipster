@@ -174,15 +174,18 @@ module.exports = UpgradeGenerator.extend({
         generate: function() {
             this.log('Regenerating app with jhipster ' + this.latestVersion + '...');
             var done = this.async();
-            shelljs.exec('yo jhipster --force --with-entities', {silent:true}, function (code, stdout, stderr) {
-                this.log(chalk.green('Successfully regenerated app with jhipster ' + this.latestVersion));
+            shelljs.exec('yo jhipster --force --with-entities', {silent:false}, function (code, stdout, stderr) {
+                if (!stderr) this.log(chalk.green('Successfully regenerated app with jhipster ' + this.latestVersion));
+                else this.error('Something went wrong!')
                 done();
             }.bind(this));
         },
 
         commitChanges: function() {
             var done = this.async();
-            this._gitCommitAll('Upgrade to ' + this.latestVersion, function() {done();});
+            this._gitCommitAll('Upgrade to ' + this.latestVersion, function() {
+                done();
+            });
         },
 
         checkoutSourceBranch: function() {
@@ -193,7 +196,7 @@ module.exports = UpgradeGenerator.extend({
             this.log('Merging changes back to ' + this.sourceBranch + '...');
             var done = this.async();
             this.git.exec('merge', {q: true}, [UPGRADE_BRANCH], function(err, msg) {
-                if (err != null) return this.error('Unable to merge changes back to ' + this.sourceBranch + ':\n' + err);
+                if (err != null) this.error('Unable to merge changes back to ' + this.sourceBranch + ':\n' + err);
                 this.log(chalk.green('Merge done !') + '\n\tPlease now fix conflicts if any, and commit !');
                 done();
             }.bind(this));
@@ -201,7 +204,6 @@ module.exports = UpgradeGenerator.extend({
     },
 
     end: function () {
-        if (this.abort) return;
         this.log(chalk.green.bold('\nUpgraded successfully.\n'));
     }
 
