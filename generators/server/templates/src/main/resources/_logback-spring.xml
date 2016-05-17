@@ -22,7 +22,7 @@
     </appender>
 -->
 
-    <logger name="<%=packageName%>" level="@logback.loglevel@"/>
+    <logger name="<%=packageName%>" level="#logback.loglevel#"/>
 <% if (databaseType == 'cassandra') { %>
     <logger name="io.netty" level="WARN"/><% } %>
     <logger name="javax.activation" level="WARN"/>
@@ -61,7 +61,7 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-    <root level="@logback.loglevel@">
+    <root level="#logback.loglevel#">
         <appender-ref ref="CONSOLE"/>
     </root>
 
