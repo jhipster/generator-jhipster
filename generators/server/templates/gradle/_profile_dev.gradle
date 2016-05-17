@@ -32,19 +32,18 @@ task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
 }<% } %>
 
-task setProdProperties(dependsOn: bootRun) << {
-    doFirst {
-        System.setProperty('spring.profiles.active', profiles)
-    }
-}
-
 processResources {
     filesMatching('**/logback-spring.xml') {
         filter {
-            it.replace('@logback.loglevel@', logbackLoglevel)
+            it.replace('#logback.loglevel#', logbackLoglevel)
+        }
+    }
+    filesMatching('**/application.yml') {
+        filter {
+            it.replace('#spring.profiles.active#', 'dev')
         }
     }
 }
 
 <% if (!skipClient) { %>
-setProdProperties.dependsOn gulpConstantDev<% } %>
+processResources.dependsOn gulpConstantDev<% } %>

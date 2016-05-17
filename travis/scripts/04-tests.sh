@@ -3,9 +3,9 @@ set -ev
 #--------------------------------------------------
 # Launch tests
 #--------------------------------------------------
-cd "$HOME"/"$JHIPSTER"
+cd "$HOME"/app
 if [ "$JHIPSTER" != "app-gradle" ]; then
-  mvn test
+  ./mvnw test
 else
   ./gradlew test
 fi

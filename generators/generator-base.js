@@ -1416,11 +1416,24 @@ Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
 };
 
 Generator.prototype.error = function(msg) {
-    return this.env.error(chalk.red.bold('ERROR! ') + msg);
+    this.env.error(chalk.red.bold('ERROR! ') + msg);
 };
 
 Generator.prototype.warning = function(msg) {
-    return this.env.error(chalk.yellow.bold('WARNING! ') + msg);
+    this.log(chalk.yellow.bold('WARNING! ') + msg);
 };
+
+Generator.prototype.isGitInstalled = function (successCb, errorCb) {
+    exec('git --version', function (err) {
+        if (err) {
+            this.warning('git is not found on your computer.\n',
+                ' Install git: ' + chalk.yellow('http://git-scm.com/')
+            );
+            errorCb && errorCb();
+        } else {
+            successCb && successCb();
+        }
+    }.bind(this));
+}
 
 Generator.prototype.contains = _.includes;
