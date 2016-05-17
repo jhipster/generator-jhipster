@@ -25,23 +25,15 @@ module.exports = UpgradeGenerator.extend({
         generators.Base.apply(this, arguments);
 
         this.currentVersion = packagejs.version;
-        this.logo = configOptions.logo;
         this.git = new Git();
 
-        // This adds support for a `--force` flag
-        this.option('force', {
-            desc: 'Force re-generation even if now update available',
-            type: Boolean,
-            defaults: false
-        });
         this.force = this.options['force'];
     },
 
     initializing: {
         displayLogo: function () {
-            if (this.logo) {
-                this.printJHipsterLogo();
-            }
+            this.log(chalk.white('Welcome to the JHipster Upgrade Sub-Generator '));
+            this.log(chalk.white('This will upgrade your current application codebase to the latest JHipster version');
         }
     },
 
