@@ -102,16 +102,12 @@ module.exports = JhipsterGenerator.extend({
         checkGit: function () {
             if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
-            exec('git --version', function (err) {
-                if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' git is not found on your computer.\n',
-                        ' Install git: ' + chalk.yellow('http://git-scm.com/')
-                    );
-                } else {
-                    this.gitInstalled = true;
-                }
+            this.isGitInstalled(function () {
+                this.gitInstalled = true;
                 done();
-            }.bind(this));
+            }, function () {
+                done();
+            });
         },
 
         checkGitConnection: function () {

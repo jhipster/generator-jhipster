@@ -63,11 +63,12 @@ module.exports = UpgradeGenerator.extend({
     configuring: {
         assertGitPresent: function() {
             var done = this.async();
-            exec('git --version', function (err) {
-                if (err) return this.warning('Git is not found on your computer.\n' +
-                        ' Install git: ' + chalk.yellow('http://git-scm.com/'));
+            this.isGitInstalled(function () {
                 done();
-            }.bind(this));
+            }, function () {
+                this.error('Exiting the process.');
+                done();
+            });
         },
 
         checkLatestVersion: function() {
