@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#-------------------------------------------------------------------------------
+# Functions
+#-------------------------------------------------------------------------------
 launchProtractor() {
     retryCount=1
     maxRetry=10
@@ -27,10 +30,10 @@ launchProtractor() {
 #-------------------------------------------------------------------------------
 # Start the application
 #-------------------------------------------------------------------------------
-cd "$HOME"/"$JHIPSTER"
+cd "$HOME"/app
 if [ "$RUN_APP" == 1 ]; then
   if [ "$JHIPSTER" != "app-gradle" ]; then
-    mvn package -DskipTests=true -P"$PROFILE"
+    ./mvnw package -DskipTests=true -P"$PROFILE"
     mv target/*.war target/app.war
     java -jar target/app.war --spring.profiles.active="$PROFILE" &
   else

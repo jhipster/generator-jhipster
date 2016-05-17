@@ -4,12 +4,13 @@ services:
   - docker
 language: node_js
 node_js:
-  - "4.4.3"
+  - "4.4.4"
 jdk:
   - oraclejdk8
 env:
   global:
-    - JHIPSTER_NODE_CACHE=1
+    - JHIPSTER_CACHE_REPO=https://github.com/jhipster/jhipster-travis-cache.git
+    - JHIPSTER_CACHE_BRANCH=160516-springboot-135
     - PROFILE=dev
     - RUN_APP=1
     - PROTRACTOR=0
@@ -30,7 +31,6 @@ env:
     - JHIPSTER=app-mongodb
     - JHIPSTER=app-oauth2
     - JHIPSTER=app-jwt
-
 before_install:
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
