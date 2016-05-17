@@ -1420,7 +1420,7 @@ Generator.prototype.error = function(msg) {
 };
 
 Generator.prototype.warning = function(msg) {
-    return this.env.error(chalk.yellow.bold('WARNING! ') + msg);
+    return this.log(chalk.yellow.bold('WARNING! ') + msg);
 };
 
 Generator.prototype.contains = _.includes;
