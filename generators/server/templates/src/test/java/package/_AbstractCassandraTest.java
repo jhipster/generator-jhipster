@@ -25,9 +25,11 @@ public class AbstractCassandraTest {
 
     public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";
 
+    public static final long CASSANDRA_TIMEOUT = 30000L;
+
     @BeforeClass
     public static void startServer() throws InterruptedException, TTransportException, ConfigurationException, IOException, URISyntaxException  {
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra();
+        EmbeddedCassandraServerHelper.startEmbeddedCassandra(CASSANDRA_TIMEOUT);
         Cluster cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(9142).build();
         Session session = cluster.connect();
         CQLDataLoader dataLoader = new CQLDataLoader(session);

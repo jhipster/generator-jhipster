@@ -2,6 +2,6 @@ version: '2'
 services:
     jhipster-registry:
         container_name: jhipster-registry
-        image: jhipster/jhipster-registry:v2.0.0
+        image: jhipster/jhipster-registry:v2.1.0
         ports:
             - 8761:8761

@@ -5,7 +5,6 @@ set -ev
 #-------------------------------------------------------------------------------
 java -version
 git --version
-mvn -v
 node -v
 npm -v
 bower -v

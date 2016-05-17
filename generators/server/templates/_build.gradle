@@ -267,10 +267,12 @@ dependencies {
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
-compileJava.dependsOn(processResources)
-
 clean {
     delete "target"
+}
+
+task cleanResources(type: Delete) {
+    delete 'build/resources'
 }
 
 task wrapper(type: Wrapper) {
@@ -279,3 +281,6 @@ task wrapper(type: Wrapper) {
 
 task stage(dependsOn: 'bootRepackage') {
 }
+
+compileJava.dependsOn processResources
+processResources.dependsOn cleanResources

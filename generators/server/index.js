@@ -397,7 +397,7 @@ module.exports = JhipsterServerGenerator.extend({
                         },
                         {
                             value: 'sql',
-                            name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                            name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
                         },
                         {
                             value: 'mongodb',
@@ -424,7 +424,7 @@ module.exports = JhipsterServerGenerator.extend({
                     choices: [
                         {
                             value: 'sql',
-                            name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                            name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
                         },
                         {
                             value: 'mongodb',
@@ -447,7 +447,7 @@ module.exports = JhipsterServerGenerator.extend({
                     choices: [
                         {
                             value: 'sql',
-                            name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                            name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
                         },
                         {
                             value: 'mongodb',
@@ -470,7 +470,7 @@ module.exports = JhipsterServerGenerator.extend({
                     choices: [
                         {
                             value: 'sql',
-                            name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                            name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
                         },
                         {
                             value: 'mongodb',
@@ -498,6 +498,10 @@ module.exports = JhipsterServerGenerator.extend({
                         {
                             value: 'mysql',
                             name: 'MySQL'
+                        },
+                        {
+                            value: 'mariadb',
+                            name: 'MariaDB'
                         },
                         {
                             value: 'postgresql',
@@ -533,6 +537,33 @@ module.exports = JhipsterServerGenerator.extend({
                         {
                             value: 'mysql',
                             name: 'MySQL'
+                        }
+                    ],
+                    default: 0
+                },
+                {
+                    when: function (response) {
+                        return (response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb');
+                    },
+                    type: 'list',
+                    name: 'devDatabaseType',
+                    message: function (response) {
+                        return getNumberedQuestion('Which *development* database would you like to use?', currentQuestion, totalQuestions, function (current) {
+                            currentQuestion = current;
+                        }, response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb');
+                    },
+                    choices: [
+                        {
+                            value: 'h2Disk',
+                            name: 'H2 with disk-based persistence'
+                        },
+                        {
+                            value: 'h2Memory',
+                            name: 'H2 with in-memory persistence'
+                        },
+                        {
+                            value: 'mariadb',
+                            name: 'MariaDB'
                         }
                     ],
                     default: 0
@@ -910,6 +941,9 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(DOCKER_DIR + '_app.yml', DOCKER_DIR + 'app.yml', this, {});
             if (this.prodDatabaseType === 'mysql') {
                 this.template(DOCKER_DIR + '_mysql.yml', DOCKER_DIR + 'mysql.yml', this, {});
+            }
+            if (this.prodDatabaseType === 'mariadb') {
+                this.template(DOCKER_DIR + '_mariadb.yml', DOCKER_DIR + 'mariadb.yml', this, {});
             }
             if (this.prodDatabaseType === 'postgresql') {
                 this.template(DOCKER_DIR + '_postgresql.yml', DOCKER_DIR + 'postgresql.yml', this, {});
