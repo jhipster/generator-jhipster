@@ -45,7 +45,7 @@ public class PaginationUtil {
     }
 
 
-    <% if (searchEngine == 'elasticsearch') { %>
+    <% if (searchEngine === 'elasticsearch') { %>
 
     public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page<?> page, String baseUrl)
         throws URISyntaxException {
