@@ -3,7 +3,7 @@ set -ev
 #-------------------------------------------------------------------------------
 # Start docker container
 #-------------------------------------------------------------------------------
-cd "$HOME"/"$JHIPSTER"
+cd "$HOME"/app
 if [[ ("$JHIPSTER" == 'app-cassandra') && (-a src/main/docker/cassandra.yml) ]]; then
   docker-compose -f src/main/docker/cassandra.yml up -d
 elif [[ ("$JHIPSTER" == 'app-mongodb') && (-a src/main/docker/mongodb.yml) ]]; then
