@@ -17,12 +17,16 @@ if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
 
+if (project.hasProperty('no-swagger')) {
+    profiles += ',no-swagger'
+}
+
 if (project.hasProperty('no-cache')) {
     profiles += ',no-cache'
 }
 
 bootRun {
-    args = []
+    args = ["--spring.profiles.active=" + profiles]
 }
 <% if (!skipClient) { %>
 task gulpBuildWithOpts(type: GulpTask) {
@@ -41,14 +45,14 @@ processResources {
     }
     filesMatching('**/application.yml') {
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace('#spring.profiles.active#', 'prod')
         }
     }
 }
 
 <% if (!skipClient) { %>
-gulp_build.dependsOn 'npmInstall'
-gulp_build.dependsOn 'bower'
+gulpBuildWithOpts.dependsOn 'npmInstall'
+gulpBuildWithOpts.dependsOn 'bower'
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
 bootRun.dependsOn gulp_test<% } %>

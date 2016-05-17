@@ -21,7 +21,7 @@ if (project.hasProperty('no-cache')) {
 }
 
 bootRun {
-    args = []
+    args = ["--spring.profiles.active=" + profiles]
 }
 <% if (!skipClient) { %>
 war {
@@ -40,10 +40,10 @@ processResources {
     }
     filesMatching('**/application.yml') {
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace('#spring.profiles.active#', 'dev')
         }
     }
 }
 
 <% if (!skipClient) { %>
-bootRun.dependsOn gulpConstantDev<% } %>
+processResources.dependsOn gulpConstantDev<% } %>
