@@ -24,7 +24,6 @@ module.exports = UpgradeGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
 
-        this.currentVersion = packagejs.version;
         this.git = new Git();
 
         this.force = this.options['force'];
@@ -34,6 +33,10 @@ module.exports = UpgradeGenerator.extend({
         displayLogo: function () {
             this.log(chalk.white('Welcome to the JHipster Upgrade Sub-Generator '));
             this.log(chalk.white('This will upgrade your current application codebase to the latest JHipster version');
+        },
+
+        getCurrentJHVersion: function () {
+            this.currentVersion = this.config.get('jhipsterVersion');
         }
     },
 
@@ -49,13 +52,13 @@ module.exports = UpgradeGenerator.extend({
     _gitCommitAll: function(commitMsg, callback) {
         var commit = function() {
             this.git.exec('commit', {q: true}, ['-m \"' + commitMsg + '\"', '-a', '--allow-empty'], function(err, msg) {
-                if (err != null) return this.error('Unable to commit in git:\n' + err);
+                if (err != null) this.error('Unable to commit in git:\n' + err);
                 this.log('Committed: ' + commitMsg);
                 callback();
             }.bind(this));
         }.bind(this);
         this.git.exec('add', {}, ['-A'], function(err, msg) {
-            if (err != null) return this.error('Unable to add resources in git:\n' + err);
+            if (err != null) this.error('Unable to add resources in git:\n' + err);
             commit();
         }.bind(this));
     },
@@ -81,8 +84,7 @@ module.exports = UpgradeGenerator.extend({
                 } else if (this.force) {
                     this.log(chalk.yellow('Forced re-generation'));
                 } else {
-                    this.log(chalk.green('No update available.') + ' Application has already been generated with latest version.');
-                    return;
+                    this.error(chalk.green('No update available.') + ' Application has already been generated with latest version.');
                 }
                 done();
             }.bind(this));
@@ -92,9 +94,11 @@ module.exports = UpgradeGenerator.extend({
             if (! fs.existsSync('.git')) {
                 var done = this.async();
                 this.git.exec('init', {}, [], function(err, msg) {
-                    if (err != null) return this.error('Unable to initialize a new git repository:\n' + err);
+                    if (err != null) this.error('Unable to initialize a new git repository:\n' + err);
                     this.log('Initialized a new git repository');
-                    this._gitCommitAll('Initial', function() {done();});
+                    this._gitCommitAll('Initial', function() {
+                        done();
+                    });
                 }.bind(this));
             }
         },
@@ -102,9 +106,12 @@ module.exports = UpgradeGenerator.extend({
         assertNoLocalChanges: function() {
             var done = this.async();
             this.git.exec('status', {}, ['--porcelain'], function(err, msg) {
-                if (err != null) return this.error('Unable to check for local changes:\n' + err);
-                if (msg != null && msg !== '') return this.warning(' local changes found.\n' +
+                if (err != null) this.error('Unable to check for local changes:\n' + err);
+                if (msg != null && msg !== '') {
+                    this.warning(' local changes found.\n' +
                         '\tPlease commit/stash them before upgrading');
+                    this.error('Exiting process');
+                }
                 done();
             }.bind(this));
         },
@@ -112,7 +119,7 @@ module.exports = UpgradeGenerator.extend({
         detectCurrentBranch: function() {
             var done = this.async();
             this.git.exec('rev-parse', {q: true}, ['--abbrev-ref', 'HEAD'], function(err, msg) {
-                if (err != null) return this.error('Unable to detect current git branch:\n' + err);
+                if (err != null) this.error('Unable to detect current git branch:\n' + err);
                 this.sourceBranch = msg.replace('\n','');
                 done();
             }.bind(this));
@@ -122,7 +129,7 @@ module.exports = UpgradeGenerator.extend({
             var done = this.async();
             var createUpgradeBranch = function() {
                 this.git.exec('branch', {q: true}, [UPGRADE_BRANCH], function(err, msg) {
-                    if (err != null) return this.error('Unable to create ' + UPGRADE_BRANCH + ':\n' + err);
+                    if (err != null) this.error('Unable to create ' + UPGRADE_BRANCH + ':\n' + err);
                     this.log('Created branch ' + UPGRADE_BRANCH);
                 }.bind(this));
             }.bind(this);
@@ -144,9 +151,9 @@ module.exports = UpgradeGenerator.extend({
         },
 
         updateJhipster: function() {
-            this.log('Updating ' + GENERATOR_JHIPSTER + '...');
+            this.log('Updating ' + GENERATOR_JHIPSTER + '. This might take some time...');
             var done = this.async();
-            shelljs.exec('npm update -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, stdout, stderr) {
+            shelljs.exec('npm install -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, stdout, stderr) {
                 this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
                 done();
             }.bind(this));
@@ -156,12 +163,12 @@ module.exports = UpgradeGenerator.extend({
             var done = this.async();
             this.git.exec('rm', {q: true}, ['-rf', '--ignore-unmatch', '*'], function(err, msg) {
                 if (err != null) return this.error('Unable to cleanup directory:\n' + err);
+                shelljs.exec('ls -a1 | grep -E -v \'.yo-rc.json|.git\|node_modules\' | xargs rm -rf +', {silent:true},
+                    function (code, stdout, stderr) {
+                        this.log('Cleaned up directory');
+                        done();
+                    }.bind(this));
             }.bind(this));
-            shelljs.exec('ls -a1 | grep -E -v \'.yo-rc.json|.git\|node_modules\' | xargs rm -rf +', {silent:true},
-                function (code, stdout, stderr) {
-                    this.log('Cleaned up directory');
-                    done();
-                }.bind(this));
         },
 
         generate: function() {

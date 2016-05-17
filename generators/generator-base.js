@@ -1416,11 +1416,11 @@ Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
 };
 
 Generator.prototype.error = function(msg) {
-    return this.env.error(chalk.red.bold('ERROR! ') + msg);
+    this.env.error(chalk.red.bold('ERROR! ') + msg);
 };
 
 Generator.prototype.warning = function(msg) {
-    return this.log(chalk.yellow.bold('WARNING! ') + msg);
+    this.log(chalk.yellow.bold('WARNING! ') + msg);
 };
 
 Generator.prototype.isGitInstalled = function (successCb, errorCb) {
