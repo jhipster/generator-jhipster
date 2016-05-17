@@ -7,7 +7,6 @@ var util = require('util'),
     fs = require('fs'),
     shelljs = require('shelljs'),
     semver = require('semver'),
-    rimraf = require('rimraf'),
     Git = require('git-wrapper');
 
 var UpgradeGenerator = generators.Base.extend({});
