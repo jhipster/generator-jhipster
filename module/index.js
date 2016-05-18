@@ -3,6 +3,7 @@
 const JDLReader = require('../lib/reader/jdl_reader');
 
 module.exports = {
-  parse: JDLReader.read,
-  parseFromFiles: JDLReader.readFiles
+  parse: JDLReader.parse,
+  parseFromFiles: JDLReader.parseFromFiles,
+  convertToEntityJson: JDLReader.convertToEntityJson
 };

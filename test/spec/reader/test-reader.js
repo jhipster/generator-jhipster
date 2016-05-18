@@ -3,15 +3,15 @@
 var expect = require('chai').expect,
     fs = require('fs'),
     fail = expect.fail,
-    read = require('../../../lib/reader/jdl_reader').read,
-    readFiles = require('../../../lib/reader/jdl_reader').readFiles;
+    parse = require('../../../lib/reader/jdl_reader').parse,
+    parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
-describe('::readContent', function () {
+describe('::parse', function () {
   describe('when passing invalid parameters', function () {
     describe('such as nil', function () {
       it('throws an error', function () {
         try {
-          read(null);
+          parse(null);
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException')
@@ -21,7 +21,7 @@ describe('::readContent', function () {
     describe('such as an empty array', function () {
       it('throws an error', function () {
         try {
-          read('');
+          parse('');
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException')
@@ -33,18 +33,18 @@ describe('::readContent', function () {
     describe('when reading JDL content', function () {
       it('reads it', function () {
         var input = fs.readFileSync('./test/samples/valid_jdl.jdl', 'utf-8').toString();
-        var content = read(input);
+        var content = parse(input);
         expect(content).not.to.be.null;
       });
     });
   });
 });
-describe('::readFiles', function() {
+describe('::parseFromFiles', function() {
   describe('when passing invalid parameters', function () {
     describe('such as nil', function () {
       it('throws an error', function () {
         try {
-          readFiles(null);
+          parseFromFiles(null);
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException')
@@ -54,7 +54,7 @@ describe('::readFiles', function() {
     describe('such as an empty array', function () {
       it('throws an error', function () {
         try {
-          readFiles([]);
+          parseFromFiles([]);
           fail();
         } catch (error) {
           expect(error.name).to.eq('IllegalArgumentException')
@@ -64,7 +64,7 @@ describe('::readFiles', function() {
     describe("such as files without the '.jh' or '.jdl' file extension", function () {
       it('throws an error', function () {
         try {
-          readFiles(['../../samples/invalid_file.txt']);
+          parseFromFiles(['../../samples/invalid_file.txt']);
           fail();
         } catch (error) {
           expect(error.name).to.eq('WrongFileException')
@@ -74,7 +74,7 @@ describe('::readFiles', function() {
     describe('such as files that do not exist', function () {
       it('throws an error', function () {
         try {
-          readFiles(['nofile.jh']);
+          parseFromFiles(['nofile.jh']);
           fail();
         } catch (error) {
           expect(error.name).to.eq('WrongFileException')
@@ -84,7 +84,7 @@ describe('::readFiles', function() {
     describe('such as folders', function () {
       it('throws an error', function () {
         try {
-          readFiles(['../../samples/folder.jdl']);
+          parseFromFiles(['../../samples/folder.jdl']);
           fail();
         } catch (error) {
           expect(error.name).to.eq('WrongFileException')
@@ -95,13 +95,13 @@ describe('::readFiles', function() {
   describe('when passing valid arguments', function () {
     describe('when reading a single JDL file', function () {
       it('reads it', function () {
-        var content = readFiles(['./test/samples/valid_jdl.jdl']);
+        var content = parseFromFiles(['./test/samples/valid_jdl.jdl']);
         expect(content).not.to.be.null;
       });
     });
     describe('when reading more than one JDL file', function() {
       it('reads them', function () {
-        var content = readFiles(['./test/samples/valid_jdl.jdl', './test/samples/valid_jdl2.jdl']);
+        var content = parseFromFiles(['./test/samples/valid_jdl.jdl', './test/samples/valid_jdl2.jdl']);
         expect(content).not.to.be.null;
       });
     });

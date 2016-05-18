@@ -30,7 +30,10 @@
       "type": "Apache 2.0"
     }
   ],
-  "dependencies": {},
+  "dependencies": {
+    "chalk": "1.1.3",
+    "lodash": "4.11.2"
+  },
   "devDependencies": {
     "pegjs": "0.9.0",
     "mocha": "2.4.5",
