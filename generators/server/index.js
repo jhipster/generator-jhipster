@@ -71,16 +71,16 @@ module.exports = JhipsterServerGenerator.extend({
             defaults: false
         });
 
-        this.skipClient = !this.options['client-hook'] || configOptions.skipClient || this.config.get('skipClient');
-        this.skipUserManagement = configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
+        this.skipClient = !this.options['client-hook'] || this.configOptions.skipClient || this.config.get('skipClient');
+        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.enableTranslation = this.options['i18n'];
         this.testFrameworks = [];
         this.options['gatling'] && this.testFrameworks.push('gatling');
         this.options['cucumber'] && this.testFrameworks.push('cucumber');
         this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
-        this.logo = configOptions.logo;
-        this.baseName = configOptions.baseName;
+        this.logo = this.configOptions.logo;
+        this.baseName = this.configOptions.baseName;
     },
     initializing: {
         displayLogo: function () {
@@ -100,7 +100,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
             this.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
-            this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
+            this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
@@ -218,21 +218,21 @@ module.exports = JhipsterServerGenerator.extend({
         askFori18n: prompts.askFori18n,
 
         setSharedConfigOptions: function () {
-            configOptions.lastQuestion = this.currentQuestion;
-            configOptions.totalQuestions = this.totalQuestions;
-            configOptions.packageName = this.packageName;
-            configOptions.hibernateCache = this.hibernateCache;
-            configOptions.clusteredHttpSession = this.clusteredHttpSession;
-            configOptions.websocket = this.websocket;
-            configOptions.databaseType = this.databaseType;
-            configOptions.devDatabaseType = this.devDatabaseType;
-            configOptions.prodDatabaseType = this.prodDatabaseType;
-            configOptions.searchEngine = this.searchEngine;
-            configOptions.buildTool = this.buildTool;
-            configOptions.enableSocialSignIn = this.enableSocialSignIn;
-            configOptions.authenticationType = this.authenticationType;
-            configOptions.uaaBaseName = this.uaaBaseName;
-            configOptions.serverPort = this.serverPort;
+            this.configOptions.lastQuestion = this.currentQuestion;
+            this.configOptions.totalQuestions = this.totalQuestions;
+            this.configOptions.packageName = this.packageName;
+            this.configOptions.hibernateCache = this.hibernateCache;
+            this.configOptions.clusteredHttpSession = this.clusteredHttpSession;
+            this.configOptions.websocket = this.websocket;
+            this.configOptions.databaseType = this.databaseType;
+            this.configOptions.devDatabaseType = this.devDatabaseType;
+            this.configOptions.prodDatabaseType = this.prodDatabaseType;
+            this.configOptions.searchEngine = this.searchEngine;
+            this.configOptions.buildTool = this.buildTool;
+            this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
+            this.configOptions.authenticationType = this.authenticationType;
+            this.configOptions.uaaBaseName = this.uaaBaseName;
+            this.configOptions.serverPort = this.serverPort;
 
             // Make dist dir available in templates
             if (this.buildTool === 'maven') {
@@ -309,7 +309,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('rememberMeKey', this.rememberMeKey);
             this.config.set('enableTranslation', this.enableTranslation);
-            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
+            if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
@@ -318,25 +318,25 @@ module.exports = JhipsterServerGenerator.extend({
 
     default: {
         getSharedConfigOptions: function () {
-            this.useSass = configOptions.useSass ? configOptions.useSass : false;
-            if (configOptions.enableTranslation !== undefined) {
-                this.enableTranslation = configOptions.enableTranslation;
+            this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
+            if (this.configOptions.enableTranslation !== undefined) {
+                this.enableTranslation = this.configOptions.enableTranslation;
             }
-            if (configOptions.nativeLanguage !== undefined) {
-                this.nativeLanguage = configOptions.nativeLanguage;
+            if (this.configOptions.nativeLanguage !== undefined) {
+                this.nativeLanguage = this.configOptions.nativeLanguage;
             }
-            if (configOptions.languages !== undefined) {
-                this.languages = configOptions.languages;
+            if (this.configOptions.languages !== undefined) {
+                this.languages = this.configOptions.languages;
             }
-            if (configOptions.testFrameworks) {
-                this.testFrameworks = configOptions.testFrameworks;
+            if (this.configOptions.testFrameworks) {
+                this.testFrameworks = this.configOptions.testFrameworks;
             }
         },
 
         composeLanguages: function () {
-            if (configOptions.skipI18nQuestion) return;
+            if (this.configOptions.skipI18nQuestion) return;
 
-            this.composeLanguagesSub(this, configOptions, 'server');
+            this.composeLanguagesSub(this, this.configOptions, 'server');
         }
     },
 

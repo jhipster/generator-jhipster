@@ -2,7 +2,6 @@
 var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('lodash'),
     scriptBase = require('../generator-base'),
     prompts = require('./prompts'),
     AwsFactory = require('./lib/aws.js');

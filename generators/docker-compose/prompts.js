@@ -53,7 +53,7 @@ function askForPath() {
 
         done();
     }.bind(this));
-},
+}
 
 function askForApps() {
     if (this.regenerate) return;
@@ -101,7 +101,7 @@ function askForApps() {
 
         done();
     }.bind(this));
-},
+}
 
 function askForClustersMode() {
     if (this.regenerate) return;
@@ -134,7 +134,7 @@ function askForClustersMode() {
 
         done();
     }.bind(this));
-},
+}
 
 function askForElk() {
     if (this.regenerate) return;
@@ -152,7 +152,7 @@ function askForElk() {
         this.useElk = props.elk;
         done();
     }.bind(this));
-},
+}
 
 function askForAdminPassword() {
     if (this.regenerate) return;

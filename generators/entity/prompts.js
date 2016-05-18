@@ -147,7 +147,40 @@ function askForFieldsToRemove() {
     }
     var cb = this.async();
 
-    askForFieldsToRemove.call(this, cb);
+    var prompts = [
+        {
+            type: 'checkbox',
+            name: 'fieldsToRemove',
+            message: 'Please choose the fields you want to remove',
+            choices: this.fieldNameChoices,
+            default: 'none'
+        },
+        {
+            when: function (response) {
+                return response.fieldsToRemove !== 'none';
+            },
+            type: 'confirm',
+            name: 'confirmRemove',
+            message: 'Are you sure to remove these fields?',
+            default: true
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        if (props.confirmRemove) {
+            this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
+            var i;
+            for (i = this.fields.length - 1; i >= 0; i -= 1) {
+                var field = this.fields[i];
+                if (props.fieldsToRemove.filter(function (val) {
+                    return val === field.fieldName;
+                }).length > 0) {
+                    this.fields.splice(i, 1);
+                }
+            }
+        }
+        cb();
+
+    }.bind(this));
 }
 
 function askForRelationships() {
@@ -175,7 +208,40 @@ function askForRelationsToRemove() {
 
     var cb = this.async();
 
-    askForRelationsToRemove.call(this, cb);
+    var prompts = [
+        {
+            type: 'checkbox',
+            name: 'relsToRemove',
+            message: 'Please choose the relationships you want to remove',
+            choices: this.relNameChoices,
+            default: 'none'
+        },
+        {
+            when: function (response) {
+                return response.relsToRemove !== 'none';
+            },
+            type: 'confirm',
+            name: 'confirmRemove',
+            message: 'Are you sure to remove these relationships?',
+            default: true
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        if (props.confirmRemove) {
+            this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
+            var i;
+            for (i = this.relationships.length - 1; i >= 0; i -= 1) {
+                var rel = this.relationships[i];
+                if (props.relsToRemove.filter(function (val) {
+                    return val === rel.relationshipName + ':' + rel.relationshipType;
+                }).length > 0) {
+                    this.relationships.splice(i, 1);
+                }
+            }
+        }
+        cb();
+
+    }.bind(this));
 }
 
 function askForDTO() {
@@ -847,53 +913,15 @@ function askForField(cb) {
             cb();
         }
     }.bind(this));
-},
-/**
- * ask question for field deletion
- */
-function askForFieldsToRemove(cb) {
-    var fieldNamesUnderscored = this.fieldNamesUnderscored;
-    var prompts = [
-        {
-            type: 'checkbox',
-            name: 'fieldsToRemove',
-            message: 'Please choose the fields you want to remove',
-            choices: this.fieldNameChoices,
-            default: 'none'
-        },
-        {
-            when: function (response) {
-                return response.fieldsToRemove !== 'none';
-            },
-            type: 'confirm',
-            name: 'confirmRemove',
-            message: 'Are you sure to remove these fields?',
-            default: true
-        }
-    ];
-    this.prompt(prompts, function (props) {
-        if (props.confirmRemove) {
-            this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
-            var i;
-            for (i = this.fields.length - 1; i >= 0; i -= 1) {
-                var field = this.fields[i];
-                if (props.fieldsToRemove.filter(function (val) {
-                    return val === field.fieldName;
-                }).length > 0) {
-                    this.fields.splice(i, 1);
-                }
-            }
-        }
-        cb();
+}
 
-    }.bind(this));
-},
 /**
  * ask question for a relationship creation
  */
 function askForRelationship(cb) {
     var name = this.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
+    var fieldNamesUnderscored = this.fieldNamesUnderscored;
     var prompts = [
         {
             type: 'confirm',
@@ -1049,45 +1077,6 @@ function askForRelationship(cb) {
             this.log('\n');
             cb();
         }
-    }.bind(this));
-},
-/**
- * ask question for relationship deletion
- */
-function askForRelationsToRemove(cb) {
-    var prompts = [
-        {
-            type: 'checkbox',
-            name: 'relsToRemove',
-            message: 'Please choose the relationships you want to remove',
-            choices: this.relNameChoices,
-            default: 'none'
-        },
-        {
-            when: function (response) {
-                return response.relsToRemove !== 'none';
-            },
-            type: 'confirm',
-            name: 'confirmRemove',
-            message: 'Are you sure to remove these relationships?',
-            default: true
-        }
-    ];
-    this.prompt(prompts, function (props) {
-        if (props.confirmRemove) {
-            this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
-            var i;
-            for (i = this.relationships.length - 1; i >= 0; i -= 1) {
-                var rel = this.relationships[i];
-                if (props.relsToRemove.filter(function (val) {
-                    return val === rel.relationshipName + ':' + rel.relationshipType;
-                }).length > 0) {
-                    this.relationships.splice(i, 1);
-                }
-            }
-        }
-        cb();
-
     }.bind(this));
 }
 

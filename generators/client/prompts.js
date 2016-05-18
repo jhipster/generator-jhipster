@@ -1,9 +1,5 @@
 'use strict';
 
-var chalk = require('chalk');
-
-const constants = require('../generator-constants');
-
 module.exports = {
     askForModuleName,
     askForClientSideOpts,

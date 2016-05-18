@@ -91,8 +91,9 @@ module.exports = DockerComposeGenerator.extend({
 
         askForElk: prompts.askForElk,
 
-        askForAdminPassword: prompts.askForAdminPassword,
-
+        askForAdminPassword: prompts.askForAdminPassword
+    },
+    
     configuring: {
         insight: function () {
             var insight = this.insight();

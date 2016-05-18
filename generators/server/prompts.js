@@ -1,10 +1,8 @@
 'use strict';
 
-var chalk = require('chalk'),
-    path = require('path'),
-    shelljs = require('shelljs');
-
-const constants = require('../generator-constants');
+var path = require('path'),
+    shelljs = require('shelljs'),
+    crypto = require('crypto');
 
 module.exports = {
     askForModuleName,
