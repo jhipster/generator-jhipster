@@ -102,12 +102,10 @@ module.exports = JhipsterGenerator.extend({
         checkGit: function () {
             if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
-            this.isGitInstalled(function () {
-                this.gitInstalled = true;
+            this.isGitInstalled(function (code) {
+                this.gitInstalled = code === 0;
                 done();
-            }.bind(this), function () {
-                done();
-            });
+            }.bind(this));
         },
 
         checkGitConnection: function () {
