@@ -5,8 +5,7 @@ var util = require('util'),
     scriptBase = require('../generator-base'),
     fs = require('fs'),
     shelljs = require('shelljs'),
-    semver = require('semver'),
-    Git = require('git-wrapper');
+    semver = require('semver');
 
 var UpgradeGenerator = generators.Base.extend({});
 
@@ -62,12 +61,10 @@ module.exports = UpgradeGenerator.extend({
     configuring: {
         assertGitPresent: function() {
             var done = this.async();
-            this.isGitInstalled(function () {
+            this.isGitInstalled(function (code) {
+                if (code !== 0) this.error('Exiting the process.');
                 done();
-            }, function () {
-                this.error('Exiting the process.');
-                done();
-            });
+            }.bind(this));
         },
 
         checkLatestVersion: function() {

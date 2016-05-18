@@ -1423,17 +1423,31 @@ Generator.prototype.warning = function(msg) {
     this.log(chalk.yellow.bold('WARNING! ') + msg);
 };
 
-Generator.prototype.isGitInstalled = function (successCb, errorCb) {
-    exec('git --version', function (err) {
-        if (err) {
+Generator.prototype.isGitInstalled = function (callback) {
+    this.gitExec('--version', function (code) {
+        if (code !== 0) {
             this.warning('git is not found on your computer.\n',
                 ' Install git: ' + chalk.yellow('http://git-scm.com/')
             );
-            errorCb && errorCb();
-        } else {
-            successCb && successCb();
         }
+        callback && callback(code)
     }.bind(this));
+};
+
+/*
+ * options is optional and takes any of child process options
+ * The call back will receive code, stdout and stderr
+ */
+Generator.prototype.gitExec = function (command, options, callback) {
+    callback = arguments[arguments.length - 1];
+    if (arguments.length == 2) {
+        options = {};
+    }
+    options.async = true;
+    options.silent = true;
+
+    command = 'git ' + command;
+    shelljs.exec(command, options, callback);
 };
 
 Generator.prototype.contains = _.includes;
