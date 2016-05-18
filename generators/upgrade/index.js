@@ -168,7 +168,7 @@ module.exports = UpgradeGenerator.extend({
 
         commitChanges: function() {
             var done = this.async();
-            this._gitCommitAll('Upgrade to ' + this.latestVersion, function() {
+            this._gitCommitAll('Upgrade to JHipster ' + this.latestVersion, function() {
                 done();
             });
         },
