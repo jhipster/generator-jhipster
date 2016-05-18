@@ -28,7 +28,6 @@ const constants = {
     SERVER_QUESTIONS: 12,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: MAIN_DIR + 'docker/',
-    JHIPSTER_CONFIG_DIR: '.jhipster/',
 
     MAIN_DIR: MAIN_DIR,
     TEST_DIR: TEST_DIR,

@@ -1430,7 +1430,7 @@ Generator.prototype.isGitInstalled = function (callback) {
                 ' Install git: ' + chalk.yellow('http://git-scm.com/')
             );
         }
-        callback && callback(code)
+        callback && callback(code);
     }.bind(this));
 };
 

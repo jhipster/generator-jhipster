@@ -18,8 +18,6 @@ const GENERATOR_JHIPSTER = 'generator-jhipster',
 module.exports = UpgradeGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
-
-        this.git = new Git();
         this.force = this.options['force'];
     },
 
@@ -140,7 +138,7 @@ module.exports = UpgradeGenerator.extend({
             insight.trackWithEvent('generator', 'upgrade');
         },
 
-        updateJhipster: function() {
+        /*updateJhipster: function() {
             this.log('Updating ' + GENERATOR_JHIPSTER + '. This might take some time...');
             var done = this.async();
             shelljs.exec('npm install -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, msg, err) {
@@ -149,7 +147,7 @@ module.exports = UpgradeGenerator.extend({
                 done();
             }.bind(this));
         },
-
+*/
         cleanUp: function() {
             var done = this.async();
             if (shelljs.rm('-rf', '!(.yo-rc.json|.git)').code === 0 ) {
