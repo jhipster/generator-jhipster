@@ -12,6 +12,14 @@
 
         vm.<%= entityInstance %> = entity;
         vm.clear = clear;
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+        vm.datePickerOpenStatus = {};
+        vm.openCalendar = openCalendar;
+        <%_ } _%>
+        <%_ if (fieldsContainBlob) { _%>
+        vm.byteSize = DataUtils.byteSize;
+        vm.openFile = DataUtils.openFile;
+        <%_ } _%>
         vm.save = save;<%
             var queries = [];
             for (idx in relationships) {
@@ -65,10 +73,7 @@
         function onSaveError () {
             vm.isSaving = false;
         }
-        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 
-        vm.datePickerOpenStatus = {};
-        <%_ } _%>
         <%_ for (idx in fields) {
             if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
         vm.datePickerOpenStatus.<%= fields[idx].fieldName %> = false;
@@ -90,16 +95,11 @@
             }
         };
         <%_ } } _%>
-        <%_ if (fieldsContainBlob) { _%>
 
-        vm.openFile = DataUtils.openFile;
-        vm.byteSize = DataUtils.byteSize;
-        <%_ } _%>
         <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-
-        vm.openCalendar = function(date) {
+        function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
-        };
+        }
         <%_ } _%>
     }
 })();
