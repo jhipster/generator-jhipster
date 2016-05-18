@@ -489,8 +489,12 @@ function askForField(cb) {
                     name: 'BigDecimal'
                 },
                 {
-                    value: 'Date',
-                    name: 'Date'
+                    value: 'LocalDate',
+                    name: 'LocalDate (Warning: only compatible with cassandra v3)'
+                },
+                {
+                    value: 'ZonedDateTime',
+                    name: 'ZonedDateTime'
                 },
                 {
                     value: 'Boolean',
@@ -648,7 +652,6 @@ function askForField(cb) {
                     (response.fieldType === 'LocalDate' ||
                     response.fieldType === 'ZonedDateTime' ||
                     response.fieldType === 'UUID' ||
-                    response.fieldType === 'Date' ||
                     response.fieldType === 'Boolean' ||
                     response.fieldType === 'ByteBuffer' ||
                     response.fieldIsEnum === true);

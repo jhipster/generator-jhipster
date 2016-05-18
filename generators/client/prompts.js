@@ -4,8 +4,6 @@ var chalk = require('chalk');
 
 const constants = require('../generator-constants');
 
-var totalQuestions = constants.QUESTIONS;
-
 module.exports = {
     askForModuleName,
     askForClientSideOpts,
