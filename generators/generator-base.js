@@ -1434,6 +1434,6 @@ Generator.prototype.isGitInstalled = function (successCb, errorCb) {
             successCb && successCb();
         }
     }.bind(this));
-}
+};
 
 Generator.prototype.contains = _.includes;

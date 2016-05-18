@@ -3,7 +3,6 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
-    packagejs = require('../../package.json'),
     fs = require('fs'),
     shelljs = require('shelljs'),
     semver = require('semver'),
@@ -12,8 +11,6 @@ var util = require('util'),
 var UpgradeGenerator = generators.Base.extend({});
 
 util.inherits(UpgradeGenerator, scriptBase);
-
-var configOptions = {};
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster',
