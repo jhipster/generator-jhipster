@@ -1436,17 +1436,22 @@ Generator.prototype.isGitInstalled = function (callback) {
 
 /*
  * options is optional and takes any of child process options
+ * gitExec(args [, options ], callback)
+ * args can be an array of arguments
  * The call back will receive code, stdout and stderr
  */
-Generator.prototype.gitExec = function (command, options, callback) {
+Generator.prototype.gitExec = function (args, options, callback) {
     callback = arguments[arguments.length - 1];
-    if (arguments.length == 2) {
+    if (arguments.length < 3) {
         options = {};
     }
     options.async = true;
     options.silent = true;
 
-    command = 'git ' + command;
+    if (!Array.isArray(args)) {
+        args = [args];
+    }
+    var command = 'git ' + args.join(' ');
     shelljs.exec(command, options, callback);
 };
 
