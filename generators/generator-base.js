@@ -1281,11 +1281,11 @@ Generator.prototype.getMainClassName = function () {
     return _.upperFirst(this.getAngularAppName());
 };
 
-Generator.prototype.askModuleName = function (generator, currentQuestion, totalQuestions) {
+Generator.prototype.askModuleName = function (generator) {
 
     var done = generator.async();
     var defaultAppBaseName = this.getDefaultAppName();
-    var getNumberedQuestion = this.getNumberedQuestion;
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
     generator.prompt({
         type: 'input',
         name: 'baseName',
@@ -1297,9 +1297,7 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
         },
         message: function (response) {
-            return getNumberedQuestion('What is the base name of your application?', currentQuestion, totalQuestions, function (current) {
-                currentQuestion = current;
-            }, true);
+            return getNumberedQuestion('What is the base name of your application?', true);
         },
         default: defaultAppBaseName
     }, function (prompt) {
@@ -1308,10 +1306,10 @@ Generator.prototype.askModuleName = function (generator, currentQuestion, totalQ
     }.bind(generator));
 };
 
-Generator.prototype.aski18n = function (generator, currentQuestion, totalQuestions) {
+Generator.prototype.aski18n = function (generator) {
 
     var languageOptions = this.getAllSupportedLanguageOptions();
-    var getNumberedQuestion = this.getNumberedQuestion;
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
 
     var done = generator.async();
     var prompts = [
@@ -1319,9 +1317,7 @@ Generator.prototype.aski18n = function (generator, currentQuestion, totalQuestio
             type: 'confirm',
             name: 'enableTranslation',
             message: function (response) {
-                return getNumberedQuestion('Would you like to enable internationalization support?', currentQuestion, totalQuestions, function (current) {
-                    currentQuestion = current;
-                }, true);
+                return getNumberedQuestion('Would you like to enable internationalization support?', true);
             },
             default: true
         },
@@ -1379,13 +1375,12 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
     }
 };
 
-Generator.prototype.getNumberedQuestion = function (msg, currentQuestion, totalQuestions, cb, cond) {
+Generator.prototype.getNumberedQuestion = function (msg, cond) {
     var order;
     if (cond) {
-        ++currentQuestion;
+        ++this.currentQuestion;
     }
-    order = '(' + currentQuestion + '/' + totalQuestions + ') ';
-    cb(currentQuestion);
+    order = '(' + this.currentQuestion + '/' + this.totalQuestions + ') ';
     return order + msg;
 };
 

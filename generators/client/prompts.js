@@ -10,23 +10,20 @@ function askForModuleName() {
 
     if (this.baseName) return;
 
-    this.askModuleName(this, this.currentQuestion++, this.totalQuestions);
+    this.askModuleName(this);
 }
 
 function askForClientSideOpts() {
     if (this.existingProject) return;
 
     var done = this.async();
-    var getNumberedQuestion = this.getNumberedQuestion;
-    var generator = this;
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
     var prompts = [
         {
             type: 'confirm',
             name: 'useSass',
             message: function (response) {
-                return getNumberedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, true);
+                return getNumberedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', true);
             },
             default: false
         }
@@ -40,5 +37,5 @@ function askForClientSideOpts() {
 function askFori18n() {
     if (this.existingProject || this.configOptions.skipI18nQuestion) return;
 
-    this.aski18n(this, this.currentQuestion++, this.totalQuestions);
+    this.aski18n(this);
 }

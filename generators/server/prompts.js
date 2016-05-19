@@ -13,7 +13,7 @@ module.exports = {
 function askForModuleName() {
     if (this.baseName) return;
 
-    this.askModuleName(this, this.currentQuestion++, this.totalQuestions);
+    this.askModuleName(this);
 
 }
 
@@ -21,9 +21,8 @@ function askForServerSideOpts() {
     if (this.existingProject) return;
 
     var done = this.async();
-    var getNumberedQuestion = this.getNumberedQuestion;
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
     var applicationType = this.applicationType;
-    var generator = this;
     var prompts = [
         {
             when: function (response) {
@@ -36,9 +35,7 @@ function askForServerSideOpts() {
                 return 'This is not a valid port number.';
             },
             message: function (response) {
-                return getNumberedQuestion('As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'gateway' || applicationType === 'microservice');
+                return getNumberedQuestion('As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.', applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa');
             },
             default: applicationType === 'gateway' ? '8080' : applicationType === 'uaa' ? '9999' : '8081'
         },
@@ -50,9 +47,7 @@ function askForServerSideOpts() {
                 return 'The package name you have provided is not a valid Java package name.';
             },
             message: function (response) {
-                return getNumberedQuestion('What is your default Java package name?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, true);
+                return getNumberedQuestion('What is your default Java package name?', true);
             },
             default: 'com.mycompany.myapp',
             store: true
@@ -64,9 +59,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'authenticationType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of authentication would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'monolith');
+                return getNumberedQuestion('Which *type* of authentication would you like to use?', applicationType === 'monolith');
             },
             choices: [
                 {
@@ -91,9 +84,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'authenticationType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of authentication would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'gateway' || applicationType === 'microservice');
+                return getNumberedQuestion('Which *type* of authentication would you like to use?', applicationType === 'gateway' || applicationType === 'microservice');
             },
             choices: [
                 {
@@ -114,9 +105,7 @@ function askForServerSideOpts() {
             type: 'input',
             name: 'uaaBaseName',
             message: function (response) {
-                return getNumberedQuestion('What is the folder path of your UAA application?.', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'gateway' && response.authenticationType === 'uaa');
+                return getNumberedQuestion('What is the folder path of your UAA application?.', applicationType === 'gateway' && response.authenticationType === 'uaa');
             },
             default: '../uaa',
             validate: function (input) {
@@ -136,9 +125,8 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'enableSocialSignIn',
             message: function (response) {
-                return getNumberedQuestion('Do you want to use social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt'));
+                return getNumberedQuestion('Do you want to use social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!',
+                    applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt'));
             },
             choices: [
                 {
@@ -159,9 +147,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', applicationType === 'microservice');
             },
             choices: [
                 {
@@ -190,9 +176,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.authenticationType === 'session-social');
+                return getNumberedQuestion('Which *type* of database would you like to use?', response.enableSocialSignIn);
             },
             choices: [
                 {
@@ -213,9 +197,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.authenticationType !== 'session-social' && applicationType !== 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
             },
             choices: [
                 {
@@ -236,9 +218,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.authenticationType !== 'session-social' && applicationType !== 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
             },
             choices: [
                 {
@@ -263,9 +243,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'prodDatabaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *production* database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.databaseType === 'sql');
+                return getNumberedQuestion('Which *production* database would you like to use?', response.databaseType === 'sql');
             },
             choices: [
                 {
@@ -294,9 +272,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'devDatabaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.databaseType === 'sql' && response.prodDatabaseType === 'mysql');
+                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mysql');
             },
             choices: [
                 {
@@ -321,9 +297,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'devDatabaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb');
+                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mariadb');
             },
             choices: [
                 {
@@ -348,9 +322,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'devDatabaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql');
+                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'postgresql');
             },
             choices: [
                 {
@@ -375,9 +347,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'devDatabaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *development* database would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.databaseType === 'sql' && response.prodDatabaseType === 'oracle');
+                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'oracle');
             },
             choices: [
                 {
@@ -402,9 +372,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'hibernateCache',
             message: function (response) {
-                return getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.databaseType === 'sql');
+                return getNumberedQuestion('Do you want to use Hibernate 2nd level cache?', response.databaseType === 'sql');
             },
             choices: [
                 {
@@ -429,9 +397,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'searchEngine',
             message: function (response) {
-                return getNumberedQuestion('Do you want to use a search engine in your application?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, response.databaseType === 'sql');
+                return getNumberedQuestion('Do you want to use a search engine in your application?', response.databaseType === 'sql');
             },
             choices: [
                 {
@@ -452,9 +418,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'clusteredHttpSession',
             message: function (response) {
-                return getNumberedQuestion('Do you want to use clustered HTTP sessions?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'monolith' || applicationType === 'gateway');
+                return getNumberedQuestion('Do you want to use clustered HTTP sessions?', applicationType === 'monolith' || applicationType === 'gateway');
             },
             choices: [
                 {
@@ -475,9 +439,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'websocket',
             message: function (response) {
-                return getNumberedQuestion('Do you want to use WebSockets?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, applicationType === 'monolith' || applicationType === 'gateway');
+                return getNumberedQuestion('Do you want to use WebSockets?', applicationType === 'monolith' || applicationType === 'gateway');
             },
             choices: [
                 {
@@ -495,9 +457,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'buildTool',
             message: function (response) {
-                return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                    generator.currentQuestion = current;
-                }, true);
+                return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', true);
             },
             choices: [
                 {
@@ -574,7 +534,7 @@ function askForServerSideOpts() {
 function askFori18n() {
     if (this.existingProject || this.configOptions.skipI18nQuestion) return;
 
-    this.aski18n(this, this.currentQuestion++, this.totalQuestions);
+    this.aski18n(this);
 }
 
 function getUaaAppName(input) {

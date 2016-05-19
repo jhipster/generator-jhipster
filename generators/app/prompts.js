@@ -36,16 +36,13 @@ function askForApplicationType() {
     if (this.existingProject) return;
 
     var done = this.async();
-    var getNumberedQuestion = this.getNumberedQuestion;
-    var generator = this;
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
 
     this.prompt({
         type: 'list',
         name: 'applicationType',
         message: function (response) {
-            return getNumberedQuestion('Which *type* of application would you like to create?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                generator.currentQuestion = current;
-            }, true);
+            return getNumberedQuestion('Which *type* of application would you like to create?', true);
         },
         choices: [
             {
@@ -75,7 +72,7 @@ function askForApplicationType() {
 function askForModuleName() {
     if (this.existingProject) return;
 
-    this.askModuleName(this, this.currentQuestion++, this.totalQuestions);
+    this.askModuleName(this);
     this.configOptions.lastQuestion = this.currentQuestion;
     this.configOptions.totalQuestions = this.totalQuestions;
 }
@@ -84,14 +81,13 @@ function askFori18n() {
     this.currentQuestion = this.configOptions.lastQuestion;
     this.totalQuestions = this.configOptions.totalQuestions;
     if (this.skipI18n || this.existingProject) return;
-    this.aski18n(this, this.currentQuestion++, this.totalQuestions);
+    this.aski18n(this);
 }
 
 function askForTestOpts() {
     if (this.existingProject) return;
 
-    var getNumberedQuestion = this.getNumberedQuestion;
-    var generator = this;
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
     var choices = [];
     if (!this.skipServer) {
         // all server side test frameworks should be addded here
@@ -112,9 +108,7 @@ function askForTestOpts() {
         type: 'checkbox',
         name: 'testFrameworks',
         message: function (response) {
-            return getNumberedQuestion('Which testing frameworks would you like to use?', generator.currentQuestion, generator.totalQuestions, function (current) {
-                generator.currentQuestion = current;
-            }, true);
+            return getNumberedQuestion('Which testing frameworks would you like to use?', true);
         },
         choices: choices,
         default: ['gatling']
