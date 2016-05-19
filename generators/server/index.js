@@ -1050,7 +1050,7 @@ module.exports = JhipsterServerGenerator.extend({
 
                 /* Skip the code below for --skip-user-management */
                 if (this.skipUserManagement) return;
-                if (this.applicationType !== 'microservice') {
+                if (this.applicationType !== 'microservice' && this.databaseType === 'cassandra') {
                     this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_create-tables.cql', this, {});
                     this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000001_insert_default_users.cql', this, {});
                 }
