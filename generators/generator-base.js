@@ -1068,6 +1068,29 @@ Generator.prototype.isJhipsterVersionLessThan = function (version) {
     return semver.lt(jhipsterVersion, version);
 };
 
+/**
+ * executes a git command using shellJS
+ * gitExec(args [, options ], callback)
+ *
+ * @param {string|array} args - can be an array of arguments or a string command
+ * @param {object} options[optional] - takes any of child process options
+ * @param {function} callback - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+ */
+Generator.prototype.gitExec = function (args, options, callback) {
+    callback = arguments[arguments.length - 1];
+    if (arguments.length < 3) {
+        options = {};
+    }
+    options.async = true;
+    options.silent = true;
+
+    if (!Array.isArray(args)) {
+        args = [args];
+    }
+    var command = 'git ' + args.join(' ');
+    shelljs.exec(command, options, callback);
+};
+
 /*========================================================================*/
 /* private methods use within generator (not exposed to modules)*/
 /*========================================================================*/
@@ -1432,27 +1455,6 @@ Generator.prototype.isGitInstalled = function (callback) {
         }
         callback && callback(code);
     }.bind(this));
-};
-
-/*
- * options is optional and takes any of child process options
- * gitExec(args [, options ], callback)
- * args can be an array of arguments
- * The call back will receive code, stdout and stderr
- */
-Generator.prototype.gitExec = function (args, options, callback) {
-    callback = arguments[arguments.length - 1];
-    if (arguments.length < 3) {
-        options = {};
-    }
-    options.async = true;
-    options.silent = true;
-
-    if (!Array.isArray(args)) {
-        args = [args];
-    }
-    var command = 'git ' + args.join(' ');
-    shelljs.exec(command, options, callback);
 };
 
 Generator.prototype.contains = _.includes;

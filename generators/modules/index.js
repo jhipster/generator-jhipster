@@ -111,6 +111,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.getModuleHooks = this.getModuleHooks;
         jhipsterFunc.getExistingEntities = this.getExistingEntities;
         jhipsterFunc.isJhipsterVersionLessThan = this.isJhipsterVersionLessThan;
+        jhipsterFunc.gitExec = this.gitExec;
 
     },
 
