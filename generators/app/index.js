@@ -89,11 +89,11 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('java -version', function (err, stdout, stderr) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computer.');
+                    this.warning('Java 8 is not found on your computer.');
                 } else {
                     var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                     if (!javaVersion.match(/1\.8/)) {
-                        this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computeur. Your Java version is: ' + chalk.yellow(javaVersion));
+                        this.warning('Java 8 is not found on your computeur. Your Java version is: ' + chalk.yellow(javaVersion));
                     }
                 }
                 done();
@@ -114,7 +114,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, function (error) {
                 if (error) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Failed to connect to "git://github.com"\n',
+                    this.warning('Failed to connect to "git://github.com"\n',
                         ' 1. Check your Internet connection.\n',
                         ' 2. If you are using an HTTP proxy, try this command: ' + chalk.yellow('git config --global url."https://".insteadOf git://')
                     );
@@ -128,7 +128,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('bower --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' bower is not found on your computer.\n',
+                    this.warning('bower is not found on your computer.\n',
                         ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
                     );
                 }
@@ -141,7 +141,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('gulp --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' gulp is not found on your computer.\n',
+                    this.warning('gulp is not found on your computer.\n',
                         ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
                     );
                 }
@@ -151,7 +151,7 @@ module.exports = JhipsterGenerator.extend({
 
         validate: function () {
             if (this.skipServer && this.skipClient) {
-                this.env.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
+                this.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
             }
         },
 

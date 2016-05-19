@@ -20,7 +20,7 @@ module.exports = ModulesGenerator.extend({
         var jhipsterVar = this.options.jhipsterVar;
         var jhipsterFunc = this.options.jhipsterFunc;
         if (jhipsterVar === undefined || jhipsterVar.moduleName === undefined) {
-            this.env.error(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
+            this.error(chalk.red('This sub-generator must be used by JHipster modules, and the module name is not defined.'));
         }
 
         this.log('Composing JHipster configuration with module ' + chalk.red(jhipsterVar.moduleName));
@@ -31,7 +31,7 @@ module.exports = ModulesGenerator.extend({
 
         if (!this.options.skipValidation && (baseName === undefined || packageName === undefined)) {
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
-            this.env.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
+            this.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
         }
         // add required Jhipster variables
         jhipsterVar.baseName = this.baseName = baseName;

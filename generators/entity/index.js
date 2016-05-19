@@ -138,40 +138,40 @@ module.exports = EntityGenerator.extend({
 
         validateDbExistence: function () {
             if(this.databaseType === 'no') {
-                this.env.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
+                this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
             }
         },
 
         validateEntityName: function () {
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
-                this.env.error(chalk.red('The entity name cannot contain special characters'));
+                this.error(chalk.red('The entity name cannot contain special characters'));
             } else if (this.name === '') {
-                this.env.error(chalk.red('The entity name cannot be empty'));
+                this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
-                this.env.error(chalk.red('The entity name cannot end with \'Detail\''));
+                this.error(chalk.red('The entity name cannot end with \'Detail\''));
             } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) !== -1) {
-                this.env.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
+                this.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
             }
         },
 
         validateTableName: function () {
             var prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
-                this.env.error(chalk.red('The table name cannot contain special characters'));
+                this.error(chalk.red('The table name cannot contain special characters'));
             } else if (this.entityTableName === '') {
-                this.env.error(chalk.red('The table name cannot be empty'));
+                this.error(chalk.red('The table name cannot be empty'));
             } else if (prodDatabaseType === 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.env.error(chalk.red('The table name cannot contain a MySQL reserved keyword'));
+                this.error(chalk.red('The table name cannot contain a MySQL reserved keyword'));
             } else if (prodDatabaseType === 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.env.error(chalk.red('The table name cannot contain a PostgreSQL reserved keyword'));
+                this.error(chalk.red('The table name cannot contain a PostgreSQL reserved keyword'));
             } else if (prodDatabaseType === 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.env.error(chalk.red('The table name cannot contain a Cassandra reserved keyword'));
+                this.error(chalk.red('The table name cannot contain a Cassandra reserved keyword'));
             } else if (prodDatabaseType === 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.env.error(chalk.red('The table name cannot contain a Oracle reserved keyword'));
+                this.error(chalk.red('The table name cannot contain a Oracle reserved keyword'));
             } else if (prodDatabaseType === 'oracle' && _.snakeCase(this.entityTableName).length > 26) {
-                this.env.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
+                this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
             } else if (prodDatabaseType === 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.env.error(chalk.red('The table name cannot contain a MongoDB reserved keyword'));
+                this.error(chalk.red('The table name cannot contain a MongoDB reserved keyword'));
             }
         },
 
@@ -224,7 +224,7 @@ module.exports = EntityGenerator.extend({
         if (this.applicationType === 'gateway' && this.useMicroserviceJson){
             this.microserviceName = this.fileData.microserviceName;
             if (!this.microserviceName) {
-                this.env.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
+                this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
             }
             this.skipServer = true;
             this.searchEngine = this.fileData.searchEngine || this.searchEngine;
@@ -255,43 +255,43 @@ module.exports = EntityGenerator.extend({
             for (var idx in this.fields) {
                 var field = this.fields[idx];
                 if (_.isUndefined(field.fieldName)) {
-                    this.env.error(chalk.red('ERROR fieldName is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                    this.error(chalk.red('fieldName is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                 }
 
                 if (_.isUndefined(field.fieldType)) {
-                    this.env.error(chalk.red('ERROR fieldType is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                    this.error(chalk.red('fieldType is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                 }
 
                 if (!_.isUndefined(field.fieldValidateRules)) {
                     if (!_.isArray(field.fieldValidateRules)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRules is not an array in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRules is not an array in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     for (var idxRules in field.fieldValidateRules) {
                         var fieldValidateRule = field.fieldValidateRules[idxRules];
                         if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
-                            this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4) + ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
+                            this.error(chalk.red('fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4) + ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
                         }
                     }
                     if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.includes(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.includes(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.includes(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.includes(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.includes(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.includes(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                        this.error(chalk.red('fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                 }
             }
@@ -301,32 +301,32 @@ module.exports = EntityGenerator.extend({
                 var relationship = this.relationships[idx];
                 if (_.isUndefined(relationship.relationshipName)) {
                     relationship.relationshipName = relationship.otherEntityName;
-                    this.log(chalk.yellow('WARNING relationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + relationship.otherEntityName + ' as fallback'));
+                    this.warning('relationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + relationship.otherEntityName + ' as fallback'));
                 }
 
                 if (_.isUndefined(relationship.otherEntityName)) {
-                    this.env.error(chalk.red('ERROR otherEntityName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
+                    this.error(chalk.red('otherEntityName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
 
                 if (_.isUndefined(relationship.otherEntityRelationshipName)
                     && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
                     relationship.otherEntityRelationshipName = _.lowerFirst(this.name);
-                    this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _.lowerFirst(this.name) + ' as fallback'));
+                    this.warning('otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _.lowerFirst(this.name) + ' as fallback'));
                 }
 
                 if (_.isUndefined(relationship.otherEntityField)
                     && (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true) || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))) {
-                    this.log(chalk.yellow('WARNING otherEntityField is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using id as fallback'));
+                    this.warning('otherEntityField is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using id as fallback'));
                     relationship.otherEntityField = 'id';
                 }
 
                 if (_.isUndefined(relationship.relationshipType)) {
-                    this.env.error(chalk.red('ERROR relationshipType is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
+                    this.error(chalk.red('relationshipType is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
 
                 if (_.isUndefined(relationship.ownerSide)
                     && (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')) {
-                    this.env.error(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
+                    this.error(chalk.red('ownerSide is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
             }
 
@@ -334,20 +334,20 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.changelogDate)
                 && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 var currentDate = this.dateFormatForLiquibase();
-                this.log(chalk.yellow('WARNING changelogDate is missing in .jhipster/' + this.name + '.json, using ' + currentDate + ' as fallback'));
+                this.warning('changelogDate is missing in .jhipster/' + this.name + '.json, using ' + currentDate + ' as fallback'));
                 this.changelogDate = currentDate;
             }
             if (_.isUndefined(this.dto)) {
-                this.log(chalk.yellow('WARNING dto is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+                this.warning('dto is missing in .jhipster/' + this.name + '.json, using no as fallback'));
                 this.dto = 'no';
             }
             if (_.isUndefined(this.service)) {
-                this.log(chalk.yellow('WARNING service is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+                this.warning('service is missing in .jhipster/' + this.name + '.json, using no as fallback'));
                 this.service = 'no';
             }
             if (_.isUndefined(this.pagination)) {
                 if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-                    this.log(chalk.yellow('WARNING pagination is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+                    this.warning('pagination is missing in .jhipster/' + this.name + '.json, using no as fallback'));
                     this.pagination = 'no';
                 } else {
                     this.pagination = 'no';

@@ -30,14 +30,14 @@ module.exports = DockerComposeGenerator.extend({
 
             shelljs.exec('docker -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
+                    this.warning('Docker version 1.10.0 or later is not installed on your computer.\n' +
                         '         Read http://docs.docker.com/engine/installation/#installation\n');
                 } else {
                     var dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
                     var dockerVersionMajor = dockerVersion.split('.')[0];
                     var dockerVersionMinor = dockerVersion.split('.')[1];
                     if ( dockerVersionMajor < 1 || ( dockerVersionMajor === 1 && dockerVersionMinor < 10 )) {
-                        this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
+                        this.warning('Docker version 1.10.0 or later is not installed on your computer.\n' +
                             '         Docker version found: ' + dockerVersion + '\n' +
                             '         Read http://docs.docker.com/engine/installation/#installation\n');
                     }
@@ -51,14 +51,14 @@ module.exports = DockerComposeGenerator.extend({
 
             shelljs.exec('docker-compose -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose 1.6.0 or later is not installed on your computer.\n' +
+                    this.warning('Docker Compose 1.6.0 or later is not installed on your computer.\n' +
                         '         Read https://docs.docker.com/compose/install/\n');
                 } else {
                     var composeVersion = stdout.split(' ')[2].replace(/,/g, '');
                     var composeVersionMajor = composeVersion.split('.')[0];
                     var composeVersionMinor = composeVersion.split('.')[1];
                     if ( composeVersionMajor < 1 || ( composeVersionMajor === 1 && composeVersionMinor < 6 )) {
-                        this.log(chalk.yellow.bold('WARNING!') + ' Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
+                        this.warning('Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
                             '         Docker Compose version found: ' + composeVersion + '\n' +
                             '         Read https://docs.docker.com/compose/install/\n');
                     }
@@ -93,7 +93,7 @@ module.exports = DockerComposeGenerator.extend({
 
         askForAdminPassword: prompts.askForAdminPassword
     },
-    
+
     configuring: {
         insight: function () {
             var insight = this.insight();
@@ -283,7 +283,8 @@ module.exports = DockerComposeGenerator.extend({
     },
     end: function() {
         if (this.warning) {
-            this.log('\n' + chalk.yellow.bold('WARNING!') + ' Docker Compose configuration generated with missing images!');
+            this.log('\n');
+            this.warning('Docker Compose configuration generated with missing images!');
             this.log(this.warningMessage);
         } else {
             this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));

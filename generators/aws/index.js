@@ -48,7 +48,7 @@ module.exports = AwsGenerator.extend({
                 this.dbEngine = 'postgres';
                 break;
             default:
-                this.env.error(chalk.red('Sorry deployment for this database is not possible'));
+                this.error(chalk.red('Sorry deployment for this database is not possible'));
             }
         }
     },
@@ -85,7 +85,7 @@ module.exports = AwsGenerator.extend({
 
             var child = this.buildApplication(this.buildTool, 'prod', function (err) {
                 if (err) {
-                    this.env.error(chalk.red(err));
+                    this.error(chalk.red(err));
                 } else {
                     cb();
                 }
@@ -104,7 +104,7 @@ module.exports = AwsGenerator.extend({
 
             s3.createBucket({bucket: this.bucketName}, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
@@ -125,7 +125,7 @@ module.exports = AwsGenerator.extend({
 
             s3.uploadWar(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.warKey = data.warKey;
                     this.log(data.message);
@@ -150,7 +150,7 @@ module.exports = AwsGenerator.extend({
 
             rds.createDatabase(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
@@ -175,7 +175,7 @@ module.exports = AwsGenerator.extend({
 
             rds.createDatabaseUrl(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.dbUrl = data.dbUrl;
                     this.log(data.message);
@@ -203,7 +203,7 @@ module.exports = AwsGenerator.extend({
 
             eb.createApplication(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
