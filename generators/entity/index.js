@@ -301,7 +301,7 @@ module.exports = EntityGenerator.extend({
                 var relationship = this.relationships[idx];
                 if (_.isUndefined(relationship.relationshipName)) {
                     relationship.relationshipName = relationship.otherEntityName;
-                    this.warning('relationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + relationship.otherEntityName + ' as fallback'));
+                    this.warning('relationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + relationship.otherEntityName + ' as fallback');
                 }
 
                 if (_.isUndefined(relationship.otherEntityName)) {
@@ -311,12 +311,12 @@ module.exports = EntityGenerator.extend({
                 if (_.isUndefined(relationship.otherEntityRelationshipName)
                     && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
                     relationship.otherEntityRelationshipName = _.lowerFirst(this.name);
-                    this.warning('otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _.lowerFirst(this.name) + ' as fallback'));
+                    this.warning('otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _.lowerFirst(this.name) + ' as fallback');
                 }
 
                 if (_.isUndefined(relationship.otherEntityField)
                     && (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === true) || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))) {
-                    this.warning('otherEntityField is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using id as fallback'));
+                    this.warning('otherEntityField is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using id as fallback');
                     relationship.otherEntityField = 'id';
                 }
 
@@ -334,20 +334,20 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.changelogDate)
                 && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 var currentDate = this.dateFormatForLiquibase();
-                this.warning('changelogDate is missing in .jhipster/' + this.name + '.json, using ' + currentDate + ' as fallback'));
+                this.warning('changelogDate is missing in .jhipster/' + this.name + '.json, using ' + currentDate + ' as fallback');
                 this.changelogDate = currentDate;
             }
             if (_.isUndefined(this.dto)) {
-                this.warning('dto is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+                this.warning('dto is missing in .jhipster/' + this.name + '.json, using no as fallback');
                 this.dto = 'no';
             }
             if (_.isUndefined(this.service)) {
-                this.warning('service is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+                this.warning('service is missing in .jhipster/' + this.name + '.json, using no as fallback');
                 this.service = 'no';
             }
             if (_.isUndefined(this.pagination)) {
                 if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-                    this.warning('pagination is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+                    this.warning('pagination is missing in .jhipster/' + this.name + '.json, using no as fallback');
                     this.pagination = 'no';
                 } else {
                     this.pagination = 'no';
