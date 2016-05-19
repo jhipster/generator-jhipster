@@ -1,4 +1,3 @@
-        vm.loadAll = loadAll;
         vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
@@ -13,7 +12,8 @@
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        vm.loadAll();
+
+        loadAll();
 
         function loadAll () {
         <%_ if (searchEngine != 'elasticsearch') { _%>

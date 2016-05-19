@@ -9,7 +9,18 @@
 
     function <%= entityAngularJSName %>DialogController ($timeout, $scope, $stateParams, $uibModalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
         var vm = this;
-        vm.<%= entityInstance %> = entity;<%
+
+        vm.<%= entityInstance %> = entity;
+        vm.clear = clear;
+        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+        vm.datePickerOpenStatus = {};
+        vm.openCalendar = openCalendar;
+        <%_ } _%>
+        <%_ if (fieldsContainBlob) { _%>
+        vm.byteSize = DataUtils.byteSize;
+        vm.openFile = DataUtils.openFile;
+        <%_ } _%>
+        vm.save = save;<%
             var queries = [];
             for (idx in relationships) {
                 var query;
@@ -40,32 +51,29 @@
             angular.element('.form-group:eq(1)>input').focus();
         });
 
-        var onSaveSuccess = function (result) {
-            $scope.$emit('<%=angularAppName%>:<%= entityInstance %>Update', result);
-            $uibModalInstance.close(result);
-            vm.isSaving = false;
-        };
+        function clear () {
+            $uibModalInstance.dismiss('cancel');
+        }
 
-        var onSaveError = function () {
-            vm.isSaving = false;
-        };
-
-        vm.save = function () {
+        function save () {
             vm.isSaving = true;
             if (vm.<%= entityInstance %>.id !== null) {
                 <%= entityClass %>.update(vm.<%= entityInstance %>, onSaveSuccess, onSaveError);
             } else {
                 <%= entityClass %>.save(vm.<%= entityInstance %>, onSaveSuccess, onSaveError);
             }
-        };
+        }
 
-        vm.clear = function() {
-            $uibModalInstance.dismiss('cancel');
-        };
-        <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+        function onSaveSuccess (result) {
+            $scope.$emit('<%=angularAppName%>:<%= entityInstance %>Update', result);
+            $uibModalInstance.close(result);
+            vm.isSaving = false;
+        }
 
-        vm.datePickerOpenStatus = {};
-        <%_ } _%>
+        function onSaveError () {
+            vm.isSaving = false;
+        }
+
         <%_ for (idx in fields) {
             if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
         vm.datePickerOpenStatus.<%= fields[idx].fieldName %> = false;
@@ -87,16 +95,11 @@
             }
         };
         <%_ } } _%>
-        <%_ if (fieldsContainBlob) { _%>
 
-        vm.openFile = DataUtils.openFile;
-        vm.byteSize = DataUtils.byteSize;
-        <%_ } _%>
         <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-
-        vm.openCalendar = function(date) {
+        function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
-        };
+        }
         <%_ } _%>
     }
 })();
