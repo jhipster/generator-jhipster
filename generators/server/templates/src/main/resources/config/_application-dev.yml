@@ -67,7 +67,7 @@ spring:
     <%_ } _%>
     jpa:
         <%_ if (devDatabaseType == 'mysql') { _%>
-        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (devDatabaseType == 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
