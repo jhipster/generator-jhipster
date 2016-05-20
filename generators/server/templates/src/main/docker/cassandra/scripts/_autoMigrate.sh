@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Orchestrate the automatic execution of all the cql migration scripts when starting the cluster
-# for local development
 
 # Protect from iterating on empty directories
 shopt -s nullglob
@@ -15,6 +14,7 @@ function logDebug {
 }
 
 function waitForClusterConnection() {
+    log "waiting for cassandra connection..."
     retryCount=0
     maxRetry=20
     cqlsh -e "Describe KEYSPACES;" $CASSANDRA_CONTACT_POINT &>/dev/null
@@ -45,8 +45,8 @@ if [ "$#" -eq 1 ]; then
     SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     EXECUTE_CQL_SCRIPT=$SCRIPT_DIR'/execute-cql.sh'
 else
-    log "create keyspace and base tables"
-    . ./usr/local/bin/init-dev
+    log "use $CREATE_KEYSPACE_SCRIPT script to create keyspace if necessary"
+    cqlsh -f /cql/$CREATE_KEYSPACE_SCRIPT $CASSANDRA_CONTACT_POINT
 fi
 
 function executeScripts() {
@@ -57,7 +57,7 @@ function executeScripts() {
     done
 }
 
-log "executed all non already executed scripts from $CQL_FILES_PATH"
+log "execute all non already executed scripts from $CQL_FILES_PATH"
 executeScripts "$CQL_FILES_PATH*.cql"
 
 log "migration done"

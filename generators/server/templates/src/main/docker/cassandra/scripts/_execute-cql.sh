@@ -91,7 +91,7 @@ function isExecuted {
 }
 
 function executeCqlScript {
-    log "execute: " $cqlFile
+    log "execute: $cqlFile"
     cqlsh -k $KEYSPACE_NAME -f $cqlFile $CASSANDRA_CONTACT_POINT
 
     # if execution failed
@@ -99,6 +99,7 @@ function executeCqlScript {
         exitWithError "fail to apply script $filename
         stop applying database changes"
     fi
+    logDebug "execution of $cqlFile succeeded"
 }
 
 function logExecutedScript {

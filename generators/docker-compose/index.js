@@ -199,33 +199,44 @@ module.exports = DockerComposeGenerator.extend({
                 if (database !== 'no') {
                     var relativePath = '';
                     var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
-                    var databaseYamlConfig = databaseYaml.services[lowercaseBaseName + '-' + database];
+                    var databaseServiceName = lowercaseBaseName + '-' + database;
+                    var databaseYamlConfig = databaseYaml.services[databaseServiceName];
                     delete databaseYamlConfig.ports;
 
                     if (database === 'cassandra') {
-                        var cassandraDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var cassandraConfig = cassandraDbYaml.services[lowercaseBaseName + '-' + database];
-                        cassandraConfig.build.context = relativePath;
-                        var cassandraNodeConfig = cassandraDbYaml.services[lowercaseBaseName + '-' + database + '-node'];
-                        databaseYamlConfig = cassandraDbYaml.services[lowercaseBaseName + '-' + database];
-                        delete databaseYamlConfig.ports;
-                        parentConfiguration[lowercaseBaseName + '-' + database + '-node'] = cassandraNodeConfig;
+
+                        // node config
+                        var cassandraClusterYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-cluster.yml'));
+                        var cassandraNodeConfig = cassandraClusterYaml.services[databaseServiceName + '-node'];
+                        parentConfiguration[databaseServiceName + '-node'] = cassandraNodeConfig;
+
+                        // migration service config
+                        var cassandraMigrationYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-migration.yml'));
+                        var cassandraMigrationConfig = cassandraMigrationYaml.services[databaseServiceName + '-migration'];
+                        cassandraMigrationConfig.build.context = relativePath;
+                        var createKeyspaceScript = cassandraClusterYaml.services[databaseServiceName + '-migration'].environment[0];
+                        cassandraMigrationConfig.environment.push(createKeyspaceScript);
+                        cassandraMigrationConfig['links'] = cassandraClusterYaml.services[databaseServiceName + '-migration'].links;
+                        var cqlFilesRelativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/resources/config/cql');
+                        cassandraMigrationConfig['volumes'][0] = cqlFilesRelativePath + ':/cql:ro';
+
+                        parentConfiguration[databaseServiceName + '-migration'] = cassandraMigrationConfig;
                     }
 
                     if (appConfig.clusteredDb) {
                         var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var mongodbNodeConfig = clusterDbYaml.services[lowercaseBaseName + '-' + database + '-node'];
-                        var mongoDbConfigSrvConfig = clusterDbYaml.services[lowercaseBaseName + '-' + database + '-config'];
+                        var mongodbNodeConfig = clusterDbYaml.services[databaseServiceName + '-node'];
+                        var mongoDbConfigSrvConfig = clusterDbYaml.services[databaseServiceName + '-config'];
                         mongodbNodeConfig.build.context = relativePath;
-                        databaseYamlConfig = clusterDbYaml.services[lowercaseBaseName + '-' + database];
+                        databaseYamlConfig = clusterDbYaml.services[databaseServiceName];
                         delete databaseYamlConfig.ports;
-                        parentConfiguration[lowercaseBaseName + '-' + database + '-node'] = mongodbNodeConfig;
-                        parentConfiguration[lowercaseBaseName + '-' + database + '-config'] = mongoDbConfigSrvConfig;
+                        parentConfiguration[databaseServiceName + '-node'] = mongodbNodeConfig;
+                        parentConfiguration[databaseServiceName + '-config'] = mongoDbConfigSrvConfig;
                     }
 
-                    parentConfiguration[lowercaseBaseName + '-' + database] = databaseYamlConfig;
+                    parentConfiguration[databaseServiceName] = databaseYamlConfig;
                 }
                 // Add search engine configuration
                 var searchEngine = appConfig.searchEngine;

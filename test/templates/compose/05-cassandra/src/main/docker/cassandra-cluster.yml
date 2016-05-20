@@ -21,3 +21,11 @@ services:
             - mscassandra-cassandra:seed
         environment:
             - CASSANDRA_SEEDS=seed
+    mscassandra-cassandra-migration:
+        extends:
+            file: cassandra-migration.yml
+            service: mscassandra-cassandra-migration
+        links:
+            - mscassandra-cassandra
+        environment:
+            - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
