@@ -3,7 +3,7 @@ services:
 <%_ for(var i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
 <%_ } _%>
-<%_ if (gatewayNb > 0) { _%>
+<%_ if (gatewayNb + microserviceNb > 0) { _%>
     jhipster-registry:
         extends:
             file: jhipster-registry.yml
