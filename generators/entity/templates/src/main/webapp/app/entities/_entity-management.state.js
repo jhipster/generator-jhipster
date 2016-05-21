@@ -82,7 +82,7 @@
                     return $translate.refresh();
                 }],<% } %>
                 entity: ['$stateParams', '<%= entityClass %>', function($stateParams, <%= entityClass %>) {
-                    return <%= entityClass %>.get({id : $stateParams.id});
+                    return <%= entityClass %>.get({id : $stateParams.id}).$promise;
                 }]
             }
         })
@@ -138,7 +138,7 @@
                     size: 'lg',
                     resolve: {
                         entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                            return <%= entityClass %>.get({id : $stateParams.id});
+                            return <%= entityClass %>.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
@@ -162,7 +162,7 @@
                     size: 'md',
                     resolve: {
                         entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                            return <%= entityClass %>.get({id : $stateParams.id});
+                            return <%= entityClass %>.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
