@@ -123,9 +123,11 @@ spring:
     thymeleaf:
         cache: true
 
+<%_ if (databaseType === 'sql') { _%>
 liquibase:
     contexts: prod
 
+<%_ } _%>
 server:
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
     port: <%= serverPort %>
