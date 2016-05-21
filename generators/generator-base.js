@@ -1317,7 +1317,11 @@ Generator.prototype.aski18n = function (generator) {
             type: 'confirm',
             name: 'enableTranslation',
             message: function (response) {
-                return getNumberedQuestion('Would you like to enable internationalization support?', true);
+                if ( generator.applicationType === 'microservice' || generator.applicationType === 'uaa' ) {
+                    return getNumberedQuestion('Would you like to enable internationalization support?', true, 2);
+                } else {
+                    return getNumberedQuestion('Would you like to enable internationalization support?', true);
+                }
             },
             default: true
         },
@@ -1375,10 +1379,14 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
     }
 };
 
-Generator.prototype.getNumberedQuestion = function (msg, cond) {
+Generator.prototype.getNumberedQuestion = function (msg, cond, value) {
     var order;
     if (cond) {
-        ++this.currentQuestion;
+        if (value) {
+            this.currentQuestion = this.currentQuestion + value;
+        } else {
+            ++this.currentQuestion;
+        }
     }
     order = '(' + this.currentQuestion + '/' + this.totalQuestions + ') ';
     return order + msg;
