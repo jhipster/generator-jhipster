@@ -105,7 +105,7 @@ function askForServerSideOpts() {
             type: 'input',
             name: 'uaaBaseName',
             message: function (response) {
-                return getNumberedQuestion('What is the folder path of your UAA application?.', applicationType === 'gateway' && response.authenticationType === 'uaa');
+                return getNumberedQuestion('What is the folder path of your UAA application?', false);
             },
             default: '../uaa',
             validate: function (input) {
@@ -197,7 +197,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice', 2);
             },
             choices: [
                 {
@@ -218,7 +218,11 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
+                if ( applicationType !== 'uaa' ) {
+                    return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
+                } else {
+                    return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice', 2);
+                }
             },
             choices: [
                 {
@@ -418,7 +422,11 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'clusteredHttpSession',
             message: function (response) {
-                return getNumberedQuestion('Do you want to use clustered HTTP sessions?', applicationType === 'monolith' || applicationType === 'gateway');
+                if ( response.databaseType === 'sql' ) {
+                    return getNumberedQuestion('Do you want to use clustered HTTP sessions?', applicationType === 'monolith' || applicationType === 'gateway');
+                } else {
+                    return getNumberedQuestion('Do you want to use clustered HTTP sessions?', applicationType === 'monolith' || applicationType === 'gateway', 5);
+                }
             },
             choices: [
                 {
@@ -457,7 +465,13 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'buildTool',
             message: function (response) {
-                return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', true);
+                if ( applicationType !== 'microservice' && applicationType !== 'uaa' ) {
+                    return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', true);
+                } else if ( response.databaseType === 'sql' ) {
+                    return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', true, 3);
+                } else {
+                    return getNumberedQuestion('Would you like to use Maven or Gradle for building the backend?', true, 7);
+                }
             },
             choices: [
                 {
