@@ -129,7 +129,7 @@ describe('JDLRelationship', function () {
         });
       });
       describe('because the type is invalid', function () {
-        it('returns false', function() {
+        it('returns false', function () {
           expect(
               JDLRelationship.isValid({
                 from: {name: 'Valid2', tableName: 't_valid2', fields: []},
@@ -141,7 +141,7 @@ describe('JDLRelationship', function () {
         });
       });
       describe('because it lacks an injected field', function () {
-        it('returns false', function() {
+        it('returns false', function () {
           expect(
               JDLRelationship.isValid({
                 from: {name: 'Valid2', tableName: 't_valid2', fields: []},
@@ -152,8 +152,8 @@ describe('JDLRelationship', function () {
         });
       });
     });
-    describe('when passing a valid object', function() {
-      it('returns true', function() {
+    describe('when passing a valid object', function () {
+      it('returns true', function () {
         expect(
             JDLRelationship.isValid({
               from: {name: 'Valid2', tableName: 't_valid2', fields: []},
@@ -166,6 +166,114 @@ describe('JDLRelationship', function () {
     });
   });
   describe('#toString', function () {
-
+    describe('without any comment', function () {
+      it('stringifies the relationship', function () {
+        var relationship = new JDLRelationship({
+          from: new JDLEntity({name: 'A'}),
+          to: new JDLEntity({name: 'B'}),
+          type: RelationshipTypes.OneToOne,
+          injectedFieldInFrom: 'b'
+        });
+        expect(relationship.toString()).to.eq(
+            `relationship ${relationship.type} {
+  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
+}`
+        );
+      });
+    });
+    describe('with comments for both sides', function () {
+      it('stringifies the relationship', function () {
+        var relationship = new JDLRelationship({
+          from: new JDLEntity({name: 'A'}),
+          to: new JDLEntity({name: 'B'}),
+          type: RelationshipTypes.OneToOne,
+          injectedFieldInFrom: 'b',
+          commentInFrom: 'Some comment.',
+          commentInTo: 'Some other comment.'
+        });
+        expect(relationship.toString()).to.eq(
+            `relationship ${relationship.type} {
+  /**
+   * ${relationship.commentInFrom}
+   */
+  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to
+  /**
+   * ${relationship.commentInTo}
+   */
+  ${relationship.to.name}
+}`
+        );
+      });
+    });
+    describe('with a comment for the source side', function () {
+      it('stringifies the relationship', function () {
+        var relationship = new JDLRelationship({
+          from: new JDLEntity({name: 'A'}),
+          to: new JDLEntity({name: 'B'}),
+          type: RelationshipTypes.OneToOne,
+          injectedFieldInFrom: 'b',
+          commentInFrom: 'Some comment.'
+        });
+        expect(relationship.toString()).to.eq(
+            `relationship ${relationship.type} {
+  /**
+   * ${relationship.commentInFrom}
+   */
+  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
+}`
+        );
+      });
+    });
+    describe('with a comment for the destination side', function () {
+      it('stringifies the relationship', function () {
+        var relationship = new JDLRelationship({
+          from: new JDLEntity({name: 'A'}),
+          to: new JDLEntity({name: 'B'}),
+          type: RelationshipTypes.OneToOne,
+          injectedFieldInFrom: 'b',
+          commentInTo: 'Some other comment.'
+        });
+        expect(relationship.toString()).to.eq(
+            `relationship ${relationship.type} {
+  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to
+  /**
+   * ${relationship.commentInTo}
+   */
+  ${relationship.to.name}
+}`
+        );
+      });
+    });
+    describe('with only one injected field', function () {
+      it('stringifies the relationship', function () {
+        var relationship = new JDLRelationship({
+          from: new JDLEntity({name: 'A'}),
+          to: new JDLEntity({name: 'B'}),
+          type: RelationshipTypes.OneToOne,
+          injectedFieldInFrom: 'b'
+        });
+        expect(relationship.toString()).to.eq(
+            `relationship ${relationship.type} {
+  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
+}`
+        );
+      });
+    });
+    describe('with both injected fields', function () {
+      it('stringifies the relationship', function () {
+        var relationship = new JDLRelationship({
+          from: new JDLEntity({name: 'A'}),
+          to: new JDLEntity({name: 'B'}),
+          type: RelationshipTypes.OneToOne,
+          injectedFieldInFrom: 'b',
+          injectedFieldInTo: 'a(id)'
+        });
+        expect(relationship.toString()).to.eq(
+            `relationship ${relationship.type} {
+  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}{${relationship.injectedFieldInTo}}
+}`
+        );
+      });
+    });
   });
 });
