@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Properties;
 
 /**
- * Utility class to load a spring profile to be used as default
+ * Utility class to load a Spring profile to be used as default
  * when there is no <code>spring.profiles.active</code> set in the environment or as command line argument.
  * If the value is not available in <code>application.yml</code> then <code>dev</code> profile will be used as default.
  */
