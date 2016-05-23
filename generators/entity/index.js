@@ -432,7 +432,7 @@ module.exports = EntityGenerator.extend({
                 var fieldType = field.fieldType;
 
                 var nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], fieldType);
+                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'], fieldType);
                 if ((this.databaseType === 'sql' || this.databaseType === 'mongodb') && !nonEnumType) {
                     field.fieldIsEnum = true;
                 } else {
