@@ -25,7 +25,7 @@ public final class DefaultProfileUtil {
     private static final Properties BUILD_PROPERTIES = readProperties();
 
     /**
-     * get a default profile from application.yml
+     * Get a default profile from <code>application.yml</code>.
      */
     public static String getDefaultActiveProfiles(){
         if (BUILD_PROPERTIES != null) {
@@ -41,19 +41,19 @@ public final class DefaultProfileUtil {
     }
 
     /**
-     * set a default to use when no profile is configured.
+     * Set a default to use when no profile is configured.
      */
     public static void addDefaultProfile(SpringApplication app) {
         /*
         * The default profile to use when no other profiles are defined
-        * This cannot be set in the `application.yml` file.
+        * This cannot be set in the <code>application.yml</code> file.
         * See https://github.com/spring-projects/spring-boot/issues/1219
         */
         app.setDefaultProperties(Collections.singletonMap(SPRING_PROFILE_ACTIVE, getDefaultActiveProfiles()));
     }
 
     /**
-     * load application.yml from classpath
+     * Load application.yml from classpath.
      */
     private static Properties readProperties() {
         try {

@@ -1252,7 +1252,7 @@ Generator.prototype.printJHipsterLogo = function () {
     );
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
     if (this.checkInstall) this.checkForNewVersion();
-    this.log(chalk.white('Welcome to the JHipster Generator test') + chalk.yellow('v' + packagejs.version));
+    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
     this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
 };
 
