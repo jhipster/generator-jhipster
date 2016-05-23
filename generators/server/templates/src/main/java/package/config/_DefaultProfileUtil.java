@@ -6,8 +6,7 @@ import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.io.ClassPathResource;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 import java.util.Properties;
 
 /**
@@ -45,14 +44,12 @@ public final class DefaultProfileUtil {
      * set a default to use when no profile is configured.
      */
     public static void addDefaultProfile(SpringApplication app) {
-        Map<String, Object> defProperties =  new HashMap<>();
         /*
         * The default profile to use when no other profiles are defined
         * This cannot be set in the `application.yml` file.
         * See https://github.com/spring-projects/spring-boot/issues/1219
         */
-        defProperties.put(SPRING_PROFILE_ACTIVE, getDefaultActiveProfiles());
-        app.setDefaultProperties(defProperties);
+        app.setDefaultProperties(Collections.singletonMap(SPRING_PROFILE_ACTIVE, getDefaultActiveProfiles()));
     }
 
     /**
