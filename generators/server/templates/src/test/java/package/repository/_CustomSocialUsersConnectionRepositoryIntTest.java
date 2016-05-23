@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = <%= mainClass %>.class)
 @WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'sql') { %>
+@IntegrationTest<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class CustomSocialUsersConnectionRepositoryIntTest {
 
@@ -278,8 +278,8 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
     public void addConnectionDuplicate() {
         Connection<TestFacebookApi> connection = connectionFactory.createConnection(new AccessGrant("123456789", null, "987654321", 3600L));
         connectionRepository.addConnection(connection);
-        connectionRepository.addConnection(connection);
-        socialUserConnectionRepository.flush();    
+        connectionRepository.addConnection(connection);<% if (databaseType === 'sql') { %>
+        socialUserConnectionRepository.flush();<% } %>
     }
 
     @Test
