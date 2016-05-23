@@ -115,6 +115,9 @@
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
+        <!-- These remain empty unless the corresponding profile is active -->
+        <profile.no-liquibase></profile.no-liquibase>
+        <profile.no-swagger></profile.no-swagger>
     </properties>
 
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
@@ -974,9 +977,6 @@
                     Enable the line below to have remote debugging of your application on port 5005
                     <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
                     -->
-                    <arguments>
-                        <argument>--spring.profiles.active=dev</argument>
-                    </arguments>
                 </configuration>
             </plugin>
             <plugin>
@@ -1058,6 +1058,18 @@
 
     <profiles>
         <profile>
+            <id>no-liquibase</id>
+            <properties>
+                <profile.no-liquibase>,no-liquibase</profile.no-liquibase>
+            </properties>
+        </profile>
+        <profile>
+            <id>no-swagger</id>
+            <properties>
+                <profile.no-swagger>,no-swagger</profile.no-swagger>
+            </properties>
+        </profile>
+        <profile>
             <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -1089,7 +1101,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev</spring.profiles.active>
+                <spring.profiles.active>dev${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1189,9 +1201,6 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <executable>true</executable>
-                            <arguments>
-                                <argument>--spring.profiles.active=prod</argument>
-                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -1200,7 +1209,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod</spring.profiles.active>
+                <spring.profiles.active>prod${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
             </properties>
         </profile>
     </profiles>
