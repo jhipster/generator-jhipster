@@ -13,7 +13,7 @@
     <artifactId><%= dasherizedBaseName %></artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name><%= baseName %></name>
+    <name><%= humanizedBaseName %></name>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
 
     <repositories>
