@@ -265,7 +265,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.camelizedBaseName = _.camelCase(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
-            this.humanizedBaseName = _.capitalize(_.trim(_.snakeCase(this.baseName).replace(/_id$/, '').replace(/_/g, ' ')));
+            this.humanizedBaseName = _.startCase(this.baseName);
             this.mainClass = this.getMainClassName();
 
             if (this.prodDatabaseType === 'oracle') {
