@@ -1,9 +1,9 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "travisDefaultFromScratch",
-    "packageName": "com.mycompany.myapp",
-    "packageFolder": "com/mycompany/myapp",
+    "baseName": "JhipsterSampleApplication",
+    "packageName": "io.github.jhipster.demo",
+    "packageFolder": "io/github/jhipster/demo",
     "authenticationType": "session",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",

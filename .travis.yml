@@ -46,6 +46,7 @@ script:
   - $JHIPSTER_SCRIPTS/03-docker-compose.sh
   - $JHIPSTER_SCRIPTS/04-tests.sh
   - $JHIPSTER_SCRIPTS/05-run.sh
+  - $JHIPSTER_SCRIPTS/06-sonar.sh
 notifications:
   webhooks:
     urls:
