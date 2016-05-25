@@ -5,6 +5,8 @@
         .module('<%=angularAppName%>')
         .directive('pageRibbon', pageRibbon);
 
+    pageRibbon.$inject = ['ProfileService', '$rootScope'<% if (enableTranslation) { %>, '$translate'<% } %>];
+
     function pageRibbon(ProfileService, $rootScope<% if (enableTranslation) { %>, $translate<% } %>) {
         var directive = {
             replace : true,
