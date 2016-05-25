@@ -1,9 +1,9 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "JhipsterSampleApplication",
-    "packageName": "io.github.jhipster.demo",
-    "packageFolder": "io/github/jhipster/demo",
+    "baseName": "jhipsterSampleApplication",
+    "packageName": "io.github.jhipster.sample",
+    "packageFolder": "io/github/jhipster/sample",
     "authenticationType": "session",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
