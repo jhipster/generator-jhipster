@@ -6,7 +6,7 @@
   "dependencies": {
     "angular": "1.5.5",
     "angular-aria": "1.5.5",
-    "angular-bootstrap": "1.2.5",
+    "angular-bootstrap": "1.3.3",
     "angular-cache-buster": "0.4.3",
     "angular-cookies": "1.5.5",
     <%_ if (enableTranslation) { _%>
