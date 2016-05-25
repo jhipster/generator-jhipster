@@ -30,16 +30,16 @@ module.exports = DockerComposeGenerator.extend({
 
             shelljs.exec('docker -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.warning('Docker version 1.10.0 or later is not installed on your computer.\n' +
-                        '         Read http://docs.docker.com/engine/installation/#installation\n');
+                    this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
+                        '         Read http://docs.docker.com/engine/installation/#installation\n'));
                 } else {
                     var dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
                     var dockerVersionMajor = dockerVersion.split('.')[0];
                     var dockerVersionMinor = dockerVersion.split('.')[1];
                     if ( dockerVersionMajor < 1 || ( dockerVersionMajor === 1 && dockerVersionMinor < 10 )) {
-                        this.warning('Docker version 1.10.0 or later is not installed on your computer.\n' +
+                        this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
                             '         Docker version found: ' + dockerVersion + '\n' +
-                            '         Read http://docs.docker.com/engine/installation/#installation\n');
+                            '         Read http://docs.docker.com/engine/installation/#installation\n'));
                     }
                 }
                 done();
@@ -51,16 +51,16 @@ module.exports = DockerComposeGenerator.extend({
 
             shelljs.exec('docker-compose -v', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.warning('Docker Compose 1.6.0 or later is not installed on your computer.\n' +
-                        '         Read https://docs.docker.com/compose/install/\n');
+                    this.log(chalk.red('Docker Compose 1.6.0 or later is not installed on your computer.\n' +
+                        '         Read https://docs.docker.com/compose/install/\n'));
                 } else {
                     var composeVersion = stdout.split(' ')[2].replace(/,/g, '');
                     var composeVersionMajor = composeVersion.split('.')[0];
                     var composeVersionMinor = composeVersion.split('.')[1];
                     if ( composeVersionMajor < 1 || ( composeVersionMajor === 1 && composeVersionMinor < 6 )) {
-                        this.warning('Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
+                        this.log(chalk.red('Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
                             '         Docker Compose version found: ' + composeVersion + '\n' +
-                            '         Read https://docs.docker.com/compose/install/\n');
+                            '         Read https://docs.docker.com/compose/install/\n'));
                     }
                 }
                 done();
@@ -106,10 +106,11 @@ module.exports = DockerComposeGenerator.extend({
 
             var imagePath = '';
             var runCommand = '';
-            this.warningMessage = 'To generate Docker image, please run:\n';
+            this.warning = false;
+            this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
             this.appsFolders.forEach(function (appsFolder, index) {
                 var appConfig = this.appConfigs[index];
-                if(appConfig.buildTool === 'maven') {
+                if (appConfig.buildTool === 'maven') {
                     imagePath = this.destinationPath(this.directoryPath + appsFolder + '/target/docker/' + _.kebabCase(appConfig.baseName) + '-*.war');
                     runCommand = './mvnw package -Pprod docker:build';
                 } else {
@@ -295,8 +296,8 @@ module.exports = DockerComposeGenerator.extend({
     end: function() {
         if (this.warning) {
             this.log('\n');
-            this.warning('Docker Compose configuration generated with missing images!');
-            this.log(this.warningMessage);
+            this.log(chalk.red('Docker Compose configuration generated with missing images!'));
+            this.log(chalk.red(this.warningMessage));
         } else {
             this.log('\n' + chalk.bold.green('Docker Compose configuration successfully generated!'));
         }
