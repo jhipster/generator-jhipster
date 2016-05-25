@@ -37,7 +37,7 @@
     "ng-file-upload": "12.0.4",
     "ngInfiniteScroll": "1.2.2",
     <%_ if (websocket == 'spring-websocket') { _%>
-    "sockjs-client": "1.0.3",
+    "sockjs-client": "1.1.1",
     "stomp-websocket": "2.3.4",
     <%_ } _%>
     "swagger-ui": "2.1.4"
@@ -48,7 +48,7 @@
   "overrides": {
     "angular" : {
       "dependencies": {
-        "jquery": "2.2.2"
+        "jquery": "2.2.4"
       }
     },
     "angular-cache-buster" : {
