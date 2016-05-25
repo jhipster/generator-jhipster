@@ -51,6 +51,8 @@ services:
             <%_ if (applicationType == 'gateway' || prodDatabaseType == 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
             - JHIPSTER_SLEEP=30 # gives time for the cassandra cluster to start and execute the migration scripts
+            <%_ } else { _%>
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
             <%_ } _%>
             <%_ if (searchEngine == 'elasticsearch') { _%>
             - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
