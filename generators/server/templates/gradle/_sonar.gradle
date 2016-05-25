@@ -10,9 +10,3 @@ jacocoTestReport {
         xml.enabled true
     }
 }
-
-sonarqube {
-    properties {
-        toolVersion = '2.4'
-    }
-}
