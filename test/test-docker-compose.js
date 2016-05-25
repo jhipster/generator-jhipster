@@ -13,8 +13,8 @@ const expectedFiles = {
         'central-server-config/application.yml'
     ],
     elk : [
-        'elk.yml',
-        'log-monitoring/log-config/logstash.conf'
+        'jhipster-console.yml',
+        'log-conf/logstash.conf'
     ]
 };
 
