@@ -4,19 +4,19 @@
   "appPath": "<%= MAIN_SRC_DIR %>",
   "testPath": "<%= TEST_SRC_DIR %>spec",
   "dependencies": {
-    "angular": "1.5.2",
-    "angular-aria": "1.5.2",
+    "angular": "1.5.5",
+    "angular-aria": "1.5.5",
     "angular-bootstrap": "1.2.5",
     "angular-cache-buster": "0.4.3",
-    "angular-cookies": "1.5.2",
+    "angular-cookies": "1.5.5",
     <%_ if (enableTranslation) { _%>
     "angular-dynamic-locale": "0.1.30",
-    "angular-i18n": "1.5.2",
+    "angular-i18n": "1.5.5",
     <%_ } _%>
     "ngstorage": "0.3.10",
     "angular-loading-bar": "0.9.0",
-    "angular-resource": "1.5.2",
-    "angular-sanitize": "1.5.2",
+    "angular-resource": "1.5.5",
+    "angular-sanitize": "1.5.5",
     <%_ if (enableTranslation) { _%>
     "angular-translate": "2.11.0",
     "angular-translate-interpolation-messageformat": "2.11.0",
@@ -43,7 +43,7 @@
     "swagger-ui": "2.1.4"
   },
   "devDependencies": {
-    "angular-mocks": "1.5.2"
+    "angular-mocks": "1.5.5"
   },
   "overrides": {
     "angular" : {
@@ -53,13 +53,13 @@
     },
     "angular-cache-buster" : {
       "dependencies": {
-        "angular": "1.5.2"
+        "angular": "1.5.5"
       }
     },
     <%_ if (enableTranslation) { _%>
     "angular-dynamic-locale" : {
       "dependencies": {
-        "angular": "1.5.2"
+        "angular": "1.5.5"
       }
     },
     <%_ } if (useSass) { _%>
@@ -77,8 +77,8 @@
     <%_ } _%>
   },
   "resolutions": {
-    "angular": "1.5.2",
-    "angular-cookies": "1.5.2",
+    "angular": "1.5.5",
+    "angular-cookies": "1.5.5",
     "angular-bootstrap": "1.2.5",
     "jquery": "2.2.2"
   }
