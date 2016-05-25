@@ -10,7 +10,7 @@
     "angular-cache-buster": "0.4.3",
     "angular-cookies": "1.5.5",
     <%_ if (enableTranslation) { _%>
-    "angular-dynamic-locale": "0.1.30",
+    "angular-dynamic-locale": "0.1.32",
     "angular-i18n": "1.5.5",
     <%_ } _%>
     "ngstorage": "0.3.10",
@@ -23,7 +23,7 @@
     "angular-translate-loader-partial": "2.11.0",
     "angular-translate-storage-cookie": "2.11.0",
     <%_ } _%>
-    "angular-ui-router": "0.2.18",
+    "angular-ui-router": "0.3.0",
     <%_ if (useSass) { _%>
     "bootstrap-sass": "3.3.6",
     <%_ } else { _%>
