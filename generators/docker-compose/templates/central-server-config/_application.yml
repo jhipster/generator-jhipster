@@ -12,7 +12,7 @@ jhipster:
     logging:
         logstash: # forward logs to ELK
             enabled: true
-            host: elk-logstash
+            host: jhipster-logstash
     metrics:
         logs: # report metrics in the logs
             enabled: true
