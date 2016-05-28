@@ -8,7 +8,7 @@
     AuditsService.$inject = ['$resource'];
 
     function AuditsService ($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName %>/api/audits/:id'<%} else { %>'management/jhipster/audits/:id'<% } %>, {}, {
+        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/audits/:id'<%} else { %>'management/jhipster/audits/:id'<% } %>, {}, {
             'get': {
                 method: 'GET',
                 isArray: true
