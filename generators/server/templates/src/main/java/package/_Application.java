@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-<%_ } _%><%_ if (applicationType === 'microservice' && authenticationType === 'uaa') _%>
+<%_ } _%><%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
@@ -36,7 +36,7 @@ import java.util.Collection;
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 @EnableEurekaClient
 <%_ } _%>
-<%_ if (applicationType === 'microservice' && authenticationType === 'uaa') _%>
+<%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 @EnableFeignClients
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>

@@ -615,7 +615,7 @@
             <artifactId>spring-retry</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') _%>
+        <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
