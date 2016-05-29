@@ -125,5 +125,22 @@ package <%=packageName%>.config;
 
           return converter;
       }
+
+      @Bean
+      public OAuth2ProtectedResourceDetails geOAuth2ProtectedResourceDetails() {
+          ClientCredentialsResourceDetails resource = new ClientCredentialsResourceDetails();
+
+          resource.setAccessTokenUri(jHipsterProperties.getSecurity().getClientAuthorization().getTokenUrl());
+          resource.setGrantType("client_credentials");
+          resource.setClientId(jHipsterProperties.getSecurity().getClientAuthorization().getClientId());
+          resource.setClientSecret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret());
+
+          return resource;
+      }
+
+      @Bean
+      public RequestInterceptor getOAuth2RequestInterceptor() throws IOException {
+          return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), geOAuth2ProtectedResourceDetails());
+      }
   }
 <% } %>
