@@ -83,7 +83,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         /*
-        @TODO this should be done by a ClientDetailsService (similar to UserDetailsService) with an consumable resource
+        for a better client design, this should be done by a ClientDetailsService (similar to UserDetailsService)
          */
         clients.inMemory()
             .withClient("web_app")
@@ -92,8 +92,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
             .and()
-            .withClient("internal")
-            .secret("internal") //only for testing!!! @TODO config or details service..
+            .withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
+            .secret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())
+            .scopes("web-app")
             .autoApprove(true)
             .authorizedGrantTypes("client_credentials");
     }

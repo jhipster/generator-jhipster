@@ -228,21 +228,35 @@ public class JHipsterProperties {
 
         private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+
+        <%_ if(applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+
+        private final ClientAuthorization clientAuthorization = new ClientAuthorization();
+
+        <%_ } _%>
+
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 
         private final Authentication authentication = new Authentication();
         <%_ } _%>
-        <%_ if (authenticationType == 'session') { _%>
+        <%_ if (authenticationType === 'session') { _%>
 
         public RememberMe getRememberMe() {
             return rememberMe;
         }
         <%_ } _%>
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         public Authentication getAuthentication() {
             return authentication;
         }
+
+        <%_ if(applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+        public ClientAuthorization getClientAuthorization() {
+            return clientAuthorization;
+        }
+
+        <%_ } _ %>
 
         public static class Authentication {
 
@@ -335,6 +349,41 @@ public class JHipsterProperties {
             <%_ } _%>
         }
         <%_ } _%>
+
+        <%_ if(applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+        public static class ClientAuthorization {
+
+            private String clientId;
+
+            private String clientSecret;
+
+            private String tokenUrl;
+
+            public String getClientId() {
+                return clientId;
+            }
+
+            public void setClientId(String clientId) {
+                this.clientId = clientId;
+            }
+
+            public String getClientSecret() {
+                return clientSecret;
+            }
+
+            public void setClientSecret(String clientSecret) {
+                this.clientSecret = clientSecret;
+            }
+
+            public String getTokenUrl() {
+                return tokenUrl;
+            }
+
+            public void setTokenUrl(String tokenUrl) {
+                this.tokenUrl = tokenUrl;
+            }
+        }
+
         <%_ if (authenticationType == 'session') { _%>
         public static class RememberMe {
 
@@ -636,7 +685,7 @@ public class JHipsterProperties {
         private final SpectatorMetrics spectatorMetrics = new SpectatorMetrics();
 
         public SpectatorMetrics getSpectatorMetrics() { return spectatorMetrics; }
-        
+
         public static class SpectatorMetrics {
 
             private boolean enabled = false;
@@ -711,10 +760,10 @@ public class JHipsterProperties {
         public String[] getDisplayOnActiveProfiles() {
             return displayOnActiveProfiles;
         }
-        
+
         public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
             this.displayOnActiveProfiles = displayOnActiveProfiles;
         }
-    }  
+    }
 
 }
