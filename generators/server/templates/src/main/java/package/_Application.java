@@ -14,6 +14,8 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+<%_ } _%><%_ if (applicationType === 'microservice' && authenticationType === 'uaa') _%>
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -33,6 +35,9 @@ import java.util.Collection;
 @EnableConfigurationProperties({ JHipsterProperties.class<% if (databaseType == 'sql') { %>, LiquibaseProperties.class<% } %> })
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 @EnableEurekaClient
+<%_ } _%>
+<%_ if (applicationType === 'microservice' && authenticationType === 'uaa') _%>
+@EnableFeignClients
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
 @EnableZuulProxy
