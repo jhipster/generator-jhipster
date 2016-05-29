@@ -41,7 +41,7 @@
             };
 
             return $http({
-                url: '<%= uaaBaseName %>/oauth/token',
+                url: '<%= uaaBaseName.toLowerCase() %>/oauth/token',
                 method: 'post',
                 data: data,
                 headers: headers,
