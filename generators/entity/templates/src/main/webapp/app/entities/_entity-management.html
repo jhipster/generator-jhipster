@@ -152,12 +152,12 @@
     </div>
     <%_ if (pagination == 'pager') { _%>
     <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount"></jhi-item-count>
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
     </div>
     <uib-pager total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
     <%_ } else if (pagination == 'pagination') { _%>
     <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount"></jhi-item-count>
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
         <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
     <%_ } _%>
