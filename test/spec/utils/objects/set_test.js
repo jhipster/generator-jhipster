@@ -5,8 +5,16 @@ const expect = require('chai').expect,
 
 describe('Set', function () {
   describe('::new()', function () {
-    it('creates a new Set', function () {
-      new Set();
+    describe('with no arg', function() {
+      it('creates a new Set', function () {
+        new Set();
+      });
+    });
+    describe('with an array', function() {
+      it("creates a Set with the array's elements", function() {
+        var set = new Set([1,2,3,4]);
+        expect(set.size()).to.eq(4);
+      });
     });
   });
   describe('::add', function () {
