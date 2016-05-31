@@ -8,7 +8,7 @@ const expect = require('chai').expect,
     JDLRelationships = require('../../../lib/core/jdl_relationships');
 
 describe('JDLRelationships', function () {
-  describe('::add', function () {
+  describe('#add', function () {
     describe('when passing an invalid relationship', function () {
       describe('because it is nil', function () {
         it('fails', function () {
@@ -64,7 +64,7 @@ describe('JDLRelationships', function () {
       });
     });
   });
-  describe('::toString', function () {
+  describe('#toString', function () {
     describe('when having one relationship per type', function () {
       it('uses the standard string form', function () {
         var relationships = new JDLRelationships();
