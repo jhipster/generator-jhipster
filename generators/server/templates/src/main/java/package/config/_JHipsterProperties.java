@@ -359,6 +359,8 @@ public class JHipsterProperties {
 
             private String tokenUrl;
 
+            private String tokenServiceId;
+
             public String getClientId() {
                 return clientId;
             }
@@ -381,6 +383,14 @@ public class JHipsterProperties {
 
             public void setTokenUrl(String tokenUrl) {
                 this.tokenUrl = tokenUrl;
+            }
+
+            public String getTokenServiceId() {
+                return tokenServiceId;
+            }
+
+            public void setTokenServiceId(String tokenServiceId) {
+                this.tokenServiceId = tokenServiceId;
             }
         }
 
