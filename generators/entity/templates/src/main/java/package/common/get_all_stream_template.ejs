@@ -1,16 +1,28 @@
-<%
-var mapper = entityInstance  + 'Mapper';
-var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
-for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+<%  var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    var mapper = entityInstance  + 'Mapper';
+    var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+    var entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs';
+    for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
-            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (viaService) { %>
-            return <% if (pagination != 'no') { %>new ResponseEntity<>(<% } %><%= entityInstance %>Service.findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull()<% if (pagination != 'no') { %>,
-                    HttpStatus.OK)<% } %>;<% } else { %>
-            return <% if (pagination != 'no') { %>new ResponseEntity<>(<% } %>StreamSupport
-                .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
-                .map(<%= entityToDtoReference %>)<% } if (pagination != 'no') { %>
-                .collect(Collectors.toList()), HttpStatus.OK);<% } else { if (dto == 'mapstruct') { %>
-                .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
-                .collect(Collectors.toList());<% }} %><% } %>
+            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");
+        <%_ if (viaService) { _%>
+            List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Service.findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
+        <%_ } else { _%>
+            List<<%= instanceType %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll().stream()
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)
+            <%_ if (dto == 'mapstruct') { _%>
+                .map(<%= entityToDtoReference %>)
+            <%_ } _%>
+            <%_ if (dto == 'mapstruct' && pagination == 'no') { _%>
+                .collect(Collectors.toCollection(LinkedList::new));
+            <%_ } else { _%>
+                .collect(Collectors.toList());
+            <%_ } _%>
+        <%_ } _%>
+        <%_ var results = (dto == 'mapstruct' && viaService) ? (entityListToDtoListReference + '(' + entityInstancePlural + ')') : entityInstancePlural; _%>
+        <%_ if (pagination == 'no') { _%>
+            return <%= results %>;
+        <%_ } else { _%>
+            return ResponseEntity.ok().body(<%= results %>);
+        <%_ } _%>
         }<% } } %>
