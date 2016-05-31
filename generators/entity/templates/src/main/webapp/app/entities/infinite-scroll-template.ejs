@@ -9,6 +9,7 @@
         vm.reverse = true;
         <%_ if (searchEngine == 'elasticsearch') { _%>
         vm.clear = clear;
+        vm.loadAll = loadAll;
         vm.search = search;
         <%_ } _%>
         <%_ if (fieldsContainBlob) { _%>
