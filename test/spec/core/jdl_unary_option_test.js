@@ -114,6 +114,14 @@ describe('JDLUnaryOption', function () {
         expect(option.entityNames.size()).to.eq(1);
       });
     });
+    describe('when passing an excluded entity', function() {
+      it('returns false', function() {
+        var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
+        option.addEntity(new JDLEntity({name: 'A'}));
+        var result = option.excludeEntity(new JDLEntity({name: 'A'}));
+        expect(result).to.be.false;
+      });
+    });
   });
   describe('#excludeEntity', function () {
     describe('when passing a nil entity', function () {
@@ -153,7 +161,25 @@ describe('JDLUnaryOption', function () {
         expect(option.excludedNames.size()).to.eq(1);
       });
     });
+    describe('when passing an added entity', function() {
+      it('returns false', function() {
+        var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
+        option.excludeEntity(new JDLEntity({name: 'A'}));
+        var result = option.addEntity(new JDLEntity({name: 'A'}));
+        expect(result).to.be.false;
+      });
+    });
   });
   describe('#toString', function () {
+    it('stringifies the option', function() {
+      var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
+      option.addEntity(new JDLEntity({name: 'D'}));
+      option.addEntity(new JDLEntity({name: 'E'}));
+      option.addEntity(new JDLEntity({name: 'F'}));
+      option.excludeEntity(new JDLEntity({name: 'A'}));
+      option.excludeEntity(new JDLEntity({name: 'B'}));
+      option.excludeEntity(new JDLEntity({name: 'C'}));
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D, E, F except A, B, C`);
+    });
   });
 });
