@@ -3,8 +3,8 @@
 const expect = require('chai').expect,
     fail = expect.fail,
     JDLEntity = require('../../../lib/core/jdl_entity'),
-    JDLRelationship = require('../../../lib/core/jdl_relationship').JDLRelationship,
-    RelationshipTypes = require('../../../lib/core/jdl_relationship').RelationshipTypes,
+    JDLRelationship = require('../../../lib/core/jdl_relationship'),
+    RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
     JDLRelationships = require('../../../lib/core/jdl_relationships');
 
 describe('JDLRelationships', function () {
@@ -48,7 +48,7 @@ describe('JDLRelationships', function () {
             name: 'Abc2'
           }),
           injectedFieldInFrom: 'something',
-          type: RelationshipTypes.OneToOne
+          type: RELATIONSHIP_TYPES.ONE_TO_ONE
         }));
         relationships.add(new JDLRelationship({
           from: new JDLEntity({
@@ -58,7 +58,7 @@ describe('JDLRelationships', function () {
             name: 'Abc3'
           }),
           injectedFieldInFrom: 'somethingElse',
-          type: RelationshipTypes.OneToOne
+          type: RELATIONSHIP_TYPES.ONE_TO_ONE
         }));
         expect(relationships.relationships.OneToOne.length).to.eq(2);
       });
@@ -76,7 +76,7 @@ describe('JDLRelationships', function () {
             name: 'Abc2'
           }),
           injectedFieldInFrom: 'something',
-          type: RelationshipTypes.OneToOne
+          type: RELATIONSHIP_TYPES.ONE_TO_ONE
         });
         var otm = new JDLRelationship({
           from: new JDLEntity({
@@ -86,7 +86,7 @@ describe('JDLRelationships', function () {
             name: 'Abc2'
           }),
           injectedFieldInTo: 'somethingElse',
-          type: RelationshipTypes.OneToMany
+          type: RELATIONSHIP_TYPES.ONE_TO_MANY
         });
         relationships.add(oto);
         relationships.add(otm);
@@ -109,7 +109,7 @@ relationship ${otm.type} {
             name: 'Abc2'
           }),
           injectedFieldInFrom: 'something',
-          type: RelationshipTypes.OneToOne
+          type: RELATIONSHIP_TYPES.ONE_TO_ONE
         });
         var oto2 = new JDLRelationship({
           from: new JDLEntity({
@@ -119,7 +119,7 @@ relationship ${otm.type} {
             name: 'Abc3'
           }),
           injectedFieldInTo: 'somethingElse',
-          type: RelationshipTypes.OneToOne
+          type: RELATIONSHIP_TYPES.ONE_TO_ONE
         });
         relationships.add(oto1);
         relationships.add(oto2);
