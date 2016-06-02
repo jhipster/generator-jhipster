@@ -32,14 +32,17 @@ launchProtractor() {
 #-------------------------------------------------------------------------------
 cd "$HOME"/app
 if [ "$RUN_APP" == 1 ]; then
-  if [ "$JHIPSTER" != "app-gradle" ]; then
+  if [ -f "mvnw" ]; then
     ./mvnw package -DskipTests=true -P"$PROFILE"
     mv target/*.war target/app.war
     java -jar target/app.war --spring.profiles.active="$PROFILE" &
-  else
+  elif [ -f "gradlew" ]; then
     ./gradlew bootRepackage -P"$PROFILE" -x test
     mv build/libs/*.war build/libs/app.war
     java -jar build/libs/app.war --spring.profiles.active="$PROFILE" &
+  else
+    echo "No mvnw or gradlew"
+    exit 0
   fi
   sleep 20
   #-------------------------------------------------------------------------------

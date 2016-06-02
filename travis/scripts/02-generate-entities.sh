@@ -131,8 +131,8 @@ generateEntity TestOneToOne
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" != "app-gradle" ]; then
+if [ -f "mvnw" ]; then
   ./mvnw javadoc:javadoc
-else
+elif [ -f "gradlew" ]; then
   ./gradlew javadoc
 fi
