@@ -111,7 +111,20 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.getModuleHooks = this.getModuleHooks;
         jhipsterFunc.getExistingEntities = this.getExistingEntities;
         jhipsterFunc.isJhipsterVersionLessThan = this.isJhipsterVersionLessThan;
-        jhipsterFunc.gitExec = this.gitExec;
+        jhipsterFunc.getTableName = this.getTableName;
+        jhipsterFunc.getColumnName = this.getColumnName;
+        jhipsterFunc.getPluralColumnName = this.getPluralColumnName;
+        jhipsterFunc.error = this.error;
+        jhipsterFunc.warning = this.warning;
+        jhipsterFunc.printJHipsterLogo = this.printJHipsterLogo;
+        jhipsterFunc.checkForNewVersion = this.checkForNewVersion;
+        jhipsterFunc.getAngularAppName = this.getAngularAppName;
+        jhipsterFunc.getMainClassName = this.getMainClassName;
+        jhipsterFunc.askModuleName = this.askModuleName;
+        jhipsterFunc.aski18n = this.aski18n;
+        jhipsterFunc.composeLanguagesSub = this.composeLanguagesSub;
+        jhipsterFunc.getNumberedQuestion = this.getNumberedQuestion;
+        jhipsterFunc.buildApplication = this.buildApplication;
 
     },
 
