@@ -71,6 +71,8 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.2.1",
+    "typescript ": "1.8.10",
+    "typings ": "1.0.4",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.16",
     <%_ } _%>
