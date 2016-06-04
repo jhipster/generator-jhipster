@@ -7,7 +7,8 @@ module.exports = {
     askForApplicationType,
     askForModuleName,
     askFori18n,
-    askForTestOpts
+    askForTestOpts,
+    askForClient
 };
 
 function askForInsightOptIn() {
@@ -122,6 +123,35 @@ function askForTestOpts() {
         default: defaultChoice
     }, function (prompt) {
         this.testFrameworks = prompt.testFrameworks;
+        done();
+    }.bind(this));
+}
+
+function askForClient() {
+    if (this.existingProject) return;
+
+    var done = this.async();
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+
+    this.prompt({
+        type: 'list',
+        name: 'clientType',
+        message: function (response) {
+            return getNumberedQuestion('Would you like to use AngularJS 2 for the client side?', true);
+        },
+        choices: [
+            {
+                value: 'angular',
+                name: 'No! I`ll use AngularJS 1'
+            },
+            {
+                value: 'angular2',
+                name: 'Yes! I`ll use AngularJS 2 (Please note that this is still in beta)'
+            }
+        ],
+        default: 'angular'
+    }, function (prompt) {
+        this.clientType = this.configOptions.clientType = prompt.clientType;
         done();
     }.bind(this));
 }
