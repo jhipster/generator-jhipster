@@ -178,6 +178,8 @@ module.exports = JhipsterGenerator.extend({
 
         askForApplicationType: prompts.askForApplicationType,
 
+        askForClient: prompts.askForClient,
+
         askForModuleName: prompts.askForModuleName
     },
 
