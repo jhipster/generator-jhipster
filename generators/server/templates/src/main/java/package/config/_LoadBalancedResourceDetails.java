@@ -1,5 +1,7 @@
 package <%=packageName%>.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
@@ -11,6 +13,8 @@ import java.net.URISyntaxException;
 
 @Component
 public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetails {
+    
+    Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public LoadBalancedResourceDetails(JHipsterProperties jHipsterProperties) {
@@ -46,7 +50,7 @@ public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetail
 
                 return newUrl;
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                log.error("{}: {}", e.getClass().toString(), e.getMessage());
 
                 return super.getAccessTokenUri();
             }
