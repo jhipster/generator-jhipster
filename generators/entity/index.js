@@ -384,6 +384,10 @@ module.exports = EntityGenerator.extend({
                 this.data.microserviceName = this.baseName;
                 this.data.searchEngine = this.searchEngine;
             }
+            if (this.applicationType === 'gateway' && this.useMicroserviceJson){
+                this.data.microserviceName = this.microserviceName;
+                this.data.searchEngine = this.searchEngine;
+            }
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
