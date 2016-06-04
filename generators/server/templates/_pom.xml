@@ -799,7 +799,7 @@
                         <id>default-resources</id>
                         <phase>validate</phase>
                         <goals>
-                            <goal>resources</goal>
+                            <goal>copy-resources</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>target/classes</outputDirectory>
