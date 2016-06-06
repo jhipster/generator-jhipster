@@ -28,7 +28,8 @@ var gulp = require('gulp'),<% if(useSass) { %>
     naturalSort = require('gulp-natural-sort'),
     bowerFiles = require('main-bower-files'),
     typescript = require('gulp-typescript'),
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
+    tslint = require('gulp-tslint');
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
@@ -256,6 +257,13 @@ gulp.task('eslint:fix', function () {
         }))
         .pipe(eslint.format())
         .pipe(gulpIf(util.isLintFixed, gulp.dest(config.app + 'app')));
+});
+
+// check app for any tslint errors
+gulp.task('tslint', function() {
+  return gulp.src('app/**/*.ts')
+    .pipe(tslint())
+    .pipe(tslint.report('verbose'));
 });
 
 gulp.task('test', ['inject:test', 'ngconstant:dev'], function (done) {
