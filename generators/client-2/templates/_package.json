@@ -47,7 +47,8 @@
     "gulp-sass": "2.3.1",
     <%_ } _%>
     "gulp-sourcemaps": "1.6.0",
-    "gulp-typescript": "2.13.6",
+    "gulp-tslint": "^2.0.0",
+    "gulp-typescript": "^2.13.6",
     "gulp-uglify": "1.5.3",
     "gulp-useref": "3.1.0",
     "jasmine-core": "2.4.1",
