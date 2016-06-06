@@ -1,0 +1,11 @@
+{
+  "globalDependencies": {
+    "angular": "registry:dt/angular#1.5.0+20160602160139",
+    "angular-animate": "registry:dt/angular-animate#1.5.0+20160407085121",
+    "angular-mocks": "registry:dt/angular-mocks#1.3.0+20160425155016",
+    "angular-resource": "registry:dt/angular-resource#1.5.0+20160602125522",
+    "angular-route": "registry:dt/angular-route#1.3.0+20160317120654",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160505161446",
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236"
+  }
+}
