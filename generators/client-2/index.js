@@ -279,6 +279,8 @@ module.exports = JhipsterClientGenerator.extend({
 
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
+            this.template('tsconfig.json', 'tsconfig.json', this, {});
+            this.template('typings.json', 'typings.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
             this.template('_eslintrc.json', '.eslintrc.json', this, {});
             this.template('_eslintignore', '.eslintignore', this, {});
