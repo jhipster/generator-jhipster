@@ -207,7 +207,7 @@ gulp.task('ngconstant:dev', function () {
         template: config.constantTemplate,
         stream: true
     })
-    .pipe(rename('app.constants.js'))
+    .pipe(rename('app.constants.ts'))
     .pipe(gulp.dest(config.app + 'app/'));
 });
 
@@ -221,7 +221,7 @@ gulp.task('ngconstant:prod', function () {
         template: config.constantTemplate,
         stream: true
     })
-    .pipe(rename('app.constants.js'))
+    .pipe(rename('app.constants.ts'))
     .pipe(gulp.dest(config.app + 'app/'));
 });
 
