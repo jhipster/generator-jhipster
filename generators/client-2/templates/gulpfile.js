@@ -163,7 +163,7 @@ gulp.task('tscompile', ['clean'], function(cb){
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.app));
+        .pipe(gulp.dest(config.app  + 'app'));
 });
 
 gulp.task('inject:app', function () {
