@@ -279,7 +279,7 @@ module.exports = JhipsterClientGenerator.extend({
 
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
-            this.template('tsconfig.json', 'tsconfig.json', this, {});
+            this.template('_tsconfig.json', 'tsconfig.json', this, {});
             this.template('typings.json', 'typings.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
             this.template('_eslintrc.json', '.eslintrc.json', this, {});
@@ -322,8 +322,10 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularAppFiles: function () {
             this.copyHtml(MAIN_SRC_DIR + '_index.html', MAIN_SRC_DIR + 'index.html');
+            this.copy(MAIN_SRC_DIR + 'system.config.ts', MAIN_SRC_DIR + 'system.config.ts');
 
             // Angular JS module
+            this.template(ANGULAR_DIR + '_app.main.ts', ANGULAR_DIR + 'app.main.ts', this, {});
             this.template(ANGULAR_DIR + '_app.module.ts', ANGULAR_DIR + 'app.module.ts', this, {});
             this.template(ANGULAR_DIR + '_app.state.ts', ANGULAR_DIR + 'app.state.ts', this, {});
             this.template(ANGULAR_DIR + '_app.constants.ts', ANGULAR_DIR + 'app.constants.ts', this, {});
@@ -600,7 +602,6 @@ module.exports = JhipsterClientGenerator.extend({
                 );
             } else {
                 this.spawnCommand('gulp', ['install']);
-                this.spawnCommand('npm', ['run typings install']);
             }
         };
         if (!this.options['skip-install']) {
