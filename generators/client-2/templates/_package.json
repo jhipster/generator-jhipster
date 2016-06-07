@@ -101,7 +101,7 @@
   },
   "scripts": {
     "test": "gulp test",
-    "postinstall": "typings install<% if (testFrameworks.indexOf('protractor') > -1) { %> && webdriver-manager update<% } %>",
+    "postinstall": "tsc && typings install<% if (testFrameworks.indexOf('protractor') > -1) { %> && webdriver-manager update<% } %>",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings"
