@@ -7,6 +7,21 @@
     "node_modules",
     "<%= MAIN_SRC_DIR %>bower_components"
   ],
+  "dependencies": {
+    "@angular/common": "2.0.0-rc.1",
+    "@angular/compiler": "2.0.0-rc.1",
+    "@angular/core": "2.0.0-rc.1",
+    "@angular/http": "2.0.0-rc.1",
+    "@angular/platform-browser": "2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "2.0.0-rc.1",
+    "@angular/router": "2.0.0-rc.1",
+    "core-js": "^2.4.0",
+    "hammerjs": "^2.0.8",
+    "rxjs": "5.0.0-beta.6",
+    "systemjs": "^0.19.26",
+    "zone.js": "^0.6.12",
+    "angular2": "^2.0.0"
+  },
   "devDependencies": {
     "bower": "1.7.9",
     "browser-sync": "2.12.10",
@@ -47,6 +62,8 @@
     "gulp-sass": "2.3.1",
     <%_ } _%>
     "gulp-sourcemaps": "1.6.0",
+    "gulp-tslint": "^2.0.0",
+    "gulp-typescript": "^2.13.6",
     "gulp-uglify": "1.5.3",
     "gulp-useref": "3.1.0",
     "jasmine-core": "2.4.1",

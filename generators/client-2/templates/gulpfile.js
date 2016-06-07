@@ -26,12 +26,16 @@ var gulp = require('gulp'),<% if(useSass) { %>
     inject = require('gulp-inject'),
     angularFilesort = require('gulp-angular-filesort'),
     naturalSort = require('gulp-natural-sort'),
-    bowerFiles = require('main-bower-files');
+    bowerFiles = require('main-bower-files'),
+    typescript = require('gulp-typescript'),
+    sourcemaps = require('gulp-sourcemaps'),
+    tslint = require('gulp-tslint');
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
-    build = require('./gulp/build');
+    build = require('./gulp/build'),
+    tscConfig = require('./tsconfig.json');
 
 <%_ if(enableTranslation) { _%>
 var yorc = require('./.yo-rc.json')['generator-jhipster'];
@@ -127,8 +131,18 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('inject', ['inject:dep', 'inject:app']);
+
+gulp.task('inject', ['tscompile','inject:dep', 'inject:app']);
 gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
+
+    
+gulp.task('tscompile', ['clean'], function(cb){
+     return gulp
+    .src(config.app+'app/**/*.ts').pipe(sourcemaps.init())
+    .pipe(typescript(tscConfig.compilerOptions))
+    .pipe(sourcemaps.write('.'));
+});
+
 
 gulp.task('inject:app', function () {
     return gulp.src(config.app + 'index.html')
@@ -243,6 +257,13 @@ gulp.task('eslint:fix', function () {
         }))
         .pipe(eslint.format())
         .pipe(gulpIf(util.isLintFixed, gulp.dest(config.app + 'app')));
+});
+
+// check app for any tslint errors
+gulp.task('tslint', function() {
+  return gulp.src('app/**/*.ts')
+    .pipe(tslint())
+    .pipe(tslint.report('verbose'));
 });
 
 gulp.task('test', ['inject:test', 'ngconstant:dev'], function (done) {
