@@ -3,7 +3,8 @@
 const expect = require('chai').expect,
     fail = expect.fail,
     JDLField = require('../../../lib/core/jdl_field'),
-    JDLValidation = require('../../../lib/core/jdl_validation');
+    JDLValidation = require('../../../lib/core/jdl_validation'),
+    VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 
 describe('JDLField', function () {
   describe('::new', function () {
@@ -49,40 +50,76 @@ describe('JDLField', function () {
       });
     });
   });
-  describe('::isValid', function() {
-    describe('when checking the validity of an invalid object', function() {
-      describe('because it is nil or undefined', function() {
-        it('returns false', function() {
+  describe('::isValid', function () {
+    describe('when checking the validity of an invalid object', function () {
+      describe('because it is nil or undefined', function () {
+        it('returns false', function () {
           expect(JDLField.isValid(null)).to.be.false;
           expect(JDLField.isValid(undefined)).to.be.false;
         });
       });
-      describe('without a name attribute', function() {
-        it('returns false', function() {
+      describe('without a name attribute', function () {
+        it('returns false', function () {
           expect(JDLField.isValid({type: 'String'})).to.be.false;
         });
       });
-      describe('without a type attribute', function() {
-        it('returns false', function() {
+      describe('without a type attribute', function () {
+        it('returns false', function () {
           expect(JDLField.isValid({name: 'myField'})).to.be.false;
         });
       });
-      describe('because its validations are invalid', function() {
-        it('returns false', function() {
+      describe('because its validations are invalid', function () {
+        it('returns false', function () {
           expect(
               JDLField.isValid({
                 name: 'myField',
                 type: 'String',
                 validations: [{
                   value: 42
-                }]})
+                }]
+              })
           ).to.be.false;
         });
       });
     });
-    describe('when checking the validity of a valid object', function() {
-      it('returns true', function() {
+    describe('when checking the validity of a valid object', function () {
+      it('returns true', function () {
         expect(JDLField.isValid({name: 'myField', type: 'String'})).to.be.true;
+      });
+    });
+  });
+  describe('#addValidation', function () {
+    describe('when adding an invalid validation', function () {
+      it('fails', function () {
+        var field = new JDLField({
+          name: 'abc',
+          type: 'String',
+          comment: 'comment'
+        });
+        try {
+          field.addValidation(null);
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('InvalidObjectException');
+        }
+        try {
+          field.addValidation({name: VALIDATIONS.MIN});
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('InvalidObjectException');
+        }
+      });
+    });
+    describe('when adding a valid validation', function () {
+      it('works', function () {
+        var field = new JDLField({
+          name: 'abc',
+          type: 'String',
+          comment: 'comment'
+        });
+        var validation = {name: VALIDATIONS.MIN, value: 42};
+        field.addValidation(validation);
+        expect(field.validations).to.deep.eq({min: validation});
       });
     });
   });
