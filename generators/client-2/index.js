@@ -322,7 +322,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularAppFiles: function () {
             this.copyHtml(MAIN_SRC_DIR + '_index.html', MAIN_SRC_DIR + 'index.html');
-            this.copy(MAIN_SRC_DIR + 'system.config.ts', MAIN_SRC_DIR + 'system.config.ts');
+            this.copy(MAIN_SRC_DIR + 'system.config.js', MAIN_SRC_DIR + 'system.config.js');
 
             // Angular JS module
             this.template(ANGULAR_DIR + '_app.main.ts', ANGULAR_DIR + 'app.main.ts', this, {});
