@@ -7,7 +7,7 @@
         "messages": {
             "validate": {
                 "login": {
-                    "required": "è necessario per entrare in un utente.",
+                    "required": "è necessario per autenticarsi.",
                     "minlength": "E 'necessario che l'utente abbia almeno 1 carattere",
                     "maxlength": "L'utente non può avere più di 50 caratteri",
                     "pattern": "Contenere tuo login può solo lettere e cifre minuscole"
