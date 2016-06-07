@@ -93,7 +93,7 @@ module.exports = JhipsterGenerator.extend({
                 } else {
                     var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                     if (!javaVersion.match(/1\.8/)) {
-                        this.warning('Java 8 is not found on your computeur. Your Java version is: ' + chalk.yellow(javaVersion));
+                        this.warning('Java 8 is not found on your computer. Your Java version is: ' + chalk.yellow(javaVersion));
                     }
                 }
                 done();
