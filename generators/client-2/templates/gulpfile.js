@@ -47,13 +47,17 @@ gulp.task('clean', function () {
     return del([config.dist], { dot: true });
 });
 
-gulp.task('copy', function () {
-    return es.merge( <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
-        gulp.src(config.app + 'i18n/**')
+gulp.task('copy', [<% if(enableTranslation) {'copy:i18n', <% } %>'copy:fonts', 'copy:common', 'copy:deps']);
+<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
+gulp.task('copy:i18n', function () {
+    return gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
-        .pipe(gulp.dest(config.dist + 'i18n/')),<% } %><% if(!useSass) { %>
-        gulp.src(config.bower + 'bootstrap/fonts/*.*')
+        .pipe(gulp.dest(config.dist + 'i18n/'));
+});
+<% } %>
+gulp.task('copy:fonts', function () {
+    return es.merge(<% if(!useSass) { %>gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(rev())
@@ -73,12 +77,29 @@ gulp.task('copy', function () {
             base: config.dist,
             merge: true
         }))
-        .pipe(gulp.dest(config.dist)),
-        gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist))
         .pipe(gulp.dest(config.dist))
     );
+});
+
+gulp.task('copy:common', function () {
+    return gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist))
+        .pipe(gulp.dest(config.dist));
+});
+
+//copy npm dependencies to vendor folder
+//TODO optimize to copy only required minified files
+gulp.task('copy:deps', function(){
+    return gulp.src([
+        'node_modules/core-js/client/shim.min.js',
+        'node_modules/zone.js/dist/zone.js',
+        'node_modules/reflect-metadata/Reflect.js',
+        'node_modules/systemjs/dist/system.src.js',
+        'node_modules/@angular/**/*.js',
+        'node_modules/rxjs/**/*.js'
+    ], { base: 'node_modules' })
+    .pipe(gulp.dest(config.app + 'vendor'));
 });
 
 gulp.task('images', function () {
@@ -135,7 +156,7 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
 gulp.task('inject', ['tscompile','inject:dep', 'inject:app']);
 gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
-    
+
 gulp.task('tscompile', ['clean'], function(cb){
      return gulp
     .src(config.app+'app/**/*.ts').pipe(sourcemaps.init())
