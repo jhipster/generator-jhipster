@@ -320,12 +320,13 @@ gulp.task('watch', function () {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
+    gulp.watch(config.app + 'app/**/*.ts', ['tscompile']);
     gulp.watch(config.app + 'app/**/*.js', ['inject:app']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('install', function () {
-    runSequence(['inject:dep', 'ngconstant:dev', 'tscompile', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app', 'inject:troubleshoot');
+    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps', 'tscompile']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app', 'inject:troubleshoot');
 });
 
 gulp.task('serve', function () {

@@ -89,9 +89,12 @@
         r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
         ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>-->
-
+    <script src="vendor/core-js/client/shim.min.js"></script>
+    <script src="vendor/zone.js/dist/zone.js"></script>
+    <script src="vendor/reflect-metadata/Reflect.js"></script>
+    <script src="vendor/systemjs/dist/system.src.js"></script>
     <script>
-      System.import('system-config.js').then(function () {
+      System.import('system.config.js').then(function () {
         System.import('/app');
       }).catch(console.error.bind(console));
     </script>
