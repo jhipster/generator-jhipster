@@ -1,0 +1,8 @@
+version: '2'
+services:
+    garanteasy-mail:
+        container_name: garanteasy-mail
+        image: djfarrelly/maildev
+        ports:
+            - 25:25
+            - 1080:80

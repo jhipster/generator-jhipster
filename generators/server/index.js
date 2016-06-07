@@ -390,6 +390,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
             }
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
+            this.template(DOCKER_DIR + '_mail.yml', DOCKER_DIR + 'mail.yml', this, {});
         },
 
         writeServerBuildFiles: function () {
