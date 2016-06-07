@@ -27,19 +27,20 @@ var gulp = require('gulp'),<% if(useSass) { %>
     angularFilesort = require('gulp-angular-filesort'),
     naturalSort = require('gulp-natural-sort'),
     bowerFiles = require('main-bower-files'),
-    typescript = require('gulp-typescript'),
+    ts = require('gulp-typescript'),
     sourcemaps = require('gulp-sourcemaps'),
     tslint = require('gulp-tslint');
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
-    build = require('./gulp/build'),
-    tscConfig = require('./tsconfig.json');
+    build = require('./gulp/build');
 
 <%_ if(enableTranslation) { _%>
 var yorc = require('./.yo-rc.json')['generator-jhipster'];
 <%_ } _%>
+
+var tsProject = ts.createProject('tsconfig.json');
 
 var config = require('./gulp/config');
 
@@ -158,12 +159,12 @@ gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
 
 gulp.task('tscompile', ['clean'], function(cb){
-     return gulp
-    .src(config.app+'app/**/*.ts').pipe(sourcemaps.init())
-    .pipe(typescript(tscConfig.compilerOptions))
-    .pipe(sourcemaps.write('.'));
+     return gulp.src([config.app + 'app/**/*.ts', 'typings/**/*.d.ts'])
+        .pipe(sourcemaps.init())
+        .pipe(ts(tsProject))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(config.app));
 });
-
 
 gulp.task('inject:app', function () {
     return gulp.src(config.app + 'index.html')
@@ -326,7 +327,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function () {
-    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps', 'tscompile']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app', 'inject:troubleshoot');
+    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot');
 });
 
 gulp.task('serve', function () {
@@ -334,7 +335,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'inject:vendor', 'tscompile', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
+    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'tscompile', 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);

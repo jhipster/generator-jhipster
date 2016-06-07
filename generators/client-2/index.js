@@ -588,8 +588,10 @@ module.exports = JhipsterClientGenerator.extend({
                     '\n' +
                     '\nGenerate the Angular constants:' +
                     '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
-                    (this.useSass ?
                     '\n' +
+                    '\nCompile your Typescript files:' +
+                    '\n ' + chalk.yellow.bold('gulp tscompile') +
+                    (this.useSass ? '\n' +
                     '\nCompile your Sass style sheets:' +
                     '\n ' + chalk.yellow.bold('gulp sass') : '') +
                     '\n' +
