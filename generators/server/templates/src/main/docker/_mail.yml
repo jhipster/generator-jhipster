@@ -1,8 +1,8 @@
 version: '2'
 services:
-    garanteasy-mail:
-        container_name: garanteasy-mail
-        image: djfarrelly/maildev
+    <%= baseName.toLowerCase() %>-mail:
+        container_name: <%= baseName.toLowerCase() %>-mail
+        image: djfarrelly/maildev:0.13.3
         ports:
             - 25:25
             - 1080:80
