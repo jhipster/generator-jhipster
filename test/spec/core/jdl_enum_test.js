@@ -44,15 +44,16 @@ describe('JDLEnum', function () {
     describe('when passing a value', function () {
       it('converts it to a string value', function () {
         jdlEnum.addValue(42);
-        expect(jdlEnum.values).to.deep.eq(['42']);
+        expect(jdlEnum.values.toString()).to.deep.eq("[42]");
       });
     });
   });
   describe('#toString', function () {
     it('stringifies the enum', function () {
+      var values = ['FRENCH', 'ENGLISH', 'ICELANDIC'];
       var jdlEnum = new JDLEnum({
         name: 'Language',
-        values: ['FRENCH', 'ENGLISH', 'ICELANDIC'],
+        values: values,
         comment: 'The language enumeration.'
       });
       expect(jdlEnum.toString()).to.eq(
@@ -60,9 +61,7 @@ describe('JDLEnum', function () {
  * ${jdlEnum.comment}
  */
 enum ${jdlEnum.name} {
-  ${jdlEnum.values[0]},
-  ${jdlEnum.values[1]},
-  ${jdlEnum.values[2]}
+  ${values.join(',\n  ')}
 }`
       );
     });

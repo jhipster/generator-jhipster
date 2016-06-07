@@ -1,7 +1,8 @@
 'use strict';
 
 const expect = require('chai').expect,
-    JDLValidation = require('../../../lib/core/jdl_validation').JDLValidation;
+    JDLValidation = require('../../../lib/core/jdl_validation'),
+    VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 
 describe('JDLValidation', function () {
   describe('::new', function () {
@@ -43,14 +44,14 @@ describe('JDLValidation', function () {
       });
       describe('with a valid name but an invalid value', function() {
         it('returns false', function() {
-          expect(JDLValidation.isValid({name: 'min'})).to.be.false;
+          expect(JDLValidation.isValid({name: VALIDATIONS.MIN})).to.be.false;
         });
       });
     });
     describe('when checking the validity of a valid object', function() {
       it('returns true', function() {
-        expect(JDLValidation.isValid({name: 'required'})).to.be.true;
-        expect(JDLValidation.isValid({name: 'minlength', value: 42})).to.be.true;
+        expect(JDLValidation.isValid({name: VALIDATIONS.REQUIRED})).to.be.true;
+        expect(JDLValidation.isValid({name: VALIDATIONS.MIN, value: 42})).to.be.true;
       });
     });
   });
