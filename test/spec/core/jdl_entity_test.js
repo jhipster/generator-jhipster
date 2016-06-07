@@ -128,7 +128,7 @@ describe('JDLEntity', function () {
         });
         var validField = {name: 'myField', type: 'String'};
         entity.addField(validField);
-        expect(entity.fields).to.deep.eq({myField: {name: 'myField', type: 'String'}});
+        expect(entity.fields).to.deep.eq({myField: validField});
       });
     });
   });
