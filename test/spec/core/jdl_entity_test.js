@@ -80,11 +80,13 @@ describe('JDLEntity', function () {
       describe('because its entities are invalid', function () {
         it('returns false', function () {
           expect(
-              JDLEntity.isValid({name: 'Something', tableName: 't_something', fields: [{
-                type: 'String',
-                comment: 'comment',
-                validations: []
-              }]})
+              JDLEntity.isValid({
+                name: 'Something', tableName: 't_something', fields: [{
+                  type: 'String',
+                  comment: 'comment',
+                  validations: []
+                }]
+              })
           ).to.be.false;
         });
       });
@@ -94,6 +96,39 @@ describe('JDLEntity', function () {
         expect(
             JDLEntity.isValid({name: 'Valid', tableName: 't_valid', fields: []})
         ).to.be.true;
+      });
+    });
+  });
+  describe('#addField', function () {
+    describe('when adding an invalid field', function () {
+      it('fails', function () {
+        var entity = new JDLEntity({
+          name: 'Abc',
+          tableName: 'String'
+        });
+        try {
+          entity.addField(null);
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('InvalidObjectException');
+        }
+        try {
+          entity.addField({name: 'myField'});
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('InvalidObjectException');
+        }
+      });
+    });
+    describe('when adding a valid field', function () {
+      it('works', function () {
+        var entity = new JDLEntity({
+          name: 'Abc',
+          tableName: 'String'
+        });
+        var validField = {name: 'myField', type: 'String'};
+        entity.addField(validField);
+        expect(entity.fields).to.deep.eq({myField: {name: 'myField', type: 'String'}});
       });
     });
   });
