@@ -47,7 +47,7 @@ gulp.task('clean', function () {
     return del([config.dist], { dot: true });
 });
 
-gulp.task('copy', [<% if(enableTranslation) {'copy:i18n', <% } %>'copy:fonts', 'copy:common', 'copy:deps']);
+gulp.task('copy', [<% if(enableTranslation) { %>'copy:i18n', <% } %>'copy:fonts', 'copy:common', 'copy:deps']);
 <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
 gulp.task('copy:i18n', function () {
     return gulp.src(config.app + 'i18n/**')
