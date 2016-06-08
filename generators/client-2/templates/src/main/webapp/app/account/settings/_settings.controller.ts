@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.account')
         .controller('SettingsController', SettingsController);
 
     SettingsController.$inject = ['Principal', 'Auth'<% if (enableTranslation){ %>, '<%=jhiPrefixCapitalized%>LanguageService', '$translate'<% } %>];
