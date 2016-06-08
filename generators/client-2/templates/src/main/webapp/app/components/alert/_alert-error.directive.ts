@@ -11,7 +11,7 @@
     };
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .component('jhiAlertError', jhiAlertError);
 
     jhiAlertErrorController.$inject = ['$scope', 'AlertService', '$rootScope'<% if (enableTranslation) { %>, '$translate'<% } %>];

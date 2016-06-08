@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .factory('Principal', Principal);
 
     Principal.$inject = ['$q', 'Account'<% if (websocket == 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
