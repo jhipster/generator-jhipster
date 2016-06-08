@@ -18,7 +18,8 @@
             // jhipster-needle-angularjs-add-module JHipster will add new module here
             'angular-loading-bar',
             '<%=angularAppName%>.account',
-            '<%=angularAppName%>.admin'
+            '<%=angularAppName%>.admin',
+            '<%=angularAppName%>.common'
         ])
         .run(run);
 
