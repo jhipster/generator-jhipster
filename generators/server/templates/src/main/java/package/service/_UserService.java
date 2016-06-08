@@ -5,8 +5,8 @@ import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (databaseType == 'cassandra') { %>
-import <%=packageName%>.security.AuthoritiesConstants;<% } %>
+import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
+import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.dto.ManagedUserDTO;
@@ -99,7 +99,7 @@ public class UserService {
         String langKey) {
 
         User newUser = new User();<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        Authority authority = authorityRepository.findOne("ROLE_USER");
+        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());
         Set<String> authorities = new HashSet<>();<% } %>
