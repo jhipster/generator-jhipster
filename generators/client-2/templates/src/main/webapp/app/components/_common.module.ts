@@ -7,9 +7,6 @@
             'tmh.dynamicLocale',
             'pascalprecht.translate', <% } %>
             'ngResource',
-            'ngCookies',
-            'ngAria',
-            'ngCacheBuster',
             'ui.bootstrap',
             'ui.router'
         ]);
