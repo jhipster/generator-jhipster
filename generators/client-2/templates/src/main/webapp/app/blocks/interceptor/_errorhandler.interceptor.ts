@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .factory('errorHandlerInterceptor', errorHandlerInterceptor);
 
     errorHandlerInterceptor.$inject = ['$q', '$rootScope'];
