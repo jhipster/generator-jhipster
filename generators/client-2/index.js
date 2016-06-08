@@ -451,7 +451,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.state.ts', ANGULAR_DIR + 'admin/gateway/gateway.state.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.controller.ts', ANGULAR_DIR + 'admin/gateway/gateway.controller.ts', this, {});
-            this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.routes.service.ts', ANGULAR_DIR + 'admin/gateway/gateway.routes.service.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway-routes.service.ts', ANGULAR_DIR + 'admin/gateway/gateway-routes.service.ts', this, {});
         },
 
         writeAngularComponentFiles: function () {
