@@ -15,6 +15,6 @@
     };
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .component('jhiItemCount', jhiItemCount);
 })();
