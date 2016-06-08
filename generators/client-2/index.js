@@ -350,6 +350,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
             this.copyJs(ANGULAR_DIR + 'account/activate/_activate.state.ts', ANGULAR_DIR + 'account/activate/activate.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/activate/_activate.controller.ts', ANGULAR_DIR + 'account/activate/activate.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/activate/_activate.service.ts', ANGULAR_DIR + 'account/activate/activate.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/password/password.html', ANGULAR_DIR + 'account/password/password.html');
             this.copyJs(ANGULAR_DIR + 'account/password/_password.state.ts', ANGULAR_DIR + 'account/password/password.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.controller.ts', ANGULAR_DIR + 'account/password/password.controller.ts', this, {});
@@ -371,6 +372,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
                 this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.ts', ANGULAR_DIR + 'account/sessions/sessions.state.ts', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_sessions.controller.ts', ANGULAR_DIR + 'account/sessions/sessions.controller.ts', this, {});
+                this.template(ANGULAR_DIR + 'account/sessions/_sessions.service.ts', ANGULAR_DIR + 'account/sessions/sessions.service.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'account/settings/settings.html', ANGULAR_DIR + 'account/settings/settings.html');
             this.copyJs(ANGULAR_DIR + 'account/settings/_settings.state.ts', ANGULAR_DIR + 'account/settings/settings.state.ts', this, {});
@@ -493,6 +495,23 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/alert/_alert-error.directive.ts', ANGULAR_DIR + 'components/alert/alert-error.directive.ts', this, {});
         },
 
+        writeAngularAuthServiceFiles: function () {
+            // services
+            this.template(ANGULAR_DIR + 'components/auth/_auth.service.ts', ANGULAR_DIR + 'components/auth/auth.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/auth/_principal.service.ts', ANGULAR_DIR + 'components/auth/principal.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/auth/_has-authority.directive.ts', ANGULAR_DIR + 'components/auth/has-authority.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'components/auth/has-any-authority.directive.ts', this, {});
+            if (this.authenticationType === 'oauth2') {
+                this.template(ANGULAR_DIR + 'components/auth/_auth.oauth2.service.ts', ANGULAR_DIR + 'components/auth/auth.oauth2.service.ts', this, {});
+            } else if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
+                this.template(ANGULAR_DIR + 'components/auth/_auth.jwt.service.ts', ANGULAR_DIR + 'components/auth/auth.jwt.service.ts', this, {});
+            } else {
+                this.template(ANGULAR_DIR + 'components/auth/_auth.session.service.ts', ANGULAR_DIR + 'components/auth/auth.session.service.ts', this, {});
+            }
+            this.template(ANGULAR_DIR + 'components/auth/_account.service.ts', ANGULAR_DIR + 'components/auth/account.service.ts', this, {});
+
+        },
+
         writeAngularMainFiles: function () {
             // entities
             this.copyJs(ANGULAR_DIR + 'entities/_entity.state.ts', ANGULAR_DIR + 'entities/entity.state.ts', this, {});
@@ -514,30 +533,10 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.ts', ANGULAR_DIR + 'layouts/error/error.state.ts', this, {});
         },
 
-        writeAngularAuthServiceFiles: function () {
-            // services
-            this.template(ANGULAR_DIR + 'services/auth/_auth.service.ts', ANGULAR_DIR + 'services/auth/auth.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_principal.service.ts', ANGULAR_DIR + 'services/auth/principal.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_has-authority.directive.ts', ANGULAR_DIR + 'services/auth/has-authority.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'services/auth/has-any-authority.directive.ts', this, {});
-            if (this.authenticationType === 'oauth2') {
-                this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.ts', ANGULAR_DIR + 'services/auth/auth.oauth2.service.ts', this, {});
-            } else if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
-                this.template(ANGULAR_DIR + 'services/auth/_auth.jwt.service.ts', ANGULAR_DIR + 'services/auth/auth.jwt.service.ts', this, {});
-            } else {
-                this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.ts', ANGULAR_DIR + 'services/auth/auth.session.service.ts', this, {});
-                this.template(ANGULAR_DIR + 'services/auth/_sessions.service.ts', ANGULAR_DIR + 'services/auth/sessions.service.ts', this, {});
-            }
-            this.template(ANGULAR_DIR + 'services/auth/_account.service.ts', ANGULAR_DIR + 'services/auth/account.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_activate.service.ts', ANGULAR_DIR + 'services/auth/activate.service.ts', this, {});
-
-
-        },
-
         writeAngularProfileServiceFiles: function () {
             // services
-            this.template(ANGULAR_DIR + 'services/profiles/_profile.service.ts', ANGULAR_DIR + 'services/profiles/profile.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/profiles/_page-ribbon.directive.ts', ANGULAR_DIR + 'services/profiles/page-ribbon.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/profiles/_profile.service.ts', ANGULAR_DIR + 'components/profiles/profile.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/profiles/_page-ribbon.directive.ts', ANGULAR_DIR + 'components/profiles/page-ribbon.directive.ts', this, {});
         },
 
         writeImageFiles: function () {
