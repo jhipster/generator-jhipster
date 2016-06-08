@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .factory('Base64', Base64);
 
     function Base64 () {
