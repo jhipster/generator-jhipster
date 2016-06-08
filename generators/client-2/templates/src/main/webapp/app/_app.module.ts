@@ -19,7 +19,8 @@
             'angular-loading-bar',
             '<%=angularAppName%>.account',
             '<%=angularAppName%>.admin',
-            '<%=angularAppName%>.common'
+            '<%=angularAppName%>.common',
+            '<%=angularAppName%>.entity'
         ])
         .run(run);
 
