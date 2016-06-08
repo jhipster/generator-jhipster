@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .factory('authExpiredInterceptor', authExpiredInterceptor);
 
     <% if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { %>
