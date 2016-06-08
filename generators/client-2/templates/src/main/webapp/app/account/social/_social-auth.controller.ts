@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.account')
         .controller('SocialAuthController', SocialAuthController);
 
     SocialAuthController.$inject = ['$state', '$cookies', 'Auth'];

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.account')
         .directive('jhSocial', jhSocial);
 
     jhSocial.$inject = [<% if (enableTranslation){ %>'$translatePartialLoader', '$translate', <% } %>'$filter', 'SocialService'];
