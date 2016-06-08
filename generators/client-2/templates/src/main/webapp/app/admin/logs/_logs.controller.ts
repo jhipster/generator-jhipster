@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .controller('LogsController', LogsController);
 
     LogsController.$inject = ['LogsService'];

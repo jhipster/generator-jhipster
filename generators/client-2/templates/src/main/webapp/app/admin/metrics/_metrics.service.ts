@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .factory('<%=jhiPrefixCapitalized%>MetricsService', <%=jhiPrefixCapitalized%>MetricsService);
 
     <%=jhiPrefixCapitalized%>MetricsService.$inject = ['$rootScope', '$http'];
