@@ -7,11 +7,7 @@
             'tmh.dynamicLocale',
             'pascalprecht.translate', <% } %>
             'ngResource',
-            'ngCookies',
-            'ngAria',
-            'ngCacheBuster',
             'ui.bootstrap',
-            'ui.bootstrap.datetimepicker',
             'ui.router'
         ]);
 })();
