@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .filter('findLanguageFromKey', findLanguageFromKey);
 
     function findLanguageFromKey() {
