@@ -503,11 +503,11 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/auth/_has-authority.directive.ts', ANGULAR_DIR + 'components/auth/has-authority.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'components/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'components/auth/has-any-authority.directive.ts', this, {});
             if (this.authenticationType === 'oauth2') {
-                this.template(ANGULAR_DIR + 'components/auth/_auth.oauth2.service.ts', ANGULAR_DIR + 'components/auth/auth.oauth2.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'components/auth/_auth-oauth2.service.ts', ANGULAR_DIR + 'components/auth/auth-oauth2.service.ts', this, {});
             } else if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
-                this.template(ANGULAR_DIR + 'components/auth/_auth.jwt.service.ts', ANGULAR_DIR + 'components/auth/auth.jwt.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'components/auth/_auth-jwt.service.ts', ANGULAR_DIR + 'components/auth/auth-jwt.service.ts', this, {});
             } else {
-                this.template(ANGULAR_DIR + 'components/auth/_auth.session.service.ts', ANGULAR_DIR + 'components/auth/auth.session.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'components/auth/_auth-session.service.ts', ANGULAR_DIR + 'components/auth/auth-session.service.ts', this, {});
             }
             this.template(ANGULAR_DIR + 'components/auth/_account.service.ts', ANGULAR_DIR + 'components/auth/account.service.ts', this, {});
 
