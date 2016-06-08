@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .controller('<%=jhiPrefixCapitalized%>HealthCheckController', <%=jhiPrefixCapitalized%>HealthCheckController);
 
     <%=jhiPrefixCapitalized%>HealthCheckController.$inject = ['<%=jhiPrefixCapitalized%>HealthService', '$uibModal'];

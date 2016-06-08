@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .factory('<%=jhiPrefixCapitalized%>ConfigurationService', <%=jhiPrefixCapitalized%>ConfigurationService);
 
     <%=jhiPrefixCapitalized%>ConfigurationService.$inject = ['$filter', '$http'];

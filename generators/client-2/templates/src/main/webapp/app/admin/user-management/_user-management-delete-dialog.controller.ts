@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .controller('UserManagementDeleteController', UserManagementDeleteController);
 
     UserManagementDeleteController.$inject = ['$uibModalInstance', 'entity', 'User'];

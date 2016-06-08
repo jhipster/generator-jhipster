@@ -3,7 +3,7 @@
     /* globals SockJS, Stomp */
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .factory('<%=jhiPrefixCapitalized%>TrackerService', <%=jhiPrefixCapitalized%>TrackerService);
 
     <%=jhiPrefixCapitalized%>TrackerService.$inject = ['$rootScope', '$window', '$cookies', '$http', '$q'<% if (authenticationType == 'jwt') { %>, 'AuthServerProvider'<%}%><% if (authenticationType == 'oauth2') { %>, '$localStorage'<%}%>];
