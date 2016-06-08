@@ -235,7 +235,7 @@ gulp.task('html', function () {
 
 gulp.task('ngconstant:dev', function () {
     return ngConstant({
-        name: '<%= angularAppName %>',
+        name: '<%= angularAppName %>.common',
         constants: {
             VERSION: util.parseVersion(),
             DEBUG_INFO_ENABLED: true
@@ -249,7 +249,7 @@ gulp.task('ngconstant:dev', function () {
 
 gulp.task('ngconstant:prod', function () {
     return ngConstant({
-        name: '<%= angularAppName %>',
+        name: '<%= angularAppName %>.common',
         constants: {
             VERSION: util.parseVersion(),
             DEBUG_INFO_ENABLED: false
