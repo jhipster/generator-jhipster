@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.account')
         .factory('Sessions', Sessions);
 
     Sessions.$inject = ['$resource'];
