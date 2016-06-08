@@ -515,6 +515,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularMainFiles: function () {
             // entities
+            this.template(ANGULAR_DIR + 'entities/_entity.module.ts', ANGULAR_DIR + 'entities/entity.module.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'entities/_entity.state.ts', ANGULAR_DIR + 'entities/entity.state.ts', this, {});
 
             // home module
