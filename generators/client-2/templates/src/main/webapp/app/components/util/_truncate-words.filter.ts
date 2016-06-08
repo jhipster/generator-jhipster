@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .filter('words', words);
 
     function words() {
@@ -21,7 +21,7 @@
                     input = inputWords.slice(0, words).join(' ') + '...';
                 }
             }
-            
+
             return input;
         }
     }

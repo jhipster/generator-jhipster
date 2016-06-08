@@ -2,9 +2,9 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.common')
         .filter('characters', characters);
-        
+
     function characters () {
         return charactersFilter;
 
