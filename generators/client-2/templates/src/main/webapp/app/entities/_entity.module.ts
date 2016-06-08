@@ -6,9 +6,6 @@
             'tmh.dynamicLocale',
             'pascalprecht.translate', <% } %>
             'ngResource',
-            'ngCookies',
-            'ngAria',
-            'ngCacheBuster',
             'ngFileUpload',
             'ui.bootstrap',
             'ui.bootstrap.datetimepicker',
