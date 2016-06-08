@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .controller('GatewayController', GatewayController);
 
     GatewayController.$inject = ['$filter', '$interval', 'GatewayRoutes'];

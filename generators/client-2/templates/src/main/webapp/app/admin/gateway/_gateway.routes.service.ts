@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.admin')
         .factory('GatewayRoutes', GatewayRoutes);
 
     GatewayRoutes.$inject = ['$resource'];
