@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>', [
+        .module('<%=angularAppName%>.app', [
             'ngStorage', <% if (enableTranslation) { %>
             'tmh.dynamicLocale',
             'pascalprecht.translate', <% } %>
@@ -17,9 +17,9 @@
             'infinite-scroll',
             'angular-loading-bar',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
+            '<%=angularAppName%>.common',
             '<%=angularAppName%>.account',
             '<%=angularAppName%>.admin',
-            '<%=angularAppName%>.common',
             '<%=angularAppName%>.entity'
         ])
         .run(run);
