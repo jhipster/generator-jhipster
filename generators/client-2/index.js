@@ -353,16 +353,20 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'account/password/password.html', ANGULAR_DIR + 'account/password/password.html');
             this.copyJs(ANGULAR_DIR + 'account/password/_password.state.ts', ANGULAR_DIR + 'account/password/password.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.controller.ts', ANGULAR_DIR + 'account/password/password.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/password/_password.service.ts', ANGULAR_DIR + 'account/password/password.service.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password-strength-bar.directive.ts', ANGULAR_DIR + 'account/password/password-strength-bar.directive.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/register/register.html', ANGULAR_DIR + 'account/register/register.html');
             this.copyJs(ANGULAR_DIR + 'account/register/_register.state.ts', ANGULAR_DIR + 'account/register/register.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.controller.ts', ANGULAR_DIR + 'account/register/register.controller.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/reset/request/reset.request.html', ANGULAR_DIR + 'account/reset/request/reset.request.html');
-            this.copyJs(ANGULAR_DIR + 'account/reset/request/_reset.request.state.ts', ANGULAR_DIR + 'account/reset/request/reset.request.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/reset/request/_reset.request.controller.ts', ANGULAR_DIR + 'account/reset/request/reset.request.controller.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/reset/finish/reset.finish.html', ANGULAR_DIR + 'account/reset/finish/reset.finish.html');
-            this.copyJs(ANGULAR_DIR + 'account/reset/finish/_reset.finish.state.ts', ANGULAR_DIR + 'account/reset/finish/reset.finish.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/reset/finish/_reset.finish.controller.ts', ANGULAR_DIR + 'account/reset/finish/reset.finish.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/register/_register.service.ts', ANGULAR_DIR + 'account/register/register.service.ts', this, {});
+            this.copyHtml(ANGULAR_DIR + 'account/reset/request/reset-request.html', ANGULAR_DIR + 'account/reset/request/reset-request.html');
+            this.copyJs(ANGULAR_DIR + 'account/reset/request/_reset-request.state.ts', ANGULAR_DIR + 'account/reset/request/reset-request.state.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/reset/request/_reset-request.controller.ts', ANGULAR_DIR + 'account/reset/request/reset-request.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/reset/request/_reset-request.service.ts', ANGULAR_DIR + 'account/reset/request/reset-request.service.ts', this, {});
+            this.copyHtml(ANGULAR_DIR + 'account/reset/finish/reset-finish.html', ANGULAR_DIR + 'account/reset/finish/reset-finish.html');
+            this.copyJs(ANGULAR_DIR + 'account/reset/finish/_reset-finish.state.ts', ANGULAR_DIR + 'account/reset/finish/reset-finish.state.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/reset/finish/_reset-finish.controller.ts', ANGULAR_DIR + 'account/reset/finish/reset-finish.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/reset/finish/_reset-finish.service.ts', ANGULAR_DIR + 'account/reset/finish/reset-finish.service.ts', this, {});
             if (this.authenticationType === 'session') {
                 this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
                 this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.ts', ANGULAR_DIR + 'account/sessions/sessions.state.ts', this, {});
@@ -526,10 +530,8 @@ module.exports = JhipsterClientGenerator.extend({
             }
             this.template(ANGULAR_DIR + 'services/auth/_account.service.ts', ANGULAR_DIR + 'services/auth/account.service.ts', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_activate.service.ts', ANGULAR_DIR + 'services/auth/activate.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_password.service.ts', ANGULAR_DIR + 'services/auth/password.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_password-reset-init.service.ts', ANGULAR_DIR + 'services/auth/password-reset-init.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_password-reset-finish.service.ts', ANGULAR_DIR + 'services/auth/password-reset-finish.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_register.service.ts', ANGULAR_DIR + 'services/auth/register.service.ts', this, {});
+
+
         },
 
         writeAngularProfileServiceFiles: function () {
@@ -557,8 +559,8 @@ module.exports = JhipsterClientGenerator.extend({
                 'spec/app/account/settings/_settings.controller.spec.js',
                 'spec/app/account/activate/_activate.controller.spec.js',
                 'spec/app/account/register/_register.controller.spec.js',
-                'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
-                'spec/app/account/reset/request/_reset.request.controller.spec.js',
+                'spec/app/account/reset/finish/_reset-finish.controller.spec.js',
+                'spec/app/account/reset/request/_reset-request.controller.spec.js',
                 'spec/app/services/auth/_auth.services.spec.js',
                 'spec/app/components/login/_login.controller.spec.js'
             ];
