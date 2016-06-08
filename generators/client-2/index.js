@@ -407,20 +407,20 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(ANGULAR_DIR + 'admin/docs/docs.html', ANGULAR_DIR + 'admin/docs/docs.html');
             this.copyJs(ANGULAR_DIR + 'admin/docs/_docs.state.ts', ANGULAR_DIR + 'admin/docs/docs.state.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/health/health.html', ANGULAR_DIR + 'admin/health/health.html');
-            this.copyHtml(ANGULAR_DIR + 'admin/health/_health.modal.html', ANGULAR_DIR + 'admin/health/health.modal.html');
+            this.copyHtml(ANGULAR_DIR + 'admin/health/_health-modal.html', ANGULAR_DIR + 'admin/health/health-modal.html');
             this.copyJs(ANGULAR_DIR + 'admin/health/_health.state.ts', ANGULAR_DIR + 'admin/health/health.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.controller.ts', ANGULAR_DIR + 'admin/health/health.controller.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/health/_health.modal.controller.ts', ANGULAR_DIR + 'admin/health/health.modal.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/health/_health-modal.controller.ts', ANGULAR_DIR + 'admin/health/health-modal.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.service.ts', ANGULAR_DIR + 'admin/health/health.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/logs/logs.html', ANGULAR_DIR + 'admin/logs/logs.html');
             this.copyJs(ANGULAR_DIR + 'admin/logs/_logs.state.ts', ANGULAR_DIR + 'admin/logs/logs.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/logs/_logs.controller.ts', ANGULAR_DIR + 'admin/logs/logs.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/logs/_logs.service.ts', ANGULAR_DIR + 'admin/logs/logs.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics.html', ANGULAR_DIR + 'admin/metrics/metrics.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics.modal.html', ANGULAR_DIR + 'admin/metrics/metrics.modal.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics-modal.html', ANGULAR_DIR + 'admin/metrics/metrics-modal.html', this, {}, true);
             this.copyJs(ANGULAR_DIR + 'admin/metrics/_metrics.state.ts', ANGULAR_DIR + 'admin/metrics/metrics.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.controller.ts', ANGULAR_DIR + 'admin/metrics/metrics.controller.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/metrics/_metrics.modal.controller.ts', ANGULAR_DIR + 'admin/metrics/metrics.modal.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/metrics/_metrics-modal.controller.ts', ANGULAR_DIR + 'admin/metrics/metrics-modal.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.service.ts', ANGULAR_DIR + 'admin/metrics/metrics.service.ts', this, {});
             if (this.websocket === 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
