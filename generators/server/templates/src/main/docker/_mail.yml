@@ -1,8 +1,0 @@
-version: '2'
-services:
-    <%= baseName.toLowerCase() %>-mail:
-        container_name: <%= baseName.toLowerCase() %>-mail
-        image: djfarrelly/maildev:0.13.3
-        ports:
-            - 25:25
-            - 1080:80
