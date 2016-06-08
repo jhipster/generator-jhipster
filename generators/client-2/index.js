@@ -436,6 +436,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-detail.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-detail.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-dialog.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/user-management/_user.service.ts', ANGULAR_DIR + 'admin/user-management/user.service.ts', this, {});
         },
 
         writeAngularGatewayFiles: function () {
@@ -529,7 +530,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/auth/_password-reset-init.service.ts', ANGULAR_DIR + 'services/auth/password-reset-init.service.ts', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_password-reset-finish.service.ts', ANGULAR_DIR + 'services/auth/password-reset-finish.service.ts', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_register.service.ts', ANGULAR_DIR + 'services/auth/register.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'services/user/_user.service.ts', ANGULAR_DIR + 'services/user/user.service.ts', this, {});
         },
 
         writeAngularProfileServiceFiles: function () {
