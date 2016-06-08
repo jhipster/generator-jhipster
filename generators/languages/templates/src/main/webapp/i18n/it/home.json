@@ -3,7 +3,7 @@
         "title": "Benvenuto, Java Hipster!",
         "subtitle": "Questa è la tua home page",
         "logged": {
-            "message": "Loggato come \"{{username}}\"."
+            "message": "Autenticato come \"{{username}}\"."
         },
         "question": "Se avete domande su JHipster:",
         "link": {
