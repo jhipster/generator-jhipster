@@ -784,7 +784,8 @@ module.exports = EntityGenerator.extend({
                             try {
                                 this.composeWith(module.generatorCallback, {
                                     options: {
-                                        entityConfig: entityConfig
+                                        entityConfig: entityConfig,
+                                        force: this.options['force']
                                     }
                                 });
                             } catch (err) {
