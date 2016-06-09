@@ -159,7 +159,7 @@ module.exports = UpgradeGenerator.extend({
         generate: function() {
             this.log('Regenerating app with jhipster ' + this.latestVersion + '...');
             var done = this.async();
-            shelljs.exec('yo jhipster --force --with-entities', {silent:false}, function (code, msg, err) {
+            shelljs.exec('yo jhipster --with-entities --force', {silent:false}, function (code, msg, err) {
                 if (code === 0) this.log(chalk.green('Successfully regenerated app with jhipster ' + this.latestVersion));
                 else this.error('Something went wrong while generating project! '+ err);
                 done();
