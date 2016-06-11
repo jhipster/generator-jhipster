@@ -49,8 +49,8 @@ describe('JDLObject', function () {
         expect(object.entities[entity.name]).to.deep.eq(entity);
       });
     });
-    describe('when adding an entity with the same name', function() {
-      it('replaces the former one', function() {
+    describe('when adding an entity with the same name', function () {
+      it('replaces the former one', function () {
         var object = new JDLObject();
         var entity = new JDLEntity({name: 'Valid', tableName: 't_valid', fields: []});
         object.addEntity(entity);
@@ -86,8 +86,8 @@ describe('JDLObject', function () {
         expect(object.enums[enumObject.name]).to.deep.eq(enumObject);
       });
     });
-    describe('when adding an enum with the same name', function() {
-      it('replaces the old one', function() {
+    describe('when adding an enum with the same name', function () {
+      it('replaces the old one', function () {
         var object = new JDLObject();
         var enumObject = new JDLEnum({name: 'Valid'});
         object.addEnum(enumObject);
@@ -133,8 +133,8 @@ describe('JDLObject', function () {
         expect(object.relationships.relationships.ManyToMany[relationship.getId()]).to.deep.eq(relationship);
       });
     });
-    describe('when adding twice the same relationship', function() {
-      it("doesn't do anything", function() {
+    describe('when adding twice the same relationship', function () {
+      it("doesn't do anything", function () {
         var object = new JDLObject();
         var relationship = new JDLRelationship({
           from: {name: 'Valid2', tableName: 't_valid2', fields: []},
@@ -164,6 +164,12 @@ describe('JDLObject', function () {
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
         }
+        try {
+          object.addOption({name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT, type: 'WrongType'});
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('InvalidObjectException');
+        }
       });
     });
     describe('when adding a valid option', function () {
@@ -175,7 +181,7 @@ describe('JDLObject', function () {
     });
   });
   describe('#toString', function () {
-    it('stringifies the JDL object', function() {
+    it('stringifies the JDL object', function () {
       var object = new JDLObject();
       var entityA = new JDLEntity({name: 'EntityA', tableName: 't_entity_a'});
       var field = new JDLField({name: 'myField', type: 'String'});
@@ -197,11 +203,14 @@ describe('JDLObject', function () {
       var option = new JDLUnaryOption({name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT});
       option.excludeEntity(entityA);
       object.addOption(option);
-      var option2 = new JDLBinaryOption({name: BINARY_OPTIONS.BINARY_OPTIONS.DTO, value: BINARY_OPTIONS.BINARY_OPTION_VALUES.dto.MAPSTRUCT});
+      var option2 = new JDLBinaryOption({
+        name: BINARY_OPTIONS.BINARY_OPTIONS.DTO,
+        value: BINARY_OPTIONS.BINARY_OPTION_VALUES.dto.MAPSTRUCT
+      });
       option2.addEntity(entityB);
       object.addOption(option2);
       expect(object.toString()).to.eq(
-`${entityA.toString()}
+          `${entityA.toString()}
 ${entityB.toString()}
 ${enumObject.toString()}
 
