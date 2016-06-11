@@ -77,7 +77,7 @@ describe('JDLEntity', function () {
           ).to.be.false;
         });
       });
-      describe('because its entities are invalid', function () {
+      describe('because its fields are invalid', function () {
         it('returns false', function () {
           expect(
               JDLEntity.isValid({
