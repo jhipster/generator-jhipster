@@ -33,9 +33,9 @@
   "dependencies": {},
   "devDependencies": {
     "pegjs": "0.9.0",
-    "mocha": "2.4.5",
+    "mocha": "2.5.3",
     "chai": "3.5.0",
-    "istanbul": "0.4.2"
+    "istanbul": "0.4.3"
   },
   "peerDependencies": {},
   "engines": {
