@@ -60,7 +60,7 @@ describe('JDLRelationships', function () {
           injectedFieldInFrom: 'somethingElse',
           type: RELATIONSHIP_TYPES.ONE_TO_ONE
         }));
-        expect(relationships.relationships.OneToOne.length).to.eq(2);
+        expect(Object.keys(relationships.relationships.OneToOne).length).to.eq(2);
       });
     });
   });
