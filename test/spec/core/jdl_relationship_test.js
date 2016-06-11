@@ -165,6 +165,17 @@ describe('JDLRelationship', function () {
       });
     });
   });
+  describe('#getId', function () {
+    it('returns an unique representation of the relationship', function () {
+      var relationship = new JDLRelationship({
+        from: new JDLEntity({name: 'A'}),
+        to: new JDLEntity({name: 'B'}),
+        type: RELATIONSHIP_TYPES.ONE_TO_ONE,
+        injectedFieldInFrom: 'b'
+      });
+      expect(relationship.getId()).to.eq(`${relationship.type}_${relationship.from.name}{${relationship.injectedFieldInFrom}}_${relationship.to.name}`);
+    });
+  });
   describe('#toString', function () {
     describe('without any comment', function () {
       it('stringifies the relationship', function () {
