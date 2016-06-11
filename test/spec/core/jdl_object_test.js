@@ -210,7 +210,6 @@ ${relationship.toString()}
 ${option.toString()}
 ${option2.toString()}
 `);
-      console.log(object.toString());
     });
   });
 });
