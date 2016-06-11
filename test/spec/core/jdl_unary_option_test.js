@@ -181,10 +181,14 @@ describe('JDLUnaryOption', function () {
   describe('#toString', function () {
     it('stringifies the option', function () {
       var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for *`);
       option.addEntity(new JDLEntity({name: 'D'}));
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D`);
       option.addEntity(new JDLEntity({name: 'E'}));
       option.addEntity(new JDLEntity({name: 'F'}));
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D, E, F`);
       option.excludeEntity(new JDLEntity({name: 'A'}));
+      expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D, E, F except A`);
       option.excludeEntity(new JDLEntity({name: 'B'}));
       option.excludeEntity(new JDLEntity({name: 'C'}));
       expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for D, E, F except A, B, C`);

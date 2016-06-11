@@ -229,10 +229,14 @@ describe('JDLBinaryOption', function () {
         name: BINARY_OPTIONS.DTO,
         value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
       });
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for *`);
       option.addEntity(new JDLEntity({name: 'D'}));
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D`);
       option.addEntity(new JDLEntity({name: 'E'}));
       option.addEntity(new JDLEntity({name: 'F'}));
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D, E, F`);
       option.excludeEntity(new JDLEntity({name: 'A'}));
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D, E, F except A`);
       option.excludeEntity(new JDLEntity({name: 'B'}));
       option.excludeEntity(new JDLEntity({name: 'C'}));
       expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D, E, F except A, B, C`);
