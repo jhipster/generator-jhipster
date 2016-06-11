@@ -126,7 +126,7 @@ describe('JDLEntity', function () {
           name: 'Abc',
           tableName: 'String'
         });
-        var validField = {name: 'myField', type: 'String'};
+        var validField = new JDLField({name: 'myField', type: 'String'});
         entity.addField(validField);
         expect(entity.fields).to.deep.eq({myField: validField});
       });
@@ -161,32 +161,33 @@ entity ${args.name} (${args.tableName})`
     });
     describe('with fields', function () {
       it('stringifies its content', function () {
-        var args = {
+        var entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String',
-          comment: 'Entity comment',
-          fields: [
-            new JDLField({
-              name: 'myField',
-              type: 'Integer',
-              comment: 'Field comment',
-              validations: [new JDLValidation()]
-            }), new JDLField({
-              name: 'myOtherField',
-              type: 'Long'
-            })]
-        };
-        var entity = new JDLEntity(args);
+          comment: 'Entity comment'
+        });
+        var field1 = new JDLField({
+          name: 'myField',
+          type: 'Integer',
+          comment: 'Field comment',
+          validations: [new JDLValidation()]
+        });
+        var field2 = new JDLField({
+          name: 'myOtherField',
+          type: 'Long'
+        });
+        entity.addField(field1);
+        entity.addField(field2);
         expect(entity.toString()).to.eq(
             `/**
- * ${args.comment}
+ * ${entity.comment}
  */
-entity ${args.name} (${args.tableName}) {
+entity ${entity.name} (${entity.tableName}) {
   /**
-   * ${args.fields[0].comment}
+   * ${field1.comment}
    */
-  ${args.fields[0].name} ${args.fields[0].type} ${args.fields[0].validations[0]},
-  ${args.fields[1].name} ${args.fields[1].type}
+  ${field1.name} ${field1.type} ${field1.validations[0]},
+  ${field2.name} ${field2.type}
 }`
         );
       });
