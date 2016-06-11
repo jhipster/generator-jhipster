@@ -48,6 +48,15 @@ describe('JDLEnum', function () {
       });
     });
   });
+  describe('::isValid', function () {
+    describe('when validating an invalid object', function() {
+      describe('with no name', function() {
+        it('returns false', function() {
+          expect(JDLEnum.isValid({values: ['A', 'B']})).to.be.false;
+        });
+      });
+    });
+  });
   describe('#toString', function () {
     it('stringifies the enum', function () {
       var values = ['FRENCH', 'ENGLISH', 'ICELANDIC'];
@@ -57,7 +66,7 @@ describe('JDLEnum', function () {
         comment: 'The language enumeration.'
       });
       expect(jdlEnum.toString()).to.eq(
-`/**
+          `/**
  * ${jdlEnum.comment}
  */
 enum ${jdlEnum.name} {
