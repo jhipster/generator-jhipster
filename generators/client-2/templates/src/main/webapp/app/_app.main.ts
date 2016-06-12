@@ -1,5 +1,5 @@
 import { UpgradeAdapter } from '@angular/upgrade';
 
-let upgradeAdapter = new UpgradeAdapter();
+export const upgradeAdapter = new UpgradeAdapter();
 
-upgradeAdapter.bootstrap(document.documentElement, ['<%=angularAppName%>.app']);
+upgradeAdapter.bootstrap(document.body, ['<%=angularAppName%>.app'], {strictDi: true});
