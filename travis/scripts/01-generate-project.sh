@@ -13,5 +13,5 @@ mkdir -p "$HOME"/app
 mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$HOME"/app/
 cd "$HOME"/app
 npm link generator-jhipster
-yo jhipster --force --no-insight
+yo jhipster --force --no-insight --skip-checks
 ls -al "$HOME"/app
