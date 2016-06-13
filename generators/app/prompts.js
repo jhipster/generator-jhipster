@@ -132,12 +132,16 @@ function askForClient() {
 
     var done = this.async();
     var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    var applicationType = this.applicationType;
 
     this.prompt({
         type: 'list',
         name: 'angularVersion',
+        when: function (response) {
+            return (applicationType !== 'microservice');
+        },
         message: function (response) {
-            return getNumberedQuestion('Which *AngularJS* version would you like to use for the client side?', true);
+            return getNumberedQuestion('Which *AngularJS* version would you like to use for the client side?', applicationType !== 'microservice');
         },
         choices: [
             {
