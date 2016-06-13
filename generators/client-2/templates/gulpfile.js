@@ -23,7 +23,6 @@ var gulp = require('gulp'),<% if(useSass) { %>
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
     gulpIf = require('gulp-if'),
-    inject = require('gulp-inject'),
     angularFilesort = require('gulp-angular-filesort'),
     naturalSort = require('gulp-natural-sort'),
     bowerFiles = require('main-bower-files'),
@@ -35,14 +34,13 @@ var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
     copy = require('./gulp/copy'),
+    inject = require('./gulp/inject'),
     build = require('./gulp/build');
 
 <%_ if(enableTranslation) { _%>
 var yorc = require('./.yo-rc.json')['generator-jhipster'];
 <%_ } _%>
-
 var tsProject = ts.createProject('tsconfig.json');
-
 var config = require('./gulp/config');
 
 gulp.task('clean', function () {
@@ -110,11 +108,6 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-
-gulp.task('inject', ['tscompile','inject:dep', 'inject:app']);
-gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
-
-
 gulp.task('tscompile', ['clean'], function(cb){
      return gulp.src([config.app + 'app/**/*.ts', 'typings/**/*.d.ts'])
         .pipe(sourcemaps.init())
@@ -123,59 +116,17 @@ gulp.task('tscompile', ['clean'], function(cb){
         .pipe(gulp.dest(config.dist  + 'app'));
 });
 
-gulp.task('inject:app', function () {
-    return gulp.src(config.app + 'index.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js')
-            .pipe(naturalSort())
-            .pipe(angularFilesort()), {relative: true}))
-        .pipe(gulp.dest(config.app));
-});
+gulp.task('inject', ['tscompile','inject:dep', 'inject:app']);
 
-gulp.task('inject:vendor', function () {
-    var stream = gulp.src(config.app + 'index.html')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
-            name: 'bower',
-            relative: true
-        }))
-        .pipe(gulp.dest(config.app));
+gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
-    return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassVendor)
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles({filter:['**/*.{scss,sass}']}), {read: false}), {
-            name: 'bower',
-            relative: true
-        }))
-        .pipe(gulp.dest(config.scss)));<% } else { %>stream;<% } %>
-});
+gulp.task('inject:app', inject.app);
 
-gulp.task('inject:test', function () {
-    return gulp.src(config.test + 'karma.conf.js')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles({includeDev: true, filter: ['**/*.js']}), {read: false}), {
-            starttag: '// bower:js',
-            endtag: '// endbower',
-            transform: function (filepath) {
-                return '\'' + filepath.substring(1, filepath.length) + '\',';
-            }
-        }))
-        .pipe(gulp.dest(config.test));
-});
+gulp.task('inject:vendor', inject.vendor);
 
-gulp.task('inject:troubleshoot', function () {
-    /* this task removes the troubleshooting content from index.html*/
-    return gulp.src(config.app + 'index.html')
-        .pipe(plumber({errorHandler: handleErrors}))
-        /* having empty src as we dont have to read any files*/
-        .pipe(inject(gulp.src('', {read: false}), {
-            starttag: '<!-- inject:troubleshoot -->',
-            removeTags: true,
-            transform: function () {
-                return '<!-- Angular views -->';
-            }
-        }))
-        .pipe(gulp.dest(config.app));
-});
+gulp.task('inject:test', inject.test);
+
+gulp.task('inject:troubleshoot', inject.troubleshoot);
 
 gulp.task('assets:prod', ['images', 'styles', 'html'], build);
 

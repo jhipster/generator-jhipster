@@ -290,6 +290,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('gulp/serve.js', 'gulp/serve.js', this, {});
             this.template('gulp/config.js', 'gulp/config.js', this, {});
             this.template('gulp/build.js', 'gulp/build.js', this, {});
+            this.template('gulp/copy.js', 'gulp/copy.js', this, {});
         },
 
         writeCssFiles: function () {

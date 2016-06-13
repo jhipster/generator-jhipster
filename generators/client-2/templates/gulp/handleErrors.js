@@ -1,3 +1,5 @@
+'use strict';
+
 var notify = require("gulp-notify");
 var argv = require('yargs').argv;
 
