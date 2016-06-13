@@ -9,7 +9,8 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "outDir": "<%= DIST_DIR %>"
     },
     "exclude": [
         "node_modules",

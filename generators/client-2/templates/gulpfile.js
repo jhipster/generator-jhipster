@@ -34,6 +34,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
+    copy = require('./gulp/copy'),
     build = require('./gulp/build');
 
 <%_ if(enableTranslation) { _%>
@@ -50,58 +51,14 @@ gulp.task('clean', function () {
 
 gulp.task('copy', [<% if(enableTranslation) { %>'copy:i18n', <% } %>'copy:fonts', 'copy:common', 'copy:deps']);
 <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
-gulp.task('copy:i18n', function () {
-    return gulp.src(config.app + 'i18n/**')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'i18n/'))
-        .pipe(gulp.dest(config.dist + 'i18n/'));
-});
+gulp.task('copy:i18n', copy.i18n);
 <% } %>
-gulp.task('copy:fonts', function () {
-    return es.merge(<% if(!useSass) { %>gulp.src(config.bower + 'bootstrap/fonts/*.*')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'content/fonts/'))
-        .pipe(rev())
-        .pipe(gulp.dest(config.dist + 'content/fonts/'))
-        .pipe(rev.manifest(config.revManifest, {
-            base: config.dist,
-            merge: true
-        }))
-        .pipe(gulp.dest(config.dist)),<% } %>
-        gulp.src(config.app + 'content/**/*.{woff,woff2,svg,ttf,eot,otf}')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'content/fonts/'))
-        .pipe(flatten())
-        .pipe(rev())
-        .pipe(gulp.dest(config.dist + 'content/fonts/'))
-        .pipe(rev.manifest(config.revManifest, {
-            base: config.dist,
-            merge: true
-        }))
-        .pipe(gulp.dest(config.dist))
-    );
-});
+gulp.task('copy:fonts', copy.fonts);
 
-gulp.task('copy:common', function () {
-    return gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist))
-        .pipe(gulp.dest(config.dist));
-});
+gulp.task('copy:common', copy.common);
 
 //copy npm dependencies to vendor folder
-//TODO optimize to copy only required minified files
-gulp.task('copy:deps', function(){
-    return gulp.src([
-        'node_modules/core-js/client/shim.min.js',
-        'node_modules/zone.js/dist/zone.js',
-        'node_modules/reflect-metadata/Reflect.js',
-        'node_modules/systemjs/dist/system.js',
-        'node_modules/@angular/**/*.js',
-        'node_modules/rxjs/**/*.js'
-    ], { base: 'node_modules' })
-    .pipe(gulp.dest(config.app + 'vendor'));
-});
+gulp.task('copy:deps', copy.deps);
 
 gulp.task('images', function () {
     return gulp.src(config.app + 'content/images/**')
@@ -163,7 +120,7 @@ gulp.task('tscompile', ['clean'], function(cb){
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.app  + 'app'));
+        .pipe(gulp.dest(config.dist  + 'app'));
 });
 
 gulp.task('inject:app', function () {
