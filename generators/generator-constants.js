@@ -23,7 +23,7 @@ const RESERVED_WORDS_MONGO = ['DOCUMENT'];
 const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
 const constants = {
-    QUESTIONS: 16, // maximum possible number of questions
+    QUESTIONS: 17, // maximum possible number of questions
     CLIENT_QUESTIONS: 3,
     SERVER_QUESTIONS: 13,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
