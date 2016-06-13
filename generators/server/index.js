@@ -332,6 +332,9 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }
+            if (this.configOptions.angularVersion) {
+                this.angularVersion = this.configOptions.angularVersion;
+            }
         },
 
         composeLanguages: function () {
