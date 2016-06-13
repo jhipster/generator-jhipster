@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'),
     gulp = require('gulp'),
     lazypipe = require('lazypipe'),
