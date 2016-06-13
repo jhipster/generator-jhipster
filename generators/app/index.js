@@ -55,11 +55,11 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
-        // This adds support for a `--[no-]check-install` flag
-        this.option('check-install', {
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: true
+            defaults: false
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -76,7 +76,7 @@ module.exports = JhipsterGenerator.extend({
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
-        this.checkInstall = this.options['check-install'];
+        this.checkInstall = !this.options['skip-checks'];
 
     },
     initializing: {
