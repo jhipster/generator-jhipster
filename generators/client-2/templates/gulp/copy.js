@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
     rev = require('gulp-rev'),
     plumber = require('gulp-plumber'),
@@ -10,20 +12,20 @@ var handleErrors = require('./gulp/handleErrors');
 var config = require('./config');
 
 module.exports = {<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
-    i18n: copyI18n,<% } %>
-    fonts: copyFonts,
-    common: copyCommon,
-    deps: copyDeps
+    i18n: i18n,<% } %>
+    fonts: fonts,
+    common: common,
+    deps: deps
 }
 <% if(enableTranslation) { %>
-function copyI18n() {
+function i18n() {
     return gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
         .pipe(gulp.dest(config.dist + 'i18n/'));
 }
 <% } %>
-function copyFonts() {
+function fonts() {
     return es.merge(<% if(!useSass) { %>gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
@@ -48,7 +50,7 @@ function copyFonts() {
     );
 }
 
-function copyCommon() {
+function common() {
     return gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist))
@@ -57,7 +59,7 @@ function copyCommon() {
 
 //copy npm dependencies to vendor folder
 //TODO optimize to copy only required minified files
-function copyDeps(){
+function deps(){
     return gulp.src([
         'node_modules/core-js/client/shim.min.js',
         'node_modules/zone.js/dist/zone.js',
