@@ -325,7 +325,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'system.config.js', MAIN_SRC_DIR + 'system.config.js');
 
             // Angular JS module
-            this.template(ANGULAR_DIR + '_upgrade_adaptor.ts', ANGULAR_DIR + 'upgrade_adaptor.ts', this, {});
+            this.template(ANGULAR_DIR + '_upgrade_adapter.ts', ANGULAR_DIR + 'upgrade_adapter.ts', this, {});
             this.template(ANGULAR_DIR + '_app.main.ts', ANGULAR_DIR + 'app.main.ts', this, {});
             this.template(ANGULAR_DIR + '_app.module.ts', ANGULAR_DIR + 'app.module.ts', this, {});
             this.template(ANGULAR_DIR + '_app.state.ts', ANGULAR_DIR + 'app.state.ts', this, {});

@@ -361,7 +361,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/settings.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/reset.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json',
-        CLIENT_MAIN_SRC_DIR + 'app/upgrade_adaptor.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/upgrade_adapter.ts',
         CLIENT_MAIN_SRC_DIR + 'app/app.main.ts',        
         CLIENT_MAIN_SRC_DIR + 'app/app.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/app.state.ts',
