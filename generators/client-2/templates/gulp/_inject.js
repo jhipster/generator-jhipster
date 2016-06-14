@@ -39,7 +39,7 @@ function vendor() {
             name: 'bower',
             relative: false,
             transform: function (filepath) {
-                '<script src="' + filepath.replace('/src/main/webapp/', '') + '"></script>'; // TODO temp hack
+                return '<script src="' + filepath.replace('/src/main/webapp/', '') + '"></script>'; // TODO temp hack
             }
         }))
         .pipe(gulp.dest(config.dist));
