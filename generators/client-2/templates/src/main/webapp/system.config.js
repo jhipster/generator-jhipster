@@ -3,17 +3,19 @@
 * Adjust as necessary for your application needs.
 */
 (function(global) {
+    // default js extension set true
+    System.defaultJsExtension  = true;
     // map tells the System loader where to look for things
     var map = {
         'app': 'app', // 'dist',
         '@angular': 'vendor/@angular',
         'rxjs': 'vendor/rxjs',
-        'main': 'app.main.js'
+        'main': 'app.main'
     };
     // packages tells the System loader how to load when no filename and/or no extension
     var packages = {
-        'app': { main: 'app.main.js', defaultExtension: 'js' },
-        'rxjs': { defaultExtension: 'js' }
+        'app': { main: 'app.main' },
+        'rxjs': {  }
     };
     var ngPackageNames = [
         'common',
@@ -27,11 +29,11 @@
     ];
     // Individual files (~300 requests):
     function packIndex(pkgName) {
-        packages['@angular/'+ pkgName] = { main: 'index.js', defaultExtension: 'js' };
+        packages['@angular/'+ pkgName] = { main: 'index' };
     }
     // Bundled (~40 requests):
     function packUmd(pkgName) {
-        packages['@angular/'+ pkgName] = { main: pkgName + '.umd.js', defaultExtension: 'js' };
+        packages['@angular/'+ pkgName] = { main: pkgName + '.umd' };
     };
     // Most environments should use UMD; some (Karma) need the individual index files
     var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
