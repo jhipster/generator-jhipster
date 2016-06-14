@@ -1,3 +1,5 @@
+import { AppStateConfig } from './app.state';
+
 angular
     .module('<%=angularAppName%>.app', [
         'ngStorage', <% if (enableTranslation) { %>
@@ -19,6 +21,7 @@ angular
         '<%=angularAppName%>.admin',
         '<%=angularAppName%>.entity'
     ])
+    .config(AppStateConfig)
     .run(run);
 
 run.$inject = ['stateHandler'<% if (enableTranslation) { %>, 'translationHandler'<% } %>];
