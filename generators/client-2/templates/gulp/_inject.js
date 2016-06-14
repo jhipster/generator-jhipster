@@ -21,10 +21,10 @@ module.exports = {
 
 function app() {
     return gulp.src(config.app + 'index.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js')
+        .pipe(inject(gulp.src(config.dist + 'app/**/*.js')
             .pipe(naturalSort())
             .pipe(angularFilesort()), {relative: true}))
-        .pipe(gulp.dest(config.app));
+        .pipe(gulp.dest(config.dist));
 }
 
 function vendor() {
@@ -34,7 +34,7 @@ function vendor() {
             name: 'bower',
             relative: true
         }))
-        .pipe(gulp.dest(config.app));
+        .pipe(gulp.dest(config.dist));
 
     return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassVendor)
         .pipe(plumber({errorHandler: handleErrors}))
@@ -70,5 +70,5 @@ function troubleshoot() {
                 return '<!-- Angular views -->';
             }
         }))
-        .pipe(gulp.dest(config.app));
+        .pipe(gulp.dest(config.dist));
 }
