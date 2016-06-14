@@ -1,36 +1,36 @@
-(function() {
-    'use strict';
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .factory('ProfileService', ProfileService);
+import {ProfileInfo} from './profile-info'
 
-    ProfileService.$inject = ['$q', '$http'];
+@Injectable()
+export class ProfileService {
 
-    function ProfileService($q, $http) {
+    private profileInfoUrl = 'api/profile-info';
 
-        var dataPromise;
+    constructor(private http: Http) {
 
-        var service = {
-            getProfileInfo : getProfileInfo
-        };
-
-        return service;
-
-        function getProfileInfo() {
-            if (angular.isUndefined(dataPromise)) {
-                dataPromise = $http.get('api/profile-info').then(function(result) {
-                    if (result.data.activeProfiles) {
-                        var response = {};
-                        response.activeProfiles = result.data.activeProfiles;
-                        response.ribbonEnv = result.data.ribbonEnv;
-                        response.inProduction = result.data.activeProfiles.indexOf("prod") !== -1;
-                        response.swaggerDisabled = result.data.activeProfiles.indexOf("no-swagger") !== -1;
-                        return response;
-                    }
-                });
-            }
-            return dataPromise;
-        }
     }
-})();
+
+    getProfileInfo(): Promise<ProfileInfo> {
+        return this.http.get(this.profileInfoUrl)
+            .toPromise()
+            .then(response => {
+                let data = response.json().data;
+                let pi = new ProfileInfo();
+                pi.activeProfiles = data.activeProfiles;
+                pi.ribbonEnv = data.ribbonEnv;
+                pi.inProduction = data.activeProfiles.indexOf("prod") !== -1;
+                pi.swaggerDisabled = data.activeProfiles.indexOf("no-swagger") !== -1;
+                return pi;
+
+            })
+            .catch(this.handleError);
+    }
+
+    private handleError(error: any) {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
+    }
+}

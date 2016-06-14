@@ -326,6 +326,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'system.config.js', MAIN_SRC_DIR + 'system.config.js');
 
             // Angular JS module
+            this.template(ANGULAR_DIR + '_upgrade_adapter.ts', ANGULAR_DIR + 'upgrade_adapter.ts', this, {});
             this.template(ANGULAR_DIR + '_app.main.ts', ANGULAR_DIR + 'app.main.ts', this, {});
             this.template(ANGULAR_DIR + '_app.module.ts', ANGULAR_DIR + 'app.module.ts', this, {});
             this.template(ANGULAR_DIR + '_app.state.ts', ANGULAR_DIR + 'app.state.ts', this, {});
@@ -539,6 +540,8 @@ module.exports = JhipsterClientGenerator.extend({
         writeAngularProfileServiceFiles: function () {
             // services
             this.template(ANGULAR_DIR + 'components/profiles/_profile.service.ts', ANGULAR_DIR + 'components/profiles/profile.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/profiles/_profile-info.ts', ANGULAR_DIR + 'components/profiles/profile-info.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/profiles/_profile-ribbon.component.ts', ANGULAR_DIR + 'components/profiles/profile-ribbon.component.ts', this, {});
             this.template(ANGULAR_DIR + 'components/profiles/_page-ribbon.directive.ts', ANGULAR_DIR + 'components/profiles/page-ribbon.directive.ts', this, {});
         },
 
