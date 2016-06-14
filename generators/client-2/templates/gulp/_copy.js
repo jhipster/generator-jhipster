@@ -39,7 +39,7 @@ function languages() {
 }
 <% } %>
 function html() {
-    return gulp.src(config.app + '/**/*.html')
+    return gulp.src([config.app + '/**/*.html', '!' + config.bower + '/**'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist))
         .pipe(gulp.dest(config.dist));
