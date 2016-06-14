@@ -7,7 +7,7 @@ module.exports = {
     scss: '<%= MAIN_SRC_DIR %>scss/',
     sassSrc: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
     sassVendor: 'src/main/webapp/scss/vendor.scss',
-    cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>,
+    cssDir: '<%= DIST_DIR %>content/css'<% } %>,
     bower: '<%= MAIN_SRC_DIR %>bower_components/',
     tmp: '<%= BUILD_DIR %>tmp',
     revManifest: '<%= BUILD_DIR %>tmp/rev-manifest.json',

@@ -226,16 +226,14 @@ gulp.task('watch', function () {
     gulp.watch(config.app + 'app/**/*.js', ['inject:app']);
     gulp.watch(config.app + 'app/**/*.html', ['copy:html']);
     gulp.watch(config.app + 'i18n/**/*.json', ['copy:i18n']);
-    gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
+    gulp.watch([config.dist + '*.html', config.dist + 'app/**', config.dist + 'i18n/**']).on('change', browserSync.reload);
 });
 
-gulp.task('install', function () {
-    runSequence('clean', ['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot', 'copy:temp');
+gulp.task('install', ['clean'], function () {
+    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot', 'copy:temp');
 });
 
-gulp.task('serve', function () {
-    runSequence('install', serve);
-});
+gulp.task('serve', ['install'], serve);
 
 gulp.task('build', ['clean'], function (cb) {
     runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'copy:languages'<% } %>], 'tscompile', 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
