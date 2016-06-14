@@ -7,9 +7,9 @@ var gulp = require('gulp'),
     naturalSort = require('gulp-natural-sort'),
     bowerFiles = require('main-bower-files');
 
-var handleErrors = require('./gulp/handleErrors');
+var handleErrors = require('./handleErrors');
 
-var config = require('./gulp/config');
+var config = require('./config');
 
 module.exports = {
     app: app,

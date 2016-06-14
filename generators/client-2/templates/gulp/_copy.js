@@ -3,12 +3,11 @@
 var gulp = require('gulp'),
     rev = require('gulp-rev'),
     plumber = require('gulp-plumber'),
-    handleErrors = require('./handleErrors'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     changed = require('gulp-changed');
 
-var handleErrors = require('./gulp/handleErrors');
+var handleErrors = require('./handleErrors');
 var config = require('./config');
 
 module.exports = {<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
