@@ -933,6 +933,7 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     end: function () {
+
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
             this.warning(chalk.yellow.bold('You have selected Oracle database.\n') + 'Please rename ' +

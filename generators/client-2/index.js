@@ -276,7 +276,6 @@ module.exports = JhipsterClientGenerator.extend({
     writing: {
 
         writeCommonFiles: function () {
-
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
             this.template('_tsconfig.json', 'tsconfig.json', this, {});
@@ -285,7 +284,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('_eslintrc.json', '.eslintrc.json', this, {});
             this.template('_eslintignore', '.eslintignore', this, {});
             this.template('_gulpfile.js', 'gulpfile.js', this, {});
-            this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
+            this.fs.copy(this.templatePath('gulp/_handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
             this.template('gulp/_utils.js', 'gulp/utils.js', this, {});
             this.template('gulp/_serve.js', 'gulp/serve.js', this, {});
             this.template('gulp/_config.js', 'gulp/config.js', this, {});
@@ -542,7 +541,7 @@ module.exports = JhipsterClientGenerator.extend({
             // services
             this.template(ANGULAR_DIR + 'components/profiles/_profile.service.ts', ANGULAR_DIR + 'components/profiles/profile.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/profiles/_profile-info.ts', ANGULAR_DIR + 'components/profiles/profile-info.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/profiles/_profile-ribbon.component.ts', ANGULAR_DIR + 'components/profiles/profile-ribbon.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/profiles/_page-ribbon.component.ts', ANGULAR_DIR + 'components/profiles/page-ribbon.component.ts', this, {});
             this.template(ANGULAR_DIR + 'components/profiles/_page-ribbon.directive.ts', ANGULAR_DIR + 'components/profiles/page-ribbon.directive.ts', this, {});
         },
 
