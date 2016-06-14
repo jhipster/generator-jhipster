@@ -56,6 +56,13 @@ gulp.task('copy:common', copy.common);
 //copy npm dependencies to vendor folder
 gulp.task('copy:deps', copy.deps);
 
+gulp.task('copy:temp', function () {
+    return gulp.src([config.app + '/**/*', '!' + config.app + '/**/*.ts'])
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist))
+        .pipe(gulp.dest(config.dist));
+});
+
 gulp.task('images', function () {
     return gulp.src(config.app + 'content/images/**')
         .pipe(plumber({errorHandler: handleErrors}))
@@ -94,7 +101,7 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('tscompile', ['clean'], function(cb){
+gulp.task('tscompile', function(cb){
      return gulp.src([config.app + 'app/**/*.ts', 'typings/**/*.d.ts'])
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
@@ -223,7 +230,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function () {
-    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot');
+    runSequence('clean', ['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot', 'copy:temp');
 });
 
 gulp.task('serve', function () {
