@@ -41,12 +41,14 @@ gulp.task('clean', function () {
     return del([config.dist], { dot: true });
 });
 
-gulp.task('copy', [<% if(enableTranslation) { %>'copy:i18n', <% } %>'copy:fonts', 'copy:common', 'copy:deps']);
+gulp.task('copy', [<% if(enableTranslation) { %>'copy:i18n', <% } %>'copy:fonts', 'copy:html', 'copy:common', 'copy:deps']);
 <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
 gulp.task('copy:i18n', copy.i18n);
 
 gulp.task('copy:languages', copy.languages);
 <% } %>
+gulp.task('copy:html', copy.html);
+
 gulp.task('copy:fonts', copy.fonts);
 
 gulp.task('copy:common', copy.common);
@@ -215,6 +217,8 @@ gulp.task('watch', function () {
     gulp.watch(config.app + 'content/images/**', ['images']);
     gulp.watch(config.app + 'app/**/*.ts', ['tscompile']);
     gulp.watch(config.app + 'app/**/*.js', ['inject:app']);
+    gulp.watch(config.app + 'app/**/*.html', ['copy:html']);
+    gulp.watch(config.app + 'i18n/**/*.json', ['copy:i18n']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
