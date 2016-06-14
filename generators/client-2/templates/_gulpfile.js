@@ -57,7 +57,7 @@ gulp.task('copy:common', copy.common);
 gulp.task('copy:deps', copy.deps);
 
 gulp.task('copy:temp', function () {
-    return gulp.src([config.app + '/**/*', '!' + config.app + '/**/*.ts'])
+    return gulp.src([config.app + '/**/*', '!' + config.app + '/**/*.ts', '!' + config.sassSrc])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist))
         .pipe(gulp.dest(config.dist));
@@ -229,7 +229,7 @@ gulp.task('watch', function () {
     gulp.watch([config.dist + '*.html', config.dist + 'app/**', config.dist + 'i18n/**']).on('change', browserSync.reload);
 });
 
-gulp.task('install', ['clean'], function () {
+gulp.task('install', ['clean', 'copy:temp'], function () {
     runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot', 'copy:temp');
 });
 

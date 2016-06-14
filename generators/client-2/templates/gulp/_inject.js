@@ -37,7 +37,10 @@ function vendor() {
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
             name: 'bower',
-            relative: true
+            relative: false,
+            transform: function (filepath) {
+                '<script src="' + filepath.replace('/src/main/webapp/', '') + '"></script>'; // TODO temp hack
+            }
         }))
         .pipe(gulp.dest(config.dist));
 
