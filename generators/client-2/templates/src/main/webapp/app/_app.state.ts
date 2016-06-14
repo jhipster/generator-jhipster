@@ -1,6 +1,3 @@
-angular
-    .module('<%=angularAppName%>.app')
-    .config(AppStateConfig);
 
 AppStateConfig.$inject = ['$stateProvider'];
 
@@ -26,3 +23,5 @@ function AppStateConfig($stateProvider) {
         }
     });
 }
+
+export default AppStateConfig;
