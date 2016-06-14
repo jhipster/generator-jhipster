@@ -23,9 +23,6 @@ var gulp = require('gulp'),<% if(useSass) { %>
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
     gulpIf = require('gulp-if'),
-    angularFilesort = require('gulp-angular-filesort'),
-    naturalSort = require('gulp-natural-sort'),
-    bowerFiles = require('main-bower-files'),
     ts = require('gulp-typescript'),
     sourcemaps = require('gulp-sourcemaps'),
     tslint = require('gulp-tslint');
@@ -37,9 +34,6 @@ var handleErrors = require('./gulp/handleErrors'),
     inject = require('./gulp/inject'),
     build = require('./gulp/build');
 
-<%_ if(enableTranslation) { _%>
-var yorc = require('./.yo-rc.json')['generator-jhipster'];
-<%_ } _%>
 var tsProject = ts.createProject('tsconfig.json');
 var config = require('./gulp/config');
 
@@ -50,6 +44,8 @@ gulp.task('clean', function () {
 gulp.task('copy', [<% if(enableTranslation) { %>'copy:i18n', <% } %>'copy:fonts', 'copy:common', 'copy:deps']);
 <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
 gulp.task('copy:i18n', copy.i18n);
+
+gulp.task('copy:languages', copy.languages);
 <% } %>
 gulp.task('copy:fonts', copy.fonts);
 
@@ -88,18 +84,6 @@ gulp.task('sass', function () {
         .pipe(flatten())
         .pipe(gulp.dest(config.app + 'content/fonts'))
     );
-});
-<%_ } _%>
-
-<%_ if(enableTranslation) { _%>
-gulp.task('languages', function () {
-    var locales = yorc.languages.map(function (locale) {
-        return config.bower + 'angular-i18n/angular-locale_' + locale + '.js';
-    });
-    return gulp.src(locales)
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.app + 'i18n/'))
-        .pipe(gulp.dest(config.app + 'i18n/'));
 });
 <%_ } _%>
 
@@ -235,7 +219,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function () {
-    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot');
+    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:app', 'inject:troubleshoot');
 });
 
 gulp.task('serve', function () {
@@ -243,7 +227,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'tscompile', 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
+    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'copy:languages'<% } %>], 'tscompile', 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);
