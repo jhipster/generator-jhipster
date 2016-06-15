@@ -1,25 +1,19 @@
-(function() {
-    'use strict';
+NotificationInterceptor.$inject = ['$q', 'AlertService'];
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .factory('notificationInterceptor', notificationInterceptor);
+function NotificationInterceptor ($q, AlertService) {
+    var service = {
+        response: response
+    };
 
-    notificationInterceptor.$inject = ['$q', 'AlertService'];
+    return service;
 
-    function notificationInterceptor ($q, AlertService) {
-        var service = {
-            response: response
-        };
-
-        return service;
-
-        function response (response) {
-            var alertKey = response.headers('X-<%=angularAppName%>-alert');
-            if (angular.isString(alertKey)) {
-                AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
-            }
-            return response;
+    function response (response) {
+        var alertKey = response.headers('X-<%=angularAppName%>-alert');
+        if (angular.isString(alertKey)) {
+            AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
         }
+        return response;
     }
-})();
+}
+
+export default NotificationInterceptor;
