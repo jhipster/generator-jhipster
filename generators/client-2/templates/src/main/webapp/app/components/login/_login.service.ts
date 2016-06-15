@@ -1,42 +1,36 @@
-(function() {
-    'use strict';
+LoginService.$inject = ['$uibModal'];
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .factory('LoginService', LoginService);
+function LoginService ($uibModal) {
+    var service = {
+        open: open
+    };
 
-    LoginService.$inject = ['$uibModal'];
+    var modalInstance = null;
+    var resetModal = function () {
+        modalInstance = null;
+    };
 
-    function LoginService ($uibModal) {
-        var service = {
-            open: open
-        };
+    return service;
 
-        var modalInstance = null;
-        var resetModal = function () {
-            modalInstance = null;
-        };
-
-        return service;
-
-        function open () {
-            if (modalInstance !== null) return;
-            modalInstance = $uibModal.open({
-                animation: true,
-                templateUrl: 'app/components/login/login.html',
-                controller: 'LoginController',
-                controllerAs: 'vm',
-                resolve: {
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('login');
-                        return $translate.refresh();
-                    }]
-                }
-            });
-            modalInstance.result.then(
-                resetModal,
-                resetModal
-            );
-        }
+    function open () {
+        if (modalInstance !== null) return;
+        modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'app/components/login/login.html',
+            controller: 'LoginController',
+            controllerAs: 'vm',
+            resolve: {
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('login');
+                    return $translate.refresh();
+                }]
+            }
+        });
+        modalInstance.result.then(
+            resetModal,
+            resetModal
+        );
     }
-})();
+}
+
+export default LoginService;
