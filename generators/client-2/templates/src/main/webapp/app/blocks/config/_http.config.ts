@@ -1,6 +1,6 @@
 HttpConfig.$inject = ['$urlRouterProvider', '$httpProvider', 'httpRequestInterceptorCacheBusterProvider', '$urlMatcherFactoryProvider'];
 
-function HttpConfig($urlRouterProvider, $httpProvider, httpRequestInterceptorCacheBusterProvider, $urlMatcherFactoryProvider) {
+export function HttpConfig($urlRouterProvider, $httpProvider, httpRequestInterceptorCacheBusterProvider, $urlMatcherFactoryProvider) {
     <% if (authenticationType == 'session') { %>
     //enable CSRF
     $httpProvider.defaults.xsrfCookieName = 'CSRF-TOKEN';
@@ -26,5 +26,3 @@ function HttpConfig($urlRouterProvider, $httpProvider, httpRequestInterceptorCac
         pattern: /bool|true|0|1/
     });
 }
-
-export default HttpConfig;

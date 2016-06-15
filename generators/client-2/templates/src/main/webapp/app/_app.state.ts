@@ -1,7 +1,7 @@
 
 AppStateConfig.$inject = ['$stateProvider'];
 
-function AppStateConfig($stateProvider) {
+export function AppStateConfig($stateProvider) {
     $stateProvider.state('app', {
         abstract: true,
         views: {
@@ -23,5 +23,3 @@ function AppStateConfig($stateProvider) {
         }
     });
 }
-
-export default AppStateConfig;

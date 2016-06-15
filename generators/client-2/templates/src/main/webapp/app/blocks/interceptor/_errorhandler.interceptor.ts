@@ -1,6 +1,6 @@
 ErrorHandlerInterceptor.$inject = ['$q', '$rootScope'];
 
-function ErrorHandlerInterceptor ($q, $rootScope) {
+export function ErrorHandlerInterceptor ($q, $rootScope) {
     var service = {
         responseError: responseError
     };
@@ -14,5 +14,3 @@ function ErrorHandlerInterceptor ($q, $rootScope) {
         return $q.reject(response);
     }
 }
-
-export default ErrorHandlerInterceptor;
