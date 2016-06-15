@@ -1,15 +1,9 @@
-(function () {
-    'use strict';
+PagerConfig.$inject = ['uibPagerConfig', 'paginationConstants'];
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .config(pagerConfig);
+function PagerConfig(uibPagerConfig, paginationConstants) {
+    uibPagerConfig.itemsPerPage = paginationConstants.itemsPerPage;
+    uibPagerConfig.previousText = '«';
+    uibPagerConfig.nextText = '»';
+}
 
-    pagerConfig.$inject = ['uibPagerConfig', 'paginationConstants'];
-
-    function pagerConfig(uibPagerConfig, paginationConstants) {
-        uibPagerConfig.itemsPerPage = paginationConstants.itemsPerPage;
-        uibPagerConfig.previousText = '«';
-        uibPagerConfig.nextText = '»';
-    }
-})();
+export default PagerConfig;

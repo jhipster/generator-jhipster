@@ -1,14 +1,8 @@
-(function() {
-    'use strict';
+LocalStorageConfig.$inject = ['$localStorageProvider', '$sessionStorageProvider'];
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .config(localStorageConfig);
+function LocalStorageConfig($localStorageProvider, $sessionStorageProvider) {
+  $localStorageProvider.setKeyPrefix('jhi-');
+  $sessionStorageProvider.setKeyPrefix('jhi-');
+}
 
-    localStorageConfig.$inject = ['$localStorageProvider', '$sessionStorageProvider'];
-
-    function localStorageConfig($localStorageProvider, $sessionStorageProvider) {
-      $localStorageProvider.setKeyPrefix('jhi-');
-      $sessionStorageProvider.setKeyPrefix('jhi-');
-    }
-})();
+export default LocalStorageConfig;
