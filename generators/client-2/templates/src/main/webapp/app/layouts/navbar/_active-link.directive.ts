@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>.common')
+        .module('<%=angularAppName%>.app')
         .directive('activeLink', activeLink);
 
     function activeLink() {
