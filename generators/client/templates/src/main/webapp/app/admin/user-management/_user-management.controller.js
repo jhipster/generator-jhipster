@@ -77,6 +77,53 @@
                 lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
                 resetKey: null, authorities: null
             };
+<<<<<<< c49ca56d614b4aea8c0adae26d3c0d3630895da7
+=======
+        }
+
+        function loadAll () {
+            User.query({
+                page: pagingParams.page - 1,
+                size: vm.itemsPerPage,
+                sort: sort()
+            }, onSuccess, onError);
+        }
+        function sort () {
+            var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
+            if (vm.predicate !== 'id') {
+                result.push('id');
+            }
+            return result;
+        }
+        function onSuccess (data, headers) {
+            //hide anonymous user from user management: it's a required user for Spring Security
+            for (var i in data) {
+                if (data[i]['login'] === 'anonymoususer') {
+                    data.splice(i, 1);
+                }
+            }
+            vm.links = ParseLinks.parse(headers('link'));
+            vm.totalItems = headers('X-Total-Count');
+            vm.queryCount = vm.totalItems;
+            vm.users = data;
+            vm.page = pagingParams.page;
+        }
+        function onError (error) {
+            AlertService.error(error.data.message);
+        }
+
+        function loadPage (page) {
+            vm.page = page;
+            vm.transition();
+        }
+
+        function transition () {
+            $state.transitionTo($state.$current, {
+                page: vm.page,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+                search: vm.currentSearch
+            });
+>>>>>>> set up sorting and pagination for user-management to match entities
         }
 
         function sort () {
