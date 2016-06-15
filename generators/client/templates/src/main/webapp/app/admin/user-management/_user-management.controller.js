@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('UserManagementController', UserManagementController);
 
-    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'paginationConstants'<% if (enableTranslation) { %>, '<%=jhiPrefixCapitalized%>LanguageService'<% } %>];
+    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', '$state', 'pagingParams', 'paginationConstants'<% if (enableTranslation) { %>, '<%=jhiPrefixCapitalized%>LanguageService'<% } %>];
 
-    function UserManagementController(Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %>) {
+    function UserManagementController(Principal, User, ParseLinks, $state, pagingParams, paginationConstants<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %>) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
@@ -21,40 +21,19 @@
         vm.setActive = setActive;
         vm.totalItems = null;
         vm.users = [];
-
+        vm.predicate = pagingParams.predicate;
+        vm.reverse = pagingParams.ascending;
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        vm.transition = transition;
 
         vm.loadAll();
-
         <% if (enableTranslation) { %>
         <%=jhiPrefixCapitalized%>LanguageService.getAll().then(function (languages) {
             vm.languages = languages;
         });<% } %>
-
         Principal.identity().then(function(account) {
             vm.currentAccount = account;
         });
-
-
-        function loadAll () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            User.query({page: vm.page - 1, size: paginationConstants.itemsPerPage}, function (result, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');<% } else { %>
-            User.query({}, function (result) {<% } %>
-
-                //hide anonymous user from user management: it's a required user for Spring Security
-                for(var i in result) {
-                    if(result[i]['login'] === 'anonymoususer') {
-                        result.splice(i,1);
-                    }
-                }
-                vm.users = result;
-            });
-        }
-
-        function loadPage (page) {
-            vm.page = page;
-            vm.loadAll();
-        }
 
         function setActive (user, isActivated) {
             user.activated = isActivated;
@@ -71,8 +50,50 @@
                 lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
                 resetKey: null, authorities: null
             };
-            vm.editForm.$setPristine();
-            vm.editForm.$setUntouched();
+        }
+
+        function loadAll () {
+            User.query({
+                page: pagingParams.page - 1,
+                size: vm.itemsPerPage,
+                sort: sort()
+            }, onSuccess, onError);
+        }
+        function sort () {
+            var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
+            if (vm.predicate !== 'id') {
+                result.push('id');
+            }
+            return result;
+        }
+        function onSuccess (data, headers) {
+            //hide anonymous user from user management: it's a required user for Spring Security
+            for (var i in data) {
+                if (data[i]['login'] === 'anonymoususer') {
+                    data.splice(i, 1);
+                }
+            }
+            vm.links = ParseLinks.parse(headers('link'));
+            vm.totalItems = headers('X-Total-Count');
+            vm.queryCount = vm.totalItems;
+            vm.users = data;
+            vm.page = pagingParams.page;
+        }
+        function onError (error) {
+            AlertService.error(error.data.message);
+        }
+
+        function loadPage (page) {
+            vm.page = page;
+            vm.transition();
+        }
+
+        function transition () {
+            $state.transitionTo($state.$current, {
+                page: vm.page,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+                search: vm.currentSearch
+            });
         }
     }
 })();
