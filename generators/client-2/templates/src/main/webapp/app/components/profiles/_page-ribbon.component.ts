@@ -6,7 +6,6 @@ import {ProfileInfo} from './profile-info';
     selector: 'page-ribbon',
     template: '<div class="ribbon {{cssClass}}"><a href="" translate="global.ribbon.{{ribbonEnv}}">{{ribbonEnv}}</a></div>'
 })
-
 export class PageRibbonComponent implements OnInit {
 
     profileInfo: ProfileInfo;
