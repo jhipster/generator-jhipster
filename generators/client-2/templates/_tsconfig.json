@@ -10,7 +10,7 @@
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
         "isolatedModules": true,
-        "outDir": "<%= DIST_DIR %>"
+        "outDir": "<%= DIST_DIR %>app"
     },
     "exclude": [
         "node_modules",
