@@ -1,4 +1,8 @@
 import { AppStateConfig } from './app.state';
+import './components/common.module';
+import './account/account.module';
+import './admin/admin.module';
+import './entities/entity.module';
 
 angular
     .module('<%=angularAppName%>.app', [

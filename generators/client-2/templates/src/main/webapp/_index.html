@@ -99,12 +99,6 @@
     <script src="vendor/zone.js/dist/zone.js"></script>
     <script src="vendor/reflect-metadata/Reflect.js"></script>
     <script src="vendor/systemjs/dist/system.js"></script>
-
-    <!-- build:js app/app.js  -->
-    <!-- inject:js -->
-    <!-- endinject -->
-    <!-- endbuild -->
-
     <script type="text/javascript">
       System.import('system.config.js').then(function () {
         System.import('/app').catch(function(err){ console.error(err) });
