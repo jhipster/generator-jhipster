@@ -1,6 +1,6 @@
 TranslationConfig.$inject = ['$translateProvider', 'tmhDynamicLocaleProvider'];
 
-function TranslationConfig($translateProvider, tmhDynamicLocaleProvider) {
+export function TranslationConfig($translateProvider, tmhDynamicLocaleProvider) {
     // Initialize angular-translate
     $translateProvider.useLoader('$translatePartialLoader', {
         urlTemplate: 'i18n/{lang}/{part}.json'
@@ -15,5 +15,3 @@ function TranslationConfig($translateProvider, tmhDynamicLocaleProvider) {
     tmhDynamicLocaleProvider.useCookieStorage();
     tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
 }
-
-export default TranslationConfig;

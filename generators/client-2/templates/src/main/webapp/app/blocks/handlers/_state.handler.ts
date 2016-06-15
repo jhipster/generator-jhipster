@@ -1,7 +1,7 @@
 StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } %> '$window',
         'Auth', 'Principal', 'VERSION'];
 
-function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } %> $window,
+export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } %> $window,
     Auth, Principal, VERSION) {
     return {
         initialize: initialize
@@ -53,5 +53,3 @@ function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslat
         });
     }
 }
-
-export default StateHandler;

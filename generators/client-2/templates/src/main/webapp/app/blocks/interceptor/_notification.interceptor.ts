@@ -1,6 +1,6 @@
 NotificationInterceptor.$inject = ['$q', 'AlertService'];
 
-function NotificationInterceptor ($q, AlertService) {
+export function NotificationInterceptor ($q, AlertService) {
     var service = {
         response: response
     };
@@ -15,5 +15,3 @@ function NotificationInterceptor ($q, AlertService) {
         return response;
     }
 }
-
-export default NotificationInterceptor;
