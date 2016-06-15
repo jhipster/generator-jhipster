@@ -1,6 +1,6 @@
 TranslationHandler.$inject = ['$rootScope', '$window', '$state', '$translate'];
 
-function TranslationHandler($rootScope, $window, $state, $translate) {
+export function TranslationHandler($rootScope, $window, $state, $translate) {
     return {
         initialize: initialize,
         updateTitle: updateTitle
@@ -33,5 +33,3 @@ function TranslationHandler($rootScope, $window, $state, $translate) {
         });
     }
 }
-
-export default TranslationHandler;

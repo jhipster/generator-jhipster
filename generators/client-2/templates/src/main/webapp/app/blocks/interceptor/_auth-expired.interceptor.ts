@@ -1,7 +1,7 @@
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 AuthExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$sessionStorage'];
 
-function AuthExpiredInterceptor($rootScope, $q, $injector, $localStorage, $sessionStorage) {
+export function AuthExpiredInterceptor($rootScope, $q, $injector, $localStorage, $sessionStorage) {
     var service = {
         responseError: responseError
     };
@@ -24,7 +24,7 @@ function AuthExpiredInterceptor($rootScope, $q, $injector, $localStorage, $sessi
 <%_ } if (authenticationType === 'session') { _%>
 AuthExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document'];
 
-function AuthExpiredInterceptor($rootScope, $q, $injector, $document) {
+export function AuthExpiredInterceptor($rootScope, $q, $injector, $document) {
     var service = {
         responseError: responseError
     };
@@ -80,5 +80,3 @@ function AuthExpiredInterceptor($rootScope, $q, $injector, $document) {
         }
     }
 }<% } %>
-
-export default AuthExpiredInterceptor;

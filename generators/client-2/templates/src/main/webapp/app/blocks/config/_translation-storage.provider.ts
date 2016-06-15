@@ -1,6 +1,6 @@
 TranslationStorageProvider.$inject = ['$cookies', '$log', 'LANGUAGES'];
 
-function TranslationStorageProvider($cookies, $log, LANGUAGES) {
+export function TranslationStorageProvider($cookies, $log, LANGUAGES) {
     return {
         get: get,
         put: put
@@ -18,5 +18,3 @@ function TranslationStorageProvider($cookies, $log, LANGUAGES) {
         $cookies.putObject(name, value);
     }
 }
-
-export default TranslationStorageProvider;

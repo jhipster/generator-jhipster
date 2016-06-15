@@ -1,6 +1,6 @@
 CompileServiceConfig.$inject = ['$compileProvider','DEBUG_INFO_ENABLED'];
 
-function CompileServiceConfig($compileProvider,DEBUG_INFO_ENABLED) {
+export function CompileServiceConfig($compileProvider,DEBUG_INFO_ENABLED) {
     // disable debug data on prod profile to improve performance
     $compileProvider.debugInfoEnabled(DEBUG_INFO_ENABLED);
 
@@ -12,5 +12,3 @@ function CompileServiceConfig($compileProvider,DEBUG_INFO_ENABLED) {
 	angular.reloadWithDebugInfo();
 	*/
 }
-
-export default CompileServiceConfig;
