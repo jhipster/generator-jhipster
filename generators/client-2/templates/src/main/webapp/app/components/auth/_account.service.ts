@@ -1,24 +1,18 @@
-(function() {
-    'use strict';
+Account.$inject = ['$resource'];
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .factory('Account', Account);
-
-    Account.$inject = ['$resource'];
-
-    function Account ($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, {}, {
-            'get': { method: 'GET', params: {}, isArray: false,
-                interceptor: {
-                    response: function(response) {
-                        // expose response
-                        return response;
-                    }
+function Account ($resource) {
+    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, {}, {
+        'get': { method: 'GET', params: {}, isArray: false,
+            interceptor: {
+                response: function(response) {
+                    // expose response
+                    return response;
                 }
             }
-        });
+        }
+    });
 
-        return service;
-    }
-})();
+    return service;
+}
+
+export default Account;
