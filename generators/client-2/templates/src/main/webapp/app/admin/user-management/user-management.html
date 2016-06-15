@@ -2,25 +2,25 @@
     <h2 translate="userManagement.home.title">Users</h2>
     <jhi-alert></jhi-alert>
     <div class="row">
-      <div class="col-md-4">
-          <button class="btn btn-primary" ui-sref="user-management.new">
-              <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
-          </button>
-      </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary" ui-sref="user-management.new">
+                <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
+            </button>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th translate="global.field.id">ID</th>
-                <th translate="userManagement.login">Login</th>
-                <th translate="userManagement.email">Email</th>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="login"><span translate="userManagement.login">Login</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="email"><span translate="userManagement.email">Email</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <th></th>
-                <% if (enableTranslation) { %><th translate="userManagement.langKey">Lang Key</th><% } %>
-                <th translate="userManagement.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                <th translate="userManagement.createdDate">Created Date</th>
-                <th translate="userManagement.lastModifiedBy">Last Modified By</th>
-                <th translate="userManagement.lastModifiedDate">Last Modified Date</th><% } %>
+                <% if (enableTranslation) { %><th jh-sort-by="langKey"><span translate="userManagement.langKey">Lang Key</span> <span class="glyphicon glyphicon-sort"></span></th><% } %>
+                <th><span translate="userManagement.profiles">Profiles</span></th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                <th jh-sort-by="createdDate"><span translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedBy"><span translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedDate"><span translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th><% } %>
                 <th></th>
             </tr>
             </thead>
@@ -72,7 +72,8 @@
     </div>
     <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>

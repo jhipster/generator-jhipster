@@ -33,6 +33,16 @@
                     squash: true
                 }
             },
+            params: {
+                page: {
+                    value: '1',
+                    squash: true
+                },
+                sort: {
+                    value: 'id,asc',
+                    squash: true
+                }
+            },
             resolve: {
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                     return {
@@ -55,6 +65,8 @@
                     $translatePartialLoader.addPart('user-management');
                     return $translate.refresh();
                 }]
+                <%_ } _%>
+
             }
             <%_ } _%>
         })
