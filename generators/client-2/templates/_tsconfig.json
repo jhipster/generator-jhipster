@@ -9,13 +9,10 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
-        "isolatedModules": true,
         "outDir": "<%= DIST_DIR %>app"
     },
     "exclude": [
         "node_modules",
-        "typings/index.d.ts",
-        "typings/main",
-        "typings/globals"
+        "typings/index.d.ts"
     ]
 }
