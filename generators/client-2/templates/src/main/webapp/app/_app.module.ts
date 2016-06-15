@@ -18,7 +18,9 @@ import { AppStateConfig } from './app.state';
 import { TranslationStorageProvider } from './blocks/config/translation-storage.provider';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
+<%_ } _%>
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
@@ -53,9 +55,11 @@ angular
     .config(AppStateConfig)
     .factory('TranslationStorageProvider', TranslationStorageProvider)
     .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
-    .factory('AuthInterceptor', AuthInterceptor);
-    .factory('ErrorHandlerInterceptor', ErrorHandlerInterceptor);
-    .factory('NotificationInterceptor', NotificationInterceptor);
+    <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+    .factory('AuthInterceptor', AuthInterceptor)
+    <%_ } _%>
+    .factory('ErrorHandlerInterceptor', ErrorHandlerInterceptor)
+    .factory('NotificationInterceptor', NotificationInterceptor)
     .run(run);
 
 run.$inject = ['StateHandler'<% if (enableTranslation) { %>, 'TranslationHandler'<% } %>];
