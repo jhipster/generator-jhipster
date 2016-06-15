@@ -3,8 +3,6 @@
 var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     inject = require('gulp-inject'),
-    angularFilesort = require('gulp-angular-filesort'),
-    naturalSort = require('gulp-natural-sort'),
     es = require('event-stream'),
     bowerFiles = require('main-bower-files');
 
@@ -13,23 +11,9 @@ var handleErrors = require('./handleErrors');
 var config = require('./config');
 
 module.exports = {
-    app: app,
     vendor: vendor,
     test: test,
     troubleshoot: troubleshoot
-}
-// TODO temp filter out ng2 files, need to completeley remove this task
-function app() {
-    return gulp.src(config.dist + 'index.html')
-        .pipe(inject(gulp.src([config.dist + 'app/**/*.js',
-            '!' + config.dist + 'app/**/upgrade_adapter.js',
-            '!' + config.dist + 'app/**/profile-info.js',
-            '!' + config.dist + 'app/**/profile.service.js',
-            '!' + config.dist + 'app/**/page-ribbon.component.js',
-            '!' + config.dist + 'app/**/app.main.js'])
-            .pipe(naturalSort())
-            .pipe(angularFilesort()), {relative: true}))
-        .pipe(gulp.dest(config.dist));
 }
 
 function vendor() {
