@@ -1,7 +1,9 @@
-PagerConfig.$inject = ['uibPagerConfig', 'paginationConstants'];
+import {ITEMSPERPAGE} from "../../components/form/pagination.constants";
 
-export function PagerConfig(uibPagerConfig, paginationConstants) {
-    uibPagerConfig.itemsPerPage = paginationConstants.itemsPerPage;
+PagerConfig.$inject = ['uibPagerConfig'];
+
+export function PagerConfig(uibPagerConfig) {
+    uibPagerConfig.itemsPerPage = ITEMSPERPAGE;
     uibPagerConfig.previousText = '«';
     uibPagerConfig.nextText = '»';
 }
