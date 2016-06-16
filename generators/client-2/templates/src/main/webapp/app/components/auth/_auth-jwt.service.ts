@@ -1,6 +1,6 @@
 AuthServerProvider.$inject = ['$http', '$localStorage', '$sessionStorage', '$q'];
 
-function AuthServerProvider ($http, $localStorage, $sessionStorage, $q) {
+export function AuthServerProvider ($http, $localStorage, $sessionStorage, $q) {
     var service = {
         getToken: getToken,
         hasValidToken: hasValidToken,
@@ -96,5 +96,3 @@ function AuthServerProvider ($http, $localStorage, $sessionStorage, $q) {
         delete $sessionStorage.authenticationToken;
     }
 }
-
-export default AuthServerProvider;

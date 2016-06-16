@@ -1,6 +1,6 @@
 AuthServerProvider.$inject = ['$http', '$localStorage', 'Base64'];
 
-function AuthServerProvider ($http, $localStorage, Base64) {
+export function AuthServerProvider ($http, $localStorage, Base64) {
     var service = {
         getToken: getToken,
         hasValidToken: hasValidToken,
@@ -47,5 +47,3 @@ function AuthServerProvider ($http, $localStorage, Base64) {
         });
     }
 }
-
-export default AuthServerProvider;

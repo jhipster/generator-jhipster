@@ -1,6 +1,6 @@
 LoginService.$inject = ['$uibModal'];
 
-function LoginService ($uibModal) {
+export function LoginService ($uibModal) {
     var service = {
         open: open
     };
@@ -32,5 +32,3 @@ function LoginService ($uibModal) {
         );
     }
 }
-
-export default LoginService;
