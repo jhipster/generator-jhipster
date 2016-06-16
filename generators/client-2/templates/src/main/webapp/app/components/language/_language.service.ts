@@ -1,6 +1,8 @@
-<%=jhiPrefixCapitalized%>LanguageService.$inject = ['$q', '$http', '$translate', 'LANGUAGES'];
+import {LANGUAGES} from '../../components/language/language.constants';
 
-export function <%=jhiPrefixCapitalized%>LanguageService ($q, $http, $translate, LANGUAGES) {
+<%=jhiPrefixCapitalized%>LanguageService.$inject = ['$q', '$http', '$translate'];
+
+export function <%=jhiPrefixCapitalized%>LanguageService ($q, $http, $translate) {
     var service = {
         getAll: getAll,
         getCurrent: getCurrent

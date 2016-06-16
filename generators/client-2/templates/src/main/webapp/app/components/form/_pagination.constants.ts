@@ -1,9 +1,1 @@
-(function() {
-    'use strict';
-
-    angular
-        .module('<%=angularAppName%>.common')
-        .constant('paginationConstants', {
-            'itemsPerPage': 20
-        });
-})();
+export const ITEMSPERPAGE:number = 20;

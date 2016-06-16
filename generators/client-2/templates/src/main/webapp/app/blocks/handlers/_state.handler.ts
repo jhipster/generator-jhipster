@@ -1,7 +1,7 @@
-StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'translationHandler',<% } %> '$window',
+StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'TranslationHandler',<% } %> '$window',
         'Auth', 'Principal', 'VERSION'];
 
-export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, translationHandler,<% } %> $window,
+export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, TranslationHandler,<% } %> $window,
     Auth, Principal, VERSION) {
     return {
         initialize: initialize
