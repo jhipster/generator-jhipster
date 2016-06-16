@@ -1,6 +1,6 @@
 PaginationConfig.$inject = ['uibPaginationConfig', 'paginationConstants'];
 
-function PaginationConfig(uibPaginationConfig, paginationConstants) {
+export function PaginationConfig(uibPaginationConfig, paginationConstants) {
     uibPaginationConfig.itemsPerPage = paginationConstants.itemsPerPage;
     uibPaginationConfig.maxSize = 5;
     uibPaginationConfig.boundaryLinks = true;
@@ -9,5 +9,3 @@ function PaginationConfig(uibPaginationConfig, paginationConstants) {
     uibPaginationConfig.nextText = '›';
     uibPaginationConfig.lastText = '»';
 }
-
-export default PaginationConfig;
