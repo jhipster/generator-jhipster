@@ -3,7 +3,6 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
-    fs = require('fs'),
     shelljs = require('shelljs'),
     semver = require('semver');
 
@@ -104,8 +103,8 @@ module.exports = UpgradeGenerator.extend({
         },
 
         assertGitRepository: function() {
-            if (! fs.existsSync('.git')) {
-                var done = this.async();
+            var done = this.async();
+            var gitInit = function() {
                 this.gitExec('init', function(code, msg, err) {
                     if (code !== 0) this.error('Unable to initialize a new git repository:\n' + msg + ' ' + err);
                     this.log('Initialized a new git repository');
@@ -113,7 +112,14 @@ module.exports = UpgradeGenerator.extend({
                         done();
                     });
                 }.bind(this));
-            }
+            }.bind(this);
+            this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], function(code, msg, err) {
+                if (code !== 0) gitInit();
+                else {
+                    this.log('Git repository detected');
+                    done();
+                }
+            }.bind(this));
         },
 
         assertNoLocalChanges: function() {
