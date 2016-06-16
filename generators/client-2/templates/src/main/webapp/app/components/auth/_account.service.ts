@@ -1,6 +1,6 @@
 Account.$inject = ['$resource'];
 
-function Account ($resource) {
+export function Account ($resource) {
     var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, {}, {
         'get': { method: 'GET', params: {}, isArray: false,
             interceptor: {
@@ -14,5 +14,3 @@ function Account ($resource) {
 
     return service;
 }
-
-export default Account;

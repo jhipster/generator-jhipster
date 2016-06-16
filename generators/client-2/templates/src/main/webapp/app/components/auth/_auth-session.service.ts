@@ -1,6 +1,6 @@
 AuthServerProvider.$inject = ['$http', '$localStorage' <% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-function AuthServerProvider ($http, $localStorage <% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
+export function AuthServerProvider ($http, $localStorage <% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
     var service = {
         getToken: getToken,
         hasValidToken: hasValidToken,
@@ -50,5 +50,3 @@ function AuthServerProvider ($http, $localStorage <% if (websocket === 'spring-w
         <% } %>
     }
 }
-
-export default AuthServerProvider;
