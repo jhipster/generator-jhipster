@@ -3,8 +3,8 @@ import './account/account.module';
 import './admin/admin.module';
 import './entities/entity.module';
 
-import { StateHandler } from './blocks/handlers/state.handler';
-import { TranslationHandler } from './blocks/handlers/translation.handler';
+import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
+import { TranslationHandler } from './blocks/handlers/translation.handler';<% } %>
 
 import { AlertServiceConfig } from './blocks/config/alert.config';
 import { CompileServiceConfig } from './blocks/config/compile.config';
@@ -60,6 +60,8 @@ angular
     <%_ } _%>
     .factory('ErrorHandlerInterceptor', ErrorHandlerInterceptor)
     .factory('NotificationInterceptor', NotificationInterceptor)
+    .factory('StateHandler',StateHandler)<% if (enableTranslation) { %>
+    .factory('TranslationHandler',TranslationHandler)<% } %>
     .run(run);
 
 run.$inject = ['StateHandler'<% if (enableTranslation) { %>, 'TranslationHandler'<% } %>];

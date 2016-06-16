@@ -1,6 +1,8 @@
-TranslationStorageProvider.$inject = ['$cookies', '$log', 'LANGUAGES'];
+import {LANGUAGES} from '../../components/language/language.constants';
 
-export function TranslationStorageProvider($cookies, $log, LANGUAGES) {
+TranslationStorageProvider.$inject = ['$cookies', '$log'];
+
+export function TranslationStorageProvider($cookies, $log) {
     return {
         get: get,
         put: put
