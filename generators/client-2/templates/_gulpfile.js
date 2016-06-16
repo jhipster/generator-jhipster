@@ -226,8 +226,8 @@ gulp.task('watch', function () {
     gulp.watch([config.dist + '*.html', config.dist + 'app/**', config.dist + 'i18n/**']).on('change', browserSync.reload);
 });
 
-gulp.task('install', ['clean', 'copy:temp'], function () {
-    runSequence(['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:troubleshoot', 'copy:temp');
+gulp.task('install', ['clean'], function () {
+    runSequence('copy:temp', ['inject:dep', 'ngconstant:dev', 'copy:deps']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'tscompile', 'inject:troubleshoot');
 });
 
 gulp.task('serve', ['install'], serve);
