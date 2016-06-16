@@ -1,6 +1,6 @@
 Principal.$inject = ['$q', 'Account'<% if (websocket == 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
+export function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
     var _identity,
         _authenticated = false;
 
@@ -90,5 +90,3 @@ function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, <%=
         return angular.isDefined(_identity);
     }
 }
-
-export default Principal;

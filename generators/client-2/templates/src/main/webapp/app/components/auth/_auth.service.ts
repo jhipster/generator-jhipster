@@ -1,6 +1,6 @@
 Auth.$inject = ['$rootScope', '$state', '$sessionStorage', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-function Auth ($rootScope, $state, $sessionStorage, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
+export function Auth ($rootScope, $state, $sessionStorage, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
     var service = {
         activateAccount: activateAccount,
         authorize: authorize,
@@ -186,5 +186,3 @@ function Auth ($rootScope, $state, $sessionStorage, $q, <% if (enableTranslation
         $sessionStorage.previousState = previousState;
     }
 }
-
-export default Auth;
