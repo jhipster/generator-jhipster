@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+GatewayStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function GatewayStateConfig($stateProvider) {
     $stateProvider.state('gateway', {
         parent: 'admin',
         url: '/gateway',

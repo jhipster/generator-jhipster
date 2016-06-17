@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+TrackerStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function TrackerStateConfig($stateProvider) {
     $stateProvider.state('<%=jhiPrefix%>-tracker', {
         parent: 'admin',
         url: '/tracker',

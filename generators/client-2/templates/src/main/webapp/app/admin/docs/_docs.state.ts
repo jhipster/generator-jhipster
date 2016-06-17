@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+DocsStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function DocsStateConfig($stateProvider) {
     $stateProvider.state('docs', {
         parent: 'admin',
         url: '/docs',
