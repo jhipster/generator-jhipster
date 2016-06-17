@@ -6,7 +6,6 @@ import './entities/entity.module';
 import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
 import { TranslationHandler } from './blocks/handlers/translation.handler';<% } %>
 
-import { AlertServiceConfig } from './blocks/config/alert.config';
 import { CompileServiceConfig } from './blocks/config/compile.config';
 import { HttpConfig } from './blocks/config/http.config';
 import { LocalStorageConfig } from './blocks/config/localstorage.config';
@@ -45,7 +44,6 @@ angular
         '<%=angularAppName%>.admin',
         '<%=angularAppName%>.entity'
     ])
-    .config(AlertServiceConfig)
     .config(CompileServiceConfig)
     .config(HttpConfig)
     .config(LocalStorageConfig)
