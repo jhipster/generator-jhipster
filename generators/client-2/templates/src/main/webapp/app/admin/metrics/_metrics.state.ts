@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+MetricsStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function MetricsStateConfig($stateProvider) {
     $stateProvider.state('<%=jhiPrefix%>-metrics', {
         parent: 'admin',
         url: '/metrics',

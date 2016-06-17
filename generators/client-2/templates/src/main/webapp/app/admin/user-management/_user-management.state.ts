@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+UserMgmntStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function UserMgmntStateConfig($stateProvider) {
     $stateProvider
     .state('user-management', {
         parent: 'admin',

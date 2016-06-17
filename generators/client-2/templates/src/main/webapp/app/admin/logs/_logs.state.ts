@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+LogsStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function LogsStateConfig($stateProvider) {
     $stateProvider.state('logs', {
         parent: 'admin',
         url: '/logs',
@@ -23,4 +23,3 @@ export function stateConfig($stateProvider) {
         }
     });
 }
-
