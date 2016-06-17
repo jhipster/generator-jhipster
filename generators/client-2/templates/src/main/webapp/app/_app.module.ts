@@ -23,6 +23,9 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
+import { HomeStateConfig } from './home/home.state';
+import { ErrorStateConfig } from './layouts/error/home.state';
+
 angular
     .module('<%=angularAppName%>.app', [
         'ngStorage', <% if (enableTranslation) { %>
@@ -51,6 +54,8 @@ angular
     .config(PagerConfig)
     .config(PaginationConfig)
     .config(AppStateConfig)
+    .config(HomeStateConfig)
+    .config(ErrorStateConfig)
     .factory('TranslationStorageProvider', TranslationStorageProvider)
     .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
     <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
