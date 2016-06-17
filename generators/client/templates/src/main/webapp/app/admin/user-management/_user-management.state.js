@@ -11,7 +11,7 @@
         $stateProvider
         .state('user-management', {
             parent: 'admin',
-            url: '/user-management?page&sort',
+            url: '/user-management<%_ if (databaseType !== 'cassandra') { _%>?page&sort<%_ } _%>',
             data: {
                 authorities: ['ROLE_ADMIN'],
                 pageTitle: 'user-management.home.title'
@@ -22,7 +22,7 @@
                     controller: 'UserManagementController',
                     controllerAs: 'vm'
                 }
-            },
+            },<%_ if (databaseType !== 'cassandra') { _%>
             params: {
                 page: {
                     value: '1',
@@ -47,8 +47,16 @@
                     return $translate.refresh();
                 }]
             <%_ } _%>
-                
+
+            }<%_ } else { _%>
+        
+            resolve: {
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('user-management');
+                    return $translate.refresh();
+                }]
             }
+            <%_ } _%>
         })
         .state('user-management-detail', {
             parent: 'admin',
