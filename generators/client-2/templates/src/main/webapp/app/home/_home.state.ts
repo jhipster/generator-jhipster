@@ -1,13 +1,6 @@
-(function() {
-    'use strict';
+    HomeStateConfig.$inject = ['$stateProvider'];
 
-    angular
-        .module('<%=angularAppName%>.app')
-        .config(stateConfig);
-
-    stateConfig.$inject = ['$stateProvider'];
-
-    function stateConfig($stateProvider) {
+    export function HomeStateConfig($stateProvider) {
         $stateProvider.state('home', {
             parent: 'app',
             url: '/',
@@ -29,4 +22,3 @@
             }
         });
     }
-})();
