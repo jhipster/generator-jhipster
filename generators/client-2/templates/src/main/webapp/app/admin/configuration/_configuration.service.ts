@@ -9,14 +9,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
     constructor( private http:Http ){} 
 
-    var service = {
-        get: get,
-        getEnv: getEnv
-    };
-
-    return service;
-
-     function get () {
+    get () {
          return this.http.get('management/configprops').toPromise()
                .then( getConfigPropsComplete );
                
@@ -30,7 +23,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
             }
         }
 
-        function getEnv () {            
+         getEnv () {            
              return this.http.get('management/env').toPromise()
                .then( getEnvComplete );
 
