@@ -150,7 +150,7 @@ function askForClient() {
             },
             {
                 value: 'angular2',
-                name: 'Angular 2.x (rc2)'
+                name: '[BETA] Angular 2.x (rc2)'
             }
         ],
         default: 'angular1'
