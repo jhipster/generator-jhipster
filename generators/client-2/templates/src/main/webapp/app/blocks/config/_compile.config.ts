@@ -1,4 +1,4 @@
-import { 'DEBUG_INFO_ENABLED' } from '../../app.constants';
+import { DEBUG_INFO_ENABLED } from '../../app.constants';
 
 CompileServiceConfig.$inject = ['$compileProvider'];
 
