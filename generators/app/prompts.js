@@ -133,16 +133,16 @@ function askForClient() {
             return (applicationType !== 'microservice');
         },
         message: function (response) {
-            return getNumberedQuestion('Which *AngularJS* version would you like to use for the client side?', applicationType !== 'microservice');
+            return getNumberedQuestion('Which *Angular* version would you like to use for the client side?', applicationType !== 'microservice');
         },
         choices: [
             {
                 value: 'angular1',
-                name: 'I`ll use AngularJS 1 (stable)'
+                name: 'Angular 1.x (stable)'
             },
             {
                 value: 'angular2',
-                name: 'I want to try AngularJS 2 (Please note that this is still in beta)'
+                name: 'Angular 2.x (rc2)'
             }
         ],
         default: 'angular1'
