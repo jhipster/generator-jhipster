@@ -1,18 +1,14 @@
-(function() {
-    'use strict';
+import {Injectable} from '@angular/core';
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .factory('LogsService', LogsService);
+LogsService.$inject = ['$resource'];
 
-    LogsService.$inject = ['$resource'];
+@Injectable()
+export function LogsService ($resource) {
+    var service = $resource('management/jhipster/logs', {}, {
+        'findAll': { method: 'GET', isArray: true},
+        'changeLevel': { method: 'PUT'}
+    });
 
-    function LogsService ($resource) {
-        var service = $resource('management/jhipster/logs', {}, {
-            'findAll': { method: 'GET', isArray: true},
-            'changeLevel': { method: 'PUT'}
-        });
+    return service;
+}
 
-        return service;
-    }
-})();

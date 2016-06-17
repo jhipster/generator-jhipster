@@ -1,4 +1,4 @@
-import { VERSION } from "../../app.constants";
+import { VERSION } from '../../app.constants';
 
 StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'TranslationHandler',<% } %> '$window',
         'Auth', 'Principal'];
