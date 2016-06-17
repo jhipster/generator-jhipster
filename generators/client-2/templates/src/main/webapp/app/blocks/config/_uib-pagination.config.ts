@@ -1,7 +1,9 @@
-PaginationConfig.$inject = ['uibPaginationConfig', 'paginationConstants'];
+import {ITEMSPERPAGE} from "../../components/form/pagination.constants";
 
-export function PaginationConfig(uibPaginationConfig, paginationConstants) {
-    uibPaginationConfig.itemsPerPage = paginationConstants.itemsPerPage;
+PaginationConfig.$inject = ['uibPaginationConfig'];
+
+export function PaginationConfig(uibPaginationConfig) {
+    uibPaginationConfig.itemsPerPage = ITEMSPERPAGE;
     uibPaginationConfig.maxSize = 5;
     uibPaginationConfig.boundaryLinks = true;
     uibPaginationConfig.firstText = '«';
