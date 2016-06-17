@@ -7,7 +7,7 @@ export function TranslationConfig($translateProvider, tmhDynamicLocaleProvider) 
     });
 
     $translateProvider.preferredLanguage('<%= nativeLanguage %>');
-    $translateProvider.useStorage('translationStorageProvider');
+    $translateProvider.useStorage('TranslationStorageProvider');
     $translateProvider.useSanitizeValueStrategy('escaped');
     $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
 

@@ -1,26 +1,22 @@
-(function() {
-    'use strict';
+import {Injectable} from '@angular/core';
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .factory('GatewayRoutes', GatewayRoutes);
+GatewayRoutes.$inject = ['$resource'];
 
-    GatewayRoutes.$inject = ['$resource'];
-
-    function GatewayRoutes ($resource) {
-        var service = $resource('api/gateway/routes/:id', {}, {
-            'query': { method: 'GET', isArray: true},
-            'get': {
-                method: 'GET',
-                transformResponse: function (data) {
-                    data = angular.fromJson(data);
-                    return data;
+@Injectable()
+export function GatewayRoutes ($resource) {
+    var service = $resource('api/gateway/routes/:id', {}, {
+        'query': { method: 'GET', isArray: true},
+        'get': {
+            method: 'GET', isArray: false,
+            interceptor: {
+                response: function(response) {
+                    // expose response
+                    return response;
                 }
-            },
-            'update': { method:'PUT' }
-        });
+            }
+        },
+        'update': { method:'PUT' }
+    });
 
-        return service;
-    }
-
-})();
+    return service;
+}

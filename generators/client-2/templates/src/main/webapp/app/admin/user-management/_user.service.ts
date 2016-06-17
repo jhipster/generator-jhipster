@@ -1,27 +1,25 @@
-(function () {
-    'use strict';
+import {Injectable} from '@angular/core';
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .factory('User', User);
+User.$inject = ['$resource'];
 
-    User.$inject = ['$resource'];
-
-    function User ($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/users/:login'<%} else { %>'api/users/:login'<% } %>, {}, {
-            'query': {method: 'GET', isArray: true},
-            'get': {
-                method: 'GET',
-                transformResponse: function (data) {
-                    data = angular.fromJson(data);
-                    return data;
+@Injectable()
+export function User ($resource) {
+    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/users/:login'<%} else { %>'api/users/:login'<% } %>, {}, {
+        'query': {method: 'GET', isArray: true},
+        'get': {
+            method: 'GET', isArray: false,
+            interceptor: {
+                response: function(response) {
+                    // expose response
+                    return response;
                 }
-            },
-            'save': { method:'POST' },
-            'update': { method:'PUT' },
-            'delete':{ method:'DELETE'}
-        });
+            }
+        },
+        'save': { method:'POST' },
+        'update': { method:'PUT' },
+        'delete':{ method:'DELETE'}
+    });
 
-        return service;
-    }
-})();
+    return service;
+}
+
