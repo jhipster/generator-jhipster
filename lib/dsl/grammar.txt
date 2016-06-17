@@ -70,6 +70,7 @@ prog
   / space* service:serviceDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* Comment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* JDLComment space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
+ / space* JDLDirective space* p:prog {return {"entities" : p.entities,"relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* microservice:microserviceDecl1 space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* searchEngine:searchEngineDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* noClient:noClientDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
@@ -289,5 +290,8 @@ ComStop = [*]+ "/"
 
 // a completely ignored comment, will not be a Javadoc comment
 JDLComment = "//" [^\n\r]*
+
+// JDLDirective should be ignored as it is just used for rendering
+JDLDirective = "#" [^\n\r]*
 
 Not_Com = (!ComStop !ComStart char:.) {return char;}
