@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import {ProfileInfo} from './profile-info'
+import { ProfileInfo } from './profile-info'
 
 @Injectable()
 export class ProfileService {

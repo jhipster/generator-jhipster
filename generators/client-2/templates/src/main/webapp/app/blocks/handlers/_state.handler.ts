@@ -1,8 +1,10 @@
+import { VERSION } from "../../app.constants";
+
 StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'TranslationHandler',<% } %> '$window',
-        'Auth', 'Principal', 'VERSION'];
+        'Auth', 'Principal'];
 
 export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, TranslationHandler,<% } %> $window,
-    Auth, Principal, VERSION) {
+    Auth, Principal) {
     return {
         initialize: initialize
     };
