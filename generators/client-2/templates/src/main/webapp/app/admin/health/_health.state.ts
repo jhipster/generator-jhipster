@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+HealthStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function HealthStateConfig($stateProvider) {
     $stateProvider.state('<%=jhiPrefix%>-health', {
         parent: 'admin',
         url: '/health',

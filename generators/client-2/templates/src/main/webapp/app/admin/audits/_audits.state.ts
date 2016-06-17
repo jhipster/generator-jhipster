@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+AuditStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function AuditStateConfig($stateProvider) {
     $stateProvider.state('audits', {
         parent: 'admin',
         url: '/audits',

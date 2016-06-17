@@ -1,6 +1,6 @@
-stateConfig.$inject = ['$stateProvider'];
+ConfigStateConfig.$inject = ['$stateProvider'];
 
-export function stateConfig($stateProvider) {
+export function ConfigStateConfig($stateProvider) {
     $stateProvider.state('<%=jhiPrefix%>-configuration', {
         parent: 'admin',
         url: '/configuration',

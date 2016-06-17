@@ -1,16 +1,8 @@
-(function () {
-    'use strict';
+AdminStateConfig.$inject = ['$stateProvider'];
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .config(stateConfig);
-
-    stateConfig.$inject = ['$stateProvider'];
-
-    function stateConfig ($stateProvider) {
-        $stateProvider.state('admin', {
-            abstract: true,
-            parent: 'app'
-        });
-    }
-})();
+export function AdminStateConfig ($stateProvider) {
+    $stateProvider.state('admin', {
+        abstract: true,
+        parent: 'app'
+    });
+}
