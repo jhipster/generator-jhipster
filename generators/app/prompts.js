@@ -141,7 +141,7 @@ function askForClient() {
             return (applicationType !== 'microservice');
         },
         message: function (response) {
-            return getNumberedQuestion('Which *Angular* version would you like to use for the client side?', applicationType !== 'microservice');
+            return getNumberedQuestion('Which *Angular* version would you like to use for the client?', applicationType !== 'microservice');
         },
         choices: [
             {
