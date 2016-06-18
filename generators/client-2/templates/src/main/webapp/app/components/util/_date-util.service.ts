@@ -4,7 +4,7 @@ export class DateUtils {
 
     constructor (private pipe:DatePipe) {}
 
-    convertDateTimeFromServer (date) {
+    convertDateTimeFromServer (date: any) {
         if (date) {
             return new Date(date);
         } else {
@@ -12,7 +12,7 @@ export class DateUtils {
         }
     }
 
-    convertLocalDateFromServer (date) {
+    convertLocalDateFromServer (date: any) {
         if (date) {
             var dateString = date.split('-');
             return new Date(dateString[0], dateString[1] - 1, dateString[2]);
@@ -20,7 +20,7 @@ export class DateUtils {
         return null;
     }
 
-    convertLocalDateToServer (date) {
+    convertLocalDateToServer (date: any) {
         if (date) {
             return this.pipe.transform(date, 'yyyy-MM-dd');
         } else {
