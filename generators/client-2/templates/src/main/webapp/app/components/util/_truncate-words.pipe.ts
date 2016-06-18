@@ -1,6 +1,9 @@
-export class words {        
+import {Pipe, PipeTransform} from '@angular/core';
 
-    wordsFilter(input: string, words: number) {
+@Pipe({name: 'truncateWords'})
+export class TruncateWordsPipe implements PipeTransform  {        
+
+    transform(input: string, words: number): string {
         if (isNaN(words)) {
             return input;
         }
