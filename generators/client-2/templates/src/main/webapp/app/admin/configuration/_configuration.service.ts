@@ -1,47 +1,49 @@
-(function() {
-    'use strict';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .factory('<%=jhiPrefixCapitalized%>ConfigurationService', <%=jhiPrefixCapitalized%>ConfigurationService);
 
-    <%=jhiPrefixCapitalized%>ConfigurationService.$inject = ['$filter', '$http'];
+@Injectable()
+export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
-    function <%=jhiPrefixCapitalized%>ConfigurationService ($filter, $http) {
-        var service = {
-            get: get,
-            getEnv: getEnv
-        };
+    constructor( private http:Http ){} 
 
-        return service;
-
-        function get () {
-            return $http.get('management/configprops').then(getConfigPropsComplete);
-
+    get () {
+         return this.http.get('management/configprops').toPromise()
+               .then( getConfigPropsComplete );
+               
             function getConfigPropsComplete (response) {
                 var properties = [];
-                angular.forEach(response.data, function (data) {
-                    properties.push(data);
-                });
-                var orderBy = $filter('orderBy');
-                return orderBy(properties, 'prefix');
+                response.data.forEach(prop => {
+                    properties.push(prop);
+                });                
+
+                return properties.sort( (propertyA, propertyB) => {	
+                        if ( propertyA.prefix === propertyB.prefix ) 
+                            return 0;
+                        else if ( propertyA.prefix < propertyB.prefix )
+                            return -1;
+                        else if ( propertyA.prefix > propertyB.prefix )
+                            return 1;
+                });                
             }
         }
 
-        function getEnv () {
-            return $http.get('management/env').then(getEnvComplete);
+         getEnv () {            
+             return this.http.get('management/env').toPromise()
+               .then( getEnvComplete );
 
             function getEnvComplete (response) {
                 var properties = {};
-                angular.forEach(response.data, function (val,key) {
+                response.data.forEach(prop => {
                     var vals = [];
-                    angular.forEach(val, function (v,k) {
-                        vals.push({ key:k, val:v });
+                    prop.val.forEach(valKey => {
+                        vals.push(valKey);
                     });
-                    properties[key] = vals;
+                    properties[prop.key] = vals;
                 });
                 return properties;
             }
         }
-    }
-})();
+}

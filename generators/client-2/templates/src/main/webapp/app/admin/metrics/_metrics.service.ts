@@ -1,30 +1,29 @@
-(function() {
-    'use strict';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .factory('<%=jhiPrefixCapitalized%>MetricsService', <%=jhiPrefixCapitalized%>MetricsService);
+<%=jhiPrefixCapitalized%>MetricsService.$inject = ['$rootScope'];
+@Injectable()
+export function <%=jhiPrefixCapitalized%>MetricsService ($rootScope) {
+    var service = {
+        getMetrics: getMetrics,
+        threadDump: threadDump
+    };
 
-    <%=jhiPrefixCapitalized%>MetricsService.$inject = ['$rootScope', '$http'];
+    return service;    
 
-    function <%=jhiPrefixCapitalized%>MetricsService ($rootScope, $http) {
-        var service = {
-            getMetrics: getMetrics,
-            threadDump: threadDump
-        };
-
-        return service;
-
-        function getMetrics () {
-            return $http.get('management/jhipster/metrics').then(function (response) {
+    function getMetrics () {
+        return this.http.get('management/jhipster/metrics').toPromise().
+            then( (response) => {
                 return response.data;
-            });
-        }
-
-        function threadDump () {
-            return $http.get('management/dump').then(function (response) {
-                return response.data;
-            });
-        }
+        });
     }
-})();
+
+    function threadDump () {
+        return this.http.get('management/dump').toPromise().
+            then(response => {
+                return response.data;
+        });
+    }
+}
