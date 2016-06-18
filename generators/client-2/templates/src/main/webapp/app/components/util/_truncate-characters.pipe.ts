@@ -1,5 +1,9 @@
-export class characters {
-    charactersFilter(input: string, chars: number, breakOnWord?: boolean) {
+import {Pipe, PipeTransform} from '@angular/core';
+
+@Pipe({name: 'truncateCharacters'})
+export class TruncateCharactersPipe implements PipeTransform {
+
+    transform (input: string, chars: number, breakOnWord?: boolean): string{
         if (isNaN(chars)) {
             return input;
         }
