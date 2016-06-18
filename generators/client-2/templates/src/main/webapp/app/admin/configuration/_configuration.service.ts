@@ -19,7 +19,14 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
                     properties.push(prop);
                 });                
 
-                return properties.filter(properties => 'prefix');                
+                return properties.sort( (propertyA, propertyB) => {	
+                        if ( propertyA.prefix === propertyB.prefix ) 
+                            return 0;
+                        else if ( propertyA.prefix < propertyB.prefix )
+                            return -1;
+                        else if ( propertyA.prefix > propertyB.prefix )
+                            return 1;
+                });                
             }
         }
 
