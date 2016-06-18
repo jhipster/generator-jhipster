@@ -42,6 +42,10 @@ else
     echo "No mvnw or gradlew"
     exit 0
 fi
+if [ $? -ne 0 ]; then
+    echo "Error when packaging"
+    exit 1
+fi
 
 if [ "$RUN_APP" == 1 ]; then
     java -jar app.war --spring.profiles.active="$PROFILE" &
