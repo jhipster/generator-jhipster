@@ -68,6 +68,21 @@
         function onError(error) {
             AlertService.error(error.data.message);
         }
+        <% if (databaseType !== 'cassandra') { %>function clear () {
+            vm.user = {
+                id: null, login: null, firstName: null, lastName: null, email: null,
+                activated: null, langKey: null, createdBy: null, createdDate: null,
+                lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
+                resetKey: null, authorities: null
+            };
+        }
+        function sort () {
+            var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
+            if (vm.predicate !== 'id') {
+                result.push('id');
+            }
+            return result;
+        }
 
 <%_ if (databaseType !== 'cassandra') { _%>
         function clear () {
