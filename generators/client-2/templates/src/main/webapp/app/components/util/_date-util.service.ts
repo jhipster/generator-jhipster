@@ -2,7 +2,7 @@ import { DatePipe } from "@angular/common";
 
 export class DateUtils {
 
-    constructor (private pipe:DatePipe) {}
+    constructor (private datePipe:DatePipe) {}
 
     convertDateTimeFromServer (date: any) {
         if (date) {
@@ -22,7 +22,7 @@ export class DateUtils {
 
     convertLocalDateToServer (date: any) {
         if (date) {
-            return this.pipe.transform(date, 'yyyy-MM-dd');
+            return this.datePipe.transform(date, 'yyyy-MM-dd');
         } else {
             return null;
         }
