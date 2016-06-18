@@ -1,0 +1,11 @@
+node {
+    stage 'checkout'
+    checkout scm
+
+    stage 'clean package'
+    <%_ if (buildTool === 'maven') { _%>
+    sh "./mvnw package -Pprod"
+    <%_ } else if (buildTool === 'gradle' ) { _%>
+    sh "./gradlew clean bootRepackage -Pprod"
+    <%_ } _%>
+}
