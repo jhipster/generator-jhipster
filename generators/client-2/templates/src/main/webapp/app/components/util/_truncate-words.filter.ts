@@ -8,7 +8,7 @@ export class words {
             return '';
         }
         if (input) {
-            var inputWords = input.split(/\s+/);
+            let inputWords = input.split(/\s+/);
             if (inputWords.length > words) {
                 input = inputWords.slice(0, words).join(' ') + '...';
             }

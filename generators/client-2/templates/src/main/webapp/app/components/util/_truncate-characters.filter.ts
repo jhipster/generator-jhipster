@@ -10,7 +10,7 @@ export class characters {
             input = input.substring(0, chars);
 
             if (!breakOnWord) {
-                var lastspace = input.lastIndexOf(' ');
+                let lastspace = input.lastIndexOf(' ');
                 // Get last space
                 if (lastspace !== -1) {
                     input = input.substr(0, lastspace);
