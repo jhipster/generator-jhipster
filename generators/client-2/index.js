@@ -473,7 +473,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'components/login/_login.service.ts', ANGULAR_DIR + 'components/login/login.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/login/_login.controller.ts', ANGULAR_DIR + 'components/login/login.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_base64.service.ts', ANGULAR_DIR + 'components/util/base64.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_capitalize.filter.ts', ANGULAR_DIR + 'components/util/capitalize.filter.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_capitalize.pipe.ts', ANGULAR_DIR + 'components/util/capitalize.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_parse-links.service.ts', ANGULAR_DIR + 'components/util/parse-links.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_truncate-characters.pipe.ts', ANGULAR_DIR + 'components/util/truncate-characters.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_truncate-words.pipe.ts', ANGULAR_DIR + 'components/util/truncate-words.pipe.ts', this, {});
