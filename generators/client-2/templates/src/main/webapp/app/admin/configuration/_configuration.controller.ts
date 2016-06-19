@@ -1,6 +1,11 @@
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./<%=jhiPrefixCapitalized%>ConfigurationService"; 
 import 'rxjs/add/operator/toPromise';
 
+@Component({
+  selector: '<%=jhiPrefix%>configuration',
+  templateUrl: './configuration.html',
+  providers: [ <%=jhiPrefixCapitalized%>ConfigurationService ]
+})
 export class <%=jhiPrefixCapitalized%>ConfigurationController {
     constructor(private <%=jhiPrefix%>ConfigurationService:<%=jhiPrefixCapitalized%>ConfigurationService){
 
