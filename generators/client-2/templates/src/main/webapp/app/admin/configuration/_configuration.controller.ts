@@ -1,8 +1,9 @@
+import { Component } from "@angular/core";
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./<%=jhiPrefixCapitalized%>ConfigurationService"; 
 import 'rxjs/add/operator/toPromise';
 
 @Component({
-  selector: '<%=jhiPrefix%>configuration',
+  selector: '<%=jhiPrefix%>-configuration',
   templateUrl: './configuration.html',
   providers: [ <%=jhiPrefixCapitalized%>ConfigurationService ]
 })
