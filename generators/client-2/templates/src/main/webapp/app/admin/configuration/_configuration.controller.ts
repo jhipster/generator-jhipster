@@ -1,23 +1,21 @@
-(function() {
-    'use strict';
+import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./<%=jhiPrefixCapitalized%>ConfigurationService"; 
+import 'rxjs/add/operator/toPromise';
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .controller('<%=jhiPrefixCapitalized%>ConfigurationController', <%=jhiPrefixCapitalized%>ConfigurationController);
+export class <%=jhiPrefixCapitalized%>ConfigurationController {
+    constructor(private <%=jhiPrefix%>ConfigurationService:<%=jhiPrefixCapitalized%>ConfigurationService){
 
-    <%=jhiPrefixCapitalized%>ConfigurationController.$inject = ['$filter','<%=jhiPrefixCapitalized%>ConfigurationService'];
-
-    function <%=jhiPrefixCapitalized%>ConfigurationController (filter,<%=jhiPrefixCapitalized%>ConfigurationService) {
-        var vm = this;
-
-        vm.allConfiguration = null;
-        vm.configuration = null;
-
-        <%=jhiPrefixCapitalized%>ConfigurationService.get().then(function(configuration) {
-            vm.configuration = configuration;
-        });
-        <%=jhiPrefixCapitalized%>ConfigurationService.getEnv().then(function (configuration) {
-            vm.allConfiguration = configuration;
-        });
     }
-})();
+
+    allConfiguration: any = null;
+    configuration: any = null;
+
+    this.<%=jhiPrefix%>ConfigurationService.get().toPromise().
+            then( (configuration) => { 
+                this.configuration = configuration;
+            });
+
+    this.<%=jhiPrefix%>ConfigurationService.getEnv().toPromise().
+            then( (configuration) => { 
+                this.allConfiguration = configuration;
+            });
+}
