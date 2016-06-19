@@ -1,38 +1,39 @@
-(function () {
-    'use strict';
+import { Component } from "@angular/core";
+import 'rxjs/add/operator/toPromise';
+import { <%=jhiPrefixCapitalized%>TrackerService } from "./<%=jhiPrefixCapitalized%>TrackerService";
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .controller('<%=jhiPrefixCapitalized%>TrackerController', <%=jhiPrefixCapitalized%>TrackerController);
+@Component({
+    selector: '<%=jhiPrefix%>-tracker',
+    templateUrl: './tracker.html',
+    providers: [ <%=jhiPrefixCapitalized%>TrackerService ]
+})
+export class <%=jhiPrefixCapitalized%>TrackerController{
 
-    <%=jhiPrefixCapitalized%>TrackerController.$inject = ['$cookies', '$http', '<%=jhiPrefixCapitalized%>TrackerService'];
+    constructor(private <%=jhiPrefix%>TrackerService: <%=jhiPrefixCapitalized%>TrackerService){}
 
-    function <%=jhiPrefixCapitalized%>TrackerController ($cookies, $http, <%=jhiPrefixCapitalized%>TrackerService) {
-        // This controller uses a Websocket connection to receive user activities in real-time.
-        var vm = this;
+    activities: any[] = [];
 
-        vm.activities = [];
-
-        <%=jhiPrefixCapitalized%>TrackerService.receive().then(null, null, function(activity) {
-            showActivity(activity);
-        });
-
-        function showActivity(activity) {
-            var existingActivity = false;
-            for (var index = 0; index < vm.activities.length; index++) {
-                if(vm.activities[index].sessionId === activity.sessionId) {
-                    existingActivity = true;
-                    if (activity.page === 'logout') {
-                        vm.activities.splice(index, 1);
-                    } else {
-                        vm.activities[index] = activity;
-                    }
+    showActivity (activity: any) {
+        let existingActivity: boolean = false;
+        for (let index = 0; index < this.activities.length; index++) {
+            if(this.activities[index].sessionId === activity.sessionId) {
+                existingActivity = true;
+                if ( activity.page === 'logout' ) {
+                    this.activities.splice(index, 1);
+                } else {
+                    this.activities[index] = activity;
                 }
             }
-            if (!existingActivity && (activity.page !== 'logout')) {
-                vm.activities.push(activity);
-            }
         }
-
+        if (!existingActivity && (activity.page !== 'logout')) {
+            this.activities.push(activity);
+        }
     }
-})();
+
+    this.<%=jhiPrefixCapitalized%>TrackerService.receive().toPromise.then(
+        (null,null, (activity) => {
+            this.showActivity(activity);
+        })    
+    );
+
+}
