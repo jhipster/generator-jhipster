@@ -2,7 +2,11 @@ import { DatePipe } from "@angular/common";
 import { AuditsService } from "./audits.service";
 import { ParseLinks } from "../../components/util/parse-links.service";
 
-
+@Component({
+  selector: '<%=jhiPrefix%>audit',
+  templateUrl: './audits.html',
+  providers: [ AuditsService, ParseLinks ]
+})
 export class AuditsController {    
 
     constructor(private auditsService: AuditsService,
