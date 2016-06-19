@@ -1,50 +1,34 @@
-(function() {
-    'use strict';
+import { DatePipe } from "@angular/common";
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .factory('DateUtils', DateUtils);
+export class DateUtils {
 
-    DateUtils.$inject = ['$filter'];
+    constructor (private datePipe:DatePipe) {}
 
-    function DateUtils ($filter) {
-
-        var service = {
-            convertDateTimeFromServer : convertDateTimeFromServer,
-            convertLocalDateFromServer : convertLocalDateFromServer,
-            convertLocalDateToServer : convertLocalDateToServer,
-            dateformat : dateformat
-        };
-
-        return service;
-
-        function convertDateTimeFromServer (date) {
-            if (date) {
-                return new Date(date);
-            } else {
-                return null;
-            }
-        }
-
-        function convertLocalDateFromServer (date) {
-            if (date) {
-                var dateString = date.split('-');
-                return new Date(dateString[0], dateString[1] - 1, dateString[2]);
-            }
+    convertDateTimeFromServer (date: any) {
+        if (date) {
+            return new Date(date);
+        } else {
             return null;
-        }
-
-        function convertLocalDateToServer (date) {
-            if (date) {
-                return $filter('date')(date, 'yyyy-MM-dd');
-            } else {
-                return null;
-            }
-        }
-
-        function dateformat () {
-            return 'yyyy-MM-dd';
         }
     }
 
-})();
+    convertLocalDateFromServer (date: any) {
+        if (date) {
+            let dateString = date.split('-');
+            return new Date(dateString[0], dateString[1] - 1, dateString[2]);
+        }
+        return null;
+    }
+
+    convertLocalDateToServer (date: any) {
+        if (date) {
+            return this.datePipe.transform(date, 'yyyy-MM-dd');
+        } else {
+            return null;
+        }
+    }
+
+    dateformat () {
+        return 'yyyy-MM-dd';
+    }
+}
