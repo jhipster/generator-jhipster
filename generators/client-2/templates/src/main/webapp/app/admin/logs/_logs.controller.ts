@@ -1,22 +1,21 @@
-(function() {
-    'use strict';
+import { Component } from "@angular/core";
+import { LogsService } from "./logs.service";
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .controller('LogsController', LogsController);
+@Component({
+  selector: '<%=jhiPrefix%>-logs',
+  templateUrl: './logs.html',
+  providers: [ LogsService ]
+})
+export class LogsController {
 
-    LogsController.$inject = ['LogsService'];
+    constructor ( private logsService: LogsService ) {}
 
-    function LogsController (LogsService) {
-        var vm = this;
+    loggers: any = this.logsService.findAll();
 
-        vm.changeLevel = changeLevel;
-        vm.loggers = LogsService.findAll();
-
-        function changeLevel (name, level) {
-            LogsService.changeLevel({name: name, level: level}, function () {
-                vm.loggers = LogsService.findAll();
-            });
-        }
+    changeLevel ( name: string, level: string ){
+        this.logsService.changeLevel( {name:name,level:level}, () =>{
+            this.loggers = this.logsService.findAll();
+        });
     }
-})();
+
+}
