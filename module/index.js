@@ -32,8 +32,9 @@ module.exports = {
   JDLUnaryOption: JDLUnaryOption,
   JDLBinaryOption: JDLBinaryOption,
   /* JDL reading */
-  parse: JDLReader.read,
-  parseFromFiles: JDLReader.readFiles,
+  parse: JDLReader.parse,
+  parseFromFiles: JDLReader.parseFromFiles,
+  convertToEntityJson: JDLReader.convertToEntityJson,
   /* JDL utils */
   isJDLFile: JDLReader.checkFileIsJDLFile
 };
