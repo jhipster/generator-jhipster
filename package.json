@@ -8,7 +8,7 @@
     "DSL"
   ],
   "scripts": {
-    "test": "mocha test/**/*.js",
+    "test": "mocha test/**/*convertor.js",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/**/*.js -- --ui bdd -R spec -t 5000"
   },
   "homepage": "https://github.com/jhipster/jhipster-domain-language#readme",

@@ -2,7 +2,7 @@
  *
  * This the grammar we use to generate the parser jhGrammar.js.
  *   We use the online tool http://pegjs.org/online to generate the parser.
- *   Modifying this file won't affect the program, this is just to have a more readable grammar. 
+ *   Modifying this file won't affect the program, this is just to have a more readable grammar.
  */
 
 {
@@ -29,14 +29,14 @@
         });
       }
     });
-    
+
     return newArray;
   }
 
   function makeString(o) {
     return o.join("");
   }
-  
+
   function addCardinalityToRelationships(cardinality, relationships) {
     if (!relationships) {
       return;
@@ -45,7 +45,7 @@
       relationship.cardinality = cardinality;
     });
   }
-  
+
   var entities = [];
   var relationships = [];
   var enums = [];
@@ -60,7 +60,7 @@
 }
 
 start = p:prog { return p; }
-  
+
 prog
   = space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* rd:relationDecl space* p:prog {return {"entities" : p.entities, "relationships" : flattenArray(concat([rd],p.relationships)), "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
@@ -75,16 +75,16 @@ prog
   / space* noClient:noClientDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* noServer:noServerDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
   / space* angularSuffixes:angularSuffixDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
-  / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}                                                                 
+  / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffixes": angularSuffixes};}
 
 //Entities
 entityDecl
   = jd:Comment? space* JDLComment? space* "entity" space* e:ENTITYNAME space* tableName:entityTableNameDecl? space* eb:entityBody? space* JDLComment? {return {"name" : e, tableName: tableName ? tableName : e, "body":eb, "javadoc":jd};}
-  / "entity" space* e:ENTITYNAME space* eb:entityBody? {return {"name" : e, "body":eb, "javadoc":""};}           
- 
+  / "entity" space* e:ENTITYNAME space* eb:entityBody? {return {"name" : e, "body":eb, "javadoc":""};}
+
 entityTableNameDecl
   = '(' space* name:[A-z0..9_-]+ space* ')' {return name.join('');}
- 
+
 entityBody
   = "{" space* JDLComment? space* fdl:fieldDeclList space* JDLComment? space* "}" {return fdl;}
   / "" {return [];}
@@ -92,19 +92,18 @@ entityBody
 fieldDeclList
   = JDLComment? space* com:Comment? space* JDLComment? space* f:FIELDNAME space t:type space* vl:validationList? space* ","? space* JDLComment? space* fdl:fieldDeclList {return concat([{"name" : f, "type" : t, "validations" : vl, "javadoc": com}], fdl );}
   / com:Comment? space* f:FIELDNAME space t:type space* vl:validationList {return [{"name" : f, "type" : t, "validations" : vl, "javadoc": com}];}
-  / "" {return [];}                                                
+  / "" {return [];}
 
 validationList
-  = v:validation space* vl:validationList {return concat([v], vl);}                                    
+  = v:validation space* vl:validationList {return concat([v], vl);}
   / "" {return [];}
 
 //Relationship
 relationDecl
   = 'relationship' space rt:relationshipType space* "{" space* JDLComment? space* bodies:relationshipBodies space* "}" {
-  		console.log(bodies);
         addCardinalityToRelationships(rt, bodies);
         return concat([], bodies);
-    }  
+    }
 
 relationshipBodies
   = rb:relationshipBody space* ',' space* morerb:relationshipBodies { return concat([rb], morerb); }
@@ -113,7 +112,7 @@ relationshipBodies
 relationshipBody
   = from:relationshipSide space* JDLComment? space* "to" space* JDLComment? space* to:relationshipSide space* JDLComment? {return {"from" : from , "to" : to};}
 
-relationshipSide          
+relationshipSide
   = jd:Comment? space* e:ENTITYNAME space* "{" space* i:INJECTEDFIELDNAME space* required:'required'? "}" space* {return {"name" :e, "injectedfield" : i, "javadoc": jd, 'required': required ? true : false};}
   / jd:Comment? space* e:ENTITYNAME space* ("{" space* "}")? space* {return {"name" :e, "injectedfield" : null, "javadoc": jd};}
   / e:ENTITYNAME space {return {"name" :e, "injectedfield" : null, "javadoc": ''};}
@@ -125,7 +124,7 @@ enumDecl
 
 enumPropList
   = e:ENUMPROP space* ',' space* JDLComment? space* el:enumPropList {return concat([e],el);}
-  / e:ENUMPROP {return [e];} 
+  / e:ENUMPROP {return [e];}
 
 exclusion
   = 'except' space+ sub:exclusionSub {return sub;}
@@ -164,7 +163,7 @@ serviceDecl
     }
   }
 
-// first way of declaring microservices 
+// first way of declaring microservices
 microserviceDecl1
   = 'microservice' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
     microservice[decl[decl.length - 1]] = microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
@@ -238,7 +237,7 @@ relationshipType = "OneToOne" {return "one-to-one";} / "OneToMany" {return "one-
 
 type "a type" = head:[A-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
 
-validation 
+validation
   = "required" {return {key:'required', value:''};}
   / "minlength" space* "(" space* int:INTEGER space* ")" {return {key:'minlength', value:int};}
   / "maxlength" space* "(" space* int:INTEGER space* ")" {return {key:'maxlength', value:int};}
@@ -251,9 +250,9 @@ validation
 
 
 apostrophe "apostrophe"
-  = a:["|']                    
+  = a:["|']
 
-REGEXP "a regular expression" 
+REGEXP "a regular expression"
   = word:[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* {return makeString(word);}
 
 ENUMNAME "an enum name"
@@ -265,22 +264,22 @@ ENUMPROP "an enum property"
   }
 
 INTEGER "integer"
-  = int:[0-9]+ {return parseInt(int.join(""), 10);} 
+  = int:[0-9]+ {return parseInt(int.join(""), 10);}
 
 INJECTEDFIELDNAME "an injected field"
   = head:[a-zA-Z]tail:[a-zA-Z0-9()]* {return head + tail.join('');}
 
-ENTITYNAME "an entity name"  
+ENTITYNAME "an entity name"
   = head:[A-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
 
 FIELDNAME "a field name"
-  = head:[a-zA-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}               
+  = head:[a-zA-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
 
 space "a space"
-  = space:['\n'|'\t'|'\r'|' '|\u2028|\u2029]+ 
+  = space:['\n'|'\t'|'\r'|' '|\u2028|\u2029]+
 
 /******************               COMMENT                 ***********************/
-Comment 
+Comment
   = ComStart nc:Not_Com* ComStop {return makeString(nc);}
 
 ComStart = "/*" [*]*
