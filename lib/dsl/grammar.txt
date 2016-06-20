@@ -114,7 +114,7 @@ relationshipBody
   = from:relationshipSide space* JDLComment? space* "to" space* JDLComment? space* to:relationshipSide space* JDLComment? {return {"from" : from , "to" : to};}
 
 relationshipSide          
-  = jd:Comment? space* e:ENTITYNAME space* "{" space* i:INJECTEDFIELDNAME space* "}" space* {return {"name" :e, "injectedfield" : i, "javadoc": jd};}
+  = jd:Comment? space* e:ENTITYNAME space* "{" space* i:INJECTEDFIELDNAME space* required:'required'? "}" space* {return {"name" :e, "injectedfield" : i, "javadoc": jd, 'required': required ? true : false};}
   / jd:Comment? space* e:ENTITYNAME space* ("{" space* "}")? space* {return {"name" :e, "injectedfield" : null, "javadoc": jd};}
   / e:ENTITYNAME space {return {"name" :e, "injectedfield" : null, "javadoc": ''};}
 
