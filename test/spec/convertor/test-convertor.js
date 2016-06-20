@@ -34,9 +34,7 @@ describe('::convert', function () {
       it('converts it', function () {
         var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
         var content = convertToJson(input, 'sql');
-        console.error('------------------');
-        console.error(input);
-        console.error('------------------');
+        console.error(content);
         expect(content).not.to.be.null;
       });
     });
