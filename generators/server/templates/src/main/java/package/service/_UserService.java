@@ -31,8 +31,8 @@ import java.util.*;
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
-
     <%_ if (enableSocialSignIn) { _%>
+
     @Inject
     private SocialService socialService;
     <%_ } _%>
@@ -45,7 +45,6 @@ public class UserService {
 
     @Inject
     private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
-
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %><% } %>
