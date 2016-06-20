@@ -12,6 +12,9 @@ import { MetricsStateConfig } from './metrics/metrics.state';
 import { TrackerStateConfig } from './tracker/tracker.state';
 <%_ } _%>
 import { UserMgmntStateConfig } from './user-management/user-management.state';
+import { upgradeAdapter } from '../upgrade_adapter';
+
+upgradeAdapter.addProvider(AuditsService);
 
 angular
     .module('<%=angularAppName%>.admin', [
@@ -36,3 +39,4 @@ angular
     .config(TrackerStateConfig)
 <%_ } _%>
     .config(UserMgmntStateConfig);
+    .factory('AuditsService', upgradeAdapter.downgradeNg2Provider(AuditsService));
