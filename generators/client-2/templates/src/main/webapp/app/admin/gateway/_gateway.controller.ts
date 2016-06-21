@@ -1,28 +1,24 @@
-(function() {
-    'use strict';
+import { Component } from "@angular/core";
+import { GatewayRoutesService } from "./gateway-routes.service";
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .controller('GatewayController', GatewayController);
+@Component({
+  selector: '<%=jhiPrefix%>-gateway',
+  templateUrl: './gateway.html',
+  providers: [ GatewayRoutesService ]
+})
+export class GatewayController{
 
-    GatewayController.$inject = ['$filter', '$interval', 'GatewayRoutes'];
+    constructor(private gatewayRoutesService: GatewayRoutesService){ }
 
-    function GatewayController ($filter, $interval, GatewayRoutes) {
-        var vm = this;
+    gatewayRoutes: any = null;
+    updatingRoutes: any = null;
 
-        vm.gatewayRoutes = null;
-        vm.refresh = refresh;
-        vm.updatingRoutes = null;
-
-        vm.refresh();
-
-        function refresh () {
-            vm.updatingRoutes = true;
-            GatewayRoutes.query(function(result) {
-                vm.gatewayRoutes = result;
-                vm.updatingRoutes = false;
-            });
-        }
+    refresh () {
+        this.updatingRoutes = true;
+        this.gatewayRoutesService.query( (result) => {
+            this.gatewayRoutes = result;
+            this.updatingRoutes = false;
+        });
     }
 
-})();
+}

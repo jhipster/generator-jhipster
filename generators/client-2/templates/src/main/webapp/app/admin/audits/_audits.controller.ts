@@ -1,63 +1,60 @@
-(function() {
-    'use strict';
+import { Component } from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { AuditsService } from "./audits.service";
+import { ParseLinks } from "../../components/util/parse-links.service";
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .controller('AuditsController', AuditsController);
+@Component({
+  selector: '<%=jhiPrefix%>-audit',
+  templateUrl: './audits.html',
+  providers: [ AuditsService, ParseLinks ]
+})
+export class AuditsController {    
 
-    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks'];
+    constructor(private auditsService: AuditsService,
+        private parseLinks: ParseLinks, private datePipe: DatePipe ){
 
-    function AuditsController ($filter, AuditsService, ParseLinks) {
-        var vm = this;
-
-        vm.audits = null;
-        vm.fromDate = null;
-        vm.links = null;
-        vm.loadPage = loadPage;
-        vm.onChangeDate = onChangeDate;
-        vm.page = 1;
-        vm.previousMonth = previousMonth;
-        vm.toDate = null;
-        vm.today = today;
-        vm.totalItems = null;
-
-        vm.today();
-        vm.previousMonth();
-        vm.onChangeDate();
-
-        function onChangeDate () {
-            var dateFormat = 'yyyy-MM-dd';
-            var fromDate = $filter('date')(vm.fromDate, dateFormat);
-            var toDate = $filter('date')(vm.toDate, dateFormat);
-
-            AuditsService.query({page: vm.page -1, size: 20, fromDate: fromDate, toDate: toDate}, function(result, headers){
-                vm.audits = result;
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-            });
         }
 
-        // Date picker configuration
-        function today () {
-            // Today + 1 day - needed if the current day must be included
-            var today = new Date();
-            vm.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-        }
+    audits: any = null;
+    fromDate: any = null;
+    links: any = null;
+    page: number = 1;
+    toDate: any = null;
+    totalItems: any = null;
 
-        function previousMonth () {
-            var fromDate = new Date();
-            if (fromDate.getMonth() === 0) {
-                fromDate = new Date(fromDate.getFullYear() - 1, 11, fromDate.getDate());
-            } else {
-                fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
-            }
+    onChangeDate () {
+        let dateFormat:string = 'yyyy-MM-dd';
+        let fromDate: any = this.datePipe.transform(this.fromDate, dateFormat);
+        let toDate: any = this.datePipe.transform(this.toDate, dateFormat);
 
-            vm.fromDate = fromDate;
-        }
-
-        function loadPage (page) {
-            vm.page = page;
-            vm.onChangeDate();
-        }
+        this.auditsService.query({page: this.page-1, size: 20, fromDate: fromDate, toDate: toDate},
+            (result,headers) => {
+            this.audits = result;
+            this.links = this.parseLinks.parse(headers('link'));
+            this.totalItems = headers('X-Total-Count');
+        });
     }
-})();
+
+    today () {
+        // Today + 1 day - needed if the current day must be included
+        let today = new Date();
+        this.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    }
+
+    previousMonth () {
+        let fromDate: any = new Date();
+        if (fromDate.getMonth() === 0) {
+            fromDate = new Date(fromDate.getFullYear() - 1, 11, fromDate.getDate());
+        } else {
+            fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
+        }
+
+        fromDate = fromDate;
+    }
+
+        loadPage (page: number) {
+        page = page;
+        this.onChangeDate();
+    }
+        
+}
