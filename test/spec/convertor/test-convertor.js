@@ -7,34 +7,33 @@ var expect = require('chai').expect,
     parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::convert', function () {
-  /*describe('when passing invalid parameters', function () {
-    describe('such as nil', function () {
+  describe('when passing invalid parameters', function () {
+    describe('such as undefined', function () {
       it('throws an error', function () {
         try {
-          parse(null);
+          convertToJson();
           fail();
         } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException')
+          expect(error.name).to.eq('NullPointerException')
         }
       });
     });
-    describe('such as an empty array', function () {
+    describe('such as an no databaseType', function () {
       it('throws an error', function () {
         try {
-          parse('');
+          convertToJson({});
           fail();
         } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException')
+          expect(error.name).to.eq('NullPointerException')
         }
       });
     });
-  });*/
+  });
   describe('when passing valid arguments', function () {
     describe('when converting JDL to entity json for SQL type', function () {
       it('converts it', function () {
         var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
         var content = convertToJson(input, 'sql');
-        console.error(content);
         expect(content).not.to.be.null;
       });
     });
