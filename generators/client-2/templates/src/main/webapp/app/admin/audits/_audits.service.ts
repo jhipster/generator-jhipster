@@ -4,7 +4,10 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 export interface AuditsData {
-    //TODO put the model returned here
+    timestamp : Date;
+    principal : string;
+    type: string;
+    [name : string]: any;
 }
 
 @Injectable()
