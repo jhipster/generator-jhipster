@@ -2,6 +2,7 @@
 
 const expect = require('chai').expect,
     fail = expect.fail,
+    parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
     JDLParser = require('../../../lib/dsl/jdl_parser');
 
 
@@ -32,7 +33,9 @@ describe('JDLParser', function () {
     describe('when passing valid args', function () {
       describe('with no error', function () {
         it('builds a JDLObject', function () {
-          // todo
+          var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+          var content = JDLParser.parse(input, 'sql');
+          expect(content).not.to.be.null;
         });
       });
       describe('with an invalid field type', function () {
