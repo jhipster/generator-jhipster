@@ -1,9 +1,9 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
-    JDLParser = require('../../../lib/dsl/jdl_parser');
+  fail = expect.fail,
+  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
+  JDLParser = require('../../../lib/dsl/jdl_parser');
 
 
 describe('JDLParser', function () {
@@ -54,7 +54,7 @@ describe('JDLParser', function () {
         });
       });
       describe('with an invalid option', function () {
-        it('fails', function() {
+        it('fails', function () {
           // todo
         });
       });
