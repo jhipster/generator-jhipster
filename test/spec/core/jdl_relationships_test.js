@@ -60,8 +60,38 @@ describe('JDLRelationships', function () {
           injectedFieldInFrom: 'somethingElse',
           type: RELATIONSHIP_TYPES.ONE_TO_ONE
         }));
+        expect(relationships.size).to.eq(2);
         expect(Object.keys(relationships.relationships.OneToOne).length).to.eq(2);
       });
+    });
+  });
+  describe('#toArray', function() {
+    it('returns the list of each relationship', function() {
+      var relationships = new JDLRelationships();
+      var relationship1 = new JDLRelationship({
+        from: new JDLEntity({
+          name: 'Abc'
+        }),
+        to: new JDLEntity({
+          name: 'Abc2'
+        }),
+        injectedFieldInFrom: 'something',
+        type: RELATIONSHIP_TYPES.ONE_TO_ONE
+      });
+      var relationship2 = new JDLRelationship({
+        from: new JDLEntity({
+          name: 'Abc2'
+        }),
+        to: new JDLEntity({
+          name: 'Abc3'
+        }),
+        injectedFieldInFrom: 'somethingElse',
+        type: RELATIONSHIP_TYPES.ONE_TO_ONE
+      });
+      relationships.add(relationship1);
+      relationships.add(relationship2);
+      var array = relationships.toArray();
+      expect(array).to.deep.eq([relationship1, relationship2]);
     });
   });
   describe('#toString', function () {
