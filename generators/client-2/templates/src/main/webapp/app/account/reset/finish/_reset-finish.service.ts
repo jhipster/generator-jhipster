@@ -1,15 +1,7 @@
-(function() {
-    'use strict';
+PasswordResetFinish.$inject = ['$resource'];
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .factory('PasswordResetFinish', PasswordResetFinish);
+export function PasswordResetFinish($resource) {
+    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/reset_password/finish'<%} else { %>'api/account/reset_password/finish'<% } %>, {}, {});
 
-    PasswordResetFinish.$inject = ['$resource'];
-
-    function PasswordResetFinish($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/reset_password/finish'<%} else { %>'api/account/reset_password/finish'<% } %>, {}, {});
-
-        return service;
-    }
-})();
+    return service;
+}

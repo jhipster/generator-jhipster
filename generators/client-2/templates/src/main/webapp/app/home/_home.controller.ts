@@ -1,33 +1,25 @@
-(function() {
-    'use strict';
+HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state'];
 
-    angular
-        .module('<%=angularAppName%>.app')
-        .controller('HomeController', HomeController);
+export function HomeController ($scope, Principal, LoginService, $state) {
+    var vm = this;
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state'];
-
-    function HomeController ($scope, Principal, LoginService, $state) {
-        var vm = this;
-
-        vm.account = null;
-        vm.isAuthenticated = null;
-        vm.login = LoginService.open;
-        vm.register = register;
-        $scope.$on('authenticationSuccess', function() {
-            getAccount();
-        });
-
+    vm.account = null;
+    vm.isAuthenticated = null;
+    vm.login = LoginService.open;
+    vm.register = register;
+    $scope.$on('authenticationSuccess', function() {
         getAccount();
+    });
 
-        function getAccount() {
-            Principal.identity().then(function(account) {
-                vm.account = account;
-                vm.isAuthenticated = Principal.isAuthenticated;
-            });
-        }
-        function register () {
-            $state.go('register');
-        }
+    getAccount();
+
+    function getAccount() {
+        Principal.identity().then(function(account) {
+            vm.account = account;
+            vm.isAuthenticated = Principal.isAuthenticated;
+        });
     }
-})();
+    function register () {
+        $state.go('register');
+    }
+}
