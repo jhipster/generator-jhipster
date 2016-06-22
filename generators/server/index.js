@@ -476,30 +476,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.applicationType === 'uaa') {
-                const keyStoreFile = SERVER_MAIN_RES_DIR + 'keystore.jks';
-                if (this.fs.exists(keyStoreFile)) {
-                    this.log(chalk.cyan('\nKeyStore \'' + keyStoreFile + '\' already exists. Leaving unchanged.\n'));
-                } else {
-                    shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
-                    var parent = this;
-                    shelljs.exec('keytool '+
-                        '-genkey ' +
-                        '-noprompt ' +
-                        '-keyalg RSA ' +
-                        '-alias selfsigned ' +
-                        '-keystore ' + keyStoreFile + ' ' +
-                        '-storepass password ' +
-                        '-keypass password ' +
-                        '-keysize 2048 ' +
-                        '-dname "CN=Java Hipster, OU=Development, O=' + this.packageName + ', L=, ST=, C="'
-                    , function(code) {
-                        if (code !== 0) {
-                            parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
-                        } else {
-                            parent.log(chalk.green('\nKeyStore \'' + keyStoreFile + '\' generated successfully.\n'));
-                        }
-                    });
-                }
+                this.generateKeyStore();
             }
         },
 
