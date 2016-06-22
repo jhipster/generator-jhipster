@@ -1,18 +1,14 @@
 export function AlertService () {
     this.toast = false;
     /*jshint validthis: true */
-    var service = {  getService: getService }
+    this.$get = getService;
 
     this.showAsToast = function(isToast) {
         this.toast = isToast;
     };
-    
+
     getService.$inject = ['$timeout', '$sce'<% if (enableTranslation) { %>, '$translate'<% } %>];
 
-    
-    return service;
-
-  
     function getService ($timeout, $sce<% if (enableTranslation) { %>,$translate<% } %>) {
         var toast = this.toast,
             alertId = 0, // unique id for each alert. Starts from 0.
@@ -133,5 +129,5 @@ export function AlertService () {
         }
     }
 
-    
+
 }
