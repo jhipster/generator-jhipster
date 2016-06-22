@@ -199,8 +199,7 @@ module.exports = EntityGenerator.extend({
         try {
             this.fileData = this.fs.readJSON(this.fromPath);
         } catch (err) {
-            this.log(chalk.red('\nThe configuration file could not be read!\n'));
-            return;
+            this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
