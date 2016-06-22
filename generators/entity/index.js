@@ -529,6 +529,10 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                 }
 
+                if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                    relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
+                }
+
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
                     relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                 }

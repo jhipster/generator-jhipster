@@ -255,7 +255,8 @@ public class <%= entityClass %> implements Serializable {
         relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
         relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
         otherEntityName = relationships[idx].otherEntityName,
-        otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+        otherEntityNamePlural = relationships[idx].otherEntityNamePlural,
+        otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
     %><% if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') { %>
     public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalizedPlural %>() {
         return <%= relationshipFieldNamePlural %>;
@@ -264,6 +265,12 @@ public class <%= entityClass %> implements Serializable {
     <%_ if (fluentMethods) { _%>
     public <%= entityClass %> <%= relationshipFieldNamePlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
+        return this;
+    }
+
+    public <%= entityClass %> add<%= otherEntityNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+        this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
+        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
         return this;
     }
     <%_ } _%>
