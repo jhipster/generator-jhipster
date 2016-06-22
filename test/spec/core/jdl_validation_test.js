@@ -10,7 +10,7 @@ describe('JDLValidation', function () {
       it("defaults on the 'required' validation", function () {
         var validation = new JDLValidation();
         expect(validation.name).to.eq('required');
-        expect(validation.value).to.be.null;
+        expect(validation.value).to.eq('');
       });
     });
     describe('when passing arguments', function () {
