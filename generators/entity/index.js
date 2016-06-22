@@ -209,6 +209,7 @@ module.exports = EntityGenerator.extend({
         this.changelogDate = this.fileData.changelogDate;
         this.dto = this.fileData.dto;
         this.service = this.fileData.service;
+        this.fluentMethods = this.fileData.fluentMethods;
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName || _.snakeCase(this.name).toLowerCase();
@@ -587,6 +588,7 @@ module.exports = EntityGenerator.extend({
             insight.track('entity/pagination', this.pagination);
             insight.track('entity/dto', this.dto);
             insight.track('entity/service', this.service);
+            insight.track('entity/fluentMethods', this.fluentMethods);
         }
     },
     writing : {

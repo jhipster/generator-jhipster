@@ -211,6 +211,17 @@ public class <%= entityClass %> implements Serializable {
         return <%= fieldName %>;
     }
 
+    <%_ if (fluentMethods) { _%>
+        <%_ if (fieldTypeBlobContent != 'text') { _%>
+    public <%= entityClass %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
+        <%_ } else { _%>
+    public <%= entityClass %> <%= fieldName %>(String <%= fieldName %>) {
+        <%_ } _%>
+        this.<%= fieldName %> = <%= fieldName %>;
+        return this;
+    }
+    <%_ } _%>
+
     <%_ if (fieldTypeBlobContent != 'text') { _%>
     public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
     <%_ } else { _%>
@@ -223,6 +234,13 @@ public class <%= entityClass %> implements Serializable {
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
     }
+
+    <%_ if (fluentMethods) { _%>
+    public <%= entityClass %> <%= fieldName %>ContentType(String <%= fieldName %>ContentType) {
+        this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
+        return this;
+    }
+    <%_ } _%>
 
     public void set<%= fieldInJavaBeanMethod %>ContentType(String <%= fieldName %>ContentType) {
         this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
@@ -243,12 +261,26 @@ public class <%= entityClass %> implements Serializable {
         return <%= relationshipFieldNamePlural %>;
     }
 
+    <%_ if (fluentMethods) { _%>
+    public <%= entityClass %> <%= relationshipFieldNamePlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
+        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
+        return this;
+    }
+    <%_ } _%>
+
     public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
     }<% } else { %>
     public <%= otherEntityNameCapitalized %> get<%= relationshipNameCapitalized %>() {
         return <%= relationshipFieldName %>;
     }
+
+    <%_ if (fluentMethods) { _%>
+    public <%= entityClass %> <%= relationshipFieldName %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
+        return this;
+    }
+    <%_ } _%>
 
     public void set<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
