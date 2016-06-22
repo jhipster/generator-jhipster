@@ -45,11 +45,10 @@ describe('JDLParser', function () {
             name: 'Department',
             tableName: 'Department',
             fields: {
-              departmentId: new JDLField({name: 'departmentId', type: FieldTypes.LONG, comment: null}),
+              departmentId: new JDLField({name: 'departmentId', type: FieldTypes.LONG}),
               departmentName: new JDLField({
                 name: 'departmentName',
                 type: FieldTypes.STRING,
-                comment: null,
                 validations: {required: new JDLValidation({name: Validations.REQUIRED})}
               })
             }
@@ -58,13 +57,31 @@ describe('JDLParser', function () {
             name: 'JobHistory',
             tableName: 'JobHistory',
             fields: {
-              startDate: new JDLField({name: 'startDate', type: FieldTypes.ZONED_DATE_TIME, comment: null}),
-              endDate: new JDLField({name: 'endDate', type: FieldTypes.ZONED_DATE_TIME, comment: null})
+              startDate: new JDLField({name: 'startDate', type: FieldTypes.ZONED_DATE_TIME}),
+              endDate: new JDLField({name: 'endDate', type: FieldTypes.ZONED_DATE_TIME})
             }
           }));
           expect(content.enums.JobType).to.deep.eq(new JDLEnum({
             name: 'JobType',
             values: ['TYPE1', 'TYPE2']
+          }));
+          expect(content.entities.Job).to.deep.eq(new JDLEntity({
+            name: 'Job',
+            tableName: 'Job',
+            fields: {
+              jobId: new JDLField({name: 'jobId', type: FieldTypes.LONG}),
+              jobTitle: new JDLField({
+                name: 'jobTitle',
+                type: FieldTypes.STRING,
+                validations: {
+                  minlength: new JDLValidation({name: Validations.MINLENGTH, value: 5}),
+                  maxlength: new JDLValidation({name: Validations.MAXLENGTH, value: 25})
+                }
+              }),
+              type: new JDLField({name: 'type', type: 'JobType'}),
+              minSalary: new JDLField({name: 'minSalary', type: FieldTypes.LONG}),
+              maxSalary: new JDLField({name: 'maxSalary', type: FieldTypes.LONG})
+            }
           }));
         });
       });
