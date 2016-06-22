@@ -59,7 +59,8 @@ describe('JDLParser', function () {
             fields: {
               startDate: new JDLField({name: 'startDate', type: FieldTypes.ZONED_DATE_TIME}),
               endDate: new JDLField({name: 'endDate', type: FieldTypes.ZONED_DATE_TIME})
-            }
+            },
+            comment: 'JobHistory comment.'
           }));
           expect(content.enums.JobType).to.deep.eq(new JDLEnum({
             name: 'JobType',

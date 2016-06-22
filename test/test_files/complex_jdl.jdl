@@ -3,6 +3,9 @@ entity Department {
   departmentName String required
 }
 
+/**
+ * JobHistory comment.
+ */
 entity JobHistory {
   startDate ZonedDateTime,
   endDate ZonedDateTime
