@@ -7,8 +7,7 @@ var util = require('util'),
     scriptBase = require('../generator-base'),
     packagejs = require('../../package.json'),
     crypto = require('crypto'),
-    mkdirp = require('mkdirp'),
-    shelljs = require('shelljs');
+    mkdirp = require('mkdirp');
 
 var JhipsterServerGenerator = generators.Base.extend({});
 
