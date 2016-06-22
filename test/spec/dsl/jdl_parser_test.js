@@ -1,10 +1,15 @@
 'use strict';
 
 const expect = require('chai').expect,
-  fail = expect.fail,
-  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
-  JDLParser = require('../../../lib/dsl/jdl_parser');
-
+    fail = expect.fail,
+    parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
+    JDLParser = require('../../../lib/dsl/jdl_parser'),
+    JDLEntity = require('../../../lib/core/jdl_entity'),
+    JDLEnum = require('../../../lib/core/jdl_enum'),
+    JDLField = require('../../../lib/core/jdl_field'),
+    JDLValidation = require('../../../lib/core/jdl_validation'),
+    FieldTypes = require('../../../lib/core/jhipster/field_types').SQL_TYPES,
+    Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 
 describe('JDLParser', function () {
   describe('::parse', function () {
@@ -36,7 +41,31 @@ describe('JDLParser', function () {
           var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
           var content = JDLParser.parse(input, 'sql');
           expect(content).not.to.be.null;
-          // todo check the values
+          expect(content.entities.Department).to.deep.eq(new JDLEntity({
+            name: 'Department',
+            tableName: 'Department',
+            fields: {
+              departmentId: new JDLField({name: 'departmentId', type: FieldTypes.LONG, comment: null}),
+              departmentName: new JDLField({
+                name: 'departmentName',
+                type: FieldTypes.STRING,
+                comment: null,
+                validations: {required: new JDLValidation({name: Validations.REQUIRED})}
+              })
+            }
+          }));
+          expect(content.entities.JobHistory).to.deep.eq(new JDLEntity({
+            name: 'JobHistory',
+            tableName: 'JobHistory',
+            fields: {
+              startDate: new JDLField({name: 'startDate', type: FieldTypes.ZONED_DATE_TIME, comment: null}),
+              endDate: new JDLField({name: 'endDate', type: FieldTypes.ZONED_DATE_TIME, comment: null})
+            }
+          }));
+          expect(content.enums.JobType).to.deep.eq(new JDLEnum({
+            name: 'JobType',
+            values: ['TYPE1', 'TYPE2']
+          }));
         });
       });
       describe('with an invalid field type', function () {
