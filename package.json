@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "test": "mocha test/**/*.js",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/**/*.js -- --ui bdd -R spec -t 5000"
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/**/*.js -- --ui bdd -R spec -t 5000",
+    "peg-parse": "pegjs lib/dsl/grammar.txt lib/dsl/pegjs_parser.js"
   },
   "homepage": "https://github.com/jhipster/jhipster-domain-language#readme",
   "repository": {
