@@ -83,6 +83,14 @@
                 }],<% } %>
                 entity: ['$stateParams', '<%= entityClass %>', function($stateParams, <%= entityClass %>) {
                     return <%= entityClass %>.get({id : $stateParams.id}).$promise;
+                }],
+                previousState: ["$state", function ($state) {
+                    var currentStateData = {
+                        name: $state.current.name || 'participant',
+                        params: $state.params,
+                        url: $state.href($state.current.name, $state.params)
+                    };
+                    return currentStateData;
                 }]
             }
         })
