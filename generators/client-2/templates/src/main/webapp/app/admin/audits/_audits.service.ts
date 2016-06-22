@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 
-AuditsService.$inject = ['$resource'];
+export interface AuditsData {
+    timestamp : Date;
+    principal : string;
+    type: string;
+    [name : string]: any;
+}
 
 @Injectable()
-export function AuditsService ($resource) {
-    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/audits/:id'<%} else { %>'management/jhipster/audits/:id'<% } %>, {}, {
-        'get': {
-            method: 'GET',
-            isArray: true
-        },
-        'query': {
-            method: 'GET',
-            isArray: true,
-            params: {fromDate: null, toDate: null}
-        }
-    });
-
-    return service;
+export class AuditsService  {
+    constructor(private http: Http) { }
+    query(): Observable<AuditsData[]> {
+        return this.http.get(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/audits'<%} else { %>'management/jhipster/audits'<% } %>)
+            .map((res: Response) => res.json());
+    }
+    get(id: string): Observable<AuditsData> {
+        return this.http.get(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/audits/${id}'<%} else { %>'management/jhipster/audits/${id}'<% } %>)
+            .map((res: Response) => res.json());
+    }
 }
