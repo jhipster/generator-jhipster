@@ -36,6 +36,7 @@ describe('JDLParser', function () {
           var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
           var content = JDLParser.parse(input, 'sql');
           expect(content).not.to.be.null;
+          // todo check the values
         });
       });
       describe('with an invalid field type', function () {
