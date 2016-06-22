@@ -10,7 +10,7 @@ entity JobHistory {
 
 entity Job {
   jobId Long,
-  jobTitle String,
+  jobTitle String minlength(5) maxlength(25),
   minSalary Long,
   maxSalary Long
 }
