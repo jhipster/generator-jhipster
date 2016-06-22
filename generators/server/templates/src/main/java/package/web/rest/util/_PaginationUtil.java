@@ -43,8 +43,8 @@ public class PaginationUtil {
     private static String generateUri(String baseUrl, int page, int size) throws URISyntaxException {
         return UriComponentsBuilder.fromUriString(baseUrl).queryParam("page", page).queryParam("size", size).toUriString();
     }
-
     <%_ if (searchEngine === 'elasticsearch') { _%>
+
     public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page<?> page, String baseUrl)
         throws URISyntaxException {
 

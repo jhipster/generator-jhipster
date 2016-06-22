@@ -100,8 +100,8 @@ public class MailService {
         String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
-
     <%_ if (enableSocialSignIn) { _%>
+
     @Async
     public void sendSocialRegistrationValidationEmail(User user, String provider) {
         log.debug("Sending social registration validation e-mail to '{}'", user.getEmail());
