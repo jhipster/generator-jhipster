@@ -151,7 +151,7 @@ module.exports = UpgradeGenerator.extend({
                     if (code !== 0) this.error('Unable to record current code has been generated with version ' +
                         this.currentVersion + ':\n' + msg + ' ' + err);
                     this.log('Current code recorded as generated with version ' + this.currentVersion);
-                    this._gitCheckout(UPGRADE_BRANCH, done);
+                    done();
                 }.bind(this));
             }.bind(this);
 
@@ -193,6 +193,11 @@ module.exports = UpgradeGenerator.extend({
                 else this.error('Something went wrong while updating generator! ' + msg + ' ' + err);
                 done();
             }.bind(this));
+        },
+
+        checkoutUpgradeBranch: function() {
+            var done = this.async();
+            this._gitCheckout(UPGRADE_BRANCH, done);
         },
 
         generateWithLatestVersion: function() {
