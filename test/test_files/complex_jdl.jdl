@@ -8,9 +8,14 @@ entity JobHistory {
   endDate ZonedDateTime
 }
 
+enum JobType {
+  TYPE1, TYPE2
+}
+
 entity Job {
   jobId Long,
   jobTitle String minlength(5) maxlength(25),
+  type JobType,
   minSalary Long,
   maxSalary Long
 }
