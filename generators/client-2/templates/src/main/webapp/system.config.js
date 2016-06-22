@@ -33,7 +33,7 @@
     }
     // Bundled (~40 requests):
     function packUmd(pkgName) {
-        packages['@angular/'+ pkgName] = { main: pkgName + '.umd' };
+        packages['@angular/'+ pkgName] = { main: '/bundles/' + pkgName + '.umd' };
     };
     // Most environments should use UMD; some (Karma) need the individual index files
     var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;

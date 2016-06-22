@@ -12,6 +12,9 @@ import { MetricsStateConfig } from './metrics/metrics.state';
 import { TrackerStateConfig } from './tracker/tracker.state';
 <%_ } _%>
 import { UserMgmntStateConfig } from './user-management/user-management.state';
+
+import { AuditsService } from './audits/audits.service';
+
 import { upgradeAdapter } from '../upgrade_adapter';
 
 upgradeAdapter.addProvider(AuditsService);
@@ -38,5 +41,5 @@ angular
 <%_ if (websocket === 'spring-websocket') { _%>
     .config(TrackerStateConfig)
 <%_ } _%>
-    .config(UserMgmntStateConfig);
+    .config(UserMgmntStateConfig)
     .factory('AuditsService', upgradeAdapter.downgradeNg2Provider(AuditsService));

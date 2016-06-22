@@ -1,15 +1,7 @@
-(function() {
-    'use strict';
+Password.$inject = ['$resource'];
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .factory('Password', Password);
+export function Password($resource) {
+    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/change_password'<%} else { %>'api/account/change_password'<% } %>, {}, {});
 
-    Password.$inject = ['$resource'];
-
-    function Password($resource) {
-        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/change_password'<%} else { %>'api/account/change_password'<% } %>, {}, {});
-
-        return service;
-    }
-})();
+    return service;
+}
