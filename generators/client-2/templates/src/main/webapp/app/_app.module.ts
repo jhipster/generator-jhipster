@@ -24,7 +24,7 @@ import { NotificationInterceptor } from './blocks/interceptor/notification.inter
 
 import { AppStateConfig } from './app.state';
 import { HomeStateConfig } from './home/home.state';
-import { ErrorStateConfig } from './layouts/error/home.state';
+import { ErrorStateConfig } from './layouts/error/error.state';
 
 angular
     .module('<%=angularAppName%>.app', [
