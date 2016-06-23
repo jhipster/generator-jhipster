@@ -6,11 +6,14 @@ import { Auth } from './auth/auth.service';
 import { AuthServerProvider } from './auth/auth-session.service';
 import { Account } from './auth/account.service';
 import { LoginService } from './login/login.service';
-import { Principal } from './auth/principal.service';<% if (enableTranslation) { %>
+import { Principal } from './auth/principal.service';
+import { ProfileService } from './profiles/profile.service';<% if (enableTranslation) { %>
 import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.service';<% } %>
 import { AlertService } from './alert/alert.service';
 
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
+
+upgradeAdapter.addProvider(ProfileService);
 
 angular
     .module('<%=angularAppName%>.common', [
@@ -21,12 +24,14 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
+    // bug 'showAsToast is not a function to fix'
     .config(AlertServiceConfig)
     .factory('Auth', Auth)
     .factory('AuthServerProvider', AuthServerProvider)
     .factory('Account', Account)
     .factory('LoginService', LoginService)
     .factory('Principal', Principal)
-    .factory('AlertService', AlertService)<% if (enableTranslation) { %>
+    .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
+    .provider('AlertService', AlertService)<% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
     .directive('pageRibbon', upgradeAdapter.downgradeNg2Component(PageRibbonComponent));

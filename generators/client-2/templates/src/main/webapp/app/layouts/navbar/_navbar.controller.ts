@@ -1,46 +1,38 @@
-(function() {
-    'use strict';
+NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
 
-    angular
-        .module('<%=angularAppName%>.app')
-        .controller('NavbarController', NavbarController);
+export function NavbarController ($state, Auth, Principal, ProfileService, LoginService) {
+    var vm = this;
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
+    vm.isNavbarCollapsed = true;
+    vm.isAuthenticated = Principal.isAuthenticated;
 
-    function NavbarController ($state, Auth, Principal, ProfileService, LoginService) {
-        var vm = this;
+    ProfileService.getProfileInfo().then(function(response) {
+        vm.inProduction = response.inProduction;
+        vm.swaggerDisabled = response.swaggerDisabled;
+    });
 
-        vm.isNavbarCollapsed = true;
-        vm.isAuthenticated = Principal.isAuthenticated;
+    vm.login = login;
+    vm.logout = logout;
+    vm.toggleNavbar = toggleNavbar;
+    vm.collapseNavbar = collapseNavbar;
+    vm.$state = $state;
 
-        ProfileService.getProfileInfo().then(function(response) {
-            vm.inProduction = response.inProduction;
-            vm.swaggerDisabled = response.swaggerDisabled;
-        });
-
-        vm.login = login;
-        vm.logout = logout;
-        vm.toggleNavbar = toggleNavbar;
-        vm.collapseNavbar = collapseNavbar;
-        vm.$state = $state;
-
-        function login() {
-            collapseNavbar();
-            LoginService.open();
-        }
-
-        function logout() {
-            collapseNavbar();
-            Auth.logout();
-            $state.go('home');
-        }
-
-        function toggleNavbar() {
-            vm.isNavbarCollapsed = !vm.isNavbarCollapsed;
-        }
-
-        function collapseNavbar() {
-            vm.isNavbarCollapsed = true;
-        }
+    function login() {
+        collapseNavbar();
+        LoginService.open();
     }
-})();
+
+    function logout() {
+        collapseNavbar();
+        Auth.logout();
+        $state.go('home');
+    }
+
+    function toggleNavbar() {
+        vm.isNavbarCollapsed = !vm.isNavbarCollapsed;
+    }
+
+    function collapseNavbar() {
+        vm.isNavbarCollapsed = true;
+    }
+}
