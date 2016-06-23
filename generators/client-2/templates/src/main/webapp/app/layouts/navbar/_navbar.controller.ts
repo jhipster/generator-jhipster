@@ -6,9 +6,9 @@ export function NavbarController ($state, Auth, Principal, ProfileService, Login
     vm.isNavbarCollapsed = true;
     vm.isAuthenticated = Principal.isAuthenticated;
 
-    ProfileService.getProfileInfo().then(function(response) {
-        vm.inProduction = response.inProduction;
-        vm.swaggerDisabled = response.swaggerDisabled;
+    ProfileService.getProfileInfo().subscribe(profileInfo => {
+        vm.inProduction = profileInfo.inProduction;
+        vm.swaggerDisabled = profileInfo.swaggerDisabled;
     });
 
     vm.login = login;
