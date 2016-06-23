@@ -3,7 +3,7 @@
 const expect = require('chai').expect,
     fail = expect.fail,
     parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
-    JDLParser = require('../../../lib/dsl/jdl_parser'),
+    JDLParser = require('../../../lib/parser/jdl_parser'),
     JDLEntity = require('../../../lib/core/jdl_entity'),
     JDLEnum = require('../../../lib/core/jdl_enum'),
     JDLField = require('../../../lib/core/jdl_field'),
