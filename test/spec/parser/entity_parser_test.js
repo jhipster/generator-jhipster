@@ -35,6 +35,19 @@ describe('::convert', function () {
         var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
         var content = EntityParser.parse(input, 'sql');
         expect(content).not.to.be.null;
+        expect(content.length).to.eq(8);
+        expect(content[0].name).to.eq('Department');
+        expect(content[0].body.fields.length).to.eq(2);
+      });
+    });
+    describe('when converting JDL to entity json for MongoDB type', function () {
+      it('converts it', function () {
+        // TODO
+      });
+    });
+    describe('when converting JDL to entity json for Cassandra type', function () {
+      it('converts it', function () {
+        // TODO
       });
     });
   });
