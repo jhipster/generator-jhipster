@@ -1,7 +1,7 @@
 {
-  "name": "jhipster-domain-language",
+  "name": "jhipster-core",
   "version": "1.0.1",
-  "description": "JHipster's own domain language",
+  "description": "JHipster's own domain language and core objects",
   "main": "module/index.js",
   "keywords": [
     "JHipster",
@@ -12,10 +12,10 @@
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/**/*.js -- --ui bdd -R spec -t 5000",
     "peg-parse": "pegjs lib/dsl/grammar.txt lib/dsl/pegjs_parser.js"
   },
-  "homepage": "https://github.com/jhipster/jhipster-domain-language#readme",
+  "homepage": "https://github.com/jhipster/jhipster-core#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jhipster/jhipster-domain-language.git"
+    "url": "git+https://github.com/jhipster/jhipster-core.git"
   },
   "author": {
     "name": "Mathieu Abou-Aichi",
@@ -23,7 +23,7 @@
     "url": "https://github.com/MathieuAA"
   },
   "bugs": {
-    "url": "https://github.com/jhipster/jhipster-domain-language/issues"
+    "url": "https://github.com/jhipster/jhipster-core/issues"
   },
   "license": "Apache-2.0",
   "licenses": [
