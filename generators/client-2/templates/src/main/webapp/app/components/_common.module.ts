@@ -2,9 +2,6 @@ import { upgradeAdapter } from '../upgrade_adapter';
 
 import { AlertServiceConfig } from '../blocks/config/alert.config';
 
-import { HomeController } from '../home/home.controller';
-import { NavbarController } from '../layouts/navbar/navbar.controller';
-
 import { Auth } from './auth/auth.service';
 import { AuthServerProvider } from './auth/auth-session.service';
 import { Account } from './auth/account.service';
@@ -29,8 +26,6 @@ angular
     ])
     // bug 'showAsToast is not a function to fix'
     .config(AlertServiceConfig)
-    .controller('HomeController', HomeController)
-    .controller('NavbarController', NavbarController)
     .factory('Auth', Auth)
     .factory('AuthServerProvider', AuthServerProvider)
     .factory('Account', Account)
