@@ -43,9 +43,7 @@ public class PaginationUtil {
     private static String generateUri(String baseUrl, int page, int size) throws URISyntaxException {
         return UriComponentsBuilder.fromUriString(baseUrl).queryParam("page", page).queryParam("size", size).toUriString();
     }
-
-
-    <% if (searchEngine === 'elasticsearch') { %>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
 
     public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page<?> page, String baseUrl)
         throws URISyntaxException {
@@ -69,5 +67,6 @@ public class PaginationUtil {
         link += "<" + generateUri(baseUrl, 0, page.getSize()) + "&query=" + query + ">; rel=\"first\"";
         headers.add(HttpHeaders.LINK, link);
         return headers;
-    }<% } %>
+    }
+    <%_ } _%>
 }
