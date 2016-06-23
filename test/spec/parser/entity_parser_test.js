@@ -3,7 +3,7 @@
 var expect = require('chai').expect,
     fs = require('fs'),
     fail = expect.fail,
-    convertToJson = require('../../../lib/convertor/jdl_convertor').convertToJson,
+    convertToJson = require('../../../lib/parser/entity_parser').convertToJson,
     parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::convert', function () {
