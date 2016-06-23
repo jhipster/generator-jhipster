@@ -9,25 +9,18 @@ import { ProfileInfo } from './profile-info';
 export class PageRibbonComponent implements OnInit {
 
     profileInfo: ProfileInfo;
-    ribbonEnv: String;
-    cssClass: String;
+    ribbonEnv: string;
+    cssClass: string;
 
     constructor(private profileService: ProfileService) {
         this.cssClass = 'hidden';
     }
 
-    getProfileInfo() {
-        this.profileService
-            .getProfileInfo()
-            .then(profileInfo => {
-                this.profileInfo = profileInfo;
-                this.ribbonEnv = profileInfo.ribbonEnv;
-                this.cssClass = profileInfo.ribbonEnv;
-            })
-            .catch(error => console.error(error));
-    }
-
     ngOnInit() {
-        this.getProfileInfo();
+        this.profileService.getProfileInfo().subscribe(profileInfo => {
+            this.profileInfo = profileInfo;
+            this.ribbonEnv = profileInfo.ribbonEnv;
+            this.cssClass = profileInfo.ribbonEnv;
+        });
     }
 }
