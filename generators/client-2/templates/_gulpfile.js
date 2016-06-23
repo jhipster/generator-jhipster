@@ -106,7 +106,8 @@ gulp.task('tscompile', function(cb){
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(config.dist  + 'app'));
+        .pipe(gulp.dest(config.dist  + 'app'))
+        .pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('inject', ['tscompile','inject:dep']);
