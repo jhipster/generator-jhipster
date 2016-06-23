@@ -15,6 +15,9 @@ import { LocalStorageConfig } from './blocks/config/localstorage.config';
 import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
+import { HomeController } from './home/home.controller';
+import { NavbarController } from './layouts/navbar/navbar.controller';
+
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
@@ -55,6 +58,8 @@ angular
     .config(AppStateConfig)
     .config(HomeStateConfig)
     .config(ErrorStateConfig)
+    .controller('HomeController', HomeController)
+    .controller('NavbarController', NavbarController)
     .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
     <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     .factory('AuthInterceptor', AuthInterceptor)
