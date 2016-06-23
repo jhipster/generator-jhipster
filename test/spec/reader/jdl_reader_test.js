@@ -105,5 +105,12 @@ describe('::parseFromFiles', function() {
         expect(content).not.to.be.null;
       });
     });
+    describe('when reading a complex JDL file', function() {
+      it('reads them', function () {
+        var content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+        console.log(content);
+        expect(content).not.to.be.null;
+      });
+    });
   });
 });
