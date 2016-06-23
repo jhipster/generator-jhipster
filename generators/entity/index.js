@@ -59,6 +59,13 @@ module.exports = EntityGenerator.extend({
             type: String
         });
 
+         // This method adds support for a `--[no-]fluent-methods` flag
+        this.option('fluent-methods', {
+            desc: 'Generate fluent methods in entity beans to allow chained object construction',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--angular-suffix` flag
         this.option('angular-suffix', {
             desc: 'Use a suffix to generate AngularJS routes and files, to avoid name clashes',
@@ -81,6 +88,7 @@ module.exports = EntityGenerator.extend({
         });
 
         this.regenerate = this.options['regenerate'];
+        this.fluentMethods = this.options['fluent-methods'];
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityTableName = _.snakeCase(this.entityTableName).toLowerCase();
