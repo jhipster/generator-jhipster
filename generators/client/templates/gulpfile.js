@@ -184,7 +184,7 @@ gulp.task('inject:troubleshoot', function () {
         .pipe(gulp.dest(config.app));
 });
 
-gulp.task('assets:prod', ['images', 'styles', 'html'], build);
+gulp.task('assets:prod', ['images', 'styles', 'html','swagger-ui'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
@@ -195,6 +195,21 @@ gulp.task('html', function () {
             moduleSystem: 'IIFE'
         }))
         .pipe(gulp.dest(config.tmp));
+});
+
+gulp.task('swagger-ui', function () {
+    return es.merge(
+        gulp.src([config.bower + 'swagger-ui/dist/**',
+                 '!' + config.bower + 'swagger-ui/dist/index.html',
+            '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
+            '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
+            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+        gulp.src(config.app + 'swagger-ui/index-prod.html')
+            .pipe(rename('index.html'))
+            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+    gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
+        .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
+    )
 });
 
 gulp.task('ngconstant:dev', function () {
