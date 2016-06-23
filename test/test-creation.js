@@ -46,6 +46,8 @@ const expectedFiles = {
         'README.md',
         '.gitignore',
         '.gitattributes',
+        'Jenkinsfile',
+        '.travis.yml',
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'ehcache.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
