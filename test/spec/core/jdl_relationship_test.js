@@ -165,6 +165,108 @@ describe('JDLRelationship', function () {
       });
     });
   });
+  describe('#validate', function () {
+    describe('when passing an incorrect relationship', function () {
+      describe('because it is invalid', function () {
+        it('fails', function () {
+          var relationship = new JDLRelationship({
+            from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+            to: {name: 'Valid', tableName: 't_valid', fields: []},
+            type: RELATIONSHIP_TYPES.MANY_TO_MANY,
+            injectedFieldInFrom: 'something'
+          });
+          relationship.injectedFieldInFrom = null;
+          try {
+            relationship.validate();
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('InvalidObjectException');
+          }
+        });
+      });
+      describe("because the type doesn't exist", function () {
+        it('fails', function () {
+          var relationship = new JDLRelationship({
+            from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+            to: {name: 'Valid', tableName: 't_valid', fields: []},
+            type: RELATIONSHIP_TYPES.MANY_TO_MANY,
+            injectedFieldInFrom: 'something'
+          });
+          relationship.type = 'WRONG';
+          try {
+            relationship.validate();
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('InvalidObjectException');
+          }
+        });
+      });
+      describe('because the source entity is not in a One-to-One', function () {
+        it('fails', function () {
+          var relationship = new JDLRelationship({
+            from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+            to: {name: 'Valid', tableName: 't_valid', fields: []},
+            type: RELATIONSHIP_TYPES.ONE_TO_ONE,
+            injectedFieldInTo: 'something'
+          });
+          try {
+            relationship.validate();
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('MalformedAssociationException');
+          }
+        });
+      });
+      describe('because one of the injected fields is not present in a One-to-Many (not bidirectional)', function () {
+        it('just adds the missing side', function () {
+          var relationship = new JDLRelationship({
+            from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+            to: {name: 'Valid', tableName: 't_valid', fields: []},
+            type: RELATIONSHIP_TYPES.ONE_TO_MANY,
+            injectedFieldInFrom: 'something'
+          });
+          relationship.validate();
+          expect(relationship.injectedFieldInTo).to.eq('valid2');
+          relationship.injectedFieldInFrom = null;
+          relationship.validate();
+          expect(relationship.injectedFieldInFrom).to.eq('valid');
+        });
+      });
+      describe('because both the sides are present in a Many-to-One (not unidirectional)', function () {
+        it('fails', function () {
+          var relationship = new JDLRelationship({
+            from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+            to: {name: 'Valid', tableName: 't_valid', fields: []},
+            type: RELATIONSHIP_TYPES.MANY_TO_ONE,
+            injectedFieldInFrom: 'something',
+            injectedFieldInTo: 'somethingElse'
+          });
+          try {
+            relationship.validate();
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('MalformedAssociationException');
+          }
+        });
+      });
+      describe('because one of the sides is not present in a Many-to-Many (not bidirectional)', function () {
+        it('fails', function () {
+          var relationship = new JDLRelationship({
+            from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+            to: {name: 'Valid', tableName: 't_valid', fields: []},
+            type: RELATIONSHIP_TYPES.MANY_TO_MANY,
+            injectedFieldInFrom: 'something'
+          });
+          try {
+            relationship.validate();
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('MalformedAssociationException');
+          }
+        });
+      });
+    });
+  });
   describe('#getId', function () {
     it('returns an unique representation of the relationship', function () {
       var relationship = new JDLRelationship({
