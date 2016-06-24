@@ -29,7 +29,6 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @Configuration
 @EnableSwagger2
 @Profile(Constants.SPRING_PROFILE_SWAGGER)
-@ConditionalOnProperty("jhipster.swagger.enabled")
 public class SwaggerConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);

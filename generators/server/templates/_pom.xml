@@ -1069,7 +1069,6 @@
             <id>swagger</id>
             <properties>
                 <profile.swagger>,swagger</profile.swagger>
-                <swagger.enabled>true</swagger.enabled>
             </properties>
         </profile>
         <profile>
