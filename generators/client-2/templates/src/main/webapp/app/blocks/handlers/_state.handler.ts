@@ -42,7 +42,7 @@ export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableT
             if (toState.data.pageTitle) {
                 titleKey = toState.data.pageTitle;
             }
-            <% if (enableTranslation) { %>translationHandler.updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
+            <% if (enableTranslation) { %>TranslationHandler.updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
         });
 
         $rootScope.$on('$destroy', function () {

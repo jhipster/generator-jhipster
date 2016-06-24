@@ -12,6 +12,7 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
 import { AlertService } from './alert/alert.service';
 
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
+import { <%=jhiPrefixCapitalized%>LanguageController } from './language/language.controller';
 
 upgradeAdapter.addProvider(ProfileService);
 
@@ -34,4 +35,5 @@ angular
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
     .provider('AlertService', AlertService)<% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
-    .directive('pageRibbon', upgradeAdapter.downgradeNg2Component(PageRibbonComponent));
+    .directive('pageRibbon', upgradeAdapter.downgradeNg2Component(PageRibbonComponent))
+    .controller('<%=jhiPrefixCapitalized%>LanguageController', <%=jhiPrefixCapitalized%>LanguageController);
