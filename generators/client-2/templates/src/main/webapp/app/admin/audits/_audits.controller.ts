@@ -8,12 +8,12 @@ import { ParseLinks } from "../../components/util/parse-links.service";
   templateUrl: './audits.html',
   providers: [ AuditsService, ParseLinks ]
 })
-export class AuditsController {    
+export class AuditsController {
 
-    constructor(private auditsService: AuditsService,
-        private parseLinks: ParseLinks, private datePipe: DatePipe ){
+    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks,
+        private datePipe: DatePipe ){
 
-        }
+    }
 
     audits: any = null;
     fromDate: any = null;
@@ -52,9 +52,9 @@ export class AuditsController {
         fromDate = fromDate;
     }
 
-        loadPage (page: number) {
+    loadPage (page: number) {
         page = page;
         this.onChangeDate();
     }
-        
+
 }
