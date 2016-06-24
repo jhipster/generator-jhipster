@@ -354,6 +354,8 @@ public class JHipsterProperties {
 
     public static class Swagger {
 
+        private Boolean enabled = false;
+
         private String title = "<%=baseName%> API";
 
         private String description = "<%=baseName%> API documentation";
@@ -372,7 +374,13 @@ public class JHipsterProperties {
 
         private String licenseUrl;
 
-        private Boolean enabled;
+        public Boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
 
         public String getTitle() {
             return title;
@@ -444,14 +452,6 @@ public class JHipsterProperties {
 
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
-        }
-
-        public Boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
         }
     }
 
