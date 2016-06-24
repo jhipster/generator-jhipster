@@ -118,7 +118,7 @@
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase></profile.no-liquibase>
-        <profile.no-swagger></profile.no-swagger>
+        <profile.swagger></profile.swagger>
     </properties>
 
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
@@ -1066,9 +1066,10 @@
             </properties>
         </profile>
         <profile>
-            <id>no-swagger</id>
+            <id>swagger</id>
             <properties>
-                <profile.no-swagger>,no-swagger</profile.no-swagger>
+                <profile.swagger>,swagger</profile.swagger>
+                <swagger.enabled>true</swagger.enabled>
             </properties>
         </profile>
         <profile>
@@ -1103,7 +1104,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1211,7 +1212,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
     </profiles>
