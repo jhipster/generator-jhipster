@@ -45,6 +45,15 @@ module.exports = UpgradeGenerator.extend({
         }
     },
 
+    _installJhipsterLocally: function (version, callback) {
+        this.log('Installing JHipster ' + version + ' locally');
+        shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, {silent:true}, function (code, msg, err) {
+            if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
+            else this.error('Something went wrong while installing generator! ' + msg + ' ' + err);
+            callback();
+        }.bind(this));
+    },
+
     _generate: function(version, callback) {
         this.log('Regenerating app with jhipster ' + version + '...');
         shelljs.exec('yo jhipster --with-entities --force', {silent:false}, function (code, msg, err) {
@@ -70,11 +79,13 @@ module.exports = UpgradeGenerator.extend({
 
     _regenerate: function(version, callback) {
         this._cleanUp();
-        this._generate(version, function() {
-            this._gitCommitAll('Generated with JHipster ' + version, function() {
-                callback();
+        this._installJhipsterLocally(version, function () {
+            this._generate(version, function() {
+                this._gitCommitAll('Generated with JHipster ' + version, function() {
+                    callback();
+                }.bind(this));
             }.bind(this));
-        }.bind(this));
+        }.bind(this));        
     },
 
     configuring: {
