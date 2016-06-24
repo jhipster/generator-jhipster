@@ -34,6 +34,17 @@ describe('JDLParser', function () {
           }
         });
       });
+      describe("because the database type doesn't exist", function () {
+        it('fails', function () {
+          try {
+            JDLParser.parse({
+              notNull: 42
+            }, 'WRONG');
+          } catch (error) {
+            expect(error.name).to.eq('IllegalArgumentException');
+          }
+        });
+      });
     });
     describe('when passing valid args', function () {
       describe('with no error', function () {
@@ -86,6 +97,11 @@ describe('JDLParser', function () {
           }));
         });
       });
+      describe("with a field name 'id'", function() {
+        it("doesn't add it", function() {
+          // todo
+        });
+      });
       describe('with an invalid field type', function () {
         it('fails', function () {
           // todo
@@ -98,6 +114,11 @@ describe('JDLParser', function () {
       });
       describe('with an invalid validation for a field type', function () {
         it('fails', function () {
+          // todo
+        });
+      });
+      describe('with entities that do not exist for a relationship', function() {
+        it('fails', function() {
           // todo
         });
       });
