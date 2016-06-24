@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./<%=jhiPrefixCapitalized%>ConfigurationService"; 
+import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./configuration.service";
 import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -15,13 +15,15 @@ export class <%=jhiPrefixCapitalized%>ConfigurationController {
     allConfiguration: any = null;
     configuration: any = null;
 
-    this.<%=jhiPrefix%>ConfigurationService.get().toPromise().
-            then( (configuration) => { 
-                this.configuration = configuration;
-            });
+    init() {
+        this.<%=jhiPrefix%>ConfigurationService.get().toPromise().
+                then( (configuration) => {
+                    this.configuration = configuration;
+                });
 
-    this.<%=jhiPrefix%>ConfigurationService.getEnv().toPromise().
-            then( (configuration) => { 
-                this.allConfiguration = configuration;
-            });
+        this.<%=jhiPrefix%>ConfigurationService.getEnv().toPromise().
+                then( (configuration) => {
+                    this.allConfiguration = configuration;
+                });
+    }
 }
