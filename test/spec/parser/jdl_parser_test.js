@@ -18,6 +18,7 @@ describe('JDLParser', function () {
         it('fails', function () {
           try {
             JDLParser.parse(null, 'sql');
+            fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
           }
@@ -29,6 +30,7 @@ describe('JDLParser', function () {
             JDLParser.parse({
               notNull: 42
             }, null);
+            fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
           }
@@ -40,6 +42,7 @@ describe('JDLParser', function () {
             JDLParser.parse({
               notNull: 42
             }, 'WRONG');
+            fail();
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
           }
