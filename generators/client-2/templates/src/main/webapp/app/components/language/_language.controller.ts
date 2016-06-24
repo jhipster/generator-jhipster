@@ -1,25 +1,17 @@
-(function() {
-    'use strict';
+<%=jhiPrefixCapitalized%>LanguageController.$inject = ['$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'tmhDynamicLocale'];
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .controller('<%=jhiPrefixCapitalized%>LanguageController', <%=jhiPrefixCapitalized%>LanguageController);
+export function <%=jhiPrefixCapitalized%>LanguageController ($translate, <%=jhiPrefixCapitalized%>LanguageService, tmhDynamicLocale) {
+    var vm = this;
 
-    <%=jhiPrefixCapitalized%>LanguageController.$inject = ['$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'tmhDynamicLocale'];
+    vm.changeLanguage = changeLanguage;
+    vm.languages = null;
 
-    function <%=jhiPrefixCapitalized%>LanguageController ($translate, <%=jhiPrefixCapitalized%>LanguageService, tmhDynamicLocale) {
-        var vm = this;
+    <%=jhiPrefixCapitalized%>LanguageService.getAll().then(function (languages) {
+        vm.languages = languages;
+    });
 
-        vm.changeLanguage = changeLanguage;
-        vm.languages = null;
-
-        <%=jhiPrefixCapitalized%>LanguageService.getAll().then(function (languages) {
-            vm.languages = languages;
-        });
-
-        function changeLanguage (languageKey) {
-            $translate.use(languageKey);
-            tmhDynamicLocale.set(languageKey);
-        }
+    function changeLanguage (languageKey) {
+        $translate.use(languageKey);
+        tmhDynamicLocale.set(languageKey);
     }
-})();
+}
