@@ -45,8 +45,8 @@ these new files.
 <% } %>
 To ensure everything worked, run:
 <% if (buildTool == 'maven') { %>
-    java -jar target/*.war --spring.profiles.active=prod<% } %><% if (buildTool == 'gradle') { %>
-    java -jar build/libs/*.war --spring.profiles.active=prod<% } %>
+    java -jar target/*.war<% } %><% if (buildTool == 'gradle') { %>
+    java -jar build/libs/*.war<% } %>
 <% if(!skipClient) { %>
 Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 
