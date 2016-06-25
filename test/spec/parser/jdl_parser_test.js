@@ -100,29 +100,50 @@ describe('JDLParser', function () {
           }));
         });
       });
-      describe("with a field name 'id'", function() {
-        it("doesn't add it", function() {
-          // todo
+      describe("with a field name 'id'", function () {
+        it("doesn't add it", function () {
+          var input = parseFromFiles(['./test/test_files/id_field.jdl']);
+          var content = JDLParser.parse(input, 'sql');
+          expect(content.entities.A).to.deep.eq(new JDLEntity({
+            name: 'A',
+            tableName: 'A',
+            fields: {
+              email: new JDLField({name: 'email', type: FieldTypes.STRING})
+            }
+          }));
         });
       });
       describe('with an invalid field type', function () {
         it('fails', function () {
-          // todo
+          var input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
+          try {
+            JDLParser.parse(input, 'sql');
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('WrongTypeException');
+          }
         });
       });
-      describe('with an absent validation for a field type', function () {
+      describe('with an unexistent validation for a field type', function () {
         it('fails', function () {
-          // todo
+          var input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
+          try {
+            JDLParser.parse(input, 'sql');
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('WrongValidationException');
+          }
         });
       });
-      describe('with an invalid validation for a field type', function () {
+      describe('with entities that do not exist for a relationship', function () {
         it('fails', function () {
-          // todo
-        });
-      });
-      describe('with entities that do not exist for a relationship', function() {
-        it('fails', function() {
-          // todo
+          var input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
+          try {
+            JDLParser.parse(input, 'sql');
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('UndeclaredEntityException');
+          }
         });
       });
       describe('with an invalid option', function () {

@@ -1,0 +1,5 @@
+entity A
+
+relationship OneToOne {
+  B{a} to A{b}
+}
