@@ -166,23 +166,23 @@ jhipster:
             maxBytesLocalHeap: 256M
         <%_ } _%>
     <%_ } _%>
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt') { _%>
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 tokenValidityInSeconds: 86400
     <%_ } _%>
-    <%_ if (authenticationType == 'oauth2') { _%>
+    <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
+    security:
+        authentication:
             oauth:
                 clientid: <%= baseName %>app
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     <%_ } _%>
-<%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
     security:
         rememberMe:
