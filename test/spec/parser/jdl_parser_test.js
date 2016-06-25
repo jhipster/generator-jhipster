@@ -148,7 +148,13 @@ describe('JDLParser', function () {
       });
       describe('with an invalid option', function () {
         it('fails', function () {
-          // todo
+          var input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
+          try {
+            JDLParser.parse(input, 'sql');
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('IllegalArgumentException');
+          }
         });
       });
     });
