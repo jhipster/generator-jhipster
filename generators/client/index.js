@@ -315,7 +315,6 @@ module.exports = JhipsterClientGenerator.extend({
         writeSwaggerFiles: function () {
             // Swagger-ui for Jhipster
             this.template(MAIN_SRC_DIR + 'swagger-ui/_index.html', MAIN_SRC_DIR + 'swagger-ui/index.html', this, {});
-            this.template(MAIN_SRC_DIR + 'swagger-ui/_index-prod.html', MAIN_SRC_DIR + 'swagger-ui/index-prod.html', this, {});
             this.copy(MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif', MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif');
         },
 
