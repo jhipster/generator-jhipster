@@ -3,7 +3,8 @@
 const expect = require('chai').expect,
     fail = expect.fail,
     merge = require('../../../lib/utils/object_utils').merge,
-    values = require('../../../lib/utils/object_utils').values;
+    values = require('../../../lib/utils/object_utils').values,
+    areEntitiesEqual = require('../../../lib/utils/object_utils').areEntitiesEqual;
 
 describe('ObjectUtils', function () {
   describe('::merge', function () {
@@ -61,25 +62,428 @@ describe('ObjectUtils', function () {
         try {
           values(null);
           fail();
-        } catch(error) {
+        } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
           values(undefined);
           fail();
-        } catch(error) {
+        } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
       });
     });
-    describe('when passing a valid object', function() {
-      it("returns its keys' values", function() {
+    describe('when passing a valid object', function () {
+      it("returns its keys' values", function () {
         expect(values({
           a: 42,
           b: 'A string',
-          c: [1,2,3,4,5],
+          c: [1, 2, 3, 4, 5],
           d: {d1: '', d2: 'something'}
-        })).to.deep.eq([42, 'A string', [1,2,3,4,5], {d1: '', d2: 'something'}]);
+        })).to.deep.eq([42, 'A string', [1, 2, 3, 4, 5], {d1: '', d2: 'something'}]);
+      });
+    });
+  });
+  describe('::areEntitiesEqual', function () {
+    describe('when comparing two equal objects', function () {
+      describe('as they are empty', function () {
+        it('returns true', function () {
+          var firstEmptyObject = {
+            fields: [],
+            relationships: []
+          };
+          var secondEmptyObject = {
+            fields: [],
+            relationships: []
+          };
+          expect(areEntitiesEqual(firstEmptyObject, secondEmptyObject)).to.be.true;
+        });
+      });
+      describe('they have no fields, but only relationships', function () {
+        it('returns true', function () {
+          var firstObject = {
+            fields: [],
+            relationships: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ]
+          };
+          var secondObject = {
+            fields: [],
+            relationships: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ]
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+        });
+      });
+      describe('they have fields but no relationships', function () {
+        it('returns true', function () {
+          var firstObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: []
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: []
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+        });
+      });
+      describe('they have both fields and relationships', function () {
+        it('returns true', function () {
+          var firstObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ]
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ]
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+        });
+      });
+    });
+    describe('when comparing two unequal objects', function () {
+      describe('as one of them is not empty, the other is', function () {
+        it('returns false', function () {
+          var firstObject = {
+            fields: [],
+            relationships: []
+          };
+          var secondObject = {
+            fields: [],
+            relationships: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ]
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          var firstObject = {
+            fields: [],
+            relationships: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ]
+          };
+          var secondObject = {
+            fields: [],
+            relationships: []
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+      });
+      describe('as both of them have different fields', function () {
+        it('returns false', function () {
+          var firstObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: []
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 44
+              }
+            ],
+            relationships: []
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+      });
+      describe('as both of them have different relationships', function () {
+        it('returns false', function () {
+          var firstObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ]
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              }
+            ]
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+      });
+      describe('as they do not possess the same number of fields', function () {
+        it('returns false', function () {
+          var firstObject = {
+            fields: [],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              }
+            ]
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              }
+            ]
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+      });
+      describe('as they do not have the same number of keys in fields', function () {
+        it('returns false', function () {
+          var firstObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42,
+                yetAnother: false
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              }
+            ]
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              }
+            ]
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        })
+      });
+      describe('as they do not possess the same number of relationships', function () {
+        it('returns false', function () {
+          var firstObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              }
+            ]
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ]
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+        describe('as they do not have the same number of fields in a relationship', function () {
+          it('returns false', function () {
+            var firstObject = {
+              fields: [
+                {
+                  id: 1,
+                  theAnswer: 42
+                },
+                {
+                  id: 2,
+                  notTheAnswer: 43
+                }
+              ],
+              relationships: [
+                {
+                  id: 1,
+                  anotherField: 44
+                }
+              ]
+            };
+            var secondObject = {
+              fields: [
+                {
+                  id: 1,
+                  theAnswer: 42
+                },
+                {
+                  id: 2,
+                  notTheAnswer: 43
+                }
+              ],
+              relationships: [
+                {
+                  id: 1,
+                  anotherField: 44,
+                  yetAnother: false
+                }
+              ]
+            };
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          });
+        });
       });
     });
   });
