@@ -45,15 +45,6 @@ module.exports = UpgradeGenerator.extend({
         }
     },
 
-    _installJhipsterLocally: function (version, callback) {
-        this.log('Installing JHipster ' + version + ' locally');
-        shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, {silent:true}, function (code, msg, err) {
-            if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
-            else this.error('Something went wrong while installing generator! ' + msg + ' ' + err);
-            callback();
-        }.bind(this));
-    },
-
     _generate: function(version, callback) {
         this.log('Regenerating app with jhipster ' + version + '...');
         shelljs.exec('yo jhipster --with-entities --force', {silent:false}, function (code, msg, err) {
@@ -78,14 +69,11 @@ module.exports = UpgradeGenerator.extend({
     },
 
     _regenerate: function(version, callback) {
-        this._cleanUp();
-        this._installJhipsterLocally(version, function () {
-            this._generate(version, function() {
-                this._gitCommitAll('Generated with JHipster ' + version, function() {
-                    callback();
-                }.bind(this));
+        this._generate(version, function() {
+            this._gitCommitAll('Generated with JHipster ' + version, function() {
+                callback();
             }.bind(this));
-        }.bind(this));        
+        }.bind(this));
     },
 
     configuring: {
@@ -166,12 +154,24 @@ module.exports = UpgradeGenerator.extend({
                 }.bind(this));
             }.bind(this);
 
+            var installJhipsterLocally = function(version, callback) {
+                this.log('Installing JHipster ' + version + ' locally');
+                shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, {silent:true}, function (code, msg, err) {
+                    if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
+                    else this.error('Something went wrong while installing generator! ' + msg + ' ' + err);
+                    callback();
+                }.bind(this));
+            }.bind(this);
+
             var regenerate = function() {
-                this._regenerate(this.currentVersion, function() {
-                    this._gitCheckout(this.sourceBranch, function() {
-                        // consider code up-to-date
-                        recordCodeHasBeenGenerated();
-                    });
+                this._cleanUp();
+                installJhipsterLocally(this.currentVersion, function() {
+                    this._regenerate(this.currentVersion, function() {
+                        this._gitCheckout(this.sourceBranch, function() {
+                            // consider code up-to-date
+                            recordCodeHasBeenGenerated();
+                        });
+                    }.bind(this));
                 }.bind(this));
             }.bind(this);
 
@@ -213,6 +213,7 @@ module.exports = UpgradeGenerator.extend({
 
         generateWithLatestVersion: function() {
             var done = this.async();
+            this._cleanUp();
             this._regenerate(this.latestVersion, done);
         },
 
