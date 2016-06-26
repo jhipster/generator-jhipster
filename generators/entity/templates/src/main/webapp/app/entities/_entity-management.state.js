@@ -113,7 +113,7 @@
                            }]
                        }
                    }).result.then(function() {
-                       $state.go('^', {}, { reload: true });
+                       $state.go('^', {}, { reload: false });
                    }, function() {
                        $state.go('^');
                    });
