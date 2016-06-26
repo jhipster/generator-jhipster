@@ -79,14 +79,15 @@
         <%_ } _%>
     </dl>
 
+{{vm.previousState}}
     <button type="submit"
             ui-sref="{{ vm.previousState }}"
             class="btn btn-info">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
     </button>
 
-    <button type="submit" ui-sref="<%= entityStateName %>.edit({id:vm.<%=entityInstance %>.id})" class="btn btn-primary btn-sm">
+    <button type="button" ui-sref="<%= entityStateName %>-detail.edit({id:vm.<%=entityInstance %>.id})" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
-        <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+        <span class="hidden-xs hidden-sm" translate="entity.action.edit"> Edit</span>
     </button>
 </div>
