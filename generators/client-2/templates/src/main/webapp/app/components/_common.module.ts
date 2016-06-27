@@ -2,6 +2,8 @@ import { upgradeAdapter } from '../upgrade_adapter';
 
 import { AlertServiceConfig } from '../blocks/config/alert.config';
 
+import { LoginController } from './login/login.controller';
+
 import { Auth } from './auth/auth.service';
 import { AuthServerProvider } from './auth/auth-session.service';
 import { Account } from './auth/account.service';
@@ -27,6 +29,7 @@ angular
     ])
     // bug 'showAsToast is not a function to fix'
     .config(AlertServiceConfig)
+    .controller('LoginController', LoginController)
     .factory('Auth', Auth)
     .factory('AuthServerProvider', AuthServerProvider)
     .factory('Account', Account)
