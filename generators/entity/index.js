@@ -521,7 +521,7 @@ module.exports = EntityGenerator.extend({
                     relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
                 }
 
-                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
                     relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                 }
 
