@@ -14,7 +14,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
                .then( getConfigPropsComplete );
                
             function getConfigPropsComplete (response) {
-                var properties = [];
+                let properties: any[] = [];
                 response.data.forEach(prop => {
                     properties.push(prop);
                 });                
@@ -35,9 +35,9 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
                .then( getEnvComplete );
 
             function getEnvComplete (response) {
-                var properties = {};
+                let properties: any = {};
                 response.data.forEach(prop => {
-                    var vals = [];
+                    let vals: any[] = [];
                     prop.val.forEach(valKey => {
                         vals.push(valKey);
                     });
