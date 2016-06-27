@@ -37,7 +37,7 @@ export class AuditsController {
 
     today () {
         // Today + 1 day - needed if the current day must be included
-        let today = new Date();
+        let today: any = new Date();
         this.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
     }
 
