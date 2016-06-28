@@ -1,14 +1,18 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-LogsService.$inject = ['$resource'];
+import { Log } from './log.model';
 
 @Injectable()
-export function LogsService ($resource) {
-    var service = $resource('management/jhipster/logs', {}, {
-        'findAll': { method: 'GET', isArray: true},
-        'changeLevel': { method: 'PUT'}
-    });
+export class LogsService {
+    constructor(private http: Http) { }
 
-    return service;
+    changeLevel(log: Log): Observable<Log[]> {
+        return this.http.put('management/jhipster/logs', log).map((res: Response) => res.json());
+    }
+
+    findAll(): Observable<Log[]> {
+        return this.http.get('management/jhipster/logs').map((res: Response) => res.json());
+    }
 }
-

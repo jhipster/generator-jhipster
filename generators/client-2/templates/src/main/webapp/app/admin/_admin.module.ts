@@ -14,13 +14,16 @@ import { TrackerStateConfig } from './tracker/tracker.state';
 import { UserMgmntStateConfig } from './user-management/user-management.state';
 
 import { AuditsComponent } from "./audits/audits.component";
+import { LogsComponent } from './logs/logs.component';
 
 import { AuditsService } from './audits/audits.service';
+import { LogsService } from './logs/logs.service';
 import { ParseLinks } from "../components/util/parse-links.service";
 
 import { upgradeAdapter } from '../upgrade_adapter';
 
 upgradeAdapter.addProvider(AuditsService);
+upgradeAdapter.addProvider(LogsService);
 upgradeAdapter.addProvider(ParseLinks);
 
 angular
@@ -46,4 +49,5 @@ angular
     .config(TrackerStateConfig)
 <%_ } _%>
     .config(UserMgmntStateConfig)
-    .directive('<%=jhiPrefix%>Audit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(AuditsComponent));
+    .directive('<%=jhiPrefix%>Audit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(AuditsComponent))
+    .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent));

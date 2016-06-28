@@ -10,9 +10,7 @@ export function LogsStateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/admin/logs/logs.html',
-                controller: 'LogsController',
-                controllerAs: 'vm'
+                template: '<<%=jhiPrefix%>-logs></<%=jhiPrefix%>-logs>'
             }
         },
         resolve: {
