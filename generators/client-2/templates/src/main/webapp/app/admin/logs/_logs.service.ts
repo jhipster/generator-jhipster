@@ -8,8 +8,8 @@ import { Log } from './log.model';
 export class LogsService {
     constructor(private http: Http) { }
 
-    changeLevel(log: Log): Observable<Log[]> {
-        return this.http.put('management/jhipster/logs', log).map((res: Response) => res.json());
+    changeLevel(log: Log): Observable<Response> {
+        return this.http.put('management/jhipster/logs', log);
     }
 
     findAll(): Observable<Log[]> {
