@@ -20,8 +20,9 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import java.time.LocalDate;<% } %>
+<%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
+import java.time.LocalDate;
+<%_ } _%>
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
