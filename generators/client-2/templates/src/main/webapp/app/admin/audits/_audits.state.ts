@@ -10,9 +10,7 @@ export function AuditStateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/admin/audits/audits.html',
-                controller: 'AuditsController',
-                controllerAs: 'vm'
+                template: '<<%=jhiPrefix%>-audit></<%=jhiPrefix%>-audit>'
             }
         },
         resolve: {
