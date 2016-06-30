@@ -398,9 +398,11 @@ module.exports = JhipsterClientGenerator.extend({
             // admin modules
             this.template(ANGULAR_DIR + 'admin/_admin.module.ts', ANGULAR_DIR + 'admin/admin.module.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/_admin.state.ts', ANGULAR_DIR + 'admin/admin.state.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.html', ANGULAR_DIR + 'admin/audits/audits.html');
+            this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.component.html', ANGULAR_DIR + 'admin/audits/audits.component.html');
             this.copyJs(ANGULAR_DIR + 'admin/audits/_audits.state.ts', ANGULAR_DIR + 'admin/audits/audits.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/audits/_audits.controller.ts', ANGULAR_DIR + 'admin/audits/audits.controller.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/audits/_audit-data.model.ts', ANGULAR_DIR + 'admin/audits/audit-data.model.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/audits/_audit.model.ts', ANGULAR_DIR + 'admin/audits/audit.model.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/audits/_audits.component.ts', ANGULAR_DIR + 'admin/audits/audits.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audits.service.ts', ANGULAR_DIR + 'admin/audits/audits.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/configuration/configuration.html', ANGULAR_DIR + 'admin/configuration/configuration.html');
             this.copyJs(ANGULAR_DIR + 'admin/configuration/_configuration.state.ts', ANGULAR_DIR + 'admin/configuration/configuration.state.ts', this, {});
