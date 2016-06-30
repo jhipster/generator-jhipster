@@ -1,6 +1,6 @@
 export class AuditData {
     constructor(
-        remoteAddress: string,
-        sessionId: string
+        public remoteAddress: string,
+        public sessionId: string
     ) { }
 }
