@@ -13,8 +13,8 @@ import java.net.URISyntaxException;
 
 @Component
 public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetails {
-    
-    Logger log = LoggerFactory.getLogger(this.getClass());
+
+    Logger log = LoggerFactory.getLogger(LoadBalancedResourceDetails.class);
 
     @Autowired
     public LoadBalancedResourceDetails(JHipsterProperties jHipsterProperties) {
@@ -40,15 +40,13 @@ public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetail
     @Override
     public String getAccessTokenUri() {
         String serviceName = jHipsterProperties.getSecurity().getClientAuthorization().getTokenServiceId();
-        if (loadBalancerClient != null && !serviceName.isEmpty()) {
+        if (loadBalancerClient != null && serviceName != null && !serviceName.isEmpty()) {
             String newUrl;
             try {
-                newUrl = loadBalancerClient.reconstructURI(
+                return loadBalancerClient.reconstructURI(
                     loadBalancerClient.choose(serviceName),
                     new URI(super.getAccessTokenUri())
                 ).toString();
-
-                return newUrl;
             } catch (URISyntaxException e) {
                 log.error("{}: {}", e.getClass().toString(), e.getMessage());
 

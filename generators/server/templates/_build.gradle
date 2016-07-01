@@ -207,7 +207,7 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-starter-config"
     compile "org.springframework.retry:spring-retry"
     <%_ } _%>
-    <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+    <%_ if (applicationType === 'microservice') { _%>
     compile "org.springframework.cloud:spring-cloud-security"
     compile "org.springframework.cloud:spring-cloud-starter-feign"
     <%_ } _%>

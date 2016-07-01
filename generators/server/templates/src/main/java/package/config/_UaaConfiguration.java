@@ -83,7 +83,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         /*
-        for a better client design, this should be done by a ClientDetailsService (similar to UserDetailsService)
+        For a better client design, this should be done by a ClientDetailsService (similar to UserDetailsService).
          */
         clients.inMemory()
             .withClient("web_app")
