@@ -708,6 +708,7 @@ public class JHipsterProperties {
         }
     <%_ } _%>
     }
+
     <%_ if (enableSocialSignIn) { _%>
     public static class Social {
 
@@ -720,7 +721,9 @@ public class JHipsterProperties {
         public void setRedirectAfterSignIn(String redirectAfterSignIn) {
             this.redirectAfterSignIn = redirectAfterSignIn;
         }
-    }<%_ } _%>
+    }
+
+    <%_ } _%>
     <%_ if (applicationType == 'gateway') { _%>
     public static class Gateway {
 
@@ -777,5 +780,4 @@ public class JHipsterProperties {
             this.displayOnActiveProfiles = displayOnActiveProfiles;
         }
     }
-
 }

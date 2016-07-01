@@ -4,13 +4,18 @@ services:
   - docker
 language: node_js
 node_js:
-  - "4.4.4"
+  - "4.4.5"
 jdk:
   - oraclejdk8
+cache:
+  directories:
+    - node_modules
+    - $HOME/.m2
+    - $HOME/.gradle
+    - $HOME/app/node_modules
+    - $HOME/app/node
 env:
   global:
-    - JHIPSTER_CACHE_REPO=https://github.com/jhipster/jhipster-travis-cache.git
-    - JHIPSTER_CACHE_BRANCH=160516-springboot-135
     - PROFILE=dev
     - RUN_APP=1
     - PROTRACTOR=0
@@ -19,18 +24,18 @@ env:
     - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
     - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
-    - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0
+    - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0 PROFILE=prod RUN_APP=0
     - JHIPSTER=app-gradle PROTRACTOR=1
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-social-websocket PROTRACTOR=1
     - JHIPSTER=app-cassandra
-    - JHIPSTER=app-microservice
-    - JHIPSTER=app-gateway
     - JHIPSTER=app-hazelcast-cucumber
     - JHIPSTER=app-mongodb
     - JHIPSTER=app-oauth2
     - JHIPSTER=app-jwt
+    - JHIPSTER=app-gateway
+    - JHIPSTER=app-microservice
 before_install:
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0

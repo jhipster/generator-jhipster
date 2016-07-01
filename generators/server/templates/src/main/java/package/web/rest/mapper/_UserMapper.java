@@ -18,12 +18,15 @@ public interface UserMapper {
     UserDTO userToUserDTO(User user);
 
     List<UserDTO> usersToUserDTOs(List<User> users);
-    <% if (databaseType != 'cassandra') { %>
+
+    <%_ if (databaseType != 'cassandra') { _%>
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
-    @Mapping(target = "lastModifiedDate", ignore = true)<% if ((authenticationType == 'session') && (databaseType == 'sql')) { %>
-    @Mapping(target = "persistentTokens", ignore = true)<% } } %>
+    @Mapping(target = "lastModifiedDate", ignore = true)
+    <%_ if ((authenticationType == 'session') && (databaseType == 'sql')) { _%>
+    @Mapping(target = "persistentTokens", ignore = true)
+    <%_ } } _%>
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "activationKey", ignore = true)
     @Mapping(target = "resetKey", ignore = true)
@@ -41,7 +44,8 @@ public interface UserMapper {
         user.setId(id);
         return user;
     }
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+
+    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
     default Set<String> stringsFromAuthorities (Set<Authority> authorities) {
         return authorities.stream().map(Authority::getName)
             .collect(Collectors.toSet());
@@ -53,5 +57,6 @@ public interface UserMapper {
             auth.setName(string);
             return auth;
         }).collect(Collectors.toSet());
-    }<% } %>
+    }
+    <%_ } _%>
 }

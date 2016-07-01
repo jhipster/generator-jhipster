@@ -349,6 +349,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
             this.template('_travis.yml', '.travis.yml', this, {});
+            this.template('_Jenkinsfile', 'Jenkinsfile', this, {});
         },
 
         writeDockerFiles: function () {
@@ -880,7 +881,10 @@ module.exports = JhipsterServerGenerator.extend({
     end: function () {
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' in the `' + chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
+            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') + 'Please rename ' +
+                chalk.yellow.bold('ojdbc' + this.ojdbcVersion + '.jar') + ' to ' +
+                chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' and place it in the `' +
+                chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
         }
         this.log(chalk.green.bold('\nServer app generated successfully.\n'));
     }

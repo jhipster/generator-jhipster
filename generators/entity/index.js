@@ -199,8 +199,7 @@ module.exports = EntityGenerator.extend({
         try {
             this.fileData = this.fs.readJSON(this.fromPath);
         } catch (err) {
-            this.log(chalk.red('\nThe configuration file could not be read!\n'));
-            return;
+            this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
@@ -384,6 +383,10 @@ module.exports = EntityGenerator.extend({
                 this.data.microserviceName = this.baseName;
                 this.data.searchEngine = this.searchEngine;
             }
+            if (this.applicationType === 'gateway' && this.useMicroserviceJson){
+                this.data.microserviceName = this.microserviceName;
+                this.data.searchEngine = this.searchEngine;
+            }
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
@@ -518,7 +521,7 @@ module.exports = EntityGenerator.extend({
                     relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
                 }
 
-                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one'))) {
+                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
                     relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                 }
 
@@ -780,7 +783,8 @@ module.exports = EntityGenerator.extend({
                             try {
                                 this.composeWith(module.generatorCallback, {
                                     options: {
-                                        entityConfig: entityConfig
+                                        entityConfig: entityConfig,
+                                        force: this.options['force']
                                     }
                                 });
                             } catch (err) {

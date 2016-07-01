@@ -196,7 +196,7 @@
         },
         {
             "fieldName": "operationsFile",
-            "fieldType": "ByteBuffer",
+            "fieldType": "ByteBuffer"
         }
     ],
     "changelogDate": "20160208184031",

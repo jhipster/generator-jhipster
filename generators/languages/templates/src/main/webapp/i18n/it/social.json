@@ -1,6 +1,6 @@
 {
     "social": {
-        "btnLabel": "Sign in with {{ label }}",
+        "btnLabel": "Autenticati con { label }}",
         "register": {
             "title": "Registrati con {{ label }}",
             "errorTitle": "Registrato con un account esterno",

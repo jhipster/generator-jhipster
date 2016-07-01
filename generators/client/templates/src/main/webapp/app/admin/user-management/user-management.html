@@ -11,16 +11,16 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th translate="global.field.id">ID</th>
-                <th translate="userManagement.login">Login</th>
-                <th translate="userManagement.email">Email</th>
+            <tr<% if (databaseType !== 'cassandra') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()"<% } %>>
+                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="glyphicon glyphicon-sort"></span><%_ } _%></th>
+                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="login"<% } %>><span translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="email"<% } %>><span translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                 <th></th>
-                <% if (enableTranslation) { %><th translate="userManagement.langKey">Lang Key</th><% } %>
-                <th translate="userManagement.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                <th translate="userManagement.createdDate">Created Date</th>
-                <th translate="userManagement.lastModifiedBy">Last Modified By</th>
-                <th translate="userManagement.lastModifiedDate">Last Modified Date</th><% } %>
+                <% if (enableTranslation) { %><th <% if (databaseType !== 'cassandra') { %> jh-sort-by="langKey"<% } %>> <span translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th><%_ } _%>
+                <th><span translate="userManagement.profiles">Profiles</span></th><%_ if (databaseType !== 'cassandra') { _%>
+                <th jh-sort-by="createdDate"><span translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedBy"><span translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedDate"><span translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th><% } %>
                 <th></th>
             </tr>
             </thead>
@@ -70,9 +70,10 @@
             </tbody>
         </table>
     </div>
-    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>
