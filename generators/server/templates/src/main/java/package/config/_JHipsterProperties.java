@@ -4,7 +4,8 @@ package <%=packageName%>.config;
 import javax.validation.constraints.NotNull;
 <%_ } _%>
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;<%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;<%_ } _%>
 import org.springframework.web.cors.CorsConfiguration;
 
 <%_ if (applicationType == 'gateway') { _%>
@@ -351,39 +352,8 @@ public class JHipsterProperties {
         <%_ } _%>
 
         <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-        public static class ClientAuthorization {
-
-            private String clientId;
-
-            private String clientSecret;
-
-            private String tokenUrl;
-
+        public static class ClientAuthorization extends ClientCredentialsResourceDetails {
             private String tokenServiceId;
-
-            public String getClientId() {
-                return clientId;
-            }
-
-            public void setClientId(String clientId) {
-                this.clientId = clientId;
-            }
-
-            public String getClientSecret() {
-                return clientSecret;
-            }
-
-            public void setClientSecret(String clientSecret) {
-                this.clientSecret = clientSecret;
-            }
-
-            public String getTokenUrl() {
-                return tokenUrl;
-            }
-
-            public void setTokenUrl(String tokenUrl) {
-                this.tokenUrl = tokenUrl;
-            }
 
             public String getTokenServiceId() {
                 return tokenServiceId;
@@ -393,7 +363,6 @@ public class JHipsterProperties {
                 this.tokenServiceId = tokenServiceId;
             }
         }
-
         <%_ } _%>
 
         <%_ if (authenticationType == 'session') { _%>

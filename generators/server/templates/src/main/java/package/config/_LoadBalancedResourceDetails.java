@@ -20,7 +20,7 @@ public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetail
     public LoadBalancedResourceDetails(JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;
 
-        setAccessTokenUri(jHipsterProperties.getSecurity().getClientAuthorization().getTokenUrl());
+        setAccessTokenUri(jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri());
         setClientId(jHipsterProperties.getSecurity().getClientAuthorization().getClientId());
         setClientSecret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret());
         setGrantType("client_credentials");
