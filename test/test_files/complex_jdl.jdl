@@ -117,3 +117,7 @@ paginate Job with pagination
 dto Employee with mapstruct
 
 service Employee with serviceClass
+
+microservice * with mymicroservice
+
+search * with elasticsearch
