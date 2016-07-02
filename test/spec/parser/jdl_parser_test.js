@@ -8,8 +8,13 @@ const expect = require('chai').expect,
     JDLEnum = require('../../../lib/core/jdl_enum'),
     JDLField = require('../../../lib/core/jdl_field'),
     JDLValidation = require('../../../lib/core/jdl_validation'),
+    JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
+    JDLBinaryOption = require('../../../lib/core/jdl_binary_option'),
     FieldTypes = require('../../../lib/core/jhipster/field_types').SQL_TYPES,
-    Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS;
+    Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS,
+    UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
+    BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
+    BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('JDLParser', function () {
   describe('::parse', function () {
@@ -98,6 +103,38 @@ describe('JDLParser', function () {
               maxSalary: new JDLField({name: 'maxSalary', type: FieldTypes.LONG})
             }
           }));
+          expect(content.options).to.deep.eq([
+            new JDLBinaryOption({
+              name: BinaryOptions.DTO,
+              entityNames: ['Employee'],
+              value: BinaryOptionValues.dto.MAPSTRUCT
+            }),
+            new JDLBinaryOption({
+              name: BinaryOptions.SERVICE,
+              entityNames: ['Employee'],
+              value: BinaryOptionValues.service.SERVICE_CLASS
+            }),
+            new JDLBinaryOption({
+              name: BinaryOptions.PAGINATION,
+              entityNames: ['JobHistory', 'Employee'],
+              value: BinaryOptionValues.pagination['INFINITE-SCROLL']
+            }),
+            new JDLBinaryOption({
+              name: BinaryOptions.PAGINATION,
+              entityNames: ['Job'],
+              value: BinaryOptionValues.pagination.PAGINATION
+            }),
+            new JDLBinaryOption({
+              name: BinaryOptions.MICROSERVICE,
+              entityNames: ['*'],
+              value: 'mymicroservice'
+            }),
+            new JDLBinaryOption({
+              name: BinaryOptions.SEARCH_ENGINE,
+              entityNames: ['Employee'],
+              value: BinaryOptionValues.searchEngine.ELASTIC_SEARCH
+            })
+          ]);
         });
       });
       describe("with a field name 'id'", function () {
