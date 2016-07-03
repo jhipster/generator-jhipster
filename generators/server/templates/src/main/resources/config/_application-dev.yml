@@ -137,6 +137,8 @@ spring:
         cache-seconds: 1
     thymeleaf:
         cache: false
+    profiles:
+        include: swagger # automatically set the 'swagger' profile
 
 <%_ if (databaseType === 'sql') { _%>
 liquibase:
@@ -224,5 +226,3 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
-    swagger: # swagger is enabled. It can be disabled by pasing 'no-swagger' profile at run time as well
-        enabled: true

@@ -15,7 +15,7 @@
 
         ProfileService.getProfileInfo().then(function(response) {
             vm.inProduction = response.inProduction;
-            vm.swaggerDisabled = response.swaggerDisabled;
+            vm.swaggerEnabled = response.swaggerEnabled;
         });
 
         vm.login = login;

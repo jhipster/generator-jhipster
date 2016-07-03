@@ -33,10 +33,11 @@
     "gulp-inject": "4.1.0",
     "gulp-natural-sort": "0.1.1",
     "gulp-ng-annotate": "2.0.0",
-    "gulp-rename": "1.2.2",
     "gulp-ng-constant": "1.1.0",
     "gulp-notify": "2.2.0",
     "gulp-plumber": "1.1.0",
+    "gulp-rename": "1.2.2",
+    "gulp-replace": "0.5.4",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
     "gulp-protractor": "2.4.0",
     "gulp-util": "3.0.7",
