@@ -49,31 +49,38 @@ describe('::convert', function () {
         var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
         expect(content).not.to.be.null;
         expect(Object.keys(content).length).to.eq(8);
-        //expect(content[0].name).to.eq('Department');
-        //expect(content[0].body.fields.length).to.eq(2);
-        //expect(content[0].body.relationships.length).to.eq(2);
+        expect(content.Department.relationships.length).to.eq(2);
+        expect(content.Department.fields.length).to.eq(2);
+        expect(content.Department.entityTableName).to.eq('department');
+        expect(content.Employee.javadoc).to.eq('The Employee entity.');
+        expect(content.Employee.pagination).to.eq('infinite-scroll');
       });
     });
     describe('when converting JDL to entity json for MongoDB type', function () {
       it('converts it', function () {
         var input = parseFromFiles(['./test/test_files/mongo_jdl.jdl']);
-        //var content = EntityParser.parse({jdlObject: input, databaseType: 'mongodb'});
-        //expect(content).not.to.be.null;
-        //expect(content.length).to.eq(8);
-        //expect(content[0].name).to.eq('Department');
-        //expect(content[0].body.fields.length).to.eq(2);
-        //expect(content[0].body.relationships.length).to.eq(0);
+        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'mongodb'), databaseType: 'mongodb'});
+        expect(content).not.to.be.null;
+        expect(Object.keys(content).length).to.eq(8);
+        expect(content.Department.relationships.length).to.eq(0);
+        expect(content.Department.fields.length).to.eq(2);
+        expect(content.Department.entityTableName).to.eq('department');
+        expect(content.Employee.javadoc).to.eq('The Employee entity.');
+        expect(content.Employee.pagination).to.eq('infinite-scroll');
+
       });
     });
     describe('when converting JDL to entity json for Cassandra type', function () {
       it('converts it', function () {
-        //var input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
-        //var content = EntityParser.parse({jdlObject: input, databaseType: 'cassandra'});
-        //expect(content).not.to.be.null;
-        //expect(content.length).to.eq(8);
-        //expect(content[0].name).to.eq('Department');
-        //expect(content[0].body.fields.length).to.eq(2);
-        //expect(content[0].body.relationships.length).to.eq(0);
+        var input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
+        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'cassandra'), databaseType: 'cassandra'});
+        expect(content).not.to.be.null;
+        expect(Object.keys(content).length).to.eq(8);
+        expect(content.Department.relationships.length).to.eq(0);
+        expect(content.Department.fields.length).to.eq(2);
+        expect(content.Department.entityTableName).to.eq('department');
+        expect(content.Employee.javadoc).to.eq('The Employee entity.');
+        expect(content.Employee.pagination).to.eq('no');
       });
     });
   });
