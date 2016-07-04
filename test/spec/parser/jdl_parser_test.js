@@ -104,6 +104,10 @@ describe('JDLParser', function () {
             }
           }));
           expect(content.options).to.deep.eq([
+            new JDLUnaryOption({
+              name: UnaryOptions.SKIP_SERVER,
+              entityNames: ['Country']
+            }),
             new JDLBinaryOption({
               name: BinaryOptions.DTO,
               entityNames: ['Employee'],
