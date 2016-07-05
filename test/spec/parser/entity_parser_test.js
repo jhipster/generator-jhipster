@@ -1,6 +1,6 @@
 'use strict';
 
-var expect = require('chai').expect,
+const expect = require('chai').expect,
     fs = require('fs'),
     fail = expect.fail,
     JDLParser = require('../../../lib/parser/jdl_parser'),
