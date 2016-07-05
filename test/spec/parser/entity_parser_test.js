@@ -83,5 +83,20 @@ describe('::convert', function () {
         expect(content.Employee.pagination).to.eq('no');
       });
     });
+    describe('when converting JDL to entity json with a required relationship', function() {
+      it('converts it', function() {
+        var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
+        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
+        expect(content.A.relationships).to.deep.eq([{
+          otherEntityField: 'id',
+          otherEntityName: 'b',
+          otherEntityRelationshipName: 'a',
+          ownerSide: true,
+          relationshipName: 'b',
+          relationshipType: 'OneToOne',
+          relationshipValidateRules: 'required'
+        }]);
+      });
+    });
   });
 });

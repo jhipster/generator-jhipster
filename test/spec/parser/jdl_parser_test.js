@@ -141,6 +141,14 @@ describe('JDLParser', function () {
           ]);
         });
       });
+      describe('with a required relationship', function() {
+        it('adds it', function() {
+          var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
+          var content = JDLParser.parse(input, 'sql');
+          expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInFromRequired).to.be.true;
+          expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
+        });
+      });
       describe("with a field name 'id'", function () {
         it("doesn't add it", function () {
           var input = parseFromFiles(['./test/test_files/id_field.jdl']);
