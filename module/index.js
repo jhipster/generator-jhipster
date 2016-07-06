@@ -16,7 +16,8 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     JDLRelationships = require('../lib/core/jdl_relationships'),
     JDLUnaryOption = require('../lib/core/jdl_unary_option'),
     JDLBinaryOption = require('../lib/core/jdl_binary_option'),
-    exportToJSON = require('../lib/export/json_exporter').exportToJSON;
+    exportToJSON = require('../lib/export/json_exporter').exportToJSON,
+    areJHipsterEntitiesEqual = require('../lib/utils/object_utils').areJHipsterEntitiesEqual;
 
 module.exports = {
   /* JHipster notions */
@@ -43,5 +44,7 @@ module.exports = {
   /* JSON exporting */
   exportToJSON: exportToJSON,
   /* JDL utils */
-  isJDLFile: JDLReader.checkFileIsJDLFile
+  isJDLFile: JDLReader.checkFileIsJDLFile,
+  /* JSON utils */
+  areJHipsterEntitiesEqual: areJHipsterEntitiesEqual
 };
