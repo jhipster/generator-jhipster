@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "system",
         "moduleResolution": "node",
         "sourceMap": true,
@@ -10,9 +10,5 @@
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
         "outDir": "<%= DIST_DIR %>app"
-    },
-    "exclude": [
-        "node_modules",
-        "typings/index.d.ts"
-    ]
+    }
 }
