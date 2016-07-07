@@ -98,6 +98,13 @@ describe('JSONFileReader', function () {
           expect(toFilePath(name)).to.eq(`.jhipster/${name}.json`)
         });
       });
+      describe('with a valid entity name with the first letter lowercase', function () {
+        it('returns the path, with the first letter upper-cased', function () {
+          let expectedFirstLetter = 'M';
+          let name = 'myEntity';
+          expect(toFilePath(name)).to.eq(`.jhipster/${expectedFirstLetter}${name.slice(1, name.length)}.json`)
+        });
+      });
     });
   });
 });
