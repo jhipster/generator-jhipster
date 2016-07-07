@@ -264,7 +264,7 @@ ENUMPROP "an enum property"
   }
 
 INTEGER "integer"
-  = negative:'-'?int:[0-9]+ {return (negative ? negative : '') + parseInt(int.join(""), 10);}
+  = negative:'-'?int:[0-9]+ {return parseInt((negative ? negative : '') + int.join(""), 10);}
 
 INJECTEDFIELDNAME "an injected field"
   = head:[a-zA-Z]tail:[a-zA-Z0-9()]* {return head + tail.join('');}
