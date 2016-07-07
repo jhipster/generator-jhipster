@@ -178,8 +178,8 @@ jhipster:
     <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         clientAuthorization:
             # change this depending on your authorization server
-            accessTokenUri: http://uaa:9999/oauth/token
-            tokenServiceId: uaa
+            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>:9999/oauth/token
+            tokenServiceId: <%= uaaBaseName.toLowerCase() %>
             clientId: internal
             clientSecret: internal
     <%_ } _%>

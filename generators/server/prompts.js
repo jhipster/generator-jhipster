@@ -100,12 +100,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return (applicationType === 'gateway' && response.authenticationType === 'uaa');
+                return (applicationType !== 'uaa' && response.authenticationType === 'uaa');
             },
             type: 'input',
             name: 'uaaBaseName',
             message: function (response) {
-                return getNumberedQuestion('What is the folder path of your UAA application?.', applicationType === 'gateway' && response.authenticationType === 'uaa');
+                return getNumberedQuestion('What is the folder path of your UAA application?.', applicationType !== 'uaa' && response.authenticationType === 'uaa');
             },
             default: '../uaa',
             validate: function (input) {
