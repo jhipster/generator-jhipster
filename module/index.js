@@ -3,7 +3,9 @@
 const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     UNARY_OPTIONS = require('../lib/core/jhipster/unary_options'),
     RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types'),
+    FIELD_TYPES = require('../lib/core/jhipster/field_types'),
     VALIDATIONS = require('../lib/core/jhipster/validations'),
+    DATABASE_TYPES = require('../lib/core/jhipster/database_types'),
     JDLReader = require('../lib/reader/jdl_reader'),
     JDLParser = require('../lib/parser/jdl_parser'),
     EntityParser = require('../lib/parser/entity_parser'),
@@ -17,7 +19,8 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     JDLUnaryOption = require('../lib/core/jdl_unary_option'),
     JDLBinaryOption = require('../lib/core/jdl_binary_option'),
     exportToJSON = require('../lib/export/json_exporter').exportToJSON,
-    areJHipsterEntitiesEqual = require('../lib/utils/object_utils').areJHipsterEntitiesEqual;
+    ObjectUtils = require('../lib/utils/object_utils'),
+    Set = require('../lib/utils/objects/set');
 
 module.exports = {
   /* JHipster notions */
@@ -25,6 +28,8 @@ module.exports = {
   JHipsterUnaryOptions: UNARY_OPTIONS,
   JHipsterRelationshipTypes: RELATIONSHIP_TYPES,
   JHipsterValidations: VALIDATIONS,
+  JHipsterFieldTypes: FIELD_TYPES,
+  JHipsterDatabaseTypes: DATABASE_TYPES,
   /* JDL objects */
   JDLObject: JDLObject,
   JDLEntity: JDLEntity,
@@ -46,5 +51,7 @@ module.exports = {
   /* JDL utils */
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */
-  areJHipsterEntitiesEqual: areJHipsterEntitiesEqual
+  ObjectUtils: ObjectUtils,
+  /* Objects */
+  Set: Set
 };
