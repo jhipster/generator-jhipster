@@ -133,10 +133,5 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
         return converter;
     }
-
-    @Bean
-    public RequestInterceptor getOAuth2RequestInterceptor() throws IOException {
-        return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), loadBalancedResourceDetails);
-    }
 }
 <% } %>

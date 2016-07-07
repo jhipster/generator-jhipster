@@ -581,6 +581,8 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MicroserviceSecurityConfiguration.java', javaDir + 'config/MicroserviceSecurityConfiguration.java', this, {});
             if (this.applicationType === 'microservice' && this.authenticationType === 'uaa') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_FeignConfiguration.java', javaDir + 'config/FeignConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/client/_AuthorizedFeignClient.java', javaDir + 'client/AuthorizedFeignClient.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/client/_OAuth2InterceptedFeignConfiguration.java', javaDir + 'client/OAuth2InterceptedFeignConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoadBalancedResourceDetails.java', javaDir + 'config/LoadBalancedResourceDetails.java', this, {});
             }
         },
