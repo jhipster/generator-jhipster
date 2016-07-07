@@ -485,6 +485,175 @@ describe('ObjectUtils', function () {
           });
         });
       });
+      describe('as they do not have the options', function () {
+        it('returns false', function () {
+          var firstObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'pager',
+            service: 'no'
+          };
+          var secondObject = {
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'no',
+            service: 'no'
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+      });
+      describe('as they do not have the same table name', function () {
+        it('returns false', function () {
+          var firstObject = {
+            entityTableName: 'first',
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'pager',
+            service: 'no'
+          };
+          var secondObject = {
+            entityTableName: 'second',
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'no',
+            service: 'no'
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        })
+      });
+      describe('as they do not have the same comments', function() {
+        it('returns false', function() {
+          var firstObject = {
+            javadoc: 'My first comment',
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'pager',
+            service: 'no'
+          };
+          var secondObject = {
+            javadoc: 'My Second Comment',
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'no',
+            service: 'no'
+          };
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+      });
     });
   });
 });
