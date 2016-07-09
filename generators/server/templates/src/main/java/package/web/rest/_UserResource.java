@@ -92,7 +92,7 @@ public class UserResource {
      * @param managedUserDTO the user to create
      * @param request the HTTP request
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
-     * @throws URISyntaxException if the Location URI syntaxt is incorrect
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.POST,
@@ -121,7 +121,7 @@ public class UserResource {
             request.getContextPath();              // "/myContextPath" or "" if deployed in root context
             mailService.sendCreationEmail(newUser, baseUrl);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.created"<% } else { %> "An user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
                 .body(newUser);
         }
     }
@@ -132,7 +132,7 @@ public class UserResource {
      * @param managedUserDTO the user to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated user,
      * or with status 400 (Bad Request) if the login or email is already in use,
-     * or with status 500 (Internal Server Error) if the user couldnt be updated
+     * or with status 500 (Internal Server Error) if the user couldn't be updated
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.PUT,
@@ -166,13 +166,13 @@ public class UserResource {
                 );<% if (databaseType == 'mongodb') { %>
                 userRepository.save(user);<% } %>
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %>"A user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
+                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %>"An user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
                         .findOne(managedUserDTO.getId())));<% } else { %>
                 user.setAuthorities(managedUserDTO.getAuthorities());
                 userRepository.save(user);
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %> "A user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
+                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %> "An user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
                         .findOne(managedUserDTO.getId())));<% } %>
             })
@@ -185,7 +185,7 @@ public class UserResource {
      * <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
      * @param pageable the pagination information<% } %>
      * @return the ResponseEntity with status 200 (OK) and with body all users
-     * @throws URISyntaxException if the pagination headers couldnt be generated
+     * @throws URISyntaxException if the pagination headers couldn't be generated
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.GET,
@@ -241,7 +241,7 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUserInformation(login);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.deleted"<% } else { %> "An user is deleted with identifier " + login<% } %>, login)).build();
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**

@@ -56,7 +56,7 @@ public class AccountResource {
      *
      * @param managedUserDTO the managed user DTO
      * @param request the HTTP request
-     * @return the ResponseEntity with status 201 (Created) if the user is registred or 400 (Bad Request) if the login or e-mail is already in use
+     * @return the ResponseEntity with status 201 (Created) if the user is registered or 400 (Bad Request) if the login or e-mail is already in use
      */
     @RequestMapping(value = "/register",
                     method = RequestMethod.POST,
@@ -228,7 +228,7 @@ public class AccountResource {
      *
      * @param mail the mail of the user
      * @param request the HTTP request
-     * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registred
+     * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registered
      */
     @RequestMapping(value = "/account/reset_password/init",
         method = RequestMethod.POST,
