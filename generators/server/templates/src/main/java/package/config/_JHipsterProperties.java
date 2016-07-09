@@ -2,8 +2,8 @@ package <%=packageName%>.config;
 
 <%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
-<%_ } _%>
 
+<%_ } _%>
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -11,8 +11,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-<%_ } _%>
 
+<%_ } _%>
 /**
  * Properties specific to JHipster.
  *
@@ -470,7 +470,6 @@ public class JHipsterProperties {
         public Logs getLogs() {
             return logs;
         }
-
 
         public static class Jmx {
 

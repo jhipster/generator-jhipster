@@ -98,7 +98,6 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .authorizedGrantTypes("client_credentials");
     }
 
-
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore()).tokenEnhancer(jwtTokenEnhancer()).authenticationManager(authenticationManager);

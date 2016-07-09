@@ -419,7 +419,6 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
         return socialUserConnectionRepository.save(socialUserConnectionToSabe);
     }
 
-
     private void assertNewConnection(Connection<TestFacebookApi> connection) {
         assertEquals("facebook", connection.getKey().getProviderId());
         assertEquals("9", connection.getKey().getProviderUserId());

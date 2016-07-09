@@ -93,7 +93,6 @@ package <%=packageName%>.config;
       @Inject
       JHipsterProperties jHipsterProperties;
 
-
       @Override
       public void configure(HttpSecurity http) throws Exception {
           http
