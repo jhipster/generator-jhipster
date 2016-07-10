@@ -4,20 +4,22 @@ describe('Controller Tests', function() {
 
     describe('<%= entityClass %> Management Detail Controller', function() {
         var $scope, $rootScope;
-        var MockEntity<% for (idx in differentTypes) { %>, Mock<%= differentTypes[idx] %><%}%>;
+        var MockEntity, MockPreviousState<% for (idx in differentTypes) { %>, Mock<%= differentTypes[idx] %><%}%>;
         var createController;
 
         beforeEach(inject(function($injector) {
             $rootScope = $injector.get('$rootScope');
             $scope = $rootScope.$new();
             MockEntity = jasmine.createSpy('MockEntity');
+            MockPreviousState = jasmine.createSpy('MockPreviousState');
             <% for (idx in differentTypes) { %>Mock<%= differentTypes[idx] %> = jasmine.createSpy('Mock<%= differentTypes[idx] %>');
             <%}%>
 
             var locals = {
                 '$scope': $scope,
                 '$rootScope': $rootScope,
-                'entity': MockEntity <% for (idx in differentTypes) { %>,
+                'entity': MockEntity,
+                'previousState': MockPreviousState<% for (idx in differentTypes) { %>,
                 '<%= differentTypes[idx] %>': Mock<%= differentTypes[idx] %><% } %>
             };
             createController = function() {
