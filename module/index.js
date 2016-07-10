@@ -19,6 +19,7 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     JDLUnaryOption = require('../lib/core/jdl_unary_option'),
     JDLBinaryOption = require('../lib/core/jdl_binary_option'),
     exportToJSON = require('../lib/export/json_exporter').exportToJSON,
+    createJHipsterJSONFolder = require('../lib/export/json_exporter').createJHipsterJSONFolder,
     toFilePath = require('../lib/reader/json_file_reader').toFilePath,
     readEntityJSON = require('../lib/reader/json_file_reader').readEntityJSON,
     ObjectUtils = require('../lib/utils/object_utils'),
@@ -54,6 +55,7 @@ module.exports = {
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */
   ObjectUtils: ObjectUtils,
+  createJHipsterJSONFolder: createJHipsterJSONFolder,
   readEntityJSON: readEntityJSON,
   toFilePath: toFilePath,
   /* Objects */
