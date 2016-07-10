@@ -28,7 +28,7 @@ import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') 
 import java.time.ZonedDateTime;<% } %>
 
 /**
- * An user.
+ * A user.
  */<% if (databaseType == 'sql') { %>
 @Entity
 @Table(name = "jhi_user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>

@@ -121,7 +121,7 @@ public class UserResource {
             request.getContextPath();              // "/myContextPath" or "" if deployed in root context
             mailService.sendCreationEmail(newUser, baseUrl);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.created"<% } else { %> "An user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
                 .body(newUser);
         }
     }
@@ -166,13 +166,13 @@ public class UserResource {
                 );<% if (databaseType == 'mongodb') { %>
                 userRepository.save(user);<% } %>
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %>"An user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
+                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %>"A user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
                         .findOne(managedUserDTO.getId())));<% } else { %>
                 user.setAuthorities(managedUserDTO.getAuthorities());
                 userRepository.save(user);
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %> "An user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
+                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"userManagement.updated"<% } else { %> "A user is updated with identifier " + managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
                         .findOne(managedUserDTO.getId())));<% } %>
             })
@@ -241,7 +241,7 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUserInformation(login);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.deleted"<% } else { %> "An user is deleted with identifier " + login<% } %>, login)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build();
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**

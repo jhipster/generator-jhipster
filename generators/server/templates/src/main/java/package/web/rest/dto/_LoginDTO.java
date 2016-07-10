@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * A DTO representing an user's credentials
+ * A DTO representing a user's credentials
  */
 public class LoginDTO {
 
