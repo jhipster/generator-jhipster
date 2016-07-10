@@ -14,11 +14,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+<%_ } _%>
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import java.time.LocalDate;<% } %>
+<%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
+import java.time.LocalDate;
+<%_ } _%>
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
@@ -39,6 +43,11 @@ public class UserService {
 
     @Inject
     private PasswordEncoder passwordEncoder;
+
+    <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+    @Inject
+    public JdbcTokenStore jdbcTokenStore;
+    <%_ } _%>
 
     @Inject
     private UserRepository userRepository;<% if (searchEngine == 'elasticsearch') { %>
@@ -167,6 +176,10 @@ public class UserService {
     }
 
     public void deleteUserInformation(String login) {
+        <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+        jdbcTokenStore.findTokensByUserName(login).stream().forEach(token ->
+            jdbcTokenStore.removeAccessToken(token));
+        <%_ } _%>
         userRepository.findOneByLogin(login).ifPresent(u -> {
             <%_ if (enableSocialSignIn) { _%>
             socialService.deleteUserSocialConnection(u.getLogin());

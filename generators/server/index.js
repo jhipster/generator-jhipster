@@ -349,6 +349,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
             this.template('_travis.yml', '.travis.yml', this, {});
+            this.template('_Jenkinsfile', 'Jenkinsfile', this, {});
         },
 
         writeDockerFiles: function () {
