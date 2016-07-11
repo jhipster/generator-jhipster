@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DTO for transfering error message with a list of field errors.
+ * DTO for transferring error message with a list of field errors.
  */
 public class ErrorDTO implements Serializable {
 

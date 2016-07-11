@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
 /**
- * Custom Jackson deserializer for transforming a JSON object (using the ISO 8601 date formatwith optional time)
+ * Custom Jackson deserializer for transforming a JSON object (using the ISO 8601 date format with optional time)
  * to a JSR310 LocalDate object.
  */
 public class JSR310LocalDateDeserializer extends JsonDeserializer<LocalDate> {
