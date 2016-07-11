@@ -1,90 +1,67 @@
-import { Injectable, Pipe, PipeTransform } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-<%=jhiPrefixCapitalized%>HealthService.$inject = ['$rootScope'];
 
 @Injectable()
-export function <%=jhiPrefixCapitalized%>HealthService ($rootScope) {
-            
-    var separator = '.';
-    var service = {
-        checkHealth: checkHealth,
-        transformHealthData: transformHealthData,
-        getBaseName: getBaseName,
-        getSubSystemName: getSubSystemName
-    };
+export class <%=jhiPrefixCapitalized%>HealthService {
 
-    return service;
+    separator: string;
 
-
-    function checkHealth () {
-        return this.http.get('management/health').toPromise().
-            then(response => {
-                return response.data;
-            });
+    constructor (private http: Http) {
+        this.separator = '.';
     }
 
-    function transformHealthData (data) {
-        var response = [];
-        flattenHealthData(response, null, data);
+    checkHealth(): Observable<any> {
+        return this.http.get('management/health').map((res: Response) => res.json());
+    }
+
+    transformHealthData (data): any {
+        let response = [];
+        this.flattenHealthData(response, null, data);
         return response;
     }
 
-    function getBaseName (name) {
+    getBaseName (name): string {
         if (name) {
-            var split = name.split('.');
+            let split = name.split('.');
             return split[0];
         }
     }
 
-    function getSubSystemName (name) {
+    getSubSystemName (name) : string{
         if (name) {
-            var split = name.split('.');
+            let split = name.split('.');
             split.splice(0, 1);
-            var remainder = split.join('.');
+            let remainder = split.join('.');
             return remainder ? ' - ' + remainder : '';
         }
     }
 
     /* private methods */
-    function flattenHealthData (result, path, data) {
-        data.forEach( (value, key) => { 
-            if (isHealthObject(value)) {
-                if (hasSubSystem(value)) {
-                    addHealthObject(result, false, value, getModuleName(path, key));
-                    flattenHealthData(result, getModuleName(path, key), value);
-                } else {
-                    addHealthObject(result, true, value, getModuleName(path, key));
-                }
-            }
-        });
-        return result;
-    }
+    private addHealthObject (result, isLeaf, healthObject, name): any {
 
-    function addHealthObject (result, isLeaf, healthObject, name) {
-
-        var healthData = {
+        let healthData = {
             'name': name
         };
-        var details = {};
-        var hasDetails = false;
+        let details = {};
+        let hasDetails = false;
 
-        healthObject.forEach( (value, key) => { 
+        for(var key in healthObject) {
+            let value = healthObject[key];
             if (key === 'status' || key === 'error') {
                 healthData[key] = value;
             } else {
-                if (!isHealthObject(value)) {
+                if (!this.isHealthObject(value)) {
                     details[key] = value;
                     hasDetails = true;
                 }
             }
-        });
+        }
 
         // Add the of the details
         if (hasDetails) {
-            extend(healthData, { 'details': details});
+            angular.extend(healthData, { 'details': details});
         }
 
         // Only add nodes if they provide additional information
@@ -94,10 +71,27 @@ export function <%=jhiPrefixCapitalized%>HealthService ($rootScope) {
         return healthData;
     }
 
-    function getModuleName (path, name) {
-        var result;
+    private flattenHealthData (result, path, data): any {
+        for(var key in data) {
+            let value = data[key];
+            if (this.isHealthObject(value)) {
+                if (this.hasSubSystem(value)) {
+                    this.addHealthObject(result, false, value, this.getModuleName(path, key));
+                    this.flattenHealthData(result, this.getModuleName(path, key), value);
+                } else {
+                    this.addHealthObject(result, true, value, this.getModuleName(path, key));
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    private getModuleName (path, name): string {
+        let result;
         if (path && name) {
-            result = path + separator + name;
+            result = path + this.separator + name;
         }  else if (path) {
             result = path;
         } else if (name) {
@@ -108,24 +102,28 @@ export function <%=jhiPrefixCapitalized%>HealthService ($rootScope) {
         return result;
     }
 
-    function hasSubSystem (healthObject) {
-        var result = false;
-        healthObject.forEach( (value) => {
+    private hasSubSystem (healthObject): boolean {
+        let result = false;
+
+        for(var key in healthObject) {
+            let value = healthObject[key];
             if (value && value.status) {
                 result = true;
             }
-        });
+        }
+
         return result;
     }
 
-    function isHealthObject (healthObject) {
-        var result = false;
-        healthObject.forEach( (value, key) => {
+    private isHealthObject (healthObject): boolean {
+        let result = false;
+
+        for(var key in healthObject) {
             if (key === 'status') {
                 result = true;
             }
-        });
+        }
+
         return result;
     }
-
 }

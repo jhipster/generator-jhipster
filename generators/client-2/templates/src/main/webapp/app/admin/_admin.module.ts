@@ -16,13 +16,17 @@ import { UserMgmntStateConfig } from './user-management/user-management.state';
 import { AuditsComponent } from "./audits/audits.component";
 import { LogsComponent } from './logs/logs.component';
 
+import { <%=jhiPrefixCapitalized%>HealthCheckController } from './health/health.controller';
+
 import { AuditsService } from './audits/audits.service';
+import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
 import { LogsService } from './logs/logs.service';
 import { ParseLinks } from "../components/util/parse-links.service";
 
 import { upgradeAdapter } from '../upgrade_adapter';
 
 upgradeAdapter.addProvider(AuditsService);
+upgradeAdapter.addProvider(<%=jhiPrefixCapitalized%>HealthService);
 upgradeAdapter.addProvider(LogsService);
 upgradeAdapter.addProvider(ParseLinks);
 
@@ -49,5 +53,7 @@ angular
     .config(TrackerStateConfig)
 <%_ } _%>
     .config(UserMgmntStateConfig)
+    .controller('<%=jhiPrefixCapitalized%>HealthCheckController', <%=jhiPrefixCapitalized%>HealthCheckController)
     .directive('<%=jhiPrefix%>Audit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(AuditsComponent))
-    .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent));
+    .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
+    .factory('<%=jhiPrefixCapitalized%>HealthService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>HealthService));
