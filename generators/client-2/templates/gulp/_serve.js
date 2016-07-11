@@ -59,4 +59,4 @@ module.exports = function () {
     });
 
     gulp.start('watch');
-}
+};

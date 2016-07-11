@@ -49,4 +49,4 @@ module.exports = function() {
         .pipe(revReplace({manifest: manifest}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.dist));
-}
+};
