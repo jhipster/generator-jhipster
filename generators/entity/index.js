@@ -18,6 +18,7 @@ const constants = require('../generator-constants'),
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR,
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
+    RESERVED_WORDS_JHIPSTER = constants.RESERVED_WORDS_JHIPSTER,
     RESERVED_WORDS_JAVA = constants.RESERVED_WORDS_JAVA,
     RESERVED_WORDS_MYSQL = constants.RESERVED_WORDS_MYSQL,
     RESERVED_WORDS_POSGRES = constants.RESERVED_WORDS_POSGRES,
@@ -149,6 +150,8 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
                 this.error(chalk.red('The entity name cannot end with \'Detail\''));
+            } else if (RESERVED_WORDS_JHIPSTER.indexOf(this.name.toUpperCase()) !== -1) {
+                this.error(chalk.red('The entity name conflicts with a jhipster class'));
             } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) !== -1) {
                 this.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
             }
