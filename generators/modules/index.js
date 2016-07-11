@@ -38,6 +38,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.packageName = packageName;
         jhipsterVar.packageFolder = packageFolder;
 
+        jhipsterVar.jhipsterConfig = this.config.getAll();
+        jhipsterVar.applicationType = this.config.get('applicationType');
         jhipsterVar.authenticationType = this.config.get('authenticationType');
         jhipsterVar.hibernateCache = this.config.get('hibernateCache');
         jhipsterVar.clusteredHttpSession = this.config.get('clusteredHttpSession');
