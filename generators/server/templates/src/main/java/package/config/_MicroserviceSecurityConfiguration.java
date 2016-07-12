@@ -133,15 +133,14 @@ package <%=packageName%>.config;
       }
 
       @Bean
-      @Qualifier("LoadBalancedRestTemplate")
-      public RestTemplate restTemplate(RestTemplateCustomizer customizer) {
+      public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
           RestTemplate restTemplate = new RestTemplate();
           customizer.customize(restTemplate);
           return restTemplate;
       }
 
       @Inject
-      @Qualifier("LoadBalancedRestTemplate")
+      @Qualifier("loadBalancedRestTemplate")
       private RestTemplate keyUriRestTemplate;
 
       private String getKeyFromAuthorizationServer() {
