@@ -17,6 +17,7 @@ var path = require('path'),
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
 const WORD_WRAP_WIDTH = 80;
+const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const constants = require('./generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
@@ -482,7 +483,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
 };
 
 /**
- * Add a new social connection factory in the SocialConfiguration.java file.
+ * Add a new social button in the login and register modules
  *
  * @param {string} socialName - name of the social module. ex: 'facebook'
  * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
@@ -757,7 +758,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             file: fullPath,
             needle: 'jhipster-needle-gradle-buildscript-dependency',
             splicable: [
-                'classpath group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
+                'classpath \'' + group + ':' + name + ':' + version + '\''
             ]
         }, this);
     } catch (e) {
@@ -780,7 +781,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             file: fullPath,
             needle: 'jhipster-needle-gradle-dependency',
             splicable: [
-                scope + ' group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
+                scope + ' \'' + group + ':' + name + ':' + version + '\''
             ]
         }, this);
     } catch (e) {
@@ -953,7 +954,7 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
     try {
         var modules;
         var error, duplicate;
-        var moduleName = _.startCase(npmPackageName.replace('generator-jhipster-', ''));
+        var moduleName = _.startCase(npmPackageName.replace(GENERATOR_JHIPSTER + '-', ''));
         var generatorName = npmPackageName.replace('generator-', '');
         var generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app');
         var moduleConfig = {
@@ -1054,6 +1055,289 @@ Generator.prototype.copyI18nFilesByName = function (generator, webappDir, fileTo
     _this.copy(webappDir + 'i18n/' + lang + '/' + fileToCopy, webappDir + 'i18n/' + lang + '/' + fileToCopy);
 };
 
+/**
+ * Check if the JHipster version used to generate an existing project is less than the passed version argument
+ *
+ * @param {string} version - A valid semver version string
+ */
+Generator.prototype.isJhipsterVersionLessThan = function (version) {
+    var jhipsterVersion = this.config.get('jhipsterVersion');
+    if (!jhipsterVersion) {
+        return true;
+    }
+    return semver.lt(jhipsterVersion, version);
+};
+
+/**
+ * executes a git command using shellJS
+ * gitExec(args [, options ], callback)
+ *
+ * @param {string|array} args - can be an array of arguments or a string command
+ * @param {object} options[optional] - takes any of child process options
+ * @param {function} callback - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+ */
+Generator.prototype.gitExec = function (args, options, callback) {
+    callback = arguments[arguments.length - 1];
+    if (arguments.length < 3) {
+        options = {};
+    }
+    options.async = true;
+    options.silent = true;
+
+    if (!Array.isArray(args)) {
+        args = [args];
+    }
+    var command = 'git ' + args.join(' ');
+    shelljs.exec(command, options, callback);
+};
+
+/**
+ * get a table name in JHipster preferred style.
+ *
+ * @param {string} value - table name string
+ */
+Generator.prototype.getTableName = function (value) {
+    return _.snakeCase(value).toLowerCase();
+};
+
+/**
+ * get a table column name in JHipster preferred style.
+ *
+ * @param {string} value - table column name string
+ */
+Generator.prototype.getColumnName = function (value) {
+    return _.snakeCase(value).toLowerCase();
+};
+
+/**
+ * get a table column names plural form in JHipster preferred style.
+ *
+ * @param {string} value - table column name string
+ */
+Generator.prototype.getPluralColumnName = function (value) {
+    return this.getColumnName(pluralize(value));
+};
+
+/**
+ * Print an error message.
+ *
+ * @param {string} msg - message to print
+ */
+Generator.prototype.error = function(msg) {
+    this.env.error(chalk.red.bold('ERROR! ') + msg);
+};
+
+/**
+ * Print a warning message.
+ *
+ * @param {string} value - message to print
+ */
+Generator.prototype.warning = function(msg) {
+    this.log(chalk.yellow.bold('WARNING! ') + msg);
+};
+
+/**
+ * Prints a JHipster logo.
+ */
+Generator.prototype.printJHipsterLogo = function () {
+    this.log(' \n' +
+        chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
+        chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
+        chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
+        chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
+        chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n')
+    );
+    this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+    if (this.checkInstall) this.checkForNewVersion();
+    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
+    this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
+};
+
+/**
+ * Checks if there is a newer JHipster version available.
+ */
+Generator.prototype.checkForNewVersion = function () {
+    try {
+        shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, stdout, stderr) {
+            if (!stderr && semver.lt(packagejs.version, stdout)) {
+                this.log(
+                    chalk.yellow(' ______________________________________________________________________________\n\n') +
+                    chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n','')) + chalk.gray(' (current: ' + packagejs.version + ')') + '\n' +
+                    chalk.yellow('  Run ' + chalk.magenta('npm install -g ' + GENERATOR_JHIPSTER ) + ' to update.\n') +
+                    chalk.yellow(' ______________________________________________________________________________\n')
+                );
+            }
+        }.bind(this));
+    } catch (err) {
+        // fail silently as this function doesnt affect normal generator flow
+    }
+};
+
+/**
+ * get the angular app name for the app.
+ */
+Generator.prototype.getAngularAppName = function () {
+    return _.camelCase(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
+};
+
+/**
+ * get the java main class name.
+ */
+Generator.prototype.getMainClassName = function () {
+    return _.upperFirst(this.getAngularAppName());
+};
+
+/**
+ * ask a prompt for apps name.
+ *
+ * @param {object} generator - generator instance to use
+ */
+Generator.prototype.askModuleName = function (generator) {
+
+    var done = generator.async();
+    var defaultAppBaseName = this.getDefaultAppName();
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    generator.prompt({
+        type: 'input',
+        name: 'baseName',
+        validate: function (input) {
+            if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;
+            if (input === 'application') {
+                return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
+            }
+            return 'Your application name cannot contain special characters or a blank space, using the default name instead';
+        },
+        message: function (response) {
+            return getNumberedQuestion('What is the base name of your application?', true);
+        },
+        default: defaultAppBaseName
+    }, function (prompt) {
+        generator.baseName = prompt.baseName;
+        done();
+    }.bind(generator));
+};
+
+/**
+ * ask a prompt for i18n option.
+ *
+ * @param {object} generator - generator instance to use
+ */
+Generator.prototype.aski18n = function (generator) {
+
+    var languageOptions = this.getAllSupportedLanguageOptions();
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+
+    var done = generator.async();
+    var prompts = [
+        {
+            type: 'confirm',
+            name: 'enableTranslation',
+            message: function (response) {
+                return getNumberedQuestion('Would you like to enable internationalization support?', true);
+            },
+            default: true
+        },
+        {
+            when: function (response) {
+                return response.enableTranslation === true;
+            },
+            type: 'list',
+            name: 'nativeLanguage',
+            message: 'Please choose the native language of the application?',
+            choices: languageOptions,
+            default: 'en',
+            store: true
+        },
+        {
+            when: function (response) {
+                return response.enableTranslation === true;
+            },
+            type: 'checkbox',
+            name: 'languages',
+            message: 'Please choose additional languages to install',
+            choices: function (response) {
+                return _.filter(languageOptions, function (o) {
+                    return o.value !== response.nativeLanguage;
+                });
+            }
+        }
+    ];
+
+    generator.prompt(prompts, function (prompt) {
+        generator.enableTranslation = prompt.enableTranslation;
+        generator.nativeLanguage = prompt.nativeLanguage;
+        generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
+        done();
+    }.bind(generator));
+};
+
+/**
+ * compose using the language sub generator.
+ *
+ * @param {object} generator - generator instance to use
+ * @param {object} configOptions - options to pass to the generator
+ * @param {String} type - server | client
+ */
+Generator.prototype.composeLanguagesSub = function (generator, configOptions, type) {
+    if (generator.enableTranslation) {
+        // skip server if app type is client
+        var skipServer = type && type === 'client';
+        // skip client if app type is server
+        var skipClient = type && type === 'server';
+        generator.composeWith('jhipster:languages', {
+            options: {
+                'skip-install': true,
+                'skip-server': skipServer,
+                'skip-client': skipClient,
+                configOptions: configOptions
+            },
+            args: generator.languages
+        }, {
+            local: require.resolve('./languages')
+        });
+    }
+};
+
+/**
+ * Add numbering to a question
+ *
+ * @param {String} msg - question text
+ * @param {boolean} cond - increment question
+ */
+Generator.prototype.getNumberedQuestion = function (msg, cond) {
+    var order;
+    if (cond) {
+        ++this.currentQuestion;
+    }
+    order = '(' + this.currentQuestion + '/' + this.totalQuestions + ') ';
+    return order + msg;
+};
+
+/**
+ * build a generated application.
+ *
+ * @param {String} buildTool - maven | gradle
+ * @param {String} profile - dev | prod
+ * @param {Function} cb - callback when build is complete
+ */
+Generator.prototype.buildApplication = function (buildTool, profile, cb) {
+    var buildCmd = 'mvnw package -DskipTests=true -B';
+
+    if (buildTool === 'gradle') {
+        buildCmd = 'gradlew bootRepackage -x test';
+    }
+
+    if (os.platform() !== 'win32') {
+        buildCmd = './' + buildCmd;
+    }
+    buildCmd += ' -P' + profile;
+    var child = {};
+    child.stdout = exec(buildCmd, cb).stdout;
+    child.buildCmd = buildCmd;
+
+    return child;
+};
+
 /*========================================================================*/
 /* private methods use within generator (not exposed to modules)*/
 /*========================================================================*/
@@ -1139,18 +1423,6 @@ Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
     }
 };
 
-Generator.prototype.getTableName = function (value) {
-    return _.snakeCase(value).toLowerCase();
-};
-
-Generator.prototype.getColumnName = function (value) {
-    return _.snakeCase(value).toLowerCase();
-};
-
-Generator.prototype.getPluralColumnName = function (value) {
-    return this.getColumnName(pluralize(value));
-};
-
 Generator.prototype.insight = function () {
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
@@ -1171,26 +1443,18 @@ Generator.prototype.insight = function () {
     return insight;
 };
 
-Generator.prototype.removefile = function (file) {
+Generator.prototype.removeFile = function (file) {
     if (shelljs.test('-f', file)) {
         this.log('Removing the file - ' + file);
         shelljs.rm(file);
     }
 };
 
-Generator.prototype.removefolder = function (folder) {
+Generator.prototype.removeFolder = function (folder) {
     if (shelljs.test('-d', folder)) {
         this.log('Removing the folder - ' + folder);
         shelljs.rm('-rf', folder);
     }
-};
-
-Generator.prototype.isJhipsterVersionLessThan = function (version) {
-    var jhipsterVersion = this.config.get('jhipsterVersion');
-    if (!jhipsterVersion) {
-        return true;
-    }
-    return semver.lt(jhipsterVersion, version);
 };
 
 Generator.prototype.getDefaultAppName = function () {
@@ -1213,150 +1477,46 @@ Generator.prototype.formatAsApiModelProperty = function (text) {
     return jhipsterUtils.wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true);
 };
 
-Generator.prototype.printJHipsterLogo = function () {
-    this.log(' \n' +
-        chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
-        chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
-        chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
-        chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
-        chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
-    this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
-    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
-    this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
+Generator.prototype.isNumber = function (input) {
+    if (isNaN(this.filterNumber(input))) {
+        return false;
+    }
+    return true;
 };
 
-Generator.prototype.getAngularAppName = function () {
-    return _.camelCase(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
+Generator.prototype.isSignedNumber = function (input) {
+    if (isNaN(this.filterNumber(input, true))) {
+        return false;
+    }
+    return true;
 };
 
-Generator.prototype.getMainClassName = function () {
-    return _.upperFirst(this.getAngularAppName());
+Generator.prototype.isSignedDecimalNumber = function (input) {
+    if (isNaN(this.filterNumber(input, true, true))) {
+        return false;
+    }
+    return true;
 };
 
-Generator.prototype.askModuleName = function (generator, currentQuestion, totalQuestions) {
+Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
+    var signed = isSigned ? '(\\-|\\+)?' : '';
+    var decimal = isDecimal ? '(\\.[0-9]+)?' : '';
+    var regex = new RegExp('^' + signed + '([0-9]+' + decimal + ')$');
 
-    var done = generator.async();
-    var defaultAppBaseName = this.getDefaultAppName();
-    var getNumberedQuestion = this.getNumberedQuestion;
-    generator.prompt({
-        type: 'input',
-        name: 'baseName',
-        validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;
-            if (input === 'application') {
-                return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
-            }
-            return 'Your application name cannot contain special characters or a blank space, using the default name instead';
-        },
-        message: function (response) {
-            return getNumberedQuestion('What is the base name of your application?', currentQuestion, totalQuestions, function (current) {
-                currentQuestion = current;
-            }, true);
-        },
-        default: defaultAppBaseName
-    }, function (prompt) {
-        generator.baseName = prompt.baseName;
-        done();
-    }.bind(generator));
+    if (regex.test(input)) return Number(input);
+
+    return NaN;
 };
 
-Generator.prototype.aski18n = function (generator, currentQuestion, totalQuestions) {
-
-    var languageOptions = this.getAllSupportedLanguageOptions();
-    var getNumberedQuestion = this.getNumberedQuestion;
-
-    var done = generator.async();
-    var prompts = [
-        {
-            type: 'confirm',
-            name: 'enableTranslation',
-            message: function (response) {
-                return getNumberedQuestion('Would you like to enable internationalization support?', currentQuestion, totalQuestions, function (current) {
-                    currentQuestion = current;
-                }, true);
-            },
-            default: true
-        },
-        {
-            when: function (response) {
-                return response.enableTranslation === true;
-            },
-            type: 'list',
-            name: 'nativeLanguage',
-            message: 'Please choose the native language of the application?',
-            choices: languageOptions,
-            default: 'en',
-            store: true
-        },
-        {
-            when: function (response) {
-                return response.enableTranslation === true;
-            },
-            type: 'checkbox',
-            name: 'languages',
-            message: 'Please choose additional languages to install',
-            choices: function (response) {
-                return _.filter(languageOptions, function (o) {
-                    return o.value !== response.nativeLanguage;
-                });
-            }
+Generator.prototype.isGitInstalled = function (callback) {
+    this.gitExec('--version', function (code) {
+        if (code !== 0) {
+            this.warning('git is not found on your computer.\n',
+                ' Install git: ' + chalk.yellow('http://git-scm.com/')
+            );
         }
-    ];
-
-    generator.prompt(prompts, function (prompt) {
-        generator.enableTranslation = prompt.enableTranslation;
-        generator.nativeLanguage = prompt.nativeLanguage;
-        generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
-        done();
-    }.bind(generator));
-};
-
-Generator.prototype.composeLanguagesSub = function (generator, configOptions, type) {
-    if (generator.enableTranslation) {
-        // skip server if app type is client
-        var skipServer = type && type === 'client';
-        // skip client if app type is server
-        var skipClient = type && type === 'server';
-        generator.composeWith('jhipster:languages', {
-            options: {
-                'skip-install': true,
-                'skip-server': skipServer,
-                'skip-client': skipClient,
-                configOptions: configOptions
-            },
-            args: generator.languages
-        }, {
-            local: require.resolve('./languages')
-        });
-    }
-};
-
-Generator.prototype.getNumberedQuestion = function (msg, currentQuestion, totalQuestions, cb, cond) {
-    var order;
-    if (cond) {
-        ++currentQuestion;
-    }
-    order = '(' + currentQuestion + '/' + totalQuestions + ') ';
-    cb(currentQuestion);
-    return order + msg;
-};
-
-Generator.prototype.buildApplication = function (buildTool, profile, cb) {
-    var buildCmd = 'mvnw package -DskipTests=true -B';
-
-    if (buildTool === 'gradle') {
-        buildCmd = 'gradlew bootRepackage -x test';
-    }
-
-    if (os.platform() !== 'win32') {
-        buildCmd = './' + buildCmd;
-    }
-    buildCmd += ' -P' + profile;
-    var child = {};
-    child.stdout = exec(buildCmd, cb).stdout;
-    child.buildCmd = buildCmd;
-
-    return child;
+        callback && callback(code);
+    }.bind(this));
 };
 
 Generator.prototype.contains = _.includes;

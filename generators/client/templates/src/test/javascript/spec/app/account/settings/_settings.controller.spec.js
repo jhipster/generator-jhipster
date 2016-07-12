@@ -34,7 +34,7 @@ describe('Controller Tests', function() {
 
                 activated: true,
                 email: "john.doe@mail.com",
-                langKey: "<%= nativeLanguageShortName %>",
+                langKey: "<%= nativeLanguage %>",
                 login: "john"
             };
             MockPrincipal.identity.and.returnValue($q.resolve(accountValues));

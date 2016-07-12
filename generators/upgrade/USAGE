@@ -1,0 +1,12 @@
+Description:
+    Updates JHipster version, and upgrades generated application
+
+Example:
+
+    yo jhipster:upgrade
+
+    Assuming you have Git installed, and you run this command in the Git branch you are using for development, JHipster Upgrader will :
+    - checkout a "jhipster_upgrade" branch
+    - update generator-jhipster via npm
+    - regenerate your whole application
+    - switch back to your development branch, and start the merge

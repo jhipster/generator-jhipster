@@ -24,16 +24,16 @@
             var translationKey = keyPrefix + fieldName;
             if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') {
                 fieldInputType = 'number';
-            } else if (fieldType == 'LocalDate' || fieldType == 'Date') {
+            } else if (fieldType == 'LocalDate') {
                 fieldInputType = 'date';
             } else if (fieldType == 'ZonedDateTime') {
                 fieldInputType = 'datetime-local';
             } else if (fieldType == 'Boolean') {
                 fieldInputType = 'checkbox';
-            } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
+            } else if ((fieldType == 'byte[]' || fieldType == 'ByteBuffer') && fieldTypeBlobContent != 'text') {
                 fieldInputType = 'hidden';
             } _%>
-        <div class="form-group"<% if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
+        <div class="form-group"<% if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
             <label class="control-label" translate="<%= translationKey %>" for="field_<%= fieldName %>"><%= fieldNameHumanized %></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fieldName %>" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>"<% if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
@@ -45,20 +45,19 @@
                 <%_ } _%>
             </select>
             <%_ } else { _%>
-                <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+                <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <div>
                     <%_ if (fieldTypeBlobContent == 'image') { _%>
                 <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + vm.<%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
                     <%_ } _%>
-                <div class="help-block clearfix">
+                <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>" class="help-block clearfix">
                     <%_ if (fieldTypeBlobContent == 'any') { _%>
-                    <a class="pull-left" ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a><br>
-                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    <a class="pull-left" ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a><br>
+                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } else { _%>
-                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } _%>
                     <button ng-click="vm.<%= entityInstance %>.<%= fieldName %>=null;vm.<%= entityInstance %>.<%= fieldName %>ContentType=null;"
-                            ng-if="vm.<%= entityInstance %>.<%= fieldName %>"
                             class="btn btn-default btn-xs pull-right">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
@@ -69,7 +68,7 @@
                 </button>
             </div>
                 <%_ } _%>
-                <%_ if (fieldType == 'LocalDate' || fieldType == 'Date') { _%>
+                <%_ if (fieldType == 'LocalDate') { _%>
                 <div class="input-group">
                     <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" uib-datepicker-popup="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
                     <%- include ng_validators %>/>
@@ -92,7 +91,7 @@
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>"
                     <%- include ng_validators %> />
-                    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+                    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>ContentType" />
                     <%_ } _%>
@@ -154,7 +153,7 @@
                     This field should be a number.
                 </p>
                 <%_ } _%>
-                <%_ if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
+                <%_ if (fieldType == 'ZonedDateTime') { _%>
                 <p class="help-block"
                     ng-show="editForm.<%= fieldName %>.$error.ZonedDateTimelocal" translate="entity.validation.ZonedDateTimelocal">
                     This field should be a date and time.
@@ -176,29 +175,30 @@
             var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
             var otherEntityField = relationships[idx].otherEntityField;
             var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+            var relationshipRequired = relationships[idx].relationshipRequired;
             var translationKey = keyPrefix + relationshipName; _%>
             <%_ if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true && otherEntityName == 'user')) { _%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
                 <option value=""></option>
             </select>
                 <%_ } else { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %>"            <% if (relationshipRequired) { %> required<% } %>>
                 <option value=""></option>
             </select>
-                <%_ } _%>
+            <%_ } _%>
         </div>
             <%_ } else if (relationshipType == 'one-to-one' && ownerSide == true) { _%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                 <%_ if (dto == 'no') { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id' track by <%=otherEntityName %>.id">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id' track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>>
                 <option value=""></option>
             </select>
                 <%_ } else { _%>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id'">
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="vm.<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=relationshipFieldNamePlural.toLowerCase() %> | orderBy:'id'"<% if (relationshipRequired) { %> required<% } %>>
                 <option value=""></option>
             </select>
                 <%_ } _%>
@@ -206,7 +206,17 @@
             <%_ } else if (relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { _%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="vm.<%=entityInstance %>.<%=relationshipFieldNamePlural %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"></select>
+            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="vm.<%=entityInstance %>.<%=relationshipFieldNamePlural %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in vm.<%=otherEntityNamePlural.toLowerCase() %> track by <%=otherEntityName %>.id"<% if (relationshipRequired) { %> required<% } %>></select>
+        </div>
+            <%_ } _%>
+            <%_ if (relationships[idx].relationshipValidate == true) { _%>
+        <div ng-show="editForm.<%= relationshipName %>.$invalid">
+                <%_ if (relationshipRequired) { _%>
+            <p class="help-block"
+                ng-show="editForm.<%= relationshipName %>.$error.required" translate="entity.validation.required">
+                This field is required.
+            </p>
+                <%_ } _%>
         </div>
             <%_ } _%>
         <%_ } _%>
@@ -215,7 +225,7 @@
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
         </button>
-        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
         </button>
     </div>

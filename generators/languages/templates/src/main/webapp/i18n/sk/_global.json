@@ -76,6 +76,9 @@
         },
         "field": {
             "id": "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Zrušiť",
             "delete": "Odstrániť",
             "edit": "Upraviť",
+            "open": "Open",
             "save": "Uložiť",
             "view": "Detaily"
         },
@@ -111,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Server je nedostupný",
+        "url.not.found": "Not found",
         "NotNull": "Pole {{ fieldName }} nemôže byť prázdne!",
         "Size": "Pole {{ fieldName }} nespĺňa požiadavku minimálnej alebo maximálnej veľkosti!",
         "userexists": "Zadané používateľské meno už niekto používa!",

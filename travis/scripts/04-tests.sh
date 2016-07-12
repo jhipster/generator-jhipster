@@ -3,12 +3,12 @@ set -ev
 #--------------------------------------------------
 # Launch tests
 #--------------------------------------------------
-cd "$HOME"/"$JHIPSTER"
-if [ "$JHIPSTER" != "app-gradle" ]; then
-  mvn test
-else
+cd "$HOME"/app
+if [ -f "mvnw" ]; then
+  ./mvnw test
+elif [ -f "gradlew" ]; then
   ./gradlew test
 fi
-if [ "$JHIPSTER" != "app-microservice" ]; then
+if [ -f "gulpfile.js" ]; then
   gulp test --no-notification
 fi

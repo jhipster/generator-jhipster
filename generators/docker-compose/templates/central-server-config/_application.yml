@@ -1,6 +1,8 @@
 #common configuration shared between all applications
 configserver:
-    status: ${spring.cloud.config.uri}/${spring.cloud.config.label}/${spring.cloud.config.name}-${spring.cloud.config.profile}.yml/
+    name: Docker JHipster Registry
+    status: Connected to the JHipster Registry running in Docker
+
 jhipster:
     security:
         authentication:
@@ -10,9 +12,14 @@ jhipster:
     logging:
         logstash: # forward logs to ELK
             enabled: true
-            host: elk-logstash
+            host: jhipster-logstash
     metrics:
         logs: # report metrics in the logs
             enabled: true
             reportFrequency: 60 # in seconds
 <%_ } _%>
+
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://admin:<%= adminPassword %>@registry:8761/eureka/

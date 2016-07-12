@@ -3,23 +3,23 @@ services:
 <%_ for(var i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
 <%_ } _%>
-<%_ if (gatewayNb > 0) { _%>
+<%_ if (gatewayNb + microserviceNb > 0) { _%>
     jhipster-registry:
         extends:
             file: jhipster-registry.yml
             service: jhipster-registry
 <%_ } _%>
 <%_ if (useElk) { _%>
-    elk-elasticsearch:
+    jhipster-elasticsearch:
         extends:
-            file: elk.yml
-            service: elk-elasticsearch
-    elk-logstash:
+            file: jhipster-console.yml
+            service: jhipster-elasticsearch
+    jhipster-logstash:
         extends:
-          file: elk.yml
-          service: elk-logstash
+          file: jhipster-console.yml
+          service: jhipster-logstash
     jhipster-console:
         extends:
-            file: elk.yml
+            file: jhipster-console.yml
             service: jhipster-console
 <%_ } _%>

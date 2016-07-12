@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,22 +23,33 @@ import java.nio.file.Paths;
  */
 public class AbstractCassandraTest {
 
+    public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";
+
+    public static final long CASSANDRA_TIMEOUT = 30000L;
+
     @BeforeClass
     public static void startServer() throws InterruptedException, TTransportException, ConfigurationException, IOException, URISyntaxException  {
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra();
+        EmbeddedCassandraServerHelper.startEmbeddedCassandra(CASSANDRA_TIMEOUT);
         Cluster cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(9142).build();
         Session session = cluster.connect();
+        String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
+        session.execute(createQuery);
+        String useKeyspaceQuery = "USE " + CASSANDRA_UNIT_KEYSPACE;
+        session.execute(useKeyspaceQuery);
         CQLDataLoader dataLoader = new CQLDataLoader(session);
-        dataLoader.load(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "cassandra_unit_keyspace"));
         applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
     }
 
     private static void applyScripts(CQLDataLoader dataLoader, String cqlDir, String pattern) throws IOException, URISyntaxException {
-        Path path = Paths.get(ClassLoader.getSystemResource(cqlDir).toURI());
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(path, pattern)) {
+        URL dirUrl = ClassLoader.getSystemResource(cqlDir);
+        if (dirUrl == null) { // protect for empty directory
+            return;
+        }
+
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dirUrl.toURI()), pattern)) {
             for (Path entry : stream) {
                 String fileName = entry.getFileName().toString();
-                dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, "cassandra_unit_keyspace"));
+                dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
             }
         }
     }

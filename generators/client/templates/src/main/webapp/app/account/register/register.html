@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label class="control-label" for="login" translate="global.form.username">Username</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="{{'global.form.username.placeholder' | translate}}"
-                           ng-model="vm.registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
+                           ng-model="vm.registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[_'.@A-Za-z0-9-]*$/" required>
                     <div ng-show="form.login.$dirty && form.login.$invalid">
                         <p class="help-block"
                                ng-show="form.login.$error.required" translate="register.messages.validate.login.required">
@@ -130,6 +130,7 @@
             <jh-social ng-provider="facebook"></jh-social>
             <jh-social ng-provider="twitter"></jh-social>
             <!-- jhipster-needle-add-social-button -->
+        </div>
         <%_ } _%>
     </div>
 </div>

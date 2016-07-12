@@ -1,21 +1,19 @@
 package <%=packageName%>.security;
 
-import <%=packageName%>.domain.PersistentToken;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.User;<%}%>
+import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.config.JHipsterProperties;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
-import org.springframework.dao.DataAccessException;
+import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.springframework.dao.DataAccessException;<%}%>
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.rememberme.*;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<%}%>
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -94,14 +92,15 @@ public class CustomPersistentRememberMeServices extends
         token.setTokenDate(new Date());<%}%>
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
-        token.setUserAgent(request.getHeader("User-Agent"));
+        token.setUserAgent(request.getHeader("User-Agent"));<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         try {
             <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to update token: ", e);
             throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
-        }
+        }<% } else { %>
+        addCookie(token, request, response);<% } %>
         return getUserDetailsService().loadUserByUsername(login);
     }
 
@@ -125,13 +124,14 @@ public class CustomPersistentRememberMeServices extends
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
-        }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
+        }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         try {
             <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);
-        }
+        }<% } else { %>
+        addCookie(token, request, response);<% } %>
     }
 
     /**
@@ -140,8 +140,8 @@ public class CustomPersistentRememberMeServices extends
      * The standard Spring Security implementations are too basic: they invalidate all tokens for the
      * current user, so when he logs out from one browser, all his other sessions are destroyed.
      */
-    @Override
-    @Transactional
+    @Override<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String rememberMeCookie = extractRememberMeCookie(request);
         if (rememberMeCookie != null && rememberMeCookie.length() != 0) {

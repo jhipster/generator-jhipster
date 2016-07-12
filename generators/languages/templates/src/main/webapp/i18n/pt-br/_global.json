@@ -76,6 +76,9 @@
         },
         "field": {
             "id" : "Código"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Cancelar",
             "delete": "Excluir",
             "edit": "Editar",
+            "open": "Open",
             "save": "Salvar",
             "view": "Visualizar"
         },
@@ -111,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Servidor indisponível",
+        "url.not.found": "Not found",
         "NotNull": "O Campo {{fieldName}} não pode ser vazio!",
         "Size": "O campo {{fieldName}} não obedece os requisitos de tamanho mínimo ou máximo!",
         "userexists": "Usuário já existente!",

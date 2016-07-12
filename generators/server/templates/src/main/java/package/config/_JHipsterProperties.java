@@ -2,8 +2,8 @@ package <%=packageName%>.config;
 
 <%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
-<%_ } _%>
 
+<%_ } _%>
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -11,8 +11,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-<%_ } _%>
 
+<%_ } _%>
 /**
  * Properties specific to JHipster.
  *
@@ -46,6 +46,8 @@ public class JHipsterProperties {
 
     private final Gateway gateway = new Gateway();
     <%_ } _%>
+
+    private final Ribbon ribbon = new Ribbon();
 
     public Async getAsync() {
         return async;
@@ -90,6 +92,10 @@ public class JHipsterProperties {
         return gateway;
     }
     <%_ } _%>
+
+    public Ribbon getRibbon() {
+        return ribbon;
+    }
 
     public static class Async {
 
@@ -222,7 +228,7 @@ public class JHipsterProperties {
 
         private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
 
         private final Authentication authentication = new Authentication();
         <%_ } _%>
@@ -233,7 +239,7 @@ public class JHipsterProperties {
         }
         <%_ } _%>
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
         public Authentication getAuthentication() {
             return authentication;
         }
@@ -244,7 +250,7 @@ public class JHipsterProperties {
             private final Oauth oauth = new Oauth();
 
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             private final Jwt jwt = new Jwt();
 
             <%_ } _%>
@@ -253,7 +259,7 @@ public class JHipsterProperties {
                 return oauth;
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             public Jwt getJwt() {
                 return jwt;
             }
@@ -293,7 +299,7 @@ public class JHipsterProperties {
                 }
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
 
             public static class Jwt {
 
@@ -366,8 +372,6 @@ public class JHipsterProperties {
 
         private String licenseUrl;
 
-        private Boolean enabled;
-
         public String getTitle() {
             return title;
         }
@@ -439,14 +443,6 @@ public class JHipsterProperties {
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
         }
-
-        public Boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
     }
 
     public static class Metrics {
@@ -474,7 +470,6 @@ public class JHipsterProperties {
         public Logs getLogs() {
             return logs;
         }
-
 
         public static class Jmx {
 
@@ -625,6 +620,21 @@ public class JHipsterProperties {
 
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
+
+    <%_ if (applicationType == 'gateway' || applicationType == 'microservice') { _%>
+        private final SpectatorMetrics spectatorMetrics = new SpectatorMetrics();
+
+        public SpectatorMetrics getSpectatorMetrics() { return spectatorMetrics; }
+
+        public static class SpectatorMetrics {
+
+            private boolean enabled = false;
+
+            public boolean isEnabled() { return enabled; }
+
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+        }
+    <%_ } _%>
     }
 
     <%_ if (enableSocialSignIn) { _%>
@@ -639,7 +649,9 @@ public class JHipsterProperties {
         public void setRedirectAfterSignIn(String redirectAfterSignIn) {
             this.redirectAfterSignIn = redirectAfterSignIn;
         }
-    }<%_ } _%>
+    }
+
+    <%_ } _%>
     <%_ if (applicationType == 'gateway') { _%>
     public static class Gateway {
 
@@ -683,4 +695,17 @@ public class JHipsterProperties {
         }
     }
 <%_ } _%>
+
+    public static class Ribbon {
+
+        private String[] displayOnActiveProfiles;
+
+        public String[] getDisplayOnActiveProfiles() {
+            return displayOnActiveProfiles;
+        }
+
+        public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
+            this.displayOnActiveProfiles = displayOnActiveProfiles;
+        }
+    }
 }

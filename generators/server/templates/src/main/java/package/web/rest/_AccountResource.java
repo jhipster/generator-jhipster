@@ -1,7 +1,7 @@
 package <%=packageName%>.web.rest;
 
-import com.codahale.metrics.annotation.Timed;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<% } %><% if (authenticationType == 'session') { %>
+import com.codahale.metrics.annotation.Timed;
+<% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
@@ -56,7 +56,7 @@ public class AccountResource {
      *
      * @param managedUserDTO the managed user DTO
      * @param request the HTTP request
-     * @return the ResponseEntity with status 201 (Created) if the user is registred or 400 (Bad Request) if the login or e-mail is already in use
+     * @return the ResponseEntity with status 201 (Created) if the user is registered or 400 (Bad Request) if the login or e-mail is already in use
      */
     @RequestMapping(value = "/register",
                     method = RequestMethod.POST,
@@ -67,7 +67,7 @@ public class AccountResource {
         HttpHeaders textPlainHeaders = new HttpHeaders();
         textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
 
-        return userRepository.findOneByLogin(managedUserDTO.getLogin())
+        return userRepository.findOneByLogin(managedUserDTO.getLogin().toLowerCase())
             .map(user -> new ResponseEntity<>("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
             .orElseGet(() -> userRepository.findOneByEmail(managedUserDTO.getEmail())
                 .map(user -> new ResponseEntity<>("e-mail address already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
@@ -228,7 +228,7 @@ public class AccountResource {
      *
      * @param mail the mail of the user
      * @param request the HTTP request
-     * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registred
+     * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registered
      */
     @RequestMapping(value = "/account/reset_password/init",
         method = RequestMethod.POST,

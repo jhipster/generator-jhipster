@@ -76,6 +76,9 @@
         },
         "field": {
             "id" : "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Отмена",
             "delete": "Удалить",
             "edit": "Изменить",
+            "open": "Open",
             "save": "Сохранить",
             "view": "Просмотр"
         },
@@ -111,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Сервер не доступен",
+        "url.not.found": "Not found",
         "NotNull": "Поле {{fieldName}} не может быть пустым!",
         "Size": "Поле {{fieldName}} не отвечает требованиям мин/макс.го размера!",
         "userexists": "Имя пользователя уже используется!",

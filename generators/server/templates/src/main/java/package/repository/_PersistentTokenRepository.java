@@ -87,7 +87,7 @@ public class PersistentTokenRepository {
         BatchStatement batch = new BatchStatement();
         batch.add(insertPersistentTokenStmt.bind()
             .setString("series", token.getSeries())
-            .setDate("token_date", token.getTokenDate())
+            .setTimestamp("token_date", token.getTokenDate())
             .setString("user_agent", token.getUserAgent())
             .setString("token_value", token.getTokenValue())
             .setString("login", token.getLogin())

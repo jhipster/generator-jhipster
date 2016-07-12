@@ -76,6 +76,9 @@
         },
         "field": {
             "id": "ஐடி"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "ரத்து",
             "delete": "நீக்கு",
             "edit": "திருத்து",
+            "open": "Open",
             "save": "சேமி",
             "view": "பார்"
         },
@@ -111,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "சர்வரை அடைய முடியவில்லை",
+        "url.not.found": "Not found",
         "NotNull": "களம் {{fieldName}} காலியாக இருக்க கூடாது!",
         "Size": "களம் {{fieldName}} தேவைகள் பூர்த்தி செய்யவில்லை!",
         "userexists": "உள் நுழை பெயர் எடுக்கப்பட்டது!",

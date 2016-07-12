@@ -13,7 +13,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if 
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+import java.time.ZonedDateTime;<% } %>
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;<% } %>
@@ -25,9 +27,10 @@ import java.util.UUID;<% } %>
  */<% } %><% if (databaseType=='cassandra') { %>/**
  * Cassandra repository for the <%= entityClass %> entity.
  */<% } %><% if (databaseType=='sql' || databaseType=='mongodb') { %>
+@SuppressWarnings("unused")
 public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {<% for (idx in relationships) { %><% if (relationships[idx].relationshipType == 'many-to-one' && relationships[idx].otherEntityName == 'user') { %>
 
-    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal<% if (authenticationType != 'jwt') { %>.username<% } %>}")
+    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
     List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();<% } } %>
 <% if (fieldsContainOwnerManyToMany==true) { %>
     @Query("select distinct <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (idx in relationships) {
@@ -68,11 +71,18 @@ public class <%= entityClass %>Repository {
                 for (idx in fields) {
                     var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
                     var fieldName = fields[idx].fieldName;
+                    var fieldNameUnderscored = fields[idx].fieldNameUnderscored;
                     if (fields[idx].fieldType == 'Integer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'BigDecimal') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Boolean') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'LocalDate') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", LocalDate.class));<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get("<%= fieldName %>", ZonedDateTime.class));<% } else if (fields[idx].fieldType == 'Boolean') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBool("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Text') { %>
-                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else if (fields[idx].fieldType === 'ByteBuffer') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBytes("<%= fieldName %>"));
+                <%_ if (fields[idx].fieldTypeBlobContent !== 'text') { _%>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>ContentType(row.getString("<%= fieldNameUnderscored %>_content_type"));
+                <%_ } _%><% } else { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get<%= fields[idx].fieldType %>("<%= fieldName %>"));<% } } %>
                 return <%= entityInstance %>;
             }

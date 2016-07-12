@@ -5,36 +5,41 @@
         .module('<%=angularAppName%>')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ENV', 'LoginService'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
 
-    function NavbarController ($state, Auth, Principal, ENV, LoginService) {
+    function NavbarController ($state, Auth, Principal, ProfileService, LoginService) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
         vm.isAuthenticated = Principal.isAuthenticated;
-        vm.inProduction = ENV === 'prod';
+
+        ProfileService.getProfileInfo().then(function(response) {
+            vm.inProduction = response.inProduction;
+            vm.swaggerEnabled = response.swaggerEnabled;
+        });
+
         vm.login = login;
         vm.logout = logout;
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
 
-        function login () {
+        function login() {
             collapseNavbar();
             LoginService.open();
         }
 
-        function logout () {
+        function logout() {
             collapseNavbar();
             Auth.logout();
             $state.go('home');
         }
 
-        function toggleNavbar () {
+        function toggleNavbar() {
             vm.isNavbarCollapsed = !vm.isNavbarCollapsed;
         }
 
-        function collapseNavbar () {
+        function collapseNavbar() {
             vm.isNavbarCollapsed = true;
         }
     }

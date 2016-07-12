@@ -82,10 +82,43 @@
                     return $translate.refresh();
                 }],<% } %>
                 entity: ['$stateParams', '<%= entityClass %>', function($stateParams, <%= entityClass %>) {
-                    return <%= entityClass %>.get({id : $stateParams.id});
+                    return <%= entityClass %>.get({id : $stateParams.id}).$promise;
+                }],
+                previousState: ["$state", function ($state) {
+                    var currentStateData = {
+                        name: $state.current.name || '<%= entityStateName %>',
+                        params: $state.params,
+                        url: $state.href($state.current.name, $state.params)
+                    };
+                    return currentStateData;
                 }]
             }
         })
+        .state('<%= entityStateName %>-detail.edit', {
+               parent: '<%= entityStateName %>-detail',
+               url: '/detail/edit',
+               data: {
+                   authorities: ['ROLE_USER']
+               },
+               onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                   $uibModal.open({
+                       templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
+                       controller: '<%= entityAngularJSName %>DialogController',
+                       controllerAs: 'vm',
+                       backdrop: 'static',
+                       size: 'lg',
+                       resolve: {
+                           entity: ['<%= entityClass %>', function(<%= entityClass %>) {
+                               return <%= entityClass %>.get({id : $stateParams.id}).$promise;
+                           }]
+                       }
+                   }).result.then(function() {
+                       $state.go('^', {}, { reload: false });
+                   }, function() {
+                       $state.go('^');
+                   });
+               }]
+           })
         .state('<%= entityStateName %>.new', {
             parent: '<%= entityStateName %>',
             url: '/new',
@@ -107,7 +140,7 @@
                                 <%= fields[idx].fieldName %>: false,
                                     <%_ } else { _%>
                                 <%= fields[idx].fieldName %>: null,
-                                        <%_ if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
+                                        <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
                                 <%= fields[idx].fieldName %>ContentType: null,
                                         <%_ } _%>
                                     <%_ } _%>
@@ -138,7 +171,7 @@
                     size: 'lg',
                     resolve: {
                         entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                            return <%= entityClass %>.get({id : $stateParams.id});
+                            return <%= entityClass %>.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
@@ -162,7 +195,7 @@
                     size: 'md',
                     resolve: {
                         entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                            return <%= entityClass %>.get({id : $stateParams.id});
+                            return <%= entityClass %>.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {

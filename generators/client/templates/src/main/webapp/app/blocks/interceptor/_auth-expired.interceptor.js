@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .factory('authExpiredInterceptor', authExpiredInterceptor);
 
-    <% if (authenticationType === 'oauth2' || authenticationType === 'jwt') { %>
+    <% if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { %>
     authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$sessionStorage'];
 
     function authExpiredInterceptor($rootScope, $q, $injector, $localStorage, $sessionStorage) {
@@ -28,9 +28,9 @@
             return $q.reject(response);
         }
     }<% } %><% if (authenticationType === 'session') { %>
-    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document', '$sessionStorage'];
+    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document'];
 
-    function authExpiredInterceptor($rootScope, $q, $injector, $document, $sessionStorage) {
+    function authExpiredInterceptor($rootScope, $q, $injector, $document) {
         var service = {
             responseError: responseError
         };
@@ -46,8 +46,7 @@
                 var params = $rootScope.toStateParams;
                 Auth.logout();
                 if (to.name !== 'accessdenied') {
-                    $sessionStorage.previousStateName = to.name;
-                    $sessionStorage.previousStateParams = params;
+                    Auth.storePreviousState(to.name, params);
                 }
                 var LoginService = $injector.get('LoginService');
                 LoginService.open();

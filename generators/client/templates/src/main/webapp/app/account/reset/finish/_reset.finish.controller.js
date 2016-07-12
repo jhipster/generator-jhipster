@@ -22,6 +22,8 @@
         $timeout(function (){angular.element('#password').focus();});
 
         function finishReset() {
+            vm.doNotMatch = null;
+            vm.error = null;
             if (vm.resetAccount.password !== vm.confirmPassword) {
                 vm.doNotMatch = 'ERROR';
             } else {

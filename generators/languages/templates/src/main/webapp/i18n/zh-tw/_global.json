@@ -76,16 +76,20 @@
         },
         "field": {
             "id" : "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
+            "addblob": "新增 blob",
+            "addimage": "新增 image",
             "back": "返回",
             "cancel": "取消",
             "delete": "刪除",
             "edit": "編輯",
+            "open": "開啟",
             "save": "儲存",
             "view": "檢視"
         },
@@ -97,25 +101,26 @@
             "title": "確定刪除"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "此欄位必須填寫。",
+            "minlength": "此欄位必須有至少 {{min}} 位字符。",
+            "maxlength": "此欄位不能超過 {{max}} 位字符。",
+            "min": "此欄位應超過 {{min}}。",
+            "max": "此欄位不能超過 {{max}}。",
+            "minbytes": "此欄位應超過 {{min}} bytes。",
+            "maxbytes": "此欄位不能超過 {{max}} bytes。",
+            "pattern": "此欄位應滿足格式 {{pattern}}。",
+            "number": "此欄位應為數字。",
+            "datetimelocal": "此欄位應為日期和時間。"
         }
     },
     "error": {
-        "server.not.reachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "server.not.reachable": "伺服器無法訪問",
+        "url.not.found": "Not found",
+        "NotNull": "欄位 {{fieldName}} 不能為空！",
+        "Size": "欄位 {{fieldName}} 不符合最小/最大要求！",
+        "userexists": "使用者名稱已被使用！",
+        "emailexists": "電子郵件已被使用！",
+        "idexists": "新實體不能包含ID"
     },
     "footer": "這裡是頁尾"
 }

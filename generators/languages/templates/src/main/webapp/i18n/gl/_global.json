@@ -76,6 +76,9 @@
         },
         "field": {
             "id" : "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Cancelar",
             "delete": "Eliminar",
             "edit": "Editar",
+            "open": "Open",
             "save": "Gardar",
             "view": "Vista"
         },
@@ -111,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Servidor non accesible",
+        "url.not.found": "Not found",
         "NotNull": "O campo {{fieldName}} non pode estar baleiro!",
         "Size": "O campo {{fieldName}} non cumpre cos requisitos de tamaño mínimo ou máximo!",
         "userexists": "Login name already used!",

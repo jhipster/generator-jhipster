@@ -2,8 +2,8 @@
 var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('lodash'),
     scriptBase = require('../generator-base'),
+    prompts = require('./prompts'),
     AwsFactory = require('./lib/aws.js');
 
 var AwsGenerator = generators.Base.extend({});
@@ -48,103 +48,13 @@ module.exports = AwsGenerator.extend({
                 this.dbEngine = 'postgres';
                 break;
             default:
-                this.env.error(chalk.red('Sorry deployment for this database is not possible'));
+                this.error(chalk.red('Sorry deployment for this database is not possible'));
             }
         }
     },
-    prompting: function () {
-        if (this.existingProject) {
-            return;
-        }
 
-        var cb = this.async();
+    prompting: prompts.prompting,
 
-        var prompts = [
-            {
-                type: 'input',
-                name: 'applicationName',
-                message: 'Application name:',
-                default: this.baseName
-            },
-            {
-                type: 'input',
-                name: 'environmentName',
-                message: 'Environment name:',
-                default: this.baseName + '-env'
-            },
-            {
-                type: 'input',
-                name: 'bucketName',
-                message: 'Name of S3 bucket:',
-                default: this.baseName
-            },
-            {
-                type: 'input',
-                name: 'dbName',
-                message: 'Database name:',
-                default: this.baseName
-            },
-            {
-                type: 'input',
-                name: 'dbUsername',
-                message: 'Database username:',
-                validate: function (input) {
-                    if (input === '') return 'Please provide a username';
-                    else return true;
-                }
-            },
-            {
-                type: 'password',
-                name: 'dbPassword',
-                message: 'Database password:',
-                validate: function (input) {
-                    if (input === '') return 'Please provide a password';
-                    else if (input.length < 8) return 'Password must contain minimum 8 chars';
-                    else return true;
-                }
-            },
-            {
-                type: 'list',
-                name: 'instanceType',
-                message: 'On which EC2 instance type do you want to deploy?',
-                choices: ['t2.micro', 't2.small', 't2.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge', 'c3.large', 'c3.xlarge',
-                    'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge', 'hs1.8xlarge', 'i2.xlarge', 'i2.2xlarge', 'i2.4xlarge',
-                    'i2.8xlarge', 'r3.large', 'r3.xlarge', 'r3.2xlarge'],
-                default: 0
-            },
-            {
-                type: 'list',
-                name: 'dbInstanceClass',
-                message: 'On which RDS instance class do you want to deploy?',
-                choices: ['db.t1.micro', 'db.m1.small', 'db.m1.medium', 'db.m1.large', 'db.m1.xlarge', 'db.m2.xlarge ',
-                    'db.m2.2xlarge', 'db.m2.4xlarge', 'db.m3.medium', 'db.m3.large', 'db.m3.xlarge', 'db.m3.2xlarge',
-                    'db.r3.large', 'db.r3.xlarge', 'db.r3.2xlarge', 'db.r3.4xlarge', 'db.r3.8xlarge', 'db.t2.micro',
-                    'db.t2.small', 'db.t2.medium'],
-                default: 17
-            },
-            {
-                type: 'list',
-                name: 'awsRegion',
-                message: 'On which region do you want to deploy?',
-                choices: ['ap-northeast-1', 'ap-southeast-1', 'ap-southeast-2', 'eu-central-1', 'eu-west-1', 'sa-east-1',
-                    'us-east-1', 'us-west-1', 'us-west-2'],
-                default: 3
-            }];
-
-        this.prompt(prompts, function (props) {
-            this.applicationName = _.kebabCase(props.applicationName);
-            this.environmentName = _.kebabCase(props.environmentName);
-            this.bucketName = _.kebabCase(props.bucketName);
-            this.instanceType = props.instanceType;
-            this.awsRegion = props.awsRegion;
-            this.dbName = props.dbName;
-            this.dbUsername = props.dbUsername;
-            this.dbPassword = props.dbPassword;
-            this.dbInstanceClass = props.dbInstanceClass;
-
-            cb();
-        }.bind(this));
-    },
     configuring: {
         insight: function () {
             var insight = this.insight();
@@ -167,6 +77,7 @@ module.exports = AwsGenerator.extend({
             });
         }
     },
+
     default: {
         productionBuild: function () {
             var cb = this.async();
@@ -174,7 +85,7 @@ module.exports = AwsGenerator.extend({
 
             var child = this.buildApplication(this.buildTool, 'prod', function (err) {
                 if (err) {
-                    this.env.error(chalk.red(err));
+                    this.error(chalk.red(err));
                 } else {
                     cb();
                 }
@@ -193,7 +104,7 @@ module.exports = AwsGenerator.extend({
 
             s3.createBucket({bucket: this.bucketName}, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
@@ -214,7 +125,7 @@ module.exports = AwsGenerator.extend({
 
             s3.uploadWar(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.warKey = data.warKey;
                     this.log(data.message);
@@ -239,7 +150,7 @@ module.exports = AwsGenerator.extend({
 
             rds.createDatabase(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();
@@ -264,7 +175,7 @@ module.exports = AwsGenerator.extend({
 
             rds.createDatabaseUrl(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.dbUrl = data.dbUrl;
                     this.log(data.message);
@@ -292,7 +203,7 @@ module.exports = AwsGenerator.extend({
 
             eb.createApplication(params, function (err, data) {
                 if (err) {
-                    this.env.error(chalk.red(err.message));
+                    this.error(chalk.red(err.message));
                 } else {
                     this.log(data.message);
                     cb();

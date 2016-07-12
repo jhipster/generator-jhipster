@@ -16,7 +16,7 @@
         return service;
 
         function get () {
-            return $http.get('configprops').then(getConfigPropsComplete);
+            return $http.get('management/configprops').then(getConfigPropsComplete);
 
             function getConfigPropsComplete (response) {
                 var properties = [];
@@ -29,7 +29,7 @@
         }
 
         function getEnv () {
-            return $http.get('env').then(getEnvComplete);
+            return $http.get('management/env').then(getEnvComplete);
 
             function getEnvComplete (response) {
                 var properties = {};

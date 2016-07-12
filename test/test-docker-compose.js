@@ -13,8 +13,8 @@ const expectedFiles = {
         'central-server-config/application.yml'
     ],
     elk : [
-        'elk.yml',
-        'log-monitoring/log-config/logstash.conf'
+        'jhipster-console.yml',
+        'log-conf/logstash.conf'
     ]
 };
 
@@ -113,6 +113,34 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
     });
 
+    describe('gateway, uaa server and one microservice, with elk', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({force: true})
+                .withPrompts({
+                    directoryPath: './',
+                    'chosenApps': [
+                        '01-gateway',
+                        '02-mysql',
+                        '06-uaa'
+                    ],
+                    clusteredDbApps: [],
+                    elk: true
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('creates expected elk files', function () {
+            assert.file(expectedFiles.elk);
+        });
+    });
+
     describe('gateway and multi microservices, with elk', function () {
         beforeEach(function (done) {
             helpers
@@ -126,11 +154,10 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '01-gateway',
                         '02-mysql',
                         '03-psql',
-                        '04-mongo'
+                        '04-mongo',
+                        '07-mariadb'
                     ],
-                    clusteredDbApps: [
-                        '04-mongo'
-                    ],
+                    clusteredDbApps: [],
                     elk: true
                 })
                 .on('end', done);
@@ -161,6 +188,32 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     clusteredDbApps: [
                         '04-mongo'
                     ],
+                    elk: true
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('creates expected elk files', function () {
+            assert.file(expectedFiles.elk);
+        });
+    });
+
+    describe('gateway and 1 microservice, with cassandra cluster', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withPrompts({
+                    directoryPath: './',
+                    'chosenApps': [
+                        '01-gateway',
+                        '05-cassandra'
+                    ],
+                    clusteredDbApps: [],
                     elk: true
                 })
                 .on('end', done);

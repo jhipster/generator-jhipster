@@ -1,5 +1,6 @@
 package <%=packageName%>.config;
 
+import com.github.mongobee.Mongobee;
 import com.mongodb.Mongo;<% if (authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %>
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
@@ -43,7 +44,7 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
 
     @Bean
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converterList = new ArrayList<>();;<% if (authenticationType == 'oauth2') { %>
+        List<Converter<?, ?>> converterList = new ArrayList<>();<% if (authenticationType == 'oauth2') { %>
         converterList.add(new OAuth2AuthenticationReadConverter());<% } %>
         converterList.add(DateToZonedDateTimeConverter.INSTANCE);
         converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
@@ -52,6 +53,17 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
         converterList.add(DateToLocalDateTimeConverter.INSTANCE);
         converterList.add(LocalDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converterList);
+    }
+
+    @Bean
+    public Mongobee mongobee() throws Exception {
+        log.debug("Configuring Mongobee");
+        Mongobee mongobee = new Mongobee(mongo());
+        mongobee.setDbName(getDatabaseName());
+        // package to scan for migrations
+        mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
+        mongobee.setEnabled(true);
+        return mongobee;
     }
 
     @Override

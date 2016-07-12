@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "Stai utilizzando un browser <strong> non aggiornato </ strong> <a href=\"http://browsehappy.com/?locale=en\"> Aggiorna il tuo browser per </a> migliorare la tua esperienza.",
+        "browsehappy": "Stai utilizzando un browser <strong> non aggiornato </ strong> <a href=\"http://browsehappy.com/?locale=it\"> Aggiorna il tuo browser per </a> migliorare la tua esperienza.",
         "menu": {
             "home": "Home",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -28,7 +28,7 @@
                 "metrics": "Metrica",
                 "health": "Integrità",
                 "configuration": "Configurazione",
-                "logs": "Logs",
+                "logs": "Log",
                 "audits": "Cambiamenti",
                 "apidocs": "API",
                 "database": "Database",
@@ -48,7 +48,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Se si vuole <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\"> avviare una sessione</a> , è possibile provare ad utilizzare gli account di default: <br/> - Amministratore (user = \" admin \"e la password = \"admin \") <br/> - utente (user = \"user \" e la password = \"user \")",
+                "authenticated": "Se vuoi <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\"> avviare una sessione</a>, puoi provare ad utilizzare gli account di default: <br/> - Amministratore (user = \" admin \"e la password = \"admin \") <br/> - utente (user = \"user \" e la password = \"user \")",
                 "register": "Non hai ancora un account <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crea un account?</a>"
             },
             "error": {
@@ -76,6 +76,9 @@
         },
         "field": {
             "id" : "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Annulla",
             "delete": "Elimina",
             "edit": "Modifica",
+            "open": "Open",
             "save": "Salva",
             "view": "Visualizza"
         },
@@ -102,20 +106,21 @@
             "maxlength": "Questo campo non può essere più lungo di {{max}} caratteri.",
             "min": "Questo campo dovrebbe essere più di {{min}}..",
             "max": "Questo campo non può essere superiore a {{max}}.",
-            "minbytes": "Questo campo dovrebbe essere più di {{min}} bytes.",
-            "maxbytes": "Questo campo non può essere superiore a {{max}} bytes.",
-            "pattern": "Questo campo dovrebbe seguire pattern pattern {{}}.",
+            "minbytes": "Questo campo dovrebbe essere più di {{min}} byte.",
+            "maxbytes": "Questo campo non può essere superiore a {{max}} byte.",
+            "pattern": "Questo campo dovrebbe corrispondere al pattern {{}}.",
             "number": "Questo campo deve essere un numero.",
             "datetimelocal": "Questo campo dovrebbe essere data e ora."
         }
     },
     "error": {
-        "server.not.reachable": "Server not reachable",
+        "server.not.reachable": "Server non raggiungibile",
+        "url.not.found": "Non trovato",
         "NotNull": "Il campo {{fieldName}} non può essere vuoto!",
         "Size": "Il campo {{fieldName}} non è conforme ai requisiti di lunghezza min/max!",
         "userexists": "Il nome utente è già in uso!",
         "emailexists": "L' e-mail è già in uso!",
-        "idexists": "Una nuovaentità {{entityName}} non può avere un ID"
+        "idexists": "Una nuova entità {{entityName}} non può avere il medesimo ID di una esistente"
     },
     "footer": "pié di pagina"
 }

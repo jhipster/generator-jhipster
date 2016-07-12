@@ -4,6 +4,7 @@ var util = require('util'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
     cleanup = require('../cleanup'),
+    prompts = require('./prompts'),
     packagejs = require('../../package.json'),
     exec = require('child_process').exec;
 
@@ -14,13 +15,11 @@ util.inherits(JhipsterGenerator, scriptBase);
 /* Constants use throughout */
 const constants = require('../generator-constants');
 
-var currentQuestion = 0;
-var totalQuestions = constants.QUESTIONS;
-var configOptions = {};
-
 module.exports = JhipsterGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
+
+        this.configOptions = {};
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
@@ -58,7 +57,7 @@ module.exports = JhipsterGenerator.extend({
 
         // This adds support for a `--[no-]check-install` flag
         this.option('check-install', {
-            desc: 'Check the installation',
+            desc: 'Check the status of the required tools',
             type: Boolean,
             defaults: true
         });
@@ -70,10 +69,12 @@ module.exports = JhipsterGenerator.extend({
             defaults: 'jhi'
         });
 
-        this.skipClient = configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
-        this.skipServer = configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
-        this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.jhiPrefix = configOptions.jhiPrefix = this.options['jhi-prefix'];
+        this.currentQuestion = 0;
+        this.totalQuestions = constants.QUESTIONS;
+        this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
+        this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
+        this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
+        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.checkInstall = this.options['check-install'];
 
@@ -88,11 +89,11 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('java -version', function (err, stdout, stderr) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computer.');
+                    this.warning('Java 8 is not found on your computer.');
                 } else {
                     var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                     if (!javaVersion.match(/1\.8/)) {
-                        this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computeur. Your Java version is: ' + chalk.yellow(javaVersion));
+                        this.warning('Java 8 is not found on your computer. Your Java version is: ' + chalk.yellow(javaVersion));
                     }
                 }
                 done();
@@ -102,14 +103,8 @@ module.exports = JhipsterGenerator.extend({
         checkGit: function () {
             if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
-            exec('git --version', function (err) {
-                if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' git is not found on your computer.\n',
-                        ' Install git: ' + chalk.yellow('http://git-scm.com/')
-                    );
-                } else {
-                    this.gitInstalled = true;
-                }
+            this.isGitInstalled(function (code) {
+                this.gitInstalled = code === 0;
                 done();
             }.bind(this));
         },
@@ -119,7 +114,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, function (error) {
                 if (error) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Failed to connect to "git://github.com"\n',
+                    this.warning('Failed to connect to "git://github.com"\n',
                         ' 1. Check your Internet connection.\n',
                         ' 2. If you are using an HTTP proxy, try this command: ' + chalk.yellow('git config --global url."https://".insteadOf git://')
                     );
@@ -133,7 +128,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('bower --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' bower is not found on your computer.\n',
+                    this.warning('bower is not found on your computer.\n',
                         ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
                     );
                 }
@@ -146,7 +141,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('gulp --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' gulp is not found on your computer.\n',
+                    this.warning('gulp is not found on your computer.\n',
                         ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
                     );
                 }
@@ -156,7 +151,7 @@ module.exports = JhipsterGenerator.extend({
 
         validate: function () {
             if (this.skipServer && this.skipClient) {
-                this.env.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
+                this.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
             }
         },
 
@@ -179,86 +174,34 @@ module.exports = JhipsterGenerator.extend({
     },
 
     prompting: {
-        askForInsightOptIn: function () {
-            if (this.existingProject) return;
+        askForInsightOptIn: prompts.askForInsightOptIn,
 
-            var done = this.async();
-            var insight = this.insight();
-            this.prompt({
-                when: function () {
-                    return insight.optOut === undefined;
-                },
-                type: 'confirm',
-                name: 'insight',
-                message: 'May ' + chalk.cyan('JHipster') + ' anonymously report usage statistics to improve the tool over time?',
-                default: true
-            }, function (prompt) {
-                if (prompt.insight !== undefined) {
-                    insight.optOut = !prompt.insight;
-                }
-                done();
-            }.bind(this));
-        },
+        askForApplicationType: prompts.askForApplicationType,
 
-        askForApplicationType: function () {
-            if (this.existingProject) return;
-
-            var done = this.async();
-            var getNumberedQuestion = this.getNumberedQuestion;
-
-            this.prompt({
-                type: 'list',
-                name: 'applicationType',
-                message: function (response) {
-                    return getNumberedQuestion('Which *type* of application would you like to create?', currentQuestion, totalQuestions, function (current) {
-                        currentQuestion = current;
-                    }, true);
-                },
-                choices: [
-                    {
-                        value: 'monolith',
-                        name: 'Monolithic application (recommended for simple projects)'
-                    },
-                    {
-                        value: 'microservice',
-                        name: 'Microservice application'
-                    },
-                    {
-                        value: 'gateway',
-                        name: 'Microservice gateway'
-                    }
-                ],
-                default: 'monolith'
-            }, function (prompt) {
-                this.applicationType = configOptions.applicationType = prompt.applicationType;
-                done();
-            }.bind(this));
-        },
-
-        askForModuleName: function () {
-            if (this.existingProject) return;
-
-            this.askModuleName(this, currentQuestion++, totalQuestions);
-            configOptions.lastQuestion = currentQuestion;
-            configOptions.totalQuestions = totalQuestions;
-        }
+        askForModuleName: prompts.askForModuleName
     },
 
     configuring: {
         setup: function () {
-            configOptions.skipI18nQuestion = true;
-            configOptions.baseName = this.baseName;
-            configOptions.logo = false;
+            this.configOptions.skipI18nQuestion = true;
+            this.configOptions.baseName = this.baseName;
+            this.configOptions.logo = false;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
                 this.skipClient = true;
                 this.generatorType = 'server';
-                this.skipUserManagement = configOptions.skipUserManagement = true;
+                this.skipUserManagement = this.configOptions.skipUserManagement = true;
+            }
+            if (this.applicationType === 'uaa') {
+                this.skipClient = true;
+                this.generatorType = 'server';
+                this.skipUserManagement = this.configOptions.skipUserManagement = false;
+                this.authenticationType = this.configOptions.authenticationType = 'uaa';
             }
             if (this.skipClient) {
                 // defaults to use when skipping client
                 this.generatorType = 'server';
-                configOptions.enableTranslation = this.options['i18n'];
+                this.configOptions.enableTranslation = this.options['i18n'];
             }
             if (this.skipServer) {
                 this.generatorType = 'client';
@@ -272,7 +215,7 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith('jhipster:server', {
                 options: {
                     'client-hook': !this.skipClient,
-                    configOptions: configOptions
+                    configOptions: this.configOptions
                 }
             }, {
                 local: require.resolve('../server')
@@ -285,7 +228,7 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith('jhipster:client', {
                 options: {
                     'skip-install': this.options['skip-install'],
-                    configOptions: configOptions
+                    configOptions: this.configOptions
                 }
             }, {
                 local: require.resolve('../client')
@@ -293,59 +236,20 @@ module.exports = JhipsterGenerator.extend({
 
         },
 
-        askFori18n: function () {
-            currentQuestion = configOptions.lastQuestion;
-            totalQuestions = configOptions.totalQuestions;
-            if (this.skipI18n || this.existingProject) return;
-            this.aski18n(this, currentQuestion++, totalQuestions);
-        }
+        askFori18n: prompts.askFori18n
     },
 
     default: {
 
-        askForTestOpts: function () {
-            if (this.existingProject) return;
-
-            var getNumberedQuestion = this.getNumberedQuestion;
-            var choices = [];
-            if (!this.skipServer) {
-                // all server side test frameworks should be addded here
-                choices.push(
-                    {name: 'Gatling', value: 'gatling'},
-                    {name: 'Cucumber', value: 'cucumber'}
-                );
-            }
-            if (!this.skipClient) {
-                // all client side test frameworks should be addded here
-                choices.push(
-                    {name: 'Protractor', value: 'protractor'}
-                );
-            }
-            var done = this.async();
-
-            this.prompt({
-                type: 'checkbox',
-                name: 'testFrameworks',
-                message: function (response) {
-                    return getNumberedQuestion('Which testing frameworks would you like to use?', currentQuestion, totalQuestions, function (current) {
-                        currentQuestion = current;
-                    }, true);
-                },
-                choices: choices,
-                default: ['gatling']
-            }, function (prompt) {
-                this.testFrameworks = prompt.testFrameworks;
-                done();
-            }.bind(this));
-        },
+        askForTestOpts: prompts.askForTestOpts,
 
         setSharedConfigOptions: function () {
-            configOptions.lastQuestion = currentQuestion;
-            configOptions.totalQuestions = totalQuestions;
-            configOptions.testFrameworks = this.testFrameworks;
-            configOptions.enableTranslation = this.enableTranslation;
-            configOptions.nativeLanguage = this.nativeLanguage;
-            configOptions.languages = this.languages;
+            this.configOptions.lastQuestion = this.currentQuestion;
+            this.configOptions.totalQuestions = this.totalQuestions;
+            this.configOptions.testFrameworks = this.testFrameworks;
+            this.configOptions.enableTranslation = this.enableTranslation;
+            this.configOptions.nativeLanguage = this.nativeLanguage;
+            this.configOptions.languages = this.languages;
         },
 
         insight: function () {
@@ -357,7 +261,7 @@ module.exports = JhipsterGenerator.extend({
 
         composeLanguages: function () {
             if (this.skipI18n) return;
-            this.composeLanguagesSub(this, configOptions, this.generatorType);
+            this.composeLanguagesSub(this, this.configOptions, this.generatorType);
         },
 
         saveConfig: function () {
@@ -413,7 +317,8 @@ module.exports = JhipsterGenerator.extend({
                             try {
                                 this.composeWith(module.generatorCallback, {
                                     options: {
-                                        appConfig: configOptions
+                                        appConfig: this.configOptions,
+                                        force: this.options['force']
                                     }
                                 });
                             } catch (err) {

@@ -2,11 +2,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-cassandra:
         container_name: <%= baseName.toLowerCase() %>-cassandra
-        build:
-            context: .
-            dockerfile: cassandra/Cassandra-Cluster.Dockerfile
-        environment:
-            - CASSANDRA_CONTACT_POINT=<%=baseName.toLowerCase()%>-cassandra
+        image: cassandra:2.2.5
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
         ports:
@@ -21,3 +17,11 @@ services:
             - <%= baseName.toLowerCase() %>-cassandra:seed
         environment:
             - CASSANDRA_SEEDS=seed
+    <%=baseName.toLowerCase()%>-cassandra-migration:
+        extends:
+            file: cassandra-migration.yml
+            service: <%=baseName.toLowerCase()%>-cassandra-migration
+        links:
+            - <%=baseName.toLowerCase()%>-cassandra
+        environment:
+            - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql

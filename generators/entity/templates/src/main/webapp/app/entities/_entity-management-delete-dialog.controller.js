@@ -9,15 +9,20 @@
 
     function <%= entityAngularJSName %>DeleteController($uibModalInstance, entity, <%= entityClass %>) {
         var vm = this;
+
         vm.<%= entityInstance %> = entity;
-        vm.clear = function() {
+        vm.clear = clear;
+        vm.confirmDelete = confirmDelete;
+        
+        function clear () {
             $uibModalInstance.dismiss('cancel');
-        };
-        vm.confirmDelete = function (id) {
+        }
+
+        function confirmDelete (id) {
             <%= entityClass %>.delete({id: id},
                 function () {
                     $uibModalInstance.close(true);
                 });
-        };
+        }
     }
 })();

@@ -18,10 +18,10 @@ import org.springframework.data.elasticsearch.annotations.Document;<% } %>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
+import java.nio.ByteBuffer;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
-import java.time.ZonedDateTime;<% } %><% if (fieldsContainDate == true) { %>
-import java.util.Date;<% } %><% if (importSet == true) { %>
+import java.time.ZonedDateTime;<% } %><% if (importSet == true) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
@@ -73,7 +73,7 @@ public class <%= entityClass %> implements Serializable {
         if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
             required = true;
         } _%>
-    <%- include field_validators -%>
+    <%- include ../common/field_validators -%>
     <%_ } _%>
     <%_ if (databaseType == 'sql') {
         if (fields[idx].fieldIsEnum) { _%>
@@ -99,15 +99,21 @@ public class <%= entityClass %> implements Serializable {
     private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%><%_ if (databaseType == 'sql') { _%>
-    @Column(name = "<%=fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
-    <% if (databaseType == 'mongodb') { %>@Field("<%=fieldNameUnderscored %>_content_type")
-    <%_ } _%>
-
+    <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
+      <%_ if (databaseType == 'sql' || databaseType === 'cassandra') { _%>
+    @Column(name = "<%=fieldNameUnderscored %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
+        <%_ if (required && databaseType === 'cassandra') { _%>
+    @NotNull
+        <%_ } _%>
+      <%_ } _%>
+      <%_ if (databaseType == 'mongodb') { _%>
+    @Field("<%=fieldNameUnderscored %>_content_type")
+      <%_ } _%>
     private String <%= fieldName %>ContentType;
 
     <%_ }
     }
+
     for (idx in relationships) {
         var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
         otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural,
@@ -116,6 +122,7 @@ public class <%= entityClass %> implements Serializable {
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         joinTableName = entityTableName + '_'+ getTableName(relationshipName),
         relationshipType = relationships[idx].relationshipType,
+        relationshipValidate = relationships[idx].relationshipValidate,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         ownerSide = relationships[idx].ownerSide;
         if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
@@ -142,6 +149,9 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationshipType == 'many-to-one') { _%>
     @ManyToOne
+    <%_ if (relationshipValidate) { _%>
+    <%- include relationship_validators -%>
+    <%_ }_%>
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType == 'many-to-many') { _%>
@@ -154,6 +164,9 @@ public class <%= entityClass %> implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     }
             if (ownerSide == true) { _%>
+    <%_ if (relationshipValidate) { _%>
+    <%- include relationship_validators -%>
+    <%_ }_%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="ID"))
@@ -163,6 +176,9 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else { _%>
     <%_     if (ownerSide) { _%>
     @OneToOne
+    <%_ if (relationshipValidate) { _%>
+    <%- include relationship_validators -%>
+    <%_ }_%>
     @JoinColumn(unique = true)
     <%_    } else { _%>
     @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")
@@ -202,7 +218,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
@@ -267,7 +283,7 @@ public class <%= entityClass %> implements Serializable {
                 var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                 var fieldName = fields[idx].fieldName; _%>
             ", <%= fieldName %>='" + <%= fieldName %> + "'" +
-                <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+                <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
                 <%_ } _%>
             <%_ } _%>

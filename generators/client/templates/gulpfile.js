@@ -8,7 +8,9 @@ var gulp = require('gulp'),<% if(useSass) { %>
     templateCache = require('gulp-angular-templatecache'),
     htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
-    ngConstant = require('gulp-ng-constant-fork'),
+    ngConstant = require('gulp-ng-constant'),
+    rename = require('gulp-rename'),
+    replace = require('gulp-replace'),
     eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     argv = require('yargs').argv,
     gutil = require('gulp-util'),
@@ -16,7 +18,6 @@ var gulp = require('gulp'),<% if(useSass) { %>
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     del = require('del'),
-    wiredep = require('wiredep').stream,
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync'),
     KarmaServer = require('karma').Server,
@@ -24,7 +25,9 @@ var gulp = require('gulp'),<% if(useSass) { %>
     changed = require('gulp-changed'),
     gulpIf = require('gulp-if'),
     inject = require('gulp-inject'),
-    angularFilesort = require('gulp-angular-filesort');
+    angularFilesort = require('gulp-angular-filesort'),
+    naturalSort = require('gulp-natural-sort'),
+    bowerFiles = require('main-bower-files');
 
 var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
@@ -125,50 +128,64 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('inject', function () {
+gulp.task('inject', ['inject:dep', 'inject:app']);
+gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
+
+gulp.task('inject:app', function () {
     return gulp.src(config.app + 'index.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js')
+            .pipe(naturalSort())
+            .pipe(angularFilesort()), {relative: true}))
         .pipe(gulp.dest(config.app));
 });
 
-gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
-
-gulp.task('wiredep:app', function () {
+gulp.task('inject:vendor', function () {
     var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(wiredep())
+        .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
+            name: 'bower',
+            relative: true
+        }))
         .pipe(gulp.dest(config.app));
 
-    return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassSrc)
+    return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassVendor)
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(wiredep({
-            ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
+        .pipe(inject(gulp.src(bowerFiles({filter:['**/*.{scss,sass}']}), {read: false}), {
+            name: 'bower',
+            relative: true
         }))
         .pipe(gulp.dest(config.scss)));<% } else { %>stream;<% } %>
 });
 
-gulp.task('wiredep:test', function () {
+gulp.task('inject:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(wiredep({
-            ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected JavaScript files
-            devDependencies: true,
-            fileTypes: {
-                js: {
-                    block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
-                    detect: {
-                        js: /'(.*\.js)'/gi
-                    },
-                    replace: {
-                        js: '\'src/{{filePath}}\','
-                    }
-                }
+        .pipe(inject(gulp.src(bowerFiles({includeDev: true, filter: ['**/*.js']}), {read: false}), {
+            starttag: '// bower:js',
+            endtag: '// endbower',
+            transform: function (filepath) {
+                return '\'' + filepath.substring(1, filepath.length) + '\',';
             }
         }))
         .pipe(gulp.dest(config.test));
 });
 
-gulp.task('assets:prod', ['images', 'styles', 'html'], build);
+gulp.task('inject:troubleshoot', function () {
+    /* this task removes the troubleshooting content from index.html*/
+    return gulp.src(config.app + 'index.html')
+        .pipe(plumber({errorHandler: handleErrors}))
+        /* having empty src as we dont have to read any files*/
+        .pipe(inject(gulp.src('', {read: false}), {
+            starttag: '<!-- inject:troubleshoot -->',
+            removeTags: true,
+            transform: function () {
+                return '<!-- Angular views -->';
+            }
+        }))
+        .pipe(gulp.dest(config.app));
+});
+
+gulp.task('assets:prod', ['images', 'styles', 'html','swagger-ui'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
@@ -181,45 +198,47 @@ gulp.task('html', function () {
         .pipe(gulp.dest(config.tmp));
 });
 
+gulp.task('swagger-ui', function () {
+    return es.merge(
+        gulp.src([config.bower + 'swagger-ui/dist/**',
+                 '!' + config.bower + 'swagger-ui/dist/index.html',
+                 '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
+                 '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
+            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+        gulp.src(config.app + 'swagger-ui/index.html')
+            .pipe(replace('../bower_components/swagger-ui/dist/', ''))
+            .pipe(replace('swagger-ui.js', 'lib/swagger-ui.min.js'))
+            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+        gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
+            .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
+    )
+});
+
 gulp.task('ngconstant:dev', function () {
     return ngConstant({
-        dest: 'app.constants.js',
         name: '<%= angularAppName %>',
-        deps: false,
-        noFile: true,
-        interpolate: /\{%=(.+?)%\}/g,
-        wrap:
-            '(function () {\n' +
-            '    "use strict";\n' +
-            '    // DO NOT EDIT THIS FILE, EDIT THE GULP TASK NGCONSTANT SETTINGS INSTEAD WHICH GENERATES THIS FILE\n' +
-            '    {%= __ngModule %}\n' +
-            '})();\n',
         constants: {
-            ENV: 'dev',
-            VERSION: util.parseVersion()
-        }
+            VERSION: util.parseVersion(),
+            DEBUG_INFO_ENABLED: true
+        },
+        template: config.constantTemplate,
+        stream: true
     })
+    .pipe(rename('app.constants.js'))
     .pipe(gulp.dest(config.app + 'app/'));
 });
 
 gulp.task('ngconstant:prod', function () {
     return ngConstant({
-        dest: 'app.constants.js',
         name: '<%= angularAppName %>',
-        deps: false,
-        noFile: true,
-        interpolate: /\{%=(.+?)%\}/g,
-        wrap:
-            '(function () {\n' +
-            '    "use strict";\n' +
-            '    // DO NOT EDIT THIS FILE, EDIT THE GULP TASK NGCONSTANT SETTINGS INSTEAD WHICH GENERATES THIS FILE\n' +
-            '    {%= __ngModule %}\n' +
-            '})();\n',
         constants: {
-            ENV: 'prod',
-            VERSION: util.parseVersion()
-        }
+            VERSION: util.parseVersion(),
+            DEBUG_INFO_ENABLED: false
+        },
+        template: config.constantTemplate,
+        stream: true
     })
+    .pipe(rename('app.constants.js'))
     .pipe(gulp.dest(config.app + 'app/'));
 });
 
@@ -243,7 +262,7 @@ gulp.task('eslint:fix', function () {
         .pipe(gulpIf(util.isLintFixed, gulp.dest(config.app + 'app')));
 });
 
-gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
+gulp.task('test', ['inject:test', 'ngconstant:dev'], function (done) {
     new KarmaServer({
         configFile: __dirname + '/' + config.test + 'karma.conf.js',
         singleRun: true
@@ -276,12 +295,12 @@ gulp.task('watch', function () {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
-    gulp.watch(config.app + 'app/**/*.js', ['inject']);
+    gulp.watch(config.app + 'app/**/*.js', ['inject:app']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('install', function () {
-    runSequence(['wiredep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject');
+    runSequence(['inject:dep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app', 'inject:troubleshoot');
 });
 
 gulp.task('serve', function () {
@@ -289,7 +308,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'wiredep:app', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject', 'assets:prod', cb);
+    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);

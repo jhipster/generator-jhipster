@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -64,6 +65,9 @@ public class SocialService {
     private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId) {
         String email = userProfile.getEmail();
         String userName = userProfile.getUsername();
+        if (!StringUtils.isBlank(userName)) {
+            userName = userName.toLowerCase(Locale.ENGLISH);
+        }
         if (StringUtils.isBlank(email) && StringUtils.isBlank(userName)) {
             log.error("Cannot create social user because email and login are null");
             throw new IllegalArgumentException("Email and login cannot be null");

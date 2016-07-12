@@ -36,7 +36,7 @@ public class RateLimitingRepository {
         BoundStatement stmt = rateLimitingIncrement.bind();
         stmt.setString("id", id);
         stmt.setString("time_unit", timeUnit);
-        stmt.setDate("time", time);
+        stmt.setTimestamp("time", time);
         session.executeAsync(stmt);
     }
 
@@ -44,7 +44,7 @@ public class RateLimitingRepository {
         BoundStatement stmt = rateLimitingCount.bind();
         stmt.setString("id", id);
         stmt.setString("time_unit", timeUnit);
-        stmt.setDate("time", time);
+        stmt.setTimestamp("time", time);
         ResultSet rs = session.execute(stmt);
         if (rs.isExhausted()) {
             return 0;

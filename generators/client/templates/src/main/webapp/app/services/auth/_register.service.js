@@ -8,6 +8,6 @@
     Register.$inject = ['$resource'];
 
     function Register ($resource) {
-        return $resource('api/register', {}, {});
+        return $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/register'<%} else { %>'api/register'<% } %>, {}, {});
     }
 })();

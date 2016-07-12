@@ -10,7 +10,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 eureka:
     instance:
         prefer-ip-address: true
@@ -21,7 +21,7 @@ eureka:
         registerWithEureka: true
         fetchRegistry: true
         serviceUrl:
-            defaultZone: http://localhost:8761/eureka/
+            defaultZone: http://admin:admin@localhost:8761/eureka/
 <%_ } _%>
 
 spring:
@@ -38,17 +38,15 @@ spring:
     datasource:
         <%_ if (prodDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+        <%_ } else if (prodDatabaseType == 'mariadb') { _%>
+        url: jdbc:mariadb://localhost:3306/<%= baseName %>
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
         url: jdbc:postgresql://localhost:5432/<%= baseName %>
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } _%>
         name:
-        <%_ if (prodDatabaseType == 'mysql') { _%>
-        username: root
-        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
-        username: <%= baseName %>
-        <%_ } _%>
+        username: <% if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         password:
         <%_ if (prodDatabaseType == 'mysql') { _%>
         hikari:
@@ -60,7 +58,9 @@ spring:
         <%_ } _%>
     jpa:
         <%_ if (prodDatabaseType == 'mysql') { _%>
-        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        <%_ } else if (prodDatabaseType == 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
         database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
@@ -68,7 +68,7 @@ spring:
         <%_ } else { _%>
         database-platform: org.hibernate.dialect.HSQLDialect
         <%_ } _%>
-        <%_ if (prodDatabaseType == 'mysql') { _%>
+        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType === 'mariadb') { _%>
         database: MYSQL
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
         database: POSTGRESQL
@@ -77,7 +77,7 @@ spring:
         <%_ } else { _%>
         database: HSQL
         <%_ } _%>
-        show_sql: false
+        show-sql: false
         properties:
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
@@ -103,7 +103,7 @@ spring:
     <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         cassandra:
             contactPoints: localhost
-            protocolVersion: V2
+            protocolVersion: V4
             compression: LZ4
             keyspaceName: <%= baseName %>
     <%_ if (applicationType == 'gateway') { _%>
@@ -123,9 +123,11 @@ spring:
     thymeleaf:
         cache: true
 
+<%_ if (databaseType === 'sql') { _%>
 liquibase:
     contexts: prod
 
+<%_ } _%>
 server:
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
     port: <%= serverPort %>
@@ -135,6 +137,7 @@ server:
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
+        min-response-size: 1024
 
 # ===================================================================
 # JHipster specific properties
@@ -163,6 +166,29 @@ jhipster:
             maxBytesLocalHeap: 256M
         <%_ } _%>
     <%_ } _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+    security:
+        authentication:
+    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+            jwt:
+                secret: <%= jwtSecretKey %>
+                # Token is valid 24 hours
+                tokenValidityInSeconds: 86400
+    <%_ } _%>
+    <%_ if (authenticationType == 'oauth2') { _%>
+            oauth:
+                clientid: <%= baseName %>app
+                secret: my-secret-token-to-change-in-production
+                # Token is valid 30 minutes
+                tokenValidityInSeconds: 1800
+    <%_ } _%>
+<%_ } _%>
+<%_ if (authenticationType == 'session') { _%>
+    security:
+        rememberMe:
+            # security key (this key should be unique for your application, and kept secret)
+            key: <%= rememberMeKey %>
+<%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
@@ -176,7 +202,7 @@ jhipster:
             host: localhost
             port: 2003
             prefix: <%= baseName %>
-        logs: # report metrics in the logs
+        logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds
     logging:
@@ -185,5 +211,8 @@ jhipster:
             host: localhost
             port: 5000
             queueSize: 512
-    swagger: # swagger is disabled. It can be disabled by pasing 'no-swagger' profile at run time as well
-        enabled: false
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
+            enabled: false
+            # edit spring.metrics.export.delay-millis to set report frequency
+    <%_ } _%>

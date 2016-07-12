@@ -25,9 +25,10 @@ public class LoggingConfiguration {
     @Value("${server.port}")
     private String serverPort;
 
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     @Value("${eureka.instance.instanceId}")
     private String instanceId;
+
     <%_ } _%>
     @Inject
     private JHipsterProperties jHipsterProperties;
@@ -45,10 +46,10 @@ public class LoggingConfiguration {
         LogstashSocketAppender logstashAppender = new LogstashSocketAppender();
         logstashAppender.setName("LOGSTASH");
         logstashAppender.setContext(context);
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
             "\"instance_id\":\"" + instanceId + "\"}";
-        <% } else { %>
+        <%_ } else { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
         <%_ } _%>
 
