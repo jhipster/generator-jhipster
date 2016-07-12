@@ -1,8 +1,5 @@
-import {Injectable} from '@angular/core';
-
 User.$inject = ['$resource'];
 
-@Injectable()
 export function User ($resource) {
     var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/users/:login'<%} else { %>'api/users/:login'<% } %>, {}, {
         'query': {method: 'GET', isArray: true},

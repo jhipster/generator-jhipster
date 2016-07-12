@@ -4,7 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
 <%=jhiPrefixCapitalized%>MetricsService.$inject = ['$rootScope'];
-@Injectable()
+
 export function <%=jhiPrefixCapitalized%>MetricsService ($rootScope) {
     var service = {
         getMetrics: getMetrics,

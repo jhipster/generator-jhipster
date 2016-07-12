@@ -41,9 +41,14 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     /* private methods */
     private addHealthObject (result, isLeaf, healthObject, name): any {
 
+        let status:any;
+        let error:any;
         let healthData = {
-            'name': name
+            'name': name,
+            'error': error,
+            'status': status
         };
+        
         let details = {};
         let hasDetails = false;
 
