@@ -6,9 +6,6 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fse = require('fs-extra');
 
-/*const constants = require('../generators/generator-constants'),
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;*/
-
 describe('JHipster generator import jdl', function () {
     describe('imports a JDL model from single file', function () {
         beforeEach(function (done) {
