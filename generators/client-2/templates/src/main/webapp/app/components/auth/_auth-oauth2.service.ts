@@ -3,7 +3,6 @@ AuthServerProvider.$inject = ['$http', '$localStorage', 'Base64'];
 export function AuthServerProvider ($http, $localStorage, Base64) {
     var service = {
         getToken: getToken,
-        hasValidToken: hasValidToken,
         login: login,
         logout: logout
     };
@@ -12,11 +11,6 @@ export function AuthServerProvider ($http, $localStorage, Base64) {
 
     function getToken () {
         return $localStorage.authenticationToken;
-    }
-
-    function hasValidToken () {
-        var token = this.getToken();
-        return token && token.expires_at && token.expires_at > new Date().getTime();
     }
 
     function login (credentials) {
