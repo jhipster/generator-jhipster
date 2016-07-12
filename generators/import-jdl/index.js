@@ -3,8 +3,7 @@ var util = require('util'),
     shelljs = require('shelljs'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    jhuml = require('jhipster-uml'),
-    jdl = require('jhipster-domain-language'),
+    jhiCore = require('jhipster-core'),
     scriptBase = require('../generator-base');
 
 var JDLGenerator = generators.Base.extend({});
@@ -33,22 +32,6 @@ module.exports = JDLGenerator.extend({
         }
     },
 
-    _filterScheduledClasses: function(classToFilter, scheduledClasses) {
-        return scheduledClasses.filter(function(element) {
-            return element !== classToFilter;
-        });
-    },
-
-    _initDatabaseTypeHolder: function(databaseTypeName) {
-        switch (databaseTypeName) {
-        case 'mongodb':
-            return jhuml.MongoDBTypes;
-        case 'cassandra':
-            return jhuml.CassandraTypes;
-        default:
-            return jhuml.SQLTypes;
-        }
-    },
     default: {
         insight: function () {
             var insight = this.insight();
@@ -57,37 +40,16 @@ module.exports = JDLGenerator.extend({
 
         parseJDL: function () {
             this.log('The jdl is being parsed.');
-            var Editors = jhuml.editors;
-            var EntitiesCreator = jhuml.EntitiesCreator;
-            var ClassScheduler = jhuml.ClassScheduler;
 
-            var types = this._initDatabaseTypeHolder(this.databaseType);
+            var jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.databaseType)};
+            var entities = jhiCore.convertToJHipsterJSON({
+                jdlObject: jdlObject,
+                databaseType: this.databaseType
+            });
 
-            var parser = new Editors.Parsers.dsl(jdl.parseFromFiles(this.jdlFiles), types);
-            var parsedData = parser.parse();
-            var scheduler = new ClassScheduler(
-                Object.keys(parsedData.classes),
-                parsedData.associations
-            );
-
-            var scheduledClasses = scheduler.schedule();
-            if (parsedData.userClassId) {
-                scheduledClasses =
-                this._filterScheduledClasses(parsedData.userClassId, scheduledClasses);
-            }
-
-            var creator = new EntitiesCreator(
-                parsedData,
-                parser.databaseTypes,
-                [], {}, {}
-            );
-
-            creator.createEntities();
-            if (!this.options['force']) {
-                scheduledClasses = creator.filterOutUnchangedEntities(scheduledClasses);
-            }
             this.log('Writing entity JSON files.');
-            creator.writeJSON(scheduledClasses);
+            jhiCore.exportToJSON(entities);
+
         },
 
         generateEntities: function () {
