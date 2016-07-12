@@ -21,7 +21,7 @@
 
         vm.alerts = [];
 
-        function addErrorAlert (message, key, data) {
+        function addErrorAlert (message, key?, data?) {
             <%_ if (enableTranslation) { _%>
             key = key && key !== null ? key : message;
             vm.alerts.push(

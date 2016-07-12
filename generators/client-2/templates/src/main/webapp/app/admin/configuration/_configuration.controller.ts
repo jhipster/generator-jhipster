@@ -16,13 +16,11 @@ export class <%=jhiPrefixCapitalized%>ConfigurationController {
     configuration: any = null;
 
     init() {
-        this.<%=jhiPrefix%>ConfigurationService.get().toPromise().
-                then( (configuration) => {
+        this.<%=jhiPrefix%>ConfigurationService.get().then( (configuration) => {
                     this.configuration = configuration;
                 });
 
-        this.<%=jhiPrefix%>ConfigurationService.getEnv().toPromise().
-                then( (configuration) => {
+        this.<%=jhiPrefix%>ConfigurationService.getEnv().then( (configuration) => {
                     this.allConfiguration = configuration;
                 });
     }
