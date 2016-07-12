@@ -6,10 +6,15 @@ entity Department {
 /**
  * JobHistory comment.
  */
-entity JobHistory {
-  startDate ZonedDateTime,
-  endDate ZonedDateTime
-}
+ entity JobHistory {
+ 	startDate ZonedDateTime,
+ 	endDate ZonedDateTime,
+ 	language Language
+ }
+
+ enum Language {
+     FRENCH, ENGLISH, SPANISH
+ }
 
 enum JobType {
   TYPE1, TYPE2
