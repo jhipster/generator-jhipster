@@ -23,7 +23,11 @@ function vendor() {
             name: 'bower',
             relative: false,
             transform: function (filepath) {
-                return '<script src="' + filepath.replace('/src/main/webapp/', '') + '"></script>'; // TODO temp hack
+                if ( filepath.indexOf('.css') !== -1 ) {
+                    return '<link rel="stylesheet" href="' + filepath.replace('/src/main/webapp/', '') + '"/>'; // TODO temp hack
+                } else {
+                    return '<script src="' + filepath.replace('/src/main/webapp/', '') + '"></script>'; // TODO temp hack
+                }                
             }
         }))
         .pipe(gulp.dest(config.dist));
