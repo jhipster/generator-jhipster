@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>.admin')
         .controller('UserManagementController', UserManagementController);
 
-    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks'<% if (databaseType !== 'cassandra') { %>, '$state', 'pagingParams', 'paginationConstants'<% } %><% if (enableTranslation) { %>, '<%=jhiPrefixCapitalized%>LanguageService'<% } %>];
+    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks'<% if (databaseType !== 'cassandra') { %>, '$state', 'pagingParams', 'paginationConstants'<% } %><% if (enableTranslation) { %>, '<%=jhiPrefixCapitalized%>LanguageService'<% } %>, 'AlertService' ];
 
-    function UserManagementController(Principal, User, ParseLinks<% if (databaseType !== 'cassandra') { %>, $state, pagingParams, paginationConstants<% } %><% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %>) {
+    function UserManagementController(Principal, User, ParseLinks<% if (databaseType !== 'cassandra') { %>, $state, pagingParams, paginationConstants<% } %><% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %>, AlertService ) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
