@@ -158,7 +158,7 @@ module.exports = UpgradeGenerator.extend({
                 this.log('Installing JHipster ' + version + ' locally');
                 shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, {silent:true}, function (code, msg, err) {
                     if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
-                    else this.error('Something went wrong while installing generator! ' + msg + ' ' + err);
+                    else this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
                     callback();
                 }.bind(this));
             }.bind(this);
