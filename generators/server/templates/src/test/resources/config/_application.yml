@@ -26,6 +26,8 @@ spring:
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
     <%_ } _%>
+    jackson:
+        serialization.write_dates_as_timestamps: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
