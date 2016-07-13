@@ -10,9 +10,7 @@ export function ConfigStateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/admin/configuration/configuration.html',
-                controller: '<%=jhiPrefixCapitalized%>ConfigurationController',
-                controllerAs: 'vm'
+                template: '<jhi-configuration></jhi-configuration>'
             }
         },
         resolve: {

@@ -1,33 +1,33 @@
-<div>
-    <h2 translate="configuration.title">Configuration</h2>
+<div *ngIf="allConfiguration && configuration">
+    <h2>Configuration</h2>
 
-    <span translate="configuration.filter">Filter (by prefix)</span> <input type="text" ng-model="filter" class="form-control">
-    <label ng-hide="filteredConfig.length == 0">Spring configuration</label>
+    <span>Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
+    <label>Spring configuration</label>
     <table class="table table-condensed table-striped table-bordered table-responsive"
-        style="table-layout:fixed" ng-hide="filteredConfig.length == 0">
+        style="table-layout:fixed">
         <thead>
         <tr>
-            <th ng-click="predicate = 'prefix'; reverse=!reverse" class="col-sm-4"><span translate="configuration.table.prefix">Prefix</span></th>
-            <th translate="configuration.table.properties" class="col-sm-8">Properties</th>
+            <th class="col-sm-4"><span>Prefix</span></th>
+            <th class="col-sm-8">Properties</th>
         </tr>
         </thead>
 
-        <tr ng-repeat="entry in filtered = (vm.configuration | filter:filter | orderBy:predicate:reverse)">
+        <tr *ngFor="let entry of getConfigs()">
             <td><span>{{entry.prefix}}</span></td>
             <td>
-                <div class="row" ng-repeat="(key, value) in entry.properties">
+                <div class="row" *ngFor="let key of keys(entry.properties)">
                     <div class="col-md-4">{{key}}</div>
                     <div class="col-md-8">
-                        <span class="pull-right label label-default break">{{value}}</span>
+                        <span class="pull-right label label-default break">{{entry.properties[key]}}</span>
                     </div>
                 </div>
             </td>
         </tr>
     </table>
-    <div ng-repeat="(key, value) in vm.allConfiguration">
-        <label ng-hide="filtered.length == 0"><span>{{key}}</span></label>
+    <div *ngFor="let key of keys(allConfiguration)">
+        <label><span>{{key}}</span></label>
         <table class="table table-condensed table-striped table-bordered table-responsive"
-               style="table-layout:fixed" ng-hide="filtered.length == 0">
+               style="table-layout:fixed">
             <thead>
             <tr>
                 <th class="col-sm-4">Property</th>
@@ -35,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in filtered = (value | filter:filter)">
+            <tr *ngFor="let item of allConfiguration[key]">
                 <td class="break">{{item.key}}</td>
                 <td class="break">
                     <span class="pull-right label label-default break">{{item.val}}</span>

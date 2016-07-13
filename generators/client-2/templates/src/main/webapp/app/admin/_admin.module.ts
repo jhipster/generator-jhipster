@@ -17,6 +17,7 @@ import { AuditsComponent } from "./audits/audits.component";
 import { LogsComponent } from './logs/logs.component';
 
 import { <%=jhiPrefixCapitalized%>HealthCheckController } from './health/health.controller';
+import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
 
 import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
@@ -55,5 +56,6 @@ angular
     .config(UserMgmntStateConfig)
     .controller('<%=jhiPrefixCapitalized%>HealthCheckController', <%=jhiPrefixCapitalized%>HealthCheckController)
     .directive('<%=jhiPrefix%>Audit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(AuditsComponent))
+    .directive('<%=jhiPrefix%>Configuration', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>ConfigurationComponent))
     .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
     .factory('<%=jhiPrefixCapitalized%>HealthService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>HealthService));

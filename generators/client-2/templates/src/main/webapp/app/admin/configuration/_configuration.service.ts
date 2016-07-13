@@ -1,49 +1,51 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
-
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
-    constructor( private http:Http ){} 
+    constructor(private http:Http) {
+    }
 
-    get () {
-         return this.http.get('management/configprops').toPromise()
-               .then( getConfigPropsComplete );
-               
-            function getConfigPropsComplete (response) {
-                let properties: any[] = [];
-                response.data.forEach(prop => {
-                    properties.push(prop);
-                });                
+    get():Observable<any> {
+        return this.http.get('management/configprops').map((res:Response) => {
+            let properties:any[] = [];
 
-                return properties.sort( (propertyA, propertyB) => {	
-                        if ( propertyA.prefix === propertyB.prefix ) 
-                            return 0;
-                        else if ( propertyA.prefix < propertyB.prefix )
-                            return -1;
-                        else if ( propertyA.prefix > propertyB.prefix )
-                            return 1;
-                });                
+            const propertiesObject = res.json();
+
+            for(var key in propertiesObject) {
+                properties.push(propertiesObject[key]);
             }
-        }
 
-         getEnv () {            
-             return this.http.get('management/env').toPromise()
-               .then( getEnvComplete );
+            return properties.sort((propertyA, propertyB) => {
+                if (propertyA.prefix === propertyB.prefix)
+                    return 0;
+                else if (propertyA.prefix < propertyB.prefix)
+                    return -1;
+                else if (propertyA.prefix > propertyB.prefix)
+                    return 1;
+            });
+        });
+    }
 
-            function getEnvComplete (response) {
-                let properties: any = {};
-                response.data.forEach(prop => {
-                    let vals: any[] = [];
-                    prop.val.forEach(valKey => {
-                        vals.push(valKey);
-                    });
-                    properties[prop.key] = vals;
-                });
-                return properties;
+    getEnv(): Observable<any> {
+        return this.http.get('management/env').map((res:Response) => {
+            let properties:any = {};
+
+            const propertiesObject = res.json();
+
+            for(var key in propertiesObject) {
+                let valsObject = propertiesObject[key];
+                let vals:any[] = [];
+
+                for(var valKey in valsObject) {
+                    vals.push({key: valKey, val:valsObject[valKey]});
+                }
+                properties[key] = vals;
             }
-        }
+
+            return properties;
+        });
+    }
 }

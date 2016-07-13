@@ -406,7 +406,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/audits/_audits.service.ts', ANGULAR_DIR + 'admin/audits/audits.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/configuration/configuration.html', ANGULAR_DIR + 'admin/configuration/configuration.html');
             this.copyJs(ANGULAR_DIR + 'admin/configuration/_configuration.state.ts', ANGULAR_DIR + 'admin/configuration/configuration.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/configuration/_configuration.controller.ts', ANGULAR_DIR + 'admin/configuration/configuration.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/configuration/_configuration.component.ts', ANGULAR_DIR + 'admin/configuration/configuration.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/configuration/_configuration.service.ts', ANGULAR_DIR + 'admin/configuration/configuration.service.ts', this, {});
             this.copy(ANGULAR_DIR + 'admin/docs/docs.html', ANGULAR_DIR + 'admin/docs/docs.html');
             this.copyJs(ANGULAR_DIR + 'admin/docs/_docs.state.ts', ANGULAR_DIR + 'admin/docs/docs.state.ts', this, {});
