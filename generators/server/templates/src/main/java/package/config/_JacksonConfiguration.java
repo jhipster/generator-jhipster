@@ -42,7 +42,7 @@ public class JacksonConfiguration {
     }
 
     @Bean
-    public ObjectMapper myJacksonObjectMapper() {
+    public ObjectMapper jacksonObjectMapper() {
         return this.builder.createXmlMapper(false).build();
     }
 
