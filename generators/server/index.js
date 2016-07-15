@@ -456,7 +456,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(SERVER_MAIN_RES_DIR + '/config/liquibase/master.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml');
             }
 
-            if (this.databaseType === 'mongodb') {
+            if (this.databaseType === 'mongodb' && !this.skipUserManagement) {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/_InitialSetupMigration.java', javaDir + 'config/dbmigrations/InitialSetupMigration.java', this, {});
             }
 
