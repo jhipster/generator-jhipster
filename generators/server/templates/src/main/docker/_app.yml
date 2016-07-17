@@ -34,6 +34,7 @@ services:
             - SPRING_PROFILES_ACTIVE=prod
             <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
             - SPRING_CLOUD_CONFIG_URI=http://admin:admin@registry:8761/config
+            - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:admin@registry:8761/eureka
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mysql') { _%>
             - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
