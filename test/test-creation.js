@@ -69,6 +69,7 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/aop/logging/LoggingAspect.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/SwaggerConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/PageableParameterBuilderPlugin.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/ExceptionHandlingAsyncTaskExecutor.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/package-info.java',
