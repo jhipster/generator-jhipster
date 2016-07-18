@@ -34,6 +34,8 @@ spring:
             enabled: true
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
+    jackson:
+        serialization.indent_output: true
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         <%_ if (devDatabaseType == 'mysql') { _%>
