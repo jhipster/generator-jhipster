@@ -5,6 +5,7 @@ var util = require('util'),
     _ = require('lodash'),
     prompts = require('./prompts'),
     scriptBase = require('../generator-base'),
+    cleanup = require('../cleanup'),
     packagejs = require('../../package.json'),
     crypto = require('crypto'),
     mkdirp = require('mkdirp');
@@ -342,6 +343,10 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     writing: {
+
+        cleanupOldServerFiles: function() {
+            cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
+        },
 
         writeGlobalFiles: function () {
             this.template('_README.md', 'README.md', this, {});
