@@ -1,14 +1,14 @@
 <div *ngIf="allConfiguration && configuration">
-    <h2>Configuration</h2>
+    <h2 translate="configuration.title">Configuration</h2>
 
-    <span>Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
+    <span translate="configuration.filter">Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
     <label>Spring configuration</label>
     <table class="table table-condensed table-striped table-bordered table-responsive"
         style="table-layout:fixed">
         <thead>
         <tr>
-            <th class="col-sm-4"><span>Prefix</span></th>
-            <th class="col-sm-8">Properties</th>
+            <th class="col-sm-4"><span translate="configuration.table.prefix">Prefix</span></th>
+            <th translate="configuration.table.properties" class="col-sm-8">Properties</th>
         </tr>
         </thead>
 
