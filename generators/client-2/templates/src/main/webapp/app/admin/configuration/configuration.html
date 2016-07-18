@@ -7,8 +7,8 @@
         style="table-layout:fixed">
         <thead>
         <tr>
-            <th class="col-sm-4"><span translate="configuration.table.prefix">Prefix</span></th>
-            <th translate="configuration.table.properties" class="col-sm-8">Properties</th>
+            <th class="col-sm-4" (click)="orderProp = 'prefix'; reverse=!reverse"><span translate="configuration.table.prefix">Prefix</span></th>
+            <th translate="configuration.table.properties" class="col-sm-8" (click)="orderProp = 'properties'; reverse=!reverse">Properties</th>
         </tr>
         </thead>
 
