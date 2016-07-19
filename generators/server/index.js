@@ -478,6 +478,10 @@ module.exports = JhipsterServerGenerator.extend({
                     this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000001_insert_default_users.cql', this, {});
                 }
             }
+
+            if (this.applicationType === 'uaa') {
+                this.generateKeyStore();
+            }
         },
 
         writeServerPropertyFiles: function () {
