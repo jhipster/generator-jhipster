@@ -69,8 +69,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
                 .antMatchers("/mappings/**").permitAll()
                 .antMatchers("/liquibase/**").permitAll()
                 .antMatchers("/v2/api-docs/**").permitAll()
-                .antMatchers("/configuration/security").permitAll()
-                .antMatchers("/configuration/ui").permitAll()
+                .antMatchers("/swagger-resources/configuration/security").permitAll()
+                .antMatchers("/swagger-resources/configuration/ui").permitAll()
                 .antMatchers("/protected/**").authenticated();
         }
 
