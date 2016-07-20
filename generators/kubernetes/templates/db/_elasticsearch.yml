@@ -16,15 +16,45 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-elasticsearch
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-elasticsearch
+    spec:
+      volumes:
+      - name: data
+        emptyDir: {}
+      containers:
+      - name: elasticsearch
+        image: elasticsearch:1.7.5
+        ports:
+        - containerPort: 9200
+          name: http
+          protocol: TCP
+        - containerPort: 9300
+          name: transport
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data/
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>
+  name: <%= app.baseName.toLowerCase() %>-elasticsearch
 spec:
   selector:
-    app: <%= app.baseName.toLowerCase() %>
-  <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
-  type: LoadBalancer
-  <%_ } _%>
+    app: <%= app.baseName.toLowerCase() %>-elasticsearch
   ports:
-  - port: <%= app.serverPort %>
+  - port: 9200
+    name: http
+    protocol: TCP
+  - port: 9300
+    name: transport
+    protocol: TCP

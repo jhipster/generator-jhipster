@@ -19,8 +19,6 @@ var generators = require('yeoman-generator'),
     shelljs = require('shelljs'),
     crypto = require('crypto'),
     _ = require('lodash'),
-    jsyaml = require('js-yaml'),
-    pathjs = require('path'),
     util = require('util'),
     prompts = require('./prompts'),
     scriptBase = require('../generator-base');
@@ -35,7 +33,7 @@ module.exports = KubernetesGenerator.extend({
 
     initializing: {
         sayHello: function() {
-            this.log(chalk.white('Welcome to the JHipster Kubernetes Generator '));
+            this.log(chalk.white(chalk.bold('[BETA]') + ' Welcome to the JHipster Kubernetes Generator '));
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
         },
 
@@ -65,7 +63,7 @@ module.exports = KubernetesGenerator.extend({
 
             shelljs.exec('kubectl version', {silent:true}, function(code, stdout, stderr) {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + 'kubectl 1.2 or later is not installed on your computer.\n' +
+                    this.log(chalk.yellow.bold('WARNING!') + ' kubectl 1.2 or later is not installed on your computer.\n' +
                       'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n');
                 }
                 done();
@@ -82,7 +80,7 @@ module.exports = KubernetesGenerator.extend({
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
 
-            if(this.defaultAppsFolders !== undefined) {
+            if (this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
             }
         }
@@ -93,12 +91,12 @@ module.exports = KubernetesGenerator.extend({
         var appsFolders = [];
 
         files.forEach(function(file) {
-            if(file.isDirectory()) {
-                if( (shelljs.test('-f', file.name + '/.yo-rc.json'))
-                    && (shelljs.test('-f', file.name + '/src/main/docker/app.yml')) ) {
+            if (file.isDirectory()) {
+                if ((shelljs.test('-f', file.name + '/.yo-rc.json'))
+                    && (shelljs.test('-f', file.name + '/src/main/docker/app.yml'))) {
                     try {
                         var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
-                        if(fileData['generator-jhipster'].baseName !== undefined) {
+                        if (fileData['generator-jhipster'].baseName !== undefined) {
                             appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                         }
                     } catch(err) {
@@ -116,7 +114,8 @@ module.exports = KubernetesGenerator.extend({
 
         askForApps: prompts.askForApps,
 
-        askForClustersMode: prompts.askForClustersMode,
+        // cluster for mongodb: it can be done later
+        // askForClustersMode: prompts.askForClustersMode,
 
         askForAdminPassword: prompts.askForAdminPassword,
 
@@ -138,9 +137,10 @@ module.exports = KubernetesGenerator.extend({
 
             var imagePath = '';
             var runCommand = '';
+            this.warning = false;
             this.warningMessage = 'To generate Docker image, please run:\n';
             for (var i = 0; i < this.appsFolders.length; i++) {
-                if(this.appConfigs[i].buildTool === 'maven') {
+                if (this.appConfigs[i].buildTool === 'maven') {
                     imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
                     runCommand = './mvnw package -Pprod docker:build';
                 } else {
@@ -162,86 +162,18 @@ module.exports = KubernetesGenerator.extend({
             }
         },
 
-
         generateJwtSecret: function() {
-            if(this.jwtSecretKey === undefined) {
+            if (this.jwtSecretKey === undefined) {
                 this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
             }
         },
 
         setAppsFolderPaths: function() {
-            if(this.applicationType) return;
+            if (this.applicationType) return;
             this.appsFolderPaths = [];
             for (var i = 0; i < this.appsFolders.length; i++) {
                 var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
                 this.appsFolderPaths.push(path);
-            }
-        },
-
-        setAppsYaml: function() {
-            if(this.applicationType) return;
-            this.appsYaml = [];
-
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                var parentConfiguration = {};
-                var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
-
-                // Add application configuration
-                var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
-                var yamlConfig = yaml.services[this.appConfigs[i].baseName.toLowerCase() + '-app'];
-
-                parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-app'] = yamlConfig;
-
-                // Add database configuration
-                var database = this.appConfigs[i].prodDatabaseType;
-                if (database !== 'no') {
-                    var relativePath = '';
-                    var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
-                    var databaseYamlConfig = databaseYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
-                    delete databaseYamlConfig.ports;
-
-                    if (database === 'cassandra') {
-                        var cassandraDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-cluster.yml'));
-                        relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var cassandraConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
-                        cassandraConfig.build.context = relativePath;
-                        var cassandraNodeConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
-                        databaseYamlConfig = cassandraDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
-                        delete databaseYamlConfig.ports;
-                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = cassandraNodeConfig;
-                    }
-
-                    if (this.appConfigs[i].clusteredDb) {
-                        var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
-                        relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var mongodbNodeConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'];
-                        var mongoDbConfigSrvConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'];
-                        mongodbNodeConfig.build.context = relativePath;
-                        databaseYamlConfig = clusterDbYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + database];
-                        delete databaseYamlConfig.ports;
-                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-node'] = mongodbNodeConfig;
-                        parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database + '-config'] = mongoDbConfigSrvConfig;
-                    }
-
-                    parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + database] = databaseYamlConfig;
-                }
-                // Add search engine configuration
-                var searchEngine = this.appConfigs[i].searchEngine;
-                if (searchEngine === 'elasticsearch') {
-                    var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
-                    var searchEngineConfig = searchEngineYaml.services[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine];
-                    delete searchEngineConfig.ports;
-                    parentConfiguration[this.appConfigs[i].baseName.toLowerCase() + '-' + searchEngine] = searchEngineConfig;
-                }
-                // Dump the file
-                var stringYaml = jsyaml.dump(parentConfiguration, {indent: 4});
-                var array = stringYaml.split('\n');
-                for (var j = 0; j < array.length; j++) {
-                    array[j] = '    ' + array[j];
-                    array[j] = array[j].replace(/\'/g, '');
-                }
-                stringYaml = array.join('\n');
-                this.appsYaml.push(stringYaml);
             }
         },
 
@@ -267,12 +199,13 @@ module.exports = KubernetesGenerator.extend({
                 if (this.app.prodDatabaseType) {
                     this.template('db/_' + this.app.prodDatabaseType + '.yml', appName + '/' + appName + '-' + this.app.prodDatabaseType + '.yml');
                 }
-              }
+            }
         },
 
         writeRegistryFiles: function() {
-            if(this.gatewayNb === 0 && this.microserviceNb === 0) return;
-            this.copy('jhipster-registry.yml', 'registry/jhipster-registry.yml');
+            this.log('writeRegistryFiles');
+            if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
+            this.template('_jhipster-registry.yml', 'registry/jhipster-registry.yml');
         }
     },
     end: function() {
@@ -283,7 +216,7 @@ module.exports = KubernetesGenerator.extend({
             this.log('\n' + chalk.bold.green('Kubernetes configuration successfully generated!'));
         }
 
-        this.log(chalk.yellow.bold('WARNING!') + ' You will need to push your image to a registry. If you have not not done so, use the following commands to tag and push the images:');
+        this.log(chalk.yellow.bold('WARNING!') + ' You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:');
         for (var i = 0; i < this.appsFolders.length; i++) {
             var originalImageName = this.appConfigs[i].baseName.toLowerCase();
             var targetImageName = this.appConfigs[i].targetImageName;
@@ -297,13 +230,13 @@ module.exports = KubernetesGenerator.extend({
         if (this.gatewayNb >= 1) {
             this.log('  ' + chalk.cyan('kubectl create -f registry'));
         }
-        for (var i = 0; i < this.appsFolders.length; i++) {
+        for (i = 0; i < this.appsFolders.length; i++) {
             this.log('  ' + chalk.cyan('kubectl create -f ' + this.appConfigs[i].baseName));
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
             this.log('\nUse these commands to find your application\'s IP addresses:');
-            for (var i = 0; i < this.appsFolders.length; i++) {
+            for (i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
                     this.log('  ' + chalk.cyan('kubectl get svc '+this.appConfigs[i].baseName));
                 }

@@ -1,8 +1,6 @@
 'use strict';
 
-var chalk = require('chalk'),
-    shelljs = require('shelljs'),
-    _ = require('lodash'),
+var _ = require('lodash'),
     dockerComposePrompts = require('../docker-compose/prompts');
 
 module.exports = _.extend({
@@ -51,7 +49,7 @@ function askForDockerPushCommand() {
         name: 'dockerPushCommand',
         message: 'What command should we use for push Docker image to repository ?',
         default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push'
-    }]; 
+    }];
 
     this.prompt(prompts, function(props) {
         this.dockerPushCommand = props.dockerPushCommand;

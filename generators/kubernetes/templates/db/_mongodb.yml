@@ -16,15 +16,35 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mongodb
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-mongodb
+    spec:
+      volumes:
+      - name: data
+        emptyDir: {}
+      containers:
+      - name: mongo
+        image: mongo:3.3.5
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: data
+          mountPath: /data/db/
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>
+  name: <%= app.baseName.toLowerCase() %>-mongodb
 spec:
   selector:
-    app: <%= app.baseName.toLowerCase() %>
-  <%_ if (app.applicationType === 'monolith' || app.applicationType === 'gateway') { _%>
-  type: LoadBalancer
-  <%_ } _%>
+    app: <%= app.baseName.toLowerCase() %>-mongodb
   ports:
-  - port: <%= app.serverPort %>
+  - port: 27017
