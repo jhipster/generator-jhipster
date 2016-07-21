@@ -64,7 +64,7 @@
             <%_ } else { _%>
                 <%_ if (relationshipType == 'many-to-many') { _%>
             <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldNamePlural %>">
-                <a ui-sref="<%= otherEntityStateName %>-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                <a ui-sref="<%= otherEntityStateName %>-detail({id: <%= relationshipFieldName %>.id})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
             </span>
                 <%_ } else { _%>
                     <%_ if (dto == 'no') { _%>
