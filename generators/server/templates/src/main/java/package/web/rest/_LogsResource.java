@@ -28,6 +28,7 @@ public class LogsResource {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         return context.getLoggerList()
             .stream()
+            .filter(logger -> logger.getLevel() != null)
             .map(LoggerDTO::new)
             .collect(Collectors.toList());
     }
