@@ -15,7 +15,7 @@ cache:
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
 env:
-  - NODE_VERSION=4.4.5
+  - NODE_VERSION=4.4.7
 before_install:
   - nvm install $NODE_VERSION
   - npm install -g npm
