@@ -27,7 +27,20 @@ const constants = require('../generator-constants'),
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
-    SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+    SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR,
+
+    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
+    DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE,
+    DOCKER_MYSQL = constants.DOCKER_MYSQL,
+    DOCKER_MARIADB = constants.DOCKER_MARIADB,
+    DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL,
+    DOCKER_MONGODB = constants.DOCKER_MONGODB,
+    DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA,
+    DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH,
+    DOCKER_SONAR = constants.DOCKER_SONAR,
+    DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
+    DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
+    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
 
 var javaDir;
 
@@ -100,6 +113,19 @@ module.exports = JhipsterServerGenerator.extend({
             this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
             this.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
             this.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
+
+            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JAVA_JRE = DOCKER_JAVA_JRE,
+            this.DOCKER_MYSQL = DOCKER_MYSQL;
+            this.DOCKER_MARIADB = DOCKER_MARIADB;
+            this.DOCKER_POSTGRESQL = DOCKER_POSTGRESQL;
+            this.DOCKER_MONGODB = DOCKER_MONGODB;
+            this.DOCKER_CASSANDRA = DOCKER_CASSANDRA;
+            this.DOCKER_ELASTICSEARCH = DOCKER_ELASTICSEARCH;
+            this.DOCKER_SONAR = DOCKER_SONAR;
+            this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
 
             this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
             if (!this.applicationType) {
