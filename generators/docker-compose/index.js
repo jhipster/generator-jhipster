@@ -14,6 +14,12 @@ var DockerComposeGenerator = generators.Base.extend({});
 
 util.inherits(DockerComposeGenerator, scriptBase);
 
+const constants = require('../generator-constants'),
+    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
+    DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
+    DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
+    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+
 module.exports = DockerComposeGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
@@ -23,6 +29,14 @@ module.exports = DockerComposeGenerator.extend({
         sayHello: function() {
             this.log(chalk.white('Welcome to the JHipster Docker Compose Sub-Generator '));
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
+        },
+
+        setupServerVars: function () {
+            // Make constants available in templates
+            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
         },
 
         checkDocker: function() {
