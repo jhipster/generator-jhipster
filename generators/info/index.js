@@ -21,39 +21,32 @@ module.exports = ReportGenerator.extend({
 
         checkJHipster: function () {
             var done = this.async();
-            this.log('##### **JHipster Version(s)**\n');
+            this.log('##### **JHipster Version(s)**');
             shelljs.exec('npm list generator-jhipster', {silent:true}, function (err, stdout, stderr) {
                 if (!err) {
-                    this.log('```');
-                    this.log(stdout);
-                    this.log('```');
+                    this.log('\n```\n' + stdout + '```\n');
                 }
                 done();
             }.bind(this));
         },
 
-        displayYorc: function () {
+        displayConfiguration: function () {
             var done = this.async();
-            this.log('##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n');
-            shelljs.exec('cat .yo-rc.json', {silent:true}, function (err, stdout, stderr) {
-                if (!err) {
-                    this.log('```yaml');
-                    this.log(stdout);
-                    this.log('```\n');
-                }
-                done();
-            }.bind(this));
+            var result = shelljs.cat('.yo-rc.json');
+            this.log('##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
+                '\n```yaml\n' + result + '\n```\n');
+            done();
         },
 
         displayEntities: function () {
             var done = this.async();
             this.log('##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
-            shelljs.exec('for f in `ls .jhipster`; do echo ${f%} ; cat .jhipster/${f%} ; done', {silent:true}, function (err, stdout, stderr) {
-                if (!err) {
-                    this.log(stdout);
-                }
-                done();
+            shelljs.ls('.jhipster/*.json').forEach(function(file) {
+                this.log(file.split('/')[1]);
+                var result = shelljs.cat(file);
+                this.log('\n```yaml\n' + result + '\n```\n');
             }.bind(this));
+            done();
         },
 
         checkJava: function () {
