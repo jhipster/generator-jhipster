@@ -95,30 +95,30 @@
             }
         })
         .state('<%= entityStateName %>-detail.edit', {
-               parent: '<%= entityStateName %>-detail',
-               url: '/detail/edit',
-               data: {
-                   authorities: ['ROLE_USER']
-               },
-               onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                   $uibModal.open({
-                       templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                       controller: '<%= entityAngularJSName %>DialogController',
-                       controllerAs: 'vm',
-                       backdrop: 'static',
-                       size: 'lg',
-                       resolve: {
-                           entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                               return <%= entityClass %>.get({id : $stateParams.id}).$promise;
-                           }]
-                       }
-                   }).result.then(function() {
-                       $state.go('^', {}, { reload: false });
-                   }, function() {
-                       $state.go('^');
-                   });
-               }]
-           })
+            parent: '<%= entityStateName %>-detail',
+            url: '/detail/edit',
+            data: {
+                authorities: ['ROLE_USER']
+            },
+            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                $uibModal.open({
+                    templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
+                    controller: '<%= entityAngularJSName %>DialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        entity: ['<%= entityClass %>', function(<%= entityClass %>) {
+                            return <%= entityClass %>.get({id : $stateParams.id}).$promise;
+                        }]
+                    }
+                }).result.then(function() {
+                    $state.go('^', {}, { reload: false });
+                }, function() {
+                    $state.go('^');
+                });
+            }]
+        })
         .state('<%= entityStateName %>.new', {
             parent: '<%= entityStateName %>',
             url: '/new',
