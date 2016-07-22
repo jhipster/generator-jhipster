@@ -142,8 +142,8 @@ describe('JDLParser', function () {
           ]);
         });
       });
-      describe('with a required relationship', function() {
-        it('adds it', function() {
+      describe('with a required relationship', function () {
+        it('adds it', function () {
           var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
           var content = JDLParser.parse(input, 'sql');
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInFromRequired).to.be.true;
@@ -205,6 +205,24 @@ describe('JDLParser', function () {
           } catch (error) {
             expect(error.name).to.eq('IllegalArgumentException');
           }
+        });
+      });
+      describe('with a required enum', function () {
+        it('adds it', function () {
+          var input = parseFromFiles(['./test/test_files/enum.jdl']);
+          var content = JDLParser.parse(input, 'sql');
+          expect(content.enums.MyEnum).to.deep.eq(new JDLEnum({
+            name: 'MyEnum',
+            values: ['AAA', 'BBB', 'CCC']
+          }));
+          var enumField = new JDLField({
+            name: 'sourceType',
+            type: 'MyEnum'
+          });
+          enumField.addValidation(new JDLValidation({
+            name: Validations.REQUIRED
+          }));
+          expect(content.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
     });

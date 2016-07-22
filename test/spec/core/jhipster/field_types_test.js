@@ -42,7 +42,7 @@ describe('FieldTypes', function () {
     });
     describe('when passing an enum', function () {
       it('returns true', function () {
-        expect(FieldTypes.isSQLType(new JDLEnum({name: 'Enum'}))).to.be.true;
+        expect(FieldTypes.isSQLType(new JDLEnum({name: 'MyEnum'}))).to.be.true;
       });
     });
   });
@@ -81,7 +81,7 @@ describe('FieldTypes', function () {
     });
     describe('when passing an enum', function () {
       it('returns true', function () {
-        expect(FieldTypes.isMongoDBType(new JDLEnum({name: 'Enum'}))).to.be.true;
+        expect(FieldTypes.isMongoDBType(new JDLEnum({name: 'MyEnum'}))).to.be.true;
       });
     });
   });
@@ -120,7 +120,7 @@ describe('FieldTypes', function () {
     });
     describe('when passing an enum', function () {
       it('returns false', function () {
-        expect(FieldTypes.isCassandraType(new JDLEnum({name: 'Enum'}))).to.be.false;
+        expect(FieldTypes.isCassandraType(new JDLEnum({name: 'MyEnum'}))).to.be.false;
       });
     });
   });
