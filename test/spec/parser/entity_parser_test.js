@@ -93,7 +93,7 @@ describe('::convert', function () {
           otherEntityRelationshipName: 'a',
           ownerSide: true,
           relationshipName: 'b',
-          relationshipType: 'OneToOne',
+          relationshipType: 'one-to-one',
           relationshipValidateRules: 'required'
         }]);
       });
