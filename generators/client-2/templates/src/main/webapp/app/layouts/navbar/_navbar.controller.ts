@@ -8,7 +8,7 @@ export function NavbarController ($state, Auth, Principal, ProfileService, Login
 
     ProfileService.getProfileInfo().subscribe(profileInfo => {
         vm.inProduction = profileInfo.inProduction;
-        vm.swaggerDisabled = profileInfo.swaggerDisabled;
+        vm.swaggerEnabled = profileInfo.swaggerEnabled;
     });
 
     vm.login = login;

@@ -20,7 +20,7 @@ export class ProfileService {
                 pi.activeProfiles = data.activeProfiles;
                 pi.ribbonEnv = data.ribbonEnv;
                 pi.inProduction = data.activeProfiles.indexOf("prod") !== -1;
-                pi.swaggerDisabled = data.activeProfiles.indexOf("no-swagger") !== -1;
+                pi.swaggerEnabled = data.activeProfiles.indexOf("swagger") !== -1;
                 return pi;
             });
     }
