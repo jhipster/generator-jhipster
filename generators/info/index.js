@@ -23,7 +23,7 @@ module.exports = ReportGenerator.extend({
             var done = this.async();
             this.log('##### **JHipster Version(s)**');
             shelljs.exec('npm list generator-jhipster', {silent:true}, function (err, stdout, stderr) {
-                if (!err) {
+                if (stdout) {
                     this.log('\n```\n' + stdout + '```\n');
                 }
                 done();
