@@ -5,7 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('SocialService', SocialService);
 
-    function SocialService () {
+    SocialService.$inject = ['$document'];
+
+    function SocialService ($document) {
         var socialService = {
             getProviderSetting: getProviderSetting,
             getProviderURL: getProviderURL,
@@ -31,7 +33,7 @@
         function getCSRF () {
             /* globals document */
             var name = 'CSRF-TOKEN=';
-            var ca = document.cookie.split(';');
+            var ca = $document[0].cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
                 while (c.charAt(0) === ' ') {
