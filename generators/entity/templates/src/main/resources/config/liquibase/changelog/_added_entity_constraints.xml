@@ -12,6 +12,11 @@
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
+            if (otherEntityName === 'user') {
+                otherEntityTableName = jhiPrefix + '_user';
+            } else {
+                otherEntityTableName = getEntityProperty(otherEntityName, 'entityTableName');
+            }
             if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
                 var constraintName = 'fk_' + getTableName(name.toLowerCase()) + '_' +
                     getTableName(relationshipName.toLowerCase()) + '_id';
@@ -26,9 +31,7 @@
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%
-                                 var otherEntityTable = getTableName(otherEntityName);
-                                 if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
+                                 referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType == 'many-to-many' && ownerSide) {
                 var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
                 if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
@@ -66,9 +69,7 @@
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= otherEntityConstraintName %>"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%
-                                 var otherEntityTable = getTableName(otherEntityName);
-                                 if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
+                                 referencedTableName="<%= otherEntityTableName %>"/>
         <%  } %><% } %>
     </changeSet>
 </databaseChangeLog>
