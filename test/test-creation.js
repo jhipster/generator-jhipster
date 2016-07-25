@@ -395,7 +395,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audit.model.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.html',
