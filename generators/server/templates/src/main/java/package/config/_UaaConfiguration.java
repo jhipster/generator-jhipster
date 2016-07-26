@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,13 +15,16 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+import java.security.KeyPair;
 
 @Configuration
 @EnableAuthorizationServer
@@ -69,8 +73,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
                 .antMatchers("/mappings/**").permitAll()
                 .antMatchers("/liquibase/**").permitAll()
                 .antMatchers("/v2/api-docs/**").permitAll()
-                .antMatchers("/configuration/security").permitAll()
-                .antMatchers("/configuration/ui").permitAll()
+                .antMatchers("/swagger-resources/configuration/security").permitAll()
+                .antMatchers("/swagger-resources/configuration/ui").permitAll()
                 .antMatchers("/protected/**").authenticated();
         }
 
@@ -87,9 +91,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
          */
         clients.inMemory()
             .withClient("web_app")
-            .scopes("web-app")
+            .scopes("openid")
             .autoApprove(true)
-            .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
             .and()
             .withClient("internal")
@@ -100,34 +103,41 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenStore(tokenStore()).tokenEnhancer(jwtTokenEnhancer()).authenticationManager(authenticationManager);
+        endpoints.authenticationManager(authenticationManager).accessTokenConverter(
+                jwtAccessTokenConverter());
     }
 
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
-
     /**
      * Apply the token converter (and enhander) for token store.
      */
     @Bean
     public JwtTokenStore tokenStore() {
-        return new JwtTokenStore(jwtTokenEnhancer());
+        return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
     /**
      * This bean generates an token enhancer, which manages the exchange between JWT acces tokens and Authentication
      * in both direction.
      *
-     * @return an access token converter configured with JHipsters secret key
+     * @return an access token converter configured with the authorization server's public/private keys
      */
     @Bean
-    public JwtAccessTokenConverter jwtTokenEnhancer() {
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey(jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret());
+        KeyPair keyPair = new KeyStoreKeyFactory(
+             new ClassPathResource("keystore.jks"), "password".toCharArray())
+             .getKeyPair("selfsigned");
+        converter.setKeyPair(keyPair);
         return converter;
+    }
+
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+        oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess(
+                "isAuthenticated()");
     }
 }

@@ -211,7 +211,7 @@ gulp.task('swagger-ui', function () {
             .pipe(gulp.dest(config.dist + 'swagger-ui/')),
         gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
             .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
-    )
+    );
 });
 
 gulp.task('ngconstant:dev', function () {

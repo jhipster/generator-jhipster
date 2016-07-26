@@ -34,6 +34,8 @@ spring:
             enabled: true
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
+    jackson:
+        serialization.indent_output: true
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         <%_ if (devDatabaseType == 'mysql') { _%>
@@ -176,10 +178,10 @@ jhipster:
             maxBytesLocalHeap: 16M
         <%_ } _%>
     <%_ } _%>
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
             jwt:
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 24 hours

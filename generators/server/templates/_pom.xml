@@ -86,13 +86,13 @@
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Brixton.SR2</spring-cloud.version>
+        <spring-cloud.version>Brixton.SR3</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.1.0.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
-        <springfox.version>2.4.0</springfox.version>
+        <springfox.version>2.5.0</springfox.version>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
         <httpclient.version>4.5.1</httpclient.version>
@@ -1127,8 +1127,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v4.4.3</nodeVersion>
-                                    <npmVersion>3.8.3</npmVersion>
+                                    <nodeVersion>v4.4.7</nodeVersion>
+                                    <npmVersion>3.10.5</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
