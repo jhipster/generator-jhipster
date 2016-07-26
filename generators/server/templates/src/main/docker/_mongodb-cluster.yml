@@ -2,7 +2,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-mongodb:
         container_name: <%= baseName.toLowerCase() %>-mongodb
-        image: mongo:3.3.5
+        image: <%= DOCKER_MONGODB %>
         ports:
             - "27017:27017"
         command: mongos --configdb <%= baseName.toLowerCase() %>-mongodb-config
@@ -12,6 +12,6 @@ services:
             dockerfile: mongodb/MongoDB.Dockerfile
         command: mongod --replSet rs1 --noprealloc --smallfiles
     <%= baseName.toLowerCase() %>-mongodb-config:
-        image: mongo:3.3.5
+        image: mongo:<%= DOCKER_MONGODB %>
         container_name: <%= baseName.toLowerCase() %>-mongodb-config
         command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db

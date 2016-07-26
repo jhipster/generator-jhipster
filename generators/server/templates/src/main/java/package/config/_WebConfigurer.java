@@ -204,6 +204,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         source.registerCorsConfiguration("/oauth/**", config);
         <%_ if (applicationType == 'gateway') { _%>
         source.registerCorsConfiguration("/*/api/**", config);
+        source.registerCorsConfiguration("/*/oauth/**", config);
         <%_ } _%>
         return new CorsFilter(source);
     }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>

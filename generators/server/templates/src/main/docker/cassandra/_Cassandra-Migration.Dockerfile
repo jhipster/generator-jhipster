@@ -1,4 +1,4 @@
-FROM cassandra:2.2.5
+FROM <%= DOCKER_CASSANDRA %>
 
 # script to orchestrate the automatic keyspace creation and apply all migration scripts
 ADD cassandra/scripts/autoMigrate.sh /usr/local/bin/autoMigrate

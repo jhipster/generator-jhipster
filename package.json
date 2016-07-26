@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "3.4.2",
+  "version": "3.5.1",
   "description": "Spring Boot + AngularJS in one handy generator",
   "files": [
     "generators"
@@ -49,7 +49,7 @@
     "js-yaml": "3.6.1",
     "yo": "1.8.4",
     "semver": "5.1.0",
-    "jhipster-core": "1.1.1"
+    "jhipster-core": "1.1.2"
   },
   "devDependencies": {
     "eslint": "2.11.1",

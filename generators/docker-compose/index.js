@@ -14,6 +14,12 @@ var DockerComposeGenerator = generators.Base.extend({});
 
 util.inherits(DockerComposeGenerator, scriptBase);
 
+const constants = require('../generator-constants'),
+    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
+    DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
+    DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
+    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+
 module.exports = DockerComposeGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
@@ -23,6 +29,14 @@ module.exports = DockerComposeGenerator.extend({
         sayHello: function() {
             this.log(chalk.white('Welcome to the JHipster Docker Compose Sub-Generator '));
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
+        },
+
+        setupServerVars: function () {
+            // Make constants available in templates
+            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
         },
 
         checkDocker: function() {
@@ -169,7 +183,6 @@ module.exports = DockerComposeGenerator.extend({
 
                 // Re-configure the JHipster Registry if it is already configured
                 var spring_cloud_config_uri_configured = false;
-                var eureka_client_serviceurl_defaultzone_configured = false;
                 yamlConfig.environment.forEach(function (env, index, envArr) {
 
                     if (env.startsWith('SPRING_CLOUD_CONFIG_URI')) {
@@ -177,20 +190,11 @@ module.exports = DockerComposeGenerator.extend({
                             this.adminPassword + '@registry:8761/config';
                         spring_cloud_config_uri_configured = true;
                     }
-                    if (env.startsWith('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE')) {
-                        envArr[index] = 'EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:' +
-                            this.adminPassword + '@registry:8761/eureka';
-                        eureka_client_serviceurl_defaultzone_configured = true;
-                    }
                 }, this);
                 // Configure the JHipster Registry if it is not already configured
                 if (!spring_cloud_config_uri_configured) {
                     yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
                         this.adminPassword + '@registry:8761/config');
-                }
-                if (!eureka_client_serviceurl_defaultzone_configured) {
-                    yamlConfig.environment.push('EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://admin:' +
-                        this.adminPassword + '@registry:8761/eureka');
                 }
 
                 parentConfiguration[lowercaseBaseName + '-app'] = yamlConfig;

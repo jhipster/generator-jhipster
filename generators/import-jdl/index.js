@@ -40,30 +40,39 @@ module.exports = JDLGenerator.extend({
 
         parseJDL: function () {
             this.log('The jdl is being parsed.');
+            try {
+                var jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.databaseType);
+                var entities = jhiCore.convertToJHipsterJSON({
+                    jdlObject: jdlObject,
+                    databaseType: this.databaseType
+                });
+                this.log('Writing entity JSON files.');
+                jhiCore.exportToJSON(entities);
+            } catch (e) {
+                this.error('Error while parsing entities from JDL\n' + e);
+            }
 
-            var jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.databaseType);
-            var entities = jhiCore.convertToJHipsterJSON({
-                jdlObject: jdlObject,
-                databaseType: this.databaseType
-            });
-            this.log('Writing entity JSON files.');
-            jhiCore.exportToJSON(entities);
 
         },
 
         generateEntities: function () {
             this.log('Generating entities.');
-            this.getExistingEntities().forEach(function (entity) {
-                this.composeWith('jhipster:entity', {
-                    options: {
-                        regenerate: true,
-                        'skip-install': true
-                    },
-                    args: [entity.name]
-                }, {
-                    local: require.resolve('../entity')
-                });
-            }, this);
+            try {
+                this.getExistingEntities().forEach(function (entity) {
+                    this.composeWith('jhipster:entity', {
+                        options: {
+                            regenerate: true,
+                            'skip-install': true
+                        },
+                        args: [entity.name]
+                    }, {
+                        local: require.resolve('../entity')
+                    });
+                }, this);
+            } catch (e) {
+                this.error('Error while generating entities from parsed JDL\n' + e);
+            }
+
         }
     },
 

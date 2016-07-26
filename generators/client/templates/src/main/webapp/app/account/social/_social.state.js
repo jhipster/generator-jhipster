@@ -33,7 +33,7 @@
             parent: 'account',
             url: '/social-auth',
             data: {
-                authorities: [],
+                authorities: []
             },
             views: {
                 'content@': {
