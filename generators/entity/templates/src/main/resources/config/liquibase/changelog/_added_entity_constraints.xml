@@ -16,6 +16,9 @@
                 otherEntityTableName = jhiPrefix + '_user';
             } else {
                 otherEntityTableName = getEntityProperty(otherEntityName, 'entityTableName');
+                if (otherEntityTableName === undefined) {
+                    otherEntityTableName = getTableName(otherEntityName);
+                }
             }
             if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
                 var constraintName = 'fk_' + getTableName(name.toLowerCase()) + '_' +
