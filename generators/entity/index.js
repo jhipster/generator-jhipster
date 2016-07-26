@@ -118,7 +118,6 @@ module.exports = EntityGenerator.extend({
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
-            this.jhiPrefix = this.config.get('jhiPrefix');
             // backward compatibility on testing frameworks
             if (this.testFrameworks === undefined) {
                 this.testFrameworks = ['gatling'];
@@ -349,7 +348,7 @@ module.exports = EntityGenerator.extend({
                 this.service = 'no';
             }
             if (_.isUndefined(this.entityTableName)) {
-                this.warning('entityTableName is missing in .jhipster/' + this.name + '.json, using no as fallback');
+                this.warning('entityTableName is missing in .jhipster/' + this.name + '.json, using entity name as fallback');
                 this.entityTableName = this.getTableName(this.name);
             }
             if (_.isUndefined(this.pagination)) {
