@@ -7,7 +7,8 @@
         Added the constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-2" author="jhipster">
-        <% for (idx in relationships) {
+        <% var cnames = {}; 
+        for (idx in relationships) {
             var relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
@@ -21,7 +22,13 @@
                 } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
                     constraintName = 'fk_' + getTableName(name.toLowerCase().substring(0, 10)) + '_' +
                         getTableName(relationshipName.toLowerCase().substring(0, 10)) + '_id';
-                }%>
+                }
+                if(cnames[constraintName]){
+                    // TODO : better way to generate a unique name 
+                    constraintName = constraintName.replace(/_id$/, '_'+(name.toLowerCase()+relationshipName).length);
+                }
+                cnames[constraintName] = 1;
+                %>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
