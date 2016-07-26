@@ -1023,7 +1023,7 @@ Generator.prototype.getModuleHooks = function () {
 };
 
 /**
- * get a property of an entity from th configuration file
+ * get a property of an entity from the configuration file
  * @param {string} file - configuration file name for the entity
  * @param {string} key - key to read
  */
@@ -1031,7 +1031,7 @@ Generator.prototype.getEntityProperty = function (file, key) {
     var property = null;
 
     try {
-        var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, file.charAt(0).toUpperCase() + file.slice(1) + '.json'));
+        var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
         property = entityJson[key];
     } catch (err) {
         this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
