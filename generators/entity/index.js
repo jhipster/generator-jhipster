@@ -599,8 +599,6 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEnumFiles: function() {
-            if (this.skipServer) return;
-
             for (var idx in this.fields) {
                 var field = this.fields[idx];
                 if (field.fieldIsEnum === true) {
@@ -613,8 +611,10 @@ module.exports = EntityGenerator.extend({
                     enumInfo.enumInstance = field.enumInstance;
                     enumInfo.angularAppName = this.angularAppName;
                     enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
-                    this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
-                        SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+                    if (!this.skipServer) {
+                        this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
+                            SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+                    }
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
