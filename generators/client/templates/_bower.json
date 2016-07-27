@@ -78,6 +78,6 @@
   },
   "resolutions": {
     "angular": "1.5.8",
-    "angular-bootstrap": "2.0.0",
+    "angular-bootstrap": "2.0.0"
   }
 }
