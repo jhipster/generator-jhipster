@@ -77,7 +77,7 @@ spring:
         <%_ } else { _%>
         database: HSQL
         <%_ } _%>
-        show_sql: false
+        show-sql: false
         properties:
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
@@ -166,10 +166,10 @@ jhipster:
             maxBytesLocalHeap: 256M
         <%_ } _%>
     <%_ } _%>
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
@@ -216,5 +216,3 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
-    swagger: # swagger is disabled. It can be disabled by pasing 'no-swagger' profile at run time as well
-        enabled: false

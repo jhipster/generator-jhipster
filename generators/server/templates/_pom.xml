@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.3.5.RELEASE</version>
+        <version>1.3.6.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -76,6 +76,7 @@
         <mapstruct.version>1.0.0.Final</mapstruct.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+        <maven-resources-plugin.version>3.0.0</maven-resources-plugin.version>
         <sortpom-maven-plugin.version>2.5.0</sortpom-maven-plugin.version>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
@@ -85,13 +86,13 @@
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Brixton.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Brixton.SR3</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.1.0.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
-        <springfox.version>2.4.0</springfox.version>
+        <springfox.version>2.5.0</springfox.version>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
         <httpclient.version>4.5.1</httpclient.version>
@@ -117,7 +118,7 @@
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase></profile.no-liquibase>
-        <profile.no-swagger></profile.no-swagger>
+        <profile.swagger></profile.swagger>
     </properties>
 
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
@@ -403,6 +404,7 @@
             </exclusions>
         </dependency>
         <%_ } _%>
+        <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
@@ -411,7 +413,6 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-        <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
@@ -792,18 +793,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>default-resources</id>
                         <phase>validate</phase>
                         <goals>
-                            <goal>resources</goal>
+                            <goal>copy-resources</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>target/classes</outputDirectory>
                             <useDefaultDelimiters>false</useDefaultDelimiters>
                             <delimiters>
-                              <delimiter>#</delimiter>
+                                <delimiter>#</delimiter>
                             </delimiters>
                             <resources>
                                 <resource>
@@ -892,7 +894,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
             </plugin>
@@ -982,7 +984,7 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.5</version>
+                <version>0.4.10</version>
                 <configuration>
                     <imageName><%= baseName.toLowerCase() %></imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
@@ -1064,9 +1066,9 @@
             </properties>
         </profile>
         <profile>
-            <id>no-swagger</id>
+            <id>swagger</id>
             <properties>
-                <profile.no-swagger>,no-swagger</profile.no-swagger>
+                <profile.swagger>,swagger</profile.swagger>
             </properties>
         </profile>
         <profile>
@@ -1101,7 +1103,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1125,8 +1127,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v4.4.3</nodeVersion>
-                                    <npmVersion>3.8.3</npmVersion>
+                                    <nodeVersion>v4.4.7</nodeVersion>
+                                    <npmVersion>3.10.5</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1209,19 +1211,8 @@
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
     </profiles>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.19</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
 </project>

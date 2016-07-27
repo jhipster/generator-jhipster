@@ -28,12 +28,12 @@
                     return $translate.refresh();
                 }]
             },
-            onEnter: function(<%=jhiPrefixCapitalized%>TrackerService) {
+            onEnter: ['<%=jhiPrefixCapitalized%>TrackerService', function(<%=jhiPrefixCapitalized%>TrackerService) {
                 <%=jhiPrefixCapitalized%>TrackerService.subscribe();
-            },
-            onExit: function(<%=jhiPrefixCapitalized%>TrackerService) {
+            }],
+            onExit: ['<%=jhiPrefixCapitalized%>TrackerService', function(<%=jhiPrefixCapitalized%>TrackerService) {
                 <%=jhiPrefixCapitalized%>TrackerService.unsubscribe();
-            }
+            }]
         });
     }
 })();

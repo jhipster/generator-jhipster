@@ -49,15 +49,16 @@ public class JWTFilter extends GenericFilterBean {
 
     private String resolveToken(HttpServletRequest request){
         String bearerToken = request.getHeader(JWTConfigurer.AUTHORIZATION_HEADER);
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             String jwt = bearerToken.substring(7, bearerToken.length());
             return jwt;
         }
-        <% if (websocket == 'spring-websocket') { %>
+        <%_ if (websocket == 'spring-websocket') { _%>
         String jwt = request.getParameter(JWTConfigurer.AUTHORIZATION_TOKEN);
-        if(StringUtils.hasText(jwt)) {
+        if (StringUtils.hasText(jwt)) {
             return jwt;
-        }<% } %>
+        }
+        <%_ } _%>
         return null;
     }
 }

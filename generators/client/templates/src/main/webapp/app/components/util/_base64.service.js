@@ -85,6 +85,8 @@
                 chr1 = chr2 = chr3 = '';
                 enc1 = enc2 = enc3 = enc4 = '';
             }
+
+            return output;
         }
     }
 })();

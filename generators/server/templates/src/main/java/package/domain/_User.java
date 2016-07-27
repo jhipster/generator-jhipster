@@ -60,7 +60,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     @JsonIgnore
     @NotNull
-    @Size(min = 60, max = 60) <% if (databaseType == 'sql') { %>
+    @Size(min = 60, max = 60)<% if (databaseType == 'sql') { %>
     @Column(name = "password_hash",length = 60)<% } %>
     private String password;
 

@@ -140,8 +140,8 @@ dependencies {
     }
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"<% if (databaseType == 'sql') { %>
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"<% } %>
     compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
@@ -154,6 +154,7 @@ dependencies {
     compile "com.hazelcast:hazelcast:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
+    compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
     compile("com.zaxxer:HikariCP:${HikariCP_version}") {
         exclude(module: 'tools')
     }
@@ -167,13 +168,12 @@ dependencies {
     compile "javax.transaction:javax.transaction-api"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
-    compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
     <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile ("org.hibernate:hibernate-ehcache") {
         exclude(module: 'ehcache-core')
-    }<% } %>
+    }<% } %><% if (databaseType == 'sql') { %>
     compile "org.hibernate:hibernate-envers"
-    compile "org.hibernate:hibernate-validator"<% if (databaseType == 'sql') { %>
+    compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
         exclude(module: 'jetty-servlet')
     }
@@ -276,7 +276,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '2.14.1'
 }
 
 task stage(dependsOn: 'bootRepackage') {

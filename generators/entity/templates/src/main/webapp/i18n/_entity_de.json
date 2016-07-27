@@ -11,7 +11,7 @@
             "updated": "<%= entityClassHumanized %> aktualisiert mit ID {{ param }}",
             "deleted": "<%= entityClassHumanized %> gelöscht mit ID {{ param }}",
             "delete": {
-                "question": "Soll <%= entityClassHumanized %> {{ id }} wirklich dauerhaft gejöscht werden?"
+                "question": "Soll <%= entityClassHumanized %> {{ id }} wirklich dauerhaft gelöscht werden?"
             },
             "detail": {
                 "title": "<%= entityClassHumanized %>"

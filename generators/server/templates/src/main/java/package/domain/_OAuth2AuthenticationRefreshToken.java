@@ -41,7 +41,6 @@ public class OAuth2AuthenticationRefreshToken implements Serializable {
         return authentication;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

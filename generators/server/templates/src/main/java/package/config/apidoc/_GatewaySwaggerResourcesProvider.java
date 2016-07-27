@@ -23,8 +23,7 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
  */
 @Component
 @Primary
-@Profile("!" + Constants.SPRING_PROFILE_NO_SWAGGER)
-@ConditionalOnProperty(value="jhipster.swagger.enabled")
+@Profile(Constants.SPRING_PROFILE_SWAGGER)
 public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
     private final Logger log = LoggerFactory.getLogger(GatewaySwaggerResourcesProvider.class);
