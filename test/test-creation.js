@@ -64,7 +64,7 @@ const expectedFiles = {
         SERVER_MAIN_RES_DIR + 'mails/activationEmail.html',
         SERVER_MAIN_RES_DIR + 'mails/passwordResetEmail.html',
         SERVER_MAIN_RES_DIR + 'i18n/messages.properties',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/JhipsterApp.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/Application.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/ApplicationWebXml.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/aop/logging/LoggingAspect.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/package-info.java',
@@ -542,9 +542,9 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct package names', function () {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java'
+                SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java'
             ]);
-            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /package com\.otherpackage;/);
+            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java', /package com\.otherpackage;/);
         });
     });
 
