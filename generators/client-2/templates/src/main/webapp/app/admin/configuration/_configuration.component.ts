@@ -1,10 +1,15 @@
 import { Component, OnInit } from "@angular/core";
+
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./configuration.service";
+import { FilterPipe } from "../../shared/filter.pipe";
+import { OrderByPipe } from "../../shared/order-by.pipe";
+
 
 @Component({
-  selector: '<%=jhiPrefix%>-configuration',
-  templateUrl: 'app/admin/configuration/configuration.html',
-  providers: [ <%=jhiPrefixCapitalized%>ConfigurationService ]
+    selector: '<%=jhiPrefix%>-configuration',
+    templateUrl: 'app/admin/configuration/configuration.html',
+    pipes: [FilterPipe, OrderByPipe],
+    providers: [ <%=jhiPrefixCapitalized%>ConfigurationService ]
 })
 export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     allConfiguration:any = null;
@@ -19,10 +24,6 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
         this.filter = '';
         this.orderProp = 'prefix';
         this.reverse = false;
-    }
-
-    getConfigs(): any[] {
-        return this.sortConfig(this.filterConfig(this.configuration));
     }
 
 
@@ -42,27 +43,5 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
         this.<%=jhiPrefix%>ConfigurationService.getEnv().subscribe((configuration) => {
             this.allConfiguration = configuration;
         });
-    }
-
-    private filterConfig(configArray: any[]) {
-        return configArray.filter(config => {
-            return config.prefix.indexOf(this.filter) >= 0;
-        });
-    }
-
-    private sortConfig(configArray: any[]) {
-        configArray = configArray.slice(0).sort((a, b) => {
-            if (a[this.orderProp] < b[this.orderProp]) {
-              return -1;
-            } else if ([b[this.orderProp] < a[this.orderProp]]) {
-              return 1;
-            } else {
-              return 0;
-            }
-        });
-
-        if(this.reverse) configArray.reverse();
-
-        return configArray;
     }
 }

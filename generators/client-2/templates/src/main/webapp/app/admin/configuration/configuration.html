@@ -12,7 +12,7 @@
         </tr>
         </thead>
 
-        <tr *ngFor="let entry of getConfigs()">
+        <tr *ngFor="let entry of (configuration | filter:filter:'prefix' | orderBy:orderProp:reverse)">
             <td><span>{{entry.prefix}}</span></td>
             <td>
                 <div class="row" *ngFor="let key of keys(entry.properties)">
