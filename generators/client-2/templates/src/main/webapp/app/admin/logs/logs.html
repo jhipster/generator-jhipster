@@ -13,8 +13,7 @@
         </tr>
         </thead>
 
-        <!-- <tr ng-repeat="logger in loggers | filter:filter | orderBy:predicate:reverse"> -->
-        <tr *ngFor="let logger of getLoggers()">
+        <tr *ngFor="let logger of (loggers | filter:filter:'name' | orderBy:orderProp:reverse)">
             <td><small>{{logger.name | slice:0:140}}</small></td>
             <td>
                 <button (click)="changeLevel(logger.name, 'TRACE')" [ngClass]="(logger.level=='TRACE') ? 'btn-danger' : 'btn-default'" class="btn btn-default btn-xs">TRACE</button>
