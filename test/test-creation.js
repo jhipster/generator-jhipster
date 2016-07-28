@@ -387,6 +387,9 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.ts',
 
+        CLIENT_MAIN_SRC_DIR + 'app/shared/filter.pipe.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/order-by.pipe.ts',
+
         CLIENT_MAIN_SRC_DIR + 'app/admin/admin.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.service.ts',
