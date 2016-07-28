@@ -113,7 +113,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
 <% if (databaseType != 'sql') { %>
         @Inject
         private JHipsterProperties jHipsterProperties;
-}<% } %>
+<% } %>
         @Inject
         private TokenStore tokenStore;
 <% if (databaseType == 'sql') { %>
