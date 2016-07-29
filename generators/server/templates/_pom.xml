@@ -46,8 +46,8 @@
         <frontend-maven-plugin.version>1.0</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
-        <gatling.version>2.2.2</gatling.version>
-        <gatling-maven-plugin.version>2.2.0</gatling-maven-plugin.version>
+        <gatling.version>2.1.7</gatling.version>
+        <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
         <hazelcast.version>3.6.1</hazelcast.version>
