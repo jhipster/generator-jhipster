@@ -211,7 +211,7 @@ module.exports = EntityGenerator.extend({
         this.service = this.fileData.service;
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
-        this.entityTableName = this.fileData.entityTableName || _.snakeCase(this.name).toLowerCase();
+        this.entityTableName = this.fileData.entityTableName;
         this.fields && this.fields.forEach(function (field) {
             this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             this.fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
@@ -346,6 +346,10 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.service)) {
                 this.warning('service is missing in .jhipster/' + this.name + '.json, using no as fallback');
                 this.service = 'no';
+            }
+            if (_.isUndefined(this.entityTableName)) {
+                this.warning('entityTableName is missing in .jhipster/' + this.name + '.json, using entity name as fallback');
+                this.entityTableName = this.getTableName(this.name);
             }
             if (_.isUndefined(this.pagination)) {
                 if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {

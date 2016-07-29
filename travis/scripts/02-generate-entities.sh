@@ -74,6 +74,7 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity TestManyToOne
   moveEntity TestManyToMany
   moveEntity TestOneToOne
+  moveEntity TestCustomTableName
 
 else
   moveEntity BankAccount
@@ -127,6 +128,7 @@ generateEntity TestPagination
 generateEntity TestManyToOne
 generateEntity TestManyToMany
 generateEntity TestOneToOne
+generateEntity TestCustomTableName
 
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
