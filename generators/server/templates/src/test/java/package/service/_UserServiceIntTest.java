@@ -11,7 +11,6 @@ import <%=packageName%>.service.util.RandomUtil;
 import java.time.LocalDate;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.context.SpringBootTest;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,8 +29,7 @@ import static org.assertj.core.api.Assertions.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-@WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'sql') { %>
+@WebAppConfiguration<% if (databaseType == 'sql') { %>
 @Transactional<% } %>
 public class UserServiceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
