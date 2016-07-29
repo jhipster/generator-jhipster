@@ -10,9 +10,7 @@ export function HealthStateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/admin/health/health.html',
-                controller: '<%=jhiPrefixCapitalized%>HealthCheckController',
-                controllerAs: 'vm'
+                template: '<<%=jhiPrefix%>-health></<%=jhiPrefix%>-health>'
             }
         },
         resolve: {
