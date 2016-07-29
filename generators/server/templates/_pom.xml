@@ -62,6 +62,9 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <jna.version>${jna.version}</jna.version>
+        <%_ } _%>
         <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
         <mariadb.version>1.4.4</mariadb.version>
         <%_ } _%>
@@ -477,6 +480,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>

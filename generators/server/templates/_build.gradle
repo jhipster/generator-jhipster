@@ -155,6 +155,7 @@ dependencies {
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
+    compile "org.hibernate:hibernate-entitymanager:${hibernate_entitymanager_version}"
     compile("com.zaxxer:HikariCP:${HikariCP_version}") {
         exclude(module: 'tools')
     }
@@ -169,10 +170,9 @@ dependencies {
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
     <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-    compile ("org.hibernate:hibernate-ehcache") {
-        exclude(module: 'ehcache-core')
-    }<% } %><% if (databaseType == 'sql') { %>
-    compile "org.hibernate:hibernate-envers"
+    compile "org.hibernate:hibernate-ehcache:${hibernate_entitymanager_version}"<% } %>
+    <% if (databaseType == 'sql') { %>
+    compile "org.hibernate:hibernate-envers:${hibernate_entitymanager_version}"
     compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
         exclude(module: 'jetty-servlet')
@@ -184,7 +184,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-starter-aop"<% if (databaseType == 'sql') { %>
     compile "org.springframework.boot:spring-boot-starter-data-jpa"<% } %><% if (searchEngine == 'elasticsearch') { %>
-    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"<% } %><% if (databaseType == 'mongodb') { %>
+    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+    // needed to get around elasticsearch stacktrace about jna not found
+    // https://github.com/elastic/elasticsearch/issues/13245
+    compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
     compile "org.springframework.boot:spring-boot-starter-security"
     compile "org.springframework.boot:spring-boot-starter-web"<% if (websocket == 'spring-websocket') { %>
