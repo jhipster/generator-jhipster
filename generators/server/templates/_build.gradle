@@ -27,8 +27,12 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 apply plugin: 'io.spring.dependency-management'
+<%_ if (databaseType == 'sql') { _%>
+/* downgrade Hibernate to 4.3 */
+ext['hibernate.version'] = '${hibernate_entitymanager_version}'
+<%_ } _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 dependencyManagement {
   imports {
     mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+ spring_cloud_version
@@ -155,7 +159,6 @@ dependencies {
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
-    compile "org.hibernate:hibernate-entitymanager:${hibernate_entitymanager_version}"
     compile("com.zaxxer:HikariCP:${HikariCP_version}") {
         exclude(module: 'tools')
     }
@@ -170,9 +173,10 @@ dependencies {
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
     <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-    compile "org.hibernate:hibernate-ehcache:${hibernate_entitymanager_version}"<% } %>
-    <% if (databaseType == 'sql') { %>
-    compile "org.hibernate:hibernate-envers:${hibernate_entitymanager_version}"
+    compile ("org.hibernate:hibernate-ehcache") {
+        exclude(module: 'ehcache-core')
+    }<% } %><% if (databaseType == 'sql') { %>
+    compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
         exclude(module: 'jetty-servlet')
