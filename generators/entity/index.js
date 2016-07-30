@@ -478,7 +478,8 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
-                    field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\') : field.fieldValidateRulesPattern;
+                    field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern ?
+                        field.fieldValidateRulesPattern.replace(/\\/g, '\\\\') : field.fieldValidateRulesPattern;
                 }
 
                 if (_.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
