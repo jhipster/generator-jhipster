@@ -3,7 +3,7 @@
 > Bug reports or queries opened without any of these info will be **closed** without any explanation.
 > For feature requests, label the title with [FEATURE] and explain your use case and ideas clearly below, you can remove sections which are not relevant.
 > For bug reports your `.yo-rc.json` file is mandatory else we will close the issue.
-> To provide information, you can use: yo jhipster:info
+> You can run `yo jhipster:info` in your project folder to get most of the required info
 -->
 
 ##### **Overview of the issue**
