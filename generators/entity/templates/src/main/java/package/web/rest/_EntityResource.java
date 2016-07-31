@@ -140,8 +140,7 @@ public class <%= entityClass %>Resource {
      * to the query.
      *
      * @param query the query of the <%= entityInstance %> search <% if (pagination != 'no') { %>
-     * @param pageable the pagination information<% } if (fieldsContainNoOwnerOneToOne) { %>
-     * @param filter the filter of the request<% } %>
+     * @param pageable the pagination information<% } %>
      * @return the result of the search<% if (pagination != 'no') { %>
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
      */
