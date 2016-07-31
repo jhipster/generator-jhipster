@@ -7,8 +7,8 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     VALIDATIONS = require('../lib/core/jhipster/validations'),
     DATABASE_TYPES = require('../lib/core/jhipster/database_types'),
     JDLReader = require('../lib/reader/jdl_reader'),
-    JDLParser = require('../lib/parser/jdl_parser'),
-    EntityParser = require('../lib/parser/entity_parser'),
+    convertToJDL = require('../lib/parser/jdl_parser').parse,
+    convertToJHipsterJSON = require('../lib/parser/entity_parser').parse,
     JDLObject = require('../lib/core/jdl_object'),
     JDLEntity = require('../lib/core/jdl_entity'),
     JDLField = require('../lib/core/jdl_field'),
@@ -47,8 +47,8 @@ module.exports = {
   parse: JDLReader.parse,
   parseFromFiles: JDLReader.parseFromFiles,
   /* JDL conversion */
-  convertToJDL: JDLParser.parse,
-  convertToJHipsterJSON: EntityParser.parse,
+  convertToJDL: convertToJDL,
+  convertToJHipsterJSON: convertToJHipsterJSON,
   /* JSON exporting */
   exportToJSON: exportToJSON,
   /* JDL utils */
