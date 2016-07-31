@@ -196,6 +196,24 @@ describe('JDLParser', function () {
           }
         });
       });
+      describe('with User entity as from for a relationship', function () {
+        it('fails', function () {
+          var input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
+          try {
+            JDLParser.parse(input, 'sql');
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('IllegalAssociationException');
+          }
+        });
+      });
+      describe('with User entity as to for a relationship', function () {
+        it('is processed', function () {
+          var input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
+          var content = JDLParser.parse(input, 'sql');
+          expect(content.relationships.relationships.ManyToOne['ManyToOne_A{user}_User{a}'].to.name).to.eq('User');
+        });
+      });
       describe('with an invalid option', function () {
         it('fails', function () {
           var input = parseFromFiles(['./test/test_files/invalid_option.jdl']);

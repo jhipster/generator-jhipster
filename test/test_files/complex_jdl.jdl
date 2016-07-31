@@ -85,6 +85,10 @@ relationship ManyToMany {
   Job{task(title)} to Task{job}
 }
 
+relationship ManyToOne {
+  Employee{user(login)} to User{employee}
+}
+
 relationship OneToOne {
   Department{location} to Location
 }
