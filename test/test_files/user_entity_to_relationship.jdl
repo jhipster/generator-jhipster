@@ -1,0 +1,5 @@
+entity A
+
+relationship ManyToOne {
+  A{user} to User{a}
+}
