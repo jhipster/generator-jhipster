@@ -35,6 +35,16 @@ describe('::exportToJSON', function () {
         expect(fs.statSync('.jhipster/Task.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Country.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Region.json').isFile()).to.be.true;
+        // clean up the mess...
+        fs.unlinkSync('.jhipster/Department.json');
+        fs.unlinkSync('.jhipster/JobHistory.json');
+        fs.unlinkSync('.jhipster/Job.json');
+        fs.unlinkSync('.jhipster/Employee.json');
+        fs.unlinkSync('.jhipster/Location.json');
+        fs.unlinkSync('.jhipster/Task.json');
+        fs.unlinkSync('.jhipster/Country.json');
+        fs.unlinkSync('.jhipster/Region.json');
+        fs.rmdirSync('.jhipster');
       });
     });
   });
