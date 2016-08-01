@@ -23,7 +23,7 @@
                     </span>
                 </td>
                 <td class="text-center">
-                    <a class="hand" (click)="showHealth(health)" [hidden]="!health.details && !health.error">
+                    <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
                 </td>
