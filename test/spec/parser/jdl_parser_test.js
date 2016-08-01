@@ -99,7 +99,7 @@ describe('JDLParser', function () {
                   maxlength: new JDLValidation({name: Validations.MAXLENGTH, value: 25})
                 }
               }),
-              type: new JDLField({name: 'type', type: 'JobType'}),
+              jobType: new JDLField({name: 'jobType', type: 'JobType'}),
               minSalary: new JDLField({name: 'minSalary', type: FieldTypes.LONG}),
               maxSalary: new JDLField({name: 'maxSalary', type: FieldTypes.LONG})
             }

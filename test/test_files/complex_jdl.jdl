@@ -6,15 +6,15 @@ entity Department {
 /**
  * JobHistory comment.
  */
- entity JobHistory {
- 	startDate ZonedDateTime,
- 	endDate ZonedDateTime,
- 	language Language
- }
+entity JobHistory {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime,
+  language Language
+}
 
- enum Language {
-     FRENCH, ENGLISH, SPANISH
- }
+enum Language {
+  FRENCH, ENGLISH, SPANISH
+}
 
 enum JobType {
   TYPE1, TYPE2
@@ -23,7 +23,7 @@ enum JobType {
 entity Job {
   jobId Long,
   jobTitle String minlength(5) maxlength(25),
-  type JobType,
+  jobType JobType,
   minSalary Long,
   maxSalary Long
 }
