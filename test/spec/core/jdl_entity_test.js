@@ -34,6 +34,18 @@ describe('JDLEntity', function () {
         expect(entity.tableName).to.eq('Abc');
       });
     });
+    describe('when passing a reserved keyword as name', function () {
+      it('fails', function () {
+        try {
+          new JDLEntity({
+            name: 'Account'
+          });
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('IllegalNameException');
+        }
+      });
+    });
     describe('when passing arguments', function () {
       it('creates a new instance', function () {
         var args = {

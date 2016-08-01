@@ -24,6 +24,19 @@ describe('JDLEnum', function () {
         }
       });
     });
+    describe('when passing a reserved keyword as name', function () {
+      it('fails', function () {
+        try {
+          new JDLEnum({
+            name: 'Account',
+            values: ['ABC']
+          });
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('IllegalNameException');
+        }
+      });
+    });
     describe('when passing arguments', function () {
       it('uses them', function () {
         new JDLEnum({name: 'MyEnum', values: ['ABC']});
