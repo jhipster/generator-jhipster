@@ -150,7 +150,7 @@
                         }
                     }
                 }).result.then(function() {
-                    $state.go('<%= entityStateName %>', null, { reload: true });
+                    $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
                 }, function() {
                     $state.go('<%= entityStateName %>');
                 });
@@ -175,7 +175,7 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('<%= entityStateName %>', null, { reload: true });
+                    $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
                 }, function() {
                     $state.go('^');
                 });
@@ -199,7 +199,7 @@
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('<%= entityStateName %>', null, { reload: true });
+                    $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
                 }, function() {
                     $state.go('^');
                 });
