@@ -229,17 +229,17 @@ describe('JDLBinaryOption', function () {
         name: BINARY_OPTIONS.DTO,
         value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
       });
-      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for *`);
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} * with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT}`);
       option.addEntity(new JDLEntity({name: 'D'}));
-      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D`);
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} D with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT}`);
       option.addEntity(new JDLEntity({name: 'E'}));
       option.addEntity(new JDLEntity({name: 'F'}));
-      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D, E, F`);
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} D, E, F with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT}`);
       option.excludeEntity(new JDLEntity({name: 'A'}));
-      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D, E, F except A`);
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} D, E, F with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} except A`);
       option.excludeEntity(new JDLEntity({name: 'B'}));
       option.excludeEntity(new JDLEntity({name: 'C'}));
-      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} for D, E, F except A, B, C`);
+      expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} D, E, F with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} except A, B, C`);
     });
   });
 });
