@@ -1169,7 +1169,7 @@ Generator.prototype.generateKeyStore = function() {
         if (javaHome) {
             keytoolPath = javaHome + '/bin/';
         }
-        shelljs.exec(keytoolPath + 'keytool '+
+        shelljs.exec('"' + keytoolPath + 'keytool" '+
             '-genkey ' +
             '-noprompt ' +
             '-keyalg RSA ' +
