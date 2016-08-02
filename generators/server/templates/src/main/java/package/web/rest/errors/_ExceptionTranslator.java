@@ -2,6 +2,8 @@ package <%=packageName%>.web.rest.errors;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 <%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
@@ -21,6 +23,9 @@ import org.springframework.web.bind.annotation.*;
  */
 @ControllerAdvice
 public class ExceptionTranslator {
+
+    private final Logger log = LoggerFactory.getLogger(ExceptionTranslator.class);
+
 <%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
 
     @ExceptionHandler(ConcurrencyFailureException.class)
@@ -84,6 +89,7 @@ public class ExceptionTranslator {
             builder = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
             errorDTO = new ErrorDTO(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, "Internal server error");
         }
+        log.error("An exception occurred", ex);
         return builder.body(errorDTO);
     }
 }
