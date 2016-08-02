@@ -2,7 +2,11 @@
 
 Greetings, Java Hipster!
 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+[![NPM version][npm-image]][npm-url] 
+[![Build Status][travis-image]][travis-url] 
+[![Dependency Status][daviddm-image]][daviddm-url]
+[![Issue Stats](http://issuestats.com/github/jhipster/generator-jhipster/badge/pr?style=flat)](http://issuestats.com/github/jhipster/generator-jhipster)
+[![Issue Stats](http://issuestats.com/github/jhipster/generator-jhipsterbadge/issue?style=flat)](http://issuestats.com/github/jhipster/generator-jhipster)
 
 Full documentation and information is available on our website at [http://jhipster.github.io/][jhipster-url]
 
