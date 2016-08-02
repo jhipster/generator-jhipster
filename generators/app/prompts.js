@@ -35,6 +35,12 @@ function askForInsightOptIn() {
 function askForApplicationType() {
     if (this.existingProject) return;
 
+    const DEFAULT_APPTYPE = 'monolith';
+    if (this.skipServer) {
+        this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
+        return;
+    }
+
     var done = this.async();
     var getNumberedQuestion = this.getNumberedQuestion.bind(this);
 
@@ -46,7 +52,7 @@ function askForApplicationType() {
         },
         choices: [
             {
-                value: 'monolith',
+                value: DEFAULT_APPTYPE,
                 name: 'Monolithic application (recommended for simple projects)'
             },
             {
@@ -62,7 +68,7 @@ function askForApplicationType() {
                 name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
             }
         ],
-        default: 'monolith'
+        default: DEFAULT_APPTYPE
     }, function (prompt) {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
         done();
@@ -89,12 +95,14 @@ function askForTestOpts() {
 
     var getNumberedQuestion = this.getNumberedQuestion.bind(this);
     var choices = [];
+    var defaultChoice = [];
     if (!this.skipServer) {
         // all server side test frameworks should be addded here
         choices.push(
             {name: 'Gatling', value: 'gatling'},
             {name: 'Cucumber', value: 'cucumber'}
         );
+        defaultChoice = ['gatling'];
     }
     if (!this.skipClient) {
         // all client side test frameworks should be addded here
@@ -111,7 +119,7 @@ function askForTestOpts() {
             return getNumberedQuestion('Which testing frameworks would you like to use?', true);
         },
         choices: choices,
-        default: ['gatling']
+        default: defaultChoice
     }, function (prompt) {
         this.testFrameworks = prompt.testFrameworks;
         done();

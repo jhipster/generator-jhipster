@@ -317,7 +317,8 @@ module.exports = JhipsterGenerator.extend({
                             try {
                                 this.composeWith(module.generatorCallback, {
                                     options: {
-                                        appConfig: this.configOptions
+                                        appConfig: this.configOptions,
+                                        force: this.options['force']
                                     }
                                 });
                             } catch (err) {

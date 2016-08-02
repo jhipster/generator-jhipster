@@ -5,9 +5,10 @@
         .module('<%=angularAppName%>')
         .config(localStorageConfig);
 
-    localStorageConfig.$inject = ['$localStorageProvider'];
+    localStorageConfig.$inject = ['$localStorageProvider', '$sessionStorageProvider'];
 
-    function localStorageConfig($localStorageProvider) {
+    function localStorageConfig($localStorageProvider, $sessionStorageProvider) {
         $localStorageProvider.setKeyPrefix('jhi-');
+        $sessionStorageProvider.setKeyPrefix('jhi-');
     }
 })();

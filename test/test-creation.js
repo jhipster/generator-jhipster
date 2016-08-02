@@ -46,6 +46,8 @@ const expectedFiles = {
         'README.md',
         '.gitignore',
         '.gitattributes',
+        'Jenkinsfile',
+        '.travis.yml',
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'ehcache.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
@@ -62,11 +64,12 @@ const expectedFiles = {
         SERVER_MAIN_RES_DIR + 'mails/activationEmail.html',
         SERVER_MAIN_RES_DIR + 'mails/passwordResetEmail.html',
         SERVER_MAIN_RES_DIR + 'i18n/messages.properties',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/JhipsterApp.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/Application.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/ApplicationWebXml.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/aop/logging/LoggingAspect.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/SwaggerConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/PageableParameterBuilderPlugin.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/ExceptionHandlingAsyncTaskExecutor.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/package-info.java',
@@ -93,8 +96,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/PersistentToken.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/User.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateConverters.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateTimeSerializer.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310LocalDateDeserializer.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310PersistenceConverters.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/AuthorityRepository.java',
@@ -541,9 +542,9 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct package names', function () {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java'
+                SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java'
             ]);
-            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /package com\.otherpackage;/);
+            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java', /package com\.otherpackage;/);
         });
     });
 

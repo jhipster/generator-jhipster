@@ -91,7 +91,7 @@ services:
             file: cassandra-cluster.yml
             service: <%= baseName.toLowerCase() %>-cassandra
     <%= baseName.toLowerCase() %>-cassandra-node:
-        image: cassandra:2.2.5
+        image: <%= DOCKER_CASSANDRA %>
         links:
             - <%= baseName.toLowerCase() %>-cassandra:seed
         environment:

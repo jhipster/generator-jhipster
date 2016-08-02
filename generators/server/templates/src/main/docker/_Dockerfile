@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jre-alpine
+FROM <%= DOCKER_JAVA_JRE %>
 
 ENV JHIPSTER_SLEEP 0
 

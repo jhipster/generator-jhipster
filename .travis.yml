@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "4.4.5"
+  - "4.4.7"
 jdk:
   - oraclejdk8
 cache:
@@ -24,7 +24,7 @@ env:
     - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
     - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
-    - JHIPSTER=app-default-from-scratch
+    - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0 PROFILE=prod RUN_APP=0
     - JHIPSTER=app-gradle PROTRACTOR=1
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-psql-es-noi18n PROFILE=prod PROTRACTOR=1

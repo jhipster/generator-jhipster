@@ -34,7 +34,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;<% } %><% if (fieldsContainLocalDate == true || fieldsContainZonedDateTime == true) { %>
 import java.time.ZoneId;<% } %><% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;;<% } %><% if (fieldsContainBlob == true && databaseType === 'cassandra') { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainBlob == true && databaseType === 'cassandra') { %>
 import java.nio.ByteBuffer;<% } %>
 import java.util.List;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>

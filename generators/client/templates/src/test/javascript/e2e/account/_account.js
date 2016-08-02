@@ -13,7 +13,11 @@ describe('account', function () {
     });
 
     it('should fail to login with bad password', function () {
+        <%_ if (enableTranslation) { _%>
+        expect(element.all(by.css('h1')).first().getAttribute("translate")).toMatch(/home.title/);
+        <%_ } else { _%>
         expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
+        <%_ } _%>
         accountMenu.click();
         login.click();
 
@@ -21,8 +25,11 @@ describe('account', function () {
         password.sendKeys('foo');
         element(by.css('button[type=submit]')).click();
 
-        var error = $('.alert-danger').getText();
-        expect(error).toMatch(/Failed to sign in!/);
+        <%_ if (enableTranslation) { _%>
+        expect(element(by.css('.alert-danger')).getAttribute("translate")).toMatch(/login.messages.error.authentication/);
+        <%_ } else { _%>
+        expect(element(by.css('.alert-danger')).getText()).toMatch(/Failed to sign in!/);
+        <%_ } _%>
     });
 
     it('should login successfully with admin account', function () {
@@ -32,31 +39,49 @@ describe('account', function () {
         password.clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
 
+        <%_ if (enableTranslation) { _%>
+        expect(element(by.css('.alert-success')).getAttribute("translate")).toMatch(/home.logged.message/);
+        <%_ } else { _%>
         expect(element(by.css('.alert-success')).getText()).toMatch(/You are logged in as user "admin"/);
+        <%_ } _%>
     });
 
     it('should be able to update settings', function () {
         accountMenu.click();
         element(by.css('[ui-sref="settings"]')).click();
 
+        <%_ if (enableTranslation) { _%>
+        expect(element(by.css('h2')).getAttribute("translate")).toMatch(/settings.title/);
+        <%_ } else { _%>
         expect(element(by.css('h2')).getText()).toMatch(/User settings for \[admin\]/);
+        <%_ } _%>
         element(by.css('button[type=submit]')).click();
 
-        var message = $('.alert-success').getText();
-        expect(message).toMatch(/Settings saved!/);
+        <%_ if (enableTranslation) { _%>
+        expect(element(by.css('.alert-success')).getAttribute("translate")).toMatch(/settings.messages.success/);
+        <%_ } else { _%>
+        expect(element(by.css('.alert-success')).getText()).toMatch(/Settings saved!/);
+        <%_ } _%>
     });
 
     it('should be able to update password', function () {
         accountMenu.click();
         element(by.css('[ui-sref="password"]')).click();
 
+        <%_ if (enableTranslation) { _%>
+        expect(element.all(by.css('h2')).first().getAttribute("translate")).toMatch(/password.title/);
+        <%_ } else { _%>
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Password for \[admin\]/);
+        <%_ } _%>
         password.sendKeys('newpassword');
         element(by.id('confirmPassword')).sendKeys('newpassword');
         element(by.css('button[type=submit]')).click();
 
-        var message = $('.alert-success').getText();
-        expect(message).toMatch(/Password changed!/);
+        <%_ if (enableTranslation) { _%>
+        expect(element(by.css('.alert-success')).getAttribute("translate")).toMatch(/password.messages.success/);
+        <%_ } else { _%>
+        expect(element(by.css('.alert-success')).getText()).toMatch(/Password changed!/);
+        <%_ } _%>
         accountMenu.click();
         logout.click();
 

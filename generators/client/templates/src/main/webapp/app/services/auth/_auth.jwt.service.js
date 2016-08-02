@@ -10,7 +10,6 @@
     function AuthServerProvider ($http, $localStorage, $sessionStorage, $q) {
         var service = {
             getToken: getToken,
-            hasValidToken: hasValidToken,
             login: login,
             loginWithToken: loginWithToken,
             storeAuthenticationToken: storeAuthenticationToken,
@@ -21,11 +20,6 @@
 
         function getToken () {
             return $localStorage.authenticationToken || $sessionStorage.authenticationToken;
-        }
-
-        function hasValidToken () {
-            var token = this.getToken();
-            return token && token.expires && token.expires > new Date().getTime();
         }
 
         function login (credentials) {

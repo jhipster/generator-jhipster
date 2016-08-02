@@ -45,6 +45,8 @@ chances of your issue being dealt with quickly:
 
 Click [here](https://github.com/jhipster/generator-jhipster/issues/new) to open a bug issue with a pre-filled template. For feature requests and quiries you can use [this template][feature-template].
 
+You can run `yo jhipster:info` in your project folder to get most of the above required info.
+
 Issues opened without any of these info will be **closed** without any explanation.
 
 ### Submitting a Pull Request

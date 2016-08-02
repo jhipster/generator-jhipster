@@ -68,7 +68,7 @@ public class AuditResourceIntTest {
         AuditResource auditResource = new AuditResource(auditEventService);
         this.restAuditMockMvc = MockMvcBuilders.standaloneSetup(auditResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setMessageConverters(jacksonMessageConverter).build();;
+            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before

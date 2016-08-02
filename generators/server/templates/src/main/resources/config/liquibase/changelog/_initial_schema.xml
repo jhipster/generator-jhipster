@@ -49,7 +49,7 @@
                 <constraints nullable="true"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp" defaultValueDate="${now}"/>
         </createTable>
         <% if(prodDatabaseType != 'oracle') {%>
         <createIndex indexName="idx_user_login"
@@ -233,7 +233,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_client_token"
-            constraintName="fk_oauth_client_tokn_user_name"
+            constraintName="fk_oauth_client_token_user_name"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
@@ -251,7 +251,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_access_token"
-            constraintName="fk_oauth_access_tokn_user_name"
+            constraintName="fk_oauth_access_token_user_name"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
@@ -263,6 +263,7 @@
 
         <createTable tableName="oauth_code">
             <column name="code" type="varchar(255)"/>
+            <column name="authentication" type="BLOB"/>
         </createTable>
 
         <createTable tableName="oauth_approvals">
@@ -273,5 +274,10 @@
             <column name="expiresAt" type="timestamp"/>
             <column name="lastModifiedAt" type="timestamp"/>
         </createTable>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/oauth_client_details.csv"
+                  separator=";"
+                  tableName="oauth_client_details"/>
     </changeSet><% } %>
 </databaseChangeLog>

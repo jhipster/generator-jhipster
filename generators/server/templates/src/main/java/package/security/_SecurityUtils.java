@@ -60,7 +60,7 @@ public final class SecurityUtils {
      *
      * <p>The name of this method comes from the isUserInRole() method in the Servlet API</p>
      *
-     * @param authority the authorithy to check
+     * @param authority the authority to check
      * @return true if the current user has the authority, false otherwise
      */
     public static boolean isCurrentUserInRole(String authority) {

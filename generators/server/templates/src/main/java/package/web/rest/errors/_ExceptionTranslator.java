@@ -51,7 +51,7 @@ public class ExceptionTranslator {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public ErrorDTO processAccessDeniedExcpetion(AccessDeniedException e) {
+    public ErrorDTO processAccessDeniedException(AccessDeniedException e) {
         return new ErrorDTO(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
     }
 

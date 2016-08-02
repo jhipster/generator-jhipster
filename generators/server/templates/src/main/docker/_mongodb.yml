@@ -2,7 +2,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-mongodb:
         container_name: <%= baseName.toLowerCase() %>-mongodb
-        image: mongo:3.3.5
+        image: <%= DOCKER_MONGODB %>
         ports:
             - "27017:27017"
         # volumes:
