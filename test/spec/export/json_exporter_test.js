@@ -35,6 +35,83 @@ describe('::exportToJSON', function () {
         expect(fs.statSync('.jhipster/Task.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Country.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Region.json').isFile()).to.be.true;
+        var department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
+        expect(department.relationships).to.deep.eq([
+          {
+            "relationshipType": "one-to-one",
+            "relationshipName": "location",
+            "otherEntityName": "location",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "department"
+          },
+          {
+            "relationshipType": "one-to-many",
+            "relationshipName": "employee",
+            "otherEntityName": "employee",
+            "otherEntityRelationshipName": "department"
+          }
+        ]);
+        expect(department.fields).to.deep.eq([
+          {
+            "fieldName": "departmentId",
+            "fieldType": "Long"
+          },
+          {
+            "fieldName": "departmentName",
+            "fieldType": "String",
+            "fieldValidateRules": ["required"]
+          }
+        ]);
+        expect(department.dto).to.eq('no');
+        expect(department.service).to.eq('no');
+        expect(department.pagination).to.eq('no');
+        var jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
+        expect(jobHistory.relationships).to.deep.eq([
+          {
+            "relationshipType": "one-to-one",
+            "relationshipName": "department",
+            "otherEntityName": "department",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "jobHistory"
+          },
+          {
+            "relationshipType": "one-to-one",
+            "relationshipName": "job",
+            "otherEntityName": "job",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "jobHistory"
+          },
+          {
+            "relationshipType": "one-to-one",
+            "relationshipName": "employee",
+            "otherEntityName": "employee",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "jobHistory"
+          }
+        ]);
+        expect(jobHistory.fields).to.deep.eq([
+          {
+            "fieldName": "startDate",
+            "fieldType": "ZonedDateTime"
+          },
+          {
+            "fieldName": "endDate",
+            "fieldType": "ZonedDateTime"
+          },
+          {
+            "fieldName": "language",
+            "fieldType": "Language",
+            "fieldValues": "FRENCH,ENGLISH,SPANISH"
+          }
+        ]);
+        expect(jobHistory.dto).to.eq('no');
+        expect(jobHistory.service).to.eq('no');
+        expect(jobHistory.pagination).to.eq('infinite-scroll');
+        var job = JSON.parse(fs.readFileSync('.jhipster/Job.json', {encoding: 'utf-8'}));
         // clean up the mess...
         fs.unlinkSync('.jhipster/Department.json');
         fs.unlinkSync('.jhipster/JobHistory.json');
