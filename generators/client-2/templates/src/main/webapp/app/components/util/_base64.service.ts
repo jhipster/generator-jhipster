@@ -21,10 +21,15 @@
         return service;
 
         function encode (input) {
-            var output = '',
-                chr1, chr2, chr3 = '',
-                enc1, enc2, enc3, enc4 = '',
-                i = 0;
+            let output = '';
+            let enc1: any = '';
+            let enc2: any = '';
+            let enc3: any = '';
+            let enc4: any = '';
+            let chr1: any = '';
+            let chr2: any = '';
+            let chr3: any = '';
+            let i = 0;
 
             while (i < input.length) {
                 chr1 = input.charCodeAt(i++);
@@ -55,10 +60,15 @@
         }
 
         function decode (input) {
-            var output = '',
-                chr1, chr2, chr3 = '',
-                enc1, enc2, enc3, enc4 = '',
-                i = 0;
+            let output = '';
+            let enc1: any = '';
+            let enc2: any = '';
+            let enc3: any = '';
+            let enc4: any = '';
+            let chr1: any = '';
+            let chr2: any = '';
+            let chr3: any = '';
+            let i = 0;
 
             // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
             input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
