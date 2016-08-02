@@ -34,10 +34,10 @@ public class LoggingAspect {
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             log.error("Exception in {}.{}() with cause = {} and exception {}", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName(), e.getCause(), e);
+                joinPoint.getSignature().getName(), e.getCause().getMessage(), e.getMessage());
         } else {
             log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName(), e.getCause());
+                joinPoint.getSignature().getName(), e.getCause().getMessage());
         }
     }
 
