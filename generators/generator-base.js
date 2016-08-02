@@ -1164,7 +1164,12 @@ Generator.prototype.generateKeyStore = function() {
     } else {
         shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
         var parent = this;
-        shelljs.exec('keytool '+
+        var javaHome = shelljs.env['JAVA_HOME'];
+        var keytoolPath = '';
+        if (javaHome) {
+            keytoolPath = javaHome + '/bin/';
+        }
+        shelljs.exec(keytoolPath + 'keytool '+
             '-genkey ' +
             '-noprompt ' +
             '-keyalg RSA ' +
