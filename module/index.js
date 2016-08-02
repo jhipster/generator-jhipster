@@ -22,6 +22,7 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     createJHipsterJSONFolder = require('../lib/export/json_exporter').createJHipsterJSONFolder,
     toFilePath = require('../lib/reader/json_file_reader').toFilePath,
     readEntityJSON = require('../lib/reader/json_file_reader').readEntityJSON,
+    isReservedKeyword = require('../lib/core/jhipster/reserved_keywords').isReserved,
     ObjectUtils = require('../lib/utils/object_utils'),
     Set = require('../lib/utils/objects/set');
 
@@ -33,6 +34,7 @@ module.exports = {
   JHipsterValidations: VALIDATIONS,
   JHipsterFieldTypes: FIELD_TYPES,
   JHipsterDatabaseTypes: DATABASE_TYPES,
+  isReservedKeyword: isReservedKeyword,
   /* JDL objects */
   JDLObject: JDLObject,
   JDLEntity: JDLEntity,
