@@ -52,24 +52,24 @@
                 "register": "Vous n'avez pas encore de compte ? <a class=\"alert-link\" ui-sref=\"register\">Créer un compte</a>"
             },
             "error": {
-                "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
+                "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux !"
             },
             "validate": {
                 "newpassword": {
                     "required": "Votre mot de passe est requis.",
-                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
-                    "strength": "Robustesse du mot de passe:"
+                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères.",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères.",
+                    "strength": "Robustesse du mot de passe :"
                 },
                 "confirmpassword": {
                     "required": "Votre confirmation du mot de passe est requis.",
-                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères.",
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères."
                 },
                 "email": {
                     "required": "Votre email est requis.",
-                    "minlength": "Votre email doit comporter au moins 5 caractères",
-                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
+                    "minlength": "Votre email doit comporter au moins 5 caractères.",
+                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères.",
                     "invalid": "Votre email n'est pas valide."
                 }
             }
@@ -100,10 +100,10 @@
             "required": "Ce champs est obligatoire.",
             "minlength": "Ce champs doit faire au minimum {{min}} caractères.",
             "maxlength": "Ce champs doit faire moins de {{max}} caractères.",
-            "min": "Ce champs doit être inférieur à {{min}}.",
-            "max": "Ce champs doit être supérieur à {{max}}.",
-            "minbytes": "Ce champs doit être inférieur à {{min}} bytes.",
-            "maxbytes": "Ce champs doit être supérieur à {{max}} bytes.",
+            "min": "Ce champs doit être supérieur à {{min}}.",
+            "max": "Ce champs doit être inférieur à {{max}}.",
+            "minbytes": "Ce champs doit être supérieur à {{min}} bytes.",
+            "maxbytes": "Ce champs doit être inférieur à {{max}} bytes.",
             "pattern": "Ce champs doit suivre l'expression régulière {{pattern}}.",
             "number": "Ce champs doit être un nombre.",
             "datetimelocal": "Ce champs doit être une date et une heure."
