@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect,
     isReserved = require('../../../../lib/core/jhipster/reserved_keywords').isReserved,
-    isReservedEntityName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedEntityName,
+    isReservedClassName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedClassName,
     isReservedTableName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedTableName,
     isReservedFieldName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedFieldName;
 
@@ -42,8 +42,8 @@ describe('ReservedKeywords', function () {
     });
     describe('when passing an invalid entity name', function() {
       it('returns true', function() {
-        expect(isReservedEntityName('Account')).to.be.true;
-        expect(isReservedEntityName('ACCOUNT')).to.be.true;
+        expect(isReservedClassName('Account')).to.be.true;
+        expect(isReservedClassName('ACCOUNT')).to.be.true;
       });
     });
     describe('when passing an invalid table name', function() {
