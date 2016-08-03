@@ -34,19 +34,6 @@ describe('JDLField', function () {
         }
       });
     });
-    describe('when passing a reserved keyword as name', function () {
-      it('fails', function () {
-        try {
-          new JDLField({
-            name: 'type',
-            type: 'String'
-          });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('IllegalNameException');
-        }
-      });
-    });
     describe('when passing arguments', function () {
       it('creates a new instance', function () {
         var args = {

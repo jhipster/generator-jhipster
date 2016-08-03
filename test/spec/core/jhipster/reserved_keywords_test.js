@@ -29,7 +29,7 @@ describe('ReservedKeywords', function () {
         expect(isReserved('ACCOUNT', 'jhipster')).to.be.true;
       });
     });
-    describe('when passing an invalid keyword for diffrent types', function() {
+    describe('when passing an invalid keyword for different types', function() {
       it('returns true', function() {
         expect(isReserved('ACCOUNT', 'jhipster')).to.be.true;
         expect(isReserved('SUPER', 'JAVA')).to.be.true;
@@ -42,20 +42,24 @@ describe('ReservedKeywords', function () {
     });
     describe('when passing an invalid entity name', function() {
       it('returns true', function() {
-        expect(isReservedClassName('Account')).to.be.true;
+        expect(isReservedClassName('CONTINUE')).to.be.true;
         expect(isReservedClassName('ACCOUNT')).to.be.true;
       });
     });
     describe('when passing an invalid table name', function() {
       it('returns true', function() {
+        expect(isReservedTableName('ANALYZE', 'sql')).to.be.true;
         expect(isReservedTableName('ANALYZE', 'mysql')).to.be.true;
-        expect(isReservedTableName('Analyze', 'MYSQL')).to.be.true;
+        expect(isReservedTableName('ANALYZE', 'postgresql')).to.be.true;
+        expect(isReservedTableName('ACCESS', 'oracle')).to.be.true;
+        expect(isReservedTableName('ADD', 'cassandra')).to.be.true;
+        expect(isReservedTableName('DOCUMENT', 'mongodb')).to.be.true;
       });
     });
-    describe('when passing an invalid entity name', function() {
+    describe('when passing an invalid entity field name', function() {
       it('returns true', function() {
-        expect(isReservedFieldName('ANALYZE', 'mysql')).to.be.true;
-        expect(isReservedFieldName('Analyze', 'MYSQL')).to.be.true;
+        expect(isReservedFieldName('ANALYZE', 'sql')).to.be.true;
+        expect(isReservedFieldName('CONTINUE', 'sql')).to.be.true;
       });
     });
   });
