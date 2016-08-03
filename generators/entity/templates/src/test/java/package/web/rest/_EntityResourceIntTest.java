@@ -41,8 +41,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-<% for (idx in fields) { if (fields[idx].fieldIsEnum == true) { %>import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
-<% } } %>
+<%_ for (idx in fields) { if (fields[idx].fieldIsEnum == true) { _%>import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
+<%_ } } _%>
 /**
  * Test class for the <%= entityClass %>Resource REST controller.
  *
@@ -50,9 +50,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if (fieldsContainZonedDateTime == true) { %>
+public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<%_ if (fieldsContainZonedDateTime == true) { _%>
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));<% } %>
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));<%_ } _%>
 <% for (idx in fields) {
     var defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
