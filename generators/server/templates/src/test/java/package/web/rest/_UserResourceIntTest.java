@@ -71,7 +71,7 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
         restUserMockMvc.perform(get("/api/users/john.doe@localhost.com")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$.login").value("john.doe@localhost.com"));
 
         userRepository.delete(user);
