@@ -46,7 +46,7 @@ describe('::convert', function () {
     describe('when converting JDL to entity json for SQL type', function () {
       it('converts it', function () {
         var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
+        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'mysql'), databaseType: 'mysql'});
         expect(content).not.to.be.null;
         expect(Object.keys(content).length).to.eq(8);
         expect(content.Department.relationships.length).to.eq(2);
