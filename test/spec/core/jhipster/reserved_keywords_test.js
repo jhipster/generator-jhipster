@@ -1,7 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    isReserved = require('../../../../lib/core/jhipster/reserved_keywords').isReserved;
+    isReserved = require('../../../../lib/core/jhipster/reserved_keywords').isReserved,
+    isReservedEntityName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedEntityName,
+    isReservedTableName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedTableName,
+    isReservedFieldName = require('../../../../lib/core/jhipster/reserved_keywords').isReservedFieldName;
 
 describe('ReservedKeywords', function () {
   describe('::isReserved', function () {
@@ -35,6 +38,24 @@ describe('ReservedKeywords', function () {
         expect(isReserved('ADD', 'CASSANDRA')).to.be.true;
         expect(isReserved('ACTIVATE', 'ORACLE')).to.be.true;
         expect(isReserved('DOCUMENT', 'MONGODB')).to.be.true;
+      });
+    });
+    describe('when passing an invalid entity name', function() {
+      it('returns true', function() {
+        expect(isReservedEntityName('Account')).to.be.true;
+        expect(isReservedEntityName('ACCOUNT')).to.be.true;
+      });
+    });
+    describe('when passing an invalid table name', function() {
+      it('returns true', function() {
+        expect(isReservedTableName('ANALYZE', 'mysql')).to.be.true;
+        expect(isReservedTableName('Analyze', 'MYSQL')).to.be.true;
+      });
+    });
+    describe('when passing an invalid entity name', function() {
+      it('returns true', function() {
+        expect(isReservedFieldName('ANALYZE', 'mysql')).to.be.true;
+        expect(isReservedFieldName('Analyze', 'MYSQL')).to.be.true;
       });
     });
   });
