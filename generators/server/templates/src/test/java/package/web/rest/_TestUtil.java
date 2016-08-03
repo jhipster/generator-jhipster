@@ -51,6 +51,7 @@ public class TestUtil {
      *
      * @param size the size of the byte array
      * @param data the data to put in the byte array
+     * @return the JSON byte array
      */
     public static byte[] createByteArray(int size, String data) {
         byte[] byteArray = new byte[size];
