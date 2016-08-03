@@ -63,7 +63,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version>
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        <jna.version>${jna.version}</jna.version>
+        <jna.version>4.2.2</jna.version>
         <%_ } _%>
         <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
         <mariadb.version>1.4.4</mariadb.version>
