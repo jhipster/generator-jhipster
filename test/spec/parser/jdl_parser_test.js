@@ -58,7 +58,7 @@ describe('JDLParser', function () {
       describe('with no error', function () {
         it('builds a JDLObject', function () {
           var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-          var content = JDLParser.parse(input, 'sql');
+          var content = JDLParser.parse(input, 'mysql');
           expect(content).not.to.be.null;
           expect(content.entities.Department).to.deep.eq(new JDLEntity({
             name: 'Department',
