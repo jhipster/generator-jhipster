@@ -4,21 +4,27 @@
             "relationshipName": "testManyToOne",
             "otherEntityName": "testManyToOne",
             "relationshipType": "one-to-many",
-            "otherEntityRelationshipName": "testEntity"
+            "otherEntityRelationshipName": "testCustomTableName"
         },
         {
             "relationshipName": "testManyToMany",
             "otherEntityName": "testManyToMany",
             "relationshipType": "many-to-many",
             "ownerSide": false,
-            "otherEntityRelationshipName": "testEntity"
+            "otherEntityRelationshipName": "testCustomTableName"
         },
         {
             "relationshipName": "testOneToOne",
             "otherEntityName": "testOneToOne",
             "relationshipType": "one-to-one",
             "ownerSide": false,
-            "otherEntityRelationshipName": "testEntity"
+            "otherEntityRelationshipName": "testCustomTableName"
+        },
+        {
+            "relationshipName": "testEntity",
+            "otherEntityName": "testEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         },
         {
             "relationshipName": "userOneToMany",
@@ -40,17 +46,12 @@
             "otherEntityField": "login",
             "ownerSide": true,
             "otherEntityRelationshipName": "parent"
-        },
-        {
-            "relationshipName": "testCustomTableName",
-            "otherEntityName": "testCustomTableName",
-            "relationshipType": "one-to-many",
-            "otherEntityRelationshipName": "testEntity"
         }
     ],
     "fields": [],
     "changelogDate": "20160208210109",
     "dto": "no",
     "service": "no",
+    "entityTableName": "jhi_test_custom_table_name_entity",
     "pagination": "no"
 }
