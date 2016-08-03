@@ -124,6 +124,38 @@ describe('FieldTypes', function () {
       });
     });
   });
+  describe('::getIsType', function () {
+    describe('when passing an invalid argument', function () {
+      it('fails', function () {
+        try {
+          FieldTypes.getIsType(null);
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('NullPointerException');
+        }
+        try {
+          FieldTypes.getIsType(null, function () {
+            //do nothing
+          });
+          fail();
+        } catch (error) {
+          expect(error.name).to.eq('NullPointerException');
+        }
+      });
+    });
+    describe('when passing a valid argument without callback', function () {
+      it('returns isType', function () {
+        expect(FieldTypes.getIsType('mysql')).to.eq(FieldTypes.isSQLType);
+      });
+    });
+    describe('when passing a valid argument and callback', function () {
+      it('returns true', function () {
+        expect(FieldTypes.getIsType('sql', function () {
+          //do nothing
+        })).to.eq(FieldTypes.isSQLType);
+      });
+    });
+  });
   describe('::hasValidation', function () {
     describe('when passing an invalid argument', function () {
       it('fails', function () {
