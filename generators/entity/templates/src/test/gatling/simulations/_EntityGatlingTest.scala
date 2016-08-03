@@ -74,7 +74,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http)
         .check(status.is(401))<% if (authenticationType == 'session') { %>
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))<% } %>).exitHereIfFailed
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*);[P,p]ath=/").saveAs("csrf_token"))<% } %>).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
 <%_ if (authenticationType == 'session') { _%>
@@ -106,7 +106,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http_authenticated)
         .check(status.is(200))<% if (authenticationType == 'session') { %>
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))<% } %>)
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*);[P,p]ath=/").saveAs("csrf_token"))<% } %>)
         .pause(10)
         .repeat(2) {
             exec(http("Get all <%= entityInstancePlural %>")
