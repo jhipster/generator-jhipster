@@ -27,8 +27,12 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 apply plugin: 'io.spring.dependency-management'
+<%_ if (databaseType == 'sql') { _%>
+/* downgrade Hibernate to 4.3 */
+ext['hibernate.version'] = '${hibernate_entitymanager_version}'
+<%_ } _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 dependencyManagement {
   imports {
     mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+ spring_cloud_version
@@ -184,7 +188,10 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-starter-aop"<% if (databaseType == 'sql') { %>
     compile "org.springframework.boot:spring-boot-starter-data-jpa"<% } %><% if (searchEngine == 'elasticsearch') { %>
-    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"<% } %><% if (databaseType == 'mongodb') { %>
+    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+    // needed to get around elasticsearch stacktrace about jna not found
+    // https://github.com/elastic/elasticsearch/issues/13245
+    compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
     compile "org.springframework.boot:spring-boot-starter-security"
     compile "org.springframework.boot:spring-boot-starter-web"<% if (websocket == 'spring-websocket') { %>
@@ -251,6 +258,7 @@ dependencies {
     testCompile "info.cukes:cucumber-junit:${cucumber_version}"
     testCompile "info.cukes:cucumber-spring:${cucumber_version}"<% } %>
     testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework.boot:spring-boot-test"
     testCompile "org.assertj:assertj-core:${assertj_core_version}"
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core"<% if (databaseType == 'sql') { %>
