@@ -1023,6 +1023,24 @@ Generator.prototype.getModuleHooks = function () {
 };
 
 /**
+ * get a property of an entity from the configuration file
+ * @param {string} file - configuration file name for the entity
+ * @param {string} key - key to read
+ */
+Generator.prototype.getEntityProperty = function (file, key) {
+    var property = null;
+
+    try {
+        var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
+        property = entityJson[key];
+    } catch (err) {
+        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+    }
+
+    return property;
+};
+
+/**
  * get sorted list of entities according to changelog date (i.e. the order in which they were added)
  */
 Generator.prototype.getExistingEntities = function () {
@@ -1146,7 +1164,12 @@ Generator.prototype.generateKeyStore = function() {
     } else {
         shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
         var parent = this;
-        shelljs.exec('keytool '+
+        var javaHome = shelljs.env['JAVA_HOME'];
+        var keytoolPath = '';
+        if (javaHome) {
+            keytoolPath = javaHome + '/bin/';
+        }
+        shelljs.exec('"' + keytoolPath + 'keytool" '+
             '-genkey ' +
             '-noprompt ' +
             '-keyalg RSA ' +
@@ -1215,7 +1238,9 @@ Generator.prototype.getAngularAppName = function () {
  * get the java main class name.
  */
 Generator.prototype.getMainClassName = function () {
-    return _.upperFirst(this.getAngularAppName());
+    // Don't name by baseName because numbers can cause compilation issues.
+    // https://github.com/jhipster/generator-jhipster/issues/3889
+    return 'Application';
 };
 
 /**

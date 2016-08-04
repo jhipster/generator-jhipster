@@ -48,6 +48,13 @@
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true
+        },
+        {
+            "relationshipName": "testCustomTableName",
+            "otherEntityName": "testCustomTableName",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "fields": [],
