@@ -14,7 +14,7 @@
             url: '/user-management<%_ if (databaseType !== 'cassandra') { _%>?page&sort<%_ } _%>',
             data: {
                 authorities: ['ROLE_ADMIN'],
-                pageTitle: 'user-management.home.title'
+                pageTitle: 'userManagement.home.title'
             },
             views: {
                 'content@': {
@@ -49,7 +49,7 @@
             <%_ } _%>
 
             }<%_ } else { _%>
-        
+
             resolve: {
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('user-management');
