@@ -1,14 +1,12 @@
 package <%=packageName%>.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.<%= entityClass %>;<% if (service != 'no') { %>
+import com.codahale.metrics.annotation.Timed;<% if (service != 'no') { %>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } else { %>
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} %>
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination != 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;

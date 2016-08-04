@@ -6,8 +6,8 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service != 'no') { %>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
 
 import org.junit.Before;
 import org.junit.Test;
@@ -184,8 +184,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();<% if (service != 'no') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", <%= entityInstance %>Service);<% } else { if (searchEngine == 'elasticsearch') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% } if (dto == 'mapstruct') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% } %>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();

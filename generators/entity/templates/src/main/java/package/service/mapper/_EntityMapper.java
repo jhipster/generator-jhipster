@@ -1,7 +1,7 @@
-package <%=packageName%>.web.rest.mapper;
+package <%=packageName%>.service.mapper;
 
 import <%=packageName%>.domain.*;
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 
 import org.mapstruct.*;
 import java.util.List;
