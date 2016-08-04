@@ -39,4 +39,4 @@ angular
     .provider('AlertService', AlertService)<% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))<% if (enableTranslation) { %>
-    .controller('<%=jhiPrefixCapitalized%>LanguageController', <%=jhiPrefixCapitalized%>LanguageController);<% } %>
+    .controller('<%=jhiPrefixCapitalized%>LanguageController', <%=jhiPrefixCapitalized%>LanguageController)<% } %>;
