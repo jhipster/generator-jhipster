@@ -1,13 +1,13 @@
-package <%=packageName%>.web.rest.dto;
+package <%=packageName%>.web.rest.vm;
 
 import java.util.List;
 
 import org.springframework.cloud.client.ServiceInstance;
 
 /**
- * Stores a route managed by the Gateway.
+ * View Model that stores a route managed by the Gateway.
  */
-public class RouteDTO {
+public class RouteVM {
 
     private String path;
 

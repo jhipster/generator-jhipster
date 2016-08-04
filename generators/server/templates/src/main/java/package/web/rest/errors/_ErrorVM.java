@@ -5,27 +5,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DTO for transferring error message with a list of field errors.
+ * View Model for transferring error message with a list of field errors.
  */
-public class ErrorDTO implements Serializable {
+public class ErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private final String message;
     private final String description;
 
-    private List<FieldErrorDTO> fieldErrors;
+    private List<FieldErrorVM> fieldErrors;
 
-    public ErrorDTO(String message) {
+    public ErrorVM(String message) {
         this(message, null);
     }
 
-    public ErrorDTO(String message, String description) {
+    public ErrorVM(String message, String description) {
         this.message = message;
         this.description = description;
     }
 
-    public ErrorDTO(String message, String description, List<FieldErrorDTO> fieldErrors) {
+    public ErrorVM(String message, String description, List<FieldErrorVM> fieldErrors) {
         this.message = message;
         this.description = description;
         this.fieldErrors = fieldErrors;
@@ -35,7 +35,7 @@ public class ErrorDTO implements Serializable {
         if (fieldErrors == null) {
             fieldErrors = new ArrayList<>();
         }
-        fieldErrors.add(new FieldErrorDTO(objectName, field, message));
+        fieldErrors.add(new FieldErrorVM(objectName, field, message));
     }
 
     public String getMessage() {
@@ -46,7 +46,7 @@ public class ErrorDTO implements Serializable {
         return description;
     }
 
-    public List<FieldErrorDTO> getFieldErrors() {
+    public List<FieldErrorVM> getFieldErrors() {
         return fieldErrors;
     }
 }

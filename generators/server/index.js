@@ -548,7 +548,7 @@ module.exports = JhipsterServerGenerator.extend({
 
 
             if (this.authenticationType === 'jwt') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoginDTO.java', javaDir + 'web/rest/dto/LoginDTO.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_LoginVM.java', javaDir + 'web/rest/vm/LoginVM.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_JWTToken.java', javaDir + 'web/rest/JWTToken.java', this, {});
             }
@@ -606,7 +606,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingRepository.java', javaDir + 'gateway/ratelimiting/RateLimitingRepository.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/accesscontrol/_AccessControlFilter.java', javaDir + 'gateway/accesscontrol/AccessControlFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilter.java', javaDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilter.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_RouteVM.java', javaDir + 'web/rest/vm/RouteVM.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
         },
 
@@ -743,10 +743,10 @@ module.exports = JhipsterServerGenerator.extend({
             // error handler code - server side
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ErrorDTO.java', javaDir + 'web/rest/errors/ErrorDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ErrorVM.java', javaDir + 'web/rest/errors/ErrorVM.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_FieldErrorDTO.java', javaDir + 'web/rest/errors/FieldErrorDTO.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ParameterizedErrorDTO.java', javaDir + 'web/rest/errors/ParameterizedErrorDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_FieldErrorVM.java', javaDir + 'web/rest/errors/FieldErrorVM.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ParameterizedErrorVM.java', javaDir + 'web/rest/errors/ParameterizedErrorVM.java', this, {});
 
         },
 
@@ -754,8 +754,8 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_package-info.java', javaDir + 'web/rest/vm/package-info.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_LoggerVM.java', javaDir + 'web/rest/vm/LoggerVM.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
@@ -872,12 +872,16 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             /* User management java web files */
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/dto/_package-info.java', javaDir + 'service/dto/package-info.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/dto/_UserDTO.java', javaDir + 'service/dto/UserDTO.java', this, {});
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_ManagedUserVM.java', javaDir + 'web/rest/vm/ManagedUserVM.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/mapper/_UserMapper.java', javaDir + 'web/rest/mapper/UserMapper.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_KeyAndPasswordVM.java', javaDir + 'web/rest/vm/KeyAndPasswordVM.java', this, {});
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/mapper/_package-info.java', javaDir + 'service/mapper/package-info.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/mapper/_UserMapper.java', javaDir + 'service/mapper/UserMapper.java', this, {});
 
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {

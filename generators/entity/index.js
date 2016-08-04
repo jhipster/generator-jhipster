@@ -663,8 +663,8 @@ module.exports = EntityGenerator.extend({
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
             }
             if (this.dto === 'mapstruct') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_EntityDTO.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/dto/' + this.entityClass + 'DTO.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_EntityDTO.java',
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/vm/' + this.entityClass + 'DTO.java', this, {});
 
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/mapper/_EntityMapper.java',
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/mapper/' + this.entityClass + 'Mapper.java', this, {});

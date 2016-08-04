@@ -1,17 +1,18 @@
-package <%=packageName%>.web.rest.dto;
+package <%=packageName%>.web.rest.vm;
 <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
 import java.time.ZonedDateTime;<% } %>
 
 import java.util.Set;
 
 import <%=packageName%>.domain.User;
+import <%=packageName%>.service.dto.UserDTO;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * A DTO extending the UserDTO, which is meant to be used in the user management UI.
+ * View Model extending the UserDTO, which is meant to be used in the user management UI.
  */
-public class ManagedUserDTO extends UserDTO {
+public class ManagedUserVM extends UserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
     public static final int PASSWORD_MAX_LENGTH = 100;
@@ -28,10 +29,10 @@ public class ManagedUserDTO extends UserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
-    public ManagedUserDTO() {
+    public ManagedUserVM() {
     }
 
-    public ManagedUserDTO(User user) {
+    public ManagedUserVM(User user) {
         super(user);
         this.id = user.getId();<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
         this.createdDate = user.getCreatedDate();
@@ -40,7 +41,7 @@ public class ManagedUserDTO extends UserDTO {
         this.password = null;
     }
 
-    public ManagedUserDTO(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,
+    public ManagedUserVM(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,
                           String email, boolean activated, String langKey, Set<String> authorities <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate <% } %>) {
         super(login, firstName, lastName, email, activated, langKey, authorities);
         this.id = id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
@@ -88,7 +89,7 @@ public class ManagedUserDTO extends UserDTO {
 
     @Override
     public String toString() {
-        return "ManagedUserDTO{" +
+        return "ManagedUserVM{" +
             "id=" + id +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +

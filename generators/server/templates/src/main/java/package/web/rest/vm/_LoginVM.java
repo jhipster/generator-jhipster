@@ -1,4 +1,4 @@
-package <%=packageName%>.web.rest.dto;
+package <%=packageName%>.web.rest.vm;
 
 import <%=packageName%>.config.Constants;
 import javax.validation.constraints.NotNull;
@@ -6,9 +6,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- * A DTO representing a user's credentials
+ * View Model object for storing a user's credentials.
  */
-public class LoginDTO {
+public class LoginVM {
 
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @NotNull
@@ -16,7 +16,7 @@ public class LoginDTO {
     private String username;
 
     @NotNull
-    @Size(min = ManagedUserDTO.PASSWORD_MIN_LENGTH, max = ManagedUserDTO.PASSWORD_MAX_LENGTH)
+    @Size(min = ManagedUserVM.PASSWORD_MIN_LENGTH, max = ManagedUserVM.PASSWORD_MAX_LENGTH)
     private String password;
 
     private Boolean rememberMe;
@@ -47,7 +47,7 @@ public class LoginDTO {
 
     @Override
     public String toString() {
-        return "LoginDTO{" +
+        return "LoginVM{" +
             "password='" + password + '\'' +
             ", username='" + username + '\'' +
             ", rememberMe=" + rememberMe +
