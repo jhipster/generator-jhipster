@@ -40,7 +40,7 @@ public interface <%= entityClass %>Service {
      *
      *  @return the list of entities
      */
-    List<<%= entityClass %>DTO> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
+    List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
 <% } } -%>
 
     /**
