@@ -181,10 +181,18 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();<% if (service != 'no') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", <%= entityInstance %>Service);<% } else { if (searchEngine == 'elasticsearch') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% } %>
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
+        <%_ if (service != 'no') { _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", <%= entityInstance %>Service);
+        <%_ } else { _%>
+            <%_ if (searchEngine == 'elasticsearch') { _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);
+            <%_ } _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);
+        <%_ } _%>
+        <%_ if (service == 'no' && dto == 'mapstruct') { _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);
+        <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();

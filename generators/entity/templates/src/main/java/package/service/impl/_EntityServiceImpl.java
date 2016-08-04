@@ -41,11 +41,6 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
-    <%_ if (dto == 'mapstruct') { _%>
-
-    @Inject
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
-    <%_ } _%>
 
     /**
      * Save a <%= entityInstance %>.
@@ -66,16 +61,20 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
     public <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
-        log.debug("Request to get all <%= entityClassPlural %>");<% if (pagination == 'no') { %>
+        log.debug("Request to get all <%= entityClassPlural %>");
+        <%_ if (pagination == 'no') { _%>
         List<<%= instanceType %>> result = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
-            .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } else { %>
-        Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable); <% } %>
-        <%_ if (dto == 'mapstruct') { _%>
-        return result.map(<%= instanceName %> -> <%= entityToDto %>(<%= instanceName%>));
-        <%_ } else { _%>
+            .collect(Collectors.toCollection(LinkedList::new))<% } %>;
+
         return result;
-        <%_ } _%>
+        <%_ } else { _%>
+        Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable);
+            <%_ if (dto == 'mapstruct') { _%>
+        return result.map(<%= instanceName %> -> <%= entityToDto %>(<%= instanceName%>));
+            <%_ } else { _%>
+        return result;
+        <%_ } } _%>
     }
 <%- include('../../common/get_filtered_template'); -%>
     /**
