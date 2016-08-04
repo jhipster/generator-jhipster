@@ -17,7 +17,7 @@ public class CachingHttpHeadersFilter implements Filter {
 
     private long CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(1461L);
 
-    private JHipsterProperties jHipsterProperties;;
+    private JHipsterProperties jHipsterProperties;
 
     public CachingHttpHeadersFilter(JHipsterProperties jHipsterProperties) {
         this.jHipsterProperties = jHipsterProperties;

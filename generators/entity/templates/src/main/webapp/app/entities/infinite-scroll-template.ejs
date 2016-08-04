@@ -1,12 +1,25 @@
         vm.<%= entityInstancePlural %> = [];
-        vm.predicate = 'id';
-        vm.reverse = true;
+        vm.loadPage = loadPage;
         vm.page = 0;
+        vm.links = {
+            last: 0
+        };
+        vm.predicate = 'id';
+        vm.reset = reset;
+        vm.reverse = true;
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        vm.clear = clear;
+        vm.loadAll = loadAll;
+        vm.search = search;
+        <%_ } _%>
         <%_ if (fieldsContainBlob) { _%>
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        vm.loadAll = function() {
+
+        loadAll();
+
+        function loadAll () {
         <%_ if (searchEngine != 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: vm.page,
@@ -36,6 +49,7 @@
                 }
                 return result;
             }
+
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
@@ -43,22 +57,36 @@
                     vm.<%= entityInstancePlural %>.push(data[i]);
                 }
             }
+
             function onError(error) {
                 AlertService.error(error.data.message);
             }
-        };
-        vm.reset = function() {
+        }
+
+        function reset () {
             vm.page = 0;
             vm.<%= entityInstancePlural %> = [];
-            vm.loadAll();
-        };
-        vm.loadPage = function(page) {
+            loadAll();
+        }
+
+        function loadPage(page) {
             vm.page = page;
-            vm.loadAll();
-        };
+            loadAll();
+        }
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        vm.search = function (searchQuery) {
+        function clear () {
+            vm.<%= entityInstancePlural %> = [];
+            vm.links = null;
+            vm.page = 0;
+            vm.predicate = 'id';
+            vm.reverse = true;
+            vm.searchQuery = null;
+            vm.currentSearch = null;
+            vm.loadAll();
+        }
+
+        function search (searchQuery) {
             if (!searchQuery){
                 return vm.clear();
             }
@@ -69,18 +97,5 @@
             vm.reverse = false;
             vm.currentSearch = searchQuery;
             vm.loadAll();
-        };
-
-        vm.clear = function () {
-            vm.<%= entityInstancePlural %> = [];
-            vm.links = null;
-            vm.page = 0;
-            vm.predicate = 'id';
-            vm.reverse = true;
-            vm.searchQuery = null;
-            vm.currentSearch = null;
-            vm.loadAll();
-        };
+        }
         <%_ } _%>
-
-        vm.loadAll();

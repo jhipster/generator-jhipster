@@ -22,17 +22,44 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
 import org.springframework.security.oauth2.provider.token.TokenStore;<% if (databaseType == 'sql') { %>
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %>
 
 import javax.inject.Inject;<% if (databaseType == 'sql') { %>
 import javax.sql.DataSource;<% } %>
 
 @Configuration
-public class OAuth2ServerConfiguration {
+public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
+
+    @Inject
+    private DataSource dataSource;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JdbcTokenStore(dataSource);
+    }<% } %><% if (databaseType == 'mongodb') { %>
+
+    @Inject
+    private OAuth2AccessTokenRepository oAuth2AccessTokenRepository;
+
+    @Inject
+    private OAuth2RefreshTokenRepository oAuth2RefreshTokenRepository;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new MongoDBTokenStore(oAuth2AccessTokenRepository, oAuth2RefreshTokenRepository);
+    }<% } %>
 
     @Configuration
     @EnableResourceServer
-    protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+    protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {<% if (databaseType == 'sql') { %>
+
+        @Inject
+        private TokenStore tokenStore;<% } %>
 
         @Inject
         private Http401UnauthorizedEntryPoint authenticationEntryPoint;
@@ -62,26 +89,19 @@ public class OAuth2ServerConfiguration {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
-                .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/dump/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/shutdown/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/beans/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/configprops/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/info/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/autoconfig/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/liquibase/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/protected/**").authenticated();
-
+                .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                .antMatchers("/v2/api-docs/**").permitAll()
+                .antMatchers("/swagger-resources/configuration/ui").permitAll()
+                .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
+<% if (databaseType == 'sql') { %>
+        @Override
+        public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+            resources.resourceId("res_<%= baseName %>").tokenStore(tokenStore);
+        }<% } %>
     }
 
     @Configuration
@@ -89,22 +109,24 @@ public class OAuth2ServerConfiguration {
     protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {<% if (databaseType == 'sql') { %>
 
         @Inject
-        private DataSource dataSource;<% } %><% if (databaseType == 'mongodb') { %>
-
-        @Inject
-        private OAuth2AccessTokenRepository oAuth2AccessTokenRepository;
-
-        @Inject
-        private OAuth2RefreshTokenRepository oAuth2RefreshTokenRepository;<% } %>
-
+        private DataSource dataSource;<% } %>
+<% if (databaseType != 'sql') { %>
         @Inject
         private JHipsterProperties jHipsterProperties;
-
+<% } %>
+        @Inject
+        private TokenStore tokenStore;
+<% if (databaseType == 'sql') { %>
         @Bean
-        public TokenStore tokenStore() {
-            return new <% if (databaseType == 'sql') { %>JdbcTokenStore(dataSource);<% } else { %>MongoDBTokenStore(oAuth2AccessTokenRepository, oAuth2RefreshTokenRepository);<% } %>
+        protected AuthorizationCodeServices authorizationCodeServices() {
+            return new JdbcAuthorizationCodeServices(dataSource);
         }
 
+        @Bean
+        public ApprovalStore approvalStore() {
+            return new JdbcApprovalStore(dataSource);
+        }
+<% } %>
         @Inject
         @Qualifier("authenticationManagerBean")
         private AuthenticationManager authenticationManager;
@@ -112,10 +134,11 @@ public class OAuth2ServerConfiguration {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
                 throws Exception {
-
-            endpoints
-                    .tokenStore(tokenStore())
-                    .authenticationManager(authenticationManager);
+            endpoints<% if (databaseType == 'sql') { %>
+                .authorizationCodeServices(authorizationCodeServices())
+                .approvalStore(approvalStore())<% } %>
+                .tokenStore(tokenStore)
+                .authenticationManager(authenticationManager);
         }
 
         @Override
@@ -124,7 +147,8 @@ public class OAuth2ServerConfiguration {
         }
 
         @Override
-        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        public void configure(ClientDetailsServiceConfigurer clients) throws Exception {<% if (databaseType == 'sql') { %>
+            clients.jdbc(dataSource);<% } else { %>
             clients
                 .inMemory()
                 .withClient(jHipsterProperties.getSecurity().getAuthentication().getOauth().getClientid())
@@ -132,7 +156,7 @@ public class OAuth2ServerConfiguration {
                 .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
                 .authorizedGrantTypes("password", "refresh_token", "authorization_code", "implicit")
                 .secret(jHipsterProperties.getSecurity().getAuthentication().getOauth().getSecret())
-                .accessTokenValiditySeconds(jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds());
+                .accessTokenValiditySeconds(jHipsterProperties.getSecurity().getAuthentication().getOauth().getTokenValidityInSeconds());<% } %>
         }
     }
 }

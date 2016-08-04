@@ -85,6 +85,9 @@
         },
         "field": {
             "id" : "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -95,6 +98,7 @@
             "cancel": "Anulează",
             "delete": "Șterge",
             "edit": "Editează",
+            "open": "Open",
             "save": "Salvează",
             "view": "Vizualizează"
         },
@@ -120,6 +124,7 @@
     },
     "error": {
         "server.not.reachable": "Serverul este indisponibil",
+        "url.not.found": "Not found",
         "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",
         "Size": "Câmpul {{fieldName}} nu corespunde ceințelor de dimensiune minimă/maximă!",
         "userexists": "Login name already used!",

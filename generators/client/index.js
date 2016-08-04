@@ -4,6 +4,7 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('lodash'),
     scriptBase = require('../generator-base'),
+    prompts = require('./prompts'),
     mkdirp = require('mkdirp'),
     packagejs = require('../../package.json');
 
@@ -19,15 +20,11 @@ const constants = require('../generator-constants'),
     TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     ANGULAR_DIR = constants.ANGULAR_DIR;
 
-var currentQuestion;
-var totalQuestions;
-var configOptions = {};
-
 module.exports = JhipsterClientGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
 
-        configOptions = this.options.configOptions || {};
+        this.configOptions = this.options.configOptions || {};
 
         // This adds support for a `--protractor` flag
         this.option('protractor', {
@@ -92,8 +89,15 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: 'jhi'
         });
 
-        this.skipServer = configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = configOptions.skipUserManagement || this.config.get('skipUserManagement');
+        // This adds support for a `--skip-user-management` flag
+        this.option('skip-user-management', {
+            desc: 'Skip the user management module during app generation',
+            type: Boolean,
+            defaults: false
+        });
+
+        this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
+        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -102,14 +106,14 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
-        this.jhiPrefix = configOptions.jhiPrefix || this.options['jhi-prefix'];
+        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         this.testFrameworks = [];
         this.options['protractor'] && this.testFrameworks.push('protractor');
-        currentQuestion = configOptions.lastQuestion ? configOptions.lastQuestion : 0;
-        totalQuestions = configOptions.totalQuestions ? configOptions.totalQuestions : QUESTIONS;
-        this.baseName = configOptions.baseName;
-        this.logo = configOptions.logo;
+        this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
+        this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
+        this.baseName = this.configOptions.baseName;
+        this.logo = this.configOptions.logo;
     },
 
     initializing: {
@@ -124,8 +128,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.MAIN_SRC_DIR = MAIN_SRC_DIR;
             this.TEST_SRC_DIR = TEST_SRC_DIR;
 
-            this.serverPort = this.config.get('serverPort') || configOptions.serverPort || 8080;
-            this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
+            this.serverPort = this.config.get('serverPort') || this.configOptions.serverPort || 8080;
+            this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
@@ -159,46 +163,16 @@ module.exports = JhipsterClientGenerator.extend({
 
     prompting: {
 
-        askForModuleName: function () {
+        askForModuleName: prompts.askForModuleName,
 
-            if (this.baseName) return;
+        askForClientSideOpts: prompts.askForClientSideOpts,
 
-            this.askModuleName(this, currentQuestion++, totalQuestions);
-        },
-
-        askForClientSideOpts: function () {
-            if (this.existingProject) return;
-
-            var done = this.async();
-            var getNumberedQuestion = this.getNumberedQuestion;
-            var prompts = [
-                {
-                    type: 'confirm',
-                    name: 'useSass',
-                    message: function (response) {
-                        return getNumberedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', currentQuestion, totalQuestions, function (current) {
-                            currentQuestion = current;
-                        }, true);
-                    },
-                    default: false
-                }
-            ];
-            this.prompt(prompts, function (props) {
-                this.useSass = props.useSass;
-                done();
-            }.bind(this));
-        },
-
-        askFori18n: function () {
-            if (this.existingProject || configOptions.skipI18nQuestion) return;
-
-            this.aski18n(this, currentQuestion++, totalQuestions);
-        },
+        askFori18n: prompts.askFori18n,
 
         setSharedConfigOptions: function () {
-            configOptions.lastQuestion = currentQuestion;
-            configOptions.totalQuestions = totalQuestions;
-            configOptions.useSass = this.useSass;
+            this.configOptions.lastQuestion = this.currentQuestion;
+            this.configOptions.totalQuestions = this.totalQuestions;
+            this.configOptions.useSass = this.useSass;
         }
 
     },
@@ -206,7 +180,7 @@ module.exports = JhipsterClientGenerator.extend({
     configuring: {
         insight: function () {
             var insight = this.insight();
-            insight.track('generator', 'app');
+            insight.trackWithEvent('generator', 'client');
             insight.track('app/useSass', this.useSass);
             insight.track('app/enableTranslation', this.enableTranslation);
             insight.track('app/nativeLanguage', this.nativeLanguage);
@@ -220,13 +194,16 @@ module.exports = JhipsterClientGenerator.extend({
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
-            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split('-')[0] : 'en';
+            if (!this.nativeLanguage) {
+                // set to english when translation is set to false
+                this.nativeLanguage = 'en';
+            }
         },
 
         saveConfig: function () {
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
-            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
+            if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
@@ -236,48 +213,52 @@ module.exports = JhipsterClientGenerator.extend({
     default: {
 
         getSharedConfigOptions: function () {
-            if (configOptions.hibernateCache) {
-                this.hibernateCache = configOptions.hibernateCache;
+            if (this.configOptions.hibernateCache) {
+                this.hibernateCache = this.configOptions.hibernateCache;
             }
-            if (configOptions.websocket) {
-                this.websocket = configOptions.websocket;
+            if (this.configOptions.websocket) {
+                this.websocket = this.configOptions.websocket;
             }
-            if (configOptions.databaseType) {
-                this.databaseType = configOptions.databaseType;
+            if (this.configOptions.databaseType) {
+                this.databaseType = this.configOptions.databaseType;
             }
-            if (configOptions.devDatabaseType) {
-                this.devDatabaseType = configOptions.devDatabaseType;
+            if (this.configOptions.devDatabaseType) {
+                this.devDatabaseType = this.configOptions.devDatabaseType;
             }
-            if (configOptions.prodDatabaseType) {
-                this.prodDatabaseType = configOptions.prodDatabaseType;
+            if (this.configOptions.prodDatabaseType) {
+                this.prodDatabaseType = this.configOptions.prodDatabaseType;
             }
-            if (configOptions.searchEngine) {
-                this.searchEngine = configOptions.searchEngine;
+            if (this.configOptions.searchEngine) {
+                this.searchEngine = this.configOptions.searchEngine;
             }
-            if (configOptions.buildTool) {
-                this.buildTool = configOptions.buildTool;
+            if (this.configOptions.buildTool) {
+                this.buildTool = this.configOptions.buildTool;
             }
-            if (configOptions.enableSocialSignIn !== undefined) {
-                this.enableSocialSignIn = configOptions.enableSocialSignIn;
+            if (this.configOptions.enableSocialSignIn !== undefined) {
+                this.enableSocialSignIn = this.configOptions.enableSocialSignIn;
             }
-            if (configOptions.authenticationType) {
-                this.authenticationType = configOptions.authenticationType;
+            if (this.configOptions.authenticationType) {
+                this.authenticationType = this.configOptions.authenticationType;
             }
-            if (configOptions.testFrameworks) {
-                this.testFrameworks = configOptions.testFrameworks;
+            if (this.configOptions.testFrameworks) {
+                this.testFrameworks = this.configOptions.testFrameworks;
             }
-            if (configOptions.enableTranslation !== undefined) {
-                this.enableTranslation = configOptions.enableTranslation;
+            if (this.configOptions.enableTranslation !== undefined) {
+                this.enableTranslation = this.configOptions.enableTranslation;
             }
-            if (configOptions.nativeLanguage !== undefined) {
-                this.nativeLanguage = configOptions.nativeLanguage;
+            if (this.configOptions.nativeLanguage !== undefined) {
+                this.nativeLanguage = this.configOptions.nativeLanguage;
             }
-            if (configOptions.languages !== undefined) {
-                this.languages = configOptions.languages;
+            if (this.configOptions.languages !== undefined) {
+                this.languages = this.configOptions.languages;
+            }
+
+            if(this.configOptions.uaaBaseName !== undefined) {
+                this.uaaBaseName = this.configOptions.uaaBaseName;
             }
 
             // Make dist dir available in templates
-            if (configOptions.buildTool === 'maven') {
+            if (this.configOptions.buildTool === 'maven') {
                 this.BUILD_DIR = 'target/';
             } else {
                 this.BUILD_DIR = 'build/';
@@ -286,9 +267,9 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         composeLanguages: function () {
-            if (configOptions.skipI18nQuestion) return;
+            if (this.configOptions.skipI18nQuestion) return;
 
-            this.composeLanguagesSub(this, configOptions, 'client');
+            this.composeLanguagesSub(this, this.configOptions, 'client');
         }
     },
 
@@ -354,6 +335,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_http.config.js', ANGULAR_DIR + 'blocks/config/http.config.js', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_localstorage.config.js', ANGULAR_DIR + 'blocks/config/localstorage.config.js', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_compile.config.js', ANGULAR_DIR + 'blocks/config/compile.config.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/config/_uib-pager.config.js', ANGULAR_DIR + 'blocks/config/uib-pager.config.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/config/_uib-pagination.config.js', ANGULAR_DIR + 'blocks/config/uib-pagination.config.js', this, {});
         },
 
         writeAngularAuthFiles: function () {
@@ -436,6 +419,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularUserMgmntFiles: function () {
+            if (this.skipUserManagement) return;
+
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/user-management.html', ANGULAR_DIR + 'admin/user-management/user-management.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');
@@ -461,8 +446,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/form/_show-validation.directive.js', ANGULAR_DIR + 'components/form/show-validation.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.js', ANGULAR_DIR + 'components/form/maxbytes.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_minbytes.directive.js', ANGULAR_DIR + 'components/form/minbytes.directive.js', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_uib-pager.config.js', ANGULAR_DIR + 'components/form/uib-pager.config.js', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_uib-pagination.config.js', ANGULAR_DIR + 'components/form/uib-pagination.config.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_pagination.constants.js', ANGULAR_DIR + 'components/form/pagination.constants.js', this, {});
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'components/language/_language.filter.js', ANGULAR_DIR + 'components/language/language.filter.js', this, {});
@@ -486,7 +469,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.js', ANGULAR_DIR + 'components/util/jhi-item-count.directive.js', this, {});
 
             // interceptor code
-            if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt') {
+            if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
                 this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.js', this, {});
             }
             this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.js', this, {});
@@ -528,7 +511,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/auth/_has-any-authority.directive.js', ANGULAR_DIR + 'services/auth/has-any-authority.directive.js', this, {});
             if (this.authenticationType === 'oauth2') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
-            } else if (this.authenticationType === 'jwt') {
+            } else if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.jwt.service.js', ANGULAR_DIR + 'services/auth/auth.jwt.service.js', this, {});
             } else {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.js', ANGULAR_DIR + 'services/auth/auth.session.service.js', this, {});
@@ -543,12 +526,17 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
         },
 
+        writeAngularProfileServiceFiles: function () {
+            // services
+            this.template(ANGULAR_DIR + 'services/profiles/_profile.service.js', ANGULAR_DIR + 'services/profiles/profile.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/profiles/_page-ribbon.directive.js', ANGULAR_DIR + 'services/profiles/page-ribbon.directive.js', this, {});
+        },
+
         writeImageFiles: function () {
             // Images
-            this.copy(MAIN_SRC_DIR + 'content/images/development_ribbon.png', MAIN_SRC_DIR + 'content/images/development_ribbon.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
-
+            this.copy(MAIN_SRC_DIR + 'content/images/logo-jhipster.png', MAIN_SRC_DIR + 'content/images/logo-jhipster.png');
         },
 
         writeClientTestFwFiles: function () {
@@ -592,7 +580,7 @@ module.exports = JhipsterClientGenerator.extend({
                     'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
                     '\n' +
                     '\nInject your front end dependencies into your source code:' +
-                    '\n ' + chalk.yellow.bold('gulp wiredep') +
+                    '\n ' + chalk.yellow.bold('gulp inject') +
                     '\n' +
                     '\nGenerate the Angular constants:' +
                     '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +

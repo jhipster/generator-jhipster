@@ -10,7 +10,7 @@ var fs = require('fs'),
     cssnano = require('gulp-cssnano'),
     uglify = require('gulp-uglify'),
     useref = require("gulp-useref"),
-    revReplace = require("gulp-rev-replace")
+    revReplace = require("gulp-rev-replace"),
     plumber = require('gulp-plumber'),
     gulpIf = require('gulp-if'),
     handleErrors = require('./handleErrors');
@@ -44,7 +44,7 @@ module.exports = function() {
         .pipe(gulpIf('*.css', cssTask()))
         .pipe(gulpIf('*.html', htmlmin({collapseWhitespace: true})))
         .pipe(gulpIf('**/*.!(html)', rev()))
-        .pipe(revReplace({manifest}))
+        .pipe(revReplace({manifest: manifest}))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.dist));
-}
+};

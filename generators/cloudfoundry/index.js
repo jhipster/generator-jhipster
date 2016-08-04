@@ -4,8 +4,8 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
-    _ = require('lodash'),
     glob = require('glob'),
+    prompts = require('./prompts'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
@@ -39,62 +39,14 @@ module.exports = CloudFoundryGenerator.extend({
         }
     },
 
-    prompting: function () {
-        var done = this.async();
-        var databaseType = this.databaseType;
-        var prompts = [{
-            name: 'cloudfoundryDeployedName',
-            message: 'Name to deploy as:',
-            default: this.baseName
-        },
-            {
-                type: 'list',
-                name: 'cloudfoundryProfile',
-                message: 'Which profile would you like to use?',
-                choices: [
-                    {
-                        value: 'dev',
-                        name: 'dev'
-                    },
-                    {
-                        value: 'prod',
-                        name: 'prod'
-                    }
-                ],
-                default: 0
-            },
-            {
-                when: function(response) {
-                    return databaseType !== 'no';
-                },
-                name: 'cloudfoundryDatabaseServiceName',
-                message: 'What is the name of your database service?',
-                default: 'elephantsql'
-            },
-            {
-                when: function(response) {
-                    return databaseType !== 'no';
-                },
-                name: 'cloudfoundryDatabaseServicePlan',
-                message: 'What is the name of your database plan?',
-                default: 'turtle'
-            }];
-
-        this.prompt(prompts, function (props) {
-            this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
-            this.cloudfoundryProfile = props.cloudfoundryProfile;
-            this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
-            this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
-
-            if ((this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') && this.cloudfoundryProfile === 'dev') {
-                this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
-                this.cloudfoundryProfile = 'prod';
-            }
-            done();
-        }.bind(this));
-    },
+    prompting: prompts.prompting,
 
     configuring: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'cloudfoundry');
+        },
+
         copyCloudFoundryFiles: function () {
             if (this.abort) return;
             this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
@@ -138,8 +90,7 @@ module.exports = CloudFoundryGenerator.extend({
             var done = this.async();
 
             this.log(chalk.bold('\nCreating your Cloud Foundry hosting environment, this may take a couple minutes...'));
-            var insight = this.insight();
-            insight.track('generator', 'cloudfoundry');
+
             if (this.databaseType !== 'no') {
                 this.log(chalk.bold('Creating the database'));
                 var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, {}, function (err, stdout, stderr) {

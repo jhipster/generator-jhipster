@@ -6,15 +6,13 @@ import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.User;
 
 import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;
 import java.util.Optional;<% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

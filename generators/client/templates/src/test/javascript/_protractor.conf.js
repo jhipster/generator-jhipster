@@ -4,7 +4,7 @@ var JasmineReporters = require('jasmine-reporters');
 var prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
 
 exports.config = {
-    seleniumServerJar: prefix + 'node_modules/protractor/selenium/selenium-server-standalone-2.47.1.jar',
+    seleniumServerJar: prefix + 'node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-2.53.1.jar',
     chromeDriver: prefix + 'node_modules/protractor/selenium/chromedriver',
     allScriptsTimeout: 20000,
 
@@ -60,7 +60,7 @@ exports.config = {
 
         browser.addMockModule('disableNgAnimate', disableNgAnimate);
         browser.addMockModule('disableCssAnimate', disableCssAnimate);
-        
+
         browser.driver.manage().window().setSize(1280, 1024);
         jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
             savePath: '<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e',

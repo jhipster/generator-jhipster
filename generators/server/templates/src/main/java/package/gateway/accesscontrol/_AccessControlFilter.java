@@ -53,9 +53,7 @@ public class AccessControlFilter extends ZuulFilter {
             // If this route correspond to the current request URI
             // We do a substring to remove the "**" at the end of the route URL
             if (requestUri.startsWith(serviceUrl.substring(0, serviceUrl.length() - 2))) {
-                if (isAuthorizedRequest(serviceUrl, serviceName, requestUri)) {
-                    return false;
-                }
+				return !isAuthorizedRequest(serviceUrl, serviceName, requestUri);
             }
         }
         return true;

@@ -23,7 +23,7 @@
                 <%_ if (applicationType == 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
-                "userManagement": "Gestion utilisateur",
+                "userManagement": "Gestion des utilisateurs",
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "health": "Diagnostics",
@@ -52,40 +52,44 @@
                 "register": "Vous n'avez pas encore de compte ? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Créer un compte</a>"
             },
             "error": {
-                "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
+                "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux !"
             },
             "validate": {
                 "newpassword": {
                     "required": "Votre mot de passe est requis.",
-                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
-                    "strength": "Robustesse du mot de passe:"
+                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères.",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères.",
+                    "strength": "Robustesse du mot de passe :"
                 },
                 "confirmpassword": {
-                    "required": "Votre confirmation du mot de passe est requis.",
-                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
+                    "required": "Votre confirmation du mot de passe est requise.",
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères.",
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères."
                 },
                 "email": {
                     "required": "Votre email est requis.",
-                    "minlength": "Votre email doit comporter au moins 5 caractères",
-                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
+                    "minlength": "Votre email doit comporter au moins 5 caractères.",
+                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères.",
                     "invalid": "Votre email n'est pas valide."
                 }
             }
         },
         "field": {
             "id": "ID"
+        },
+        "ribbon": {
+            "dev":"Développement"
         }
     },
     "entity": {
         "action": {
             "addblob": "Ajouter blob",
-            "addimage": "ajouter image",
+            "addimage": "Ajouter image",
             "back": "Retour",
             "cancel": "Annuler",
             "edit": "Editer",
             "delete": "Supprimer",
+            "open": "Ouvrir",
             "save": "Sauvegarder",
             "view": "Voir"
         },
@@ -97,25 +101,26 @@
             "title": "Confirmation de suppression"
         },
         "validation": {
-            "required": "Ce champs est obligatoire.",
-            "minlength": "Ce champs doit faire au minimum {{min}} caractères.",
-            "maxlength": "Ce champs doit faire moins de {{max}} caractères.",
-            "min": "Ce champs doit être inférieur à {{min}}.",
-            "max": "Ce champs doit être supérieur à {{max}}.",
-            "minbytes": "Ce champs doit être inférieur à {{min}} bytes.",
-            "maxbytes": "Ce champs doit être supérieur à {{max}} bytes.",
-            "pattern": "Ce champs doit suivre l'expression régulière {{pattern}}.",
-            "number": "Ce champs doit être un nombre.",
-            "datetimelocal": "Ce champs doit être une date et une heure."
+            "required": "Ce champ est obligatoire.",
+            "minlength": "Ce champ doit faire au minimum {{min}} caractères.",
+            "maxlength": "Ce champ doit faire moins de {{max}} caractères.",
+            "min": "Ce champ doit être supérieur à {{min}}.",
+            "max": "Ce champ doit être inférieur à {{max}}.",
+            "minbytes": "Ce champ doit être supérieur à {{min}} bytes.",
+            "maxbytes": "Ce champ doit être inférieur à {{max}} bytes.",
+            "pattern": "Ce champ doit suivre l'expression régulière {{pattern}}.",
+            "number": "Ce champ doit être un nombre.",
+            "datetimelocal": "Ce champ doit être une date et une heure."
         }
     },
     "error": {
-        "server.not.reachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "server.not.reachable": "Serveur inaccessible",
+        "url.not.found": "Non trouvé",
+        "NotNull": "Le champ {{fieldName}} ne peut pas être vide !",
+        "Size": "Le champ {{fieldName}} ne respecte pas les critères minimum et maximum !",
+        "userexists": "Login déja utilisé !",
+        "emailexists": "Email déja utilisé !",
+        "idexists": "Une nouvelle entité {{entityName}} ne peut pas avoir d'ID !"
     },
     "footer": "Ceci est votre pied de page"
 }

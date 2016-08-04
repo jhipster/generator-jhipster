@@ -1,0 +1,22 @@
+version: '2'
+services:
+    jhipster-elasticsearch:
+        image: <%= DOCKER_JHIPSTER_ELASTICSEARCH %>
+        ports:
+            - 9200:9200
+            - 9300:9300
+        # Uncomment this section to have elasticsearch data persisted to a volume
+        #volumes:
+        #   - ./log-data:/usr/share/elasticsearch/data
+    jhipster-logstash:
+        image: <%= DOCKER_JHIPSTER_LOGSTASH %>
+        command: logstash -f /conf/logstash.conf
+        ports:
+            - 5000:5000/udp
+        # Uncomment this section to have logstash config loaded from a volume
+        #volumes:
+        #    - ./log-conf/:/conf
+    jhipster-console:
+        image: <%= DOCKER_JHIPSTER_CONSOLE %>
+        ports:
+            - 5601:5601

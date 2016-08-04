@@ -76,6 +76,9 @@
         },
         "field": {
             "id" : "Código"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Cancelar",
             "delete": "Eliminar",
             "edit": "Editar",
+            "open": "Open",
             "save": "Guardar",
             "view": "Visualizar"
         },
@@ -111,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Server not reachable",
+        "url.not.found": "Not found",
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",

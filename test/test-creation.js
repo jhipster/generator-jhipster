@@ -4,6 +4,7 @@
 var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
+var fse = require('fs-extra');
 
 const constants = require('../generators/generator-constants'),
     TEST_DIR = constants.TEST_DIR,
@@ -45,6 +46,8 @@ const expectedFiles = {
         'README.md',
         '.gitignore',
         '.gitattributes',
+        'Jenkinsfile',
+        '.travis.yml',
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'ehcache.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
@@ -61,11 +64,12 @@ const expectedFiles = {
         SERVER_MAIN_RES_DIR + 'mails/activationEmail.html',
         SERVER_MAIN_RES_DIR + 'mails/passwordResetEmail.html',
         SERVER_MAIN_RES_DIR + 'i18n/messages.properties',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/JhipsterApp.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/Application.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/ApplicationWebXml.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/aop/logging/LoggingAspect.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/SwaggerConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/PageableParameterBuilderPlugin.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/ExceptionHandlingAsyncTaskExecutor.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/package-info.java',
@@ -92,8 +96,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/PersistentToken.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/User.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateConverters.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateTimeSerializer.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310LocalDateDeserializer.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310PersistenceConverters.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/AuthorityRepository.java',
@@ -200,6 +202,8 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation-storage.provider.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/compile.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/uib-pager.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/uib-pagination.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/state.handler.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/auth-expired.interceptor.js',
@@ -223,8 +227,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/services/auth/register.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/services/auth/sessions.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/form/show-validation.directive.js',
-        CLIENT_MAIN_SRC_DIR + 'app/components/form/uib-pager.config.js',
-        CLIENT_MAIN_SRC_DIR + 'app/components/form/uib-pagination.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
@@ -306,7 +308,6 @@ const expectedFiles = {
         CLIENT_TEST_SRC_DIR + 'spec/app/account/reset/request/reset.request.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/services/auth/auth.services.spec.js',
         CLIENT_MAIN_SRC_DIR + 'content/css/documentation.css',
-        CLIENT_MAIN_SRC_DIR + 'content/images/development_ribbon.png',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster.png',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster2x.png'
     ],
@@ -344,6 +345,11 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/TokenProvider.java'
     ],
 
+    uaa: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/UaaConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/UaaWebSecurityConfiguration.java'
+    ],
+
     gateway: [
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/GatewayConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java',
@@ -372,19 +378,22 @@ const expectedFiles = {
         DOCKER_DIR + 'sonar.yml'
     ],
 
-    dockerCassandra: [
-        DOCKER_DIR + 'cassandra/Cassandra.Dockerfile',
-        DOCKER_DIR + 'cassandra/Cassandra-OpsCenter.Dockerfile',
-        DOCKER_DIR + 'cassandra/scripts/init-dev.sh',
-        DOCKER_DIR + 'cassandra/scripts/init-prod.sh',
-        DOCKER_DIR + 'cassandra/scripts/entities.sh',
-        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
-        DOCKER_DIR + 'opscenter/Dockerfile',
-        DOCKER_DIR + 'cassandra-opscenter.yml',
+    cassandra: [
+        SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace-prod.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/create-keyspace.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_create-tables.cql',
+        SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000001_insert_default_users.cql',
+        DOCKER_DIR + 'cassandra/Cassandra-Migration.Dockerfile',
+        DOCKER_DIR + 'cassandra/scripts/autoMigrate.sh',
+        DOCKER_DIR + 'cassandra/scripts/execute-cql.sh',
+        DOCKER_DIR + 'cassandra-cluster.yml',
+        DOCKER_DIR + 'cassandra-migration.yml',
         DOCKER_DIR + 'cassandra.yml'
     ],
 
     containerizeWithDocker: [
+        DOCKER_DIR + 'central-server-config/application.yml',
         DOCKER_DIR + 'jhipster-registry.yml',
         DOCKER_DIR + 'Dockerfile',
         DOCKER_DIR + 'app.yml'
@@ -392,7 +401,6 @@ const expectedFiles = {
 };
 
 describe('JHipster generator', function () {
-    this.timeout(5000); //to avoid occassional timeouts
 
     describe('default configuration', function () {
         beforeEach(function (done) {
@@ -409,6 +417,44 @@ describe('JHipster generator', function () {
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false,
+                    'skipClient': false,
+                    'skipUserManagement': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
+            assert.file(expectedFiles.client);
+            assert.file(expectedFiles.dockerServicesProd);
+            assert.file(['gulpfile.js']);
+        });
+    });
+
+    describe('mariadb configuration', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Disk',
+                    'prodDatabaseType': 'mariadb',
                     'useSass': false,
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
@@ -496,9 +542,9 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct package names', function () {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java'
+                SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java'
             ]);
-            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /package com\.otherpackage;/);
+            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java', /package com\.otherpackage;/);
         });
     });
 
@@ -633,11 +679,45 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files with "Cassandra"', function () {
-            assert.file(expectedFiles.dockerCassandra);
+            assert.file(expectedFiles.cassandra);
         });
     });
 
-    describe('i18n', function () {
+    describe('cassandra no i18n', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'no',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'cassandra',
+                    'devDatabaseType': 'cassandra',
+                    'prodDatabaseType': 'cassandra',
+                    'useSass': false,
+                    'enableTranslation': false,
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false,
+                    'skipClient': false,
+                    'skipUserManagement': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with "Cassandra"', function () {
+            assert.file(expectedFiles.cassandra);
+            assert.noFile(expectedFiles.i18n);
+            assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
+        });
+    });
+
+    describe('no i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -866,7 +946,7 @@ describe('JHipster generator', function () {
     describe('microservice', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false, skipClient: true, skipUserManagement: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     'applicationType': 'microservice',
                     'baseName': 'jhipster',
@@ -937,10 +1017,88 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.containerizeWithDocker);
         });
     });
+
+    describe('UAA server', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'applicationType': 'uaa',
+                    'baseName': 'jhipster-uaa',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'serverPort': '9999',
+                    'authenticationType': 'uaa',
+                    'hibernateCache': 'no',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'mysql',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the UAA application type', function () {
+            assert.file(expectedFiles.uaa);
+            assert.file(expectedFiles.dockerServicesDev);
+            assert.file(expectedFiles.dockerServicesProd);
+            assert.file(expectedFiles.containerizeWithDocker);
+        });
+    });
+
+    describe('Gateway with UAA server', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
+                })
+                .withPrompts({
+                    'applicationType': 'gateway',
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'serverPort': '8080',
+                    'authenticationType': 'uaa',
+                    'uaaBaseName': './uaa/',
+                    'hibernateCache': 'hazelcast',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'mysql',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no',
+                    'enableSocialSignIn': false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for UAA auth with the Gateway application type', function () {
+            assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.gateway);
+            assert.file(expectedFiles.dockerServicesDev);
+            assert.file(expectedFiles.dockerServicesProd);
+            assert.file(expectedFiles.containerizeWithDocker);
+        });
+    });
 });
 
 describe('JHipster server generator', function () {
-    this.timeout(4000); //to avoid occassional timeouts
     describe('generate server', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/server'))
@@ -976,7 +1134,6 @@ describe('JHipster server generator', function () {
 });
 
 describe('JHipster client generator', function () {
-    this.timeout(4000); //to avoid occassional timeouts
     describe('generate client', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))

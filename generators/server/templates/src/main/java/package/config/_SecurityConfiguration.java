@@ -1,10 +1,18 @@
 package <%=packageName%>.config;
-<% if (authenticationType == 'session' || authenticationType == 'jwt') { %>
-import <%=packageName%>.security.*;<% } %><% if (authenticationType == 'session') { %>
-import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authenticationType == 'jwt') { %>
-import <%=packageName%>.security.jwt.*;<% } %><% if (authenticationType == 'session') { %>
-import <%=packageName%>.config.JHipsterProperties;<% } %>
 
+<%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
+import <%=packageName%>.security.*;
+<%_ } _%>
+<%_ if (authenticationType == 'session') { _%>
+import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;
+<%_ } _%>
+<%_ if (authenticationType == 'jwt') { _%>
+import <%=packageName%>.security.jwt.*;
+<%_ } _%>
+<%_ if (authenticationType == 'session') { _%>
+import <%=packageName%>.config.JHipsterProperties;
+
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
@@ -21,9 +29,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
-<% if (authenticationType == 'session') { %>
+<%_ if (authenticationType == 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.csrf.CsrfFilter;<% } %>
+import org.springframework.security.web.csrf.CsrfFilter;
+<%_ } _%>
 
 import javax.inject.Inject;
 
@@ -137,32 +146,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/account/reset_password/init").permitAll()
             .antMatchers("/api/account/reset_password/finish").permitAll()
-            .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/audits/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()<% } %>
-            .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/dump/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/shutdown/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/beans/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/configprops/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/info/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/autoconfig/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/mappings/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/liquibase/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/v2/api-docs/**").permitAll()
-            .antMatchers("/configuration/security").permitAll()
-            .antMatchers("/configuration/ui").permitAll()
-            .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'jwt') { %>;<% } %><% if (authenticationType == 'jwt') { %>
-            <%_ if (applicationType == 'gateway') { _%>
-            .antMatchers("/swagger-resources").permitAll()
-            .antMatchers("/").permitAll()
-            .anyRequest().authenticated() <% } %>
+            .antMatchers("/swagger-resources/configuration/ui").permitAll()
+            .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)<%if (authenticationType != 'jwt') { %>;<% } else { %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 

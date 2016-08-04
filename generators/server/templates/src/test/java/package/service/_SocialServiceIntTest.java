@@ -12,12 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.*;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.util.LinkedMultiValueMap;
@@ -29,10 +27,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
-@WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'sql') { %>
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType == 'sql') { %>
 @Transactional<% } %>
 public class SocialServiceIntTest {
 
@@ -80,7 +76,7 @@ public class SocialServiceIntTest {
             "LAST_NAME",
             "PROVIDER");
         socialService.createSocialUser(connection, "fr");
-        MultiValueMap connectionsByProviderId = new LinkedMultiValueMap<>();
+        MultiValueMap<String, Connection<?>> connectionsByProviderId = new LinkedMultiValueMap<>();
         connectionsByProviderId.put("PROVIDER", null);
         when(mockConnectionRepository.findAllConnections()).thenReturn(connectionsByProviderId);
 
@@ -280,7 +276,7 @@ public class SocialServiceIntTest {
     @Test
     public void testCreateSocialUserShouldNotCreateUserIfEmailAlreadyExist() {
         // Setup
-        User user = createExistingUser("@OTHER_LOGIN",
+        createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
             "OTHER_LAST_NAME");
@@ -305,8 +301,7 @@ public class SocialServiceIntTest {
     @Test
     public void testCreateSocialUserShouldNotChangeUserIfEmailAlreadyExist() {
         // Setup
-        long initialUserCount = userRepository.count();
-        User user = createExistingUser("@OTHER_LOGIN",
+        createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
             "OTHER_LAST_NAME");
@@ -321,7 +316,7 @@ public class SocialServiceIntTest {
 
         //Verify
         User userToVerify = userRepository.findOneByEmail("mail@mail.com").get();
-        assertThat(userToVerify.getLogin()).isEqualTo("@OTHER_LOGIN");
+        assertThat(userToVerify.getLogin()).isEqualTo("@other_login");
         assertThat(userToVerify.getFirstName()).isEqualTo("OTHER_FIRST_NAME");
         assertThat(userToVerify.getLastName()).isEqualTo("OTHER_LAST_NAME");
 

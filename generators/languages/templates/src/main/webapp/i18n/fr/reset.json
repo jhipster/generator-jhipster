@@ -6,9 +6,9 @@
                 "button": "Réinitialiser le mot de passe"
             },
             "messages": {
-                "info": "Veuillez renseigner l'addresse e-mail utilisée pour vous enregistrer",
-                "success": "Veuillez vérifier vos nouveaux e-mails et suivre les instructions pour réinitialiser votre mot de passe.",
-                "notfound": "<strong>L'adresse e-mail n'existe pas!</strong> Merci de la vérifier et de rééssayer."
+                "info": "Veuillez renseigner l'addresse email utilisée pour vous enregistrer",
+                "success": "Veuillez vérifier vos nouveaux emails et suivre les instructions pour réinitialiser votre mot de passe.",
+                "notfound": "<strong>L'adresse email n'existe pas !</strong> Merci de la vérifier et de rééssayer."
 
             }
 

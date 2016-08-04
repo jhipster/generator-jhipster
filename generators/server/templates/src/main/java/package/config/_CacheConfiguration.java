@@ -37,6 +37,7 @@ import javax.persistence.metamodel.EntityType;
 import java.util.Set;
 import java.util.SortedSet;<% } %>
 
+@SuppressWarnings("unused")
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(value = { MetricsConfiguration.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
@@ -229,6 +230,8 @@ public class CacheConfiguration {
 
     /**
      * Use by Spring Security, to get events from Hazelcast.
+     *
+     * @return the session registry
      */
     @Bean
     public SessionRegistry sessionRegistry() {

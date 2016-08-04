@@ -61,16 +61,21 @@
                         var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
                         var fieldType = fields[idx].fieldType;
                         var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-                        <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
+                        <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
                     <td>
-                        <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fieldName %>"/> {{<%= entityInstance %>.<%= fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
+                        <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
+                            <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 30px;"/>
+                        </a>
+                        <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
-                        <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
-                    <td><a ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
-                        {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</td>
+                        <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
+                    <td>
+                        <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a>
+                        <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    </td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>
                     <td translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
-                        <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
+                        <%_ } else if (fieldType == 'ZonedDateTime') { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | date:'medium'}}</td>
                     <%_ } else if (fieldType == 'LocalDate') { _%>
                         <td>{{<%=entityInstance %>.<%=fieldName%> | date:'mediumDate'}}</td>
@@ -82,6 +87,7 @@
                             var relationshipType = relationships[idx].relationshipType;
                             var ownerSide = relationships[idx].ownerSide;
                             var relationshipFieldName = relationships[idx].relationshipFieldName;
+                            var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
                             var otherEntityName = relationships[idx].otherEntityName;
                             var otherEntityStateName = relationships[idx].otherEntityStateName;
                             var otherEntityField = relationships[idx].otherEntityField;
@@ -92,9 +98,9 @@
                     <td>
                             <%_ if (otherEntityName == 'user') { _%>
                                 <%_ if (relationshipType == 'many-to-many') { _%>
-                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
-                        <span>
+                        </span>
                                 <%_ } else { _%>
                                     <%_ if (dto == 'no') { _%>
                         {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
@@ -104,9 +110,9 @@
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType == 'many-to-many') { _%>
-                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
-                            <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
-                        <span>
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
+                            <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id: <%= relationshipFieldName %>.id})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                        </span>
                                 <%_ } else { _%>
                                     <%_ if (dto == 'no') { _%>
                         <a ui-sref="<%= otherEntityStateName %>-detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
@@ -146,12 +152,12 @@
     </div>
     <%_ if (pagination == 'pager') { _%>
     <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount"></jhi-item-count>
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
     </div>
     <uib-pager total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
     <%_ } else if (pagination == 'pagination') { _%>
     <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount"></jhi-item-count>
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
         <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
     <%_ } _%>

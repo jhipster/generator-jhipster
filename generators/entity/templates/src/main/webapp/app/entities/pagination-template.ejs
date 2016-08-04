@@ -1,11 +1,12 @@
-        vm.loadAll = loadAll;
         vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
         <%_ if (searchEngine == 'elasticsearch') { _%>
         vm.clear = clear;
         vm.search = search;
+        vm.loadAll = loadAll;
         vm.searchQuery = pagingParams.search;
         vm.currentSearch = pagingParams.search;
         <%_ } _%>
@@ -13,13 +14,14 @@
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        vm.loadAll();
+
+        loadAll();
 
         function loadAll () {
         <%_ if (searchEngine != 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: pagingParams.page - 1,
-                size: paginationConstants.itemsPerPage,
+                size: vm.itemsPerPage,
                 sort: sort()
             }, onSuccess, onError);
         <%_ } else { _%>
@@ -27,13 +29,13 @@
                 <%= entityClass %>Search.query({
                     query: pagingParams.search,
                     page: pagingParams.page - 1,
-                    size: paginationConstants.itemsPerPage,
+                    size: vm.itemsPerPage,
                     sort: sort()
                 }, onSuccess, onError);
             } else {
                 <%= entityClass %>.query({
                     page: pagingParams.page - 1,
-                    size: paginationConstants.itemsPerPage,
+                    size: vm.itemsPerPage,
                     sort: sort()
                 }, onSuccess, onError);
             }

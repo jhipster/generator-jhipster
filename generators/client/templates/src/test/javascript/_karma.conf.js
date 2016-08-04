@@ -1,5 +1,16 @@
 // Karma configuration
-// http://karma-runner.github.io/0.10/config/configuration-file.html
+// http://karma-runner.github.io/0.13/config/configuration-file.html
+
+var sourcePreprocessors = ['coverage'];
+
+function isDebug() {
+    return process.argv.indexOf('--debug') >= 0;
+}
+
+if (isDebug()) {
+    // Disable JS minification if Karma is run with debug option.
+    sourcePreprocessors = [];
+}
 
 module.exports = function (config) {
     config.set({
@@ -27,19 +38,17 @@ module.exports = function (config) {
         exclude: [<% if (testFrameworks.indexOf('protractor') > -1) { %>'<%= TEST_SRC_DIR %>e2e/**'<% } %>],
 
         preprocessors: {
-            './**/*.js': ['coverage']
+            './**/*.js': sourcePreprocessors
         },
 
-        reporters: ['dots', 'jenkins', 'coverage', 'progress'],
+        reporters: ['dots', 'junit', 'coverage', 'progress'],
 
-        jenkinsReporter: {
-            <% if (buildTool == 'maven') { %>
+        junitReporter: {<% if (buildTool == 'maven') { %>
             outputFile: 'target/test-results/karma/TESTS-results.xml'<% } else { %>
             outputFile: 'build/test-results/karma/TESTS-results.xml'<% } %>
         },
 
-        coverageReporter: {
-            <% if (buildTool == 'maven') { %>
+        coverageReporter: {<% if (buildTool == 'maven') { %>
             dir: 'target/test-results/coverage',<% } else { %>
             dir: 'build/test-results/coverage',<% } %>
             reporters: [

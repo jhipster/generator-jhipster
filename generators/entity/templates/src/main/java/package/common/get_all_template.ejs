@@ -4,8 +4,7 @@
     var mapper = entityInstance + 'Mapper';
     var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
     var entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs';
-    if (dto == 'mapstruct') { %>
-    @Transactional(readOnly = true)<% } if (pagination == 'no') { %>
+    if (pagination == 'no') { %>
     public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");<% if (viaService) { %>
         return <%= entityInstance %>Service.findAll();<% } else { %>

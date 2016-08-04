@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Metriky aplikace",
+        "refresh.button": "Aktualizovat",
+        "updating": "Aktualizace...",
+        "jvm": {
+            "title": "JVM Metriky",
+            "memory": {
+                "title": "Paměť",
+                "total": "Celková Paměť",
+                "heap": "Heap Paměť",
+                "nonheap": "Non-Heap Paměť"
+            },
+            "threads": {
+                "title": "Vlákna",
+                "all": "Všechny",
+                "runnable": "Runnable",
+                "timedwaiting": "Čas čekání",
+                "waiting": "Čekání",
+                "blocked": "Blokovaný",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Čas Blokování",
+                    "blockedcount": "Počet Blokování",
+                    "waitedtime": "Čas Čekání",
+                    "waitedcount": "Počet Čekání",
+                    "lockname": "Název zámku",
+                    "stacktrace": "Stacktrace",
+                    "show": "Zobrazit Stacktrace",
+                    "hide": "Skrýt Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Garbage kolekce",
+                "marksweepcount": "Počet Mark Sweep",
+                "marksweeptime": "Čas Mark Sweep",
+                "scavengecount": "Počet Scavenge",
+                "scavengetime": "Čas Scavenge"
+            },
+            "http": {
+                "title": "HTTP požadavky (událostí za sekundu)",
+                "active": "Aktivní požadavky:",
+                "total": "Všechny požadavky:",
+                "table": {
+                    "code": "Kód",
+                    "count": "Počet",
+                    "mean": "Průměr (Mean)",
+                    "average": "Průměr (Average)"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Nebylo nalezeno",
+                    "servererror": "Chyba Serveru"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Statistika služeb (čas v milisekundách)",
+            "table": {
+                "name": "Název služby",
+                "count": "Počet",
+                "mean": "Průměr",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache statistiky",
+            "cachename": "Název cache",
+            "objects": "Objekty",
+            "hits": "Zásahy",
+            "misses": "Minutí",
+            "evictioncount": "Počet eviction",
+            "mean": "Průměrný čas odezvy (ms)"
+        },
+        "datasource": {
+        	"usage": "Používání",
+            "title": "DataSource statistiky (čas v milisekundách)",
+            "name": "Využití poolu",
+            "count": "Počet",
+            "mean": "Průměr",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

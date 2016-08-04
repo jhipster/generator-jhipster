@@ -3,7 +3,7 @@ package <%=packageName%>.web.rest.errors;
 import java.util.List;
 
 import org.springframework.core.annotation.AnnotationUtils;
-<%_ if (databaseType != 'no') { _%>
+<%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @ControllerAdvice
 public class ExceptionTranslator {
-<%_ if (databaseType != 'no') { _%>
+<%_ if (databaseType != 'no' && databaseType != 'cassandra') { _%>
 
     @ExceptionHandler(ConcurrencyFailureException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -51,7 +51,7 @@ public class ExceptionTranslator {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    public ErrorDTO processAccessDeniedExcpetion(AccessDeniedException e) {
+    public ErrorDTO processAccessDeniedException(AccessDeniedException e) {
         return new ErrorDTO(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
     }
 

@@ -1,7 +1,4 @@
-FROM ubuntu:trusty
-
-ENV JAVA_VERSION 8
-ENV JAVA_HOME /usr/lib/jvm/java-${JAVA_VERSION}-oracle
+FROM ubuntu:xenial
 
 RUN \
   # configure the "jhipster" user
@@ -10,15 +7,9 @@ RUN \
   echo 'jhipster:jhipster' |chpasswd && \
   mkdir /home/jhipster/app && \
 
-  # install oracle jdk 8
-  echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list && \
-  echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list && \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886 && \
+  # install open-jdk 8
   apt-get update && \
-  echo oracle-java${JAVA_VERSION}-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections && \
-  apt-get install -y --force-yes --no-install-recommends \
-    oracle-java${JAVA_VERSION}-installer \
-    oracle-java${JAVA_VERSION}-set-default && \
+  apt-get install -y openjdk-8-jdk && \
 
   # install utilities
   apt-get install -y \
@@ -34,7 +25,7 @@ RUN \
      build-essential && \
 
   # install node.js
-  curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - && \
+  curl -sL https://deb.nodesource.com/setup_4.x | bash && \
   apt-get install -y nodejs && \
 
   # upgrade npm
@@ -44,7 +35,14 @@ RUN \
   npm install -g \
     yo \
     bower \
-    gulp-cli
+    gulp-cli && \
+
+  # cleanup
+  apt-get clean && \
+  rm -rf \
+    /var/lib/apt/lists/* \
+    /tmp/* \
+    /var/tmp/*
 
 # copy sources
 COPY . /home/jhipster/generator-jhipster
@@ -59,7 +57,6 @@ RUN \
     /usr/lib/node_modules && \
 
   # cleanup
-  apt-get clean && \
   rm -rf \
     /var/lib/apt/lists/* \
     /tmp/* \

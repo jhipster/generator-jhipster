@@ -16,8 +16,7 @@ import org.springframework.data.domain.Pageable;<% } %>
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;<% if (dto == 'mapstruct') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;<% if (validation) { %>
@@ -140,8 +139,10 @@ public class <%= entityClass %>Resource {
      * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
      * to the query.
      *
-     * @param query the query of the <%= entityInstance %> search
-     * @return the result of the search
+     * @param query the query of the <%= entityInstance %> search <% if (pagination != 'no') { %>
+     * @param pageable the pagination information<% } %>
+     * @return the result of the search<% if (pagination != 'no') { %>
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
      */
     @RequestMapping(value = "/_search/<%= entityApiUrl %>",
         method = RequestMethod.GET,

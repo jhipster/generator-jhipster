@@ -5,45 +5,39 @@ ext {
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
 }
 
 def profiles = 'dev'
 if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
-if (project.hasProperty('no-swagger')) {
-    profiles += ',no-swagger'
-}
-if (project.hasProperty('no-cache')) {
-    profiles += ',no-cache'
-}
 
 bootRun {
-    args = ["--spring.profiles.active=" + profiles]
+    args = []
 }
 <% if (!skipClient) { %>
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
-}<% } %>
+}
 
 task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
-}
-
-task setProdProperties(dependsOn: bootRun) << {
-    doFirst {
-        System.setProperty('spring.profiles.active', profiles)
-    }
-}
+}<% } %>
 
 processResources {
     filesMatching('**/logback-spring.xml') {
         filter {
-            it.replace('@logback.loglevel@', logbackLoglevel)
+            it.replace('#logback.loglevel#', logbackLoglevel)
+        }
+    }
+    filesMatching('**/application.yml') {
+        filter {
+            it.replace('#spring.profiles.active#', profiles)
         }
     }
 }
 
-setProdProperties.dependsOn gulpConstantDev
+<% if (!skipClient) { %>
+processResources.dependsOn gulpConstantDev<% } %>

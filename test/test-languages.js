@@ -15,6 +15,7 @@ describe('JHipster generator languages', function () {
         {name: 'Catalan', value: 'ca'},
         {name: 'Chinese (Simplified)', value: 'zh-cn'},
         {name: 'Chinese (Traditional)', value: 'zh-tw'},
+        {name: 'Czech', value: 'cs'},
         {name: 'Danish', value: 'da'},
         {name: 'Dutch', value: 'nl'},
         {name: 'Galician', value: 'gl'},
@@ -31,6 +32,7 @@ describe('JHipster generator languages', function () {
         {name: 'Portuguese', value: 'pt-pt'},
         {name: 'Romanian', value: 'ro'},
         {name: 'Russian', value: 'ru'},
+        {name: 'Slovak', value: 'sk'},
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
@@ -44,7 +46,7 @@ describe('JHipster generator languages', function () {
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                     })
-                    .withOptions({'skip-wiredep': true})
+                    .withOptions({'skip-install': true})
                     .withPrompts({
                         languages: [language.value]
                     })
@@ -96,7 +98,7 @@ describe('JHipster generator languages', function () {
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir);
                     })
-                    .withOptions({'skip-wiredep': true})
+                    .withOptions({'skip-install': true})
                     .withPrompts({
                         languages: [language.value]
                     })

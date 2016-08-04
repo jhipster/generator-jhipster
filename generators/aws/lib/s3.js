@@ -1,26 +1,28 @@
 'use strict';
-var fs = require('fs');
+var fs = require('fs'),
+    chalk = require('chalk');
 
-var FILE_EXTENSION = '.original',
+const FILE_EXTENSION = '.original',
     S3_STANDARD_REGION = 'us-east-1';
 
-try {
-    var progressbar = require('progress');
-} catch (e) {
-    console.log(
-        'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n' +
-        'WINDOWS\n' +
-        'cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
-        'npm install aws-sdk progress node-uuid\n\n' +
-        'LINUX / MAC\n' +
-        'cd /usr/local/lib/node_modules/generator-jhipster\n' +
-        'npm install aws-sdk progress node-uuid'
-    );
-    process.exit(e.code);
-}
+var progressbar;
 
-var S3 = module.exports = function S3(Aws) {
+
+var S3 = module.exports = function S3(Aws, generator) {
     this.Aws = Aws;
+    try {
+        progressbar = require('progress');
+    } catch (e) {
+        generator.env.error(chalk.red(
+            'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n') +
+            chalk.yellow('WINDOWS\n') +
+            chalk.green('cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
+            'npm install aws-sdk progress node-uuid\n\n') +
+            chalk.yellow('LINUX / MAC\n') +
+            chalk.green('cd /usr/local/lib/node_modules/generator-jhipster\n' +
+            'npm install aws-sdk progress node-uuid')
+        );
+    }
 };
 
 S3.prototype.createBucket = function createBucket(params, callback) {
@@ -42,23 +44,22 @@ S3.prototype.createBucket = function createBucket(params, callback) {
     });
 
     s3.headBucket(function (err) {
-            if (err && err.statusCode === 404) {
-                s3.createBucket(function (err) {
-                    if (err) {
-                        error(err.message, callback);
-                    } else {
-                        success('Bucket ' + bucket + ' created successful', callback);
-                    }
-                });
-            } else if (err && err.statusCode === 301) {
-                error('Bucket ' + bucket + ' is already in use', callback);
-            } else if (err) {
-                error(err.message, callback);
-            } else {
-                success('Bucket ' + bucket + ' already exists', callback);
-            }
+        if (err && err.statusCode === 404) {
+            s3.createBucket(function (err) {
+                if (err) {
+                    error(err.message, callback);
+                } else {
+                    success('Bucket ' + bucket + ' created successful', callback);
+                }
+            });
+        } else if (err && err.statusCode === 301) {
+            error('Bucket ' + bucket + ' is already in use', callback);
+        } else if (err) {
+            error(err.message, callback);
+        } else {
+            success('Bucket ' + bucket + ' already exists', callback);
         }
-    );
+    });
 };
 
 S3.prototype.uploadWar = function uploadWar(params, callback) {
@@ -67,9 +68,9 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
     var buildFolder;
 
     if (buildTool === 'gradle') {
-        buildFolder = 'build/libs/'
+        buildFolder = 'build/libs/';
     } else {
-        buildFolder = 'target/'
+        buildFolder = 'target/';
     }
 
     findWarFilename(buildFolder, function (err, warFilename) {
@@ -101,7 +102,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
     }.bind(this));
 };
 
-var findWarFilename = function findWarFilename(buildFolder, callback) {
+function findWarFilename(buildFolder, callback) {
     var warFilename = '';
     fs.readdir(buildFolder, function (err, files) {
         if (err) {
@@ -115,9 +116,9 @@ var findWarFilename = function findWarFilename(buildFolder, callback) {
         });
         callback(null, warFilename);
     });
-};
+}
 
-var uploadToS3 = function uploadToS3(s3, body, callback) {
+function uploadToS3(s3, body, callback) {
     var bar;
 
     s3.waitFor('bucketExists', function (err) {
@@ -148,12 +149,12 @@ var uploadToS3 = function uploadToS3(s3, body, callback) {
             });
         }
     });
-};
+}
 
-var success = function success(message, callback) {
+function success(message, callback) {
     callback(null, {message: message});
-};
+}
 
-var error = function error(message, callback) {
+function error(message, callback) {
     callback({message: message}, null);
-};
+}

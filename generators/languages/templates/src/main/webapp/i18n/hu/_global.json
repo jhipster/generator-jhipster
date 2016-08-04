@@ -23,7 +23,7 @@
                 <%_ if (applicationType == 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
-                "userManagement": "User management",
+                "userManagement": "Felhasználókezelés",
                 "tracker": "Felhasználó követés",
                 "metrics": "Metrikák",
                 "health": "Health",
@@ -42,13 +42,13 @@
             "newpassword": "Új jelszó",
             "newpassword.placeholder": "Új jelszava",
             "confirmpassword": "Új jelszó megerősítése",
-            "confirmpassword.placeholder": "Újra írja be jelszavát",
+            "confirmpassword.placeholder": "Írja be újra a jelszavát",
             "email": "E-mail",
             "email.placeholder": "Az Ön email címe"
         },
         "messages": {
             "info": {
-                "authenticated": "Ha be akar <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
+                "authenticated": "Ha be akar <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépni</a>, kipróbálás céljából használható felhasználók:<br/>- Adminisztrátor (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
                 "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Regisztráljon</a>"
             },
             "error": {
@@ -57,8 +57,8 @@
             "validate": {
                 "newpassword": {
                     "required": "A jelszó kötelező.",
-                    "minlength": "A jelszó legalább 6 betűből kell, hogy álljon",
-                    "maxlength": "A jelszó nem lehet hosszabb mint 50 betű",
+                    "minlength": "A jelszó legalább 6 karakterből kell, hogy álljon",
+                    "maxlength": "A jelszó nem lehet hosszabb mint 50 karakter",
                     "strength": "A jelszó bonyolultsága:"
                 },
                 "confirmpassword": {
@@ -76,6 +76,9 @@
         },
         "field": {
             "id" : "ID"
+        },
+        "ribbon": {
+            "dev":"Fejlesztés"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Mégsem",
             "delete": "Törlés",
             "edit": "Szerkesztés",
+            "open": "Megnyitás",
             "save": "Mentés",
             "view": "Nézet"
         },
@@ -105,17 +109,18 @@
             "minbytes": "Ennek a mezőnek a megengedett minimum értéke {{min}} bytes.",
             "maxbytes": "Ennek a mezőnek a megengedett maximum értéke {{max}} bytes.",
             "pattern": "Ennek a mezőnek meg kell felelni a {{pattern}} mintának.",
-            "number": "Ennek a mezőnek számnak kéne lennie.",
-            "datetimelocal": "Ennek a mezőnek dátumnak vagy időpontnak kéne lennie."
+            "number": "Ennek a mezőnek számnak kell lennie.",
+            "datetimelocal": "Ennek a mezőnek dátumnak vagy időpontnak kell lennie."
         }
     },
     "error": {
         "server.not.reachable": "A szerver nem elérhető",
+        "url.not.found": "Not found",
         "NotNull": "Az {{fieldName}} mező nem lehet üres!",
         "Size": "A {{fieldName}} mező nem teljesíti a minimum/maximum hossz követelményeket!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "userexists": "Ezzel a felhasználónévvel már regisztráltak!",
+        "emailexists": "Ezzel az e-mail címmel már regisztráltak!",
+        "idexists": "Az új {{entityName}}-nak/nek nem lehet még ID-ja"
     },
     "footer": "Ez a lábléc."
 }

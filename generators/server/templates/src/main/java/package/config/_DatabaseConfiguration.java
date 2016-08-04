@@ -9,7 +9,7 @@ import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType =
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
 import com.mongodb.Mongo;
-import org.mongeez.Mongeez;<% } %>
+import com.github.mongobee.Mongobee;<% } %>
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 import org.h2.tools.Server;
 <%_ } _%>
@@ -181,13 +181,13 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     }
 
     @Bean
-    public Mongeez mongeez() {
-        log.debug("Configuring Mongeez");
-        Mongeez mongeez = new Mongeez();
-        mongeez.setFile(new ClassPathResource("/config/mongeez/master.xml"));
-        mongeez.setMongo(mongo);
-        mongeez.setDbName(mongoProperties.getDatabase());
-        mongeez.process();
-        return mongeez;
+    public Mongobee mongobee() {
+        log.debug("Configuring Mongobee");
+        Mongobee mongobee = new Mongobee(mongo);
+        mongobee.setDbName(mongoProperties.getDatabase());
+        // package to scan for migrations
+        mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
+        mongobee.setEnabled(true);
+        return mongobee;
     }<% } %>
 }

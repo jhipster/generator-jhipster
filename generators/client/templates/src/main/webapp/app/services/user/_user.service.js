@@ -8,7 +8,7 @@
     User.$inject = ['$resource'];
 
     function User ($resource) {
-        var service = $resource('api/users/:login', {}, {
+        var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/users/:login'<%} else { %>'api/users/:login'<% } %>, {}, {
             'query': {method: 'GET', isArray: true},
             'get': {
                 method: 'GET',

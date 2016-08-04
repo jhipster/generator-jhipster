@@ -76,6 +76,9 @@
         },
         "field": {
             "id" : "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
         }
     },
     "entity": {
@@ -86,6 +89,7 @@
             "cancel": "Avbryt",
             "delete": "Ta bort",
             "edit": "Ändra",
+            "open": "Open",
             "save": "Spara",
             "view": "Titta"
         },
@@ -111,6 +115,7 @@
     },
     "error": {
         "server.not.reachable": "Servern kan inte nås",
+        "url.not.found": "Not found",
         "NotNull": "Fält {{fieldName}} kan inte vara tomt!",
         "Size": "Fält {{fieldName}} uppfyller inte min/max-storlekskravet!",
         "userexists": "Användarnamnet är upptaget!",

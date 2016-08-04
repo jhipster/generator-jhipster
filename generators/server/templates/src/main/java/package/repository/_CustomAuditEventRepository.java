@@ -24,13 +24,20 @@ public class CustomAuditEventRepository implements AuditEventRepository {
 
     private static final String AUTHORIZATION_FAILURE = "AUTHORIZATION_FAILURE";
 
-    private static final String ANONYMOUS_USER = "anonymousUser";
+    private static final String ANONYMOUS_USER = "anonymoususer";
 
     @Inject
     private PersistenceAuditEventRepository persistenceAuditEventRepository;
 
     @Inject
     private AuditEventConverter auditEventConverter;
+
+    @Override
+    public List<AuditEvent> find(Date after) {
+        Iterable<PersistentAuditEvent> persistentAuditEvents =
+            persistenceAuditEventRepository.findByAuditEventDateAfter(LocalDateTime.from(after.toInstant()));
+        return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
+    }
 
     @Override
     public List<AuditEvent> find(String principal, Date after) {
@@ -43,6 +50,13 @@ public class CustomAuditEventRepository implements AuditEventRepository {
             persistentAuditEvents =
                 persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfter(principal, LocalDateTime.from(after.toInstant()));
         }
+        return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
+    }
+
+    @Override
+    public List<AuditEvent> find(String principal, Date after, String type) {
+        Iterable<PersistentAuditEvent> persistentAuditEvents =
+            persistenceAuditEventRepository.findByPrincipalAndAuditEventDateAfterAndAuditEventType(principal, LocalDateTime.from(after.toInstant()), type);
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
 

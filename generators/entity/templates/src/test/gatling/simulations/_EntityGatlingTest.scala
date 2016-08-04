@@ -43,7 +43,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } _%>
 <%_ if (authenticationType == 'oauth2') { _%>
 
-    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:mySecretOAuthSecret".getBytes(StandardCharsets.UTF_8))
+    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:my-secret-token-to-change-in-production".getBytes(StandardCharsets.UTF_8))
 
     val headers_http_authentication = Map(
         "Content-Type" -> """application/x-www-form-urlencoded""",
@@ -74,7 +74,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http)
         .check(status.is(401))<% if (authenticationType == 'session') { %>
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))<% } %>).exitHereIfFailed
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*);[P,p]ath=/").saveAs("csrf_token"))<% } %>).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
 <%_ if (authenticationType == 'session') { _%>
@@ -91,7 +91,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("password", "admin")
         .formParam("grant_type", "password")
         .formParam("scope", "read write")
-        .formParam("client_secret", "mySecretOAuthSecret")
+        .formParam("client_secret", "my-secret-token-to-change-in-production")
         .formParam("client_id", "<%= baseName%>app")
         .formParam("submit", "Login")
         .check(jsonPath("$.access_token").saveAs("access_token"))).exitHereIfFailed
@@ -106,7 +106,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .get("/api/account")
         .headers(headers_http_authenticated)
         .check(status.is(200))<% if (authenticationType == 'session') { %>
-        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))<% } %>)
+        .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*);[P,p]ath=/").saveAs("csrf_token"))<% } %>)
         .pause(10)
         .repeat(2) {
             exec(http("Get all <%= entityInstancePlural %>")

@@ -7,7 +7,7 @@
 
     LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModalInstance'];
 
-    function LoginController ($rootScope,$state, $timeout, Auth, $uibModalInstance) {
+    function LoginController ($rootScope, $state, $timeout, Auth, $uibModalInstance) {
         var vm = this;
 
         vm.authenticationError = false;
@@ -20,7 +20,7 @@
         vm.requestResetPassword = requestResetPassword;
         vm.username = null;
 
-        $timeout(function (){angular.element('[ng-model="vm.username"]').focus();});
+        $timeout(function (){angular.element('#username').focus();});
 
         function cancel () {
             vm.credentials = {
@@ -46,13 +46,14 @@
                     $state.go('home');
                 }
 
-                // If we're redirected to login, our
-                // previousState is already set in the authExpiredInterceptor. When login succesful go to stored state
-                if ($rootScope.redirected && $rootScope.previousStateName) {
-                    $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
-                    $rootScope.redirected = false;
-                } else {
-                    $rootScope.$broadcast('authenticationSuccess');
+                $rootScope.$broadcast('authenticationSuccess');
+
+                // previousState was set in the authExpiredInterceptor before being redirected to login modal.
+                // since login is succesful, go to stored previousState and clear previousState
+                if (Auth.getPreviousState()) {
+                    var previousState = Auth.getPreviousState();
+                    Auth.resetPreviousState();
+                    $state.go(previousState.name, previousState.params);
                 }
             }).catch(function () {
                 vm.authenticationError = true;

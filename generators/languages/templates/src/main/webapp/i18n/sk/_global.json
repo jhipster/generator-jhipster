@@ -1,0 +1,126 @@
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Používate <strong>zastaraný</strong> prehliadač. Prosím <a href=\"http://browsehappy.com/?locale=en\">aktualizujte svoj prehliadač</a> pre zlepšenie použiteľnosti.",
+        "menu": {
+            "home": "Domov",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entity",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Účet",
+                "settings": "Nastavenia",
+                "password": "Heslo",
+                "sessions": "Sedenia",
+                "login": "Prihlásenie",
+                "logout": "Odhlásiť sa",
+                "register": "Registrácia"
+            },
+            "admin": {
+                "main": "Administrácia",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Brána",
+                <%_ } _%>
+                "userManagement": "Správa používateľov",
+                "tracker": "Sledovanie používateľov",
+                "metrics": "Metriky",
+                "health": "Stav systému",
+                "configuration": "Konfigurácia",
+                "logs": "Logy",
+                "audits": "Audity",
+                "apidocs": "API",
+                "database": "Databáza",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Jazyk"
+        },
+        "form": {
+            "username": "Používateľské meno",
+            "username.placeholder": "Vaše používateľské meno",
+            "newpassword": "Nové heslo",
+            "newpassword.placeholder": "Nové heslo",
+            "confirmpassword": "Potvrdenie nového hesla",
+            "confirmpassword.placeholder": "Potvrdenie nového hesla",
+            "email": "E-mail",
+            "email.placeholder": "Váš e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Ak sa chcete <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prihlásiť</a>, môžete vyskúšať predvolené účty:<br/>- Administrátor (meno=\"admin\" a heslo=\"admin\") <br/>- Používateľ (meno=\"user\" a heslo=\"user\").",
+                "register": "Ešte nemáte účet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Zaregistrujte si nový účet.</a>"
+            },
+            "error": {
+                "dontmatch": "Nové heslo a potvrdenie nového hesla sa nezhodujú!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Heslo je povinné.",
+                    "minlength": "Vaše heslo musí mať aspoň 5 znakov.",
+                    "maxlength": "Vaše heslo nemôže byť dlhšie ako 50 znakov.",
+                    "strength": "Sila hesla:"
+                },
+                "confirmpassword": {
+                    "required": "Potvrdenie hesla je povinné.",
+                    "minlength": "Vaše potvrdenie hesla musí mať aspoň 5 znakov.",
+                    "maxlength": "Vaše potvrdenie hesla nemôže byť dlhšie ako 50 znakov."
+                },
+                "email": {
+                    "required": "E-mail je povinný.",
+                    "invalid": "Zadaný e-mail nie je validný.",
+                    "minlength": "Váš e-mail musí mať aspoň 5 znakov.",
+                    "maxlength": "Váš e-mail nemôže byť dlhší ako 50 znakov."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev":"Development"
+        }
+    },
+    "entity": {
+        "action": {
+            "addblob": "Vložiť blob",
+            "addimage": "Vložiť obrázok",
+            "back": "Späť",
+            "cancel": "Zrušiť",
+            "delete": "Odstrániť",
+            "edit": "Upraviť",
+            "open": "Open",
+            "save": "Uložiť",
+            "view": "Detaily"
+        },
+        "detail": {
+            "field": "Pole",
+            "value": "Hodnota"
+        },
+        "delete": {
+            "title": "Potvrdenie odstránenia"
+        },
+        "validation": {
+            "required": "Toto pole je povinné.",
+            "minlength": "Toto pole musí mať aspoň {{ min }} znakov.",
+            "maxlength": "Toto pole nemôže byť dlhšie ako {{ max }} znakov.",
+            "min": "Toto pole musí mať hodnotu vyššiu ako {{ min }}.",
+            "max": "Toto pole nemôže mať vyššiu hodnotu ako {{ max }}.",
+            "minbytes": "Toto pole musí mať viac ako {{ min }} bajtov.",
+            "maxbytes": "Toto pole nemôže mať viac ako {{ max }} bajtov.",
+            "pattern": "Toto pole musí spĺňať vzor {{ pattern }}.",
+            "number": "Toto pole by malo obsahovať číslo.",
+            "datetimelocal": "Toto pole by malo obsahovať dátum a čas."
+        }
+    },
+    "error": {
+        "server.not.reachable": "Server je nedostupný",
+        "url.not.found": "Not found",
+        "NotNull": "Pole {{ fieldName }} nemôže byť prázdne!",
+        "Size": "Pole {{ fieldName }} nespĺňa požiadavku minimálnej alebo maximálnej veľkosti!",
+        "userexists": "Zadané používateľské meno už niekto používa!",
+        "emailexists": "Zadaný e-mail už niekto používa!",
+        "idexists": "Nová entita {{ entityName }} ešte nemôže mať ID"
+    },
+    "footer": "Toto je vaše zápätie"
+}

@@ -4,8 +4,8 @@ import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %
 import java.time.ZonedDateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
-import java.util.Date;<% } %><% if (relationships.length > 0) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainBlob && databaseType === 'cassandra') { %>
+import java.nio.ByteBuffer;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
@@ -22,6 +22,7 @@ public class <%= entityClass %>DTO implements Serializable {
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     private UUID id;<% } %>
+
     <%_ for (idx in fields) {
         var fieldValidate = fields[idx].fieldValidate;
         var fieldValidateRules = fields[idx].fieldValidateRules;
@@ -37,44 +38,37 @@ public class <%= entityClass %>DTO implements Serializable {
         var fieldName = fields[idx].fieldName;
         if (fieldValidate == true) {
             var required = false;
-            var MAX_VALUE = 2147483647;
             if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
                 required = true;
-            }
-            if (required) { _%>
-
-    @NotNull<% } %><% if (fieldValidateRules.indexOf('minlength') != -1 && fieldValidateRules.indexOf('maxlength') == -1) { %>
-    @Size(min = <%= fieldValidateRulesMinlength %>)<% } %><% if (fieldValidateRules.indexOf('maxlength') != -1 && fieldValidateRules.indexOf('minlength') == -1) { %>
-    @Size(max = <%= fieldValidateRulesMaxlength %>)<% } %><% if (fieldValidateRules.indexOf('minlength') != -1 && fieldValidateRules.indexOf('maxlength') != -1) { %>
-    @Size(min = <%= fieldValidateRulesMinlength %>, max = <%= fieldValidateRulesMaxlength %>)<% } %><% if (fieldValidateRules.indexOf('minbytes') != -1 && fieldValidateRules.indexOf('maxbytes') == -1) { %>
-    @Size(min = <%= fieldValidateRulesMinbytes %>)<% } %><% if (fieldValidateRules.indexOf('maxbytes') != -1 && fieldValidateRules.indexOf('minbytes') == -1) { %>
-    @Size(max = <%= fieldValidateRulesMaxbytes %>)<% } %><% if (fieldValidateRules.indexOf('minbytes') != -1 && fieldValidateRules.indexOf('maxbytes') != -1) { %>
-    @Size(min = <%= fieldValidateRulesMinbytes %>, max = <%= fieldValidateRulesMaxbytes %>)<% } %><% if (fieldValidateRules.indexOf('min') != -1) { %>
-    @Min(value = <%= fieldValidateRulesMin %>)<% } %><% if (fieldValidateRules.indexOf('max') != -1) { %>
-    @Max(value = <%= fieldValidateRulesMax %><%= (fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fieldValidateRulesPatternJava %>")<% } } %><% if (fieldType == 'byte[]' && databaseType === 'sql') { %>
-    @Lob<% } %>
+            } _%>
+    <%- include ../../../common/field_validators -%>
+    <%_ } _%>
+    <%_ if (fieldType == 'byte[]' && databaseType === 'sql') { _%>
+    @Lob
+    <%_ } _%>
     <%_ if (fieldTypeBlobContent != 'text') { _%>
     private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>
     private String <%= fieldName %>;
     <%_ } %>
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
     private String <%= fieldName %>ContentType;
         <%_ } _%>
     <%_ } _%>
     <%_ for (idx in relationships) {
         var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
         relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
         ownerSide = relationships[idx].ownerSide; %><% if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
-    private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldName %>s = new HashSet<>();
+    private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
-    private Long <%= relationshipFieldName %>Id;<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
+    private Long <%= relationshipFieldName %>Id;
+    <% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
@@ -106,7 +100,7 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+    <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
@@ -118,30 +112,44 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ } } _%>
     <%_ for (idx in relationships) {
         relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         otherEntityName = relationships[idx].otherEntityName,
+        otherEntityNamePlural = relationships[idx].otherEntityNamePlural,
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
         relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
+        relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
         ownerSide = relationships[idx].ownerSide;
         if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
-    public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalized %>s() {
-        return <%= relationshipFieldName %>s;
+    public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalizedPlural %>() {
+        return <%= relationshipFieldNamePlural %>;
     }
 
-    public void set<%= relationshipNameCapitalized %>s(Set<<%= otherEntityNameCapitalized %>DTO> <%= otherEntityName %>s) {
-        this.<%= relationshipFieldName %>s = <%= otherEntityName %>s;
+    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>DTO> <%= otherEntityNamePlural %>) {
+        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
     }
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
+    <%_ if (relationshipNameCapitalized.length > 1) { _%>
     public Long get<%= relationshipNameCapitalized %>Id() {
         return <%= relationshipFieldName %>Id;
     }
 
     public void set<%= relationshipNameCapitalized %>Id(Long <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
-    }<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
+    }
+    <%_ } else { // special case when the entity name has one character _%>
+    public Long get<%= relationshipNameCapitalized.toLowerCase() %>Id() {
+        return <%= relationshipFieldName %>Id;
+    }
+
+    public void set<%= relationshipNameCapitalized.toLowerCase() %>Id(Long <%= otherEntityName %>Id) {
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
+    }
+    <%_ } _%>
+<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
 
     public String get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() {
         return <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;

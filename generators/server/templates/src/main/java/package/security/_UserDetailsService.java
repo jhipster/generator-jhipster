@@ -1,6 +1,5 @@
 package <%=packageName%>.security;
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<%}%>
+
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import org.slf4j.Logger;
@@ -9,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;<% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<%}%>
 
 import javax.inject.Inject;
 import java.util.*;
@@ -27,11 +26,11 @@ public class UserDetailsService implements org.springframework.security.core.use
     @Inject
     private UserRepository userRepository;
 
-    @Override
-    @Transactional
+    @Override<% if (databaseType == 'sql') { %>
+    @Transactional<%}%>
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
-        String lowercaseLogin = login.toLowerCase();
+        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         Optional<User> userFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
         return userFromDatabase.map(user -> {
             if (!user.getActivated()) {

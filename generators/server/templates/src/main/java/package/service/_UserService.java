@@ -1,25 +1,28 @@
 package <%=packageName%>.service;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
-import <%=packageName%>.domain.PersistentToken;<% } %><% } %>
+import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (databaseType == 'cassandra') { %>
-import <%=packageName%>.security.AuthoritiesConstants;<% } %>
+import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
+import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.dto.ManagedUserDTO;
-import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import java.time.LocalDate;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+<%_ } _%>
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
+<%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
+import java.time.LocalDate;
+<%_ } _%>
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
@@ -32,8 +35,8 @@ import java.util.*;
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
-
     <%_ if (enableSocialSignIn) { _%>
+
     @Inject
     private SocialService socialService;
     <%_ } _%>
@@ -41,12 +44,16 @@ public class UserService {
     @Inject
     private PasswordEncoder passwordEncoder;
 
+    <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+    @Inject
+    public JdbcTokenStore jdbcTokenStore;
+    <%_ } _%>
+
     @Inject
     private UserRepository userRepository;<% if (searchEngine == 'elasticsearch') { %>
 
     @Inject
     private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
-
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %><% } %>
@@ -100,7 +107,7 @@ public class UserService {
         String langKey) {
 
         User newUser = new User();<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        Authority authority = authorityRepository.findOne("ROLE_USER");
+        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
         Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());
         Set<String> authorities = new HashSet<>();<% } %>
@@ -133,7 +140,7 @@ public class UserService {
         user.setLastName(managedUserDTO.getLastName());
         user.setEmail(managedUserDTO.getEmail());
         if (managedUserDTO.getLangKey() == null) {
-            user.setLangKey("<%= nativeLanguageShortName %>"); // default language
+            user.setLangKey("<%= nativeLanguage %>"); // default language
         } else {
             user.setLangKey(managedUserDTO.getLangKey());
         }<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -169,6 +176,10 @@ public class UserService {
     }
 
     public void deleteUserInformation(String login) {
+        <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+        jdbcTokenStore.findTokensByUserName(login).stream().forEach(token ->
+            jdbcTokenStore.removeAccessToken(token));
+        <%_ } _%>
         userRepository.findOneByLogin(login).ifPresent(u -> {
             <%_ if (enableSocialSignIn) { _%>
             socialService.deleteUserSocialConnection(u.getLogin());

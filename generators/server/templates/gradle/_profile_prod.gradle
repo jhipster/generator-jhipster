@@ -9,7 +9,7 @@ ext {
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
+    compile "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
 }
 
 def profiles = 'prod'
@@ -17,12 +17,12 @@ if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
 
-if (project.hasProperty('no-cache')) {
-    profiles += ',no-cache'
+if (project.hasProperty('swagger')) {
+    profiles += ',swagger'
 }
 
 bootRun {
-    args = ["--spring.profiles.active=" + profiles]
+    args = []
 }
 <% if (!skipClient) { %>
 task gulpBuildWithOpts(type: GulpTask) {
@@ -36,19 +36,19 @@ war {
 processResources {
     filesMatching('**/logback-spring.xml') {
         filter {
-            it.replace('@logback.loglevel@', logbackLoglevel)
+            it.replace('#logback.loglevel#', logbackLoglevel)
+        }
+    }
+    filesMatching('**/application.yml') {
+        filter {
+            it.replace('#spring.profiles.active#', profiles)
         }
     }
 }
 
-task setProdProperties(dependsOn: bootRun) << {
-    doFirst {
-        System.setProperty('spring.profiles.active', profiles)
-    }
-}
 <% if (!skipClient) { %>
-gulp_build.dependsOn 'npmInstall'
-gulp_build.dependsOn 'bower'
+gulpBuildWithOpts.dependsOn 'npmInstall'
+gulpBuildWithOpts.dependsOn 'bower'
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
 bootRun.dependsOn gulp_test<% } %>

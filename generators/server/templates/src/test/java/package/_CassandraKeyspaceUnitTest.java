@@ -6,17 +6,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = <%= mainClass %>.class)
 public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass().getCanonicalName());
@@ -25,8 +23,10 @@ public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
     private Session session;
 
     @Test
-    public void shouldHaveUserTableCreated() throws Exception {
-        ResultSet result = session.execute("select * from user");
-        assertThat(result.all()).hasSize(4);
+    public void shouldListCassandraUnitKeyspace() throws Exception {
+        ResultSet result = session.execute("SELECT * FROM system_schema.keyspaces;");
+        assertThat(result.all())
+            .extracting(row -> row.getString("keyspace_name"))
+            .containsOnlyOnce((CASSANDRA_UNIT_KEYSPACE));
     }
 }

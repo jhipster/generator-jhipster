@@ -6,8 +6,7 @@ import <%=packageName%>.domain.SocialUserConnection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.social.connect.*;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
@@ -16,8 +15,7 @@ import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 import org.springframework.social.oauth1.OAuth1Operations;
 import org.springframework.social.oauth1.OAuth1ServiceProvider;
 import org.springframework.social.oauth2.*;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -31,10 +29,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
-@WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'sql') { %>
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class CustomSocialUsersConnectionRepositoryIntTest {
 
@@ -176,8 +172,9 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
         providerUsers.add("twitter", "1");
         MultiValueMap<String, Connection<?>> connectionsForUsers = connectionRepository.findConnectionsToUsers(providerUsers);
         assertEquals(2, connectionsForUsers.size());
-        assertEquals("10", connectionsForUsers.getFirst("facebook").getKey().getProviderUserId());
-        assertFacebookConnection((Connection<TestFacebookApi>) connectionsForUsers.get("facebook").get(1));
+        String providerId=connectionsForUsers.getFirst("facebook").getKey().getProviderUserId();
+        assertTrue("10".equals(providerId) || "9".equals(providerId) );
+        assertFacebookConnection((Connection<TestFacebookApi>) connectionRepository.getConnection(new ConnectionKey("facebook", "9")));
         assertTwitterConnection((Connection<TestTwitterApi>) connectionsForUsers.getFirst("twitter"));
     }
 
@@ -277,7 +274,8 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
     public void addConnectionDuplicate() {
         Connection<TestFacebookApi> connection = connectionFactory.createConnection(new AccessGrant("123456789", null, "987654321", 3600L));
         connectionRepository.addConnection(connection);
-        connectionRepository.addConnection(connection);
+        connectionRepository.addConnection(connection);<% if (databaseType === 'sql') { %>
+        socialUserConnectionRepository.flush();<% } %>
     }
 
     @Test
@@ -416,7 +414,6 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
             expireTime);
         return socialUserConnectionRepository.save(socialUserConnectionToSabe);
     }
-
 
     private void assertNewConnection(Connection<TestFacebookApi> connection) {
         assertEquals("facebook", connection.getKey().getProviderId());

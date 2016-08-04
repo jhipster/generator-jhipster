@@ -1,2 +1,2 @@
-FROM mongo:3.2.3
+FROM <%= DOCKER_MONGODB %>
 ADD mongodb/scripts/init_replicaset.js init_replicaset.js

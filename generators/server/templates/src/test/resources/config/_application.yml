@@ -10,7 +10,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 eureka:
     client:
         enabled: false
@@ -26,6 +26,8 @@ spring:
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
     <%_ } _%>
+    jackson:
+        serialization.write_dates_as_timestamps: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
@@ -36,7 +38,7 @@ spring:
         database-platform: <%=packageName%>.domain.util.FixedH2Dialect
         database: H2
         open-in-view: false
-        show_sql: true
+        show-sql: true
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
@@ -59,7 +61,7 @@ spring:
         cassandra:
             contactPoints: localhost
             port: 9142
-            protocolVersion: V2
+            protocolVersion: V4
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
     <%_ if (applicationType == 'gateway') { _%>
@@ -103,24 +105,25 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         authentication:
-    <%_ if (authenticationType == 'jwt') { _%>
+    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             jwt:
-                secret: jwt-secret-key
-                # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
+                secret: <%= jwtSecretKey %>
+                # Token is valid 24 hours
+                tokenValidityInSeconds: 86400
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
                 clientid: <%= baseName %>app
-                secret: mySecretOAuthSecret
+                secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
+    security:
         rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
@@ -137,4 +140,3 @@ jhipster:
         contactEmail:
         license:
         licenseUrl:
-        enabled: false

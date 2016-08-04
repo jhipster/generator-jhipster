@@ -1,9 +1,11 @@
 #!/bin/bash
 set -ev
-
+#-------------------------------------------------------------------------------
+# Functions
+#-------------------------------------------------------------------------------
 moveEntity() {
   local entity="$1"
-  mv "$JHIPSTER_SAMPLES"/.jhipster/"$entity".json "$HOME"/"$JHIPSTER"/.jhipster/
+  mv "$JHIPSTER_SAMPLES"/.jhipster/"$entity".json "$HOME"/app/.jhipster/
 }
 
 generateEntity() {
@@ -16,7 +18,7 @@ generateEntity() {
 #-------------------------------------------------------------------------------
 # Copy entities json
 #-------------------------------------------------------------------------------
-mkdir -p "$HOME"/"$JHIPSTER"/.jhipster/
+mkdir -p "$HOME"/app/.jhipster/
 if [ "$JHIPSTER" == "app-mongodb" ]; then
   moveEntity MongoBankAccount
 
@@ -72,6 +74,7 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity TestManyToOne
   moveEntity TestManyToMany
   moveEntity TestOneToOne
+  moveEntity TestCustomTableName
 
 else
   moveEntity BankAccount
@@ -87,12 +90,12 @@ else
   moveEntity FieldTestPaginationEntity
 fi
 
-ls -l "$HOME"/"$JHIPSTER"/.jhipster/
+ls -l "$HOME"/app/.jhipster/
 
 #-------------------------------------------------------------------------------
 # Generate the entities with yo jhipster:entity
 #-------------------------------------------------------------------------------
-cd "$HOME"/"$JHIPSTER"
+cd "$HOME"/app
 generateEntity BankAccount
 generateEntity MongoBankAccount
 generateEntity MicroserviceBankAccount
@@ -125,12 +128,13 @@ generateEntity TestPagination
 generateEntity TestManyToOne
 generateEntity TestManyToMany
 generateEntity TestOneToOne
+generateEntity TestCustomTableName
 
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" != "app-gradle" ]; then
-  mvn javadoc:javadoc
-else
+if [ -f "mvnw" ]; then
+  ./mvnw javadoc:javadoc
+elif [ -f "gradlew" ]; then
   ./gradlew javadoc
 fi

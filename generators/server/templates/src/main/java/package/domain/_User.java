@@ -1,4 +1,6 @@
 package <%=packageName%>.domain;
+
+import <%=packageName%>.config.Constants;
 <% if (databaseType == 'cassandra') { %>
 import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;<% } %>
@@ -21,6 +23,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import java.time.ZonedDateTime;<% } %>
 
@@ -45,17 +48,19 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @PartitionKey
     private String id;<% } %>
 
-    @NotNull<% if (enableSocialSignIn) { %>
-    @Size(min = 1, max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100, unique = true, nullable = false)<% } %><% } else { %>
-    @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
-    @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50, unique = true, nullable = false)<% } %><% } %>
+    <%_ var columnMax = 50;
+        if (enableSocialSignIn) {
+            columnMax = 100;
+        } _%>
+    @NotNull
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = <%=columnMax %>)<% if (databaseType == 'sql') { %>
+    @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %>
     private String login;
 
     @JsonIgnore
     @NotNull
-    @Size(min = 60, max = 60) <% if (databaseType == 'sql') { %>
+    @Size(min = 60, max = 60)<% if (databaseType == 'sql') { %>
     @Column(name = "password_hash",length = 60)<% } %>
     private String password;
 
@@ -69,10 +74,9 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
-    @NotNull
     @Email
     @Size(max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100, unique = true, nullable = false)<% } %>
+    @Column(length = 100, unique = true)<% } %>
     private String email;
 <% if (databaseType == 'sql') { %>
     @NotNull
@@ -134,8 +138,9 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         return login;
     }
 
+    //Lowercase the login before saving it in database
     public void setLogin(String login) {
-        this.login = login;
+        this.login = login.toLowerCase(Locale.ENGLISH);
     }
 
     public String getPassword() {

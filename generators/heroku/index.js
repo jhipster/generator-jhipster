@@ -75,6 +75,11 @@ module.exports = HerokuGenerator.extend({
     },
 
     default: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'heroku');
+        },
+
         gitInit: function () {
             if (this.abort) return;
             var done = this.async();
@@ -123,6 +128,8 @@ module.exports = HerokuGenerator.extend({
                 dbAddOn = ' --addons heroku-postgresql';
             } else if (this.prodDatabaseType === 'mysql') {
                 dbAddOn = ' --addons jawsdb:kitefin';
+            } else if (this.prodDatabaseType === 'mongodb') {
+                dbAddOn = ' --addons mongolab:sandbox';
             }
 
             this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
@@ -227,13 +234,11 @@ module.exports = HerokuGenerator.extend({
 
         copyHerokuFiles: function () {
             if (this.abort) return;
-            var insight = this.insight();
-            insight.track('generator', 'heroku');
+
             var done = this.async();
             this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-
-            if (this.prodDatabaseType !== 'no') {
+            if (this.prodDatabaseType === 'postgresql' || this.prodDatabaseType === 'mysql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
             }
 

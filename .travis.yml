@@ -4,12 +4,18 @@ services:
   - docker
 language: node_js
 node_js:
-  - "4.4.2"
+  - "4.4.7"
 jdk:
   - oraclejdk8
+cache:
+  directories:
+    - node_modules
+    - $HOME/.m2
+    - $HOME/.gradle
+    - $HOME/app/node_modules
+    - $HOME/app/node
 env:
   global:
-    - JHIPSTER_NODE_CACHE=1
     - PROFILE=dev
     - RUN_APP=1
     - PROTRACTOR=0
@@ -18,19 +24,18 @@ env:
     - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
     - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
-    - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0
+    - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0 PROFILE=prod RUN_APP=0
     - JHIPSTER=app-gradle PROTRACTOR=1
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-social-websocket PROTRACTOR=1
     - JHIPSTER=app-cassandra
-    - JHIPSTER=app-microservice
-    - JHIPSTER=app-gateway
     - JHIPSTER=app-hazelcast-cucumber
     - JHIPSTER=app-mongodb
     - JHIPSTER=app-oauth2
     - JHIPSTER=app-jwt
-
+    - JHIPSTER=app-gateway
+    - JHIPSTER=app-microservice
 before_install:
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
@@ -46,10 +51,11 @@ script:
   - $JHIPSTER_SCRIPTS/03-docker-compose.sh
   - $JHIPSTER_SCRIPTS/04-tests.sh
   - $JHIPSTER_SCRIPTS/05-run.sh
+  - $JHIPSTER_SCRIPTS/06-sonar.sh
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/c77e712c44b0a4914b7c
+      - https://webhooks.gitter.im/e/479b810ad42c816679fb
     on_success: always  # options: [always|never|change] default: always
     on_failure: always  # options: [always|never|change] default: always
     on_start: false     # default: false

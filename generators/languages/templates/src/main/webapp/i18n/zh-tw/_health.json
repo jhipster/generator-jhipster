@@ -4,11 +4,11 @@
         "refresh.button": "重整",
         "stacktrace": "堆疊追蹤",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "詳細信息",
+            "properties": "屬性",
+            "name": "名",
+            "value": "值",
+            "error": "錯誤"
         },
         "indicator": {
             <%_ if (applicationType === 'gateway') { _%>
@@ -17,10 +17,10 @@
             "configServer": "Microservice Config Server",
             <%_ } _%>
             "diskSpace": "硬碟空間",
-            "mail": "電子郵件",<% if (searchEngine == 'elasticsearch') { %>
-            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
-            "db": "資料庫"<% } %><% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "電子郵件"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "資料庫"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

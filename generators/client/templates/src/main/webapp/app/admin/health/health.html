@@ -17,7 +17,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="health in vm.healthData">
-                <td><% if (enableTranslation){ %>{{'health.indicator.' + vm.baseName(health.name) | translate}}<% }else{ %><span class="text-capitalize">{{ vm.baseName(health.name) }}</span><% } %> {{vm.subSystemName(health.name)}}</td>
+                <td><% if (enableTranslation){ %>{{'health.indicator.' + vm.baseName(health.name) | translate}}<% } else { %><span class="text-capitalize">{{ vm.baseName(health.name) }}</span><% } %> {{vm.subSystemName(health.name)}}</td>
                 <td class="text-center">
                     <span class="label" ng-class="vm.getLabelClass(health.status)">
                         <% if (enableTranslation){ %>{{'health.status.' + health.status | translate}}<% }else{ %>{{ health.status }}<% } %>

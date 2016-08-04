@@ -43,13 +43,17 @@ module.exports = ServiceGenerator.extend({
             cb();
         }.bind(this));
     },
+    default: {
+        insight: function () {
+            var insight = this.insight();
+            insight.trackWithEvent('generator', 'service');
+            insight.track('service/interface', this.useInterface);
+        }
+    },
 
     writing: function () {
         this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = this.name.toLowerCase();
-        var insight = this.insight();
-        insight.track('generator', 'service');
-        insight.track('service/interface', this.useInterface);
 
         this.template(SERVER_MAIN_SRC_DIR + 'package/service/_Service.java',
             SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.serviceClass + 'Service.java');

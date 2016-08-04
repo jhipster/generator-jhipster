@@ -1,0 +1,24 @@
+version: '2'
+services:
+    jhipster-registry:
+        container_name: jhipster-registry
+        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        volumes:
+            - ./central-server-config:/central-config
+        # By default the JHipster Registry runs with the "prod" and "native"
+        # Spring profiles.
+        # "native" profile means the filesystem is used to store data, see
+        # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev,native
+            - SECURITY_USER_PASSWORD=<%= adminPassword %>
+            <%_ if (useElk) { _%>
+            - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
+            - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
+            - JHIPSTER_METRICS_LOGS_ENABLED=true
+            - JHIPSTER_METRICS_LOGS_REPORTFREQUENCY=60
+            <%_ } _%>
+            # - GIT_URI=https://github.com/jhipster/jhipster-registry/
+            # - GIT_SEARCH_PATH=central-config
+        ports:
+            - 8761:8761

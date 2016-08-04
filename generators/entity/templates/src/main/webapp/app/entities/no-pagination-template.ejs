@@ -3,20 +3,25 @@
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        vm.loadAll = function() {
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        vm.search = search;
+        vm.loadAll = loadAll;
+        <%_ } _%>
+
+        loadAll();
+
+        function loadAll() {
             <%= entityClass %>.query(function(result) {
                 vm.<%= entityInstancePlural %> = result;
             });
-        };
+        }
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        vm.search = function () {
+        function search () {
             if (!vm.searchQuery) {
                 return vm.loadAll();
             }
             <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
                 vm.<%= entityInstancePlural %> = result;
             });
-        };<%_ } _%>
-
-        vm.loadAll();
+        }<%_ } _%>

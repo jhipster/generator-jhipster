@@ -11,7 +11,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
 eureka:
     instance:
         appname: <%= baseName %>
@@ -20,16 +20,28 @@ eureka:
 ribbon:
     eureka:
         enabled: true
+
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
-
 zuul:
 
 <%_ } _%>
+management:
+    context-path: /management
+    health:
+        mail:
+            enabled: false # When using the MailService, configure an SMTP server and set this to true
 
 spring:
     application:
         name: <%= baseName %>
+    profiles:
+        # The commented value for `active` can be replaced with valid spring profiles to load.
+        # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
+        # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
+        active: #spring.profiles.active#
+    jackson:
+        serialization.write_dates_as_timestamps: false
     <%_ if (databaseType == 'sql') { _%>
     jpa:
         open-in-view: false
@@ -86,28 +98,6 @@ jhipster:
         #max-age: 1800
     mail:
         from: <%= baseName %>@localhost
-    security:
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
-        authentication:
-    <%_ if (authenticationType == 'jwt') { _%>
-            jwt:
-                secret: <%= jwtSecretKey %>
-                # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
-    <%_ } _%>
-    <%_ if (authenticationType == 'oauth2') { _%>
-            oauth:
-                clientid: <%= baseName %>app
-                secret: mySecretOAuthSecret
-                # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
-    <%_ } _%>
-<%_ } _%>
-<%_ if (authenticationType == 'session') { _%>
-        rememberMe:
-            # security key (this key should be unique for your application, and kept secret)
-            key: <%= rememberMeKey %>
-<%_ } _%>
     swagger:
         title: <%=baseName%> API
         description: <%=baseName%> API documentation
@@ -126,3 +116,6 @@ jhipster:
         redirectAfterSignIn: "/#/home"
         <%_ } _%>
 <%_ } _%>
+    ribbon:
+        # comma seperated list of profiles to show a ribbon on the GUI
+        displayOnActiveProfiles: dev
