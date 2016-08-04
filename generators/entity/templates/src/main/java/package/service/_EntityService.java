@@ -3,6 +3,8 @@ package <%=packageName%>.service;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
 <%_ if (dto == 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+<%_ } else { _%>
+import <%=packageName%>.domain.<%= entityClass %>;
 <%_ } _%>
 <%_ if (pagination != 'no') { _%>
 import org.springframework.data.domain.Page;
@@ -31,7 +33,7 @@ public interface <%= entityClass %>Service {
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
-    <% if (pagination != 'no') { %>Page<<%= entityClass %>DTO<% } else { %>List<<%= entityClass %>DTO<% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
+    <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
 <% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>
     /**
      *  Get all the <%= entityClass %>DTO where <%= relationships[idx].relationshipNameCapitalized %> is null.
