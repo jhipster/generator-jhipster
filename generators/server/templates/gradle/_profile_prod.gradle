@@ -17,8 +17,8 @@ if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
 
-if (project.hasProperty('no-swagger')) {
-    profiles += ',no-swagger'
+if (project.hasProperty('swagger')) {
+    profiles += ',swagger'
 }
 
 bootRun {

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.3.5.RELEASE</version>
+        <version>1.4.0.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -32,12 +32,12 @@
         <%_ if (databaseType === 'sql') { _%>
         <hikaricp.version>2.4.6</hikaricp.version>
         <%_ } _%>
-        <assertj-core.version>3.3.0</assertj-core.version>
+        <assertj-core.version>3.5.2</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <commons-codec.version>1.10</commons-codec.version>
         <%_ } _%>
-        <commons-io.version>2.4</commons-io.version>
+        <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <cucumber.version>1.2.4</cucumber.version>
@@ -62,12 +62,15 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <jna.version>4.2.2</jna.version>
+        <%_ } _%>
         <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
         <mariadb.version>1.4.4</mariadb.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <liquibase.version>3.4.2</liquibase.version>
-        <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
+        <liquibase.version>3.5.1</liquibase.version>
+        <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
@@ -76,23 +79,23 @@
         <mapstruct.version>1.0.0.Final</mapstruct.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
-        <maven-resources-plugin.version>3.0.0</maven-resources-plugin.version>
+        <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <sortpom-maven-plugin.version>2.5.0</sortpom-maven-plugin.version>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
-        <logstash-logback-encoder.version>4.6</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>4.7</logstash-logback-encoder.version>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Brixton.SR1</spring-cloud.version>
+        <spring-cloud.version>Brixton.SR3</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.1.0.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
-        <springfox.version>2.4.0</springfox.version>
+        <springfox.version>2.5.0</springfox.version>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
         <httpclient.version>4.5.1</httpclient.version>
@@ -104,7 +107,7 @@
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <sonar-maven-plugin.version>3.0.2</sonar-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.7.6.201602180812</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
         <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.jacoco.itReportPath>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
@@ -118,7 +121,7 @@
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase></profile.no-liquibase>
-        <profile.no-swagger></profile.no-swagger>
+        <profile.swagger></profile.swagger>
     </properties>
 
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
@@ -478,6 +481,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
@@ -500,6 +508,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -894,7 +907,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
+                <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
             </plugin>
@@ -984,7 +997,7 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.5</version>
+                <version>0.4.10</version>
                 <configuration>
                     <imageName><%= baseName.toLowerCase() %></imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
@@ -1066,9 +1079,9 @@
             </properties>
         </profile>
         <profile>
-            <id>no-swagger</id>
+            <id>swagger</id>
             <properties>
-                <profile.no-swagger>,no-swagger</profile.no-swagger>
+                <profile.swagger>,swagger</profile.swagger>
             </properties>
         </profile>
         <profile>
@@ -1103,7 +1116,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1127,8 +1140,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v4.4.3</nodeVersion>
-                                    <npmVersion>3.8.3</npmVersion>
+                                    <nodeVersion>v4.4.7</nodeVersion>
+                                    <npmVersion>3.10.5</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1211,7 +1224,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.no-liquibase}${profile.no-swagger}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
     </profiles>

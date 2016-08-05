@@ -13,9 +13,6 @@ def profiles = 'dev'
 if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
-if (project.hasProperty('no-swagger')) {
-    profiles += ',no-swagger'
-}
 
 bootRun {
     args = []

@@ -2,8 +2,8 @@ package <%=packageName%>.config;
 
 <%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
-<%_ } _%>
 
+<%_ } _%>
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -11,8 +11,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-<%_ } _%>
 
+<%_ } _%>
 /**
  * Properties specific to JHipster.
  *
@@ -372,8 +372,6 @@ public class JHipsterProperties {
 
         private String licenseUrl;
 
-        private Boolean enabled;
-
         public String getTitle() {
             return title;
         }
@@ -445,14 +443,6 @@ public class JHipsterProperties {
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
         }
-
-        public Boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
     }
 
     public static class Metrics {
@@ -480,7 +470,6 @@ public class JHipsterProperties {
         public Logs getLogs() {
             return logs;
         }
-
 
         public static class Jmx {
 

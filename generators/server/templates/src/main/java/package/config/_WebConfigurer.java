@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
-import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -202,6 +202,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         source.registerCorsConfiguration("/api/**", config);
         source.registerCorsConfiguration("/v2/api-docs", config);
         source.registerCorsConfiguration("/oauth/**", config);
+        <%_ if (applicationType == 'gateway') { _%>
+        source.registerCorsConfiguration("/*/api/**", config);
+        source.registerCorsConfiguration("/*/oauth/**", config);
+        <%_ } _%>
         return new CorsFilter(source);
     }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
 

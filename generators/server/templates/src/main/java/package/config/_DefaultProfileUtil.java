@@ -27,6 +27,8 @@ public final class DefaultProfileUtil {
 
     /**
      * Get a default profile from <code>application.yml</code>.
+     *
+     * @return the default active profile
      */
     public static String getDefaultActiveProfiles(){
         if (BUILD_PROPERTIES != null) {
@@ -43,6 +45,8 @@ public final class DefaultProfileUtil {
 
     /**
      * Set a default to use when no profile is configured.
+     *
+     * @param app the spring application
      */
     public static void addDefaultProfile(SpringApplication app) {
         Map<String, Object> defProperties =  new HashMap<>();
@@ -57,6 +61,8 @@ public final class DefaultProfileUtil {
 
     /**
      * Load application.yml from classpath.
+     *
+     * @return the YAML Properties
      */
     private static Properties readProperties() {
         try {

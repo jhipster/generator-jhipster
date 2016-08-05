@@ -100,12 +100,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return (applicationType === 'gateway' && response.authenticationType === 'uaa');
+                return ((applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
             },
             type: 'input',
             name: 'uaaBaseName',
             message: function (response) {
-                return getNumberedQuestion('What is the folder path of your UAA application?.', applicationType === 'gateway' && response.authenticationType === 'uaa');
+                return getNumberedQuestion('What is the folder path of your UAA application?.', (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
             },
             default: '../uaa',
             validate: function (input) {
@@ -480,7 +480,7 @@ function askForServerSideOpts() {
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
         }
 
-        if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa' || this.applicationType === 'microservice' || this.applicationType === 'uaa') {
+        if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
             this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
         }
 

@@ -2,7 +2,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-mysql:
         container_name: <%= baseName.toLowerCase() %>-mysql
-        image: mysql:5.7.12
+        image: <%= DOCKER_MYSQL %>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
         environment:

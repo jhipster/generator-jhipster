@@ -856,7 +856,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
     var regex;
     switch (action) {
     case 'stripHtml' :
-        regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
+        regex = /( translate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
             //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
@@ -1023,6 +1023,24 @@ Generator.prototype.getModuleHooks = function () {
 };
 
 /**
+ * get a property of an entity from the configuration file
+ * @param {string} file - configuration file name for the entity
+ * @param {string} key - key to read
+ */
+Generator.prototype.getEntityProperty = function (file, key) {
+    var property = null;
+
+    try {
+        var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
+        property = entityJson[key];
+    } catch (err) {
+        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+    }
+
+    return property;
+};
+
+/**
  * get sorted list of entities according to changelog date (i.e. the order in which they were added)
  */
 Generator.prototype.getExistingEntities = function () {
@@ -1137,6 +1155,41 @@ Generator.prototype.warning = function(msg) {
 };
 
 /**
+ * Generate a KeyStore for uaa authorization server.
+ */
+Generator.prototype.generateKeyStore = function() {
+    const keyStoreFile = SERVER_MAIN_RES_DIR + 'keystore.jks';
+    if (this.fs.exists(keyStoreFile)) {
+        this.log(chalk.cyan('\nKeyStore \'' + keyStoreFile + '\' already exists. Leaving unchanged.\n'));
+    } else {
+        shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
+        var parent = this;
+        var javaHome = shelljs.env['JAVA_HOME'];
+        var keytoolPath = '';
+        if (javaHome) {
+            keytoolPath = javaHome + '/bin/';
+        }
+        shelljs.exec('"' + keytoolPath + 'keytool" '+
+            '-genkey ' +
+            '-noprompt ' +
+            '-keyalg RSA ' +
+            '-alias selfsigned ' +
+            '-keystore ' + keyStoreFile + ' ' +
+            '-storepass password ' +
+            '-keypass password ' +
+            '-keysize 2048 ' +
+            '-dname "CN=Java Hipster, OU=Development, O=' + this.packageName + ', L=, ST=, C="'
+        , function(code) {
+            if (code !== 0) {
+                parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
+            } else {
+                parent.log(chalk.green('\nKeyStore \'' + keyStoreFile + '\' generated successfully.\n'));
+            }
+        });
+    }
+};
+
+/**
  * Prints a JHipster logo.
  */
 Generator.prototype.printJHipsterLogo = function () {
@@ -1150,6 +1203,7 @@ Generator.prototype.printJHipsterLogo = function () {
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
     if (this.checkInstall) this.checkForNewVersion();
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
+    this.log(chalk.white('Documentation for creating an application: ' + chalk.yellow('https://jhipster.github.io/creating-an-app/')));
     this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
 };
 
@@ -1184,7 +1238,9 @@ Generator.prototype.getAngularAppName = function () {
  * get the java main class name.
  */
 Generator.prototype.getMainClassName = function () {
-    return _.upperFirst(this.getAngularAppName());
+    // Don't name by baseName because numbers can cause compilation issues.
+    // https://github.com/jhipster/generator-jhipster/issues/3889
+    return 'Application';
 };
 
 /**

@@ -2,7 +2,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-mariadb:
         container_name: <%= baseName.toLowerCase() %>-mariadb
-        image: mariadb:10.1.14
+        image: <%= DOCKER_MARIADB %>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/mysql/:/var/lib/mysql/
         environment:

@@ -18,6 +18,7 @@ const constants = require('../generator-constants'),
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR,
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
+    RESERVED_WORDS_JHIPSTER = constants.RESERVED_WORDS_JHIPSTER,
     RESERVED_WORDS_JAVA = constants.RESERVED_WORDS_JAVA,
     RESERVED_WORDS_MYSQL = constants.RESERVED_WORDS_MYSQL,
     RESERVED_WORDS_POSGRES = constants.RESERVED_WORDS_POSGRES,
@@ -149,6 +150,8 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
                 this.error(chalk.red('The entity name cannot end with \'Detail\''));
+            } else if (RESERVED_WORDS_JHIPSTER.indexOf(this.name.toUpperCase()) !== -1) {
+                this.error(chalk.red('The entity name conflicts with a jhipster class'));
             } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) !== -1) {
                 this.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
             }
@@ -208,7 +211,7 @@ module.exports = EntityGenerator.extend({
         this.service = this.fileData.service;
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
-        this.entityTableName = this.fileData.entityTableName || _.snakeCase(this.name).toLowerCase();
+        this.entityTableName = this.fileData.entityTableName;
         this.fields && this.fields.forEach(function (field) {
             this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             this.fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
@@ -344,6 +347,10 @@ module.exports = EntityGenerator.extend({
                 this.warning('service is missing in .jhipster/' + this.name + '.json, using no as fallback');
                 this.service = 'no';
             }
+            if (_.isUndefined(this.entityTableName)) {
+                this.warning('entityTableName is missing in .jhipster/' + this.name + '.json, using entity name as fallback');
+                this.entityTableName = this.getTableName(this.name);
+            }
             if (_.isUndefined(this.pagination)) {
                 if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                     this.warning('pagination is missing in .jhipster/' + this.name + '.json, using no as fallback');
@@ -468,6 +475,11 @@ module.exports = EntityGenerator.extend({
                     } else {
                         field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
                     }
+                }
+
+                if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
+                    field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern ?
+                        field.fieldValidateRulesPattern.replace(/\\/g, '\\\\') : field.fieldValidateRulesPattern;
                 }
 
                 if (_.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
@@ -596,8 +608,6 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEnumFiles: function() {
-            if (this.skipServer) return;
-
             for (var idx in this.fields) {
                 var field = this.fields[idx];
                 if (field.fieldIsEnum === true) {
@@ -610,8 +620,10 @@ module.exports = EntityGenerator.extend({
                     enumInfo.enumInstance = field.enumInstance;
                     enumInfo.angularAppName = this.angularAppName;
                     enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
-                    this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
-                        SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+                    if (!this.skipServer) {
+                        this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
+                            SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+                    }
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
@@ -684,6 +696,7 @@ module.exports = EntityGenerator.extend({
             if (this.skipClient) {
                 return;
             }
+
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityPluralFileName + '.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-detail.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.html', this, {}, true);
