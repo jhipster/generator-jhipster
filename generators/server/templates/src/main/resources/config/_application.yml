@@ -60,7 +60,8 @@ spring:
         open-in-view: false
         hibernate:
             ddl-auto: none
-            naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+            naming:
+                strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
     <%_ } _%>
     messages:
         basename: i18n/messages
