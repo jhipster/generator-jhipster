@@ -54,15 +54,13 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
     }
 
     private String rewriteBasePath(RequestContext context) {
+        InputStream responseDataStream = context.getResponseDataStream();
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();
         try {
-            InputStream inputStream;
             if (context.getResponseGZipped()) {
-                inputStream = new GZIPInputStream(context.getResponseDataStream());
-            } else {
-                inputStream = context.getResponseDataStream();
+                responseDataStream = new GZIPInputStream(context.getResponseDataStream());
             }
-            String response = IOUtils.toString(inputStream, Charsets.UTF_8);
+            String response = IOUtils.toString(responseDataStream, Charsets.UTF_8);
             if (response != null) {
                 LinkedHashMap<String, Object> map = this.mapper.readValue(response, LinkedHashMap.class);
 
