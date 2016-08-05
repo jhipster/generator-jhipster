@@ -1,7 +1,8 @@
 package <%=packageName%>.gateway.responserewriting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.CharStreams;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import com.netflix.zuul.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import springfox.documentation.swagger2.web.Swagger2Controller;
 
 import java.io.*;
 import java.util.LinkedHashMap;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Zuul filter to rewrite micro-services Swagger URL Base Path.
@@ -41,7 +43,10 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
     @Override
     public Object run() {
         RequestContext context = RequestContext.getCurrentContext();
-        context.getResponse().setCharacterEncoding("UTF-8");
+
+        if (!context.getResponseGZipped()) {
+            context.getResponse().setCharacterEncoding("UTF-8");
+        }
 
         String rewrittenResponse = rewriteBasePath(context);
         context.setResponseBody(rewrittenResponse);
@@ -49,10 +54,15 @@ public class SwaggerBasePathRewritingFilter extends SendResponseFilter {
     }
 
     private String rewriteBasePath(RequestContext context) {
-        InputStream responseDataStream = context.getResponseDataStream();
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();
         try {
-            String response = CharStreams.toString(new InputStreamReader(responseDataStream));
+            InputStream inputStream;
+            if (context.getResponseGZipped()) {
+                inputStream = new GZIPInputStream(context.getResponseDataStream());
+            } else {
+                inputStream = context.getResponseDataStream();
+            }
+            String response = IOUtils.toString(inputStream, Charsets.UTF_8);
             if (response != null) {
                 LinkedHashMap<String, Object> map = this.mapper.readValue(response, LinkedHashMap.class);
 
