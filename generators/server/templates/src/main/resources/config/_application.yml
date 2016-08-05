@@ -24,6 +24,19 @@ ribbon:
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
 zuul:
+    host:
+        connect-timeout-millis: 5000
+        socket-timeout-millis: 10000
+
+
+# See https://github.com/Netflix/Hystrix/wiki/Configuration
+hystrix:
+    command:
+        default:
+            execution:
+                isolation:
+                    thread:
+                        timeoutInMilliseconds: 10000
 
 <%_ } _%>
 management:
