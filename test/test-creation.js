@@ -403,7 +403,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.component.ts',

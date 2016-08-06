@@ -16,7 +16,8 @@ import { UserMgmntStateConfig } from './user-management/user-management.state';
 import { AuditsComponent } from "./audits/audits.component";
 import { LogsComponent } from './logs/logs.component';
 
-import { <%=jhiPrefixCapitalized%>HealthCheckController } from './health/health.controller';
+import { HealthModalController } from "./health/health-modal.controller";
+import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
 
 import { AuditsService } from './audits/audits.service';
@@ -30,6 +31,8 @@ upgradeAdapter.addProvider(AuditsService);
 upgradeAdapter.addProvider(<%=jhiPrefixCapitalized%>HealthService);
 upgradeAdapter.addProvider(LogsService);
 upgradeAdapter.addProvider(ParseLinks);
+
+upgradeAdapter.upgradeNg1Provider('$uibModal');
 
 angular
     .module('<%=angularAppName%>.admin', [
@@ -54,8 +57,9 @@ angular
     .config(TrackerStateConfig)
 <%_ } _%>
     .config(UserMgmntStateConfig)
-    .controller('<%=jhiPrefixCapitalized%>HealthCheckController', <%=jhiPrefixCapitalized%>HealthCheckController)
+    .controller('HealthModalController', HealthModalController)
     .directive('<%=jhiPrefix%>Audit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(AuditsComponent))
     .directive('<%=jhiPrefix%>Configuration', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>ConfigurationComponent))
+    .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))
     .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
     .factory('<%=jhiPrefixCapitalized%>HealthService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>HealthService));

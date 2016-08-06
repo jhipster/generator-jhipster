@@ -415,7 +415,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'admin/health/health.html', ANGULAR_DIR + 'admin/health/health.html');
             this.copyHtml(ANGULAR_DIR + 'admin/health/_health-modal.html', ANGULAR_DIR + 'admin/health/health-modal.html');
             this.copyJs(ANGULAR_DIR + 'admin/health/_health.state.ts', ANGULAR_DIR + 'admin/health/health.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/health/_health.controller.ts', ANGULAR_DIR + 'admin/health/health.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/health/_health.component.ts', ANGULAR_DIR + 'admin/health/health.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health-modal.controller.ts', ANGULAR_DIR + 'admin/health/health-modal.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.service.ts', ANGULAR_DIR + 'admin/health/health.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/logs/logs.html', ANGULAR_DIR + 'admin/logs/logs.html');
