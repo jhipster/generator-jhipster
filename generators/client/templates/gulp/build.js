@@ -18,8 +18,7 @@ var fs = require('fs'),
 var config = require('./config');
 
 var initTask = lazypipe()
-    .pipe(sourcemaps.init)
-    .pipe(footer, ';');
+    .pipe(sourcemaps.init);
 var jsTask = lazypipe()
     .pipe(ngAnnotate)
     .pipe(uglify);
