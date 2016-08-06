@@ -13,11 +13,9 @@
     public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %>)
         throws URISyntaxException {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get a page of <%= entityClassPlural %>");<% if (viaService) { %>
-        Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);
+        Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);<% } else { %>
+        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);<% } %>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);<% } else { %>
-        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
-        return new ResponseEntity<>(<% if (dto == 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);<% } %>
+        return new ResponseEntity<>(<% if (!viaService && dto == 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
     <% } -%>
 }
