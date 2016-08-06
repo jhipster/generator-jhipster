@@ -71,7 +71,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
         <%_ } else { _%>
         Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable);
             <%_ if (dto == 'mapstruct') { _%>
-        return result.map(<%= instanceName %> -> <%= entityToDto %>(<%= instanceName%>));
+        return result.map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
             <%_ } else { _%>
         return result;
         <%_ } } _%>
