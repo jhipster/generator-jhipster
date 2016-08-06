@@ -105,12 +105,16 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
-    public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
+    public <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
         <%_ if (pagination == 'no') { _%>
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        return <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
-        <%_ } _%>
+        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
+            <%_ if (dto == 'mapstruct') { _%>
+        return result.map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
+            <%_ } else { _%>
+        return result;
+        <%_ } } _%>
     }<% } %>
 }
