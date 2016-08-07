@@ -240,6 +240,11 @@ describe('JDLBinaryOption', function () {
       option.excludeEntity(new JDLEntity({name: 'B'}));
       option.excludeEntity(new JDLEntity({name: 'C'}));
       expect(option.toString()).to.eq(`${BINARY_OPTIONS.DTO} D, E, F with ${BINARY_OPTION_VALUES.dto.MAPSTRUCT} except A, B, C`);
+      option = new JDLBinaryOption({
+        name: BINARY_OPTIONS.PAGINATION,
+        value: BINARY_OPTION_VALUES.pagination.PAGER
+      });
+      expect(option.toString()).to.eq(`paginate * with ${BINARY_OPTION_VALUES.pagination.PAGER}`);
     });
   });
 });
