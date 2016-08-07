@@ -104,7 +104,7 @@ module.exports = HerokuGenerator.extend({
             if (this.abort) return;
             var done = this.async();
             this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-            var child = exec('heroku plugins:install https://github.com/heroku/heroku-deploy', function (err, stdout) {
+            var child = exec('heroku plugins:install heroku-cli-deploy', function (err, stdout) {
                 if (err) {
                     this.abort = true;
                     this.log.error(err);
@@ -279,9 +279,9 @@ module.exports = HerokuGenerator.extend({
             var done = this.async();
             this.log(chalk.bold('\nDeploying application'));
 
-            var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
+            var herokuDeployCommand = 'heroku deploy:jar target/*.war';
             if (this.buildTool === 'gradle') {
-                herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war';
+                herokuDeployCommand = 'heroku deploy:jar build/libs/*.war';
             }
 
             herokuDeployCommand += ' --app ' + this.herokuDeployedName;
