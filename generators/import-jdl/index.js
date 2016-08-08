@@ -21,7 +21,7 @@ module.exports = JDLGenerator.extend({
         validate: function () {
             this.jdlFiles && this.jdlFiles.forEach(function (key) {
                 if (!shelljs.test('-f', key)) {
-                    this.env.error(chalk.red('\nCould not find ' + key + ', make sure the path is correct!\n'));
+                    this.env.error(chalk.red(`\nCould not find ${ key }, make sure the path is correct!\n`));
                 }
             }, this);
         },
@@ -49,7 +49,7 @@ module.exports = JDLGenerator.extend({
                 this.log('Writing entity JSON files.');
                 jhiCore.exportToJSON(entities, this.options['force']);
             } catch (e) {
-                this.error('Error while parsing entities from JDL\n' + (e.message || e));
+                this.error(`Error while parsing entities from JDL\n${ (e.message || e) }`);
             }
 
 
@@ -70,7 +70,7 @@ module.exports = JDLGenerator.extend({
                     });
                 }, this);
             } catch (e) {
-                this.error('Error while generating entities from parsed JDL\n' + e);
+                this.error(`Error while generating entities from parsed JDL\n${ e }`);
             }
 
         }
