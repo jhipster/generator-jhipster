@@ -343,6 +343,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_compile.config.ts', ANGULAR_DIR + 'blocks/config/compile.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pager.config.ts', ANGULAR_DIR + 'blocks/config/uib-pager.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pagination.config.ts', ANGULAR_DIR + 'blocks/config/uib-pagination.config.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/account.model.ts', ANGULAR_DIR + 'shared/account.model.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/filter.pipe.ts', ANGULAR_DIR + 'shared/filter.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/order-by.pipe.ts', ANGULAR_DIR + 'shared/order-by.pipe.ts', this, {});
         },
@@ -528,7 +529,7 @@ module.exports = JhipsterClientGenerator.extend({
             // home module
             this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
             this.copyJs(ANGULAR_DIR + 'home/_home.state.ts', ANGULAR_DIR + 'home/home.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'home/_home.controller.ts', ANGULAR_DIR + 'home/home.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'home/_home.component.ts', ANGULAR_DIR + 'home/home.component.ts', this, {});
 
             // layouts
             this.template(ANGULAR_DIR + 'layouts/navbar/_active-link.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-link.directive.ts', this, {});

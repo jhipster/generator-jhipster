@@ -380,6 +380,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.ts',
 
+        CLIENT_MAIN_SRC_DIR + 'app/shared/account.model.ts',
         CLIENT_MAIN_SRC_DIR + 'app/shared/filter.pipe.ts',
         CLIENT_MAIN_SRC_DIR + 'app/shared/order-by.pipe.ts',
 
@@ -478,7 +479,7 @@ const expectedFiles = {
 
         CLIENT_MAIN_SRC_DIR + 'app/home/home.html',
         CLIENT_MAIN_SRC_DIR + 'app/home/home.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/home/home.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/home/home.component.ts',
 
         CLIENT_TEST_SRC_DIR + 'karma.conf.js',
         CLIENT_TEST_SRC_DIR + 'spec/helpers/httpBackend.js',
