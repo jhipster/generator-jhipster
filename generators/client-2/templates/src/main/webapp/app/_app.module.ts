@@ -18,7 +18,7 @@ import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
 import { HomeComponent } from './home/home.component';
-import { NavbarController } from './layouts/navbar/navbar.controller';
+import { NavbarComponent } from './layouts/navbar/navbar.controller';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -60,8 +60,8 @@ angular
     .config(AppStateConfig)
     .config(HomeStateConfig)
     .config(ErrorStateConfig)
-    .controller('NavbarController', NavbarController)
     .directive('home', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(HomeComponent))
+    .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
     .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
     <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     .factory('AuthInterceptor', AuthInterceptor)
