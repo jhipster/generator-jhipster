@@ -6,6 +6,7 @@ var util = require('util'),
     shelljs = require('shelljs'),
     pluralize = require('pluralize'),
     prompts = require('./prompts'),
+    jhiCore = require('jhipster-core'),
     scriptBase = require('../generator-base');
 
 /* constants used througout */
@@ -18,13 +19,6 @@ const constants = require('../generator-constants'),
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR,
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
-    RESERVED_WORDS_JHIPSTER = constants.RESERVED_WORDS_JHIPSTER,
-    RESERVED_WORDS_JAVA = constants.RESERVED_WORDS_JAVA,
-    RESERVED_WORDS_MYSQL = constants.RESERVED_WORDS_MYSQL,
-    RESERVED_WORDS_POSGRES = constants.RESERVED_WORDS_POSGRES,
-    RESERVED_WORDS_CASSANDRA = constants.RESERVED_WORDS_CASSANDRA,
-    RESERVED_WORDS_ORACLE = constants.RESERVED_WORDS_ORACLE,
-    RESERVED_WORDS_MONGO = constants.RESERVED_WORDS_MONGO,
     SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
 
@@ -150,10 +144,8 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
                 this.error(chalk.red('The entity name cannot end with \'Detail\''));
-            } else if (RESERVED_WORDS_JHIPSTER.indexOf(this.name.toUpperCase()) !== -1) {
-                this.error(chalk.red('The entity name conflicts with a jhipster class'));
-            } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) !== -1) {
-                this.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
+            } else if (jhiCore.isReservedClassName(this.name)) {
+                this.error(chalk.red('The entity name cannot contain a Java or JHipster reserved keyword'));
             }
         },
 
@@ -163,18 +155,10 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The table name cannot contain special characters'));
             } else if (this.entityTableName === '') {
                 this.error(chalk.red('The table name cannot be empty'));
-            } else if (prodDatabaseType === 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.error(chalk.red('The table name cannot contain a MySQL reserved keyword'));
-            } else if (prodDatabaseType === 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.error(chalk.red('The table name cannot contain a PostgreSQL reserved keyword'));
-            } else if (prodDatabaseType === 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.error(chalk.red('The table name cannot contain a Cassandra reserved keyword'));
-            } else if (prodDatabaseType === 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.error(chalk.red('The table name cannot contain a Oracle reserved keyword'));
+            } else if (jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
+                this.error(chalk.red('The table name cannot contain a ' + prodDatabaseType.toUpperCase() + ' reserved keyword'));
             } else if (prodDatabaseType === 'oracle' && _.snakeCase(this.entityTableName).length > 26) {
                 this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
-            } else if (prodDatabaseType === 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.entityTableName.toUpperCase()) !== -1) {
-                this.error(chalk.red('The table name cannot contain a MongoDB reserved keyword'));
             }
         },
 
