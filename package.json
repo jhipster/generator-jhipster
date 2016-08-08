@@ -31,7 +31,7 @@
     "pretest": "eslint .",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "test": "mocha --timeout 20000 --reporter spec"
+    "test": "mocha --timeout 20000 --slow 0 --reporter spec"
   },
   "dependencies": {
     "chalk": "1.1.3",

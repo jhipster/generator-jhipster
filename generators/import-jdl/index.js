@@ -28,7 +28,7 @@ module.exports = JDLGenerator.extend({
 
         getConfig: function () {
             this.baseName = this.config.get('baseName');
-            this.databaseType = this.config.get('databaseType');
+            this.prodDatabaseType = this.config.get('prodDatabaseType');
         }
     },
 
@@ -41,10 +41,10 @@ module.exports = JDLGenerator.extend({
         parseJDL: function () {
             this.log('The jdl is being parsed.');
             try {
-                var jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.databaseType);
+                var jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType);
                 var entities = jhiCore.convertToJHipsterJSON({
                     jdlObject: jdlObject,
-                    databaseType: this.databaseType
+                    databaseType: this.prodDatabaseType
                 });
                 this.log('Writing entity JSON files.');
                 jhiCore.exportToJSON(entities, this.options['force']);
