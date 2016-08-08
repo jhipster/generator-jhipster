@@ -21,6 +21,12 @@ upgradeAdapter.upgradeNg1Provider('Principal');
 upgradeAdapter.upgradeNg1Provider('$state');
 upgradeAdapter.upgradeNg1Provider('LoginService');
 
+upgradeAdapter.upgradeNg1Provider('$state');
+upgradeAdapter.upgradeNg1Provider('Auth');
+upgradeAdapter.upgradeNg1Provider('<%=jhiPrefixCapitalized%>LanguageService');
+upgradeAdapter.upgradeNg1Provider('LoginService');
+upgradeAdapter.upgradeNg1Provider('Principal');
+
 angular
     .module('<%=angularAppName%>.common', [
         'ngStorage', <% if (enableTranslation) { %>
@@ -41,5 +47,4 @@ angular
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
     .provider('AlertService', AlertService)<% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
-    .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))<% if (enableTranslation) { %>
-    .controller('<%=jhiPrefixCapitalized%>LanguageController', <%=jhiPrefixCapitalized%>LanguageController)<% } %>;
+    .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent));
