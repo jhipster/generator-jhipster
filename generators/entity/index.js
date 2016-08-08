@@ -125,7 +125,7 @@ module.exports = EntityGenerator.extend({
 
             this.filename = this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
             if (shelljs.test('-f', this.filename)) {
-                this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
+                this.log(chalk.green(`\nFound the ${ this.filename } configuration file, entity can be automatically generated!\n`));
                 this.useConfigurationFile = true;
                 this.fromPath = this.filename;
             }
