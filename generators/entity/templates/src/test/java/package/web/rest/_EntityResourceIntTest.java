@@ -2,8 +2,8 @@ package <%=packageName%>.web.rest;
 <% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service != 'no') { %>
+import <%=packageName%>.domain.*;
+import <%=packageName%>.repository.*;<% if (service != 'no') { %>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
@@ -26,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;<% } %><% if (fi
 import org.springframework.util.Base64Utils;<% } %>
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+import javax.inject.Inject;
+import javax.persistence.EntityManager;<% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -174,6 +175,9 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
+    @Inject
+    private EntityManager em;
+
     private MockMvc rest<%= entityClass %>MockMvc;
 
     private <%= entityClass %> <%= entityInstance %>;
@@ -198,17 +202,48 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
             .setMessageConverters(jacksonMessageConverter).build();
     }
 
-    @Before
-    public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
-        <%= entityInstance %>Repository.deleteAll();<% } if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.deleteAll();<% } %>
-        <%= entityInstance %> = new <%= entityClass %>();
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static <%= entityClass %> createEntity(EntityManager em) {
+        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
         <%_ for (idx in fields) { _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
             <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
             <%_ } _%>
         <%_ } _%>
+        <%_ for (idx in relationships) {
+            var relationshipValidate = relationships[idx].relationshipValidate;
+            var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+            var relationshipFieldName = relationships[idx].relationshipFieldName;
+            var relationshipType = relationships[idx].relationshipType;
+            var relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
+            var relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+            if (relationshipValidate != null && relationshipValidate === true) { _%>
+        // Adding required entity
+        <%= otherEntityNameCapitalized %> <%= relationshipFieldName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
+        em.persist(<%= relationshipFieldName %>);
+        em.flush();
+            <%_ if (relationshipType == 'many-to-many') { _%>
+        <%= entityInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= relationshipFieldName %>);
+            <%_ } else { _%>
+        <%= entityInstance %>.set<%= relationshipNameCapitalized %>(<%= relationshipFieldName %>);
+            <%_ } _%>
+        <%_ } } _%>
+        return <%= entityInstance %>;
+    }
+
+    @Before
+    public void initTest() {
+        <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
+        <%= entityInstance %>Repository.deleteAll();<% } if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.deleteAll();
+        <%_ } _%>
+        <%= entityInstance %> = createEntity(em);
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -329,8 +364,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
-        <%= entityClass %> updated<%= entityClass %> = new <%= entityClass %>();
-        updated<%= entityClass %>.setId(<%= entityInstance %>.getId());
+        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findOne(<%= entityInstance %>.getId());
         <%_ for (idx in fields) { _%>
         updated<%= entityClass %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
             <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType == 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
