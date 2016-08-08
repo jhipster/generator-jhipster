@@ -374,7 +374,7 @@ function askForField(cb) {
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (jhiCore.isReservedFieldName(input, prodDatabaseType)) {
-                    return 'Your field name cannot contain a Java or ' + prodDatabaseType.toUpperCase() + ' reserved keyword';
+                    return `Your field name cannot contain a Java or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
