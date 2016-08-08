@@ -343,7 +343,6 @@ module.exports = EntityGenerator.extend({
                     this.pagination = 'no';
                 }
             }
-
         },
 
         writeEntityJson: function () {
