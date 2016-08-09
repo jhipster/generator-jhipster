@@ -23,7 +23,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContextException;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -82,7 +81,6 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
     @Bean(destroyMethod = "close")
     @ConditionalOnExpression("#{!environment.acceptsProfiles('" + Constants.SPRING_PROFILE_CLOUD + "') && !environment.acceptsProfiles('" + Constants.SPRING_PROFILE_HEROKU + "')}")
-    @ConfigurationProperties(prefix = "spring.datasource.hikari")
     public DataSource dataSource(DataSourceProperties dataSourceProperties<% if (hibernateCache == 'hazelcast') { %>, CacheManager cacheManager<% } %>) {
         log.debug("Configuring Datasource");
         if (dataSourceProperties.getUrl() == null) {
@@ -138,7 +136,6 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
             liquibase.setShouldRun(liquibaseProperties.isEnabled());
             log.debug("Configuring Liquibase");
         }
-
         return liquibase;
     }
 
