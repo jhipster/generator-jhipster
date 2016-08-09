@@ -9,7 +9,7 @@
             </button>
             <a class="navbar-brand logo" href="#/" (click)="collapseNavbar()">
                 <img class="logo-img" src="content/images/logo-jhipster.png"/>
-                <span translate="global.title">Ng2jhi</span> <span class="navbar-version">v{{VERSION}}</span>
+                <span translate="global.title"><%= capitalizedBaseName %></span> <span class="navbar-version">v{{VERSION}}</span>
             </a>
         </div>
         <div class="navbar-collapse" uib-collapse="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
@@ -100,19 +100,19 @@
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="jhi-metrics" (click)="collapseNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-metrics" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
                                 <span translate="global.menu.admin.metrics">Metrics</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="jhi-health" (click)="collapseNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-health" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-heart"></span>&nbsp;
                                 <span translate="global.menu.admin.health">Health</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="jhi-configuration" (click)="collapseNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-configuration" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-list-alt"></span>&nbsp;
                                 <span translate="global.menu.admin.configuration">Configuration</span>
                             </a>
