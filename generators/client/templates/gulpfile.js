@@ -45,7 +45,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('copy', function () {
-    return es.merge( <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
+    return es.merge(<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
@@ -128,7 +128,10 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('inject', ['inject:dep', 'inject:app']);
+gulp.task('inject', function() {
+    runSequence('inject:dep', 'inject:app');
+});
+
 gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
 gulp.task('inject:app', function () {
