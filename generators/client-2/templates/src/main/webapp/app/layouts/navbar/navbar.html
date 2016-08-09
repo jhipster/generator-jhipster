@@ -129,14 +129,14 @@
                                 <span translate="global.menu.admin.logs">Logs</span>
                             </a>
                         </li>
-                        <li [hidden]="!swaggerEnabled" ui-sref-active="active">
+                        <li *ngIf="swaggerEnabled" ui-sref-active="active">
                             <a ui-sref="docs" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-book"></span>&nbsp;
                                 <span translate="global.menu.admin.apidocs">API</span>
                             </a>
                         </li>
                         <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
-                        <li [hidden]="inProduction">
+                        <li *ngIf="!inProduction">
                             <a href='/h2-console' target="_tab" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-hdd"></span>&nbsp;
                                 <span translate="global.menu.admin.database">Database</span>
