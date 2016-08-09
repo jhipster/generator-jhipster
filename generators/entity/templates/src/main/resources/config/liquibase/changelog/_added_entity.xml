@@ -100,11 +100,11 @@
             otherEntityName = relationships[idx].otherEntityName;
             if (relationshipType == 'many-to-many' && ownerSide) {
                 var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
-                if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-                    joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+                if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+                    joinTableName = joinTableName.substring(0, 30);
                 }
-                if(prodDatabaseType === 'mysql' && joinTableName.length > 64) {
-                    joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
+                if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+                    joinTableName = joinTableName.substring(0, 64);
                 }
           _%>
 

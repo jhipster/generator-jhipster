@@ -125,11 +125,11 @@ public class <%= entityClass %> implements Serializable {
         relationshipValidate = relationships[idx].relationshipValidate,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         ownerSide = relationships[idx].ownerSide;
-        if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-            joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+        if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+            joinTableName = joinTableName.substring(0, 30);
         }
-        if(prodDatabaseType === 'mysql' && joinTableName.length > 64) {
-            joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
+        if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+            joinTableName = joinTableName.substring(0, 64);
         }
         if (otherEntityRelationshipName != null) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)

@@ -24,11 +24,9 @@
                 var constraintName = 'fk_' + getTableName(name.toLowerCase()) + '_' +
                     getTableName(relationshipName.toLowerCase()) + '_id';
                 if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
-                    constraintName = 'fk_' + getTableName(name.toLowerCase().substring(0, 3)) + '_' +
-                        getTableName(relationshipName.toLowerCase().substring(0, 3)) + '_id';
+                    constraintName = constraintName.substring(0, 27) + '_id';
                 } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
-                    constraintName = 'fk_' + getTableName(name.toLowerCase().substring(0, 10)) + '_' +
-                        getTableName(relationshipName.toLowerCase().substring(0, 10)) + '_id';
+                    constraintName = constraintName.substring(0, 61) + '_id';
                 }%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
@@ -36,30 +34,28 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType == 'many-to-many' && ownerSide) {
-                var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
+                var joinTableName = entityTableName + '_' + getTableName(relationshipName);
                 if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-                    joinTableName = getTableName(name.substring(0, 5)) + '_' +
-                        getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+                    joinTableName = joinTableName.substring(0, 30);
                 } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
-                    joinTableName = getTableName(name.substring(0, 10)) + '_' +
-                        getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
+                    joinTableName = joinTableName.substring(0, 64);
                 }
                 var constraintName = 'fk_' + joinTableName + '_' + getPluralColumnName(name) + '_id';
                 var otherEntityConstraintName = 'fk_' + joinTableName + '_' + getPluralColumnName(relationshipName) + '_id';
-                if (prodDatabaseType === 'oracle' && (constraintName.length > 30 || otherEntityConstraintName > 30)) {
-                    var tempJoinTableName = getTableName(name.toLowerCase().substring(0, 3)) + '_' +
-                        getTableName(relationshipName.toLowerCase().substring(0, 3)) + '_MAP';
-                    constraintName = 'fk_' + tempJoinTableName +  '_' +
-                        getPluralColumnName(name).substring(0, 6) + '_id';
-                    otherEntityConstraintName = 'fk_' + tempJoinTableName +  '_' +
-                        getPluralColumnName(relationshipName).substring(0, 6) + '_id';
-                } else if (prodDatabaseType === 'mysql' && (constraintName.length > 64 || otherEntityConstraintName > 64)) {
-                    var tempJoinTableName = getTableName(name.toLowerCase().substring(0, 10)) + '_' +
-                        getTableName(relationshipName.toLowerCase().substring(0, 10)) + '_MAP';
-                    constraintName = 'fk_' + tempJoinTableName +  '_' +
-                        getPluralColumnName(name).substring(0, 10) + '_id';
-                    otherEntityConstraintName = 'fk_' + tempJoinTableName +  '_' +
-                        getPluralColumnName(relationshipName).substring(0, 10) + '_id';
+                if (prodDatabaseType === 'oracle') {
+                    if (constraintName.length > 30) {
+                        constraintName = constraintName.substring(0, 27) + '_id';
+                    }
+                    if (otherEntityConstraintName.length > 30) {
+                        otherEntityConstraintName = otherEntityConstraintName.substring(0, 27) + '_id';
+                    }
+                } else if (prodDatabaseType === 'mysql') {
+                    if (constraintName.length > 64) {
+                        constraintName = constraintName.substring(0, 61) + '_id';
+                    }
+                    if (otherEntityConstraintName.length > 64) {
+                        otherEntityConstraintName = otherEntityConstraintName.substring(0, 61) + '_id';
+                    }
                 }
           _%>
 
