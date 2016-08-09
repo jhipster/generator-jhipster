@@ -21,7 +21,7 @@
                 }
             }
             if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
-                var constraintName = getConstrainteName(name, relationshipName, prodDatabaseType);%>
+                var constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
@@ -29,8 +29,8 @@
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType == 'many-to-many' && ownerSide) {
                 var joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
-                var constraintName = getConstrainteName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
-                var otherEntityConstraintName = getConstrainteName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
+                var constraintName = getConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
+                var otherEntityConstraintName = getConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
         <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"

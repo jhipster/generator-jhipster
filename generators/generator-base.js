@@ -1162,7 +1162,7 @@ Generator.prototype.getJoinTableName = function (entityName, relationshipName, p
  * @param {string} prodDatabaseType - database type
  * @param {boolean} noSnakeCase - do not convert names to snakecase
  */
-Generator.prototype.getConstrainteName = function (entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+Generator.prototype.getConstraintName = function (entityName, relationshipName, prodDatabaseType, noSnakeCase) {
     var constraintName;
     if (noSnakeCase) {
         constraintName = 'fk_' + entityName + '_' +
