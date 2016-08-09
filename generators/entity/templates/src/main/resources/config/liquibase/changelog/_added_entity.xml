@@ -99,13 +99,7 @@
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
             if (relationshipType == 'many-to-many' && ownerSide) {
-                var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
-                if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-                    joinTableName = joinTableName.substring(0, 30);
-                }
-                if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
-                    joinTableName = joinTableName.substring(0, 64);
-                }
+                var joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
           _%>
 
         <createTable tableName="<%= joinTableName %>">

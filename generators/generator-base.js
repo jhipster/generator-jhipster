@@ -1137,6 +1137,50 @@ Generator.prototype.getPluralColumnName = function (value) {
 };
 
 /**
+ * get a table name for joined tables in JHipster preferred style.
+ *
+ * @param {string} entityName - name of the entity
+ * @param {string} relationshipName - name of the related entity
+ * @param {string} prodDatabaseType - database type
+ */
+Generator.prototype.getJoinTableName = function (entityName, relationshipName, prodDatabaseType) {
+    var joinTableName = this.getTableName(entityName) + '_'+ this.getTableName(relationshipName);
+    if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+        joinTableName = joinTableName.substring(0, 30);
+    }
+    if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+        joinTableName = joinTableName.substring(0, 64);
+    }
+    return joinTableName;
+};
+
+/**
+ * get a constraint name for tables in JHipster preferred style.
+ *
+ * @param {string} entityName - name of the entity
+ * @param {string} relationshipName - name of the related entity
+ * @param {string} prodDatabaseType - database type
+ * @param {boolean} noSnakeCase - do not convert names to snakecase
+ */
+Generator.prototype.getConstrainteName = function (entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+    var constraintName;
+    if (noSnakeCase) {
+        constraintName = 'fk_' + entityName + '_' +
+            relationshipName + '_id';
+    } else {
+        constraintName = 'fk_' + this.getTableName(entityName) + '_' +
+            this.getTableName(relationshipName) + '_id';
+    }
+
+    if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
+        constraintName = constraintName.substring(0, 27) + '_id';
+    } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
+        constraintName = constraintName.substring(0, 61) + '_id';
+    }
+    return constraintName;
+};
+
+/**
  * Print an error message.
  *
  * @param {string} msg - message to print
