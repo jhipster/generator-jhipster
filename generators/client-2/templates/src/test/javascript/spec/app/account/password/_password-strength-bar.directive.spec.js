@@ -16,7 +16,7 @@ describe('Directive Tests', function () {
         <%_ } _%>
         $httpBackend = $injector.get('$httpBackend');
 
-        var html = '<password-strength-bar password-to-check="password"></password-strength-bar>';
+        var html = '<password-strength-bar [password-to-check]="password"></password-strength-bar>';
         scope = $rootScope.$new();
         elm = angular.element(html);
         $compile(elm)(scope);
