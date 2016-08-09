@@ -248,10 +248,11 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Before
     public void initTest() {
         <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
-        <%= entityInstance %>Repository.deleteAll();<% } if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>Repository.deleteAll();
+        <%_ } if (searchEngine == 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.deleteAll();
         <%_ } _%>
-        <%= entityInstance %> = createEntity(em);
+        <%= entityInstance %> = createEntity(<% if (databaseType == 'sql') { %>em<% } %>);
     }
 
     @Test<% if (databaseType == 'sql') { %>
