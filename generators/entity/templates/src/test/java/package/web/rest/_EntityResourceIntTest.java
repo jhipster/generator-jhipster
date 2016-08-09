@@ -2,8 +2,14 @@ package <%=packageName%>.web.rest;
 <% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.domain.*;
-import <%=packageName%>.repository.*;<% if (service != 'no') { %>
+import <%=packageName%>.domain.<%= entityClass %>;
+<%_ for (idx in relationships) { // import entities in required relationships
+        var relationshipValidate = relationships[idx].relationshipValidate;
+        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        if (relationshipValidate != null && relationshipValidate === true) { _%>
+import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
+<%_ } } _%>
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service != 'no') { %>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
@@ -26,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;<% } %><% if (fi
 import org.springframework.util.Base64Utils;<% } %>
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;<% if (fieldsContainLocalDate == true) { %>
+import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+import javax.persistence.EntityManager;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -174,9 +180,11 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+<%_ if (databaseType == 'sql') { _%>
 
     @Inject
     private EntityManager em;
+<%_ } _%>
 
     private MockMvc rest<%= entityClass %>MockMvc;
 
@@ -208,7 +216,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= entityClass %> createEntity(EntityManager em) {
+    public static <%= entityClass %> createEntity(<% if (databaseType == 'sql') { %>EntityManager em<% } %>) {
         <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
         <%_ for (idx in fields) { _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
@@ -224,7 +232,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
             var relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
             var relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
             if (relationshipValidate != null && relationshipValidate === true) { _%>
-        // Adding required entity
+        // Add required entity
         <%= otherEntityNameCapitalized %> <%= relationshipFieldName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
         em.persist(<%= relationshipFieldName %>);
         em.flush();
