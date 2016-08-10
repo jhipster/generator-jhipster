@@ -25,6 +25,9 @@ spring:
 <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql') { _%>
     datasource:
         maximumPoolSize: 10
+        url: ${JDBC_DATABASE_URL}
+        username: ${JDBC_DATABASE_USERNAME}
+        password: ${JDBC_DATABASE_PASSWORD}
 <%_ } else if (prodDatabaseType === 'mongodb') { _%>
     data:
         mongodb:
