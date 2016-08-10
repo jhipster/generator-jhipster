@@ -9,8 +9,7 @@ var util = require('util'),
 
 const constants = require('../generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 var HerokuGenerator = generators.Base.extend({});
 
