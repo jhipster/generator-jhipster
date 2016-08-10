@@ -1,14 +1,20 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.<%= entityClass %>;<% if (service != 'no') { %>
+<%_ if (dto != 'mapstruct' || service == 'no') { _%>
+import <%=packageName%>.domain.<%= entityClass %>;
+<%_ } _%>
+<%_ if (service != 'no') { _%>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } else { %>
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} %>
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination != 'no') { %>
-import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
+<%_ if (dto == 'mapstruct') { _%>
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+<%_ if (service == 'no') { _%>
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+<%_ } } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
@@ -44,6 +50,7 @@ public class <%= entityClass %>Resource {
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
+
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
      *

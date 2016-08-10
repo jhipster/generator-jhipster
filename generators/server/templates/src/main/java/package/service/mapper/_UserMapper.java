@@ -1,8 +1,8 @@
-package <%=packageName%>.web.rest.mapper;
+package <%=packageName%>.service.mapper;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;
-import <%=packageName%>.web.rest.dto.UserDTO;
+import <%=packageName%>.service.dto.UserDTO;
 import org.mapstruct.*;
 
 import java.util.List;

@@ -36,6 +36,7 @@ spring:
             enabled: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
+        type: com.zaxxer.hikari.HikariDataSource
         <%_ if (prodDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false
         <%_ } else if (prodDatabaseType == 'mariadb') { _%>

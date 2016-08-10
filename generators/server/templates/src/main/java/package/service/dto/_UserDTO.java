@@ -1,4 +1,4 @@
-package <%=packageName%>.web.rest.dto;
+package <%=packageName%>.service.dto;
 
 import <%=packageName%>.config.Constants;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>

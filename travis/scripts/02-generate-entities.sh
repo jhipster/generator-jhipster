@@ -76,6 +76,18 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity TestOneToOne
   moveEntity TestCustomTableName
 
+  moveEntity EntityWithDTO
+  moveEntity EntityWithPagination
+  moveEntity EntityWithPaginationAndDTO
+  moveEntity EntityWithServiceClass
+  moveEntity EntityWithServiceClassAndDTO
+  moveEntity EntityWithServiceClassAndPagination
+  moveEntity EntityWithServiceClassPaginationAndDTO
+  moveEntity EntityWithServiceImpl
+  moveEntity EntityWithServiceImplAndDTO
+  moveEntity EntityWithServiceImplAndPagination
+  moveEntity EntityWithServiceImplPaginationAndDTO
+
 else
   moveEntity BankAccount
   moveEntity Label
@@ -88,6 +100,18 @@ else
   moveEntity FieldTestInfiniteScrollEntity
   moveEntity FieldTestPagerEntity
   moveEntity FieldTestPaginationEntity
+
+  moveEntity EntityWithDTO
+  moveEntity EntityWithPagination
+  moveEntity EntityWithPaginationAndDTO
+  moveEntity EntityWithServiceClass
+  moveEntity EntityWithServiceClassAndDTO
+  moveEntity EntityWithServiceClassAndPagination
+  moveEntity EntityWithServiceClassPaginationAndDTO
+  moveEntity EntityWithServiceImpl
+  moveEntity EntityWithServiceImplAndDTO
+  moveEntity EntityWithServiceImplAndPagination
+  moveEntity EntityWithServiceImplPaginationAndDTO
 fi
 
 ls -l "$HOME"/app/.jhipster/
@@ -129,6 +153,18 @@ generateEntity TestManyToOne
 generateEntity TestManyToMany
 generateEntity TestOneToOne
 generateEntity TestCustomTableName
+
+generateEntity EntityWithDTO
+generateEntity EntityWithPagination
+generateEntity EntityWithPaginationAndDTO
+generateEntity EntityWithServiceClass
+generateEntity EntityWithServiceClassAndDTO
+generateEntity EntityWithServiceClassAndPagination
+generateEntity EntityWithServiceClassPaginationAndDTO
+generateEntity EntityWithServiceImpl
+generateEntity EntityWithServiceImplAndDTO
+generateEntity EntityWithServiceImplAndPagination
+generateEntity EntityWithServiceImplPaginationAndDTO
 
 #-------------------------------------------------------------------------------
 # Check Javadoc generation

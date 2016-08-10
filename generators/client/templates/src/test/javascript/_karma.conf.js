@@ -44,8 +44,8 @@ module.exports = function (config) {
         reporters: ['dots', 'junit', 'coverage', 'progress'],
 
         junitReporter: {<% if (buildTool == 'maven') { %>
-            outputFile: 'target/test-results/karma/TESTS-results.xml'<% } else { %>
-            outputFile: 'build/test-results/karma/TESTS-results.xml'<% } %>
+            outputFile: '../target/test-results/karma/TESTS-results.xml'<% } else { %>
+            outputFile: '../build/test-results/karma/TESTS-results.xml'<% } %>
         },
 
         coverageReporter: {<% if (buildTool == 'maven') { %>

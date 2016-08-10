@@ -1,18 +1,19 @@
-<% if (!viaService) { %>
+<%_ if (!viaService) { _%>
+
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
-    <% if (dto == 'mapstruct') { %>
+    <%_ if (dto == 'mapstruct') { _%>
+
     @Inject
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
-    <% } if (searchEngine == 'elasticsearch') { %>
+    <%_ } _%>
+    <%_ if (searchEngine == 'elasticsearch') { _%>
+
     @Inject
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
-    <% }
-  } else { %>
+    <%_ } _%>
+<%_  } else { _%>
+
     @Inject
     private <%= entityClass %>Service <%= entityInstance %>Service;
-    <% if (dto == 'mapstruct') { %>
-    @Inject
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
-    <% } -%>
-<% } %>
+<%_ } _%>

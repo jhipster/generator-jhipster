@@ -9,8 +9,7 @@ var util = require('util'),
 
 const constants = require('../generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 var HerokuGenerator = generators.Base.extend({});
 
@@ -104,7 +103,7 @@ module.exports = HerokuGenerator.extend({
             if (this.abort) return;
             var done = this.async();
             this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-            var child = exec('heroku plugins:install https://github.com/heroku/heroku-deploy', function (err, stdout) {
+            var child = exec('heroku plugins:install heroku-cli-deploy', function (err, stdout) {
                 if (err) {
                     this.abort = true;
                     this.log.error(err);
@@ -238,10 +237,6 @@ module.exports = HerokuGenerator.extend({
             var done = this.async();
             this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-            if (this.prodDatabaseType === 'postgresql' || this.prodDatabaseType === 'mysql') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
-            }
-
             this.template('_bootstrap-heroku.yml', SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
             this.template('_application-heroku.yml', SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
             this.template('_Procfile', 'Procfile');
@@ -279,9 +274,9 @@ module.exports = HerokuGenerator.extend({
             var done = this.async();
             this.log(chalk.bold('\nDeploying application'));
 
-            var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
+            var herokuDeployCommand = 'heroku deploy:jar target/*.war';
             if (this.buildTool === 'gradle') {
-                herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war';
+                herokuDeployCommand = 'heroku deploy:jar build/libs/*.war';
             }
 
             herokuDeployCommand += ' --app ' + this.herokuDeployedName;
