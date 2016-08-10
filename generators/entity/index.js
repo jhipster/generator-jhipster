@@ -166,7 +166,7 @@ module.exports = EntityGenerator.extend({
             // Specific Entity sub-generator variables
             if (!this.useConfigurationFile) {
                 //no file present, new entity creation
-                this.log(chalk.red(`\nThe entity ${ this.name } is being created.\n`));
+                this.log(`\nThe entity ${ this.name } is being created.\n`);
                 this.fields = [];
                 this.relationships = [];
                 this.pagination = 'no';
@@ -175,7 +175,7 @@ module.exports = EntityGenerator.extend({
                 this.service = 'no';
             } else {
                 //existing entity reading values from file
-                this.log(chalk.red(`\nThe entity ${ this.name } is being updated.\n`));
+                this.log(`\nThe entity ${ this.name } is being updated.\n`);
                 this._loadJson();
             }
         }
