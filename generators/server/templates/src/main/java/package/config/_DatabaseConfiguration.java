@@ -120,8 +120,7 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
 <%_ } _%>
     @Bean
-    public SpringLiquibase liquibase(DataSource dataSource, DataSourceProperties dataSourceProperties,
-        LiquibaseProperties liquibaseProperties) {
+    public SpringLiquibase liquibase(DataSource dataSource, LiquibaseProperties liquibaseProperties) {
 
         // Use liquibase.integration.spring.SpringLiquibase if you don't want Liquibase to start asynchronously
         SpringLiquibase liquibase = new AsyncSpringLiquibase();
