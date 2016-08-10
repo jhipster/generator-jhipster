@@ -32,11 +32,11 @@
     }
   ],
   "dependencies": {
-    "lodash": "4.14.1"
+    "lodash": "4.14.2"
   },
   "devDependencies": {
     "pegjs": "0.9.0",
-    "mocha": "3.0.1",
+    "mocha": "3.0.2",
     "chai": "3.5.0",
     "istanbul": "0.4.4"
   },
