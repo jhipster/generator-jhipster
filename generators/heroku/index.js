@@ -128,6 +128,8 @@ module.exports = HerokuGenerator.extend({
                 dbAddOn = ' --addons heroku-postgresql';
             } else if (this.prodDatabaseType === 'mysql') {
                 dbAddOn = ' --addons jawsdb:kitefin';
+            } else if (this.prodDatabaseType === 'mariadb') {
+                dbAddOn = ' --addons jawsdb-maria:kitefin';
             } else if (this.prodDatabaseType === 'mongodb') {
                 dbAddOn = ' --addons mongolab:sandbox';
             }
