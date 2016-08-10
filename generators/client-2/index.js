@@ -343,6 +343,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_compile.config.ts', ANGULAR_DIR + 'blocks/config/compile.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pager.config.ts', ANGULAR_DIR + 'blocks/config/uib-pager.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pagination.config.ts', ANGULAR_DIR + 'blocks/config/uib-pagination.config.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/filter.pipe.ts', ANGULAR_DIR + 'shared/filter.pipe.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/order-by.pipe.ts', ANGULAR_DIR + 'shared/order-by.pipe.ts', this, {});
         },
 
         writeAngularAuthFiles: function () {
@@ -406,14 +408,14 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/audits/_audits.service.ts', ANGULAR_DIR + 'admin/audits/audits.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/configuration/configuration.html', ANGULAR_DIR + 'admin/configuration/configuration.html');
             this.copyJs(ANGULAR_DIR + 'admin/configuration/_configuration.state.ts', ANGULAR_DIR + 'admin/configuration/configuration.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/configuration/_configuration.controller.ts', ANGULAR_DIR + 'admin/configuration/configuration.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/configuration/_configuration.component.ts', ANGULAR_DIR + 'admin/configuration/configuration.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/configuration/_configuration.service.ts', ANGULAR_DIR + 'admin/configuration/configuration.service.ts', this, {});
             this.copy(ANGULAR_DIR + 'admin/docs/docs.html', ANGULAR_DIR + 'admin/docs/docs.html');
             this.copyJs(ANGULAR_DIR + 'admin/docs/_docs.state.ts', ANGULAR_DIR + 'admin/docs/docs.state.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/health/health.html', ANGULAR_DIR + 'admin/health/health.html');
             this.copyHtml(ANGULAR_DIR + 'admin/health/_health-modal.html', ANGULAR_DIR + 'admin/health/health-modal.html');
             this.copyJs(ANGULAR_DIR + 'admin/health/_health.state.ts', ANGULAR_DIR + 'admin/health/health.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/health/_health.controller.ts', ANGULAR_DIR + 'admin/health/health.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/health/_health.component.ts', ANGULAR_DIR + 'admin/health/health.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health-modal.controller.ts', ANGULAR_DIR + 'admin/health/health-modal.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.service.ts', ANGULAR_DIR + 'admin/health/health.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/logs/logs.html', ANGULAR_DIR + 'admin/logs/logs.html');
