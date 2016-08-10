@@ -1,4 +1,4 @@
-package <%=packageName%>.web.rest.dto;
+package <%=packageName%>.service.dto;
 <% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %><% if (validation) { %>
@@ -41,7 +41,7 @@ public class <%= entityClass %>DTO implements Serializable {
             if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
                 required = true;
             } _%>
-    <%- include ../../../common/field_validators -%>
+    <%- include ../../common/field_validators -%>
     <%_ } _%>
     <%_ if (fieldType == 'byte[]' && databaseType === 'sql') { _%>
     @Lob

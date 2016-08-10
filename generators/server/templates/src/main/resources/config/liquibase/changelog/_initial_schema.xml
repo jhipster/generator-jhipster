@@ -263,6 +263,7 @@
 
         <createTable tableName="oauth_code">
             <column name="code" type="varchar(255)"/>
+            <column name="authentication" type="BLOB"/>
         </createTable>
 
         <createTable tableName="oauth_approvals">
@@ -273,5 +274,10 @@
             <column name="expiresAt" type="timestamp"/>
             <column name="lastModifiedAt" type="timestamp"/>
         </createTable>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/oauth_client_details.csv"
+                  separator=";"
+                  tableName="oauth_client_details"/>
     </changeSet><% } %>
 </databaseChangeLog>

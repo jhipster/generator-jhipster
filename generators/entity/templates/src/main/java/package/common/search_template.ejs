@@ -11,9 +11,9 @@
     public ResponseEntity<List<<%= instanceType %>>> search<%= entityClassPlural %>(@RequestParam String query, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to search for a page of <%= entityClassPlural %> for query {}", query);<% if (viaService) { %>
-        Page<<%= entityClass %>> page = <%= entityInstance %>Service.search(query, pageable);<% } else { %>
+        Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);<% } else { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);<% } %>
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/<%= entityApiUrl %>");
-        return new ResponseEntity<>(<% if (dto == 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
+        return new ResponseEntity<>(<% if (!viaService && dto == 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
     <% } -%>
 }

@@ -64,7 +64,7 @@ const expectedFiles = {
         SERVER_MAIN_RES_DIR + 'mails/activationEmail.html',
         SERVER_MAIN_RES_DIR + 'mails/passwordResetEmail.html',
         SERVER_MAIN_RES_DIR + 'i18n/messages.properties',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/JhipsterApp.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/Application.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/ApplicationWebXml.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/aop/logging/LoggingAspect.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/package-info.java',
@@ -119,12 +119,18 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/UserService.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/MailService.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/util/RandomUtil.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/package-info.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/UserDTO.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/package-info.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/UserMapper.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CachingHttpHeadersFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CsrfCookieGeneratorFilter.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/package-info.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/LoggerDTO.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/UserDTO.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/package-info.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/LoggerVM.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/ManagedUserVM.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/LoggerVM.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/util/PaginationUtil.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/AccountResource.java',
@@ -354,7 +360,7 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/GatewayConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingRepository.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/RouteDTO.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/RouteVM.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/GatewayResource.java',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.state.js',
@@ -542,9 +548,9 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct package names', function () {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java'
+                SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java'
             ]);
-            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /package com\.otherpackage;/);
+            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java', /package com\.otherpackage;/);
         });
     });
 

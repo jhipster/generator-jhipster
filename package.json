@@ -31,7 +31,7 @@
     "pretest": "eslint .",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "test": "mocha --timeout 20000 --reporter spec"
+    "test": "mocha --timeout 20000 --slow 0 --reporter spec"
   },
   "dependencies": {
     "chalk": "1.1.3",
@@ -49,7 +49,7 @@
     "js-yaml": "3.6.1",
     "yo": "1.8.4",
     "semver": "5.1.0",
-    "jhipster-core": "1.1.2"
+    "jhipster-core": "1.1.5"
   },
   "devDependencies": {
     "eslint": "2.11.1",

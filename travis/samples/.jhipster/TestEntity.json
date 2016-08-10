@@ -40,6 +40,12 @@
             "otherEntityField": "login",
             "ownerSide": true,
             "otherEntityRelationshipName": "parent"
+        },
+        {
+            "relationshipName": "testCustomTableName",
+            "otherEntityName": "testCustomTableName",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "testEntity"
         }
     ],
     "fields": [],

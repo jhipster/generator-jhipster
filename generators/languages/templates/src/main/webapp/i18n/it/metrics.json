@@ -39,11 +39,11 @@
                 "scavengetime": "Scavenge time"
             },
             "http": {
-                "title": "HTTP requests (events per second)",
-                "active": "Active requests:",
-                "total": "Total requests:",
+                "title": "Richieste HTTP (eventi al secondo)",
+                "active": "Richieste attive:",
+                "total": "Richieste totali:",
                 "table": {
-                    "code": "Code",
+                    "code": "Cod",
                     "count": "Count",
                     "mean": "Mean",
                     "average": "Average"

@@ -1,21 +1,24 @@
-package <%=packageName%>.web.rest.dto;
+package <%=packageName%>.web.rest.vm;
 
 import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public class LoggerDTO {
+/**
+ * View Model object for storing a Logback logger.
+ */
+public class LoggerVM {
 
     private String name;
 
     private String level;
 
-    public LoggerDTO(Logger logger) {
+    public LoggerVM(Logger logger) {
         this.name = logger.getName();
         this.level = logger.getEffectiveLevel().toString();
     }
 
     @JsonCreator
-    public LoggerDTO() {
+    public LoggerVM() {
     }
 
     public String getName() {
@@ -36,7 +39,7 @@ public class LoggerDTO {
 
     @Override
     public String toString() {
-        return "LoggerDTO{" +
+        return "LoggerVM{" +
             "name='" + name + '\'' +
             ", level='" + level + '\'' +
             '}';

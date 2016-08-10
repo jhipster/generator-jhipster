@@ -57,6 +57,7 @@ public class SwaggerBasePathRewritingFilterTest {
         context.setRequest(request);
 
         MockHttpServletResponse response = new MockHttpServletResponse();
+        context.setResponseGZipped(false);
         context.setResponse(response);
 
         InputStream in = IOUtils.toInputStream("{\"basePath\":\"/\"}");
