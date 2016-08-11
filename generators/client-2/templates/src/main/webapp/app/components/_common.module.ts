@@ -14,7 +14,6 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
 import { AlertService } from './alert/alert.service';
 
 import { PageRibbonComponent } from './profiles/page-ribbon.component';<% if (enableTranslation) { %>
-import { <%=jhiPrefixCapitalized%>LanguageController } from './language/language.controller';<% } %>
 
 upgradeAdapter.addProvider(ProfileService);
 upgradeAdapter.upgradeNg1Provider('Principal');
