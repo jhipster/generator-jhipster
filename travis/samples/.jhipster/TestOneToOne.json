@@ -1,4 +1,5 @@
 {
+    "fluentMethods": true,
     "relationships": [
         {
             "relationshipName": "testEntity",
@@ -51,6 +52,14 @@
         {
             "relationshipName": "testPagination",
             "otherEntityName": "testPagination",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testOneToOne"
+        },
+        {
+            "relationshipName": "testCustomTableName",
+            "otherEntityName": "testCustomTableName",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,

@@ -1,6 +1,6 @@
 {
     "logs": {
-        "title": "Logs",
+        "title": "Log",
         "nbloggers": "Hai {{ total }} logger.",
         "filter": "Filtro",
         "table": {
