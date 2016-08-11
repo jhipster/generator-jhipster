@@ -49,11 +49,16 @@ describe('::convert', function () {
         var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'mysql'), databaseType: 'mysql'});
         expect(content).not.to.be.null;
         expect(Object.keys(content).length).to.eq(8);
+        for (let i = 0, entities = Object.keys(content); i < entities.length; i++) {
+          expect(content[entities[i]].fluentMethods).to.eq(true);
+        }
         expect(content.Department.relationships.length).to.eq(2);
         expect(content.Department.fields.length).to.eq(2);
         expect(content.Department.entityTableName).to.eq('department');
         expect(content.Employee.javadoc).to.eq('The Employee entity.');
         expect(content.Employee.pagination).to.eq('infinite-scroll');
+        expect(content.Job.relationships[0].otherEntityRelationshipName).to.eq('job');
+        expect(content.Task.relationships[0].otherEntityRelationshipName).to.eq('chore');
       });
     });
     describe('when converting JDL to entity json for MongoDB type', function () {
