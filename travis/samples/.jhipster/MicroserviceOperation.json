@@ -13,7 +13,7 @@
             "relationshipType": "many-to-many",
             "otherEntityField": "label",
             "ownerSide": true,
-            "otherEntityRelationshipName": "microserviceOperation"
+            "otherEntityRelationshipName": "operation"
         }
     ],
     "fields": [
