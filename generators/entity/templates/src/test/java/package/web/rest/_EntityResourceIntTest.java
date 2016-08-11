@@ -88,10 +88,10 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     var enumValue1;
     var enumValue2;
     if (isEnum) {
-        var values = fields[idx].fieldValues.split(',');
-        enumValue1 = values[0].split('(')[0].replace(/\s/g, '');
+        var values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
+        enumValue1 = values[0];
         if (values.length > 1) {
-            enumValue2 = values[1].split('(')[0].replace(/\s/g, '');
+            enumValue2 = values[1];
         } else {
             enumValue2 = enumValue1;
         }
