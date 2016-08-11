@@ -993,8 +993,8 @@ function askForRelationship(cb) {
         {
             when: function (response) {
                 return (response.relationshipAdd === true && (response.relationshipType === 'one-to-many' ||
-                (response.relationshipType === 'many-to-many' && response.ownerSide === false) ||
-                (response.relationshipType === 'one-to-one' && response.otherEntityName.toLowerCase() !== 'user')));
+                ((response.relationshipType === 'many-to-many' ||
+                response.relationshipType === 'one-to-one') && response.otherEntityName.toLowerCase() !== 'user')));
             },
             type: 'input',
             name: 'otherEntityRelationshipName',
