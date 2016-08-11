@@ -58,12 +58,14 @@
                                 <span translate="global.menu.account.password">Password</span>
                             </a>
                         </li>
+                        <%_ if (authenticationType == 'session') { _%>
                         <li ui-sref-active="active" *ngSwitchCase="true">
                             <a ui-sref="sessions" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-cloud"></span>&nbsp;
                                 <span translate="global.menu.account.sessions">Sessions</span>
                             </a>
                         </li>
+                        <%_ } _%>
                         <li ui-sref-active="active" *ngSwitchCase="true">
                             <a href="" (click)="logout()" id="logout">
                                 <span class="glyphicon glyphicon-log-out"></span>&nbsp;
@@ -93,12 +95,28 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu" uib-dropdown-menu>
+                        <%_ if (applicationType == 'gateway') { _%>
+                        <li ui-sref-active="active">
+                            <a ui-sref="gateway" (click)="collapseNavbar()">
+                                <span class="glyphicon glyphicon-road"></span>&nbsp;
+                                <span translate="global.menu.admin.gateway">Gateway</span>
+                            </a>
+                        </li>
+                        <%_ } _%>
                         <li ui-sref-active="active">
                             <a ui-sref="user-management" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-user"></span>&nbsp;
                                 <span translate="global.menu.admin.userManagement">User management</span>
                             </a>
                         </li>
+                        <%_ if (websocket == 'spring-websocket') { _%>
+                        <li ui-sref-active="active">
+                            <a ui-sref="<%=jhiPrefix%>-tracker" (click)="collapseNavbar()">
+                                <span class="glyphicon glyphicon-eye-open"></span>&nbsp;
+                                <span translate="global.menu.admin.tracker">User tracker</span>
+                            </a>
+                        </li>
+                        <%_ } _%>
                         <li ui-sref-active="active">
                             <a ui-sref="<%=jhiPrefix%>-metrics" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
@@ -136,14 +154,17 @@
                             </a>
                         </li>
                         <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
+                        <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
                         <li *ngIf="!inProduction">
                             <a href='/h2-console' target="_tab" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-hdd"></span>&nbsp;
                                 <span translate="global.menu.admin.database">Database</span>
                             </a>
                         </li>
+                        <%_ } _%>
                     </ul>
                 </li>
+                <%_ if (enableTranslation){ _%>
                 <li *ngIf="languages" ui-sref-active="active" uib-dropdown class="dropdown pointer">
                     <a class="dropdown-toggle" uib-dropdown-toggle href="" *ngIf="languages.length > 1">
                         <span>
@@ -158,6 +179,7 @@
                         </li>
                     </ul>
                 </li>
+                <%_ } _%>
             </ul>
         </div>
     </div>
