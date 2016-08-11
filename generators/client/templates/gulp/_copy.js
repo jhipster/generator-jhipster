@@ -13,7 +13,6 @@ var config = require('./config');
 module.exports = {<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
     i18n: i18n,
     languages: languages,<% } %>
-    html: html,
     fonts: fonts,
     common: common,
     swagger: swagger
@@ -38,13 +37,6 @@ function languages() {
         .pipe(gulp.dest(config.app + 'i18n/'));
 }
 <% } %>
-function html() {
-    return gulp.src([config.app + '/**/*.html', '!' + config.bower + '/**'])
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist))
-        .pipe(gulp.dest(config.dist));
-}
-
 function fonts() {
     return es.merge(<% if(!useSass) { %>gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
