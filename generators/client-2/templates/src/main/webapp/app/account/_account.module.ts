@@ -12,8 +12,8 @@ import { AccountStateConfig } from "./account.state";
 
 import { RegisterComponent } from "./register/register.controller";
 
+<% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
 upgradeAdapter.upgradeNg1Provider('Auth');
-upgradeAdapter.upgradeNg1Provider('$translate');
 upgradeAdapter.upgradeNg1Provider('LoginService');
 
 angular

@@ -360,7 +360,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'account/password/_password.state.ts', ANGULAR_DIR + 'account/password/password.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.controller.ts', ANGULAR_DIR + 'account/password/password.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.service.ts', ANGULAR_DIR + 'account/password/password.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/password/_password-strength-bar.directive.ts', ANGULAR_DIR + 'account/password/password-strength-bar.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/password/_password-strength-bar.component.ts', ANGULAR_DIR + 'account/password/password-strength-bar.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/register/register.html', ANGULAR_DIR + 'account/register/register.html');
             this.copyJs(ANGULAR_DIR + 'account/register/_register.state.ts', ANGULAR_DIR + 'account/register/register.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.controller.ts', ANGULAR_DIR + 'account/register/register.controller.ts', this, {});
