@@ -23,11 +23,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
-    gulpIf = require('gulp-if'),
-    inject = require('gulp-inject'),
-    angularFilesort = require('gulp-angular-filesort'),
-    naturalSort = require('gulp-natural-sort'),
-    bowerFiles = require('main-bower-files');
+    gulpIf = require('gulp-if');
 
 var handleErrors = require('./gulp/handle-errors'),
     serve = require('./gulp/serve'),
