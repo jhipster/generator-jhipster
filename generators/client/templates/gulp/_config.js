@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
     app: '<%= MAIN_SRC_DIR %>',
     dist: '<%= DIST_DIR %>',
