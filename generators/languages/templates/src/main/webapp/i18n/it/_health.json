@@ -1,20 +1,20 @@
 {
     "health": {
-        "title": "Heath checks",
-        "refresh.button": "Refresh",
+        "title": "Verifiche",
+        "refresh.button": "Aggiorna",
         "stacktrace": "Stacktrace",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "Dettagli",
+            "properties": "Proprietà",
+            "name": "Nome",
+            "value": "Valore",
+            "error": "Errore"
         },
         "indicator": {
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "refreshScope": "Scopo di Aggiornamento Microservice",
+            "configServer": "Server di Configurazioni Microservice",
             <%_ } _%>
             "diskSpace": "Spazio su disco",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
