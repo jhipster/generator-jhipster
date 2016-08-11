@@ -471,9 +471,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/form/_minbytes.directive.ts', ANGULAR_DIR + 'components/form/minbytes.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'components/form/_pagination.constants.ts', ANGULAR_DIR + 'components/form/pagination.constants.ts', this, {});
             if (this.enableTranslation) {
-                this.template(ANGULAR_DIR + 'components/language/_language.filter.ts', ANGULAR_DIR + 'components/language/language.filter.ts', this, {});
+                this.template(ANGULAR_DIR + 'components/language/_language.pipe.ts', ANGULAR_DIR + 'components/language/language.pipe.ts', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.constants.ts', ANGULAR_DIR + 'components/language/language.constants.ts', this, {});
-                this.template(ANGULAR_DIR + 'components/language/_language.controller.ts', ANGULAR_DIR + 'components/language/language.controller.ts', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.service.ts', ANGULAR_DIR + 'components/language/language.service.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'components/login/login.html', ANGULAR_DIR + 'components/login/login.html');
@@ -538,7 +537,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
-            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.controller.ts', ANGULAR_DIR + 'layouts/navbar/navbar.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.component.ts', ANGULAR_DIR + 'layouts/navbar/navbar.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
             this.copyHtml(ANGULAR_DIR + 'layouts/error/accessdenied.html', ANGULAR_DIR + 'layouts/error/accessdenied.html');
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.ts', ANGULAR_DIR + 'layouts/error/error.state.ts', this, {});
