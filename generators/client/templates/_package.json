@@ -39,7 +39,7 @@
     "gulp-rename": "1.2.2",
     "gulp-replace": "0.5.4",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
-    "gulp-protractor": "2.5.0",
+    "gulp-protractor": "3.0.0",
     "gulp-util": "3.0.7",
     <%_ } _%>
     "gulp-rev": "7.1.0",
@@ -67,7 +67,7 @@
     "map-stream": "0.0.6",
     "phantomjs-prebuilt": "2.1.8",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
-    "protractor": "4.0.0",
+    "protractor": "4.0.3",
     "protractor-jasmine2-screenshot-reporter": "0.3.2",
     <%_ } _%>
     "proxy-middleware": "0.15.0",

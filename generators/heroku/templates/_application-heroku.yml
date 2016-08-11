@@ -22,7 +22,7 @@ eureka:
             defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 
 spring:
-<%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql') { _%>
+<%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         maximumPoolSize: 10
