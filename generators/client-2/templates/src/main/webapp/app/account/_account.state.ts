@@ -1,16 +1,8 @@
-(function() {
-    'use strict';
+AccountStateConfig.$inject = ['$stateProvider'];
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .config(stateConfig);
-
-    stateConfig.$inject = ['$stateProvider'];
-
-    function stateConfig($stateProvider) {
-        $stateProvider.state('account', {
-            abstract: true,
-            parent: 'app'
-        });
-    }
-})();
+export function AccountStateConfig($stateProvider) {
+    $stateProvider.state('account', {
+        abstract: true,
+        parent: 'app'
+    });
+}

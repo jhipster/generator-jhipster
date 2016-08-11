@@ -17,6 +17,9 @@ import { PageRibbonComponent } from './profiles/page-ribbon.component';<% if (en
 import { <%=jhiPrefixCapitalized%>LanguageController } from './language/language.controller';<% } %>
 
 upgradeAdapter.addProvider(ProfileService);
+upgradeAdapter.upgradeNg1Provider('Principal');
+upgradeAdapter.upgradeNg1Provider('$state');
+upgradeAdapter.upgradeNg1Provider('LoginService');
 
 angular
     .module('<%=angularAppName%>.common', [
