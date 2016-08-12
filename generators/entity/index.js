@@ -166,7 +166,10 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
             } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
                 this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
+                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
             }
+
         },
 
         setupVars: function () {
