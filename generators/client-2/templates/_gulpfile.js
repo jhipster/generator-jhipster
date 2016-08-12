@@ -28,7 +28,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     sourcemaps = require('gulp-sourcemaps'),
     tslint = require('gulp-tslint');
 
-var handleErrors = require('./gulp/handleErrors'),
+var handleErrors = require('./gulp/handle-errors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
     copy = require('./gulp/copy'),
@@ -53,6 +53,8 @@ gulp.task('copy:html', copy.html);
 gulp.task('copy:fonts', copy.fonts);
 
 gulp.task('copy:common', copy.common);
+
+gulp.task('copy:swagger', copy.swagger);
 
 //copy npm dependencies to vendor folder
 gulp.task('copy:deps', copy.deps);
@@ -121,7 +123,7 @@ gulp.task('inject:test', inject.test);
 
 gulp.task('inject:troubleshoot', inject.troubleshoot);
 
-gulp.task('assets:prod', ['images', 'styles', 'html', 'swagger-ui'], build);
+gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
@@ -132,22 +134,6 @@ gulp.task('html', function () {
             moduleSystem: 'IIFE'
         }))
         .pipe(gulp.dest(config.tmp));
-});
-
-gulp.task('swagger-ui', function () {
-    return es.merge(
-        gulp.src([config.bower + 'swagger-ui/dist/**',
-             '!' + config.bower + 'swagger-ui/dist/index.html',
-             '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
-             '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
-        gulp.src(config.app + 'swagger-ui/index.html')
-            .pipe(replace('../bower_components/swagger-ui/dist/', ''))
-            .pipe(replace('swagger-ui.js', 'lib/swagger-ui.min.js'))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
-        gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
-            .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
-    );
 });
 
 gulp.task('ngconstant:dev', function () {
