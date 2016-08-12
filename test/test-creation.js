@@ -449,7 +449,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.controller.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.directive.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.state.ts',
