@@ -4,6 +4,8 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     inject = require('gulp-inject'),
     es = require('event-stream'),
+    naturalSort = require('gulp-natural-sort'),
+    angularFilesort = require('gulp-angular-filesort'),
     bowerFiles = require('main-bower-files');
 
 var handleErrors = require('./handle-errors');
