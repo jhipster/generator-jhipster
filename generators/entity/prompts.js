@@ -906,12 +906,37 @@ function askForRelationship(cb) {
     var name = this.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
     var fieldNamesUnderscored = this.fieldNamesUnderscored;
+    var entityTableName = this.entityTableName;
+    var prodDatabaseType = this.prodDatabaseType;
     var prompts = [
         {
             type: 'confirm',
             name: 'relationshipAdd',
             message: 'Do you want to add a relationship to another entity?',
             default: true
+        },
+        {
+            when: function (response) {
+                return (response.relationshipAdd === true && ((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30));
+            },
+            type: 'input',
+            name: 'entityTableName',
+            message: 'The table name for this entity is too long to form constraint names. Please use a shorter table name',
+            validate: function (input) {
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'The table name cannot contain special characters';
+                } else if (input === '') {
+                    return 'The table name cannot be empty';
+                } else if (jhiCore.isReservedTableName(input, prodDatabaseType)) {
+                    return `The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`;
+                } else if (prodDatabaseType === 'oracle' && input.length > 14) {
+                    return 'The table name is too long for Oracle, try a shorter name';
+                } else if (input.length > 30) {
+                    return 'The table name is too long, try a shorter name';
+                }
+                return true;
+            },
+            default: entityTableName
         },
         {
             when: function (response) {
