@@ -5,9 +5,10 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
+    replace = require('gulp-replace'),
     changed = require('gulp-changed');
 
-var handleErrors = require('./handleErrors');
+var handleErrors = require('./handle-errors');
 var config = require('./config');
 
 module.exports = {<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
@@ -16,6 +17,7 @@ module.exports = {<% if(enableTranslation) { /* copy i18n folders only if transl
     html: html,
     fonts: fonts,
     common: common,
+    swagger: swagger,
     deps: deps
 }
 <% if(enableTranslation) { %>
@@ -75,6 +77,25 @@ function common() {
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist))
         .pipe(gulp.dest(config.dist));
+}
+
+function swagger() {
+    return es.merge(
+        gulp.src([config.bower + 'swagger-ui/dist/**',
+             '!' + config.bower + 'swagger-ui/dist/index.html',
+             '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
+             '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
+            .pipe(plumber({errorHandler: handleErrors}))
+            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+        gulp.src(config.app + 'swagger-ui/index.html')
+            .pipe(plumber({errorHandler: handleErrors}))
+            .pipe(replace('../bower_components/swagger-ui/dist/', ''))
+            .pipe(replace('swagger-ui.js', 'lib/swagger-ui.min.js'))
+            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+        gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
+            .pipe(plumber({errorHandler: handleErrors}))
+            .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
+    );
 }
 
 //copy npm dependencies to vendor folder
