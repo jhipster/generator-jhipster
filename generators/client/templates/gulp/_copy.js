@@ -5,6 +5,7 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
+    replace = require('gulp-replace'),
     changed = require('gulp-changed');
 
 var handleErrors = require('./handle-errors');

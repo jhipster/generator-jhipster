@@ -3,6 +3,8 @@
 
 var gulp = require('gulp'),<% if(useSass) { %>
     expect = require('gulp-expect-file'),
+    es = require('event-stream'),
+    flatten = require('gulp-flatten'),
     sass = require('gulp-sass'),<% } %>
     rev = require('gulp-rev'),
     templateCache = require('gulp-angular-templatecache'),
@@ -10,13 +12,10 @@ var gulp = require('gulp'),<% if(useSass) { %>
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant'),
     rename = require('gulp-rename'),
-    replace = require('gulp-replace'),
     eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     argv = require('yargs').argv,
     gutil = require('gulp-util'),
     protractor = require('gulp-protractor').protractor,<% } %>
-    es = require('event-stream'),
-    flatten = require('gulp-flatten'),
     del = require('del'),
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync'),
