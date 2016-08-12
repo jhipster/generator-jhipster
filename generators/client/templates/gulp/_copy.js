@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     replace = require('gulp-replace'),
+    bowerFiles = require('main-bower-files'),
     changed = require('gulp-changed');
 
 var handleErrors = require('./handle-errors');
@@ -16,7 +17,8 @@ module.exports = {<% if(enableTranslation) { /* copy i18n folders only if transl
     languages: languages,<% } %>
     fonts: fonts,
     common: common,
-    swagger: swagger
+    swagger: swagger,
+    images: images
 }
 <% if(enableTranslation) { %>
 var yorc = require('../.yo-rc.json')['generator-jhipster'];
@@ -87,4 +89,11 @@ function swagger() {
             .pipe(plumber({errorHandler: handleErrors}))
             .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
     );
+}
+
+function images() {
+    return gulp.src(bowerFiles({filter: ['**/*.{gif,jpg,png}']}), { base: config.bower })
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist +  'bower_components'))
+        .pipe(gulp.dest(config.dist +  'bower_components'));
 }
