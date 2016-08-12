@@ -956,7 +956,7 @@ function askForRelationship(cb) {
         },
         {
             when: function (response) {
-                return response.relationshipAdd === true;
+                return response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== 'user';
             },
             type: 'list',
             name: 'relationshipType',
@@ -983,7 +983,30 @@ function askForRelationship(cb) {
         },
         {
             when: function (response) {
-                return (response.relationshipAdd === true && (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'));
+                return response.relationshipAdd === true && response.otherEntityName.toLowerCase() === 'user';
+            },
+            type: 'list',
+            name: 'relationshipType',
+            message: 'What is the type of the relationship?',
+            choices: [
+                {
+                    value: 'many-to-one',
+                    name: 'many-to-one'
+                },
+                {
+                    value: 'many-to-many',
+                    name: 'many-to-many'
+                },
+                {
+                    value: 'one-to-one',
+                    name: 'one-to-one'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return (response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== 'user' && (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'));
             },
             type: 'confirm',
             name: 'ownerSide',
@@ -1051,6 +1074,10 @@ function askForRelationship(cb) {
                 ownerSide: props.ownerSide,
                 otherEntityRelationshipName: props.otherEntityRelationshipName
             };
+            if(props.otherEntityName.toLowerCase() === 'user') {
+                relationship.ownerSide = true;
+            }
+            this.log(relationship);
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
             this.relationships.push(relationship);
         }
