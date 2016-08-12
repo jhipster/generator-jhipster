@@ -176,11 +176,18 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 ### Set NPM to use the cloned project
 
-In your cloned project, type:
+In your cloned `generator-jhipster` project, type `npm link`.
 
-```shell
-npm link
-```
+This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `yo jhipster`, you will now use the development version of JHipster.
+
+For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
+
+To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+
+To put it in a nutshell, you need to:
+
+1. run `npm link` on the `generator-jhipster` project
+2. run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
 Now, running the 'yo jhipster' command should use your specific JHipster version. You can test it by making a small change in your cloned generator, and running again on an existing JHipster project:
 
@@ -188,9 +195,7 @@ Now, running the 'yo jhipster' command should use your specific JHipster version
 yo jhipster
 ```
 
-TIP: If this doesn't work, try running `npm link generator-jhipster` in your project. See [this guide](http://justjs.com/posts/npm-link-developing-your-own-npm-modules-without-tears) for more information.
-
-You should see your changes reflected in the JHipster project.
+You should see your changes reflected in the generated project.
 
 ### Use a text editor
 

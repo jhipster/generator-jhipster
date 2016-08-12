@@ -9,8 +9,8 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
-import <%=packageName%>.web.rest.dto.ManagedUserDTO;
-import <%=packageName%>.web.rest.dto.UserDTO;
+import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -143,7 +143,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterValid() throws Exception {
-        ManagedUserDTO validUser = new ManagedUserDTO(
+        ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "joe",                  // login
             "password",             // password
@@ -171,7 +171,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterInvalidLogin() throws Exception {
-        ManagedUserDTO invalidUser = new ManagedUserDTO(
+        ManagedUserVM invalidUser = new ManagedUserVM(
             null,                   // id
             "funky-log!n",          // login <-- invalid
             "password",             // password
@@ -199,7 +199,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterInvalidEmail() throws Exception {
-        ManagedUserDTO invalidUser = new ManagedUserDTO(
+        ManagedUserVM invalidUser = new ManagedUserVM(
             null,               // id
             "bob",              // login
             "password",         // password
@@ -227,7 +227,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterInvalidPassword() throws Exception {
-        ManagedUserDTO invalidUser = new ManagedUserDTO(
+        ManagedUserVM invalidUser = new ManagedUserVM(
             null,               // id
             "bob",              // login
             "123",              // password with only 3 digits
@@ -256,7 +256,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Transactional<% } %>
     public void testRegisterDuplicateLogin() throws Exception {
         // Good
-        ManagedUserDTO validUser = new ManagedUserDTO(
+        ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "alice",                // login
             "password",             // password
@@ -272,7 +272,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         <% } %>);
 
         // Duplicate login, different e-mail
-        ManagedUserDTO duplicatedUser = new ManagedUserDTO(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
             "alicejr@example.com", true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
@@ -297,7 +297,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Transactional<% } %>
     public void testRegisterDuplicateEmail() throws Exception {
         // Good
-        ManagedUserDTO validUser = new ManagedUserDTO(
+        ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "john",                 // login
             "password",             // password
@@ -313,7 +313,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         <% } %>);
 
         // Duplicate e-mail, different login
-        ManagedUserDTO duplicatedUser = new ManagedUserDTO(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
+        ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
             validUser.getEmail(), true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
@@ -337,7 +337,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void testRegisterAdminIsIgnored() throws Exception {
-        ManagedUserDTO validUser = new ManagedUserDTO(
+        ManagedUserVM validUser = new ManagedUserVM(
             null,                   // id
             "badguy",               // login
             "password",             // password

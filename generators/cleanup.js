@@ -26,4 +26,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(javaDir + 'domain/util/JSR310DateTimeSerializer.java');
         generator.removeFile(javaDir + 'domain/util/JSR310LocalDateDeserializer.java');
     }
+    if (generator.isJhipsterVersionLessThan('3.6.0')) {
+        generator.removeFile(javaDir + 'config/HerokuDatabaseConfiguration.java');
+    }
 }

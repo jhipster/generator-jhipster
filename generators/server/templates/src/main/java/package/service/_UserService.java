@@ -9,7 +9,7 @@ import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
-import <%=packageName%>.web.rest.dto.ManagedUserDTO;
+import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -43,8 +43,8 @@ public class UserService {
 
     @Inject
     private PasswordEncoder passwordEncoder;
-
     <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+
     @Inject
     public JdbcTokenStore jdbcTokenStore;
     <%_ } _%>
@@ -103,7 +103,7 @@ public class UserService {
             });
     }
 
-    public User createUserInformation(String login, String password, String firstName, String lastName, String email,
+    public User createUser(String login, String password, String firstName, String lastName, String email,
         String langKey) {
 
         User newUser = new User();<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -132,26 +132,26 @@ public class UserService {
         return newUser;
     }
 
-    public User createUser(ManagedUserDTO managedUserDTO) {
+    public User createUser(ManagedUserVM managedUserVM) {
         User user = new User();<% if (databaseType == 'cassandra') { %>
         user.setId(UUID.randomUUID().toString());<% } %>
-        user.setLogin(managedUserDTO.getLogin());
-        user.setFirstName(managedUserDTO.getFirstName());
-        user.setLastName(managedUserDTO.getLastName());
-        user.setEmail(managedUserDTO.getEmail());
-        if (managedUserDTO.getLangKey() == null) {
+        user.setLogin(managedUserVM.getLogin());
+        user.setFirstName(managedUserVM.getFirstName());
+        user.setLastName(managedUserVM.getLastName());
+        user.setEmail(managedUserVM.getEmail());
+        if (managedUserVM.getLangKey() == null) {
             user.setLangKey("<%= nativeLanguage %>"); // default language
         } else {
-            user.setLangKey(managedUserDTO.getLangKey());
+            user.setLangKey(managedUserVM.getLangKey());
         }<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        if (managedUserDTO.getAuthorities() != null) {
+        if (managedUserVM.getAuthorities() != null) {
             Set<Authority> authorities = new HashSet<>();
-            managedUserDTO.getAuthorities().stream().forEach(
+            managedUserVM.getAuthorities().stream().forEach(
                 authority -> authorities.add(authorityRepository.findOne(authority))
             );
             user.setAuthorities(authorities);
         }<% } %><% if (databaseType == 'cassandra') { %>
-        user.setAuthorities(managedUserDTO.getAuthorities());<% } %>
+        user.setAuthorities(managedUserVM.getAuthorities());<% } %>
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
@@ -163,7 +163,7 @@ public class UserService {
         return user;
     }
 
-    public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
+    public void updateUser(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
             u.setFirstName(firstName);
             u.setLastName(lastName);
@@ -175,7 +175,35 @@ public class UserService {
         });
     }
 
-    public void deleteUserInformation(String login) {
+    public void updateUser(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String firstName, String lastName, String email,
+        boolean activated, String langKey, Set<String> authorities) {
+
+        userRepository
+            .findOneById(id)
+            .ifPresent(u -> {
+                u.setLogin(login);
+                u.setFirstName(firstName);
+                u.setLastName(lastName);
+                u.setEmail(email);
+                u.setActivated(activated);
+                u.setLangKey(langKey);
+                <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+                Set<Authority> managedAuthorities = u.getAuthorities();
+                managedAuthorities.clear();
+                authorities.stream().forEach(
+                    authority -> managedAuthorities.add(authorityRepository.findOne(authority))
+                );
+                <%_ } else { // Cassandra _%>
+                u.setAuthorities(authorities);
+                <%_ } _%>
+                <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
+                userRepository.save(u);
+                <%_ } _%>
+                log.debug("Changed Information for User: {}", u);
+            });
+    }
+
+    public void deleteUser(String login) {
         <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
         jdbcTokenStore.findTokensByUserName(login).stream().forEach(token ->
             jdbcTokenStore.removeAccessToken(token));
@@ -198,28 +226,43 @@ public class UserService {
             log.debug("Changed password for User: {}", u);
         });
     }
-<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true)<% } %>
+
+    <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+        <%_ if (databaseType == 'sql') { _%>
         return userRepository.findOneByLogin(login).map(u -> {
             u.getAuthorities().size();
             return u;
         });
+        <%_ } else { // MongoDB and Cassandra _%>
+        return userRepository.findOneByLogin(login);
+        <%_ } _%>
     }
-<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true)<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+
+    <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public User getUserWithAuthorities(<%= pkType %> id) {
         User user = userRepository.findOne(id);
+        <%_ if (databaseType == 'sql') { _%>
         user.getAuthorities().size(); // eagerly load the association
+        <%_ } _%>
         return user;
-    }<% } %>
-<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true)<% } %>
+    }
+
+    <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public User getUserWithAuthorities() {
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        <%_ if (databaseType == 'sql') { _%>
         user.getAuthorities().size(); // eagerly load the association
+        <%_ } _%>
         return user;
-    }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+    }
+    <%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after

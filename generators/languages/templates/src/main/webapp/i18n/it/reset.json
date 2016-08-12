@@ -1,9 +1,9 @@
 {
     "reset": {
         "request": {
-            "title": "Cambia la tua password",
+            "title": "Cambia la password",
             "form": {
-                "button": "Reset Password"
+                "button": "Reimposta Password"
             },
             "messages": {
                 "info": "Inserire l'indirizzo e-mail utilizzato per la registrazione",
@@ -14,14 +14,14 @@
 
         },
         "finish" : {
-            "title": "Reset Password",
+            "title": "Reimposta Password",
             "form": {
                 "button": "Convalida la nuova password"
             },
             "messages": {
                 "info": "Scegliere una nuova password",
                 "success": "<strong>La tua password è stata reimpostata .</strong> Per favore <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autenticati</a>.",
-                "keymissing": "La chiave di reset non è presente.",
+                "keymissing": "La chiave di reimpostazione non è presente.",
                 "error": "La tua password potrebbe non essere ripristinata. Ricorda che la richiesta della password è valida solo per 24 ore."
             }
         }

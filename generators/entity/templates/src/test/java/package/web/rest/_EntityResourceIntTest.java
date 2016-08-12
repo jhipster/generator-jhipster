@@ -3,11 +3,17 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.<%= entityClass %>;
+<%_ for (idx in relationships) { // import entities in required relationships
+        var relationshipValidate = relationships[idx].relationshipValidate;
+        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        if (relationshipValidate != null && relationshipValidate === true) { _%>
+import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
+<%_ } } _%>
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service != 'no') { %>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +32,8 @@ import org.springframework.transaction.annotation.Transactional;<% } %><% if (fi
 import org.springframework.util.Base64Utils;<% } %>
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+import javax.persistence.EntityManager;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -173,6 +180,11 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+<%_ if (databaseType == 'sql') { _%>
+
+    @Inject
+    private EntityManager em;
+<%_ } _%>
 
     private MockMvc rest<%= entityClass %>MockMvc;
 
@@ -181,27 +193,73 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();<% if (service != 'no') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", <%= entityInstance %>Service);<% } else { if (searchEngine == 'elasticsearch') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% } if (dto == 'mapstruct') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %>
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
+        <%_ if (service != 'no') { _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", <%= entityInstance %>Service);
+        <%_ } else { _%>
+            <%_ if (searchEngine == 'elasticsearch') { _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);
+            <%_ } _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);
+        <%_ } _%>
+        <%_ if (service == 'no' && dto == 'mapstruct') { _%>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);
+        <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
     }
 
-    @Before
-    public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
-        <%= entityInstance %>Repository.deleteAll();<% } if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.deleteAll();<% } %>
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static <%= entityClass %> createEntity(<% if (databaseType == 'sql') { %>EntityManager em<% } %>) {
+        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
+        <%_ if (fluentMethods) { _%>
+        <%= entityInstance %> = new <%= entityClass %>()<% for (idx in fields) { %>
+                .<%= fields[idx].fieldName %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { %>
+                .<%= fields[idx].fieldName %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
+        <%_ } else { _%>
         <%= entityInstance %> = new <%= entityClass %>();
-        <%_ for (idx in fields) { _%>
-        <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-            <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
-        <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
+            <%_ for (idx in fields) { _%>
+        <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
+                <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
+        <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+                <%_ } _%>
             <%_ } _%>
         <%_ } _%>
+        <%_ for (idx in relationships) {
+            var relationshipValidate = relationships[idx].relationshipValidate;
+            var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+            var relationshipFieldName = relationships[idx].relationshipFieldName;
+            var relationshipType = relationships[idx].relationshipType;
+            var relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
+            var relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+            if (relationshipValidate != null && relationshipValidate === true) { _%>
+        // Add required entity
+        <%= otherEntityNameCapitalized %> <%= relationshipFieldName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
+        em.persist(<%= relationshipFieldName %>);
+        em.flush();
+            <%_ if (relationshipType == 'many-to-many') { _%>
+        <%= entityInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= relationshipFieldName %>);
+            <%_ } else { _%>
+        <%= entityInstance %>.set<%= relationshipNameCapitalized %>(<%= relationshipFieldName %>);
+            <%_ } _%>
+        <%_ } } _%>
+        return <%= entityInstance %>;
+    }
+
+    @Before
+    public void initTest() {
+        <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
+        <%= entityInstance %>Repository.deleteAll();
+        <%_ } if (searchEngine == 'elasticsearch') { _%>
+        <%= entityInstance %>SearchRepository.deleteAll();
+        <%_ } _%>
+        <%= entityInstance %> = createEntity(<% if (databaseType == 'sql') { %>em<% } %>);
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -322,12 +380,17 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
-        <%= entityClass %> updated<%= entityClass %> = new <%= entityClass %>();
-        updated<%= entityClass %>.setId(<%= entityInstance %>.getId());
-        <%_ for (idx in fields) { _%>
+        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findOne(<%= entityInstance %>.getId());
+        <%_ if (fluentMethods && fields.length > 0) { _%>
+        updated<%= entityClass %><% for (idx in fields) { %>
+                .<%= fields[idx].fieldName %>(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { %>
+                .<%= fields[idx].fieldName %>ContentType(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
+        <%_ } else { _%>
+            <%_ for (idx in fields) { _%>
         updated<%= entityClass %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-            <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType == 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
+                <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType == 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
         updated<%= entityClass %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
+                <%_ } _%>
             <%_ } _%>
         <%_ } _%>
         <%_ if (dto == 'mapstruct') { _%>
