@@ -1157,8 +1157,8 @@ Generator.prototype.getJoinTableName = function (entityName, relationshipName, p
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-        entityTable = getTableName(entityName.substring(0, halfLimit)),
-        relationTable = getTableName(relationshipName.substring(0, halfLimit-1));
+        entityTable = this.getTableName(entityName.substring(0, halfLimit)),
+        relationTable = this.getTableName(relationshipName.substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}`;
     }
     return joinTableName;
@@ -1181,15 +1181,22 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
         constraintName = 'fk_' + this.getTableName(entityName) + '_' +
             this.getTableName(relationshipName) + '_id';
     }
+    var limit = 0;
 
     if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
         this.warning(`The generated constraint name "${ constraintName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
-        constraintName = constraintName.substring(0, 27) + '_id';
+        limit = 28;
     } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
         this.warning(`The generated constraint name "${ constraintName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
-        constraintName = constraintName.substring(0, 61) + '_id';
+        limit = 62;
+    }
+    if (limit > 0) {
+        var halfLimit = Math.floor(limit/2),
+        entityTable = noSnakeCase ? entityName : this.getTableName(entityName.substring(0, halfLimit)),
+        relationTable = noSnakeCase ? relationshipName: this.getTableName(relationshipName.substring(0, halfLimit - 1));
+        return `${entityTable}_${relationTable}_id`;
     }
     return constraintName;
 };
