@@ -49,7 +49,8 @@ module.exports = JDLGenerator.extend({
                 this.log('Writing entity JSON files.');
                 jhiCore.exportToJSON(entities, this.options['force']);
             } catch (e) {
-                this.error(`Error while parsing entities from JDL\n${ (e.message || e) }`);
+                this.log(e.message || e);
+                this.error(`\nError while parsing entities from JDL\n`);
             }
 
 
