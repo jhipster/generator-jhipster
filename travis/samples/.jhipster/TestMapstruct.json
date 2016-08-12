@@ -1,24 +1,25 @@
 {
+    "fluentMethods": true,
     "relationships": [
         {
             "relationshipName": "testManyToOne",
             "otherEntityName": "testManyToOne",
             "relationshipType": "one-to-many",
-            "otherEntityRelationshipName": "testEntity"
+            "otherEntityRelationshipName": "testMapstruct"
         },
         {
             "relationshipName": "testManyToMany",
             "otherEntityName": "testManyToMany",
             "relationshipType": "many-to-many",
             "ownerSide": false,
-            "otherEntityRelationshipName": "testEntity"
+            "otherEntityRelationshipName": "testMapstruct"
         },
         {
             "relationshipName": "testOneToOne",
             "otherEntityName": "testOneToOne",
             "relationshipType": "one-to-one",
             "ownerSide": false,
-            "otherEntityRelationshipName": "testEntity"
+            "otherEntityRelationshipName": "testMapstruct"
         },
         {
             "relationshipName": "userOneToMany",
