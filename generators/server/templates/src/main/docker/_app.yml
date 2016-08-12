@@ -31,7 +31,7 @@ services:
             - jhipster-registry:registry
         <%_ } _%>
         environment:
-            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_PROFILES_ACTIVE=prod,swagger
             <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
             - SPRING_CLOUD_CONFIG_URI=http://admin:admin@registry:8761/config
             <%_ } _%>

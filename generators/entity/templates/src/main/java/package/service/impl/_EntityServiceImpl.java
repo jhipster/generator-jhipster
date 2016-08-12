@@ -14,8 +14,8 @@ import <%=packageName%>.service.<%= entityClass %>Service;<% } %>
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
@@ -41,9 +41,10 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
+
     /**
      * Save a <%= entityInstance %>.
-     * 
+     *
      * @param <%= instanceName %> the entity to save
      * @return the persisted entity
      */
@@ -59,13 +60,21 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
-    public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
-        log.debug("Request to get all <%= entityClassPlural %>");<% if (pagination == 'no') { %>
+    public <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
+        log.debug("Request to get all <%= entityClassPlural %>");
+        <%_ if (pagination == 'no') { _%>
         List<<%= instanceType %>> result = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
-            .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } else { %>
-        Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable); <% } %>
+            .collect(Collectors.toCollection(LinkedList::new))<% } %>;
+
         return result;
+        <%_ } else { _%>
+        Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable);
+            <%_ if (dto == 'mapstruct') { _%>
+        return result.map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
+            <%_ } else { _%>
+        return result;
+        <%_ } } _%>
     }
 <%- include('../../common/get_filtered_template'); -%>
     /**
@@ -82,7 +91,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
 
     /**
      *  Delete the  <%= entityInstance %> by id.
-     *  
+     *
      *  @param id the id of the entity
      */
     public void delete(<%= pkType %> id) {
@@ -96,12 +105,16 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
-    public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
+    public <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
         <%_ if (pagination == 'no') { _%>
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        return <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
-        <%_ } _%>
+        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
+            <%_ if (dto == 'mapstruct') { _%>
+        return result.map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
+            <%_ } else { _%>
+        return result;
+        <%_ } } _%>
     }<% } %>
 }

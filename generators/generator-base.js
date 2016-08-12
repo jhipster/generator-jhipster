@@ -1137,6 +1137,58 @@ Generator.prototype.getPluralColumnName = function (value) {
 };
 
 /**
+ * get a table name for joined tables in JHipster preferred style.
+ *
+ * @param {string} entityName - name of the entity
+ * @param {string} relationshipName - name of the related entity
+ * @param {string} prodDatabaseType - database type
+ */
+Generator.prototype.getJoinTableName = function (entityName, relationshipName, prodDatabaseType) {
+    var joinTableName = this.getTableName(entityName) + '_'+ this.getTableName(relationshipName);
+    if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+        this.warning(`The generated join table "${ joinTableName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+
+        joinTableName = joinTableName.substring(0, 30);
+    }
+    if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+        this.warning(`The generated join table "${ joinTableName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+
+        joinTableName = joinTableName.substring(0, 64);
+    }
+    return joinTableName;
+};
+
+/**
+ * get a constraint name for tables in JHipster preferred style.
+ *
+ * @param {string} entityName - name of the entity
+ * @param {string} relationshipName - name of the related entity
+ * @param {string} prodDatabaseType - database type
+ * @param {boolean} noSnakeCase - do not convert names to snakecase
+ */
+Generator.prototype.getConstraintName = function (entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+    var constraintName;
+    if (noSnakeCase) {
+        constraintName = 'fk_' + entityName + '_' +
+            relationshipName + '_id';
+    } else {
+        constraintName = 'fk_' + this.getTableName(entityName) + '_' +
+            this.getTableName(relationshipName) + '_id';
+    }
+
+    if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
+        this.warning(`The generated constraint name "${ constraintName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+
+        constraintName = constraintName.substring(0, 27) + '_id';
+    } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
+        this.warning(`The generated constraint name "${ constraintName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+
+        constraintName = constraintName.substring(0, 61) + '_id';
+    }
+    return constraintName;
+};
+
+/**
  * Print an error message.
  *
  * @param {string} msg - message to print
@@ -1164,7 +1216,12 @@ Generator.prototype.generateKeyStore = function() {
     } else {
         shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
         var parent = this;
-        shelljs.exec('keytool '+
+        var javaHome = shelljs.env['JAVA_HOME'];
+        var keytoolPath = '';
+        if (javaHome) {
+            keytoolPath = javaHome + '/bin/';
+        }
+        shelljs.exec('"' + keytoolPath + 'keytool" '+
             '-genkey ' +
             '-noprompt ' +
             '-keyalg RSA ' +

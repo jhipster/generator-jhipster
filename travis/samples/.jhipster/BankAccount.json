@@ -1,4 +1,5 @@
 {
+    "fluentMethods": true,
     "relationships": [
         {
             "relationshipName": "user",

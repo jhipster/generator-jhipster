@@ -1,122 +1,116 @@
+entity Region {
+	regionName String
+}
+
+entity Country {
+	countryName String
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity Location {
+	streetAddress String,
+	postalCode String,
+	city String,
+	stateProvince String
+}
+
 entity Department {
-  departmentId Long,
-  departmentName String required
+	departmentName String required
 }
 
 /**
- * JobHistory comment.
+ * Task entity.
+ * @author The JHipster team.
  */
-entity JobHistory {
-  startDate ZonedDateTime,
-  endDate ZonedDateTime
-}
-
-enum JobType {
-  TYPE1, TYPE2
-}
-
-entity Job {
-  jobId Long,
-  jobTitle String minlength(5) maxlength(25),
-  type JobType,
-  minSalary Long,
-  maxSalary Long
+entity Task {
+	title String,
+	description String
 }
 
 /**
  * The Employee entity.
  */
 entity Employee {
-  employeeId Long,
-  /**
-   * The firstname attribute.
-   */
-  firstName String,
-  lastName String,
-  email String,
-  phoneNumber String,
-  hireDate ZonedDateTime,
-  salary Long,
-  commissionPct Long
+	/**
+	* The firstname attribute.
+	*/
+	firstName String,
+	lastName String,
+	email String,
+	phoneNumber String,
+	hireDate ZonedDateTime,
+	salary Long,
+	commissionPct Long
 }
 
-entity Location {
-  locationId Long,
-  streetAddress String,
-  postalCode String,
-  city String,
-  stateProvince String
+entity Job {
+	jobTitle String,
+	minSalary Long,
+	maxSalary Long
 }
 
-entity Task {
-  taskId Long,
-  title String,
-  description String
+entity JobHistory {
+	startDate ZonedDateTime,
+	endDate ZonedDateTime,
+	language Language
 }
 
-entity Country {
-  countryId Long,
-  countryName String
-}
-
-entity Region {
-  regionId Long,
-  regionName String
+enum Language {
+    FRENCH, ENGLISH, SPANISH
 }
 
 relationship OneToOne {
-  JobHistory{department} to Department
+	Country{region} to Region
 }
 
 relationship OneToOne {
-  JobHistory{job} to Job
+	Location{country} to Country
 }
 
 relationship OneToOne {
-  JobHistory{employee} to Employee
+	Department{location} to Location
 }
 
 relationship ManyToMany {
-  Job{task(title)} to Task{job}
+	Job{task(title)} to Task{job}
 }
 
-relationship OneToOne {
-  Department{location} to Location
-}
-
+// defining multiple OneToMany relationships with comments
 relationship OneToMany {
-  /**
-   * A relationship
-   */
-  Department{employee} to
-  /**
-   * Another side of the same relationship
-   */
-  Employee
+	Employee{job} to Job,
+	/**
+	* A relationship
+	*/
+	Department{employee} to
+	/**
+	* Another side of the same relationship
+	*/
+	Employee
 }
 
 relationship ManyToOne {
-  Employee{manager} to Employee
+	Employee{manager} to Employee,
+    Employee{user} to User
 }
 
-relationship OneToMany {
-  Employee{job} to Job
-}
-
+// defining multiple oneToOne relationships
 relationship OneToOne {
-  Location{country} to Country
+	JobHistory{job} to Job,
+	JobHistory{department} to Department,
+	JobHistory{employee} to Employee
 }
 
-relationship OneToOne {
-  Country{region} to Region
-}
-
+// Set pagination options
 paginate JobHistory, Employee with infinite-scroll
 paginate Job with pagination
 
-dto Employee with mapstruct
+dto * with mapstruct
 
-service Employee with serviceClass
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+// Set an angular suffix
+angularSuffix * with mySuffix
 
 microservice * with mymicroservice
 
