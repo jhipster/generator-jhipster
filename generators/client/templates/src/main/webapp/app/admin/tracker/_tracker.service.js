@@ -6,9 +6,9 @@
         .module('<%=angularAppName%>')
         .factory('<%=jhiPrefixCapitalized%>TrackerService', <%=jhiPrefixCapitalized%>TrackerService);
 
-    <%=jhiPrefixCapitalized%>TrackerService.$inject = ['$rootScope', '$window', '$cookies', '$http', '$q'<% if (authenticationType == 'jwt') { %>, 'AuthServerProvider'<%}%><% if (authenticationType == 'oauth2') { %>, '$localStorage'<%}%>];
+    <%=jhiPrefixCapitalized%>TrackerService.$inject = ['$rootScope', '$window', '$cookies', '$http', '$q'<% if (authenticationType == 'jwt' || authenticationType == 'uaa') { %>, 'AuthServerProvider'<%}%><% if (authenticationType == 'oauth2') { %>, '$localStorage'<%}%>];
 
-    function <%=jhiPrefixCapitalized%>TrackerService ($rootScope, $window, $cookies, $http, $q<% if (authenticationType == 'jwt') { %>, AuthServerProvider<%}%><% if (authenticationType == 'oauth2') { %>, $localStorage<%}%>) {
+    function <%=jhiPrefixCapitalized%>TrackerService ($rootScope, $window, $cookies, $http, $q<% if (authenticationType == 'jwt' || authenticationType == 'uaa') { %>, AuthServerProvider<%}%><% if (authenticationType == 'oauth2') { %>, $localStorage<%}%>) {
         var stompClient = null;
         var subscriber = null;
         var listener = $q.defer();
@@ -32,7 +32,7 @@
             var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType == 'oauth2') { %>
             /*jshint camelcase: false */
             var authToken = angular.fromJson($localStorage.authenticationToken).access_token;
-            url += '?access_token=' + authToken;<% } %><% if (authenticationType == 'jwt') { %>
+            url += '?access_token=' + authToken;<% } %><% if (authenticationType == 'jwt' || authenticationType == 'uaa') { %>
             var authToken = AuthServerProvider.getToken();
             if(authToken){
                 url += '?access_token=' + authToken;
