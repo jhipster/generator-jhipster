@@ -83,9 +83,8 @@ module.exports = EntityGenerator.extend({
 
         this.regenerate = this.options['regenerate'];
         this.fluentMethods = this.options['fluent-methods'];
-        this.entityTableName = this.options['table-name'] || this.name;
+        this.entityTableName = _.snakeCase(this.options['table-name'] || this.name).toLowerCase();
         this.entityNameCapitalized = _.upperFirst(this.name);
-        this.entityTableName = _.snakeCase(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
@@ -165,7 +164,7 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The table name cannot be empty'));
             } else if (jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
                 this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
-            } else if (prodDatabaseType === 'oracle' && _.snakeCase(this.entityTableName).length > 26) {
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
                 this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
             }
         },
