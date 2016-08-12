@@ -6,7 +6,7 @@ var gulp = require('gulp'),
     es = require('event-stream'),
     bowerFiles = require('main-bower-files');
 
-var handleErrors = require('./handleErrors');
+var handleErrors = require('./handle-errors');
 
 var config = require('./config');
 
