@@ -52,6 +52,7 @@ war {
 springBoot {
     mainClass = '<%= packageName %>.<%= mainClass %>'
     executable = true
+    buildInfo()
 }
 
 bootRun {
