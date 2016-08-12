@@ -161,7 +161,7 @@ const expectedFiles = {
         'gulp/config.js',
         'gulp/serve.js',
         'gulp/utils.js',
-        'gulp/handleErrors.js',
+        'gulp/handle-errors.js',
         CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
         CLIENT_MAIN_SRC_DIR + 'favicon.ico',
         CLIENT_MAIN_SRC_DIR + 'robots.txt',
