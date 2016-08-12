@@ -79,15 +79,18 @@ function swagger() {
              '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
              '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
             .pipe(plumber({errorHandler: handleErrors}))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+            .pipe(changed(config.swaggerDist))
+            .pipe(gulp.dest(config.swaggerDist)),
         gulp.src(config.app + 'swagger-ui/index.html')
             .pipe(plumber({errorHandler: handleErrors}))
+            .pipe(changed(config.swaggerDist))
             .pipe(replace('../bower_components/swagger-ui/dist/', ''))
             .pipe(replace('swagger-ui.js', 'lib/swagger-ui.min.js'))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+            .pipe(gulp.dest(config.swaggerDist)),
         gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
             .pipe(plumber({errorHandler: handleErrors}))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
+            .pipe(changed(config.swaggerDist + 'lib/'))
+            .pipe(gulp.dest(config.swaggerDist + 'lib/'))
     );
 }
 
