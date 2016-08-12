@@ -53,6 +53,13 @@ module.exports = EntityGenerator.extend({
             type: String
         });
 
+         // This method adds support for a `--[no-]fluent-methods` flag
+        this.option('fluent-methods', {
+            desc: 'Generate fluent methods in entity beans to allow chained object construction',
+            type: Boolean,
+            defaults: true
+        });
+
         // This adds support for a `--angular-suffix` flag
         this.option('angular-suffix', {
             desc: 'Use a suffix to generate AngularJS routes and files, to avoid name clashes',
@@ -75,6 +82,7 @@ module.exports = EntityGenerator.extend({
         });
 
         this.regenerate = this.options['regenerate'];
+        this.fluentMethods = this.options['fluent-methods'];
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityTableName = _.snakeCase(this.entityTableName).toLowerCase();
@@ -166,7 +174,7 @@ module.exports = EntityGenerator.extend({
             // Specific Entity sub-generator variables
             if (!this.useConfigurationFile) {
                 //no file present, new entity creation
-                this.log(chalk.red(`\nThe entity ${ this.name } is being created.\n`));
+                this.log(`\nThe entity ${ this.name } is being created.\n`);
                 this.fields = [];
                 this.relationships = [];
                 this.pagination = 'no';
@@ -175,7 +183,7 @@ module.exports = EntityGenerator.extend({
                 this.service = 'no';
             } else {
                 //existing entity reading values from file
-                this.log(chalk.red(`\nThe entity ${ this.name } is being updated.\n`));
+                this.log(`\nThe entity ${ this.name } is being updated.\n`);
                 this._loadJson();
             }
         }
@@ -193,6 +201,7 @@ module.exports = EntityGenerator.extend({
         this.changelogDate = this.fileData.changelogDate;
         this.dto = this.fileData.dto;
         this.service = this.fileData.service;
+        this.fluentMethods = this.fileData.fluentMethods;
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
@@ -354,6 +363,7 @@ module.exports = EntityGenerator.extend({
                 this.changelogDate = this.dateFormatForLiquibase();
             }
             this.data = {};
+            this.data.fluentMethods = this.fluentMethods;
             this.data.relationships = this.relationships;
             this.data.fields = this.fields;
             this.data.changelogDate = this.changelogDate;
@@ -520,6 +530,14 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                 }
 
+                if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized)) {
+                    relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
+                }
+
+                if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalizedPlural)) {
+                    relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityRelationshipName));
+                }
+
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
                     relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                 }
@@ -579,6 +597,7 @@ module.exports = EntityGenerator.extend({
             insight.track('entity/pagination', this.pagination);
             insight.track('entity/dto', this.dto);
             insight.track('entity/service', this.service);
+            insight.track('entity/fluentMethods', this.fluentMethods);
         }
     },
     writing : {

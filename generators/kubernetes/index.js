@@ -228,10 +228,10 @@ module.exports = KubernetesGenerator.extend({
 
         this.log('\nYou can deploy all your apps by running: ');
         if (this.gatewayNb >= 1) {
-            this.log('  ' + chalk.cyan('kubectl create -f registry'));
+            this.log('  ' + chalk.cyan('kubectl apply -f registry'));
         }
         for (i = 0; i < this.appsFolders.length; i++) {
-            this.log('  ' + chalk.cyan('kubectl create -f ' + this.appConfigs[i].baseName));
+            this.log('  ' + chalk.cyan('kubectl apply -f ' + this.appConfigs[i].baseName));
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {

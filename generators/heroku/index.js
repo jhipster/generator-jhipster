@@ -9,8 +9,7 @@ var util = require('util'),
 
 const constants = require('../generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 var HerokuGenerator = generators.Base.extend({});
 
@@ -128,6 +127,8 @@ module.exports = HerokuGenerator.extend({
                 dbAddOn = ' --addons heroku-postgresql';
             } else if (this.prodDatabaseType === 'mysql') {
                 dbAddOn = ' --addons jawsdb:kitefin';
+            } else if (this.prodDatabaseType === 'mariadb') {
+                dbAddOn = ' --addons jawsdb-maria:kitefin';
             } else if (this.prodDatabaseType === 'mongodb') {
                 dbAddOn = ' --addons mongolab:sandbox';
             }
@@ -237,10 +238,6 @@ module.exports = HerokuGenerator.extend({
 
             var done = this.async();
             this.log(chalk.bold('\nCreating Heroku deployment files'));
-
-            if (this.prodDatabaseType === 'postgresql' || this.prodDatabaseType === 'mysql') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
-            }
 
             this.template('_bootstrap-heroku.yml', SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
             this.template('_application-heroku.yml', SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');

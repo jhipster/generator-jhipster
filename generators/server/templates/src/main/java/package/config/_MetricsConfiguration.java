@@ -19,9 +19,16 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.jvm.*;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
+<%_ if (databaseType == 'sql') { _%>
+import com.zaxxer.hikari.HikariDataSource;
+<%_ } _%>
+
 import fr.ippon.spark.metrics.SparkReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ if (databaseType == 'sql') { _%>
+import org.springframework.beans.factory.annotation.Autowired;
+<%_ } _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.*;
 
@@ -49,6 +56,11 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     @Inject
     private JHipsterProperties jHipsterProperties;
+<%_ if (databaseType == 'sql') { _%>
+
+    @Autowired(required = false)
+    private HikariDataSource hikariDataSource;
+<%_ } _%>
 
     @Override
     @Bean
@@ -70,6 +82,12 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         metricRegistry.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
         metricRegistry.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
         metricRegistry.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+        <%_ if (databaseType == 'sql') { _%>
+        if (hikariDataSource != null) {
+            log.debug("Monitoring the datasource");
+            hikariDataSource.setMetricRegistry(metricRegistry);
+        }
+        <%_ } _%>
         if (jHipsterProperties.getMetrics().getJmx().isEnabled()) {
             log.debug("Initializing Metrics JMX reporting");
             JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();

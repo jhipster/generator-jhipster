@@ -2,9 +2,7 @@ package <%=packageName%>.config;
 <% if (databaseType == 'sql') { %>
 import <%=packageName%>.config.liquibase.AsyncSpringLiquibase;
 
-import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
@@ -14,16 +12,10 @@ import com.github.mongobee.Mongobee;<% } %>
 import org.h2.tools.Server;
 <%_ } _%>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %><% if (hibernateCache == 'hazelcast') { %>
-import org.springframework.cache.CacheManager;<% } %>
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;<% } %><% if (databaseType == 'mongodb') { %>
+import org.slf4j.LoggerFactory;<% if (databaseType == 'mongodb') { %>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType == 'sql') { %>
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
-import org.springframework.context.ApplicationContextException;<% } %>
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
@@ -38,7 +30,8 @@ import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><%
 import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
+<%_ if (databaseType == 'sql') { _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -47,12 +40,13 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 import java.sql.SQLException;
-<%_ } _%>
-import java.util.Arrays;<% } %><% if (databaseType == 'mongodb') { %>
+<%_ } } _%>
+<%_ if (databaseType == 'mongodb') { _%>
+
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-<% } %>
+<%_ } _%>
 
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
@@ -68,10 +62,7 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType == 'sql') { %>
 
     @Inject
-    private Environment env;
-
-    @Autowired(required = false)
-    private MetricRegistry metricRegistry;<% } %><% if (databaseType == 'mongodb') { %>
+    private Environment env;<% } %><% if (databaseType == 'mongodb') { %>
 
     @Inject
     private Mongo mongo;
@@ -79,31 +70,6 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     @Inject
     private MongoProperties mongoProperties;<% } %><% if (databaseType == 'sql') { %>
 
-    @Bean(destroyMethod = "close")
-    @ConditionalOnExpression("#{!environment.acceptsProfiles('" + Constants.SPRING_PROFILE_CLOUD + "') && !environment.acceptsProfiles('" + Constants.SPRING_PROFILE_HEROKU + "')}")
-    public DataSource dataSource(DataSourceProperties dataSourceProperties<% if (hibernateCache == 'hazelcast') { %>, CacheManager cacheManager<% } %>) {
-        log.debug("Configuring Datasource");
-        if (dataSourceProperties.getUrl() == null) {
-            log.error("Your database connection pool configuration is incorrect! The application" +
-                    " cannot start. Please check your Spring profile, current profiles are: {}",
-                Arrays.toString(env.getActiveProfiles()));
-
-            throw new ApplicationContextException("Database connection pool is not configured correctly");
-        }
-        HikariDataSource hikariDataSource =  (HikariDataSource) DataSourceBuilder
-                .create(dataSourceProperties.getClassLoader())
-                .type(HikariDataSource.class)
-                .driverClassName(dataSourceProperties.getDriverClassName())
-                .url(dataSourceProperties.getUrl())
-                .username(dataSourceProperties.getUsername())
-                .password(dataSourceProperties.getPassword())
-                .build();
-
-        if (metricRegistry != null) {
-            hikariDataSource.setMetricRegistry(metricRegistry);
-        }
-        return hikariDataSource;
-    }
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 
     /**
@@ -120,8 +86,7 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
 <%_ } _%>
     @Bean
-    public SpringLiquibase liquibase(DataSource dataSource, DataSourceProperties dataSourceProperties,
-        LiquibaseProperties liquibaseProperties) {
+    public SpringLiquibase liquibase(DataSource dataSource, LiquibaseProperties liquibaseProperties) {
 
         // Use liquibase.integration.spring.SpringLiquibase if you don't want Liquibase to start asynchronously
         SpringLiquibase liquibase = new AsyncSpringLiquibase();

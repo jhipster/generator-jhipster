@@ -30,6 +30,7 @@ spring:
         serialization.write_dates_as_timestamps: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
+        type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
         name:
         username:
