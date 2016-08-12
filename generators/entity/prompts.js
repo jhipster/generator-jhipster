@@ -1074,10 +1074,11 @@ function askForRelationship(cb) {
                 ownerSide: props.ownerSide,
                 otherEntityRelationshipName: props.otherEntityRelationshipName
             };
+
             if(props.otherEntityName.toLowerCase() === 'user') {
                 relationship.ownerSide = true;
             }
-            this.log(relationship);
+            
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
             this.relationships.push(relationship);
         }
