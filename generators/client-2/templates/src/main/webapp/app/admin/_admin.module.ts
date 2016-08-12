@@ -15,7 +15,6 @@ import { UserMgmntStateConfig } from './user-management/user-management.state';
 
 import { AuditsComponent } from "./audits/audits.component";
 import { LogsComponent } from './logs/logs.component';
-
 import { HealthModalController } from "./health/health-modal.controller";
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
