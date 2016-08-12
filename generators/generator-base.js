@@ -1157,8 +1157,8 @@ Generator.prototype.getJoinTableName = function (entityName, relationshipName, p
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-        entityTable = this.getTableName(entityName.substring(0, halfLimit)),
-        relationTable = this.getTableName(relationshipName.substring(0, halfLimit - 1));
+            entityTable = this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = this.getTableName(relationshipName.substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}`;
     }
     return joinTableName;
@@ -1194,8 +1194,8 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-        entityTable = noSnakeCase ? entityName : this.getTableName(entityName.substring(0, halfLimit)),
-        relationTable = noSnakeCase ? relationshipName: this.getTableName(relationshipName.substring(0, halfLimit - 1));
+            entityTable = noSnakeCase ? entityName : this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = noSnakeCase ? relationshipName: this.getTableName(relationshipName.substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}_id`;
     }
     return constraintName;
