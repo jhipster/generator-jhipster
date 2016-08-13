@@ -1290,9 +1290,11 @@ Generator.prototype.getAngularAppName = function () {
  * get the java main class name.
  */
 Generator.prototype.getMainClassName = function () {
-    // Don't name by baseName because numbers can cause compilation issues.
-    // https://github.com/jhipster/generator-jhipster/issues/3889
-    return 'Application';
+     
+    var main = _.upperFirst(this.getAngularAppName());
+    var acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
+
+    return acceptableForJava.test(main) ? main : 'Application';
 };
 
 /**
