@@ -29,9 +29,11 @@ var gulp = require('gulp'),<% if(useSass) { %>
     naturalSort = require('gulp-natural-sort'),
     bowerFiles = require('main-bower-files');
 
-var handleErrors = require('./gulp/handleErrors'),
+var handleErrors = require('./gulp/handle-errors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
+    copy = require('./gulp/copy'),
+    inject = require('./gulp/inject'),
     build = require('./gulp/build');
 
 <%_ if(enableTranslation) { _%>
