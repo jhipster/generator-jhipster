@@ -12,7 +12,6 @@ var gulp = require('gulp'),<% if(useSass) { %>
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant'),
     rename = require('gulp-rename'),
-    replace = require('gulp-replace'),
     eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     argv = require('yargs').argv,
     gutil = require('gulp-util'),
@@ -115,22 +114,6 @@ gulp.task('html', function () {
             moduleSystem: 'IIFE'
         }))
         .pipe(gulp.dest(config.tmp));
-});
-
-gulp.task('swagger-ui', function () {
-    return es.merge(
-        gulp.src([config.bower + 'swagger-ui/dist/**',
-                '!' + config.bower + 'swagger-ui/dist/index.html',
-                '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
-                '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
-        gulp.src(config.app + 'swagger-ui/index.html')
-            .pipe(replace('../bower_components/swagger-ui/dist/', ''))
-            .pipe(replace('swagger-ui.js', 'lib/swagger-ui.min.js'))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
-        gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
-            .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
-    );
 });
 
 gulp.task('ngconstant:dev', function () {
