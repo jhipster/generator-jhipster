@@ -1,6 +1,6 @@
 HealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];
 
-export function HealthModalController($uibModalInstance, currentHealth, baseName, subSystemName) {
+export function HealthModalController ($uibModalInstance, currentHealth, baseName, subSystemName) {
     var vm = this;
 
     vm.cancel = cancel;
