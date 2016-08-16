@@ -83,7 +83,7 @@ module.exports = EntityGenerator.extend({
 
         this.regenerate = this.options['regenerate'];
         this.fluentMethods = this.options['fluent-methods'];
-        this.entityTableName = _.snakeCase(this.options['table-name'] || this.name).toLowerCase();
+        this.entityTableName = this.getTableName(this.options['table-name'] || this.name);
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
