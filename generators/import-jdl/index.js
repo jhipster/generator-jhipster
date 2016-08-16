@@ -29,6 +29,7 @@ module.exports = JDLGenerator.extend({
         getConfig: function () {
             this.baseName = this.config.get('baseName');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
+            this.skipClient = this.config.get('skipClient');
         }
     },
 
