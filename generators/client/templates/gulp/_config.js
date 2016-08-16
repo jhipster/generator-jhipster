@@ -1,6 +1,9 @@
+'use strict';
+
 module.exports = {
     app: '<%= MAIN_SRC_DIR %>',
     dist: '<%= DIST_DIR %>',
+    swaggerDist: '<%= DIST_DIR %>swagger-ui/',
     test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
     scss: '<%= MAIN_SRC_DIR %>scss/',
     sassSrc: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',

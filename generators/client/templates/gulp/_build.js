@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs'),
     gulp = require('gulp'),
     lazypipe = require('lazypipe'),
@@ -13,7 +15,7 @@ var fs = require('fs'),
     revReplace = require("gulp-rev-replace"),
     plumber = require('gulp-plumber'),
     gulpIf = require('gulp-if'),
-    handleErrors = require('./handleErrors');
+    handleErrors = require('./handle-errors');
 
 var config = require('./config');
 
