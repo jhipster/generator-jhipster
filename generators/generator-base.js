@@ -1145,15 +1145,21 @@ Generator.prototype.getPluralColumnName = function (value) {
  */
 Generator.prototype.getJoinTableName = function (entityName, relationshipName, prodDatabaseType) {
     var joinTableName = this.getTableName(entityName) + '_'+ this.getTableName(relationshipName);
+    var limit = 0;
     if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
         this.warning(`The generated join table "${ joinTableName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
-        joinTableName = joinTableName.substring(0, 30);
-    }
-    if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+        limit = 30;
+    } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
         this.warning(`The generated join table "${ joinTableName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
-        joinTableName = joinTableName.substring(0, 64);
+        limit = 64;
+    }
+    if (limit > 0) {
+        var halfLimit = Math.floor(limit/2),
+            entityTable = this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = this.getTableName(relationshipName.substring(0, halfLimit - 1));
+        return `${entityTable}_${relationTable}`;
     }
     return joinTableName;
 };
@@ -1175,15 +1181,22 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
         constraintName = 'fk_' + this.getTableName(entityName) + '_' +
             this.getTableName(relationshipName) + '_id';
     }
+    var limit = 0;
 
     if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
         this.warning(`The generated constraint name "${ constraintName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
-        constraintName = constraintName.substring(0, 27) + '_id';
+        limit = 28;
     } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
         this.warning(`The generated constraint name "${ constraintName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
-        constraintName = constraintName.substring(0, 61) + '_id';
+        limit = 62;
+    }
+    if (limit > 0) {
+        var halfLimit = Math.floor(limit/2),
+            entityTable = noSnakeCase ? entityName : this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = noSnakeCase ? relationshipName: this.getTableName(relationshipName.substring(0, halfLimit - 1));
+        return `${entityTable}_${relationTable}_id`;
     }
     return constraintName;
 };

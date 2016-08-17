@@ -13,6 +13,7 @@ module.exports = {
     askForFieldsToRemove,
     askForRelationships,
     askForRelationsToRemove,
+    askForTableName,
     askForDTO,
     askForService,
     askForPagination
@@ -234,6 +235,45 @@ function askForRelationsToRemove() {
         }
         cb();
 
+    }.bind(this));
+}
+
+function askForTableName() {
+    // don't prompt if there are no relationships
+    var entityTableName = this.entityTableName;
+    var prodDatabaseType = this.prodDatabaseType;
+    if (this.relationships.length === 0 || !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
+        return;
+    }
+    var cb = this.async();
+    var prompts = [
+        {
+            type: 'input',
+            name: 'entityTableName',
+            message: 'The table name for this entity is too long to form constraint names. Please use a shorter table name',
+            validate: function (input) {
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'The table name cannot contain special characters';
+                } else if (input === '') {
+                    return 'The table name cannot be empty';
+                } else if (jhiCore.isReservedTableName(input, prodDatabaseType)) {
+                    return `The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`;
+                } else if (prodDatabaseType === 'oracle' && input.length > 14) {
+                    return 'The table name is too long for Oracle, try a shorter name';
+                } else if (input.length > 30) {
+                    return 'The table name is too long, try a shorter name';
+                }
+                return true;
+            },
+            default: entityTableName
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        /* overwrite the table name for the entity using name obtained from the user*/
+        if (props.entityTableName !== this.entityTableName) {
+            this.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
+        }
+        cb();
     }.bind(this));
 }
 
