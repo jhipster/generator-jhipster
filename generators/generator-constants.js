@@ -1,7 +1,7 @@
 'use strict';
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.3.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.4.0';
 const DOCKER_JAVA_JRE = 'java:openjdk-8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.13';
 const DOCKER_MARIADB = 'mariadb:10.1.16';
