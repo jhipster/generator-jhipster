@@ -32,7 +32,7 @@ spec:
         emptyDir: {}
       containers:
       - name: mariadb
-        image: mariadb:10.1.14
+        image: <%= DOCKER_MARIADB %>
         env:
         - name: MYSQL_USER
           value: root

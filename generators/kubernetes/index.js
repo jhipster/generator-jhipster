@@ -26,6 +26,15 @@ var generators = require('yeoman-generator'),
 var KubernetesGenerator = generators.Base.extend({});
 util.inherits(KubernetesGenerator, scriptBase);
 
+/* Constants used throughout */
+const constants = require('../generator-constants'),
+    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
+    DOCKER_MYSQL = constants.DOCKER_MYSQL,
+    DOCKER_MARIADB = constants.DOCKER_MARIADB,
+    DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL,
+    DOCKER_MONGODB = constants.DOCKER_MONGODB,
+    DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+
 module.exports = KubernetesGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
@@ -79,6 +88,13 @@ module.exports = KubernetesGenerator.extend({
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
+
+            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_MYSQL = DOCKER_MYSQL;
+            this.DOCKER_MARIADB = DOCKER_MARIADB;
+            this.DOCKER_POSTGRESQL = DOCKER_POSTGRESQL;
+            this.DOCKER_MONGODB = DOCKER_MONGODB;
+            this.DOCKER_ELASTICSEARCH = DOCKER_ELASTICSEARCH;
 
             if (this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
