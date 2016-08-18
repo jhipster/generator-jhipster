@@ -32,7 +32,7 @@ spec:
         emptyDir: {}
       containers:
       - name: elasticsearch
-        image: elasticsearch:1.7.5
+        image: <%= DOCKER_ELASTICSEARCH %>
         ports:
         - containerPort: 9200
           name: http

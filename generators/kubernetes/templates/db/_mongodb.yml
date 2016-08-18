@@ -32,7 +32,7 @@ spec:
         emptyDir: {}
       containers:
       - name: mongo
-        image: mongo:3.3.5
+        image: <%= DOCKER_MONGODB %>
         ports:
         - containerPort: 27017
         volumeMounts:
