@@ -234,15 +234,24 @@ dependencies {
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
     compile group: 'org.springframework.security', name: 'spring-security-jwt'
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
-    compile "com.github.mongobee:mongobee:${mongobee_version}"<% } %>
+    <%_ if (databaseType === 'mongodb') { _%>
+    compile "com.github.mongobee:mongobee:${mongobee_version}"
+    <%_ } _%>
     compile("io.springfox:springfox-swagger2:${springfox_version}"){
         exclude module: 'mapstruct'
     }
-    <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
-    compile "mysql:mysql-connector-java"<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile "org.postgresql:postgresql"<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
-    compile "com.h2database:h2"<% } %>
+    <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
+    compile "mysql:mysql-connector-java"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+    compile "org.postgresql:postgresql"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
+    compile "org.mariadb.jdbc:mariadb-java-client:${mariadb_java_client_version}"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    compile "com.h2database:h2"
+    <%_ } _%>
     compile "fr.ippon.spark.metrics:metrics-spark-reporter:${metrics_spark_reporter_version}"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"<% if (enableSocialSignIn) { %>
     compile "org.apache.httpcomponents:httpclient"
