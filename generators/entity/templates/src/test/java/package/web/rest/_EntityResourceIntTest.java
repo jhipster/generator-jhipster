@@ -461,8 +461,11 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);
 <%_ } _%>
 
+        // Build the search query
+        String searchQuery = "{\"match\":{\"id\":" + <%= entityInstance %>.getId() + "}}";
+
         // Search the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))
+        rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query={searchQuery}", searchQuery))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType == 'sql') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
