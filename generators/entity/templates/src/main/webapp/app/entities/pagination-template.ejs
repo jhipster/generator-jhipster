@@ -27,7 +27,11 @@
         <%_ } else { _%>
             if (pagingParams.search) {
                 <%= entityClass %>Search.query({
-                    query: pagingParams.search,
+                    query: {
+                        simple_query_string: {
+                            query: vm.searchQuery
+                        }
+                    },
                     page: pagingParams.page - 1,
                     size: vm.itemsPerPage,
                     sort: sort()

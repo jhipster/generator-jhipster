@@ -21,7 +21,13 @@
             if (!vm.searchQuery) {
                 return vm.loadAll();
             }
-            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
+            <%= entityClass %>Search.query({
+                query: {
+                    simple_query_string: {
+                        query: vm.searchQuery
+                    }
+                }
+            }, function(result) {
                 vm.<%= entityInstancePlural %> = result;
             });
         }<%_ } _%>

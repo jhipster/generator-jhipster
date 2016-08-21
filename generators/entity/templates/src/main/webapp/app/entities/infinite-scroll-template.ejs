@@ -29,7 +29,11 @@
         <%_ } else { _%>
             if (vm.currentSearch) {
                 <%= entityClass %>Search.query({
-                    query: vm.currentSearch,
+                    query: {
+                        simple_query_string: {
+                            query: vm.searchQuery
+                        }
+                    },
                     page: vm.page,
                     size: 20,
                     sort: sort()
