@@ -36,10 +36,6 @@ module.exports = EntityGenerator.extend({
             required: true,
             description: 'Entity name'
         });
-        // remove extention if feeding json files
-        if (this.name !== undefined) {
-            this.name = this.name.replace('.json', '');
-        }
 
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
@@ -80,6 +76,10 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
+        // remove extention if feeding json files
+        if (this.name !== undefined) {
+            this.name = this.name.replace('.json', '');
+        }
 
         this.regenerate = this.options['regenerate'];
         this.fluentMethods = this.options['fluent-methods'];

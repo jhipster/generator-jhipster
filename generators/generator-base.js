@@ -1303,7 +1303,7 @@ Generator.prototype.getAngularAppName = function () {
  * get the java main class name.
  */
 Generator.prototype.getMainClassName = function () {
-     
+
     var main = _.upperFirst(this.getAngularAppName());
     var acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
@@ -1412,7 +1412,8 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
-                configOptions: configOptions
+                configOptions: configOptions,
+                force: generator.options['force']
             },
             args: generator.languages
         }, {
