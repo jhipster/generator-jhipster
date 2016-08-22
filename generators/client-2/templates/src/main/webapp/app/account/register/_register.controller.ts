@@ -1,49 +1,62 @@
-(function() {
-    'use strict';
+import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .controller('RegisterController', RegisterController);
+@Component({
+    selector: 'register',
+    templateUrl: 'app/account/register/register.html'
+})
+export class RegisterComponent implements OnInit {
 
+    confirmPassword: string;
+    doNotMatch: string;
+    error: string;
+    errorEmailExists: string;
+    errorUserExists: string;
+    login: Function;
+    registerAccount: any;
+    success: boolean;
 
-    RegisterController.$inject = [<% if (enableTranslation){ %>'$translate',<% } %> '$timeout', 'Auth', 'LoginService'];
+    constructor(
+            @Inject('$translate') private $translate,
+            @Inject('Auth') private auth,
+            @Inject('LoginService') private loginService,
+            private elementRef: ElementRef,
+            private renderer: Renderer) {
+    }
 
-    function RegisterController (<% if (enableTranslation){ %>$translate, <% } %>$timeout, Auth, LoginService) {
-        var vm = this;
+    ngOnInit() {
+        this.login = this.loginService.open;
+        this.success = false;
+        this.registerAccount = {};
+    }
 
-        vm.doNotMatch = null;
-        vm.error = null;
-        vm.errorUserExists = null;
-        vm.login = LoginService.open;
-        vm.register = register;
-        vm.registerAccount = {};
-        vm.success = null;
+    ngAfterViewInit() {
+        this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
+    }
 
-        $timeout(function (){angular.element('#login').focus();});
+    register() {
+        //TODO: remove this once Auth service is migrated
+        let vm = this;
+        if (this.registerAccount.password !== this.confirmPassword) {
+            this.doNotMatch = 'ERROR';
+        } else {
+            this.registerAccount.langKey = <% if (enableTranslation){ %>this.$translate.use()<% }else {%> 'en' <% } %>;
+            this.doNotMatch = null;
+            this.error = null;
+            this.errorUserExists = null;
+            this.errorEmailExists = null;
 
-        function register () {
-            if (vm.registerAccount.password !== vm.confirmPassword) {
-                vm.doNotMatch = 'ERROR';
-            } else {
-                vm.registerAccount.langKey = <% if (enableTranslation){ %>$translate.use()<% }else {%> 'en' <% } %>;
-                vm.doNotMatch = null;
-                vm.error = null;
-                vm.errorUserExists = null;
-                vm.errorEmailExists = null;
-
-                Auth.createAccount(vm.registerAccount).then(function () {
-                    vm.success = 'OK';
-                }).catch(function (response) {
-                    vm.success = null;
-                    if (response.status === 400 && response.data === 'login already in use') {
-                        vm.errorUserExists = 'ERROR';
-                    } else if (response.status === 400 && response.data === 'e-mail address already in use') {
-                        vm.errorEmailExists = 'ERROR';
-                    } else {
-                        vm.error = 'ERROR';
-                    }
-                });
-            }
+            this.auth.createAccount(this.registerAccount).then(function () {
+                vm.success = true;
+            }).catch(function (response) {
+                vm.success = null;
+                if (response.status === 400 && response.data === 'login already in use') {
+                    vm.errorUserExists = 'ERROR';
+                } else if (response.status === 400 && response.data === 'e-mail address already in use') {
+                    vm.errorEmailExists = 'ERROR';
+                } else {
+                    vm.error = 'ERROR';
+                }
+            });
         }
     }
-})();
+}

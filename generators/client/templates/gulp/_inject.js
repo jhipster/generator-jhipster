@@ -4,6 +4,8 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     inject = require('gulp-inject'),
     es = require('event-stream'),
+    naturalSort = require('gulp-natural-sort'),
+    angularFilesort = require('gulp-angular-filesort'),
     bowerFiles = require('main-bower-files');
 
 var handleErrors = require('./handle-errors');
@@ -11,26 +13,28 @@ var handleErrors = require('./handle-errors');
 var config = require('./config');
 
 module.exports = {
+    app: app,
     vendor: vendor,
     test: test,
     troubleshoot: troubleshoot
 }
 
+function app() {
+    return gulp.src(config.app + 'index.html')
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js')
+            .pipe(naturalSort())
+            .pipe(angularFilesort()), {relative: true}))
+        .pipe(gulp.dest(config.app));
+}
+
 function vendor() {
-    var stream = gulp.src(config.dist + 'index.html')
+    var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
             name: 'bower',
-            relative: false,
-            transform: function (filepath) {
-                if ( filepath.indexOf('.css') !== -1 ) {
-                    return '<link rel="stylesheet" href="' + filepath.replace('/src/main/webapp/', '') + '"/>'; // TODO temp hack
-                } else {
-                    return '<script src="' + filepath.replace('/src/main/webapp/', '') + '"></script>'; // TODO temp hack
-                }                
-            }
+            relative: true
         }))
-        .pipe(gulp.dest(config.dist));
+        .pipe(gulp.dest(config.app));
 
     return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassVendor)
         .pipe(plumber({errorHandler: handleErrors}))
@@ -56,7 +60,7 @@ function test() {
 
 function troubleshoot() {
     /* this task removes the troubleshooting content from index.html*/
-    return gulp.src(config.dist + 'index.html')
+    return gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
         /* having empty src as we dont have to read any files*/
         .pipe(inject(gulp.src('', {read: false}), {
@@ -66,5 +70,5 @@ function troubleshoot() {
                 return '<!-- Angular views -->';
             }
         }))
-        .pipe(gulp.dest(config.dist));
+        .pipe(gulp.dest(config.app));
 }

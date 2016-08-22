@@ -154,7 +154,7 @@ const expectedFiles = {
         'gulp/config.js',
         'gulp/serve.js',
         'gulp/utils.js',
-        'gulp/handleErrors.js',
+        'gulp/handle-errors.js',
         CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
         CLIENT_MAIN_SRC_DIR + 'favicon.ico',
         CLIENT_MAIN_SRC_DIR + 'robots.txt',
@@ -324,7 +324,7 @@ const expectedFiles = {
         'gulp/config.js',
         'gulp/serve.js',
         'gulp/utils.js',
-        'gulp/handleErrors.js',
+        'gulp/handle-errors.js',
         CLIENT_MAIN_SRC_DIR + 'favicon.ico',
         CLIENT_MAIN_SRC_DIR + 'robots.txt',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/activate.json',
@@ -380,6 +380,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.ts',
 
+        CLIENT_MAIN_SRC_DIR + 'app/shared/account.model.ts',
         CLIENT_MAIN_SRC_DIR + 'app/shared/filter.pipe.ts',
         CLIENT_MAIN_SRC_DIR + 'app/shared/order-by.pipe.ts',
 
@@ -420,9 +421,8 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/account.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/auth.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/form/show-validation.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.controller.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.pipe.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/base64.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/parse-links.service.ts',
@@ -448,7 +448,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.controller.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.directive.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.state.ts',
@@ -468,7 +468,7 @@ const expectedFiles = {
 
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-link.directive.ts',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/accessdenied.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.state.ts',
@@ -478,7 +478,7 @@ const expectedFiles = {
 
         CLIENT_MAIN_SRC_DIR + 'app/home/home.html',
         CLIENT_MAIN_SRC_DIR + 'app/home/home.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/home/home.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/home/home.component.ts',
 
         CLIENT_TEST_SRC_DIR + 'karma.conf.js',
         CLIENT_TEST_SRC_DIR + 'spec/helpers/httpBackend.js',

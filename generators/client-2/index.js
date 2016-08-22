@@ -284,7 +284,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('_eslintrc.json', '.eslintrc.json', this, {});
             this.template('_eslintignore', '.eslintignore', this, {});
             this.template('_gulpfile.js', 'gulpfile.js', this, {});
-            this.fs.copy(this.templatePath('gulp/_handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
+            this.fs.copy(this.templatePath('gulp/_handle-errors.js'), this.destinationPath('gulp/handle-errors.js')); // to avoid interpolate errors
             this.template('gulp/_utils.js', 'gulp/utils.js', this, {});
             this.template('gulp/_serve.js', 'gulp/serve.js', this, {});
             this.template('gulp/_config.js', 'gulp/config.js', this, {});
@@ -343,6 +343,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_compile.config.ts', ANGULAR_DIR + 'blocks/config/compile.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pager.config.ts', ANGULAR_DIR + 'blocks/config/uib-pager.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pagination.config.ts', ANGULAR_DIR + 'blocks/config/uib-pagination.config.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/account.model.ts', ANGULAR_DIR + 'shared/account.model.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/filter.pipe.ts', ANGULAR_DIR + 'shared/filter.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/order-by.pipe.ts', ANGULAR_DIR + 'shared/order-by.pipe.ts', this, {});
         },
@@ -359,7 +360,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'account/password/_password.state.ts', ANGULAR_DIR + 'account/password/password.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.controller.ts', ANGULAR_DIR + 'account/password/password.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.service.ts', ANGULAR_DIR + 'account/password/password.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/password/_password-strength-bar.directive.ts', ANGULAR_DIR + 'account/password/password-strength-bar.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/password/_password-strength-bar.component.ts', ANGULAR_DIR + 'account/password/password-strength-bar.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/register/register.html', ANGULAR_DIR + 'account/register/register.html');
             this.copyJs(ANGULAR_DIR + 'account/register/_register.state.ts', ANGULAR_DIR + 'account/register/register.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.controller.ts', ANGULAR_DIR + 'account/register/register.controller.ts', this, {});
@@ -469,9 +470,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/form/_minbytes.directive.ts', ANGULAR_DIR + 'components/form/minbytes.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'components/form/_pagination.constants.ts', ANGULAR_DIR + 'components/form/pagination.constants.ts', this, {});
             if (this.enableTranslation) {
-                this.template(ANGULAR_DIR + 'components/language/_language.filter.ts', ANGULAR_DIR + 'components/language/language.filter.ts', this, {});
+                this.template(ANGULAR_DIR + 'components/language/_language.pipe.ts', ANGULAR_DIR + 'components/language/language.pipe.ts', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.constants.ts', ANGULAR_DIR + 'components/language/language.constants.ts', this, {});
-                this.template(ANGULAR_DIR + 'components/language/_language.controller.ts', ANGULAR_DIR + 'components/language/language.controller.ts', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.service.ts', ANGULAR_DIR + 'components/language/language.service.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'components/login/login.html', ANGULAR_DIR + 'components/login/login.html');
@@ -528,7 +528,7 @@ module.exports = JhipsterClientGenerator.extend({
             // home module
             this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
             this.copyJs(ANGULAR_DIR + 'home/_home.state.ts', ANGULAR_DIR + 'home/home.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'home/_home.controller.ts', ANGULAR_DIR + 'home/home.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'home/_home.component.ts', ANGULAR_DIR + 'home/home.component.ts', this, {});
 
             // layouts
             this.template(ANGULAR_DIR + 'layouts/navbar/_active-link.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-link.directive.ts', this, {});
@@ -536,7 +536,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
-            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.controller.ts', ANGULAR_DIR + 'layouts/navbar/navbar.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.component.ts', ANGULAR_DIR + 'layouts/navbar/navbar.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
             this.copyHtml(ANGULAR_DIR + 'layouts/error/accessdenied.html', ANGULAR_DIR + 'layouts/error/accessdenied.html');
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.ts', ANGULAR_DIR + 'layouts/error/error.state.ts', this, {});

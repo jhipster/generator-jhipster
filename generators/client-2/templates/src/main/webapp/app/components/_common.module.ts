@@ -13,10 +13,15 @@ import { ProfileService } from './profiles/profile.service';<% if (enableTransl
 import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.service';<% } %>
 import { AlertService } from './alert/alert.service';
 
-import { PageRibbonComponent } from './profiles/page-ribbon.component';<% if (enableTranslation) { %>
-import { <%=jhiPrefixCapitalized%>LanguageController } from './language/language.controller';<% } %>
+import { PageRibbonComponent } from './profiles/page-ribbon.component';
 
 upgradeAdapter.addProvider(ProfileService);
+
+upgradeAdapter.upgradeNg1Provider('$state');
+upgradeAdapter.upgradeNg1Provider('Auth');<% if (enableTranslation) { %>
+upgradeAdapter.upgradeNg1Provider('<%=jhiPrefixCapitalized%>LanguageService');<% } %>
+upgradeAdapter.upgradeNg1Provider('LoginService');
+upgradeAdapter.upgradeNg1Provider('Principal');
 
 angular
     .module('<%=angularAppName%>.common', [
@@ -38,5 +43,4 @@ angular
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
     .provider('AlertService', AlertService) <% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
-    .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))<% if (enableTranslation) { %>
-    .controller('<%=jhiPrefixCapitalized%>LanguageController', <%=jhiPrefixCapitalized%>LanguageController)<% } %>;
+    .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent));

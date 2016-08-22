@@ -14,11 +14,9 @@ var config = require('./config');
 module.exports = {<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
     i18n: i18n,
     languages: languages,<% } %>
-    html: html,
     fonts: fonts,
     common: common,
-    swagger: swagger,
-    deps: deps
+    swagger: swagger
 }
 <% if(enableTranslation) { %>
 var yorc = require('../.yo-rc.json')['generator-jhipster'];
@@ -40,12 +38,6 @@ function languages() {
         .pipe(gulp.dest(config.app + 'i18n/'));
 }
 <% } %>
-function html() {
-    return gulp.src([config.app + '/**/*.html', '!' + config.bower + '/**'])
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist))
-        .pipe(gulp.dest(config.dist));
-}
 
 function fonts() {
     return es.merge(<% if(!useSass) { %>gulp.src(config.bower + 'bootstrap/fonts/*.*')
@@ -82,32 +74,21 @@ function common() {
 function swagger() {
     return es.merge(
         gulp.src([config.bower + 'swagger-ui/dist/**',
-             '!' + config.bower + 'swagger-ui/dist/index.html',
-             '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
-             '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
+            '!' + config.bower + 'swagger-ui/dist/index.html',
+            '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
+            '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
             .pipe(plumber({errorHandler: handleErrors}))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+            .pipe(changed(config.swaggerDist))
+            .pipe(gulp.dest(config.swaggerDist)),
         gulp.src(config.app + 'swagger-ui/index.html')
             .pipe(plumber({errorHandler: handleErrors}))
+            .pipe(changed(config.swaggerDist))
             .pipe(replace('../bower_components/swagger-ui/dist/', ''))
             .pipe(replace('swagger-ui.js', 'lib/swagger-ui.min.js'))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
+            .pipe(gulp.dest(config.swaggerDist)),
         gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
             .pipe(plumber({errorHandler: handleErrors}))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
+            .pipe(changed(config.swaggerDist + 'lib/'))
+            .pipe(gulp.dest(config.swaggerDist + 'lib/'))
     );
-}
-
-//copy npm dependencies to vendor folder
-//TODO optimize to copy only required minified files
-function deps(){
-    return gulp.src([
-        'node_modules/core-js/client/shim.min.js',
-        'node_modules/zone.js/dist/zone.js',
-        'node_modules/reflect-metadata/Reflect.js',
-        'node_modules/systemjs/dist/system.js',
-        'node_modules/@angular/**/*.js',
-        'node_modules/rxjs/**/*.js'
-    ], { base: 'node_modules' })
-    .pipe(gulp.dest(config.dist + 'vendor'));
 }

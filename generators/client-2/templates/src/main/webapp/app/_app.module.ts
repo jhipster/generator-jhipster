@@ -3,6 +3,8 @@ import './account/account.module';
 import './admin/admin.module';
 import './entities/entity.module';
 
+import { upgradeAdapter } from "./upgrade_adapter";
+
 import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
 import { TranslationHandler } from './blocks/handlers/translation.handler';
 
@@ -15,8 +17,8 @@ import { LocalStorageConfig } from './blocks/config/localstorage.config';
 import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
-import { HomeController } from './home/home.controller';
-import { NavbarController } from './layouts/navbar/navbar.controller';
+import { HomeComponent } from './home/home.component';
+import { NavbarComponent } from './layouts/navbar/navbar.component';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -58,8 +60,8 @@ angular
     .config(AppStateConfig)
     .config(HomeStateConfig)
     .config(ErrorStateConfig)
-    .controller('HomeController', HomeController)
-    .controller('NavbarController', NavbarController)
+    .directive('home', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(HomeComponent))
+    .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
     .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
     <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     .factory('AuthInterceptor', AuthInterceptor)
