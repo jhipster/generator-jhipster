@@ -278,6 +278,7 @@ module.exports = JhipsterClientGenerator.extend({
         writeCommonFiles: function () {
 
             this.template('_package.json', 'package.json', this, {});
+            this.template('_npm-shrinkwrap.json', 'npm-shrinkwrap.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
             this.template('_bowerrc', '.bowerrc', this, {});
             this.template('_eslintrc.json', '.eslintrc.json', this, {});
