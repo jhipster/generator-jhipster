@@ -1140,8 +1140,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v4.4.7</nodeVersion>
-                                    <npmVersion>3.10.5</npmVersion>
+                                    <nodeVersion>v4.5.0</nodeVersion>
+                                    <npmVersion>3.10.6</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1217,6 +1217,13 @@
                         <configuration>
                             <executable>true</executable>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-info</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

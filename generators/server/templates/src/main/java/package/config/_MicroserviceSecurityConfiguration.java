@@ -114,6 +114,7 @@ package <%=packageName%>.config;
               .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()
               .authorizeRequests()
+              .antMatchers("/api/profile-info").permitAll()
               .antMatchers("/api/**").authenticated()
               .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
               .antMatchers("/swagger-resources/configuration/ui").permitAll();

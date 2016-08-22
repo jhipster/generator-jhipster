@@ -36,10 +36,6 @@ module.exports = EntityGenerator.extend({
             required: true,
             description: 'Entity name'
         });
-        // remove extention if feeding json files
-        if (this.name !== undefined) {
-            this.name = this.name.replace('.json', '');
-        }
 
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
@@ -80,12 +76,15 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
+        // remove extention if feeding json files
+        if (this.name !== undefined) {
+            this.name = this.name.replace('.json', '');
+        }
 
         this.regenerate = this.options['regenerate'];
         this.fluentMethods = this.options['fluent-methods'];
-        this.entityTableName = this.options['table-name'] || this.name;
+        this.entityTableName = this.getTableName(this.options['table-name'] || this.name);
         this.entityNameCapitalized = _.upperFirst(this.name);
-        this.entityTableName = _.snakeCase(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
@@ -165,9 +164,12 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The table name cannot be empty'));
             } else if (jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
                 this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
-            } else if (prodDatabaseType === 'oracle' && _.snakeCase(this.entityTableName).length > 26) {
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
                 this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
+                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
             }
+
         },
 
         setupVars: function () {
@@ -205,6 +207,10 @@ module.exports = EntityGenerator.extend({
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
+        if (_.isUndefined(this.entityTableName)) {
+            this.warning(`entityTableName is missing in .jhipster/${ this.name }.json, using entity name as fallback`);
+            this.entityTableName = this.getTableName(this.name);
+        }
         this.fields && this.fields.forEach(function (field) {
             this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             this.fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
@@ -236,6 +242,7 @@ module.exports = EntityGenerator.extend({
         askForFieldsToRemove: prompts.askForFieldsToRemove,
         askForRelationships: prompts.askForRelationships,
         askForRelationsToRemove: prompts.askForRelationsToRemove,
+        askForTableName: prompts.askForTableName,
         askForDTO: prompts.askForDTO,
         askForService: prompts.askForService,
         askForPagination: prompts.askForPagination
@@ -339,10 +346,6 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.service)) {
                 this.warning(`service is missing in .jhipster/${ this.name }.json, using no as fallback`);
                 this.service = 'no';
-            }
-            if (_.isUndefined(this.entityTableName)) {
-                this.warning(`entityTableName is missing in .jhipster/${ this.name }.json, using entity name as fallback`);
-                this.entityTableName = this.getTableName(this.name);
             }
             if (_.isUndefined(this.pagination)) {
                 if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
@@ -711,9 +714,9 @@ module.exports = EntityGenerator.extend({
             this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js', this, {});
             this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js', this, {});
             this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js', this, {});
-            this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
             if (this.searchEngine === 'elasticsearch') {
-                this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
+                this.template(ANGULAR_DIR + 'entities/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
             }
 
             // Copy for each
