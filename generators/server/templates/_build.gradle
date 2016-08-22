@@ -52,6 +52,7 @@ war {
 springBoot {
     mainClass = '<%= packageName %>.<%= mainClass %>'
     executable = true
+    buildInfo()
 }
 
 bootRun {
@@ -300,4 +301,5 @@ task stage(dependsOn: 'bootRepackage') {
 }
 
 compileJava.dependsOn processResources
-processResources.dependsOn cleanResources
+processResources.dependsOn cleanResources,bootBuildInfo
+bootBuildInfo.mustRunAfter cleanResources
