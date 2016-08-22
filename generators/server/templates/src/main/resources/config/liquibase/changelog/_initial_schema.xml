@@ -156,7 +156,7 @@
         <createIndex indexName="idx_persistent_audit_event"
                      tableName="jhi_persistent_audit_event"
                      unique="false">
-            <column name="principal" type="<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>"/>
+            <column name="principal" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)"/>
             <column name="event_date" type="timestamp"/>
         </createIndex>
 
