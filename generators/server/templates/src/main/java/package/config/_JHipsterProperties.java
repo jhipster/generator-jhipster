@@ -3,17 +3,15 @@ package <%=packageName%>.config;
 <%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
 <%_ } _%>
-
-import org.springframework.boot.context.properties.ConfigurationProperties;<%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;<%_ } _%>
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
 <%_ if (applicationType == 'gateway') { _%>
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-<%_ } _%>
 
+<%_ } _%>
 /**
  * Properties specific to JHipster.
  *
@@ -232,7 +230,7 @@ public class JHipsterProperties {
 
         <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
 
-        private final ClientAuthorization clientAuthorization = new ClientAuthorization();
+        private final LoadBalancedResourceDetails clientAuthorization = new LoadBalancedResourceDetails();
 
         <%_ } _%>
 
@@ -253,7 +251,7 @@ public class JHipsterProperties {
         }
 
         <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-        public ClientAuthorization getClientAuthorization() {
+        public LoadBalancedResourceDetails getClientAuthorization() {
             return clientAuthorization;
         }
 
@@ -351,20 +349,6 @@ public class JHipsterProperties {
         }
         <%_ } _%>
 
-        <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-        public static class ClientAuthorization extends ClientCredentialsResourceDetails {
-            private String tokenServiceId;
-
-            public String getTokenServiceId() {
-                return tokenServiceId;
-            }
-
-            public void setTokenServiceId(String tokenServiceId) {
-                this.tokenServiceId = tokenServiceId;
-            }
-        }
-        <%_ } _%>
-
         <%_ if (authenticationType == 'session') { _%>
         public static class RememberMe {
 
@@ -401,8 +385,6 @@ public class JHipsterProperties {
         private String license;
 
         private String licenseUrl;
-
-        private Boolean enabled;
 
         public String getTitle() {
             return title;
@@ -475,14 +457,6 @@ public class JHipsterProperties {
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
         }
-
-        public Boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
     }
 
     public static class Metrics {
@@ -510,7 +484,6 @@ public class JHipsterProperties {
         public Logs getLogs() {
             return logs;
         }
-
 
         public static class Jmx {
 

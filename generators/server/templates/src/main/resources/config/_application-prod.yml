@@ -36,6 +36,7 @@ spring:
             enabled: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
+        type: com.zaxxer.hikari.HikariDataSource
         <%_ if (prodDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false
         <%_ } else if (prodDatabaseType == 'mariadb') { _%>
@@ -129,7 +130,7 @@ liquibase:
 
 <%_ } _%>
 server:
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     port: <%= serverPort %>
 <%_ } else { _%>
     port: 8080
@@ -166,10 +167,9 @@ jhipster:
             maxBytesLocalHeap: 256M
         <%_ } _%>
     <%_ } _%>
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
@@ -183,14 +183,15 @@ jhipster:
             clientId: internal
             clientSecret: internal
     <%_ } _%>
-    <%_ if (authenticationType == 'oauth2') { _%>
+    <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
+    security:
+        authentication:
             oauth:
                 clientid: <%= baseName %>app
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     <%_ } _%>
-<%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
     security:
         rememberMe:
@@ -224,5 +225,3 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
-    swagger: # swagger is disabled. It can be disabled by pasing 'no-swagger' profile at run time as well
-        enabled: false

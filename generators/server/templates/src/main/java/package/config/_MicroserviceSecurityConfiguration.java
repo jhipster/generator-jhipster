@@ -75,8 +75,13 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 import <%=packageName%>.security.AuthoritiesConstants;
 
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -85,8 +90,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.web.client.RestTemplate;
 
 
+import java.util.Map;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -98,9 +105,6 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     @Inject
     JHipsterProperties jHipsterProperties;
-
-    @Inject
-    LoadBalancedResourceDetails loadBalancedResourceDetails;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -129,9 +133,26 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey(jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret());
-
+        converter.setVerifierKey(getKeyFromAuthorizationServer());
         return converter;
+    }
+
+    @Bean
+    public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
+        RestTemplate restTemplate = new RestTemplate();
+        customizer.customize(restTemplate);
+        return restTemplate;
+    }
+
+    @Inject
+    @Qualifier("loadBalancedRestTemplate")
+    private RestTemplate keyUriRestTemplate;
+
+    private String getKeyFromAuthorizationServer() {
+        HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
+        return (String) this.keyUriRestTemplate
+                .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
+                .get("value");
     }
 }
 <% } %>

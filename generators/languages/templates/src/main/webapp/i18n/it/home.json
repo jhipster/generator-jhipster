@@ -5,15 +5,15 @@
         "logged": {
             "message": "Autenticato come \"{{username}}\"."
         },
-        "question": "Se avete domande su JHipster:",
+        "question": "In caso di domande su JHipster:",
         "link": {
             "homepage": "Homepage JHipster",
             "stackoverflow": "JHipster su Stack Overflow",
-            "bugtracker": "JHipster tracciamnto errori",
-            "chat": "JHipster public chat room",
-            "follow": "contatto @java_hipster su Twitter"
+            "bugtracker": "JHipster tracciamento errori",
+            "chat": "Chat room pubblica di JHipster",
+            "follow": "segui @java_hipster su Twitter"
         },
-        "like": "Se vi piace JHipster, non dimenticarti di darci una stella",
+        "like": "Se ti piace JHipster, non dimenticarti di assegnarci una stella",
         "github": "GitHub"
     }
 }

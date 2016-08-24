@@ -38,6 +38,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.packageName = packageName;
         jhipsterVar.packageFolder = packageFolder;
 
+        jhipsterVar.jhipsterConfig = this.config.getAll();
+        jhipsterVar.applicationType = this.config.get('applicationType');
         jhipsterVar.authenticationType = this.config.get('authenticationType');
         jhipsterVar.hibernateCache = this.config.get('hibernateCache');
         jhipsterVar.clusteredHttpSession = this.config.get('clusteredHttpSession');
@@ -115,6 +117,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.getTableName = this.getTableName;
         jhipsterFunc.getColumnName = this.getColumnName;
         jhipsterFunc.getPluralColumnName = this.getPluralColumnName;
+        jhipsterFunc.getJoinTableName = this.getJoinTableName;
+        jhipsterFunc.getConstraintName = this.getConstraintName;
         jhipsterFunc.error = this.error;
         jhipsterFunc.warning = this.warning;
         jhipsterFunc.printJHipsterLogo = this.printJHipsterLogo;

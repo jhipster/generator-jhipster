@@ -6,14 +6,16 @@ import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.User;
 
 import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;
 import java.util.Optional;<% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
-
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -41,6 +43,12 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByLogin(String login);
 
     Optional<User> findOneById(<%= pkType %> userId);
+    <%_ if (databaseType == 'sql') { _%>
+
+    @Query(value = "select distinct user from User user join fetch user.authorities",
+        countQuery = "select count(user) from User user")
+    Page<User> findAllWithAuthorities(Pageable pageable);
+    <%_ } _%>
 
     @Override
     void delete(User t);

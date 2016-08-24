@@ -8,3 +8,8 @@ jhipster:
         authentication:
             jwt:
                 secret: my-secret-token-to-change-in-production
+
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://admin:admin@registry:8761/eureka/
