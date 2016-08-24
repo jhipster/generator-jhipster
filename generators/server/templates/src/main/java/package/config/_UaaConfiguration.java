@@ -84,6 +84,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
         }
     }
 
+    @Inject
+    private JHipsterProperties jHipsterProperties;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         /*

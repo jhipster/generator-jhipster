@@ -5,27 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 
-@Component
 public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetails {
 
     Logger log = LoggerFactory.getLogger(LoadBalancedResourceDetails.class);
 
-    @Autowired
-    public LoadBalancedResourceDetails(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
-
-        setAccessTokenUri(jHipsterProperties.getSecurity().getClientAuthorization().getAccessTokenUri());
-        setClientId(jHipsterProperties.getSecurity().getClientAuthorization().getClientId());
-        setClientSecret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret());
-        setGrantType("client_credentials");
-
-    }
+    private String tokenServiceId;
 
     private LoadBalancerClient loadBalancerClient;
 
@@ -39,12 +28,10 @@ public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetail
 
     @Override
     public String getAccessTokenUri() {
-        String serviceName = jHipsterProperties.getSecurity().getClientAuthorization().getTokenServiceId();
-        if (loadBalancerClient != null && serviceName != null && !serviceName.isEmpty()) {
-            String newUrl;
+        if (loadBalancerClient != null && tokenServiceId != null && !tokenServiceId.isEmpty()) {
             try {
                 return loadBalancerClient.reconstructURI(
-                    loadBalancerClient.choose(serviceName),
+                    loadBalancerClient.choose(tokenServiceId),
                     new URI(super.getAccessTokenUri())
                 ).toString();
             } catch (URISyntaxException e) {
@@ -55,5 +42,13 @@ public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetail
         } else {
             return super.getAccessTokenUri();
         }
+    }
+
+    public String getTokenServiceId() {
+        return this.tokenServiceId;
+    }
+
+    public void setTokenServiceId(String tokenServiceId) {
+        this.tokenServiceId = tokenServiceId;
     }
 }
