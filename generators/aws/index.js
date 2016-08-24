@@ -13,7 +13,8 @@ util.inherits(AwsGenerator, scriptBase);
 module.exports = AwsGenerator.extend({
     initializing: {
         initAws: function () {
-            this.awsFactory = new AwsFactory(this);
+            var done = this.async();
+            this.awsFactory = new AwsFactory(this, done);
         },
         getGlobalConfig: function () {
             this.existingProject = false;

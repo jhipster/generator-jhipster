@@ -2,32 +2,41 @@
 var S3 = require('./s3.js'),
     Rds = require('./rds.js'),
     chalk = require('chalk'),
+    shelljs = require('shelljs'),
+    os = require('os'),
     Eb = require('./eb.js');
 
 var Aws, generator;
 
-var AwsFactory = module.exports = function AwsFactory(generatorRef) {
+var AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
     generator = generatorRef;
     try {
         Aws = require('aws-sdk');
+        generator.log("Found AWS dependencies");
+        cb()
     } catch (e) {
-        var windowsPath;
-        var linuxPath;
+        generator.log("Installing AWS dependencies into your JHipster folder");
+        var jhipsterPath;
         var applicationType = generator.config.get('applicationType');
         if (applicationType === 'monolith' || applicationType === 'gateway') {
-            windowsPath = 'cd node_modules\\generator-jhipster\n';
-            linuxPath = 'cd node_modules/generator-jhipster\n';
+            if (os.platform() === 'win32') {
+                jhipsterPath = 'node_modules\\generator-jhipster\n';
+            } else {
+                jhipsterPath = 'node_modules/generator-jhipster\n';
+            }
         } else {
-            windowsPath = 'cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n';
-            linuxPath = 'cd /usr/local/lib/node_modules/generator-jhipster\n';
+            var prefix = shelljs.exec('npm config get prefix', {silent:true}).trim();
+            if (os.platform() === 'win32') {
+                jhipsterPath = prefix + '\\node_modules\\generator-jhipster';
+            } else {
+                jhipsterPath = prefix + '/lib/node_modules/generator-jhipster';
+            }
         }
-        generator.env.error(chalk.red(
-            'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n') +
-            chalk.yellow('WINDOWS\n') +
-            chalk.green(windowsPath + 'npm install aws-sdk progress node-uuid\n\n') +
-            chalk.yellow('LINUX / MAC\n') +
-            chalk.green(linuxPath + 'npm install aws-sdk progress node-uuid')
-        );
+        shelljs.exec('npm install aws-sdk progress node-uuid --prefix ' + jhipsterPath, {silent:false}, function (code, msg, err) {
+            if (code !== 0) generator.error('Something went wrong while installing:\n' + err);
+            Aws = require('aws-sdk');
+            cb();
+        });
     }
 };
 
