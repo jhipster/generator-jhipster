@@ -14,20 +14,15 @@ var AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
         cb();
     } catch (e) {
         generator.log('Installing AWS dependencies into your JHipster folder');
-        var jhipsterPath;
-        var applicationType = generator.config.get('applicationType');
-        if (applicationType === 'monolith' || applicationType === 'gateway') {
-            if (os.platform() === 'win32') {
-                jhipsterPath = 'node_modules\\generator-jhipster';
-            } else {
-                jhipsterPath = 'node_modules/generator-jhipster';
-            }
-        } else {
+        var jhipsterPath = 'node_modules/generator-jhipster';
+        var skipClient = generator.config.get('skipClient');
+        // use the global JHipster for apps with no client-side code
+        if (skipClient) {
             var prefix = shelljs.exec('npm config get prefix', {silent:true}).trim();
             if (os.platform() === 'win32') {
-                jhipsterPath = prefix + '\\node_modules\\generator-jhipster';
+                jhipsterPath = prefix + '/' + jhipsterPath;
             } else {
-                jhipsterPath = prefix + '/lib/node_modules/generator-jhipster';
+                jhipsterPath = prefix + '/lib/' + jhipsterPath;
             }
         }
         shelljs.exec('npm install aws-sdk progress node-uuid --prefix ' + jhipsterPath, {silent:true}, function (code, msg, err) {
