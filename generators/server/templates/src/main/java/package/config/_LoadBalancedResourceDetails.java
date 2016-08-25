@@ -9,7 +9,6 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
 public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetails {
 
     Logger log = LoggerFactory.getLogger(LoadBalancedResourceDetails.class);
