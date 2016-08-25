@@ -635,10 +635,12 @@
             <artifactId>spring-cloud-security</artifactId>
         </dependency>
         <%_ } _%>
+        <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>

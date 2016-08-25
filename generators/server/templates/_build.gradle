@@ -218,7 +218,9 @@ dependencies {
     <%_ if (authenticationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-security"
     <%_ } _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-feign"
+    <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector"
     compile "org.springframework.cloud:spring-cloud-spring-service-connector"
     compile "org.springframework.cloud:spring-cloud-localconfig-connector"
