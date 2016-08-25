@@ -629,16 +629,16 @@
             <artifactId>spring-retry</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
+        <%_ } _%>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
-        <%_ } _%>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
