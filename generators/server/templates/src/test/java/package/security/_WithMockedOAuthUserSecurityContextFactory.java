@@ -18,7 +18,6 @@ import java.util.Set;
 
 public class WithMockedOAuthUserSecurityContextFactory implements WithSecurityContextFactory<WithMockOAuth2Authentication> {
 
-
     @Override
     public SecurityContext createSecurityContext(WithMockOAuth2Authentication withClient) {
         // Get the username
@@ -47,7 +46,6 @@ public class WithMockedOAuthUserSecurityContextFactory implements WithSecurityCo
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(),
             principal.getAuthorities());
 
-
         // Create the authorization request and OAuth2Authentication object
         OAuth2Request authRequest = new OAuth2Request(null, clientId, null, true, scopeCollection, null, null, null,
             null);
@@ -60,3 +58,4 @@ public class WithMockedOAuthUserSecurityContextFactory implements WithSecurityCo
         return context;
     }
 }
+

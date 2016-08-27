@@ -10,11 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface WithMockOAuth2Authentication {
     String username() default "TestUser";
     String password() default "TestUser";
-
     String clientId() default "testClient";
     String[] scope() default {"default.read", "default.write"};
-
     String[] roles() default {"USER", "ADMIN"};
-
-
 }
