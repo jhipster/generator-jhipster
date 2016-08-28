@@ -227,17 +227,28 @@ module.exports = JhipsterGenerator.extend({
 
         composeClient: function () {
             if (this.skipClient) return;
-
-            this.composeWith('jhipster:client', {
-                options: {
-                    'skip-install': this.options['skip-install'],
-                    configOptions: this.configOptions,
-                    force: this.options['force']
-                }
-            }, {
-                local: require.resolve('../client')
-            });
-
+            
+            if (this.angularVersion === 'angular2') {
+                this.composeWith('jhipster:client-2', {
+                    options: {
+                        'skip-install': this.options['skip-install'],
+                        configOptions: this.configOptions,
+                        force: this.options['force']
+                    }
+                }, {
+                    local: require.resolve('../client-2')
+                });
+            } else {
+                this.composeWith('jhipster:client', {
+                    options: {
+                        'skip-install': this.options['skip-install'],
+                        configOptions: this.configOptions,
+                        force: this.options['force']
+                    }
+                }, {
+                    local: require.resolve('../client')
+                });
+            }
         },
 
         askFori18n: prompts.askFori18n
@@ -260,6 +271,7 @@ module.exports = JhipsterGenerator.extend({
             var insight = this.insight();
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
+            insight.track('app/angularVersion', this.angularVersion);
             insight.track('app/testFrameworks', this.testFrameworks);
         },
 
@@ -271,6 +283,7 @@ module.exports = JhipsterGenerator.extend({
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('applicationType', this.applicationType);
+            this.config.set('angularVersion', this.angularVersion);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);

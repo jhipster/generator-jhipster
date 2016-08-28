@@ -135,23 +135,23 @@ function askForClient() {
 
     this.prompt({
         type: 'list',
-        name: 'clientType',
+        name: 'angularVersion',
         message: function (response) {
-            return getNumberedQuestion('Would you like to use AngularJS 2 for the client side?', true);
+            return getNumberedQuestion('Which *AngularJS* version would you like to use for the client side?', true);
         },
         choices: [
             {
-                value: 'angular',
-                name: 'No! I`ll use AngularJS 1'
+                value: 'angular1',
+                name: 'I`ll use AngularJS 1 (stable)'
             },
             {
                 value: 'angular2',
-                name: 'Yes! I`ll use AngularJS 2 (Please note that this is still in beta)'
+                name: 'I want to try AngularJS 2 (Please note that this is still in beta)'
             }
         ],
-        default: 'angular'
+        default: 'angular1'
     }, function (prompt) {
-        this.clientType = this.configOptions.clientType = prompt.clientType;
+        this.angularVersion = this.configOptions.angularVersion = prompt.angularVersion;
         done();
     }.bind(this));
 }
