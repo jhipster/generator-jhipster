@@ -1194,9 +1194,17 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-            entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName.substring(0, halfLimit)),
-            relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : this.getTableName(relationshipName.substring(0, halfLimit - 1));
-        return `${entityTable}_${relationTable}_id`;
+            entityTable = noSnakeCase ? entityName : this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = noSnakeCase ? relationshipName: this.getTableName(relationshipName.substring(0, halfLimit - 1));
+
+        constraintName = `${entityTable}_${relationTable}_id`;
+        if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
+            this.warning(`The generated constraint name "${ constraintName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+            constraintName = constraintName.substring(0, 27) + '_id';
+        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
+            this.warning(`The generated constraint name "${ constraintName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+            constraintName = constraintName.substring(0, 61) + '_id';
+        }
     }
     return constraintName;
 };
