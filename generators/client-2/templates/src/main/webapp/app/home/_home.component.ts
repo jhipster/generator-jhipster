@@ -18,11 +18,10 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         //TODO: Remove this line after migrating "Principal" service
-        let that = this;
         this.principal.identity().then(function (account) {
-            that.account = account;
-            that.isAuthenticated = that.principal.isAuthenticated;
-        });
+            this.account = account;
+            this.isAuthenticated = this.principal.isAuthenticated;
+        }.bind(this));
     }
 
     register() {

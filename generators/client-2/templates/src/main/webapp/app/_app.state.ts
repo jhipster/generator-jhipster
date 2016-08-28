@@ -6,9 +6,7 @@ export function AppStateConfig($stateProvider) {
         abstract: true,
         views: {
             'navbar@': {
-                templateUrl: 'app/layouts/navbar/navbar.html',
-                controller: 'NavbarController',
-                controllerAs: 'vm'
+                template: '<navbar></navbar>'
             }
         },
         resolve: {
