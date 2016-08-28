@@ -44,7 +44,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     showHealth(health) {
         $uibModal.open({
             templateUrl: 'app/admin/health/health.modal.html',
-            controller: 'HealthModalController',
+            controller: '<%=jhiPrefixCapitalized%>HealthModalController',
             controllerAs: 'vm',
             size: 'lg',
             resolve: {
