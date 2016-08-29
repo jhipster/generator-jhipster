@@ -4,10 +4,37 @@ var _ = require('lodash'),
     dockerComposePrompts = require('../docker-compose/prompts');
 
 module.exports = _.extend({
+    askForApplicationType,
     askForKubernetesNamespace,
     askForDockerRepositoryName,
     askForDockerPushCommand
 }, dockerComposePrompts);
+
+function askForApplicationType() {
+    var done = this.async();
+
+    var prompts = [{
+        type: 'list',
+        name: 'kubernetesApplicationType',
+        message: 'Which *type* of application would you like to deploy?',
+        choices: [
+            {
+                value: 'monolith',
+                name: 'Monolithic application'
+            },
+            {
+                value: 'microservice',
+                name: 'Microservice application'
+            }
+        ],
+        default: 'monolith'
+    }];
+
+    this.prompt(prompts, function(props) {
+        this.kubernetesApplicationType = props.kubernetesApplicationType;
+        done();
+    }.bind(this));
+}
 
 function askForKubernetesNamespace() {
     var done = this.async();

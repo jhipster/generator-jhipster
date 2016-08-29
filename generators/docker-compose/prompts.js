@@ -15,16 +15,22 @@ function askForPath() {
     if (this.regenerate) return;
 
     var done = this.async();
-
+    var kubernetesApplicationType = this.kubernetesApplicationType;
+    var messageAskForPath;
+    if (this.kubernetesApplicationType === 'monolith') {
+        messageAskForPath = 'Enter the root directory where your applications are located';
+    } else {
+        messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
+    }
     var prompts = [{
         type: 'input',
         name: 'directoryPath',
-        message: 'Enter the root directory where your gateway(s) and microservices are located',
+        message: messageAskForPath,
         default: this.directoryPath || '../',
         validate: function (input) {
             var path = this.destinationPath(input);
             if(shelljs.test('-d', path)) {
-                var appsFolders = getAppFolders.call(this, input);
+                var appsFolders = getAppFolders.call(this, input, kubernetesApplicationType);
 
                 if(appsFolders.length === 0) {
                     return 'No microservice or gateway found in ' + path;
@@ -40,7 +46,7 @@ function askForPath() {
     this.prompt(prompts, function (props) {
         this.directoryPath = props.directoryPath;
 
-        this.appsFolders = getAppFolders.call(this, this.directoryPath);
+        this.appsFolders = getAppFolders.call(this, this.directoryPath, kubernetesApplicationType);
 
         //Removing registry from appsFolders, using reverse for loop
         for(var i = this.appsFolders.length - 1; i >= 0; i--) {
@@ -177,7 +183,7 @@ function askForAdminPassword() {
     }.bind(this));
 }
 
-function getAppFolders(input) {
+function getAppFolders(input, applicationType) {
     var files = shelljs.ls('-l', this.destinationPath(input));
     var appsFolders = [];
 
@@ -187,7 +193,8 @@ function getAppFolders(input) {
                 && (shelljs.test('-f', input + file.name + '/src/main/docker/app.yml')) ) {
                 try {
                     var fileData = this.fs.readJSON(input + file.name + '/.yo-rc.json');
-                    if(fileData['generator-jhipster'].baseName !== undefined) {
+                    if ((fileData['generator-jhipster'].baseName !== undefined)
+                        && ((applicationType === undefined) || (applicationType === fileData['generator-jhipster'].applicationType))) {
                         appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                     }
                 } catch(err) {
