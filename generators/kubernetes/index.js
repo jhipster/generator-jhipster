@@ -126,6 +126,8 @@ module.exports = KubernetesGenerator.extend({
     },
 
     prompting: {
+        askForApplicationType: prompts.askForApplicationType,
+
         askForPath: prompts.askForPath,
 
         askForApps: prompts.askForApps,
