@@ -190,9 +190,8 @@ jhipster:
     <%_ if (authenticationType === 'uaa') { _%>
     security:
         client-authorization:
-            # change this depending on your authorization server
             <%_ if (applicationType !== 'uaa') { _%>
-            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>:9999/oauth/token
+            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
             tokenServiceId: <%= uaaBaseName.toLowerCase() %>
             <%_ } _%>
             clientId: internal

@@ -117,9 +117,8 @@ jhipster:
                 tokenValidityInSeconds: 86400
     <%_ } _%>
     <%_ if (applicationType !== 'uaa' && authenticationType === 'uaa') { _%>
-        clientAuthorization:
-            # change this depending on your authorization server
-            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>:9999/oauth/token
+        client-authorization:
+            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
             tokenServiceId: <%= uaaBaseName.toLowerCase() %>
             clientId: internal
             clientSecret: internal
