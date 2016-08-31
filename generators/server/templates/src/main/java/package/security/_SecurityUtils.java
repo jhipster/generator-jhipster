@@ -44,15 +44,19 @@ public final class SecurityUtils {
      */
     public static boolean isAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        Collection<? extends GrantedAuthority> authorities = securityContext.getAuthentication().getAuthorities();
-        if (authorities != null) {
-            for (GrantedAuthority authority : authorities) {
-                if (authority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)) {
-                    return false;
+        Authentication authentication = securityContext.getAuthentication();
+        if (authentication != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            if (authorities != null) {
+                for (GrantedAuthority authority : authorities) {
+                    if (authority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)) {
+                        return false;
+                    }
                 }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
