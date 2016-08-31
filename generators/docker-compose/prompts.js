@@ -17,7 +17,7 @@ function askForPath() {
     var done = this.async();
     var kubernetesApplicationType = this.kubernetesApplicationType;
     var messageAskForPath;
-    if (this.kubernetesApplicationType === 'monolith') {
+    if (kubernetesApplicationType === 'monolith') {
         messageAskForPath = 'Enter the root directory where your applications are located';
     } else {
         messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
@@ -65,11 +65,18 @@ function askForApps() {
     if (this.regenerate) return;
 
     var done = this.async();
+    var kubernetesApplicationType = this.kubernetesApplicationType;
+    var messageAskForApps;
+    if (kubernetesApplicationType === undefined) {
+        messageAskForApps = 'Which applications do you want to include in your Docker Compose configuration?';
+    } else {
+        messageAskForApps = 'Which applications do you want to include in your Kubernetes configuration?';
+    }
 
     var prompts = [{
         type: 'checkbox',
         name: 'chosenApps',
-        message: 'Which applications do you want to include in your Docker Compose configuration?',
+        message: messageAskForApps,
         choices: this.appsFolders,
         default: this.defaultAppsFolders,
         validate: function (input) {
@@ -161,7 +168,7 @@ function askForElk() {
 }
 
 function askForAdminPassword() {
-    if (this.regenerate) return;
+    if (this.regenerate || this.kubernetesApplicationType === 'monolith') return;
 
     var done = this.async();
 
