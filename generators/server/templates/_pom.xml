@@ -38,7 +38,7 @@
         <commons-codec.version>1.10</commons-codec.version>
         <%_ } _%>
         <commons-io.version>2.5</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version>
+        <commons-lang.version>3.4</commons-lang.version>
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
@@ -323,8 +323,8 @@
             <version>${commons-io.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
         <%_ if (databaseType === 'mongodb') { _%>
