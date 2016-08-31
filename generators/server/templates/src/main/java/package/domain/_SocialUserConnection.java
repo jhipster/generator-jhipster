@@ -1,20 +1,19 @@
 package <%=packageName%>.domain;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-<% if (databaseType == 'mongodb') { %>
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+<%_ if (databaseType == 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-<% } %><% if (databaseType == 'sql') { %>
-import javax.persistence.*;<% } %>
+<%_ } _%>
+<%_ if (databaseType == 'sql') { _%>
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import javax.persistence.*;
+<%_ } _%>
 import javax.validation.constraints.NotNull;
-<% if (databaseType == 'mongodb') { -%>
+<%_ if (databaseType == 'mongodb') { _%>
 import javax.validation.constraints.Size;
-<% } -%>
+<%_ } _%>
 import java.io.Serializable;
 import java.util.Objects;
 

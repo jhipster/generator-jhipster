@@ -2,8 +2,8 @@
   "generator-jhipster": {
     "applicationType": "monolith",
     "baseName": "travisOauth2",
-    "packageName": "com.mycompany.myapp",
-    "packageFolder": "com/mycompany/myapp",
+    "packageName": "io.github.jhipster.travis",
+    "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "oauth2",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
@@ -22,6 +22,8 @@
     "testFrameworks": [
       "gatling"
     ],
+    "serverPort": "8080",
+    "jhiPrefix": "jhi",
     "travis": true
   }
 }
