@@ -12,10 +12,10 @@ describe('Controller Tests', function() {
         var createController; // local utility function
 
         var sessions = [{
-            tokenDate: "2015-10-15",
-            ipAddress: "0:0:0:0:0:0:0:1",
-            series: "xxxxxx==",
-            userAgent: "Mozilla/5.0"
+            tokenDate: '2015-10-15',
+            ipAddress: '0:0:0:0:0:0:0:1',
+            series: 'xxxxxx==',
+            userAgent: 'Mozilla/5.0'
         }];
 
         beforeEach(inject(function($injector) {
