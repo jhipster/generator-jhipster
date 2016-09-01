@@ -42,7 +42,7 @@ function askForKubernetesNamespace() {
     var prompts = [{
         type: 'input',
         name: 'kubernetesNamespace',
-        message: 'What should we use for the Kubernetes namespace ?',
+        message: 'What should we use for the Kubernetes namespace?',
         default: this.kubernetesNamespace ? this.kubernetesNamespace : 'default'
     }];
 
@@ -58,7 +58,7 @@ function askForDockerRepositoryName() {
     var prompts = [{
         type: 'input',
         name: 'dockerRepositoryName',
-        message: 'What should we use for the base Docker repository name ?',
+        message: 'What should we use for the base Docker repository name?',
         default: this.dockerRepositoryName
     }];
 
@@ -74,7 +74,7 @@ function askForDockerPushCommand() {
     var prompts = [{
         type: 'input',
         name: 'dockerPushCommand',
-        message: 'What command should we use for push Docker image to repository ?',
+        message: 'What command should we use for push Docker image to repository?',
         default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push'
     }];
 
