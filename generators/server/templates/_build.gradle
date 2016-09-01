@@ -46,7 +46,7 @@ bootRepackage {
 }
 
 war {
-    rootSpec.exclude("**/tomcat-*.jar")
+
 }
 
 springBoot {
@@ -195,7 +195,10 @@ dependencies {
     compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
     compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-web"<% if (websocket == 'spring-websocket') { %>
+    compile "org.springframework.boot:spring-boot-starter-web" {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile "org.springframework.boot:spring-boot-starter-undertow"<% if (websocket == 'spring-websocket') { %>
     compile "org.springframework.boot:spring-boot-starter-websocket"<% } %>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {

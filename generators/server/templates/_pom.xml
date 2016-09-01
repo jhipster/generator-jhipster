@@ -1097,7 +1097,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -1112,7 +1112,6 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration><% if (!skipClient) { %>
                             <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory><% } %>
-                            <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -1129,7 +1128,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
             </dependencies>
             <build>
@@ -1213,7 +1212,6 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration><% if (!skipClient) { %>
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory><% } %>
-                            <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
                         </configuration>
                     </plugin>
                     <plugin>
