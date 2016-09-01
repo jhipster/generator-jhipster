@@ -3,6 +3,7 @@ package <%=packageName%>.config;
 <% if(authenticationType == 'jwt') { %>
   import javax.inject.Inject;
 
+  import org.springframework.beans.factory.annotation.Autowired;
   import org.springframework.context.annotation.Bean;
   import org.springframework.context.annotation.Configuration;
   import org.springframework.http.HttpMethod;
@@ -76,6 +77,7 @@ package <%=packageName%>.config;
   import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
   import org.springframework.context.annotation.Bean;
   import org.springframework.context.annotation.Configuration;
+  import org.springframework.context.annotation.Profile;
   import org.springframework.http.HttpEntity;
   import org.springframework.http.HttpHeaders;
   import org.springframework.http.HttpMethod;
@@ -122,11 +124,13 @@ package <%=packageName%>.config;
       }
 
       @Bean
+      @Profile("!test")
       public TokenStore tokenStore() {
           return new JwtTokenStore(jwtAccessTokenConverter());
       }
 
       @Bean
+      @Profile("!test")
       public JwtAccessTokenConverter jwtAccessTokenConverter() {
           JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
           converter.setVerifierKey(getKeyFromAuthorizationServer());
@@ -134,13 +138,14 @@ package <%=packageName%>.config;
       }
 
       @Bean
+      @Profile("!test")
       public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
           RestTemplate restTemplate = new RestTemplate();
           customizer.customize(restTemplate);
           return restTemplate;
       }
 
-      @Inject
+      @Autowired(required = false)
       @Qualifier("loadBalancedRestTemplate")
       private RestTemplate keyUriRestTemplate;
 
