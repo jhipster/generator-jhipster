@@ -52,9 +52,9 @@
     "jhipster-core": "1.1.7"
   },
   "devDependencies": {
-    "eslint": "2.11.1",
+    "eslint": "3.4.0",
     "fs-extra": "0.30.0",
-    "mocha": "2.5.3",
+    "mocha": "3.0.2",
     "yeoman-assert": "2.2.1",
     "yeoman-test": "1.4.0"
   },
