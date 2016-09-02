@@ -124,13 +124,13 @@ package <%=packageName%>.config;
       }
 
       @Bean
-      @Profile("!test")
+      @Profile("uaa")
       public TokenStore tokenStore() {
           return new JwtTokenStore(jwtAccessTokenConverter());
       }
 
       @Bean
-      @Profile("!test")
+      @Profile("uaa")
       public JwtAccessTokenConverter jwtAccessTokenConverter() {
           JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
           converter.setVerifierKey(getKeyFromAuthorizationServer());
@@ -138,7 +138,7 @@ package <%=packageName%>.config;
       }
 
       @Bean
-      @Profile("!test")
+      @Profile("uaa")
       public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
           RestTemplate restTemplate = new RestTemplate();
           customizer.customize(restTemplate);
@@ -157,3 +157,4 @@ package <%=packageName%>.config;
       }
   }
 <% } %>
+

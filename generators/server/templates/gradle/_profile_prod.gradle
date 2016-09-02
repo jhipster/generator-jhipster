@@ -12,7 +12,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
 }
 
-def profiles = 'prod'
+def profiles = 'prod<% if (authenticationType == 'uaa') { %>,uaa<% } %>'
 if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
