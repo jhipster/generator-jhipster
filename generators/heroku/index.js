@@ -51,7 +51,7 @@ module.exports = HerokuGenerator.extend({
                 default: 0
             }];
 
-        this.prompt(prompts, function (props) {
+        this.prompt(prompts).then(function (props) {
             this.herokuDeployedName = _.kebabCase(props.herokuDeployedName);
             this.herokuRegion = props.herokuRegion;
             done();
