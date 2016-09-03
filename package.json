@@ -45,7 +45,7 @@
     "shelljs": "0.7.4",
     "pluralize": "3.0.0",
     "wordwrap": "1.0.0",
-    "yeoman-generator": "0.22.6",
+    "yeoman-generator": "0.24.1",
     "js-yaml": "3.6.1",
     "yo": "1.8.5",
     "semver": "5.3.0",
