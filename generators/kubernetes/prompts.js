@@ -30,7 +30,7 @@ function askForApplicationType() {
         default: 'monolith'
     }];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         this.kubernetesApplicationType = props.kubernetesApplicationType;
         done();
     }.bind(this));
@@ -46,7 +46,7 @@ function askForKubernetesNamespace() {
         default: this.kubernetesNamespace ? this.kubernetesNamespace : 'default'
     }];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         this.kubernetesNamespace = props.kubernetesNamespace;
         done();
     }.bind(this));
@@ -62,7 +62,7 @@ function askForDockerRepositoryName() {
         default: this.dockerRepositoryName
     }];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         this.dockerRepositoryName = props.dockerRepositoryName;
         done();
     }.bind(this));
@@ -78,7 +78,7 @@ function askForDockerPushCommand() {
         default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push'
     }];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         this.dockerPushCommand = props.dockerPushCommand;
         done();
     }.bind(this));
