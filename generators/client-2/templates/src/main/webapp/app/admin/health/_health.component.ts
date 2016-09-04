@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { <%=jhiPrefixCapitalized%>HealthService } from "./health.service";
+import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
     selector: '<%=jhiPrefix%>-health',
-    templateUrl: 'app/admin/health/health.html'
+    templateUrl: 'app/admin/health/health.html',
+    pipes: [TranslatePipe]
 })
 export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData:any;
@@ -43,7 +45,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         let vm = this;
         this.$uibModal.open({
             templateUrl: 'app/admin/health/health.modal.html',
-            controller: 'HealthModalController',
+            controller: '<%=jhiPrefixCapitalized%>HealthModalController',
             controllerAs: 'vm',
             size: 'lg',
             resolve: {

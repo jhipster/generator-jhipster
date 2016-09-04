@@ -22,7 +22,7 @@
                 <tr ng-repeat="session in vm.sessions">
                     <td>{{session.ipAddress}}</td>
                     <td>{{session.userAgent}}</td>
-                    <td>{{session.formattedTokenDate}}</td>
+                    <td>{{session.tokenDate | date:'longDate'}}</td>
                     <td>
                         <button type="submit"
                                 class="btn btn-primary"
