@@ -109,6 +109,7 @@ description = ''
 
 configurations {
     providedRuntime
+    compile.exclude module: "spring-boot-starter-tomcat"
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     // netty's native is pulled by spring-cloud-starter-ribbon, but is useless unless you explicitly add the native binary dependency.
     // Having it in the classpath without the binary can cause warnings
