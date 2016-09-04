@@ -3,6 +3,7 @@ apply plugin: 'spring-boot'<% if(!skipClient) { %>
 apply plugin: 'com.moowork.node'
 apply plugin: 'com.moowork.gulp'
 <% } %>
+apply plugin: 'com.gorylenko.gradle-git-properties'
 
 ext {
     logbackLoglevel = "INFO"
@@ -44,6 +45,10 @@ processResources {
             it.replace('#spring.profiles.active#', profiles)
         }
     }
+}
+
+gitProperties {
+    keys = ['git.branch', 'git.commit.id.abbrev']
 }
 
 <% if (!skipClient) { %>
