@@ -2,8 +2,8 @@
   "generator-jhipster": {
     "applicationType": "monolith",
     "baseName": "travisSocialWebsocket",
-    "packageName": "com.mycompany.myapp",
-    "packageFolder": "com/mycompany/myapp",
+    "packageName": "io.github.jhipster.travis",
+    "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "session",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
@@ -23,6 +23,8 @@
       "gatling",
       "protractor"
     ],
+    "serverPort": "8080",
+    "jhiPrefix": "jhi",
     "travis": true
   }
 }

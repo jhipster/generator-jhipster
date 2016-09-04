@@ -16,6 +16,7 @@ buildscript {
         classpath "com.moowork.gradle:gradle-gulp-plugin:0.12"<% } %>
         classpath "se.transmode.gradle:gradle-docker:1.2"
         classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -167,7 +168,7 @@ dependencies {
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     compile "commons-codec:commons-codec:${commons_codec_version}"
     <%_ } _%>
-    compile "commons-lang:commons-lang:${commons_lang_version}"
+    compile "org.apache.commons:commons-lang3:${commons_lang_version}"
     compile "commons-io:commons-io:${commons_io_version}"
     compile "javax.inject:javax.inject:${javax_inject_version}"
     compile "javax.transaction:javax.transaction-api"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
@@ -268,6 +269,7 @@ dependencies {
     testCompile "info.cukes:cucumber-junit:${cucumber_version}"
     testCompile "info.cukes:cucumber-spring:${cucumber_version}"<% } %>
     testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework.security:spring-security-test"
     testCompile "org.springframework.boot:spring-boot-test"
     testCompile "org.assertj:assertj-core:${assertj_core_version}"
     testCompile "junit:junit"
@@ -294,7 +296,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14.1'
+    gradleVersion = '3.0'
 }
 
 task stage(dependsOn: 'bootRepackage') {

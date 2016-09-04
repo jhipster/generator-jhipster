@@ -1,6 +1,6 @@
 package <%=packageName%>.security;
 <% if (authenticationType == 'oauth2') { %>
-import org.apache.commons.lang.StringUtils;<% } %>
+import org.apache.commons.lang3.StringUtils;<% } %>
 import org.springframework.security.core.Authentication;<% if (authenticationType == 'oauth2') { %>
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;<% } %>

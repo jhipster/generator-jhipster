@@ -80,7 +80,7 @@
         },
         "datasource": {
         	"usage": "Usage",
-            "title": "Datenquelle (Zeit in millisekunden)",
+            "title": "Datenquelle (Zeit in Millisekunden)",
             "name": "Pool-Auslastung",
             "count": "Anzahl",
             "mean": "Mittel",
