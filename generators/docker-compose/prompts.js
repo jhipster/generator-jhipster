@@ -43,7 +43,7 @@ function askForPath() {
         }.bind(this)
     }];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.directoryPath = props.directoryPath;
 
         this.appsFolders = getAppFolders.call(this, this.directoryPath, kubernetesApplicationType);
@@ -86,7 +86,7 @@ function askForApps() {
         }
     }];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.appsFolders = props.chosenApps;
 
         this.appConfigs = [];
@@ -137,7 +137,7 @@ function askForClustersMode() {
         default: this.clusteredDbApps
     }];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.clusteredDbApps = props.clusteredDbApps;
         for (var i = 0; i < this.appsFolders.length; i++) {
             for (var j = 0; j < props.clusteredDbApps.length; j++) {
@@ -161,7 +161,7 @@ function askForElk() {
         default: this.useElk && true
     }];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         this.useElk = props.elk;
         done();
     }.bind(this));
@@ -184,7 +184,7 @@ function askForAdminPassword() {
         }
     }];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         this.adminPassword = props.adminPassword;
         done();
     }.bind(this));

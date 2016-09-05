@@ -51,7 +51,7 @@ module.exports = HerokuGenerator.extend({
                 default: 0
             }];
 
-        this.prompt(prompts, function (props) {
+        this.prompt(prompts).then(function (props) {
             this.herokuDeployedName = _.kebabCase(props.herokuDeployedName);
             this.herokuRegion = props.herokuRegion;
             done();
@@ -156,7 +156,7 @@ module.exports = HerokuGenerator.extend({
                             }];
 
                         this.log('');
-                        this.prompt(prompts, function (props) {
+                        this.prompt(prompts).then(function (props) {
                             var getHerokuAppName = function(def, stdout) { return def; };
                             if (props.herokuForceName === 'Yes') {
                                 herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName;
@@ -212,7 +212,7 @@ module.exports = HerokuGenerator.extend({
                     }];
 
                 this.log('');
-                this.prompt(prompts, function (props) {
+                this.prompt(prompts).then(function (props) {
                     var configSetCmd = 'heroku config:set ' + 'JHIPSTER_REGISTRY_URL=' + props.herokuJHipsterRegistry + ' --app ' + this.herokuDeployedName;
                     var child = exec(configSetCmd, {}, function (err, stdout, stderr) {
                         if (err) {

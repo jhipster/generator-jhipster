@@ -473,7 +473,7 @@ function askForServerSideOpts() {
         }
     ];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.authenticationType = props.authenticationType;
 
         if (this.authenticationType === 'session') {

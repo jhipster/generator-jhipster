@@ -1337,7 +1337,7 @@ Generator.prototype.askModuleName = function (generator) {
             return getNumberedQuestion('What is the base name of your application?', true);
         },
         default: defaultAppBaseName
-    }, function (prompt) {
+    }).then(function (prompt) {
         generator.baseName = prompt.baseName;
         done();
     }.bind(generator));
@@ -1389,7 +1389,7 @@ Generator.prototype.aski18n = function (generator) {
         }
     ];
 
-    generator.prompt(prompts, function (prompt) {
+    generator.prompt(prompts).then(function (prompt) {
         generator.enableTranslation = prompt.enableTranslation;
         generator.nativeLanguage = prompt.nativeLanguage;
         generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
