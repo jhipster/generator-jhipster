@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import static org.mockito.BDDMockito.given;
 
-
 /**
  * A bean providing simple mocking of OAuth2 access tokens for security integration tests
  *
@@ -49,10 +48,8 @@ public class OAuth2TokenMockUtil {
         return new OAuth2Authentication(authRequest, authentication);
     }
 
-
     public RequestPostProcessor oauth2Authentication(String username, Set<String> scopes, Set<String> roles) {
         String uuid = String.valueOf(UUID.randomUUID());
-
 
         given(tokenServices.loadAuthentication(uuid))
             .willReturn(createAuthentication(username, scopes, roles));
