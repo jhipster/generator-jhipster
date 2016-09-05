@@ -10,9 +10,9 @@ const DOCKER_MONGODB = 'mongo:3.3.9';
 const DOCKER_CASSANDRA = 'cassandra:2.2.7';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:2.3.5';
 const DOCKER_SONAR = 'sonarqube:5.6-alpine';
-const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.0';
-const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v1.3.0';
-const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v1.3.0';
+const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.1';
+const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v1.3.1';
+const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v1.3.1';
 
 // all constants used throughout all generators
 
