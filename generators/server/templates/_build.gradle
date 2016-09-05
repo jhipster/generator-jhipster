@@ -47,7 +47,7 @@ bootRepackage {
 }
 
 war {
-    rootSpec.exclude("**/tomcat-*.jar")
+
 }
 
 springBoot {
@@ -110,6 +110,7 @@ description = ''
 
 configurations {
     providedRuntime
+    compile.exclude module: "spring-boot-starter-tomcat"
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     // netty's native is pulled by spring-cloud-starter-ribbon, but is useless unless you explicitly add the native binary dependency.
     // Having it in the classpath without the binary can cause warnings
@@ -196,10 +197,13 @@ dependencies {
     compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
     compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-web"<% if (websocket == 'spring-websocket') { %>
+    compile ("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile "org.springframework.boot:spring-boot-starter-undertow"<% if (websocket == 'spring-websocket') { %>
     compile "org.springframework.boot:spring-boot-starter-websocket"<% } %>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
-    compile("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {
+    compile ("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {
         exclude module: 'com.codahale.metrics'
     }
     compile "com.datastax.cassandra:cassandra-driver-extras:${datastax_driver_version}"
