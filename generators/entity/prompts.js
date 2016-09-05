@@ -242,7 +242,8 @@ function askForTableName() {
     // don't prompt if there are no relationships
     var entityTableName = this.entityTableName;
     var prodDatabaseType = this.prodDatabaseType;
-    if (this.relationships.length === 0 || !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
+    console.log(entityTableName);
+    if (!this.relationships || this.relationships.length === 0 || !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
         return;
     }
     var done = this.async();
