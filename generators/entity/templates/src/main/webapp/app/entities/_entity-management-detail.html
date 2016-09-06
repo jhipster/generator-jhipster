@@ -1,6 +1,6 @@
 <% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div>
-    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
+    <h2><span data-translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
@@ -8,10 +8,10 @@
             var fieldName = fields[idx].fieldName;
             var fieldType = fields[idx].fieldType;
             var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
+        <dt><span data-translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
-            <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
+            <span data-translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
             <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
                 <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)">
@@ -25,7 +25,7 @@
             <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
             <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
             <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
-                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a>
+                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" data-translate="entity.action.open">open</a>
                 {{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}
             </div>
             <%_ } else { _%>
@@ -47,7 +47,7 @@
                 if (relationshipType == 'many-to-one'
                     || (relationshipType == 'one-to-one' && ownerSide == true)
                     || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
-        <dt><span translate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
+        <dt><span data-translate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
         <dd>
             <%_ if (otherEntityName == 'user') { _%>
                 <%_ if (relationshipType == 'many-to-many') { _%>
@@ -82,11 +82,11 @@
     <button type="submit"
             ui-sref="{{ vm.previousState }}"
             class="btn btn-info">
-        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
     </button>
 
     <button type="button" ui-sref="<%= entityStateName %>-detail.edit({id:vm.<%=entityInstance %>.id})" class="btn btn-primary">
         <span class="glyphicon glyphicon-pencil"></span>
-        <span class="hidden-xs hidden-sm" translate="entity.action.edit"> Edit</span>
+        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
     </button>
 </div>

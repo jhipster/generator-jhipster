@@ -5,7 +5,7 @@ var prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
 
 exports.config = {
     seleniumServerJar: prefix + 'node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-2.53.1.jar',
-    chromeDriver: prefix + 'node_modules/protractor/selenium/chromedriver',
+    chromeDriver: prefix + 'node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.22',
     allScriptsTimeout: 20000,
 
     suites: {
@@ -15,7 +15,7 @@ exports.config = {
     },
 
     capabilities: {
-        'browserName': 'firefox',
+        'browserName': 'chrome',
         'phantomjs.binary.path': require('phantomjs-prebuilt').path,
         'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
