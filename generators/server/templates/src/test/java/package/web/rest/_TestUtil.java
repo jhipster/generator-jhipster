@@ -2,17 +2,14 @@ package <%=packageName%>.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
-import static <%=packageName%>.config.JacksonConfiguration.ISO_DATE_OPTIONAL_TIME;
 import static <%=packageName%>.config.JacksonConfiguration.ISO_FIXED_FORMAT;
 
 /**
@@ -40,7 +37,6 @@ public class TestUtil {
 
         JavaTimeModule module = new JavaTimeModule();
         module.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer(ISO_FIXED_FORMAT));
-        module.addDeserializer(LocalDate.class, new LocalDateDeserializer(ISO_DATE_OPTIONAL_TIME));
         mapper.registerModule(module);
 
         return mapper.writeValueAsBytes(object);

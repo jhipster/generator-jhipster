@@ -1,4 +1,5 @@
 {
+    "fluentMethods": true,
     "relationships": [
         {
             "relationshipName": "testManyToOne",
@@ -52,6 +53,6 @@
     "changelogDate": "20160208210109",
     "dto": "no",
     "service": "no",
-    "entityTableName": "jhi_test_custom_table_name_entity",
+    "entityTableName": "test_custom_table_name_entity",
     "pagination": "no"
 }

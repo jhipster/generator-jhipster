@@ -1,18 +1,18 @@
 'use strict';
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.3.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.4.0';
 const DOCKER_JAVA_JRE = 'java:openjdk-8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.13';
 const DOCKER_MARIADB = 'mariadb:10.1.16';
 const DOCKER_POSTGRESQL = 'postgres:9.5.3';
 const DOCKER_MONGODB = 'mongo:3.3.9';
 const DOCKER_CASSANDRA = 'cassandra:2.2.7';
-const DOCKER_ELASTICSEARCH = 'elasticsearch:1.7.5';
+const DOCKER_ELASTICSEARCH = 'elasticsearch:2.3.5';
 const DOCKER_SONAR = 'sonarqube:5.6-alpine';
-const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.0';
-const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v1.3.0';
-const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v1.3.0';
+const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.1';
+const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v1.3.1';
+const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v1.3.1';
 
 // all constants used throughout all generators
 

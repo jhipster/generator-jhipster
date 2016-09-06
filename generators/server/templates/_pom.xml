@@ -38,7 +38,7 @@
         <commons-codec.version>1.10</commons-codec.version>
         <%_ } _%>
         <commons-io.version>2.5</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version>
+        <commons-lang.version>3.4</commons-lang.version>
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
@@ -69,7 +69,7 @@
         <mariadb.version>1.4.4</mariadb.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <liquibase.version>3.5.1</liquibase.version>
+        <liquibase.version>3.4.2</liquibase.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
         <%_ } _%>
@@ -89,7 +89,7 @@
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Brixton.SR3</spring-cloud.version>
+        <spring-cloud.version>Brixton.SR5</spring-cloud.version>
         <%_ } _%>
         <spring-security.version>4.1.0.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
@@ -323,8 +323,8 @@
             <version>${commons-io.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
         <%_ if (databaseType === 'mongodb') { _%>
@@ -508,6 +508,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -1092,7 +1097,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
@@ -1107,7 +1112,6 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration><% if (!skipClient) { %>
                             <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory><% } %>
-                            <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -1124,7 +1128,7 @@
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
             </dependencies>
             <build>
@@ -1140,8 +1144,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v4.4.7</nodeVersion>
-                                    <npmVersion>3.10.5</npmVersion>
+                                    <nodeVersion>v4.5.0</nodeVersion>
+                                    <npmVersion>3.10.6</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1208,7 +1212,6 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration><% if (!skipClient) { %>
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory><% } %>
-                            <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -1216,6 +1219,27 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <executable>true</executable>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-info</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>pl.project13.maven</groupId>
+                        <artifactId>git-commit-id-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <configuration>
+                            <verbose>false</verbose>
+                            <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                            <includeOnlyProperties>
+                                <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                                <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
+                                <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                            </includeOnlyProperties>
                         </configuration>
                     </plugin>
                 </plugins>

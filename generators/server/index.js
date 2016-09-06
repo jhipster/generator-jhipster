@@ -799,6 +799,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
 
+            if (this.authenticationType === 'uaa') {
+                this.template(SERVER_TEST_SRC_DIR + 'package/security/_WithMockOAuth2Authentication.java', testDir + 'security/WithMockOAuth2Authentication.java', this, {});
+                this.template(SERVER_TEST_SRC_DIR + 'package/security/_WithMockedOAuthUserSecurityContextFactory.java', testDir + 'security/WithMockedOAuthUserSecurityContextFactory.java', this, {});
+            }
+
             if (this.hibernateCache === 'ehcache') {
                 this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});
             }
@@ -834,7 +839,9 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv');
-                this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/oauth_client_details.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/oauth_client_details.csv');
+                if (this.authenticationType === 'oauth2') {
+                    this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/oauth_client_details.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/oauth_client_details.csv');
+                }
             }
 
             // Email templates

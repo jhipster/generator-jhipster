@@ -3,6 +3,8 @@
 
 var gulp = require('gulp'),<% if(useSass) { %>
     expect = require('gulp-expect-file'),
+    es = require('event-stream'),
+    flatten = require('gulp-flatten'),
     sass = require('gulp-sass'),<% } %>
     rev = require('gulp-rev'),
     templateCache = require('gulp-angular-templatecache'),
@@ -10,33 +12,24 @@ var gulp = require('gulp'),<% if(useSass) { %>
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant'),
     rename = require('gulp-rename'),
-    replace = require('gulp-replace'),
     eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     argv = require('yargs').argv,
     gutil = require('gulp-util'),
     protractor = require('gulp-protractor').protractor,<% } %>
-    es = require('event-stream'),
-    flatten = require('gulp-flatten'),
     del = require('del'),
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync'),
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
-    gulpIf = require('gulp-if'),
-    inject = require('gulp-inject'),
-    angularFilesort = require('gulp-angular-filesort'),
-    naturalSort = require('gulp-natural-sort'),
-    bowerFiles = require('main-bower-files');
+    gulpIf = require('gulp-if');
 
-var handleErrors = require('./gulp/handleErrors'),
+var handleErrors = require('./gulp/handle-errors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
+    copy = require('./gulp/copy'),
+    inject = require('./gulp/inject'),
     build = require('./gulp/build');
-
-<%_ if(enableTranslation) { _%>
-var yorc = require('./.yo-rc.json')['generator-jhipster'];
-<%_ } _%>
 
 var config = require('./gulp/config');
 
@@ -44,39 +37,19 @@ gulp.task('clean', function () {
     return del([config.dist], { dot: true });
 });
 
-gulp.task('copy', function () {
-    return es.merge(<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
-        gulp.src(config.app + 'i18n/**')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'i18n/'))
-        .pipe(gulp.dest(config.dist + 'i18n/')),<% } %><% if(!useSass) { %>
-        gulp.src(config.bower + 'bootstrap/fonts/*.*')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'content/fonts/'))
-        .pipe(rev())
-        .pipe(gulp.dest(config.dist + 'content/fonts/'))
-        .pipe(rev.manifest(config.revManifest, {
-            base: config.dist,
-            merge: true
-        }))
-        .pipe(gulp.dest(config.dist)),<% } %>
-        gulp.src(config.app + 'content/**/*.{woff,woff2,svg,ttf,eot,otf}')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'content/fonts/'))
-        .pipe(flatten())
-        .pipe(rev())
-        .pipe(gulp.dest(config.dist + 'content/fonts/'))
-        .pipe(rev.manifest(config.revManifest, {
-            base: config.dist,
-            merge: true
-        }))
-        .pipe(gulp.dest(config.dist)),
-        gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist))
-        .pipe(gulp.dest(config.dist))
-    );
-});
+gulp.task('copy', [<% if(enableTranslation) { %>'copy:i18n', <% } %>'copy:fonts', 'copy:common']);
+<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
+gulp.task('copy:i18n', copy.i18n);
+
+gulp.task('copy:languages', copy.languages);
+<% } %>
+gulp.task('copy:fonts', copy.fonts);
+
+gulp.task('copy:common', copy.common);
+
+gulp.task('copy:swagger', copy.swagger);
+
+gulp.task('copy:images', copy.images);
 
 gulp.task('images', function () {
     return gulp.src(config.app + 'content/images/**')
@@ -111,18 +84,6 @@ gulp.task('sass', function () {
 });
 <%_ } _%>
 
-<%_ if(enableTranslation) { _%>
-gulp.task('languages', function () {
-    var locales = yorc.languages.map(function (locale) {
-        return config.bower + 'angular-i18n/angular-locale_' + locale + '.js';
-    });
-    return gulp.src(locales)
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.app + 'i18n/'))
-        .pipe(gulp.dest(config.app + 'i18n/'));
-});
-<%_ } _%>
-
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
     return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));
@@ -134,61 +95,15 @@ gulp.task('inject', function() {
 
 gulp.task('inject:dep', ['inject:test', 'inject:vendor']);
 
-gulp.task('inject:app', function () {
-    return gulp.src(config.app + 'index.html')
-        .pipe(inject(gulp.src(config.app + 'app/**/*.js')
-            .pipe(naturalSort())
-            .pipe(angularFilesort()), {relative: true}))
-        .pipe(gulp.dest(config.app));
-});
+gulp.task('inject:app', inject.app);
 
-gulp.task('inject:vendor', function () {
-    var stream = gulp.src(config.app + 'index.html')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
-            name: 'bower',
-            relative: true
-        }))
-        .pipe(gulp.dest(config.app));
+gulp.task('inject:vendor', inject.vendor);
 
-    return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassVendor)
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles({filter:['**/*.{scss,sass}']}), {read: false}), {
-            name: 'bower',
-            relative: true
-        }))
-        .pipe(gulp.dest(config.scss)));<% } else { %>stream;<% } %>
-});
+gulp.task('inject:test', inject.test);
 
-gulp.task('inject:test', function () {
-    return gulp.src(config.test + 'karma.conf.js')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(inject(gulp.src(bowerFiles({includeDev: true, filter: ['**/*.js']}), {read: false}), {
-            starttag: '// bower:js',
-            endtag: '// endbower',
-            transform: function (filepath) {
-                return '\'' + filepath.substring(1, filepath.length) + '\',';
-            }
-        }))
-        .pipe(gulp.dest(config.test));
-});
+gulp.task('inject:troubleshoot', inject.troubleshoot);
 
-gulp.task('inject:troubleshoot', function () {
-    /* this task removes the troubleshooting content from index.html*/
-    return gulp.src(config.app + 'index.html')
-        .pipe(plumber({errorHandler: handleErrors}))
-        /* having empty src as we dont have to read any files*/
-        .pipe(inject(gulp.src('', {read: false}), {
-            starttag: '<!-- inject:troubleshoot -->',
-            removeTags: true,
-            transform: function () {
-                return '<!-- Angular views -->';
-            }
-        }))
-        .pipe(gulp.dest(config.app));
-});
-
-gulp.task('assets:prod', ['images', 'styles', 'html','swagger-ui'], build);
+gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger', 'copy:images'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
@@ -199,22 +114,6 @@ gulp.task('html', function () {
             moduleSystem: 'IIFE'
         }))
         .pipe(gulp.dest(config.tmp));
-});
-
-gulp.task('swagger-ui', function () {
-    return es.merge(
-        gulp.src([config.bower + 'swagger-ui/dist/**',
-                 '!' + config.bower + 'swagger-ui/dist/index.html',
-                 '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
-                 '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
-        gulp.src(config.app + 'swagger-ui/index.html')
-            .pipe(replace('../bower_components/swagger-ui/dist/', ''))
-            .pipe(replace('swagger-ui.js', 'lib/swagger-ui.min.js'))
-            .pipe(gulp.dest(config.dist + 'swagger-ui/')),
-        gulp.src(config.bower  + 'swagger-ui/dist/swagger-ui.min.js')
-            .pipe(gulp.dest(config.dist + 'swagger-ui/lib/'))
-    );
 });
 
 gulp.task('ngconstant:dev', function () {
@@ -303,15 +202,13 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function () {
-    runSequence(['inject:dep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, 'inject:app', 'inject:troubleshoot');
+    runSequence(['inject:dep', 'ngconstant:dev']<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'copy:languages'<% } %>, 'inject:app', 'inject:troubleshoot');
 });
 
-gulp.task('serve', function () {
-    runSequence('install', serve);
-});
+gulp.task('serve', ['install'], serve);
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
+    runSequence(['copy', 'inject:vendor', 'ngconstant:prod'<% if(enableTranslation) { %>, 'copy:languages'<% } %>], 'inject:app', 'inject:troubleshoot', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);

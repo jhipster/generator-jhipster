@@ -17,6 +17,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  * Base class for starting/stopping Cassandra during tests.
@@ -46,11 +50,16 @@ public class AbstractCassandraTest {
             return;
         }
 
+        List<String> scripts = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(dirUrl.toURI()), pattern)) {
             for (Path entry : stream) {
-                String fileName = entry.getFileName().toString();
-                dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
+                scripts.add(entry.getFileName().toString());
             }
+        }
+        Collections.sort(scripts);
+
+        for (String fileName : scripts) {
+            dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
         }
     }
 

@@ -4,7 +4,7 @@
             "home": {
                 "title": "<%= entityClassPlural %>",
                 "createLabel": "Genera un nuovo <%= entityClassHumanized %>",
-                "createOrEditLabel": "Genera o modifica us <%= entityClassHumanized %>",
+                "createOrEditLabel": "Genera o modifica un <%= entityClassHumanized %>",
                 "search": "Cerca <%= entityClassHumanized %>"
             },
             "created": "&Egrave; stato generato un nuovo <%= entityClassHumanized %> con identificatore { param }}",
