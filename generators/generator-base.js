@@ -1194,8 +1194,8 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-            entityTable = noSnakeCase ? entityName : this.getTableName(entityName.substring(0, halfLimit)),
-            relationTable = noSnakeCase ? relationshipName: this.getTableName(relationshipName.substring(0, halfLimit - 1));
+            entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : this.getTableName(relationshipName.substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}_id`;
     }
     return constraintName;
@@ -1324,17 +1324,20 @@ Generator.prototype.askModuleName = function (generator) {
         type: 'input',
         name: 'baseName',
         validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;
-            if (input === 'application') {
+            if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                return 'Your application name cannot contain special characters or a blank space';
+            } else if (generator.applicationType === 'microservice' && /_/.test(input)) {
+                return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
+            } else if (input === 'application') {
                 return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
             }
-            return 'Your application name cannot contain special characters or a blank space, using the default name instead';
+            return true;
         },
         message: function (response) {
             return getNumberedQuestion('What is the base name of your application?', true);
         },
         default: defaultAppBaseName
-    }, function (prompt) {
+    }).then(function (prompt) {
         generator.baseName = prompt.baseName;
         done();
     }.bind(generator));
@@ -1386,7 +1389,7 @@ Generator.prototype.aski18n = function (generator) {
         }
     ];
 
-    generator.prompt(prompts, function (prompt) {
+    generator.prompt(prompts).then(function (prompt) {
         generator.enableTranslation = prompt.enableTranslation;
         generator.nativeLanguage = prompt.nativeLanguage;
         generator.languages = [prompt.nativeLanguage].concat(prompt.languages);

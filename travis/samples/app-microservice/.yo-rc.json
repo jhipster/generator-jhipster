@@ -2,30 +2,27 @@
   "generator-jhipster": {
     "applicationType": "microservice",
     "baseName": "travisMicroservice",
-    "packageName": "com.mycompany.myapp",
-    "packageFolder": "com/mycompany/myapp",
+    "packageName": "io.github.jhipster.travis",
+    "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "jwt",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
-    "websocket": "no",
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
     "searchEngine": "no",
-    "useSass": false,
     "buildTool": "maven",
-    "jwtSecretKey": "secret-key",
+    "jwtSecretKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": ["en", "fr"],
-    "enableSocialSignIn": false,
-    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
       "gatling"
     ],
-    "enableSocialSignIn": false,
     "skipClient": true,
     "skipUserManagement": true,
+    "serverPort": "8081",
+    "jhiPrefix": "jhi",
     "travis": true
   }
 }

@@ -24,7 +24,7 @@ function askForInsightOptIn() {
         name: 'insight',
         message: 'May ' + chalk.cyan('JHipster') + ' anonymously report usage statistics to improve the tool over time?',
         default: true
-    }, function (prompt) {
+    }).then(function (prompt) {
         if (prompt.insight !== undefined) {
             insight.optOut = !prompt.insight;
         }
@@ -69,7 +69,7 @@ function askForApplicationType() {
             }
         ],
         default: DEFAULT_APPTYPE
-    }, function (prompt) {
+    }).then(function (prompt) {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
         done();
     }.bind(this));
@@ -120,7 +120,7 @@ function askForTestOpts() {
         },
         choices: choices,
         default: defaultChoice
-    }, function (prompt) {
+    }).then(function (prompt) {
         this.testFrameworks = prompt.testFrameworks;
         done();
     }.bind(this));

@@ -217,13 +217,12 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
      * if they test an entity which requires the current entity.
      */
     public static <%= entityClass %> createEntity(<% if (databaseType == 'sql') { %>EntityManager em<% } %>) {
-        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
         <%_ if (fluentMethods) { _%>
-        <%= entityInstance %> = new <%= entityClass %>()<% for (idx in fields) { %>
+        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>()<% for (idx in fields) { %>
                 .<%= fields[idx].fieldName %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { %>
                 .<%= fields[idx].fieldName %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
         <%_ } else { _%>
-        <%= entityInstance %> = new <%= entityClass %>();
+        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
             <%_ for (idx in fields) { _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
                 <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>

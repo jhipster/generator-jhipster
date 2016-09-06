@@ -3,7 +3,7 @@ package <%=packageName%>.service;
 import <%=packageName%>.config.JHipsterProperties;
 import <%=packageName%>.domain.User;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
-<% if (enableSocialSignIn) { %>import org.apache.commons.lang.WordUtils;<% } %>
+<% if (enableSocialSignIn) { %>import org.apache.commons.lang3.StringUtils;<% } %>
 
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
@@ -108,7 +108,7 @@ public class MailService {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable("provider", WordUtils.capitalize(provider));
+        context.setVariable("provider", StringUtils.capitalize(provider));
         String content = templateEngine.process("socialRegistrationValidationEmail", context);
         String subject = messageSource.getMessage("email.social.registration.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
