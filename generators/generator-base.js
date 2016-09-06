@@ -49,7 +49,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
                 '<li ui-sref-active="active" >\n' +
                 '                    <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                        <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                        <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                        <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                    </a>\n' +
                 '                </li>'
             ]
@@ -76,7 +76,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
                 '<li ui-sref-active="active" >\n' +
                 '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
                 '                        </li>'
             ]
@@ -102,7 +102,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
                 '<li ui-sref-active="active" >\n' +
                 '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
                 '                        </li>'
             ]
@@ -857,12 +857,12 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
     switch (action) {
     case 'stripHtml' :
         regex = /( translate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
-            //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
     case 'stripJs' :
         regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
-            //looks for something like mainTranslatePartialLoader: [*]
+        //looks for something like mainTranslatePartialLoader: [*]
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
     case 'copy' :
