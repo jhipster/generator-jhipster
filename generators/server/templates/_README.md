@@ -58,7 +58,12 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
 
 <% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
-<% } %>
+<% } %><% if (testFrameworks.indexOf("gatling") > -1) { %>
+Performance tests are run by [Gatling]() and written in Scala. They're located in `src/test/gatling` and can be run with:
+
+    <% if (buildTool == 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
+
+<% } %>    
 ## Continuous Integration
 
 To setup this project in Jenkins, use the following configuration:
@@ -84,7 +89,8 @@ To setup this project in Jenkins, use the following configuration:
 * Post-build Actions
     * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml<% if (testFrameworks.indexOf("protractor") > -1) { %>,build/reports/e2e/*.xml<% } %>`
 
-[JHipster]: https://jhipster.github.io/<% if(!skipClient) {%>
+[JHipster]: https://jhipster.github.io/
+[Gatling]: http://gatling.io/<% if(!skipClient) {%>
 [Node.js]: https://nodejs.org/
 [Bower]: http://bower.io/
 [Gulp]: http://gulpjs.com/
