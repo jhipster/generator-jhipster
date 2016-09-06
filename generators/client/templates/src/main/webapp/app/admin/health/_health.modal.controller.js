@@ -17,5 +17,14 @@
         function cancel() {
             $uibModalInstance.dismiss('cancel');
         }
+
+        vm.getProperValue = function(value) {
+            if (vm.currentHealth.name == "diskSpace") {
+                if (value / 1073741824 > 1)
+                    return (value / 1073741824).toFixed(2) + " GB";
+                return (value / 1048576, 2).toFixed(2) + " MB";
+            }
+            return value;
+        }
     }
 })();
