@@ -65,10 +65,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
 public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
-    <%_ if (fieldsContainZonedDateTime == true) { _%>
-
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));
-    <%_ } _%>
     <%_ for (idx in fields) {
     var defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -151,7 +147,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
     private static final ZonedDateTime <%=updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final String <%=defaultValueName %>_STR = dateTimeFormatter.format(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
+    private static final String <%=defaultValueName %>_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
 
     private static final Boolean <%=defaultValueName %> = false;
     private static final Boolean <%=updatedValueName %> = true;<% } else if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { %>
