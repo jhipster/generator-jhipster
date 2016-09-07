@@ -4,6 +4,7 @@ package <%=packageName%>.config;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.jwt.JWTConfigurer;
 import <%=packageName%>.security.jwt.TokenProvider;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -70,6 +71,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 <% } %>
 <% if(authenticationType == 'uaa') { %>
 import <%=packageName%>.security.AuthoritiesConstants;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -146,6 +148,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
         return (String) this.keyUriRestTemplate
             .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
             .get("value");
+
     }
 }
-<% } %>
+<%_ } _%>

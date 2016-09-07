@@ -2,7 +2,6 @@ package <%=packageName%>.config;
 
 <%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
-
 <%_ } _%>
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
@@ -228,21 +227,35 @@ public class JHipsterProperties {
 
         private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+
+        <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+
+        private final LoadBalancedResourceDetails clientAuthorization = new LoadBalancedResourceDetails();
+
+        <%_ } _%>
+
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 
         private final Authentication authentication = new Authentication();
         <%_ } _%>
-        <%_ if (authenticationType == 'session') { _%>
+        <%_ if (authenticationType === 'session') { _%>
 
         public RememberMe getRememberMe() {
             return rememberMe;
         }
         <%_ } _%>
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         public Authentication getAuthentication() {
             return authentication;
         }
+
+        <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+        public LoadBalancedResourceDetails getClientAuthorization() {
+            return clientAuthorization;
+        }
+
+        <%_ } _ %>
 
         public static class Authentication {
 
@@ -335,6 +348,7 @@ public class JHipsterProperties {
             <%_ } _%>
         }
         <%_ } _%>
+
         <%_ if (authenticationType == 'session') { _%>
         public static class RememberMe {
 

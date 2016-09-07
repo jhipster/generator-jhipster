@@ -41,41 +41,30 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             http
                 .exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .and()
+            .and()
                 .csrf()
                 .disable()
                 .headers()
                 .frameOptions()
                 .disable()
-                .and()
+            .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+            .and()
                 .authorizeRequests()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/activate").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/account/reset_password/init").permitAll()
                 .antMatchers("/api/account/reset_password/finish").permitAll()
-                .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api/audits/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api/**").authenticated()
-                .antMatchers("/metrics/**").permitAll()
-                .antMatchers("/health/**").permitAll()
-                .antMatchers("/trace/**").permitAll()
-                .antMatchers("/dump/**").permitAll()
-                .antMatchers("/shutdown/**").permitAll()
-                .antMatchers("/beans/**").permitAll()
-                .antMatchers("/configprops/**").permitAll()
-                .antMatchers("/info/**").permitAll()
-                .antMatchers("/autoconfig/**").permitAll()
-                .antMatchers("/env/**").permitAll()
-                .antMatchers("/mappings/**").permitAll()
-                .antMatchers("/liquibase/**").permitAll()
+                .antMatchers("/api/profile-info").permitAll()
+                .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
+                .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
+                .antMatchers("/websocket/**").permitAll()<% } %>
+                .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/v2/api-docs/**").permitAll()
-                .antMatchers("/swagger-resources/configuration/security").permitAll()
                 .antMatchers("/swagger-resources/configuration/ui").permitAll()
-                .antMatchers("/protected/**").authenticated();
+                .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }
 
         @Override
@@ -84,10 +73,13 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
         }
     }
 
+    @Inject
+    private JHipsterProperties jHipsterProperties;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         /*
-        @TODO this should be done by a ClientDetailsService (similar to UserDetailsService) with an consumable resource
+        For a better client design, this should be done by a ClientDetailsService (similar to UserDetailsService).
          */
         clients.inMemory()
             .withClient("web_app")
@@ -95,8 +87,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .autoApprove(true)
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
             .and()
-            .withClient("internal")
-            .secret("internal") //only for testing!!! @TODO config or details service..
+            .withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
+            .secret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())
+            .scopes("web-app")
             .autoApprove(true)
             .authorizedGrantTypes("client_credentials");
     }

@@ -116,6 +116,13 @@ jhipster:
                 # Token is valid 24 hours
                 tokenValidityInSeconds: 86400
     <%_ } _%>
+    <%_ if (applicationType !== 'uaa' && authenticationType === 'uaa') { _%>
+        client-authorization:
+            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
+            tokenServiceId: <%= uaaBaseName.toLowerCase() %>
+            clientId: internal
+            clientSecret: internal
+    <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
                 clientid: <%= baseName %>app
