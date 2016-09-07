@@ -50,9 +50,13 @@ angular
 
 @NgModule({
     imports: [BrowserModule, FormsModule],
-    providers: [ProfileService, {
-        provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
-    }],
+    providers: [
+        ProfileService,
+        {
+            provide: XSRFStrategy,
+            useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
+        }
+    ],
     pipes: []
 })
 export class <%=angularAppName%>CommonModule {}
