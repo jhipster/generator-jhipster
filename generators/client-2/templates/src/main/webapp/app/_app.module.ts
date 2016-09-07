@@ -5,6 +5,11 @@ import './entities/entity.module';
 
 import { upgradeAdapter } from "./upgrade_adapter";
 
+import { XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
 import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
 import { TranslationHandler } from './blocks/handlers/translation.handler';
 
@@ -80,3 +85,11 @@ function run(StateHandler<% if (enableTranslation) { %>, TranslationHandler<% } 
     StateHandler.initialize();<% if (enableTranslation) { %>
     TranslationHandler.initialize();<% } %>
 }
+
+@NgModule({
+  imports: [BrowserModule, FormsModule],
+  providers: [{
+     provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
+  }]
+})
+export class <%=angularAppName%>AppModule {}
