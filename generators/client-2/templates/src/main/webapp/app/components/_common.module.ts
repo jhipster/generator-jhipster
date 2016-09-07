@@ -1,5 +1,10 @@
 import { upgradeAdapter } from '../upgrade_adapter';
 
+import { XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
 import { AlertServiceConfig } from '../blocks/config/alert.config';
 
 import { LoginController } from './login/login.controller';
@@ -14,8 +19,6 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
 import { AlertService } from './alert/alert.service';
 
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
-
-upgradeAdapter.addProvider(ProfileService);
 
 upgradeAdapter.upgradeNg1Provider('$state');
 upgradeAdapter.upgradeNg1Provider('Auth');<% if (enableTranslation) { %>
@@ -44,3 +47,12 @@ angular
     .provider('AlertService', AlertService) <% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent));
+
+@NgModule({
+    imports: [BrowserModule, FormsModule],
+    providers: [ProfileService, {
+        provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
+    }],
+    pipes: []
+})
+export class <%=angularAppName%>CommonModule {}
