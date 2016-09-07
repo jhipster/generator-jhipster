@@ -16,7 +16,6 @@ buildscript {
         classpath "com.moowork.gradle:gradle-gulp-plugin:0.12"<% } %>
         classpath "se.transmode.gradle:gradle-docker:1.2"
         classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
-        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.17"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
