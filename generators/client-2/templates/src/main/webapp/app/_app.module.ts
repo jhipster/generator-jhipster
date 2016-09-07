@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { <%=angularAppName%>CommonModule } from './components/common.module';
+import { <%=angularAppName%>AdminModule } from './admin/admin.module';
+
 import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
 import { TranslationHandler } from './blocks/handlers/translation.handler';
 
@@ -89,7 +92,7 @@ function run(StateHandler<% if (enableTranslation) { %>, TranslationHandler<% } 
 }
 
 @NgModule({
-    imports: [BrowserModule, FormsModule],
+    imports: [BrowserModule, FormsModule, <%=angularAppName%>CommonModule, <%=angularAppName%>AdminModule],
     providers: [{
         provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
     }],
