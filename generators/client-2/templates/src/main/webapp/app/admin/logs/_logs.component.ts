@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FilterPipe } from "../../shared/filter.pipe";
 import { Log } from './log.model';
 import { LogsService } from './logs.service';
-import { OrderByPipe } from "../../shared/order-by.pipe";
 
 @Component({
     selector: '<%=jhiPrefix%>-logs',
     templateUrl: 'app/admin/logs/logs.html',
-    pipes: [FilterPipe, OrderByPipe]
 })
 export class LogsComponent implements OnInit {
 
