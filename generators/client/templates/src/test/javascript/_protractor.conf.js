@@ -1,9 +1,9 @@
 const os = require('os');
 
-var HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
-var JasmineReporters = require('jasmine-reporters');
+const HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
+const JasmineReporters = require('jasmine-reporters');
 
-var prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
+const prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
 
 var webbrowserDriver= '';
 if (os.platform() === 'win32') {
