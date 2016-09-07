@@ -81,6 +81,6 @@ angular
             useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
         }
     ],
-    pipes: []
+    declarations: []
 })
 export class <%=angularAppName%>AdminModule {}
