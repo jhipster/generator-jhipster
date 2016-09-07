@@ -89,10 +89,10 @@ function run(StateHandler<% if (enableTranslation) { %>, TranslationHandler<% } 
 }
 
 @NgModule({
-  imports: [BrowserModule, FormsModule],
-  providers: [{
-     provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
- }],
- pipes: [FindLanguageFromKeyPipe]
+    imports: [BrowserModule, FormsModule],
+    providers: [{
+        provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
+    }],
+    pipes: [FindLanguageFromKeyPipe]
 })
 export class <%=angularAppName%>AppModule {}
