@@ -1,14 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./configuration.service";
-import { FilterPipe } from "../../shared/filter.pipe";
-import { OrderByPipe } from "../../shared/order-by.pipe";
-
 
 @Component({
     selector: '<%=jhiPrefix%>-configuration',
     templateUrl: 'app/admin/configuration/configuration.html',
-    pipes: [FilterPipe, OrderByPipe],
     providers: [ <%=jhiPrefixCapitalized%>ConfigurationService ]
 })
 export class <%=jhiPrefixCapitalized%>ConfigurationComponent {

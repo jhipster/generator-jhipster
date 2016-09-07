@@ -1,11 +1,9 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { <%=jhiPrefixCapitalized%>HealthService } from "./health.service";
-import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
     selector: '<%=jhiPrefix%>-health',
     templateUrl: 'app/admin/health/health.html',
-    pipes: [TranslatePipe]
 })
 export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData:any;

@@ -34,6 +34,10 @@ import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service'
 import { LogsService } from './logs/logs.service';
 import { ParseLinks } from "../components/util/parse-links.service";
 
+import { FilterPipe } from "../shared/filter.pipe";
+import { OrderByPipe } from "../shared/order-by.pipe";
+import { TranslatePipe } from '../shared/translate.pipe';
+
 upgradeAdapter.upgradeNg1Provider('$uibModal');
 
 angular
@@ -80,6 +84,6 @@ angular
             useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
         }
     ],
-    declarations: []
+    declarations: [FilterPipe, OrderByPipe, TranslatePipe]
 })
 export class <%=angularAppName%>AdminModule {}
