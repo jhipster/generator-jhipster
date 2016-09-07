@@ -39,7 +39,7 @@ import { AppStateConfig } from './app.state';
 import { HomeStateConfig } from './home/home.state';
 import { ErrorStateConfig } from './layouts/error/error.state';
 
-import {FindLanguageFromKeyPipe} from "../../components/language/language.pipe";
+import {FindLanguageFromKeyPipe} from "./components/language/language.pipe";
 
 angular
     .module('<%=angularAppName%>.app', [
@@ -96,6 +96,6 @@ function run(StateHandler<% if (enableTranslation) { %>, TranslationHandler<% } 
     providers: [{
         provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
     }],
-    pipes: [FindLanguageFromKeyPipe]
+    declarations: [FindLanguageFromKeyPipe]
 })
 export class <%=angularAppName%>AppModule {}
