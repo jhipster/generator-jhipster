@@ -1,3 +1,10 @@
+import { upgradeAdapter } from '../upgrade_adapter';
+
+import { XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
 import { AdminStateConfig } from './admin.state';
 import { AuditStateConfig } from './audits/audits.state';
 import { ConfigStateConfig } from './configuration/configuration.state';
@@ -27,13 +34,6 @@ import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
 import { LogsService } from './logs/logs.service';
 import { ParseLinks } from "../components/util/parse-links.service";
-
-import { upgradeAdapter } from '../upgrade_adapter';
-
-upgradeAdapter.addProvider(AuditsService);
-upgradeAdapter.addProvider(<%=jhiPrefixCapitalized%>HealthService);
-upgradeAdapter.addProvider(LogsService);
-upgradeAdapter.addProvider(ParseLinks);
 
 upgradeAdapter.upgradeNg1Provider('$uibModal');
 
@@ -68,3 +68,19 @@ angular
     .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))
     .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
     .factory('<%=jhiPrefixCapitalized%>HealthService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>HealthService));
+
+@NgModule({
+    imports: [BrowserModule, FormsModule],
+    providers: [
+        AuditsService,
+        <%=jhiPrefixCapitalized%>HealthService,
+        LogsService,
+        ParseLinks,
+        {
+            provide: XSRFStrategy,
+            useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
+        }
+    ],
+    pipes: []
+})
+export class <%=angularAppName%>AdminModule {}
