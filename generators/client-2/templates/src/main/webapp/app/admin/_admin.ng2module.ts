@@ -40,4 +40,4 @@ import { LogsComponent } from './logs/logs.component';
         }
     ]
 })
-export class <%=angularAppName%>AdminModule {}
+export class <%=angular2AppName%>AdminModule {}

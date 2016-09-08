@@ -25,4 +25,4 @@ import { TruncateWordsPipe } from './util/truncate-words.pipe';
         }
     ]
 })
-export class <%=angularAppName%>CommonModule {}
+export class <%=angular2AppName%>CommonModule {}
