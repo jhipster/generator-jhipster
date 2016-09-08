@@ -5,9 +5,11 @@ import { NgModule } from '@angular/core';
 
 import { <%=angularAppName%>CommonModule } from './components/common.ng2module';
 import { <%=angularAppName%>AdminModule } from './admin/admin.ng2module';
-import { <%=angularAppName%>AccountModule } from './admin/account.ng2module';
+import { <%=angularAppName%>AccountModule } from './account/account.ng2module';
 
-import {FindLanguageFromKeyPipe} from "./components/language/language.pipe";
+import { FindLanguageFromKeyPipe } from './components/language/language.pipe';
+import { HomeComponent } from './home/home.component';
+import { NavbarComponent } from './layouts/navbar/navbar.component';
 
 @NgModule({
     imports: [
@@ -17,9 +19,14 @@ import {FindLanguageFromKeyPipe} from "./components/language/language.pipe";
         <%=angularAppName%>AdminModule,
         <%=angularAppName%>AccountModule
     ],
+    declarations: [
+        HomeComponent,
+        NavbarComponent,
+        FindLanguageFromKeyPipe
+    ],
     providers: [{
         provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
     }],
-    declarations: [FindLanguageFromKeyPipe]
+    bootstrap: [ HomeComponent ]
 })
 export class <%=angularAppName%>AppModule {}
