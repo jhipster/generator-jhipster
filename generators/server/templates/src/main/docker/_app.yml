@@ -122,4 +122,6 @@ services:
         extends:
             file: jhipster-registry.yml
             service: jhipster-registry
+        environment:
+            - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./central-config/docker-config/
     <%_ } _%>
