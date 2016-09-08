@@ -1,4 +1,10 @@
+os:
+  - linux
+services:
+  - docker
 language: java
+node_js:
+  - "4.5.0"
 jdk:
   - oraclejdk8
 sudo: false
@@ -15,7 +21,7 @@ cache:
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
 env:
-  - NODE_VERSION=4.4.7
+  - NODE_VERSION=4.5.0
 before_install:
   - nvm install $NODE_VERSION
   - npm install -g npm
@@ -46,6 +52,18 @@ script:
 <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew bootRepackage -Pprod -x test
 <%_ } _%>
+  - docker-compose up -d
+  - sleep 30s
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+<%_ if (buildTool === 'maven') { _%>
+  - ./mvnw spring-boot:run &
+<%_ } else if (buildTool === 'gradle') { _%>
+  - ./gradlew bootRun &
+<%_ } _%>
+  - bootPid=$!
+  - sleep 120s
+  - grunt itest
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
