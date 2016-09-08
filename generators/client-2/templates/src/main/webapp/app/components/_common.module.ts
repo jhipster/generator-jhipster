@@ -39,6 +39,6 @@ angular
     .factory('LoginService', LoginService)
     .factory('Principal', Principal)
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
-    .factory('AlertService', AlertService) <% if (enableTranslation) { %>
+    .provider('AlertService', AlertService) <% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent));
