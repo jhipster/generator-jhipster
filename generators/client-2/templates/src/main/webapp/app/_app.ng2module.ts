@@ -22,7 +22,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         FormsModule,
         HttpModule,
         <%=angular2AppName%>CommonModule,
-        //<%=angular2AppName%>AdminModule,
+        <%=angular2AppName%>AdminModule,
         //<%=angular2AppName%>AccountModule
     ],
     declarations: [
@@ -30,13 +30,14 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         NavbarComponent,
         FindLanguageFromKeyPipe,
         CapitalizePipe,
-        FilterPipe,
-        OrderByPipe,
-        TranslatePipe
+        //FilterPipe,
+        //OrderByPipe,
+        //TranslatePipe
     ],
     providers: [
         {
-            provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
+            provide: XSRFStrategy,
+            useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
         }
     ],
     bootstrap: [ HomeComponent ]
