@@ -466,6 +466,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularComponentFiles: function () {
             this.template(ANGULAR_DIR + 'components/_common.module.ts', ANGULAR_DIR + 'components/common.module.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/_common.ng2module.ts', ANGULAR_DIR + 'components/common.ng2module.ts', this, {});
             //components
             this.template(ANGULAR_DIR + 'components/form/_show-validation.directive.ts', ANGULAR_DIR + 'components/form/show-validation.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.ts', ANGULAR_DIR + 'components/form/maxbytes.directive.ts', this, {});
