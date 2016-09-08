@@ -189,8 +189,9 @@ module.exports = JhipsterClientGenerator.extend({
 
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
-            this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelCase(this.baseName);
+            this.angularAppName = this.getAngularAppName();
+            this.angular2AppName = _.upperFirst(this.camelizedBaseName);
             this.capitalizedBaseName = _.upperFirst(this.baseName);
             this.dasherizedBaseName = _.kebabCase(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -329,6 +330,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + '_upgrade_adapter.ts', ANGULAR_DIR + 'upgrade_adapter.ts', this, {});
             this.template(ANGULAR_DIR + '_app.main.ts', ANGULAR_DIR + 'app.main.ts', this, {});
             this.template(ANGULAR_DIR + '_app.module.ts', ANGULAR_DIR + 'app.module.ts', this, {});
+            this.template(ANGULAR_DIR + '_app.ng2module.ts', ANGULAR_DIR + 'app.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + '_app.state.ts', ANGULAR_DIR + 'app.state.ts', this, {});
             this.template(ANGULAR_DIR + '_app.constants.ts', ANGULAR_DIR + 'app.constants.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/handlers/_state.handler.ts', ANGULAR_DIR + 'blocks/handlers/state.handler.ts', this, {});
@@ -352,6 +354,7 @@ module.exports = JhipsterClientGenerator.extend({
         writeAngularAuthFiles: function () {
             // account module
             this.template(ANGULAR_DIR + 'account/_account.module.ts', ANGULAR_DIR + 'account/account.module.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/_account.ng2module.ts', ANGULAR_DIR + 'account/account.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.state.ts', ANGULAR_DIR + 'account/account.state.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
             this.copyJs(ANGULAR_DIR + 'account/activate/_activate.state.ts', ANGULAR_DIR + 'account/activate/activate.state.ts', this, {});
@@ -401,6 +404,7 @@ module.exports = JhipsterClientGenerator.extend({
         writeAngularAdminModuleFiles: function () {
             // admin modules
             this.template(ANGULAR_DIR + 'admin/_admin.module.ts', ANGULAR_DIR + 'admin/admin.module.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/_admin.ng2module.ts', ANGULAR_DIR + 'admin/admin.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/_admin.state.ts', ANGULAR_DIR + 'admin/admin.state.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.component.html', ANGULAR_DIR + 'admin/audits/audits.component.html');
             this.copyJs(ANGULAR_DIR + 'admin/audits/_audits.state.ts', ANGULAR_DIR + 'admin/audits/audits.state.ts', this, {});
@@ -465,6 +469,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularComponentFiles: function () {
             this.template(ANGULAR_DIR + 'components/_common.module.ts', ANGULAR_DIR + 'components/common.module.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/_common.ng2module.ts', ANGULAR_DIR + 'components/common.ng2module.ts', this, {});
             //components
             this.template(ANGULAR_DIR + 'components/form/_show-validation.directive.ts', ANGULAR_DIR + 'components/form/show-validation.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.ts', ANGULAR_DIR + 'components/form/maxbytes.directive.ts', this, {});

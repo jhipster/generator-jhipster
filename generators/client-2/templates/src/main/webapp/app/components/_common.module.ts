@@ -15,8 +15,6 @@ import { AlertService } from './alert/alert.service';
 
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
 
-upgradeAdapter.addProvider(ProfileService);
-
 upgradeAdapter.upgradeNg1Provider('$state');
 upgradeAdapter.upgradeNg1Provider('Auth');<% if (enableTranslation) { %>
 upgradeAdapter.upgradeNg1Provider('<%=jhiPrefixCapitalized%>LanguageService');<% } %>

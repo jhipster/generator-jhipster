@@ -1,10 +1,8 @@
 import {Component, OnInit, Inject} from '@angular/core';
 
 import {ProfileService} from "../../components/profiles/profile.service";
-import {FindLanguageFromKeyPipe} from "../../components/language/language.pipe";
 
 @Component({
-    pipes: [FindLanguageFromKeyPipe],
     selector: 'navbar',
     templateUrl: 'app/layouts/navbar/navbar.html'
 })
