@@ -1,4 +1,4 @@
-import { XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
+import { HttpModule, XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -15,9 +15,10 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
     imports: [
         BrowserModule,
         FormsModule,
-        <%=angular2AppName%>CommonModule,
-        <%=angular2AppName%>AdminModule,
-        <%=angular2AppName%>AccountModule
+        HttpModule,
+        //<%=angular2AppName%>CommonModule,
+        //<%=angular2AppName%>AdminModule,
+        //<%=angular2AppName%>AccountModule
     ],
     declarations: [
         HomeComponent,
