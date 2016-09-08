@@ -24,7 +24,7 @@ export function TranslationHandler($rootScope, $window, $state, $translate) {
     // 1. titleKey parameter
     // 2. $state.$current.data.pageTitle (current state page title)
     // 3. 'global.title'
-    function updateTitle(titleKey) {
+    function updateTitle(titleKey?: string) {
         if (!titleKey && $state.$current.data && $state.$current.data.pageTitle) {
             titleKey = $state.$current.data.pageTitle;
         }
