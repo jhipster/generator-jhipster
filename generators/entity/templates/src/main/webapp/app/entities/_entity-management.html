@@ -1,13 +1,13 @@
 <div>
 <%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
-    <h2 translate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></h2>
+    <h2 data-translate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></h2>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
                 <button class="btn btn-primary" ui-sref="<%= entityStateName %>.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> translate="<%= keyPrefix %>home.createLabel">
+                    <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> data-translate="<%= keyPrefix %>home.createLabel">
                         Create new <%= entityClassHumanized %>
                     </span>
                 </button>
@@ -38,16 +38,16 @@
         <table class="jh-table table table-striped">
             <thead>
                 <tr<% if (pagination != 'no') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span data-translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ for (idx in fields) { _%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span data-translate="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType == 'many-to-one'
                                 || (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true)
                                 || (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true && pagination == 'no')) {
                             var fieldName = dto == 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span data-translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th></th>
@@ -70,11 +70,11 @@
                     </td>
                         <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
                     <td>
-                        <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" translate="entity.action.open">open</a>
+                        <a ng-if="<%= entityInstance %>.<%= fieldName %>" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" data-translate="entity.action.open">open</a>
                         <span ng-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     </td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>
-                    <td translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
+                    <td data-translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
                         <%_ } else if (fieldType == 'ZonedDateTime') { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | date:'medium'}}</td>
                     <%_ } else if (fieldType == 'LocalDate') { _%>
@@ -130,19 +130,19 @@
                                     ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})"
                                     class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                                <span class="hidden-xs hidden-sm" data-translate="entity.action.view"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="<%= entityStateName %>.edit({id:<%=entityInstance %>.id})"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                                <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="<%= entityStateName %>.delete({id:<%=entityInstance %>.id})"
                                     class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                                <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
                             </button>
                         </div>
                     </td>
