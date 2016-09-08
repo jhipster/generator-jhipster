@@ -8,27 +8,33 @@ import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module';
 import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { FindLanguageFromKeyPipe } from './components/language/language.pipe';
+import { CapitalizePipe } from './components/util/capitalize.pipe';
+import { FilterPipe } from "./shared/filter.pipe";
+import { OrderByPipe } from "./shared/order-by.pipe";
+import { TranslatePipe } from './shared/translate.pipe';
+
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
-
-import { ProfileService } from './components/profiles/profile.service';
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
-        //<%=angular2AppName%>CommonModule,
+        <%=angular2AppName%>CommonModule,
         //<%=angular2AppName%>AdminModule,
         //<%=angular2AppName%>AccountModule
     ],
     declarations: [
         HomeComponent,
         NavbarComponent,
-        FindLanguageFromKeyPipe
+        FindLanguageFromKeyPipe,
+        CapitalizePipe,
+        FilterPipe,
+        OrderByPipe,
+        TranslatePipe
     ],
     providers: [
-        ProfileService,
         {
             provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
         }
