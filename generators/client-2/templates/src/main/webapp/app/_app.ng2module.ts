@@ -11,6 +11,8 @@ import { FindLanguageFromKeyPipe } from './components/language/language.pipe';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 
+import { ProfileService } from './components/profiles/profile.service';
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -25,9 +27,12 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         NavbarComponent,
         FindLanguageFromKeyPipe
     ],
-    providers: [{
-        provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
-    }],
+    providers: [
+        ProfileService,
+        {
+            provide: XSRFStrategy, useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
+        }
+    ],
     bootstrap: [ HomeComponent ]
 })
 export class <%=angular2AppName%>AppModule {}
