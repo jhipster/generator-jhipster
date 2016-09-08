@@ -17,4 +17,4 @@ import { TranslatePipe } from '../shared/translate.pipe';
     ],
     declarations: [FilterPipe, OrderByPipe, TranslatePipe]
 })
-export class <%=angularAppName%>AccountModule {}
+export class <%=angular2AppName%>AccountModule {}

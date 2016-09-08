@@ -3,9 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { <%=angularAppName%>CommonModule } from './components/common.ng2module';
-import { <%=angularAppName%>AdminModule } from './admin/admin.ng2module';
-import { <%=angularAppName%>AccountModule } from './account/account.ng2module';
+import { <%=angular2AppName%>CommonModule } from './components/common.ng2module';
+import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module';
+import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { FindLanguageFromKeyPipe } from './components/language/language.pipe';
 import { HomeComponent } from './home/home.component';
@@ -15,9 +15,9 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
     imports: [
         BrowserModule,
         FormsModule,
-        <%=angularAppName%>CommonModule,
-        <%=angularAppName%>AdminModule,
-        <%=angularAppName%>AccountModule
+        <%=angular2AppName%>CommonModule,
+        <%=angular2AppName%>AdminModule,
+        <%=angular2AppName%>AccountModule
     ],
     declarations: [
         HomeComponent,
@@ -29,4 +29,4 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
     }],
     bootstrap: [ HomeComponent ]
 })
-export class <%=angularAppName%>AppModule {}
+export class <%=angular2AppName%>AppModule {}
