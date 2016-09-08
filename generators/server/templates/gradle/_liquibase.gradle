@@ -23,6 +23,45 @@ task liquibaseDiffChangelog(dependsOn: compileJava, type: JavaExec) {
     <% if (authenticationType == 'oauth2') { %>args "--excludeObjects=oauth_access_token, oauth_approvals, oauth_client_details,   oauth_client_token, oauth_code, oauth_refresh_token"<% } %>
 }
 
+task liquibaseAddMigration << {
+    group = "liquibase"
+
+    def dateString = buildTimestamp()
+    def migration = new File("src/main/resources/config/liquibase/changelog/" + dateString + "_migration.xml")
+
+    def content = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+        "<databaseChangeLog\n" +
+        "    xmlns=\"http://www.liquibase.org/xml/ns/dbchangelog\"\n" +
+        "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+        "    xsi:schemaLocation=\"http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd\">\n" +
+        "\n" +
+        "    <property name=\"now\" value=\"now()\" dbms=\"mysql,h2\"/>\n" +
+        "    <property name=\"now\" value=\"current_timestamp\" dbms=\"postgresql\"/>\n" +
+        "    <property name=\"now\" value=\"sysdate\" dbms=\"oracle\"/>\n" +
+        "\n" +
+        "    <property name=\"autoIncrement\" value=\"true\" dbms=\"mysql,h2,postgresql,oracle\"/>\n" +
+        "\n" +
+        "    <property name=\"floatType\" value=\"float4\" dbms=\"postgresql, h2\"/>\n" +
+        "    <property name=\"floatType\" value=\"float\" dbms=\"mysql, oracle\"/>" +
+        "" +
+        "\n" +
+        "    <changeSet id=\""+ dateString + "-1\" author=\"jhipster\">" +
+        "\n" +
+        "    </changeSet>\n" +
+        "</databaseChangeLog>"
+
+    migration.write(content)
+
+    def masterChangeLog = new File("src/main/resources/config/liquibase/master.xml")
+    def newContent = masterChangeLog.text.replace(
+        "</databaseChangeLog>",
+        "    <include file=\"classpath:config/liquibase/changelog/" + dateString + "_migration.xml\" relativeToChangelogFile=\"false\"/>\n" +
+        "</databaseChangeLog>"
+    )
+
+    masterChangeLog.write(newContent)
+}
+
 def buildTimestamp() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmmss')
