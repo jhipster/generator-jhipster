@@ -22,7 +22,7 @@
                 </li>
                 <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
                 <li [ngClass]="{active: $state.includes('entity')}" *ngSwitchCase="true" ngbDropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" ngbDropdownToggle href="" id="entity-menu">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" id="entity-menu">
                         <span>
                             <span class="glyphicon glyphicon-th-list"></span>
                             <span class="hidden-sm" translate="global.menu.entities.main">
@@ -36,7 +36,7 @@
                     </ul>
                 </li>
                 <li [ngClass]="{active: $state.includes('account')}" ngbDropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" ngbDropdownToggle href="" id="account-menu">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" id="account-menu">
                         <span>
                             <span class="glyphicon glyphicon-user"></span>
                             <span class="hidden-sm" translate="global.menu.account.main">
@@ -87,7 +87,7 @@
                     </ul>
                 </li>
                 <li [ngClass]="{active: $state.includes('admin')}"  *ngSwitchCase="true" has-authority="ROLE_ADMIN" ngbDropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" ngbDropdownToggle href="" id="admin-menu">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" id="admin-menu">
                         <span>
                             <span class="glyphicon glyphicon-tower"></span>
                             <span class="hidden-sm" translate="global.menu.admin.main">Administration</span>
@@ -166,7 +166,7 @@
                 </li>
                 <%_ if (enableTranslation){ _%>
                 <li *ngIf="languages" ui-sref-active="active" ngbDropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" ngbDropdownToggle href="" *ngIf="languages.length > 1">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" *ngIf="languages.length > 1">
                         <span>
                             <span class="glyphicon glyphicon-flag"></span>
                             <span class="hidden-sm" translate="global.menu.language">Language</span>
