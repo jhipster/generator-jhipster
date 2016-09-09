@@ -25,10 +25,10 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         BrowserModule,
         FormsModule,
         HttpModule,
+        NgbCollapseModule,
+        NgbDropdownModule,
         <%=angular2AppName%>CommonModule,
         <%=angular2AppName%>AdminModule,
-        NgbCollapseModule,
-        NgbDropdownModule
         //<%=angular2AppName%>AccountModule
     ],
     declarations: [
