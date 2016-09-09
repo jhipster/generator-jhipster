@@ -3,6 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+// TODO change this to NgbModule -->  after complete migration
+import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
+import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap/dropdown/dropdown.module';
+
 import { <%=angular2AppName%>CommonModule } from './components/common.ng2module';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module';
 import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
@@ -23,6 +27,8 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         HttpModule,
         <%=angular2AppName%>CommonModule,
         <%=angular2AppName%>AdminModule,
+        NgbCollapseModule,
+        NgbDropdownModule
         //<%=angular2AppName%>AccountModule
     ],
     declarations: [
