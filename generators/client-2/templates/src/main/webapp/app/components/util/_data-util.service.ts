@@ -65,7 +65,7 @@
         function toBase64 (file, cb) {
             var fileReader = new FileReader();
             fileReader.readAsDataURL(file);
-            fileReader.onload = function (e) {
+            fileReader.onload = function (e: any) {
                 var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
                 cb(base64Data);
             };
