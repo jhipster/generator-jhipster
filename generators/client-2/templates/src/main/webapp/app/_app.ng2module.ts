@@ -12,10 +12,6 @@ import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module';
 import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { FindLanguageFromKeyPipe } from './components/language/language.pipe';
-import { CapitalizePipe } from './components/util/capitalize.pipe';
-import { FilterPipe } from "./shared/filter.pipe";
-import { OrderByPipe } from "./shared/order-by.pipe";
-import { TranslatePipe } from './shared/translate.pipe';
 
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
@@ -34,11 +30,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
     declarations: [
         HomeComponent,
         NavbarComponent,
-        FindLanguageFromKeyPipe,
-        CapitalizePipe,
-        //FilterPipe,
-        //OrderByPipe,
-        //TranslatePipe
+        FindLanguageFromKeyPipe
     ],
     providers: [
         {

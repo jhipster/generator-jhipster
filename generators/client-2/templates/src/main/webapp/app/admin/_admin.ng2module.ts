@@ -10,9 +10,7 @@ import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service'
 import { LogsService } from './logs/logs.service';
 import { ParseLinks } from "../components/util/parse-links.service";
 
-import { OrderByPipe } from '../shared/order-by.pipe';
-import { FilterPipe } from '../shared/filter.pipe';
-import { TranslatePipe } from '../shared/translate.pipe';
+import { <%=angular2AppName%>CommonModule } from '../components/common.ng2module';
 
 import { AuditsComponent } from './audits/audits.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
@@ -20,18 +18,17 @@ import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.c
 import { LogsComponent } from './logs/logs.component';
 
 @NgModule({
-    imports: [BrowserModule, HttpModule, FormsModule],
+    imports: [
+        BrowserModule,
+        HttpModule,
+        FormsModule,
+        <%=angular2AppName%>CommonModule
+    ],
     declarations: [
-        FilterPipe,
-        OrderByPipe,
-        TranslatePipe,
         AuditsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
-        LogsComponent,
-        OrderByPipe,
-        FilterPipe,
-        TranslatePipe
+        LogsComponent
     ],
     providers: [
         AuditsService,
