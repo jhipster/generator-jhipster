@@ -25,7 +25,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         NgbDropdownModule,
         <%=angular2AppName%>CommonModule,
         <%=angular2AppName%>AdminModule,
-        //<%=angular2AppName%>AccountModule
+        <%=angular2AppName%>AccountModule
     ],
     declarations: [
         HomeComponent,

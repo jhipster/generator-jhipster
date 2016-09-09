@@ -4,13 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
+import { <%=angular2AppName%>CommonModule } from '../components/common.ng2module';
+
 import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration/configuration.service';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
 import { LogsService } from './logs/logs.service';
 import { ParseLinks } from "../components/util/parse-links.service";
-
-import { <%=angular2AppName%>CommonModule } from '../components/common.ng2module';
 
 import { AuditsComponent } from './audits/audits.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
