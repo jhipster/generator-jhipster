@@ -107,6 +107,7 @@ function deps(){
         'node_modules/reflect-metadata/Reflect.js',
         'node_modules/systemjs/dist/system.js',
         'node_modules/@angular/**/*.js',
+        'node_modules/@ng-bootstrap/ng-bootstrap/**/*.js',
         'node_modules/rxjs/**/*.js'
     ], { base: 'node_modules' })
     .pipe(gulp.dest(config.dist + 'vendor'));
