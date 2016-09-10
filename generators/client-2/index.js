@@ -355,6 +355,9 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', this, {});
+
+            this.template(ANGULAR_DIR + 'shared/directive/_sort.directive.ts', ANGULAR_DIR + 'shared/directive/sort.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/_sort-by.directive.ts', ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', this, {});
         },
 
         writeAngularAuthFiles: function () {
@@ -496,8 +499,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_date-util.service.ts', ANGULAR_DIR + 'components/util/date-util.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_data-util.service.ts', ANGULAR_DIR + 'components/util/data-util.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_pagination-util.service.ts', ANGULAR_DIR + 'components/util/pagination-util.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_sort.directive.ts', ANGULAR_DIR + 'components/util/sort.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_sort-by.directive.ts', ANGULAR_DIR + 'components/util/sort-by.directive.ts', this, {});
+
             this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.ts', ANGULAR_DIR + 'components/util/jhi-item-count.directive.ts', this, {});
 
             // interceptor code
