@@ -352,7 +352,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'shared/pagination.constants.ts', ANGULAR_DIR + 'components/form/pagination.constants.ts', this, {});
 
             this.copyJs(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
-            
+
             this.copyJs(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
@@ -369,6 +369,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/service/pagination-util.service.ts', ANGULAR_DIR + 'shared/service/pagination-util.service.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/service/parse-links.service.ts', ANGULAR_DIR + 'shared/service/parse-links.service.ts', this, {});
 
             this.copyJs(ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', this, {});
         },
@@ -501,9 +502,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'components/login/login.html', ANGULAR_DIR + 'components/login/login.html');
             this.copyJs(ANGULAR_DIR + 'components/login/_login.service.ts', ANGULAR_DIR + 'components/login/login.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/login/_login.controller.ts', ANGULAR_DIR + 'components/login/login.controller.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_base64.service.ts', ANGULAR_DIR + 'components/util/base64.service.ts', this, {});
-
-            this.template(ANGULAR_DIR + 'components/util/_parse-links.service.ts', ANGULAR_DIR + 'components/util/parse-links.service.ts', this, {});
 
             // interceptor code
             if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
@@ -527,6 +525,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'components/auth/has-any-authority.directive.ts', this, {});
             if (this.authenticationType === 'oauth2') {
                 this.template(ANGULAR_DIR + 'components/auth/_auth-oauth2.service.ts', ANGULAR_DIR + 'components/auth/auth-oauth2.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'components/auth/_base64.service.ts', ANGULAR_DIR + 'components/auth/base64.service.ts', this, {});
             } else if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
                 this.template(ANGULAR_DIR + 'components/auth/_auth-jwt.service.ts', ANGULAR_DIR + 'components/auth/auth-jwt.service.ts', this, {});
             } else {

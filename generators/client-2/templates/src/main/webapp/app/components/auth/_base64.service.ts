@@ -5,7 +5,7 @@
     angular
         .module('<%=angularAppName%>.common')
         .factory('Base64', Base64);
-
+    //TODO see if this can be replaced with any inbuilt angular/js way
     function Base64 () {
         var keyStr = 'ABCDEFGHIJKLMNOP' +
             'QRSTUVWXYZabcdef' +
