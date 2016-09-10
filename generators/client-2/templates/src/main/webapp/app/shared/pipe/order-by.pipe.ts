@@ -1,8 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-    name: 'orderBy'
-})
+@Pipe({name: 'orderBy'})
 export class OrderByPipe implements PipeTransform {
     transform(value: Array<any>, predicate: string, reverse:boolean): any {
         value = value.slice(0).sort((a, b) => {
