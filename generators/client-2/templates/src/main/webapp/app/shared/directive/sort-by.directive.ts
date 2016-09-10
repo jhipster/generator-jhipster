@@ -1,8 +1,4 @@
-angular
-    .module('<%=angularAppName%>.common')
-    .directive('jhSortBy', jhSortBy);
-
-function jhSortBy() {
+export function jhSortBy() {
     var directive = {
         restrict: 'A',
         scope: false,
