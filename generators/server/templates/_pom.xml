@@ -1120,7 +1120,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev,swagger${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1227,20 +1227,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>pl.project13.maven</groupId>
-                        <artifactId>git-commit-id-plugin</artifactId>
-                        <version>2.2.1</version>
-                        <configuration>
-                            <verbose>false</verbose>
-                            <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                            <includeOnlyProperties>
-                                <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
-                                <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
-                                <includeOnlyProperty>^git.branch$</includeOnlyProperty>
-                            </includeOnlyProperties>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

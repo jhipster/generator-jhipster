@@ -44,9 +44,7 @@ management:
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
-    info:
-        git:
-            mode: full
+
 spring:
     application:
         name: <%= baseName %>

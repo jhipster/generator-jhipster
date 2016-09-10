@@ -5,7 +5,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.InputStream;
 
