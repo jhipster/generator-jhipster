@@ -1,7 +1,8 @@
 import { Directive, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { NG_VALIDATORS } from '@angular/forms';
 import { forwardRef } from '@angular/core';
-import { numberOfBytes } from './number-of-bytes'
+import { numberOfBytes } from './number-of-bytes';
 
 function validateMaxbytesFactory() {
     return (c: FormControl, maxbytes: number) => {
@@ -28,6 +29,6 @@ export class MaxbytesValidator {
         this.validator = validateMaxbytesFactory();
     }
     validate(c: FormControl) {
-        return this.validator(c, maxbytes);
+        return this.validator(c, this.maxbytes);
     }
 }
