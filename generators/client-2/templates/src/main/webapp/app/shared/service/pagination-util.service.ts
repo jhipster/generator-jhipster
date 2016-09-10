@@ -1,3 +1,6 @@
+import { Injectable } from '@angular/core';
+
+@Injectable()
 export class PaginationUtil  {
 
     parseAscending (sort: string) {
@@ -24,4 +27,3 @@ export class PaginationUtil  {
         return sortArray.join(',');
     }
 }
-
