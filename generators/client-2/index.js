@@ -346,9 +346,9 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pager.config.ts', ANGULAR_DIR + 'blocks/config/uib-pager.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pagination.config.ts', ANGULAR_DIR + 'blocks/config/uib-pagination.config.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/account.model.ts', ANGULAR_DIR + 'shared/account.model.ts', this, {});
-            this.copyJs(ANGULAR_DIR + 'shared/translate.pipe.ts', ANGULAR_DIR + 'shared/translate.pipe.ts', this, {});
-            this.copyJs(ANGULAR_DIR + 'shared/filter.pipe.ts', ANGULAR_DIR + 'shared/filter.pipe.ts', this, {});
-            this.copyJs(ANGULAR_DIR + 'shared/order-by.pipe.ts', ANGULAR_DIR + 'shared/order-by.pipe.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
         },
 
         writeAngularAuthFiles: function () {
