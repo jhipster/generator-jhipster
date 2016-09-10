@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ParseLinks {
 
-    parse(header: string): any {
+    parse(header: string) {
         if (header.length === 0) {
             throw new Error('input must not be of zero length');
         }
