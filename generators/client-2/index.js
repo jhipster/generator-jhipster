@@ -358,6 +358,11 @@ module.exports = JhipsterClientGenerator.extend({
 
             this.copyJs(ANGULAR_DIR + 'shared/directive/sort.directive.ts', ANGULAR_DIR + 'shared/directive/sort.directive.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
+
+            this.copyJs(ANGULAR_DIR + 'shared/pagination.constants.ts', ANGULAR_DIR + 'components/form/pagination.constants.ts', this, {});
 
             this.copyJs(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
@@ -486,10 +491,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/_common.module.ts', ANGULAR_DIR + 'components/common.module.ts', this, {});
             this.template(ANGULAR_DIR + 'components/_common.ng2module.ts', ANGULAR_DIR + 'components/common.ng2module.ts', this, {});
             //components
-            this.template(ANGULAR_DIR + 'components/form/_show-validation.directive.ts', ANGULAR_DIR + 'components/form/show-validation.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.ts', ANGULAR_DIR + 'components/form/maxbytes.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_minbytes.directive.ts', ANGULAR_DIR + 'components/form/minbytes.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_pagination.constants.ts', ANGULAR_DIR + 'components/form/pagination.constants.ts', this, {});
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'components/language/_language.pipe.ts', ANGULAR_DIR + 'components/language/language.pipe.ts', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.constants.ts', ANGULAR_DIR + 'components/language/language.constants.ts', this, {});
