@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap/dropdown/dropdown.module';
 
+import { <%=angular2AppName%>SharedModule } from './shared/shared.ng2module';
 import { <%=angular2AppName%>CommonModule } from './components/common.ng2module';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module';
 import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
@@ -23,6 +24,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         HttpModule,
         NgbCollapseModule,
         NgbDropdownModule,
+        <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>CommonModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>AccountModule
