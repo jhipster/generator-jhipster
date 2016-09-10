@@ -345,10 +345,16 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_compile.config.ts', ANGULAR_DIR + 'blocks/config/compile.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pager.config.ts', ANGULAR_DIR + 'blocks/config/uib-pager.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_uib-pagination.config.ts', ANGULAR_DIR + 'blocks/config/uib-pagination.config.ts', this, {});
+        },
+
+        writeAngularSharedFiles: function () {
             this.copyJs(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', this, {});
         },
 
         writeAngularAuthFiles: function () {
@@ -484,10 +490,9 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'components/login/_login.service.ts', ANGULAR_DIR + 'components/login/login.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/login/_login.controller.ts', ANGULAR_DIR + 'components/login/login.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_base64.service.ts', ANGULAR_DIR + 'components/util/base64.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_capitalize.pipe.ts', ANGULAR_DIR + 'components/util/capitalize.pipe.ts', this, {});
+
             this.template(ANGULAR_DIR + 'components/util/_parse-links.service.ts', ANGULAR_DIR + 'components/util/parse-links.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_truncate-characters.pipe.ts', ANGULAR_DIR + 'components/util/truncate-characters.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_truncate-words.pipe.ts', ANGULAR_DIR + 'components/util/truncate-words.pipe.ts', this, {});
+
             this.template(ANGULAR_DIR + 'components/util/_date-util.service.ts', ANGULAR_DIR + 'components/util/date-util.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_data-util.service.ts', ANGULAR_DIR + 'components/util/data-util.service.ts', this, {});
             this.template(ANGULAR_DIR + 'components/util/_pagination-util.service.ts', ANGULAR_DIR + 'components/util/pagination-util.service.ts', this, {});
