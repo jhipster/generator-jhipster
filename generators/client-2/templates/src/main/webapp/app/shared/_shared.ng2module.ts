@@ -10,6 +10,7 @@ import { TranslatePipe } from './pipe/translate.pipe';
 import { JhiItemCount } from './component/jhi-item-count.component';
 import { MaxbytesValidator } from './directive/maxbytes.directive';
 import { MinbytesValidator } from './directive/minbytes.directive';
+import { ShowValidation } from './directive/show-validation.directive';
 
 @NgModule({
     imports: [],
@@ -22,7 +23,8 @@ import { MinbytesValidator } from './directive/minbytes.directive';
         CapitalizePipe,
         JhiItemCount,
         MaxbytesValidator,
-        MinbytesValidator
+        MinbytesValidator,
+        ShowValidation
     ],
     providers: [
     ],
@@ -35,7 +37,8 @@ import { MinbytesValidator } from './directive/minbytes.directive';
         CapitalizePipe,
         JhiItemCount,
         MaxbytesValidator,
-        MinbytesValidator
+        MinbytesValidator,
+        ShowValidation
     ]
 })
 export class <%=angular2AppName%>SharedModule {}

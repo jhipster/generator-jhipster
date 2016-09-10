@@ -15,12 +15,13 @@ function validateMaxbytesFactory() {
 
 @Directive({
     selector: '[maxbytes][ngModel]',
+    inputs: ['maxbytes'],
     providers: [
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => MaxbytesValidator), multi: true }
     ]
 })
 export class MaxbytesValidator {
-    @Input() maxbytes: number;
+    maxbytes: number;
     validator: Function;
 
     constructor() {

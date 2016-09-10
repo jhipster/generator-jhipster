@@ -1,16 +1,20 @@
-export function jhSortBy() {
-    var directive = {
-        restrict: 'A',
-        scope: false,
-        require: '^jhSort',
-        link: linkFunc
-    };
+import { Directive, Host } from '@angular/core';
+import { JhSort } from './sort.directive';
 
-    return directive;
-
-    function linkFunc(scope, element, attrs, parentCtrl) {
-        element.bind('click', function () {
-            parentCtrl.sort(attrs.jhSortBy);
-        });
+@Directive({
+    selector: '[jh-sort-by]',
+    inputs: ['jhSortBy'],
+    host: {
+        '(click)': 'onClick()'
+    }
+})
+export class JhSortBy {
+    jhSortBy: string;
+    jhSort: JhSort;
+    constructor(@Host() jhSort: JhSort) {
+        this.jhSort = jhSort;
+    }
+    onClick() {
+        JhSort.sort(jhSortBy);
     }
 }
