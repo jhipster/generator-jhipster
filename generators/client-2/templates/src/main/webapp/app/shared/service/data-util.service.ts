@@ -1,18 +1,12 @@
-DataUtils.$inject = ['$window'];
+import { Inject, Injectable } from '@angular/core';
 
-export function DataUtils ($window) {
+@Injectable()
+export class DataUtils {
 
-    var service = {
-        abbreviate: abbreviate,
-        byteSize: byteSize,
-        openFile: openFile,
-        toBase64: toBase64
-    };
+    constructor (@Inject('Window') window: Window) {}
 
-    return service;
-
-    function abbreviate (text) {
-        if (!angular.isString(text)) {
+    abbreviate (text: string) {
+        if (typeof text !== 'string') {
             return '';
         }
         if (text.length < 30) {
@@ -21,8 +15,8 @@ export function DataUtils ($window) {
         return text ? (text.substring(0, 15) + '...' + text.slice(-10)) : '';
     }
 
-    function byteSize (base64String) {
-        if (!angular.isString(base64String)) {
+    byteSize (base64String: string) {
+        if (typeof base64String !== 'string') {
             return '';
         }
 
@@ -51,15 +45,15 @@ export function DataUtils ($window) {
         return formatAsBytes(size(base64String));
     }
 
-    function openFile (type, data) {
-        $window.open('data:' + type + ';base64,' + data, '_blank', 'height=300,width=400');
+    openFile (type: string, data: string) {
+        window.open('data:' + type + ';base64,' + data, '_blank', 'height=300,width=400');
     }
 
-    function toBase64 (file, cb) {
-        var fileReader = new FileReader();
+    toBase64 (file: File, cb: Function) {
+        let fileReader: FileReader = new FileReader();
         fileReader.readAsDataURL(file);
         fileReader.onload = function (e: any) {
-            var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+            let base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
             cb(base64Data);
         };
     }
