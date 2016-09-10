@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "firstRelationship",
+            "otherEntityName": "testEntity",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "secondRelationship",
+            "otherEntityName": "testEntity",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "entityTableName": "test_multiple_rel",
+    "dto": "no",
+    "service": "no",
+    "pagination": "no"
+}
