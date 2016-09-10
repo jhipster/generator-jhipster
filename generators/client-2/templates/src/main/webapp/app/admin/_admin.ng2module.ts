@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
-import { <%=angular2AppName%>CommonModule } from '../components/common.ng2module';
+import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 
 import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration/configuration.service';
@@ -22,7 +22,7 @@ import { LogsComponent } from './logs/logs.component';
         BrowserModule,
         HttpModule,
         FormsModule,
-        <%=angular2AppName%>CommonModule
+        <%=angular2AppName%>SharedModule
     ],
     declarations: [
         AuditsComponent,
