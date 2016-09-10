@@ -362,6 +362,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/service/pagination-util.service.ts', ANGULAR_DIR + 'shared/service/pagination-util.service.ts', this, {});
+
+            this.template(ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', this, {});
         },
 
         writeAngularAuthFiles: function () {
@@ -499,8 +501,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_base64.service.ts', ANGULAR_DIR + 'components/util/base64.service.ts', this, {});
 
             this.template(ANGULAR_DIR + 'components/util/_parse-links.service.ts', ANGULAR_DIR + 'components/util/parse-links.service.ts', this, {});
-
-            this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.ts', ANGULAR_DIR + 'components/util/jhi-item-count.directive.ts', this, {});
 
             // interceptor code
             if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
