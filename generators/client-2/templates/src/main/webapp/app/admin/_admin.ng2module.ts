@@ -10,7 +10,7 @@ import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration/configuration.service';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
 import { LogsService } from './logs/logs.service';
-import { ParseLinks } from "../shared/service/parse-links.service";
+import { ParseLinks } from '../shared/service/parse-links.service';
 
 import { AuditsComponent } from './audits/audits.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
