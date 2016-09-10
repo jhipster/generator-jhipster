@@ -348,7 +348,11 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularSharedFiles: function () {
+            this.template(ANGULAR_DIR + 'shared/_shared.ng2module.ts', ANGULAR_DIR + 'shared/shared.ng2module.ts', this, {});
+            this.copyJs(ANGULAR_DIR + 'shared/pagination.constants.ts', ANGULAR_DIR + 'components/form/pagination.constants.ts', this, {});
+
             this.copyJs(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
+            
             this.copyJs(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
@@ -361,8 +365,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
-
-            this.copyJs(ANGULAR_DIR + 'shared/pagination.constants.ts', ANGULAR_DIR + 'components/form/pagination.constants.ts', this, {});
 
             this.copyJs(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
