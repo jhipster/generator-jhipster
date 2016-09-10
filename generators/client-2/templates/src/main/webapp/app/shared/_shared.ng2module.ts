@@ -7,6 +7,10 @@ import { FilterPipe } from './pipe/filter.pipe';
 import { OrderByPipe } from './pipe/order-by.pipe';
 import { TranslatePipe } from './pipe/translate.pipe';
 
+import { JhiItemCount } from './component/jhi-item-count.component';
+import { MaxbytesValidator } from './directive/maxbytes.directive';
+import { MinbytesValidator } from './directive/minbytes.directive';
+
 @NgModule({
     imports: [],
     declarations: [
@@ -15,7 +19,10 @@ import { TranslatePipe } from './pipe/translate.pipe';
         OrderByPipe,
         FilterPipe,
         TranslatePipe,
-        CapitalizePipe
+        CapitalizePipe,
+        JhiItemCount,
+        MaxbytesValidator,
+        MinbytesValidator
     ],
     providers: [
     ],
@@ -25,7 +32,10 @@ import { TranslatePipe } from './pipe/translate.pipe';
         OrderByPipe,
         FilterPipe,
         TranslatePipe,
-        CapitalizePipe
+        CapitalizePipe,
+        JhiItemCount,
+        MaxbytesValidator,
+        MinbytesValidator
     ]
 })
 export class <%=angular2AppName%>SharedModule {}

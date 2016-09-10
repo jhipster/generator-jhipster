@@ -1,37 +1,32 @@
-export function minbytes () {
-    var directive = {
-        restrict: 'A',
-        require: '?ngModel',
-        link: linkFunc
-    };
+import { Directive, Input } from '@angular/core';
+import { NG_VALIDATORS } from '@angular/forms';
+import { forwardRef } from '@angular/core';
+import { numberOfBytes } from './number-of-bytes'
 
-    return directive;
-
-    function linkFunc (scope, element, attrs, ngModel) {
-        if (!ngModel) {
-            return;
-        }
-
-        ngModel.$validators.minbytes = function (modelValue) {
-            return ngModel.$isEmpty(modelValue) || numberOfBytes(modelValue) >= attrs.minbytes;
+function validateMinbytesFactory() {
+    return (c: FormControl, minbytes: number) => {
+        return (c.value || numberOfBytes(c.value) >= minbytes) ? null : {
+            minbytes: {
+                valid: false
+            }
         };
-    }
+    };
+}
 
-    function endsWith(suffix, str) {
-        return str.indexOf(suffix, str.length - suffix.length) !== -1;
-    }
+@Directive({
+    selector: '[minbytes][ngModel]',
+    providers: [
+        { provide: NG_VALIDATORS, useExisting: forwardRef(() => MinbytesValidator), multi: true }
+    ]
+})
+export class MinbytesValidator {
+    @Input() minbytes: number;
+    validator: Function;
 
-    function paddingSize(base64String) {
-        if (endsWith('==', base64String)) {
-            return 2;
-        }
-        if (endsWith('=', base64String)) {
-            return 1;
-        }
-        return 0;
+    constructor() {
+        this.validator = validateMinbytesFactory();
     }
-
-    function numberOfBytes(base64String) {
-        return base64String.length / 4 * 3 - paddingSize(base64String);
+    validate(c: FormControl) {
+        return this.validator(c, minbytes);
     }
 }
