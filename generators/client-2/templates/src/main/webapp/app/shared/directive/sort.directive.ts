@@ -1,72 +1,66 @@
-export function jhSort () {
-    var directive = {
-        restrict: 'A',
-        scope: {
-            predicate: '=jhSort',
-            ascending: '=',
-            callback: '&'
-        },
-        controller: SortController,
-        controllerAs: 'vm',
-        bindToController: true
-    };
+import { Directive, Host, Input, Renderer } from '@angular/core';
 
-    return directive;
-}
+@Directive({
+    selector: '[jh-sort]',
+    inputs: ['predicate:jhSort', 'ascending', 'callback'],
+    outputs: ['jhSortChange', 'ascendingChange'],
+    host: {
+        '(click)': 'onClick()'
+    }
+})
+export class JhSortBy implements OnInit {
+    predicate: string;
+    ascending: string;
+    callback: Function;
+    jhSortChange: EventEmitter = new EventEmitter();
+    ascendingChange: EventEmitter = new EventEmitter();
+    $element: any;
 
-SortController.$inject = ['$scope', '$element'];
+    constructor(el: ElementRef, renderer: Renderer) {
+        this.$element = $(el.nativeElement);
+    }
 
-function SortController ($scope, $element) {
-    var vm = this;
-
-    vm.applyClass = applyClass;
-    vm.resetClasses = resetClasses;
-    vm.sort = sort;
-    vm.triggerApply = triggerApply;
-
-    $scope.$watchGroup(['vm.predicate', 'vm.ascending'], vm.triggerApply);
-    vm.triggerApply();
-
-    function applyClass (element) {
-        var thisIcon = element.find('span.glyphicon'),
-            sortIcon = 'glyphicon-sort',
-            sortAsc = 'glyphicon-sort-by-attributes',
-            sortDesc = 'glyphicon-sort-by-attributes-alt',
-            remove = sortIcon + ' ' + sortDesc,
-            add = sortAsc;
-        if (!vm.ascending) {
-            remove = sortIcon + ' ' + sortAsc;
-            add = sortDesc;
+    ngOnInit() {
+        //TODO needs to be validated
+        resetClasses();
+        if (this.predicate && this.predicate !== '_score') {
+            applyClass($element.find('th[jh-sort-by=\'' + this.predicate + '\']'));
         }
-        vm.resetClasses();
-        thisIcon.removeClass(remove);
-        thisIcon.addClass(add);
+
+        function applyClass (element) {
+            let thisIcon = element.find('span.glyphicon'),
+                sortIcon = 'glyphicon-sort',
+                sortAsc = 'glyphicon-sort-by-attributes',
+                sortDesc = 'glyphicon-sort-by-attributes-alt',
+                remove = sortIcon + ' ' + sortDesc,
+                add = sortAsc;
+            if (!this.ascending) {
+                remove = sortIcon + ' ' + sortAsc;
+                add = sortDesc;
+            }
+            resetClasses();
+            thisIcon.removeClass(remove);
+            thisIcon.addClass(add);
+        }
+
+        function resetClasses () {
+            var allThIcons = $element.find('span.glyphicon'),
+                sortIcon = 'glyphicon-sort',
+                sortAsc = 'glyphicon-sort-by-attributes',
+                sortDesc = 'glyphicon-sort-by-attributes-alt';
+            allThIcons.removeClass(sortAsc + ' ' + sortDesc);
+            allThIcons.addClass(sortIcon);
+        }
     }
 
-    function resetClasses () {
-        var allThIcons = $element.find('span.glyphicon'),
-            sortIcon = 'glyphicon-sort',
-            sortAsc = 'glyphicon-sort-by-attributes',
-            sortDesc = 'glyphicon-sort-by-attributes-alt';
-        allThIcons.removeClass(sortAsc + ' ' + sortDesc);
-        allThIcons.addClass(sortIcon);
-    }
-
-    function sort (field) {
-        if (field !== vm.predicate) {
-            vm.ascending = true;
+    sort (field) {
+        if (field !== this.predicate) {
+            this.ascending = true;
         } else {
-            vm.ascending = !vm.ascending;
+            this.ascending = !this.ascending;
         }
-        vm.predicate = field;
-        $scope.$apply();
-        vm.callback();
-    }
-
-    function triggerApply (values)  {
-        vm.resetClasses();
-        if (values && values[0] !== '_score') {
-            vm.applyClass($element.find('th[jh-sort-by=\'' + values[0] + '\']'));
-        }
+        this.predicate = field;
+        //$scope.$apply(); TODO not sure if something needs to be done here
+        this.callback();
     }
 }

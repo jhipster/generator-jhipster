@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'jhi-item-count',
+    inputs: ['page', 'total', 'itemsPerPage'],
     template: `
         <div class="info">
             Showing {{((page - 1) * itemsPerPage) == 0 ? 1 : ((page - 1) * itemsPerPage + 1)}} -
@@ -10,9 +11,9 @@ import { Component, Input } from '@angular/core';
         </div>`
 })
 export class JhiItemCount {
-    @Input() page: any;
-    @Input() total: any;
-    @Input() itemsPerPage: any;
-
+    page: any;
+    total: any;
+    itemsPerPage: any;
+    
     constructor() {}
 }
