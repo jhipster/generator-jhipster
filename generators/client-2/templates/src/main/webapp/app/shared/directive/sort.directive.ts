@@ -1,4 +1,4 @@
-import { Directive, Host, Input, Renderer } from '@angular/core';
+import { Directive, Host, OnInit, Renderer, EventEmitter, ElementRef } from '@angular/core';
 
 @Directive({
     selector: '[jh-sort]',
@@ -8,12 +8,12 @@ import { Directive, Host, Input, Renderer } from '@angular/core';
         '(click)': 'onClick()'
     }
 })
-export class JhSortBy implements OnInit {
+export class JhSort implements OnInit {
     predicate: string;
-    ascending: string;
+    ascending: boolean;
     callback: Function;
-    jhSortChange: EventEmitter = new EventEmitter();
-    ascendingChange: EventEmitter = new EventEmitter();
+    jhSortChange: EventEmitter<any> = new EventEmitter();
+    ascendingChange: EventEmitter<any> = new EventEmitter();
     $element: any;
 
     constructor(el: ElementRef, renderer: Renderer) {
@@ -24,7 +24,7 @@ export class JhSortBy implements OnInit {
         //TODO needs to be validated
         resetClasses();
         if (this.predicate && this.predicate !== '_score') {
-            applyClass($element.find('th[jh-sort-by=\'' + this.predicate + '\']'));
+            applyClass(this.$element.find('th[jh-sort-by=\'' + this.predicate + '\']'));
         }
 
         function applyClass (element) {
@@ -44,7 +44,7 @@ export class JhSortBy implements OnInit {
         }
 
         function resetClasses () {
-            var allThIcons = $element.find('span.glyphicon'),
+            var allThIcons = this.$element.find('span.glyphicon'),
                 sortIcon = 'glyphicon-sort',
                 sortAsc = 'glyphicon-sort-by-attributes',
                 sortDesc = 'glyphicon-sort-by-attributes-alt';

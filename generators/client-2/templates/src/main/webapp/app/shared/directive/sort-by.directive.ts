@@ -15,6 +15,6 @@ export class JhSortBy {
         this.jhSort = jhSort;
     }
     onClick() {
-        JhSort.sort(jhSortBy);
+        this.jhSort.sort(this.jhSortBy);
     }
 }
