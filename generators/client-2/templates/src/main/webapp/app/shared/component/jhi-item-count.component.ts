@@ -1,12 +1,18 @@
-export let jhiItemCount: any = {
-    template: '<div class="info">' +
-                'Showing {{(($ctrl.page - 1) * $ctrl.itemsPerPage) == 0 ? 1 : (($ctrl.page - 1) * $ctrl.itemsPerPage + 1)}} - ' +
-                '{{($ctrl.page * $ctrl.itemsPerPage) < $ctrl.queryCount ? ($ctrl.page * $ctrl.itemsPerPage) : $ctrl.queryCount}} ' +
-                'of {{$ctrl.queryCount}} items.' +
-            '</div>',
-    bindings: {
-        page: '<',
-        queryCount: '<total',
-        itemsPerPage: '<'
-    }
-};
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+    selector: 'jhi-item-count',
+    template: `
+        <div class="info">
+            Showing {{((page - 1) * itemsPerPage) == 0 ? 1 : ((page - 1) * itemsPerPage + 1)}} -
+            {{(page * itemsPerPage) < total ? (page * itemsPerPage) : total}}
+            of {{total}} items.
+        </div>`
+})
+export class JhiItemCount {
+    @Input() page: any;
+    @Input() total: any;
+    @Input() itemsPerPage: any;
+
+    constructor() {}
+}
