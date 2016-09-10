@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { DatePipe } from "@angular/common";
+import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
-import { Audit } from "./audit.model";
-import { AuditsService } from "./audits.service";
-import { ParseLinks } from "../../components/util/parse-links.service";
+import { Audit } from './audit.model';
+import { AuditsService } from './audits.service';
+import { ParseLinks } from '../../shared/service/parse-links.service';
 
 @Component({
   selector: '<%=jhiPrefix%>-audit',
@@ -23,7 +23,7 @@ export class AuditsComponent implements OnInit {
     constructor(private auditsService: AuditsService, private parseLinks: ParseLinks){ 
         this.page = 1;
         this.reverse = false;
-        this.orderProp = "timestamp";
+        this.orderProp = 'timestamp';
     }
 
     getAudits () {
