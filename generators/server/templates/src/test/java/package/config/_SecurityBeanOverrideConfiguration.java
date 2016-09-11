@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 /**
  * Overrides UAA specific beans, so they do not interfere the testing
  * This configuration must be included in @SpringBootTest in order to take effect.
- *
  */
 @Configuration
 public class SecurityBeanOverrideConfiguration {
