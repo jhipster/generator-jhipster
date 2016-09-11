@@ -810,7 +810,6 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.authenticationType === 'uaa') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/security/_OAuth2TokenMockUtil.java', testDir + 'security/OAuth2TokenMockUtil.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/config/_SecurityBeanOverrideConfiguration.java', testDir + 'config/SecurityBeanOverrideConfiguration.java', this, {});
-                //this.template(SERVER_TEST_SRC_DIR + 'package/config/_SecurityOverrideBeanCondfiguration.java', testDir + 'config/SecurityOverrideBeanCondfiguration.java', this, {});
             }
 
             if (this.hibernateCache === 'ehcache') {
