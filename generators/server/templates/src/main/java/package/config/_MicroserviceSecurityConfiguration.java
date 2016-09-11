@@ -1,6 +1,6 @@
 package <%=packageName%>.config;
 
-<% if(authenticationType == 'jwt') { %>
+<%_ if(authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.jwt.JWTConfigurer;
 import <%=packageName%>.security.jwt.TokenProvider;
@@ -68,8 +68,8 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
         return new SecurityEvaluationContextExtension();
     }
 }
-<% } %>
-<% if(authenticationType == 'uaa') { %>
+<%_ } _%>
+<%_ if(authenticationType == 'uaa') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -151,6 +151,4 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     }
 }
-
-<% } %>
-
+<%_ } _%>
