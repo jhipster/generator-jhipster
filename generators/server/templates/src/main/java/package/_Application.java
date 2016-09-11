@@ -1,7 +1,9 @@
 package <%=packageName%>;
 
-<% if(authenticationType === 'uaa') { %>import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
-<%_ } _%>import <%=packageName%>.config.Constants;
+<%_ if(applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
+<%_ } _%>
+import <%=packageName%>.config.Constants;
 import <%=packageName%>.config.DefaultProfileUtil;
 import <%=packageName%>.config.JHipsterProperties;
 
@@ -30,9 +32,13 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
-<% if(authenticationType === 'uaa') { %>@ComponentScan(
+<%_ if(applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+@ComponentScan(
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
-)<% } else { %>@ComponentScan<%_ } _%>
+)
+<%_ } else { _%>
+@ComponentScan
+<%_ } _%>
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %> })
 @EnableConfigurationProperties({ JHipsterProperties.class<% if (databaseType == 'sql') { %>, LiquibaseProperties.class<% } %> })
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>

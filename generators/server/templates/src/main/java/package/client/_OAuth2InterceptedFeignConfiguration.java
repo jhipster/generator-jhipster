@@ -34,7 +34,6 @@ public class OAuth2InterceptedFeignConfiguration {
         this.jHipsterProperties = jHipsterProperties;
     }
 
-
     @Autowired(required = false)
     public void setLoadBalancerClient(LoadBalancerClient loadBalancerClient) {
         this.loadBalancerClient = loadBalancerClient;
