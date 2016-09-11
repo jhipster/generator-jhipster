@@ -153,6 +153,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             true,                   // activated
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
             null                    // lastModifiedDate
@@ -181,6 +182,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             true,                   // activated
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
             null                    // lastModifiedDate
@@ -209,6 +211,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             true,               // activated
             "<%= nativeLanguage %>",               // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,               // createdBy
             null,               // createdDate
             null,               // lastModifiedBy
             null                // lastModifiedDate
@@ -237,6 +240,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             true,               // activated
             "<%= nativeLanguage %>",               // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,               // createdBy
             null,               // createdDate
             null,               // lastModifiedBy
             null                // lastModifiedDate
@@ -266,6 +270,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             true,                   // activated
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
             null                    // lastModifiedDate
@@ -273,7 +278,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
         // Duplicate login, different e-mail
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-            "alicejr@example.com", true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
+            "alicejr@example.com", true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
         restMvc.perform(
@@ -307,6 +312,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             true,                   // activated
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
             null                    // lastModifiedDate
@@ -314,7 +320,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
         // Duplicate e-mail, different login
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-            validUser.getEmail(), true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
+            validUser.getEmail(), true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
         restMvc.perform(
@@ -347,6 +353,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             true,                   // activated
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+            null,                   // createdBy
             null,                   // createdDate
             null,                   // lastModifiedBy
             null                    // lastModifiedDate

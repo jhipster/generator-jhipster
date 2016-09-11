@@ -645,7 +645,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/aop/logging/_LoggingAspect.java', javaDir + 'aop/logging/LoggingAspect.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DefaultProfileUtil.java', javaDir + 'config/DefaultProfileUtil.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ExcludedFromComponentScan.java', javaDir + 'config/ExcludedFromComponentScan.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_package-info.java', javaDir + 'config/apidoc/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_SwaggerConfiguration.java', javaDir + 'config/apidoc/SwaggerConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_PageableParameterBuilderPlugin.java', javaDir + 'config/apidoc/PageableParameterBuilderPlugin.java', this, {});
@@ -808,8 +807,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.authenticationType === 'uaa') {
-                this.template(SERVER_TEST_SRC_DIR + 'package/security/_WithMockOAuth2Authentication.java', testDir + 'security/WithMockOAuth2Authentication.java', this, {});
-                this.template(SERVER_TEST_SRC_DIR + 'package/security/_WithMockedOAuthUserSecurityContextFactory.java', testDir + 'security/WithMockedOAuthUserSecurityContextFactory.java', this, {});
+                this.template(SERVER_TEST_SRC_DIR + 'package/security/_OAuth2TokenMockUtil.java', testDir + 'security/OAuth2TokenMockUtil.java', this, {});
             }
 
             if (this.hibernateCache === 'ehcache') {

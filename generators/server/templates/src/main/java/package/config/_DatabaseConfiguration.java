@@ -69,7 +69,6 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
     @Inject
     private MongoProperties mongoProperties;<% } %><% if (databaseType == 'sql') { %>
-
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 
     /**
@@ -83,8 +82,8 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     public Server h2TCPServer() throws SQLException {
         return Server.createTcpServer("-tcp","-tcpAllowOthers");
     }
-
 <%_ } _%>
+
     @Bean
     public SpringLiquibase liquibase(DataSource dataSource, LiquibaseProperties liquibaseProperties) {
 

@@ -126,6 +126,8 @@ module.exports = KubernetesGenerator.extend({
     },
 
     prompting: {
+        askForApplicationType: prompts.askForApplicationType,
+
         askForPath: prompts.askForPath,
 
         askForApps: prompts.askForApps,
@@ -219,7 +221,6 @@ module.exports = KubernetesGenerator.extend({
         },
 
         writeRegistryFiles: function() {
-            this.log('writeRegistryFiles');
             if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
             this.template('_jhipster-registry.yml', 'registry/jhipster-registry.yml');
         }

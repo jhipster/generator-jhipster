@@ -5,6 +5,7 @@ import <%=packageName%>.config.JHipsterProperties;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.core.env.Environment;
@@ -53,9 +54,9 @@ public class ProfileInfoResource {
         public String[] activeProfiles;
         public String ribbonEnv;
 
-        ProfileInfoResponse(String[] activeProfiles,String ribbonEnv) {
-            this.activeProfiles=activeProfiles;
-            this.ribbonEnv=ribbonEnv;
+        ProfileInfoResponse(String[] activeProfiles, String ribbonEnv) {
+            this.activeProfiles = activeProfiles;
+            this.ribbonEnv = ribbonEnv;
         }
     }
 }

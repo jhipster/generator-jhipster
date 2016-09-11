@@ -1,7 +1,9 @@
 package <%=packageName%>.config;
 
 <% if(authenticationType == 'jwt') { %>
-import javax.inject.Inject;
+import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.security.jwt.JWTConfigurer;
+import <%=packageName%>.security.jwt.TokenProvider;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
-
-import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.security.jwt.JWTConfigurer;
-import <%=packageName%>.security.jwt.TokenProvider;
+import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
@@ -55,10 +54,9 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .authorizeRequests()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/configuration/ui").permitAll()
+            .antMatchers("/swagger-resources/configuration/ui").permitAll()
         .and()
             .apply(securityConfigurerAdapter());
-
     }
 
     private JWTConfigurer securityConfigurerAdapter() {
@@ -73,7 +71,6 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 <% } %>
 <% if(authenticationType == 'uaa') { %>
 import <%=packageName%>.security.AuthoritiesConstants;
-
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
@@ -92,11 +89,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.web.client.RestTemplate;
 
-
 import java.util.Map;
 
 import javax.inject.Inject;
-import java.io.IOException;
 
 @Configuration
 @EnableResourceServer
@@ -119,10 +114,10 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
+            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/configuration/ui").permitAll();
-
+            .antMatchers("/swagger-resources/configuration/ui").permitAll();
     }
 
     @Bean
@@ -151,8 +146,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     private String getKeyFromAuthorizationServer() {
         HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
         return (String) this.keyUriRestTemplate
-                .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
-                .get("value");
+            .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
+            .get("value");
+
     }
 }
-<% } %>
+<%_ } _%>

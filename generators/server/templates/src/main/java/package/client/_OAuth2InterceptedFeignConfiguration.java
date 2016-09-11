@@ -1,6 +1,5 @@
 package <%=packageName%>.client;
 
-import <%=packageName%>.config.ExcludedFromComponentScan;
 import <%=packageName%>.config.JHipsterProperties;
 import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import javax.inject.Inject;
 import java.io.IOException;
 
 @Configuration
-@ExcludedFromComponentScan
 public class OAuth2InterceptedFeignConfiguration {
 
     private JHipsterProperties jHipsterProperties;

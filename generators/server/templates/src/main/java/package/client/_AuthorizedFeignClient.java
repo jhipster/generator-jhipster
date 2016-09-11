@@ -11,13 +11,16 @@ import java.lang.annotation.*;
 @Documented
 @FeignClient
 public @interface AuthorizedFeignClient {
+
     @AliasFor(annotation = FeignClient.class, attribute = "name")
     String name() default "";
 
     /**
-     * A custom <code>@Configuration</code> for the feign client. Can contain override
-     * <code>@Bean</code> definition for the pieces that make up the client, for instance
-     * {@link feign.codec.Decoder}, {@link feign.codec.Encoder}, {@link feign.Contract}.
+     * A custom <code>@Configuration</code> for the feign client.
+     *
+     * Can contain override <code>@Bean</code> definition for the pieces that
+     * make up the client, for instance {@link feign.codec.Decoder},
+     * {@link feign.codec.Encoder}, {@link feign.Contract}.
      *
      * @see FeignClientsConfiguration for the defaults
      */
@@ -30,10 +33,9 @@ public @interface AuthorizedFeignClient {
     String url() default "";
 
     /**
-     * Whether 404s should be decoded instead of throwing FeignExceptions
+     * Whether 404s should be decoded instead of throwing FeignExceptions.
      */
     boolean decode404() default false;
-
 
     /**
      * Fallback class for the specified Feign client interface. The fallback class must

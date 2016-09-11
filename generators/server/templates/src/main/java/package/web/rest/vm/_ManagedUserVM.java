@@ -19,6 +19,8 @@ public class ManagedUserVM extends UserDTO {
 
     private <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
 
+    private String createdBy;
+
     private ZonedDateTime createdDate;
 
     private String lastModifiedBy;
@@ -35,6 +37,7 @@ public class ManagedUserVM extends UserDTO {
     public ManagedUserVM(User user) {
         super(user);
         this.id = user.getId();<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+        this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();<% } %>
@@ -42,9 +45,11 @@ public class ManagedUserVM extends UserDTO {
     }
 
     public ManagedUserVM(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,
-                          String email, boolean activated, String langKey, Set<String> authorities <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate <% } %>) {
+                         String email, boolean activated, String langKey, Set<String> authorities<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+                         String createdBy, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate<% } %>) {
         super(login, firstName, lastName, email, activated, langKey, authorities);
         this.id = id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+        this.createdBy = createdBy;
         this.createdDate = createdDate;
         this.lastModifiedBy = lastModifiedBy;
         this.lastModifiedDate = lastModifiedDate;<% } %>
@@ -58,6 +63,15 @@ public class ManagedUserVM extends UserDTO {
     public void setId(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         this.id = id;
     }<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 
     public ZonedDateTime getCreatedDate() {
         return createdDate;
@@ -91,6 +105,7 @@ public class ManagedUserVM extends UserDTO {
     public String toString() {
         return "ManagedUserVM{" +
             "id=" + id +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+            ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +<% } %>

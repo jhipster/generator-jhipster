@@ -2,7 +2,6 @@ package <%=packageName%>;
 
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.config.DefaultProfileUtil;
-import <%=packageName%>.config.ExcludedFromComponentScan;
 import <%=packageName%>.config.JHipsterProperties;
 
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
@@ -30,9 +28,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
-@ComponentScan(
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = ExcludedFromComponentScan.class)
-)
+@ComponentScan
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %> })
 @EnableConfigurationProperties({ JHipsterProperties.class<% if (databaseType == 'sql') { %>, LiquibaseProperties.class<% } %> })
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
@@ -95,5 +91,4 @@ public class <%= mainClass %> {
             configServerStatus == null ? "Not found or not setup for this application" : configServerStatus);
         <%_ } _%>
     }
-
 }

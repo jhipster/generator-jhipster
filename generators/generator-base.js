@@ -49,7 +49,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
                 '<li ui-sref-active="active" >\n' +
                 '                    <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                        <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                        <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                        <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                    </a>\n' +
                 '                </li>'
             ]
@@ -76,7 +76,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
                 '<li ui-sref-active="active" >\n' +
                 '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
                 '                        </li>'
             ]
@@ -102,7 +102,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
                 '<li ui-sref-active="active" >\n' +
                 '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
                 '                        </li>'
             ]
@@ -856,13 +856,13 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
     var regex;
     switch (action) {
     case 'stripHtml' :
-        regex = /( translate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
-            //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+        regex = /( data-translate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
+        //looks for something like data-translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
     case 'stripJs' :
         regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
-            //looks for something like mainTranslatePartialLoader: [*]
+        //looks for something like mainTranslatePartialLoader: [*]
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
     case 'copy' :
@@ -1194,8 +1194,8 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-            entityTable = noSnakeCase ? entityName : this.getTableName(entityName.substring(0, halfLimit)),
-            relationTable = noSnakeCase ? relationshipName: this.getTableName(relationshipName.substring(0, halfLimit - 1));
+            entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : this.getTableName(relationshipName.substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}_id`;
     }
     return constraintName;
@@ -1324,17 +1324,20 @@ Generator.prototype.askModuleName = function (generator) {
         type: 'input',
         name: 'baseName',
         validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;
-            if (input === 'application') {
+            if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                return 'Your application name cannot contain special characters or a blank space';
+            } else if (generator.applicationType === 'microservice' && /_/.test(input)) {
+                return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
+            } else if (input === 'application') {
                 return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
             }
-            return 'Your application name cannot contain special characters or a blank space, using the default name instead';
+            return true;
         },
         message: function (response) {
             return getNumberedQuestion('What is the base name of your application?', true);
         },
         default: defaultAppBaseName
-    }, function (prompt) {
+    }).then(function (prompt) {
         generator.baseName = prompt.baseName;
         done();
     }.bind(generator));
@@ -1386,7 +1389,7 @@ Generator.prototype.aski18n = function (generator) {
         }
     ];
 
-    generator.prompt(prompts, function (prompt) {
+    generator.prompt(prompts).then(function (prompt) {
         generator.enableTranslation = prompt.enableTranslation;
         generator.nativeLanguage = prompt.nativeLanguage;
         generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
