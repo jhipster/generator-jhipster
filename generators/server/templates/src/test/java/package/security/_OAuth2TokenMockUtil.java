@@ -23,9 +23,7 @@ import java.util.stream.Collectors;
 import static org.mockito.BDDMockito.given;
 
 /**
- * A bean providing simple mocking of OAuth2 access tokens for security integration tests
- *
- * @author David Steiman
+ * A bean providing simple mocking of OAuth2 access tokens for security integration tests.
  */
 @Component
 public class OAuth2TokenMockUtil {
@@ -83,4 +81,3 @@ public class OAuth2TokenMockUtil {
         }
     }
 }
-
