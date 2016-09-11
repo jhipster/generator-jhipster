@@ -151,4 +151,6 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     }
 }
-<%_ } _%>
+
+<% } %>
+

@@ -43,7 +43,7 @@ spec:
           value: http://admin:<%= adminPassword %>@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
         # - name: GIT_URI
         #   value: https://github.com/jhipster/jhipster-registry/
-        # - name: GIT_SEARCH_PATH
+        # - name: GIT_SEARCH_PATHS
         #   value: central-config
 ---
 apiVersion: v1
