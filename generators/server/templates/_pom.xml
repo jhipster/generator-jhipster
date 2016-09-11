@@ -1249,5 +1249,15 @@
                 <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
+        <profile>
+            <id>IDE</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct-processor</artifactId>
+                    <version>${mapstruct.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 </project>
