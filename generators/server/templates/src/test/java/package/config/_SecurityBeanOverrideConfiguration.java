@@ -9,10 +9,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.web.client.RestTemplate;
 
 /**
- * overrides UAA specific beans, so they do not interfere the testing
- * This configuration must be included in @SpringBootTest in order to take effect
+ * Overrides UAA specific beans, so they do not interfere the testing
+ * This configuration must be included in @SpringBootTest in order to take effect.
  *
- * @author David Steiman
  */
 @Configuration
 public class SecurityBeanOverrideConfiguration {
@@ -35,4 +34,3 @@ public class SecurityBeanOverrideConfiguration {
         return null;
     }
 }
-
