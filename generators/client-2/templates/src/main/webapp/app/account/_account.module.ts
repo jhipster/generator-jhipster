@@ -9,12 +9,19 @@ import { upgradeAdapter } from "../upgrade_adapter";
 
 import { RegisterStateConfig } from "./register/register.state";
 import { AccountStateConfig } from "./account.state";
+import { PasswordStateConfig } from "./password/password.state";
+import { PasswordResetInitStateConfig } from "./reset/request/reset-request.state";
+import { PasswordResetFinishStateConfig } from "./reset/finish/reset-finish.state";
 
 import { RegisterComponent } from "./register/register.component";
+import { PasswordComponent } from "./password/password.controller";
+import { PasswordResetInitComponent } from "./reset/request/reset-request.controller";
+import { PasswordResetFinishComponent } from "./reset/finish/reset-finish.controller";
 
 <% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
 upgradeAdapter.upgradeNg1Provider('Auth');
 upgradeAdapter.upgradeNg1Provider('LoginService');
+upgradeAdapter.upgradeNg1Provider('$stateParams');
 
 angular
     .module('<%=angularAppName%>.account', [
@@ -27,8 +34,14 @@ angular
     ])
     .config(AccountStateConfig)
     .config(RegisterStateConfig)
+    .config(PasswordStateConfig)
+    .config(PasswordResetInitStateConfig)
+    .config(PasswordResetFinishStateConfig)
     .directive('passwordStrengthBar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordStrengthBarComponent))
     .directive('jhiRegister', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(RegisterComponent))
+    .directive('password', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordComponent))
+    .directive('passwordResetInit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordResetInitComponent))
+    .directive('passwordResetFinish', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordResetFinishComponent))
     .factory('Register', Register)
     .factory('Activate', Activate)
     .factory('Password', Password)

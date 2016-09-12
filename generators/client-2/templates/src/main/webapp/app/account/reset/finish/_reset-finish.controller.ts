@@ -1,39 +1,54 @@
-(function() {
-    'use strict';
+import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
+import { TranslatePipe } from '../../../shared/translate.pipe';
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .controller('ResetFinishController', ResetFinishController);
+@Component({
+    selector: 'password-reset-finish',
+    templateUrl: 'app/account/reset/finish/reset-finish.html',
+    pipes: [TranslatePipe]
+})
+export class PasswordResetFinishComponent implements OnInit {
+    confirmPassword: string;
+    doNotMatch: string;
+    error: string;
+    keyMissing: boolean;
+    login: any;
+    resetAccount: any;
+    success: string;
+    Auth: any;
+    LoginService: any;
+    $stateParams: any;
 
-    ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginService'];
+    constructor(@Inject('Auth') Auth, @Inject('LoginService') LoginService, @Inject('$stateParams') $stateParams,
+                private elementRef: ElementRef, private renderer: Renderer) {
+        this.Auth = Auth;
+        this.LoginService = LoginService;
+        this.$stateParams = $stateParams;
+    }
 
-    function ResetFinishController ($stateParams, $timeout, Auth, LoginService) {
-        var vm = this;
+    ngOnInit() {
+        this.resetAccount = {};
+        this.login = this.LoginService.open;
+        this.keyMissing = angular.isUndefined(this.$stateParams.key);
+    }
 
-        vm.keyMissing = angular.isUndefined($stateParams.key);
-        vm.confirmPassword = null;
-        vm.doNotMatch = null;
-        vm.error = null;
-        vm.finishReset = finishReset;
-        vm.login = LoginService.open;
-        vm.resetAccount = {};
-        vm.success = null;
+    ngAfterViewInit() {
+        if (this.elementRef.nativeElement.querySelector('#password') != null)
+          this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#password'), 'focus', []);
+    }
 
-        $timeout(function (){angular.element('#password').focus();});
-
-        function finishReset() {
-            vm.doNotMatch = null;
-            vm.error = null;
-            if (vm.resetAccount.password !== vm.confirmPassword) {
-                vm.doNotMatch = 'ERROR';
-            } else {
-                Auth.resetPasswordFinish({key: $stateParams.key, newPassword: vm.resetAccount.password}).then(function () {
-                    vm.success = 'OK';
-                }).catch(function () {
-                    vm.success = null;
-                    vm.error = 'ERROR';
-                });
-            }
+    finishReset() {
+        this.doNotMatch = null;
+        this.error = null;
+        if (this.resetAccount.password !== this.confirmPassword) {
+            this.doNotMatch = 'ERROR';
+        } else {
+            let vm = this;
+            this.Auth.resetPasswordFinish({key: this.$stateParams.key, newPassword: this.resetAccount.password}).then(function () {
+                vm.success = 'OK';
+            }).catch(function () {
+                vm.success = null;
+                vm.error = 'ERROR';
+            });
         }
     }
-})();
+}

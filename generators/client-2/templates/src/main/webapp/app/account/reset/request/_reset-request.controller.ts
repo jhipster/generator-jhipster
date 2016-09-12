@@ -1,38 +1,45 @@
-(function() {
-    'use strict';
+import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
+import { TranslatePipe } from '../../../shared/translate.pipe';
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .controller('RequestResetController', RequestResetController);
+@Component({
+    selector: 'password-reset-init',
+    templateUrl: 'app/account/reset/request/reset-request.html',
+    pipes: [TranslatePipe]
+})
+export class PasswordResetInitComponent implements OnInit {
+    error: string;
+    errorEmailNotExists: string;
+    resetAccount: any;
+    success: string;
+    Auth: any;
 
-    RequestResetController.$inject = ['$timeout', 'Auth'];
-
-    function RequestResetController ($timeout, Auth) {
-        var vm = this;
-
-        vm.error = null;
-        vm.errorEmailNotExists = null;
-        vm.requestReset = requestReset;
-        vm.resetAccount = {};
-        vm.success = null;
-
-        $timeout(function (){angular.element('#email').focus();});
-
-        function requestReset () {
-
-            vm.error = null;
-            vm.errorEmailNotExists = null;
-
-            Auth.resetPasswordInit(vm.resetAccount.email).then(function () {
-                vm.success = 'OK';
-            }).catch(function (response) {
-                vm.success = null;
-                if (response.status === 400 && response.data === 'e-mail address not registered') {
-                    vm.errorEmailNotExists = 'ERROR';
-                } else {
-                    vm.error = 'ERROR';
-                }
-            });
-        }
+    constructor(@Inject('Auth') Auth, private elementRef: ElementRef, private renderer: Renderer) {
+        this.Auth = Auth;
     }
-})();
+
+    ngOnInit() {
+        this.resetAccount = {};
+    }
+
+    ngAfterViewInit() {
+        this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#email'), 'focus', []);
+    }
+
+    requestReset () {
+
+        this.error = null;
+        this.errorEmailNotExists = null;
+
+        let vm = this;
+        this.Auth.resetPasswordInit(this.resetAccount.email).then(function () {
+            vm.success = 'OK';
+        }).catch(function (response) {
+            vm.success = null;
+            if (response.status === 400 && response.data === 'e-mail address not registered') {
+                vm.errorEmailNotExists = 'ERROR';
+            } else {
+                vm.error = 'ERROR';
+            }
+        });
+    }
+}
