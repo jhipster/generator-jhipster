@@ -435,7 +435,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/auth-session.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/account.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/auth.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/auth/base64.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.pipe.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.ts',

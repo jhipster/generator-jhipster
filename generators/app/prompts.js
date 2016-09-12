@@ -154,7 +154,7 @@ function askForClient() {
             }
         ],
         default: 'angular1'
-    }, function (prompt) {
+    }).then(function (prompt) {
         this.angularVersion = this.configOptions.angularVersion = prompt.angularVersion;
         done();
     }.bind(this));
