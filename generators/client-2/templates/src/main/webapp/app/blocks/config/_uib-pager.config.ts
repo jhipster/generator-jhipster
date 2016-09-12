@@ -1,4 +1,4 @@
-import { ITEMS_PER_PAGE } from "../../components/form/pagination.constants";
+import { ITEMS_PER_PAGE } from '../../components/form/pagination.constants';
 
 PagerConfig.$inject = ['uibPagerConfig'];
 

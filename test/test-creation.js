@@ -750,7 +750,7 @@ describe('JHipster generator', function () {
     describe('bad application name for java', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false})
+                .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'baseName': '21Points',
                     'packageName': 'com.otherpackage',
