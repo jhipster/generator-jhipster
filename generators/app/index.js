@@ -165,7 +165,7 @@ module.exports = JhipsterGenerator.extend({
             this.angularVersion = this.config.get('angularVersion');
             if (!this.angularVersion) {
                 /* for backward compatibility */
-                this.angularVersion = 'angular1'
+                this.angularVersion = 'angular1';
             }
             this.testFrameworks = this.config.get('testFrameworks');
             this.enableTranslation = this.config.get('enableTranslation');
