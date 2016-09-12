@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     replace = require('gulp-replace'),
+    bowerFiles = require('main-bower-files'),
     changed = require('gulp-changed');
 
 var handleErrors = require('./handle-errors');
@@ -16,7 +17,8 @@ module.exports = {<% if(enableTranslation) { /* copy i18n folders only if transl
     languages: languages,<% } %>
     fonts: fonts,
     common: common,
-    swagger: swagger
+    swagger: swagger,
+    images: images
 }
 <% if(enableTranslation) { %>
 var yorc = require('../.yo-rc.json')['generator-jhipster'];
@@ -38,7 +40,6 @@ function languages() {
         .pipe(gulp.dest(config.app + 'i18n/'));
 }
 <% } %>
-
 function fonts() {
     return es.merge(<% if(!useSass) { %>gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
@@ -74,9 +75,9 @@ function common() {
 function swagger() {
     return es.merge(
         gulp.src([config.bower + 'swagger-ui/dist/**',
-            '!' + config.bower + 'swagger-ui/dist/index.html',
-            '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
-            '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
+             '!' + config.bower + 'swagger-ui/dist/index.html',
+             '!' + config.bower + 'swagger-ui/dist/swagger-ui.min.js',
+             '!' + config.bower + 'swagger-ui/dist/swagger-ui.js'])
             .pipe(plumber({errorHandler: handleErrors}))
             .pipe(changed(config.swaggerDist))
             .pipe(gulp.dest(config.swaggerDist)),
@@ -91,4 +92,11 @@ function swagger() {
             .pipe(changed(config.swaggerDist + 'lib/'))
             .pipe(gulp.dest(config.swaggerDist + 'lib/'))
     );
+}
+
+function images() {
+    return gulp.src(bowerFiles({filter: ['**/*.{gif,jpg,png}']}), { base: config.bower })
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist +  'bower_components'))
+        .pipe(gulp.dest(config.dist +  'bower_components'));
 }

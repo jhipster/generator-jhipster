@@ -12,48 +12,25 @@
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
+            if (otherEntityName === 'user') {
+                otherEntityTableName = 'jhi_user';
+            } else {
+                otherEntityTableName = getEntityProperty(otherEntityName, 'entityTableName');
+                if (!otherEntityTableName) {
+                    otherEntityTableName = getTableName(otherEntityName);
+                }
+            }
             if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
-                var constraintName = 'fk_' + getTableName(name.toLowerCase()) + '_' +
-                    getTableName(relationshipName.toLowerCase()) + '_id';
-            if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
-                constraintName = 'fk_' + getTableName(name.toLowerCase().substring(0, 3)) + '_' +
-                    getTableName(relationshipName.toLowerCase().substring(0, 3)) + '_id';
-            }%>
+                var constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%
-                                 var otherEntityTable = getTableName(otherEntityName);
-                                 if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
+                                 referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType == 'many-to-many' && ownerSide) {
-            var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
-            if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-                joinTableName = getTableName(name.substring(0, 5)) + '_' +
-                    getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
-            }
-            if(prodDatabaseType === 'mysql' && joinTableName.length > 64) {
-                joinTableName = getTableName(name.substring(0, 10)) + '_' +
-                    getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
-            }
-            var constraintName = 'fk_' + joinTableName + '_' + otherEntityName.toLowerCase() + '_id';
-            var otherEntityConstraintName = 'fk_' + joinTableName + '_' + name.toLowerCase() + '_id';
-            if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
-                constraintName = 'fk_' + getTableName(name.toLowerCase().substring(0, 3)) + '_' +
-                    getTableName(relationshipName.toLowerCase().substring(0, 3)) +  '_' +
-                    getTableName(otherEntityName.toLowerCase().substring(0, 3)) + '_id';
-                otherEntityConstraintName = 'fk_' + getTableName(otherEntityName.toLowerCase().substring(0, 3)) + '_' +
-                    getTableName(relationshipName.toLowerCase().substring(0, 3)) +  '_' +
-                    getTableName(name.toLowerCase().substring(0, 3)) + '_id';
-            }
-            if(prodDatabaseType === 'mysql' && constraintName.length > 64) {
-                constraintName = 'fk_' + getTableName(name.toLowerCase().substring(0, 6)) + '_' +
-                    getTableName(relationshipName.toLowerCase().substring(0, 6)) +  '_' +
-                    getTableName(otherEntityName.toLowerCase().substring(0, 6)) + '_id';
-                otherEntityConstraintName = 'fk_' + getTableName(otherEntityName.toLowerCase().substring(0, 6)) + '_' +
-                    getTableName(relationshipName.toLowerCase().substring(0, 6)) +  '_' +
-                    getTableName(name.toLowerCase().substring(0, 6)) + '_id';
-            }
+                var joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+                var constraintName = getConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
+                var otherEntityConstraintName = getConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
         <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"
@@ -65,9 +42,7 @@
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= otherEntityConstraintName %>"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%
-                                 var otherEntityTable = getTableName(otherEntityName);
-                                 if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
-        <% } %><% } %>
+                                 referencedTableName="<%= otherEntityTableName %>"/>
+        <%  } %><% } %>
     </changeSet>
 </databaseChangeLog>

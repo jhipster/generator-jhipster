@@ -2,8 +2,8 @@
     "activate": {
         "title": "Attivazione",
         "messages": {
-            "success": "<strong> Il tuo account è stato attivato </ strong> <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\"> </a> sessione ha inizio.",
-            "error": "<strong> Il tuo account non può essere verificato </ strong> compilare il modulo di registrazione sopra per registrarsi."
+            "success": "<strong>Il tuo account è stato attivato.</strong> Si prega di <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">accedere</a>.",
+            "error": "<strong>Il tuo account non può essere verificato.</strong> Si prega di compilare il modulo, per registrarsi."
         }
     }
 }

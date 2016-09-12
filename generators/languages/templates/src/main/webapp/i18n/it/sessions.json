@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "Sessione attiva per [<b>{{username}}</b>]",
+        "title": "Sessioni attive per [<b>{{username}}</b>]",
         "table": {
             "ipaddress": "Indirizzo IP",
             "useragent": "User Agent",
@@ -9,7 +9,7 @@
         },
         "messages": {
             "success": "<strong>Sessione invalidata!</strong>",
-            "error": "<strong>C'è stato un errore!</strong> Impossibile invalidare la sessione."
+            "error": "<strong>Si è verificato un errore!</strong> Impossibile invalidare la sessione."
         }
     }
 }

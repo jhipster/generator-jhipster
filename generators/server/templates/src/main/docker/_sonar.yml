@@ -2,7 +2,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-sonar:
         container_name: <%= baseName.toLowerCase() %>-sonar
-        image: sonarqube:5.5-alpine
+        image: <%= DOCKER_SONAR %>
         ports:
             - 9000:9000
             - 9092:9092

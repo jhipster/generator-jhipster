@@ -31,24 +31,29 @@ launchProtractor() {
 # Start the application
 #-------------------------------------------------------------------------------
 cd "$HOME"/app
-if [ "$RUN_APP" == 1 ]; then
-  if [ -f "mvnw" ]; then
+
+if [ -f "mvnw" ]; then
     ./mvnw package -DskipTests=true -P"$PROFILE"
-    mv target/*.war target/app.war
-    java -jar target/app.war --spring.profiles.active="$PROFILE" &
-  elif [ -f "gradlew" ]; then
+    mv target/*.war app.war
+elif [ -f "gradlew" ]; then
     ./gradlew bootRepackage -P"$PROFILE" -x test
-    mv build/libs/*.war build/libs/app.war
-    java -jar build/libs/app.war --spring.profiles.active="$PROFILE" &
-  else
+    mv build/libs/*.war app.war
+else
     echo "No mvnw or gradlew"
     exit 0
-  fi
-  sleep 20
-  #-------------------------------------------------------------------------------
-  # Launch protractor tests
-  #-------------------------------------------------------------------------------
-  if [ "$PROTRACTOR" == 1 ]; then
-    launchProtractor
-  fi
+fi
+if [ $? -ne 0 ]; then
+    echo "Error when packaging"
+    exit 1
+fi
+
+if [ "$RUN_APP" == 1 ]; then
+    java -jar app.war --spring.profiles.active="$PROFILE" &
+    sleep 20
+    #-------------------------------------------------------------------------------
+    # Launch protractor tests
+    #-------------------------------------------------------------------------------
+    if [ "$PROTRACTOR" == 1 ]; then
+        launchProtractor
+    fi
 fi

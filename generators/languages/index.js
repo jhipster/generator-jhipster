@@ -87,7 +87,7 @@ module.exports = LanguagesGenerator.extend({
     prompting: function () {
         if (this.languages) return;
 
-        var cb = this.async();
+        var done = this.async();
         var languageOptions = this.getAllSupportedLanguageOptions();
         var prompts = [
             {
@@ -97,9 +97,9 @@ module.exports = LanguagesGenerator.extend({
                 choices: languageOptions
             }];
         if (this.enableTranslation || configOptions.enableTranslation) {
-            this.prompt(prompts, function (props) {
+            this.prompt(prompts).then(function (props) {
                 this.languagesToApply = props.languages;
-                cb();
+                done();
             }.bind(this));
         } else {
             this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));

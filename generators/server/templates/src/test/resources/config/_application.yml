@@ -26,8 +26,11 @@ spring:
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
     <%_ } _%>
+    jackson:
+        serialization.write_dates_as_timestamps: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
+        type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
         name:
         username:
@@ -36,10 +39,11 @@ spring:
         database-platform: <%=packageName%>.domain.util.FixedH2Dialect
         database: H2
         open-in-view: false
-        show_sql: true
+        show-sql: true
         hibernate:
             ddl-auto: none
-            naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+            naming:
+                strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
         properties:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
@@ -111,6 +115,15 @@ jhipster:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 tokenValidityInSeconds: 86400
+    <%_ } _%>
+    <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+        client-authorization:
+            <%_ if (applicationType !== 'uaa') { _%>
+            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
+            tokenServiceId: <%= uaaBaseName.toLowerCase() %>
+            <%_ } _%>
+            clientId: internal
+            clientSecret: internal
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:

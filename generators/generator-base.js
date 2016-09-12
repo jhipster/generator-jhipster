@@ -49,7 +49,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
                 '<li ui-sref-active="active" >\n' +
                 '                    <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                        <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                        <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                        <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                    </a>\n' +
                 '                </li>'
             ]
@@ -76,7 +76,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
                 '<li ui-sref-active="active" >\n' +
                 '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
                 '                        </li>'
             ]
@@ -102,7 +102,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
                 '<li ui-sref-active="active" >\n' +
                 '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
+                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
                 '                        </li>'
             ]
@@ -856,13 +856,13 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
     var regex;
     switch (action) {
     case 'stripHtml' :
-        regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
-            //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+        regex = /( data-translate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
+        //looks for something like data-translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
     case 'stripJs' :
         regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
-            //looks for something like mainTranslatePartialLoader: [*]
+        //looks for something like mainTranslatePartialLoader: [*]
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
     case 'copy' :
@@ -1023,6 +1023,24 @@ Generator.prototype.getModuleHooks = function () {
 };
 
 /**
+ * get a property of an entity from the configuration file
+ * @param {string} file - configuration file name for the entity
+ * @param {string} key - key to read
+ */
+Generator.prototype.getEntityProperty = function (file, key) {
+    var property = null;
+
+    try {
+        var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
+        property = entityJson[key];
+    } catch (err) {
+        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+    }
+
+    return property;
+};
+
+/**
  * get sorted list of entities according to changelog date (i.e. the order in which they were added)
  */
 Generator.prototype.getExistingEntities = function () {
@@ -1119,6 +1137,71 @@ Generator.prototype.getPluralColumnName = function (value) {
 };
 
 /**
+ * get a table name for joined tables in JHipster preferred style.
+ *
+ * @param {string} entityName - name of the entity
+ * @param {string} relationshipName - name of the related entity
+ * @param {string} prodDatabaseType - database type
+ */
+Generator.prototype.getJoinTableName = function (entityName, relationshipName, prodDatabaseType) {
+    var joinTableName = this.getTableName(entityName) + '_'+ this.getTableName(relationshipName);
+    var limit = 0;
+    if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+        this.warning(`The generated join table "${ joinTableName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+
+        limit = 30;
+    } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+        this.warning(`The generated join table "${ joinTableName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+
+        limit = 64;
+    }
+    if (limit > 0) {
+        var halfLimit = Math.floor(limit/2),
+            entityTable = this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = this.getTableName(relationshipName.substring(0, halfLimit - 1));
+        return `${entityTable}_${relationTable}`;
+    }
+    return joinTableName;
+};
+
+/**
+ * get a constraint name for tables in JHipster preferred style.
+ *
+ * @param {string} entityName - name of the entity
+ * @param {string} relationshipName - name of the related entity
+ * @param {string} prodDatabaseType - database type
+ * @param {boolean} noSnakeCase - do not convert names to snakecase
+ */
+Generator.prototype.getConstraintName = function (entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+    var constraintName;
+    if (noSnakeCase) {
+        constraintName = 'fk_' + entityName + '_' +
+            relationshipName + '_id';
+    } else {
+        constraintName = 'fk_' + this.getTableName(entityName) + '_' +
+            this.getTableName(relationshipName) + '_id';
+    }
+    var limit = 0;
+
+    if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
+        this.warning(`The generated constraint name "${ constraintName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+
+        limit = 28;
+    } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
+        this.warning(`The generated constraint name "${ constraintName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+
+        limit = 62;
+    }
+    if (limit > 0) {
+        var halfLimit = Math.floor(limit/2),
+            entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName.substring(0, halfLimit)),
+            relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : this.getTableName(relationshipName.substring(0, halfLimit - 1));
+        return `${entityTable}_${relationTable}_id`;
+    }
+    return constraintName;
+};
+
+/**
  * Print an error message.
  *
  * @param {string} msg - message to print
@@ -1137,6 +1220,41 @@ Generator.prototype.warning = function(msg) {
 };
 
 /**
+ * Generate a KeyStore for uaa authorization server.
+ */
+Generator.prototype.generateKeyStore = function() {
+    const keyStoreFile = SERVER_MAIN_RES_DIR + 'keystore.jks';
+    if (this.fs.exists(keyStoreFile)) {
+        this.log(chalk.cyan('\nKeyStore \'' + keyStoreFile + '\' already exists. Leaving unchanged.\n'));
+    } else {
+        shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
+        var parent = this;
+        var javaHome = shelljs.env['JAVA_HOME'];
+        var keytoolPath = '';
+        if (javaHome) {
+            keytoolPath = javaHome + '/bin/';
+        }
+        shelljs.exec('"' + keytoolPath + 'keytool" '+
+            '-genkey ' +
+            '-noprompt ' +
+            '-keyalg RSA ' +
+            '-alias selfsigned ' +
+            '-keystore ' + keyStoreFile + ' ' +
+            '-storepass password ' +
+            '-keypass password ' +
+            '-keysize 2048 ' +
+            '-dname "CN=Java Hipster, OU=Development, O=' + this.packageName + ', L=, ST=, C="'
+        , function(code) {
+            if (code !== 0) {
+                parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
+            } else {
+                parent.log(chalk.green('\nKeyStore \'' + keyStoreFile + '\' generated successfully.\n'));
+            }
+        });
+    }
+};
+
+/**
  * Prints a JHipster logo.
  */
 Generator.prototype.printJHipsterLogo = function () {
@@ -1150,6 +1268,7 @@ Generator.prototype.printJHipsterLogo = function () {
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
     if (this.checkInstall) this.checkForNewVersion();
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
+    this.log(chalk.white('Documentation for creating an application: ' + chalk.yellow('https://jhipster.github.io/creating-an-app/')));
     this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
 };
 
@@ -1184,7 +1303,11 @@ Generator.prototype.getAngularAppName = function () {
  * get the java main class name.
  */
 Generator.prototype.getMainClassName = function () {
-    return _.upperFirst(this.getAngularAppName());
+
+    var main = _.upperFirst(this.getAngularAppName());
+    var acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
+
+    return acceptableForJava.test(main) ? main : 'Application';
 };
 
 /**
@@ -1201,17 +1324,20 @@ Generator.prototype.askModuleName = function (generator) {
         type: 'input',
         name: 'baseName',
         validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input) && input !== 'application') return true;
-            if (input === 'application') {
+            if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                return 'Your application name cannot contain special characters or a blank space';
+            } else if (generator.applicationType === 'microservice' && /_/.test(input)) {
+                return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
+            } else if (input === 'application') {
                 return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
             }
-            return 'Your application name cannot contain special characters or a blank space, using the default name instead';
+            return true;
         },
         message: function (response) {
             return getNumberedQuestion('What is the base name of your application?', true);
         },
         default: defaultAppBaseName
-    }, function (prompt) {
+    }).then(function (prompt) {
         generator.baseName = prompt.baseName;
         done();
     }.bind(generator));
@@ -1263,7 +1389,7 @@ Generator.prototype.aski18n = function (generator) {
         }
     ];
 
-    generator.prompt(prompts, function (prompt) {
+    generator.prompt(prompts).then(function (prompt) {
         generator.enableTranslation = prompt.enableTranslation;
         generator.nativeLanguage = prompt.nativeLanguage;
         generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
@@ -1289,7 +1415,8 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
-                configOptions: configOptions
+                configOptions: configOptions,
+                force: generator.options['force']
             },
             args: generator.languages
         }, {

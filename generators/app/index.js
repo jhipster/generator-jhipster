@@ -219,7 +219,8 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith('jhipster:server', {
                 options: {
                     'client-hook': !this.skipClient,
-                    configOptions: this.configOptions
+                    configOptions: this.configOptions,
+                    force: this.options['force']
                 }
             }, {
                 local: require.resolve('../server')
@@ -233,7 +234,8 @@ module.exports = JhipsterGenerator.extend({
                 this.composeWith('jhipster:client-2', {
                     options: {
                         'skip-install': this.options['skip-install'],
-                        configOptions: this.configOptions
+                        configOptions: this.configOptions,
+                        force: this.options['force']
                     }
                 }, {
                     local: require.resolve('../client-2')
@@ -242,7 +244,8 @@ module.exports = JhipsterGenerator.extend({
                 this.composeWith('jhipster:client', {
                     options: {
                         'skip-install': this.options['skip-install'],
-                        configOptions: this.configOptions
+                        configOptions: this.configOptions,
+                        force: this.options['force']
                     }
                 }, {
                     local: require.resolve('../client')
@@ -310,7 +313,8 @@ module.exports = JhipsterGenerator.extend({
                     this.composeWith('jhipster:entity', {
                         options: {
                             regenerate: true,
-                            'skip-install': true
+                            'skip-install': true,
+                            force: this.options['force']
                         },
                         args: [entity.name]
                     }, {
@@ -334,7 +338,8 @@ module.exports = JhipsterGenerator.extend({
                             try {
                                 this.composeWith(module.generatorCallback, {
                                     options: {
-                                        appConfig: this.configOptions
+                                        appConfig: this.configOptions,
+                                        force: this.options['force']
                                     }
                                 });
                             } catch (err) {

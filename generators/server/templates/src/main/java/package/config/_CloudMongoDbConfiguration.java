@@ -44,7 +44,7 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
 
     @Bean
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converterList = new ArrayList<>();;<% if (authenticationType == 'oauth2') { %>
+        List<Converter<?, ?>> converterList = new ArrayList<>();<% if (authenticationType == 'oauth2') { %>
         converterList.add(new OAuth2AuthenticationReadConverter());<% } %>
         converterList.add(DateToZonedDateTimeConverter.INSTANCE);
         converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
