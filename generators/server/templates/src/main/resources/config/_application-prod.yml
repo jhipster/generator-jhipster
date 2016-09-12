@@ -175,7 +175,7 @@ jhipster:
                 # Token is valid 24 hours
                 tokenValidityInSeconds: 86400
     <%_ } _%>
-    <%_ if (authenticationType === 'uaa') { _%>
+    <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
     security:
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
