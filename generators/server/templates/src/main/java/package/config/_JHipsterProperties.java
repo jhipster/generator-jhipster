@@ -227,13 +227,10 @@ public class JHipsterProperties {
 
         private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-
         <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
 
         private final LoadBalancedResourceDetails clientAuthorization = new LoadBalancedResourceDetails();
-
         <%_ } _%>
-
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 
         private final Authentication authentication = new Authentication();
@@ -244,19 +241,17 @@ public class JHipsterProperties {
             return rememberMe;
         }
         <%_ } _%>
-
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+
         public Authentication getAuthentication() {
             return authentication;
         }
-
         <%_ if((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+
         public LoadBalancedResourceDetails getClientAuthorization() {
             return clientAuthorization;
         }
-
         <%_ } _ %>
-
         public static class Authentication {
 
             <%_ if (authenticationType == 'oauth2') { _%>
