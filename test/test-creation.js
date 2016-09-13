@@ -419,8 +419,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -430,10 +428,9 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false,
                     'skipClient': false,
-                    'skipUserManagement': false
+                    'skipUserManagement': false,
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -457,8 +454,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Disk',
                     'prodDatabaseType': 'mariadb',
@@ -468,10 +463,9 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false,
                     'skipClient': false,
-                    'skipUserManagement': false
+                    'skipUserManagement': false,
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -495,8 +489,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -506,7 +498,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'gradle',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -531,8 +523,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/otherpackage',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -542,7 +532,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -566,8 +556,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/otherpackage',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -577,7 +565,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -600,8 +588,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -611,7 +597,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -634,8 +620,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'oauth2',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -645,7 +629,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -667,8 +651,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'hazelcast',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -678,7 +660,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -701,8 +683,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'no',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'cassandra',
                     'devDatabaseType': 'cassandra',
                     'prodDatabaseType': 'cassandra',
@@ -712,10 +692,9 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false,
                     'skipClient': false,
-                    'skipUserManagement': false
+                    'skipUserManagement': false,
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -735,8 +714,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'no',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'cassandra',
                     'devDatabaseType': 'cassandra',
                     'prodDatabaseType': 'cassandra',
@@ -744,10 +721,9 @@ describe('JHipster generator', function () {
                     'enableTranslation': false,
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false,
                     'skipClient': false,
-                    'skipUserManagement': false
+                    'skipUserManagement': false,
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -769,8 +745,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'hazelcast',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -778,7 +752,7 @@ describe('JHipster generator', function () {
                     'enableTranslation': false,
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -799,19 +773,18 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
                     'useSass': false,
                     'enableTranslation': true,
-                    'enableSocialSignIn': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : [
+                        'enableSocialSignIn:true'
+                    ]
                 })
                 .on('end', done);
         });
@@ -831,19 +804,18 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'jwt',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
                     'useSass': false,
                     'enableTranslation': true,
-                    'enableSocialSignIn': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : [
+                        'enableSocialSignIn:true'
+                    ]
                 })
                 .on('end', done);
         });
@@ -863,8 +835,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'jwt',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -874,7 +844,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -894,8 +864,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -904,7 +872,7 @@ describe('JHipster generator', function () {
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -927,8 +895,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -937,7 +903,7 @@ describe('JHipster generator', function () {
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -962,8 +928,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'jwt',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -973,7 +937,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -996,8 +960,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'jwt',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'mysql',
                     'prodDatabaseType': 'mysql',
@@ -1007,8 +969,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -1033,8 +994,6 @@ describe('JHipster generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'jwt',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -1044,8 +1003,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'gradle',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false,
+                    'serverSideOptions' : []
                     'skipClient': true,
                     'skipUserManagement': true
                 })
@@ -1072,8 +1030,6 @@ describe('JHipster generator', function () {
                     'serverPort': '9999',
                     'authenticationType': 'uaa',
                     'hibernateCache': 'no',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'mysql',
                     'prodDatabaseType': 'mysql',
@@ -1083,8 +1039,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -1113,8 +1068,6 @@ describe('JHipster generator', function () {
                     'authenticationType': 'uaa',
                     'uaaBaseName': './uaa/',
                     'hibernateCache': 'hazelcast',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'mysql',
                     'prodDatabaseType': 'mysql',
@@ -1124,8 +1077,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no',
-                    'enableSocialSignIn': false
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
@@ -1151,8 +1103,6 @@ describe('JHipster server generator', function () {
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
                     'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': 'no',
-                    'websocket': 'no',
                     'databaseType': 'sql',
                     'devDatabaseType': 'h2Memory',
                     'prodDatabaseType': 'mysql',
@@ -1161,7 +1111,7 @@ describe('JHipster server generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'searchEngine': 'no'
+                    'serverSideOptions' : []
                 })
                 .on('end', done);
         });
