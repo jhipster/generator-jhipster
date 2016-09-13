@@ -579,9 +579,6 @@ function askForOptionalItems() {
         this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
         this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
         this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
-        if (this.searchEngine === undefined) {
-            this.searchEngine = 'no';
-        }
         done();
     }.bind(this));
 }
