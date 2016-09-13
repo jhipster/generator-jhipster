@@ -459,7 +459,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset-request.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset-request.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset-request.controller.ts',

@@ -6,6 +6,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 
+import { RegisterComponent } from "./register/register.component";
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -14,7 +16,7 @@ import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
         <%=angular2AppName%>SharedModule
     ],
     declarations: [
-
+        RegisterComponent
     ],
     providers: [
         {
