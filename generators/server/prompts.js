@@ -119,28 +119,6 @@ function askForServerSideOpts() {
                 }
             }.bind(this)
         },
-        /*{
-            when: function (response) {
-                return applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt');
-            },
-            type: 'list',
-            name: 'enableSocialSignIn',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!',
-                    applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt'));
-            },
-            choices: [
-                {
-                    value: false,
-                    name: 'No'
-                },
-                {
-                    value: true,
-                    name: 'Yes, use social login'
-                }
-            ],
-            default: false
-        },*/
         {
             when: function (response) {
                 return applicationType === 'microservice';
@@ -391,69 +369,6 @@ function askForServerSideOpts() {
             ],
             default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 2 : 1
         },
-        /*{
-            when: function (response) {
-                return response.databaseType === 'sql';
-            },
-            type: 'list',
-            name: 'searchEngine',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use a search engine in your application?', response.databaseType === 'sql');
-            },
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'elasticsearch',
-                    name: 'Yes, with ElasticSearch'
-                }
-            ],
-            default: 0
-        },*/
-        /*{
-            when: function (response) {
-                return applicationType === 'monolith' || applicationType === 'gateway';
-            },
-            type: 'list',
-            name: 'clusteredHttpSession',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use clustered HTTP sessions?', applicationType === 'monolith' || applicationType === 'gateway');
-            },
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'hazelcast',
-                    name: 'Yes, with HazelCast'
-                }
-            ],
-            default: 0
-        },*/
-        /*{
-            when: function (response) {
-                return applicationType === 'monolith' || applicationType === 'gateway';
-            },
-            type: 'list',
-            name: 'websocket',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use WebSockets?', applicationType === 'monolith' || applicationType === 'gateway');
-            },
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'spring-websocket',
-                    name: 'Yes, with Spring Websocket'
-                }
-            ],
-            default: 0
-        },*/
         {
             type: 'list',
             name: 'buildTool',
@@ -500,10 +415,6 @@ function askForServerSideOpts() {
             this.serverPort = '8080';
         }
         this.hibernateCache = props.hibernateCache;
-        // this.clusteredHttpSession = props.clusteredHttpSession;
-        // this.websocket = props.websocket;
-        // this.searchEngine = props.searchEngine;
-        // this.enableSocialSignIn = props.enableSocialSignIn;
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
