@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
 
 @Component({
-    selector: 'register',
+    selector: '<%=jhiPrefix%>-register',
     templateUrl: 'app/account/register/register.html'
 })
 export class RegisterComponent implements OnInit {
