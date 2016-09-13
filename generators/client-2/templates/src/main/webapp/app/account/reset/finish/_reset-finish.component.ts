@@ -1,6 +1,10 @@
 import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
 import { TranslatePipe } from '../../../shared/translate.pipe';
 
+@Component({
+    selector: 'password-reset-finish',
+    templateUrl: 'app/account/reset/finish/reset-finish.html'
+})
 export class PasswordResetFinishComponent implements OnInit {
     confirmPassword: string;
     doNotMatch: string;

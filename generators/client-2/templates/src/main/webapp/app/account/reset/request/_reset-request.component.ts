@@ -1,6 +1,10 @@
 import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
 import { TranslatePipe } from '../../../shared/translate.pipe';
 
+@Component({
+    selector: 'password-reset-init',
+    templateUrl: 'app/account/reset/request/reset-request.html'
+})
 export class PasswordResetInitComponent implements OnInit {
     error: string;
     errorEmailNotExists: string;
