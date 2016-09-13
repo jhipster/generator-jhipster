@@ -74,7 +74,7 @@ module.exports = LanguagesGenerator.extend({
             this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.capitalizedBaseName = _.upperFirst(this.baseName);
-            this.websocket = this.config.get('websocket');
+            this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
             this.searchEngine = this.config.get('searchEngine');
             this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
@@ -120,7 +120,7 @@ module.exports = LanguagesGenerator.extend({
             if (configOptions.baseName) {
                 this.baseName = configOptions.baseName;
             }
-            if (configOptions.websocket) {
+            if (configOptions.websocket !== undefined) {
                 this.websocket = configOptions.websocket;
             }
             if (configOptions.databaseType) {

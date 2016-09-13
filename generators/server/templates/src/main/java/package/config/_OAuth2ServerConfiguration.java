@@ -81,7 +81,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
                 .disable()
                 .headers()
                 .frameOptions().disable()
-            .and()<% if (websocket == 'no') { %>
+            .and()<% if (!websocket) { %>
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()<% } %>

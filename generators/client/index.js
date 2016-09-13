@@ -216,7 +216,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.hibernateCache) {
                 this.hibernateCache = this.configOptions.hibernateCache;
             }
-            if (this.configOptions.websocket) {
+            if (this.configOptions.websocket !== undefined) {
                 this.websocket = this.configOptions.websocket;
             }
             if (this.configOptions.databaseType) {

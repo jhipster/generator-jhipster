@@ -140,7 +140,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.authenticationType = this.config.get('authenticationType');
             this.clusteredHttpSession = this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine');
-            this.websocket = this.config.get('websocket');
+            this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';
@@ -184,7 +184,7 @@ module.exports = JhipsterServerGenerator.extend({
             // force variables unused by microservice applications
             if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                 this.clusteredHttpSession = 'no';
-                this.websocket = 'no';
+                this.websocket = false;
             }
 
             var serverConfigFound = this.packageName !== undefined &&
