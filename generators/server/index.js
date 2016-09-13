@@ -138,7 +138,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.serverPort = '8080';
             }
             this.authenticationType = this.config.get('authenticationType');
-            this.clusteredHttpSession = this.config.get('clusteredHttpSession');
+            this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine');
             this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
@@ -183,7 +183,7 @@ module.exports = JhipsterServerGenerator.extend({
 
             // force variables unused by microservice applications
             if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
-                this.clusteredHttpSession = 'no';
+                this.clusteredHttpSession = false;
                 this.websocket = false;
             }
 
