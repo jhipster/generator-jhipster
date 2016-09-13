@@ -1,10 +1,10 @@
 <div>
-    <h2 translate="userManagement.home.title">Users</h2>
+    <h2 data-translate="userManagement.home.title">Users</h2>
     <jhi-alert></jhi-alert>
     <div class="row">
       <div class="col-md-4">
           <button class="btn btn-primary" ui-sref="user-management.new">
-              <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
+              <span class="glyphicon glyphicon-flash"></span> <span data-translate="userManagement.home.createLabel">Create a new User</span>
           </button>
       </div>
     </div>
@@ -12,15 +12,15 @@
         <table class="table table-striped">
             <thead>
             <tr<% if (databaseType !== 'cassandra') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()"<% } %>>
-                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="glyphicon glyphicon-sort"></span><%_ } _%></th>
-                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="login"<% } %>><span translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
-                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="email"<% } %>><span translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="id"<% } %>><span data-translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="glyphicon glyphicon-sort"></span><%_ } _%></th>
+                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="login"<% } %>><span data-translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> jh-sort-by="email"<% } %>><span data-translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                 <th></th>
-                <% if (enableTranslation) { %><th <% if (databaseType !== 'cassandra') { %> jh-sort-by="langKey"<% } %>> <span translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th><%_ } _%>
-                <th><span translate="userManagement.profiles">Profiles</span></th><%_ if (databaseType !== 'cassandra') { _%>
-                <th jh-sort-by="createdDate"><span translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="lastModifiedBy"><span translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th jh-sort-by="lastModifiedDate"><span translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th><% } %>
+                <% if (enableTranslation) { %><th <% if (databaseType !== 'cassandra') { %> jh-sort-by="langKey"<% } %>> <span data-translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th><%_ } _%>
+                <th><span data-translate="userManagement.profiles">Profiles</span></th><%_ if (databaseType !== 'cassandra') { _%>
+                <th jh-sort-by="createdDate"><span data-translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedBy"><span data-translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th jh-sort-by="lastModifiedDate"><span data-translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th><% } %>
                 <th></th>
             </tr>
             </thead>
@@ -31,9 +31,9 @@
                 <td>{{user.email}}</td>
                 <td>
                     <span class="label label-danger" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
-                          translate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
+                          data-translate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
                     <span class="label label-success" ng-click="vm.setActive(user, false)" ng-show="user.activated"
-                          translate="userManagement.activated" style="cursor: pointer;">Activated</span>
+                          data-translate="userManagement.activated" style="cursor: pointer;">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
@@ -50,19 +50,19 @@
                                 ui-sref="user-management-detail({login:user.login})"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.view"></span>
                         </button>
                         <button type="submit"
                                 ui-sref="user-management.edit({login:user.login})"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
                                 ui-sref="user-management.delete({login:user.login})"
                                 class="btn btn-danger btn-sm" ng-disabled="vm.currentAccount.login==user.login">
                             <span class="glyphicon glyphicon-remove-circle"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
                         </button>
                     </div>
                 </td>

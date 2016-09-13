@@ -1,14 +1,20 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.<%= entityClass %>;<% if (service != 'no') { %>
+<%_ if (dto != 'mapstruct' || service == 'no') { _%>
+import <%=packageName%>.domain.<%= entityClass %>;
+<%_ } _%>
+<%_ if (service != 'no') { _%>
 import <%=packageName%>.service.<%= entityClass %>Service;<% } else { %>
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} %>
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination != 'no') { %>
-import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
+<%_ if (dto == 'mapstruct') { _%>
+import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+<%_ if (service == 'no') { _%>
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+<%_ } } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
@@ -16,8 +22,7 @@ import org.springframework.data.domain.Pageable;<% } %>
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;<% if (dto == 'mapstruct') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;<% if (validation) { %>
@@ -45,6 +50,7 @@ public class <%= entityClass %>Resource {
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
+
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
      *
@@ -140,8 +146,10 @@ public class <%= entityClass %>Resource {
      * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
      * to the query.
      *
-     * @param query the query of the <%= entityInstance %> search
-     * @return the result of the search
+     * @param query the query of the <%= entityInstance %> search <% if (pagination != 'no') { %>
+     * @param pageable the pagination information<% } %>
+     * @return the result of the search<% if (pagination != 'no') { %>
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
      */
     @RequestMapping(value = "/_search/<%= entityApiUrl %>",
         method = RequestMethod.GET,

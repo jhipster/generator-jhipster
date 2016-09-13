@@ -3,9 +3,9 @@
         "title": "Attività utenti in tempo reale",
         "table": {
             "userlogin": "Utente",
-            "ipaddress": "IndirizzoIP",
+            "ipaddress": "Indirizzo IP",
             "userAgent": "User agent",
-            "page": "Pagina correntee",
+            "page": "Pagina corrente",
             "time": "Ora"
         }
     }

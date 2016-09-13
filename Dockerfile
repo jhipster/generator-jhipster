@@ -35,7 +35,14 @@ RUN \
   npm install -g \
     yo \
     bower \
-    gulp-cli
+    gulp-cli && \
+
+  # cleanup
+  apt-get clean && \
+  rm -rf \
+    /var/lib/apt/lists/* \
+    /tmp/* \
+    /var/tmp/*
 
 # copy sources
 COPY . /home/jhipster/generator-jhipster
@@ -50,7 +57,6 @@ RUN \
     /usr/lib/node_modules && \
 
   # cleanup
-  apt-get clean && \
   rm -rf \
     /var/lib/apt/lists/* \
     /tmp/* \

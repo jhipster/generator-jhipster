@@ -10,3 +10,9 @@ else
     echo "Found cache.txt"
     cat "$HOME"/.m2/cache.txt
 fi
+
+# no cache for first build
+if [ "$JHIPSTER_NODE_CACHE" == 0 ]; then
+    rm -Rf $HOME/app/node_modules
+    rm -Rf $HOME/app/node
+fi

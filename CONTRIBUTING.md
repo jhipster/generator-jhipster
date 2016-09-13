@@ -33,17 +33,21 @@ chances of your issue being dealt with quickly:
 
 * **Overview of the issue** - if an error is being thrown a stack trace helps
 * **Motivation for or Use Case** - explain why this is a bug for you
-* **JHipster Version(s)** - is it a regression?
-* **JHipster configuration, a `.yo-rc.json` file generated in the root folder** - this will help us to replicate the scenario, you can remove the rememberMe key.
-* **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory** - if the error is during an entity creation or associated with a specific entity
-* **Browsers and Operating System** - is this a problem with all browsers or only IE8?
 * **Reproduce the error** - an unambiguous set of steps to reproduce the error. If you have a JavaScript error, maybe you can provide a live example with
   [JSFiddle](http://jsfiddle.net/)?
 * **Related issues** - has a similar issue been reported before?
 * **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
   causing the problem (line of code or commit)
+* **JHipster Version(s)** - is it a regression?
+* **JHipster configuration, a `.yo-rc.json` file generated in the root folder** - this will help us to replicate the scenario, you can remove the rememberMe key.
+* **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory** - if the error is during an entity creation or associated with a specific entity
+* **Browsers and Operating System** - is this a problem with all browsers or only IE8?
+
+You can use `yo jhipster:info` to provide us the information we need.
 
 Click [here](https://github.com/jhipster/generator-jhipster/issues/new) to open a bug issue with a pre-filled template. For feature requests and quiries you can use [this template][feature-template].
+
+You can run `yo jhipster:info` in your project folder to get most of the above required info.
 
 Issues opened without any of these info will be **closed** without any explanation.
 
@@ -174,11 +178,18 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 ### Set NPM to use the cloned project
 
-In your cloned project, type:
+In your cloned `generator-jhipster` project, type `npm link`.
 
-```shell
-npm link
-```
+This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `yo jhipster`, you will now use the development version of JHipster.
+
+For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
+
+To overcome this you need to run `npm link generator-jhipster` on the generated project folder as well, so that the local version has a symbolic link to the development version of JHipster.
+
+To put it in a nutshell, you need to:
+
+1. run `npm link` on the `generator-jhipster` project
+2. run `npm link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
 Now, running the 'yo jhipster' command should use your specific JHipster version. You can test it by making a small change in your cloned generator, and running again on an existing JHipster project:
 
@@ -186,9 +197,7 @@ Now, running the 'yo jhipster' command should use your specific JHipster version
 yo jhipster
 ```
 
-TIP: If this doesn't work, try running `npm link generator-jhipster` in your project. See [this guide](http://justjs.com/posts/npm-link-developing-your-own-npm-modules-without-tears) for more information.
-
-You should see your changes reflected in the JHipster project.
+You should see your changes reflected in the generated project.
 
 ### Use a text editor
 

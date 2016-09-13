@@ -1,5 +1,8 @@
 package <%=packageName%>;
 
+<%_ if(applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
+<%_ } _%>
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.config.DefaultProfileUtil;
 import <%=packageName%>.config.JHipsterProperties;
@@ -19,7 +22,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.env.Environment;
+<% if(authenticationType === 'uaa') { %>import org.springframework.context.annotation.FilterType;
+<%_ } _%>import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -28,7 +32,13 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
+<%_ if(applicationType === 'microservice' && authenticationType === 'uaa') { _%>
+@ComponentScan(
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
+)
+<%_ } else { _%>
 @ComponentScan
+<%_ } _%>
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %> })
 @EnableConfigurationProperties({ JHipsterProperties.class<% if (databaseType == 'sql') { %>, LiquibaseProperties.class<% } %> })
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
@@ -91,5 +101,4 @@ public class <%= mainClass %> {
             configServerStatus == null ? "Not found or not setup for this application" : configServerStatus);
         <%_ } _%>
     }
-
 }

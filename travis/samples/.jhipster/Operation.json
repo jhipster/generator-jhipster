@@ -1,4 +1,5 @@
 {
+    "fluentMethods": true,
     "relationships": [
         {
             "relationshipName": "bankAccount",
@@ -11,7 +12,8 @@
             "otherEntityName": "label",
             "relationshipType": "many-to-many",
             "otherEntityField": "label",
-            "ownerSide": true
+            "ownerSide": true,
+            "otherEntityRelationshipName": "operation"
         }
     ],
     "fields": [

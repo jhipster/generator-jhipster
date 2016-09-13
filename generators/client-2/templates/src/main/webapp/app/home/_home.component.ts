@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Account } from "../shared/account.model";
+import { Account } from "../shared/model/account.model";
 
 @Component({
     selector: 'home',
@@ -18,11 +18,10 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         //TODO: Remove this line after migrating "Principal" service
-        let that = this;
         this.principal.identity().then(function (account) {
-            that.account = account;
-            that.isAuthenticated = that.principal.isAuthenticated;
-        });
+            this.account = account;
+            this.isAuthenticated = this.principal.isAuthenticated;
+        }.bind(this));
     }
 
     register() {

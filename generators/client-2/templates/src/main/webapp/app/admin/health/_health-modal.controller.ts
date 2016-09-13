@@ -1,21 +1,14 @@
-(function() {
-    'use strict';
+<%=jhiPrefixCapitalized%>HealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];
 
-    angular.module('<%=angularAppName%>.admin')
-        .controller('HealthModalController', HealthModalController);
+export function <%=jhiPrefixCapitalized%>HealthModalController ($uibModalInstance, currentHealth, baseName, subSystemName) {
+    var vm = this;
 
-    HealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];
+    vm.cancel = cancel;
+    vm.currentHealth = currentHealth;
+    vm.baseName = baseName;
+    vm.subSystemName = subSystemName;
 
-    function HealthModalController ($uibModalInstance, currentHealth, baseName, subSystemName) {
-        var vm = this;
-
-        vm.cancel = cancel;
-        vm.currentHealth = currentHealth;
-        vm.baseName = baseName;
-        vm.subSystemName = subSystemName;
-
-        function cancel() {
-            $uibModalInstance.dismiss('cancel');
-        }
+    function cancel() {
+        $uibModalInstance.dismiss('cancel');
     }
-})();
+}

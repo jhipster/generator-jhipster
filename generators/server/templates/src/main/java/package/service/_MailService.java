@@ -3,7 +3,7 @@ package <%=packageName%>.service;
 import <%=packageName%>.config.JHipsterProperties;
 import <%=packageName%>.domain.User;
 
-import org.apache.commons.lang.CharEncoding;
+import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -13,8 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
-<% if (enableSocialSignIn) { %>import org.apache.commons.lang.WordUtils;<% } %>
-
+<% if (enableSocialSignIn) { %>import org.apache.commons.lang3.StringUtils;<% } %>
 
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
@@ -30,7 +29,7 @@ import java.util.Locale;
 public class MailService {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
-    
+
     private static final String USER = "user";
     private static final String BASE_URL = "baseUrl";
 
@@ -101,16 +100,18 @@ public class MailService {
         String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
-    <% if (enableSocialSignIn) { %>
+    <%_ if (enableSocialSignIn) { _%>
+
     @Async
     public void sendSocialRegistrationValidationEmail(User user, String provider) {
         log.debug("Sending social registration validation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable("provider", WordUtils.capitalize(provider));
+        context.setVariable("provider", StringUtils.capitalize(provider));
         String content = templateEngine.process("socialRegistrationValidationEmail", context);
         String subject = messageSource.getMessage("email.social.registration.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
-    }<% } %>
+    }
+    <%_ } _%>
 }

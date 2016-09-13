@@ -34,8 +34,11 @@ spring:
             enabled: true
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
+    jackson:
+        serialization.indent_output: true
     <%_ if (databaseType == 'sql') { _%>
     datasource:
+        type: com.zaxxer.hikari.HikariDataSource
         <%_ if (devDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false
         <%_ } else if (devDatabaseType == 'mariadb') { _%>
@@ -86,7 +89,7 @@ spring:
         <%_ } else { _%>
         database: H2
         <%_ } _%>
-        show_sql: true
+        show-sql: true
         properties:
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
@@ -175,23 +178,33 @@ jhipster:
             maxBytesLocalHeap: 16M
         <%_ } _%>
     <%_ } _%>
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
     security:
         authentication:
-    <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
             jwt:
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 24 hours
                 tokenValidityInSeconds: 86400
     <%_ } _%>
-    <%_ if (authenticationType == 'oauth2') { _%>
+    <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+    security:
+        client-authorization:
+            <%_ if (applicationType !== 'uaa') { _%>
+            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
+            tokenServiceId: <%= uaaBaseName.toLowerCase() %>
+            <%_ } _%>
+            clientId: internal
+            clientSecret: internal
+    <%_ } _%>
+    <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
+    security:
+        authentication:
             oauth:
                 clientid: <%= baseName %>app
                 secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     <%_ } _%>
-<%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
     security:
         rememberMe:

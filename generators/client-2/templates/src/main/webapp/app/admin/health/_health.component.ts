@@ -3,7 +3,7 @@ import { <%=jhiPrefixCapitalized%>HealthService } from "./health.service";
 
 @Component({
     selector: '<%=jhiPrefix%>-health',
-    templateUrl: 'app/admin/health/health.html'
+    templateUrl: 'app/admin/health/health.html',
 })
 export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData:any;
@@ -40,9 +40,10 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     }
 
     showHealth(health) {
-        $uibModal.open({
+        let vm = this;
+        this.$uibModal.open({
             templateUrl: 'app/admin/health/health.modal.html',
-            controller: 'HealthModalController',
+            controller: '<%=jhiPrefixCapitalized%>HealthModalController',
             controllerAs: 'vm',
             size: 'lg',
             resolve: {

@@ -12,7 +12,7 @@
                 <span translate="global.title"><%= capitalizedBaseName %></span> <span class="navbar-version">v{{VERSION}}</span>
             </a>
         </div>
-        <div class="navbar-collapse" uib-collapse="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
+        <div class="navbar-collapse" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
                     <a ui-sref="home" (click)="collapseNavbar()">
@@ -21,8 +21,8 @@
                     </a>
                 </li>
                 <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-                <li [ngClass]="{active: $state.includes('entity')}" *ngSwitchCase="true" uib-dropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="entity-menu">
+                <li [ngClass]="{active: $state.includes('entity')}" *ngSwitchCase="true" ngbDropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" id="entity-menu">
                         <span>
                             <span class="glyphicon glyphicon-th-list"></span>
                             <span class="hidden-sm" translate="global.menu.entities.main">
@@ -31,12 +31,12 @@
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu" uib-dropdown-menu>
+                    <ul class="dropdown-menu" ngbDropdownMenu>
                         <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                     </ul>
                 </li>
-                <li [ngClass]="{active: $state.includes('account')}" uib-dropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">
+                <li [ngClass]="{active: $state.includes('account')}" ngbDropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" id="account-menu">
                         <span>
                             <span class="glyphicon glyphicon-user"></span>
                             <span class="hidden-sm" translate="global.menu.account.main">
@@ -45,7 +45,7 @@
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu" uib-dropdown-menu>
+                    <ul class="dropdown-menu" ngbDropdownMenu>
                         <li ui-sref-active="active" *ngSwitchCase="true">
                             <a ui-sref="settings" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-wrench"></span>&nbsp;
@@ -86,15 +86,15 @@
                         </li>
                     </ul>
                 </li>
-                <li [ngClass]="{active: $state.includes('admin')}"  *ngSwitchCase="true" has-authority="ROLE_ADMIN" uib-dropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="admin-menu">
+                <li [ngClass]="{active: $state.includes('admin')}"  *ngSwitchCase="true" has-authority="ROLE_ADMIN" ngbDropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" id="admin-menu">
                         <span>
                             <span class="glyphicon glyphicon-tower"></span>
                             <span class="hidden-sm" translate="global.menu.admin.main">Administration</span>
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu" uib-dropdown-menu>
+                    <ul class="dropdown-menu" ngbDropdownMenu>
                         <%_ if (applicationType == 'gateway') { _%>
                         <li ui-sref-active="active">
                             <a ui-sref="gateway" (click)="collapseNavbar()">
@@ -165,15 +165,15 @@
                     </ul>
                 </li>
                 <%_ if (enableTranslation){ _%>
-                <li *ngIf="languages" ui-sref-active="active" uib-dropdown class="dropdown pointer">
-                    <a class="dropdown-toggle" uib-dropdown-toggle href="" *ngIf="languages.length > 1">
+                <li *ngIf="languages" ui-sref-active="active" ngbDropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" ngbDropdownToggle href="#" *ngIf="languages.length > 1">
                         <span>
                             <span class="glyphicon glyphicon-flag"></span>
                             <span class="hidden-sm" translate="global.menu.language">Language</span>
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu" uib-dropdown-menu *ngIf="languages.length > 1">
+                    <ul class="dropdown-menu" ngbDropdownMenu *ngIf="languages.length > 1">
                         <li *ngFor="let language of languages">
                             <a href="" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
                         </li>

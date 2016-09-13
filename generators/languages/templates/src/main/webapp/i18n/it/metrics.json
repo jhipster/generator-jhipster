@@ -1,19 +1,19 @@
 {
     "metrics": {
-        "title": "Application Metrics",
-        "refresh.button": "Refresh",
-        "updating": "Actualización...",
+        "title": "Metriche dell'applicazione",
+        "refresh.button": "Aggiorna",
+        "updating": "Aggiornamento...",
         "jvm": {
-            "title": "JVM Metrics",
+            "title": "Metriche di JVM",
             "memory": {
-                "title": "Memory",
-                "total": "Total Memory",
-                "heap": "Heap Memory",
-                "nonheap": "Non-Heap Memory"
+                "title": "Memoria",
+                "total": "Memoria Totale",
+                "heap": "Memoria Heap",
+                "nonheap": "Memoria Non-Heap"
             },
             "threads": {
                 "title": "Threads",
-                "all": "All",
+                "all": "Tutti",
                 "runnable": "Runnable",
                 "timedwaiting": "Timed waiting",
                 "waiting": "Waiting",
@@ -39,26 +39,26 @@
                 "scavengetime": "Scavenge time"
             },
             "http": {
-                "title": "HTTP requests (events per second)",
-                "active": "Active requests:",
-                "total": "Total requests:",
+                "title": "Richieste HTTP (eventi al secondo)",
+                "active": "Richieste attive:",
+                "total": "Richieste totali:",
                 "table": {
-                    "code": "Code",
-                    "count": "Count",
-                    "mean": "Mean",
-                    "average": "Average"
+                    "code": "Codice",
+                    "count": "Numero",
+                    "mean": "Mediana",
+                    "average": "Media"
                 },
                 "code": {
                     "ok": "Ok",
-                    "notfound": "Not found",
-                    "servererror": "Server Error"
+                    "notfound": "Non trovato/i",
+                    "servererror": "Errore Server"
                 }
             }
         },
         "servicesstats": {
-            "title": "Services statistics (time in millisecond)",
+            "title": "Statistiche Servizi (in millisecondi),
             "table": {
-                "name": "Service name",
+                "name": "Nome servizio",
                 "count": "Count",
                 "mean": "Mean",
                 "min": "Min",
@@ -70,17 +70,17 @@
             }
         },
         "ehcache": {
-            "title": "Ehcache statistics",
-            "cachename": "Cache name",
-            "objects": "Objects",
+            "title": "Statistiche Ehcache",
+            "cachename": "Nome Cache",
+            "objects": "Oggetti",
             "hits": "Hits",
             "misses": "Misses",
             "evictioncount": "Eviction count",
             "mean": "Mean get time (ms)"
         },
         "datasource": {
-        	"usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
+        	"usage": "Utilizzo",
+            "title": "Statistiche DataSource (in millisecondi)",
             "name": "Pool usage",
             "count": "Count",
             "mean": "Mean",

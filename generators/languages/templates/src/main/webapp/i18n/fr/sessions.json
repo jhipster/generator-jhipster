@@ -8,8 +8,8 @@
             "button": "Invalider"
         },
         "messages": {
-            "success": "<strong>Session a été invalidée!</strong>",
-            "error": "<strong>Une erreur est survenue!</strong> La session ne peut pas être invalidée."
+            "success": "<strong>La session a été invalidée !</strong>",
+            "error": "<strong>Une erreur est survenue !</strong> La session ne peut pas être invalidée."
         }
     }
 }

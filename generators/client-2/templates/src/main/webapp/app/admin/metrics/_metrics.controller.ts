@@ -1,74 +1,66 @@
-(function() {
-    'use strict';
+<%=jhiPrefixCapitalized%>MetricsMonitoringController.$inject = ['$scope','<%=jhiPrefixCapitalized%>MetricsService', '$uibModal'];
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .controller('<%=jhiPrefixCapitalized%>MetricsMonitoringController', <%=jhiPrefixCapitalized%>MetricsMonitoringController);
+export function <%=jhiPrefixCapitalized%>MetricsMonitoringController ($scope, <%=jhiPrefixCapitalized%>MetricsService, $uibModal) {
+    var vm = this;
 
-    <%=jhiPrefixCapitalized%>MetricsMonitoringController.$inject = ['$scope','<%=jhiPrefixCapitalized%>MetricsService', '$uibModal'];
+    vm.cachesStats = {};
+    vm.metrics = {};
+    vm.refresh = refresh;
+    vm.refreshThreadDumpData = refreshThreadDumpData;
+    vm.servicesStats = {};
+    vm.updatingMetrics = true;
 
-    function <%=jhiPrefixCapitalized%>MetricsMonitoringController ($scope, <%=jhiPrefixCapitalized%>MetricsService, $uibModal) {
-        var vm = this;
+    vm.refresh();
 
-        vm.cachesStats = {};
-        vm.metrics = {};
-        vm.refresh = refresh;
-        vm.refreshThreadDumpData = refreshThreadDumpData;
+    $scope.$watch('vm.metrics', function (newValue) {
         vm.servicesStats = {};
+        vm.cachesStats = {};
+        angular.forEach(newValue.timers, function (value, key) {
+            if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
+                vm.servicesStats[key] = value;
+            }
+            if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
+                // remove gets or puts
+                var index = key.lastIndexOf('.');
+                var newKey = key.substr(0, index);
+
+                // Keep the name of the domain
+                index = newKey.lastIndexOf('.');
+                vm.cachesStats[newKey] = {
+                    'name': newKey.substr(index + 1),
+                    'value': value
+                };
+            }
+        });
+    });
+
+    function refresh () {
         vm.updatingMetrics = true;
+        <%=jhiPrefixCapitalized%>MetricsService.getMetrics().then(function (promise) {
+            vm.metrics = promise;
+            vm.updatingMetrics = false;
+        }, function (promise) {
+            vm.metrics = promise.data;
+            vm.updatingMetrics = false;
+        });
+    }
 
-        vm.refresh();
+    function refreshThreadDumpData () {
+        <%=jhiPrefixCapitalized%>MetricsService.threadDump().then(function(data) {
+            $uibModal.open({
+                templateUrl: 'app/admin/metrics/metrics.modal.html',
+                controller: '<%=jhiPrefixCapitalized%>MetricsMonitoringModalController',
+                controllerAs: 'vm',
+                size: 'lg',
+                resolve: {
+                    threadDump: function() {
+                        return data;
+                    }
 
-        $scope.$watch('vm.metrics', function (newValue) {
-            vm.servicesStats = {};
-            vm.cachesStats = {};
-            angular.forEach(newValue.timers, function (value, key) {
-                if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
-                    vm.servicesStats[key] = value;
-                }
-                if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
-                    // remove gets or puts
-                    var index = key.lastIndexOf('.');
-                    var newKey = key.substr(0, index);
-
-                    // Keep the name of the domain
-                    index = newKey.lastIndexOf('.');
-                    vm.cachesStats[newKey] = {
-                        'name': newKey.substr(index + 1),
-                        'value': value
-                    };
                 }
             });
         });
-
-        function refresh () {
-            vm.updatingMetrics = true;
-            <%=jhiPrefixCapitalized%>MetricsService.getMetrics().then(function (promise) {
-                vm.metrics = promise;
-                vm.updatingMetrics = false;
-            }, function (promise) {
-                vm.metrics = promise.data;
-                vm.updatingMetrics = false;
-            });
-        }
-
-        function refreshThreadDumpData () {
-            <%=jhiPrefixCapitalized%>MetricsService.threadDump().then(function(data) {
-                $uibModal.open({
-                    templateUrl: 'app/admin/metrics/metrics.modal.html',
-                    controller: '<%=jhiPrefixCapitalized%>MetricsMonitoringModalController',
-                    controllerAs: 'vm',
-                    size: 'lg',
-                    resolve: {
-                        threadDump: function() {
-                            return data;
-                        }
-
-                    }
-                });
-            });
-        }
-
-
     }
-})();
+
+
+}

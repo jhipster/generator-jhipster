@@ -120,17 +120,11 @@ public class <%= entityClass %> implements Serializable {
         relationshipName = relationships[idx].relationshipName,
         relationshipFieldName = relationships[idx].relationshipFieldName,
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
-        joinTableName = entityTableName + '_'+ getTableName(relationshipName),
+        joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType),
         relationshipType = relationships[idx].relationshipType,
         relationshipValidate = relationships[idx].relationshipValidate,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         ownerSide = relationships[idx].ownerSide;
-        if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-            joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
-        }
-        if(prodDatabaseType === 'mysql' && joinTableName.length > 64) {
-            joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
-        }
         if (otherEntityRelationshipName != null) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -194,11 +188,12 @@ public class <%= entityClass %> implements Serializable {
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
-<% for (idx in fields) {
+<%_ for (idx in fields) {
         var fieldType = fields[idx].fieldType;
         var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         var fieldName = fields[idx].fieldName;
-        var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; %>
+        var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
+
     <%_ if (fieldTypeBlobContent != 'text') { _%>
         <%_ if (fieldType.toLowerCase() == 'boolean') { _%>
     public <%= fieldType %> is<%= fieldInJavaBeanMethod %>() {
@@ -210,6 +205,17 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
         return <%= fieldName %>;
     }
+    <%_ if (fluentMethods) { _%>
+
+        <%_ if (fieldTypeBlobContent != 'text') { _%>
+    public <%= entityClass %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
+        <%_ } else { _%>
+    public <%= entityClass %> <%= fieldName %>(String <%= fieldName %>) {
+        <%_ } _%>
+        this.<%= fieldName %> = <%= fieldName %>;
+        return this;
+    }
+    <%_ } _%>
 
     <%_ if (fieldTypeBlobContent != 'text') { _%>
     public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
@@ -223,12 +229,20 @@ public class <%= entityClass %> implements Serializable {
     public String get<%= fieldInJavaBeanMethod %>ContentType() {
         return <%= fieldName %>ContentType;
     }
+    <%_ if (fluentMethods) { _%>
+
+    public <%= entityClass %> <%= fieldName %>ContentType(String <%= fieldName %>ContentType) {
+        this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
+        return this;
+    }
+    <%_ } _%>
 
     public void set<%= fieldInJavaBeanMethod %>ContentType(String <%= fieldName %>ContentType) {
         this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
     }
     <%_ } _%>
-<% } %><%
+<%_ } _%>
+<%_
     for (idx in relationships) {
         var relationshipFieldName = relationships[idx].relationshipFieldName,
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
@@ -237,23 +251,67 @@ public class <%= entityClass %> implements Serializable {
         relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
         relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
         otherEntityName = relationships[idx].otherEntityName,
-        otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-    %><% if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') { %>
+        otherEntityNamePlural = relationships[idx].otherEntityNamePlural,
+        otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized
+        otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
+    _%>
+    <%_ if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') { _%>
+
     public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalizedPlural %>() {
         return <%= relationshipFieldNamePlural %>;
     }
+        <%_ if (fluentMethods) { _%>
+
+    public <%= entityClass %> <%= relationshipFieldNamePlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
+        this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
+        return this;
+    }
+
+    public <%= entityClass %> add<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+        <%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
+            <%_ if (relationshipType == 'one-to-many') { _%>
+        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
+            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural != '' && relationshipType == 'many-to-many') {
+                // JHipster version < 3.6.0 didn't ask for this relationship name _%>
+        <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
+            <%_ } _%>
+        return this;
+    }
+
+    public <%= entityClass %> remove<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+        <%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
+            <%_ if (relationshipType == 'one-to-many') { _%>
+        <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
+            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural != '' && relationshipType == 'many-to-many') {
+                // JHipster version < 3.6.0 didn't ask for this relationship name _%>
+        <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
+            <%_ } _%>
+        return this;
+    }
+        <%_ } _%>
 
     public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
-    }<% } else { %>
+    }
+    <%_ } else { _%>
+
     public <%= otherEntityNameCapitalized %> get<%= relationshipNameCapitalized %>() {
         return <%= relationshipFieldName %>;
     }
+        <%_ if (fluentMethods) { _%>
+
+    public <%= entityClass %> <%= relationshipFieldName %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
+        return this;
+    }
+        <%_ } _%>
 
     public void set<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-    }<% } %>
-<% } %>
+    }
+    <%_ } _%>
+<%_ } _%>
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
