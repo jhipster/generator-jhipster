@@ -15,6 +15,7 @@ const DOCKER_SONAR = 'sonarqube:5.6.2-alpine';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.1';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v1.3.1';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v1.3.1';
+const DOCKER_CONSUL = 'consul:v0.6.4';
 
 // all constants used throughout all generators
 
@@ -62,7 +63,8 @@ const constants = {
     DOCKER_SONAR: DOCKER_SONAR,
     DOCKER_JHIPSTER_CONSOLE: DOCKER_JHIPSTER_CONSOLE,
     DOCKER_JHIPSTER_ELASTICSEARCH: DOCKER_JHIPSTER_ELASTICSEARCH,
-    DOCKER_JHIPSTER_LOGSTASH: DOCKER_JHIPSTER_LOGSTASH
+    DOCKER_JHIPSTER_LOGSTASH: DOCKER_JHIPSTER_LOGSTASH,
+    DOCKER_CONSUL: DOCKER_CONSUL
 };
 
 module.exports = constants;
