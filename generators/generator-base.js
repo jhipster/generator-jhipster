@@ -1655,6 +1655,6 @@ Generator.prototype.getOptionFromArray = function (array, option) {
     });
     optionValue = optionValue === 'true' ? true : optionValue;
     return optionValue;
-}
+};
 
 Generator.prototype.contains = _.includes;

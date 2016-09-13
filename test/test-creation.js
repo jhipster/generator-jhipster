@@ -1003,7 +1003,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'gradle',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    'serverSideOptions' : [],
                     'skipClient': true,
                     'skipUserManagement': true
                 })
