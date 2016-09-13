@@ -252,7 +252,7 @@ public class JHipsterProperties {
         public LoadBalancedResourceDetails getClientAuthorization() {
             return clientAuthorization;
         }
-        <%_ } _ %>
+        <%_ } _%>
         public static class Authentication {
             <%_ if (authenticationType == 'oauth2') { _%>
 
