@@ -245,6 +245,7 @@ module.exports = JhipsterServerGenerator.extend({
 
         askForModuleName: prompts.askForModuleName,
         askForServerSideOpts: prompts.askForServerSideOpts,
+        askForOptionalItems: prompts.askForOptionalItems,
         askFori18n: prompts.askFori18n,
 
         setSharedConfigOptions: function () {

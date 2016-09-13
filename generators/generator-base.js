@@ -1649,7 +1649,7 @@ Generator.prototype.isGitInstalled = function (callback) {
 Generator.prototype.getOptionFromArray = function (array, option) {
     let optionValue = false;
     array.forEach(function (value) {
-        if (value.contains(option)) {
+        if (_.includes(value, option)) {
             optionValue = value.split(':')[1];
         }
     });
