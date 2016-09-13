@@ -1,32 +1,42 @@
-(function() {
-    'use strict';
+import { Component, Inject, OnInit } from "@angular/core";
+import { TranslatePipe } from '../../shared/translate.pipe';
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .controller('PasswordController', PasswordController);
+@Component({
+    selector: 'password',
+    templateUrl: 'app/account/password/password.html',
+    pipes: [TranslatePipe]
+})
+export class PasswordComponent implements OnInit {
+        doNotMatch: string;
+        error: string;
+        success: string;
+        account: any;
+        password: string;
+        confirmPassword: string;
+        Auth: any;
+        Principal: any;
 
-    PasswordController.$inject = ['Auth', 'Principal'];
+        constructor(@Inject('Auth') Auth, @Inject('Principal') Principal) {
+            this.Auth = Auth;
+            this.Principal = Principal;
+        }
 
-    function PasswordController (Auth, Principal) {
-        var vm = this;
+        ngOnInit () {
+            let vm = this;
+            this.Principal.identity().then(function(account) {
+                vm.account = account;
+            });
+        }
 
-        vm.changePassword = changePassword;
-        vm.doNotMatch = null;
-        vm.error = null;
-        vm.success = null;
-
-        Principal.identity().then(function(account) {
-            vm.account = account;
-        });
-
-        function changePassword () {
-            if (vm.password !== vm.confirmPassword) {
-                vm.error = null;
-                vm.success = null;
-                vm.doNotMatch = 'ERROR';
+        changePassword () {
+            if (this.password !== this.confirmPassword) {
+                this.error = null;
+                this.success = null;
+                this.doNotMatch = 'ERROR';
             } else {
-                vm.doNotMatch = null;
-                Auth.changePassword(vm.password).then(function () {
+                this.doNotMatch = null;
+                let vm = this;
+                this.Auth.changePassword(this.password).then(function () {
                     vm.error = null;
                     vm.success = 'OK';
                 }).catch(function () {
@@ -36,4 +46,3 @@
             }
         }
     }
-})();
