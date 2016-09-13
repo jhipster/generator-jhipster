@@ -1,42 +1,32 @@
-import { Component, Inject, OnInit } from "@angular/core";
-import { TranslatePipe } from '../../shared/translate.pipe';
+(function() {
+    'use strict';
 
-@Component({
-    selector: 'password',
-    templateUrl: 'app/account/password/password.html',
-    pipes: [TranslatePipe]
-})
-export class PasswordComponent implements OnInit {
-        doNotMatch: string;
-        error: string;
-        success: string;
-        account: any;
-        password: string;
-        confirmPassword: string;
-        Auth: any;
-        Principal: any;
+    angular
+        .module('<%=angularAppName%>.account')
+        .controller('PasswordController', PasswordController);
 
-        constructor(@Inject('Auth') Auth, @Inject('Principal') Principal) {
-            this.Auth = Auth;
-            this.Principal = Principal;
-        }
+    PasswordController.$inject = ['Auth', 'Principal'];
 
-        ngOnInit () {
-            let vm = this;
-            this.Principal.identity().then(function(account) {
-                vm.account = account;
-            });
-        }
+    function PasswordController (Auth, Principal) {
+        var vm = this;
 
-        changePassword () {
-            if (this.password !== this.confirmPassword) {
-                this.error = null;
-                this.success = null;
-                this.doNotMatch = 'ERROR';
+        vm.changePassword = changePassword;
+        vm.doNotMatch = null;
+        vm.error = null;
+        vm.success = null;
+
+        Principal.identity().then(function(account) {
+            vm.account = account;
+        });
+
+        function changePassword () {
+            if (vm.password !== vm.confirmPassword) {
+                vm.error = null;
+                vm.success = null;
+                vm.doNotMatch = 'ERROR';
             } else {
-                this.doNotMatch = null;
-                let vm = this;
-                this.Auth.changePassword(this.password).then(function () {
+                vm.doNotMatch = null;
+                Auth.changePassword(vm.password).then(function () {
                     vm.error = null;
                     vm.success = 'OK';
                 }).catch(function () {
@@ -46,3 +36,4 @@ export class PasswordComponent implements OnInit {
             }
         }
     }
+})();
