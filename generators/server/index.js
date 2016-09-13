@@ -139,7 +139,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.authenticationType = this.config.get('authenticationType');
             this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
-            this.searchEngine = this.config.get('searchEngine');
+            this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
             this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
