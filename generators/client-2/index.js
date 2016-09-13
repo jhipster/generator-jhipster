@@ -382,7 +382,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'account/_account.state.ts', ANGULAR_DIR + 'account/account.state.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
             this.copyJs(ANGULAR_DIR + 'account/activate/_activate.state.ts', ANGULAR_DIR + 'account/activate/activate.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/activate/_activate.controller.ts', ANGULAR_DIR + 'account/activate/activate.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/activate/_activate.component.ts', ANGULAR_DIR + 'account/activate/activate.component.ts', this, {});
             this.template(ANGULAR_DIR + 'account/activate/_activate.service.ts', ANGULAR_DIR + 'account/activate/activate.service.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/password/password.html', ANGULAR_DIR + 'account/password/password.html');
             this.copyJs(ANGULAR_DIR + 'account/password/_password.state.ts', ANGULAR_DIR + 'account/password/password.state.ts', this, {});
@@ -393,14 +393,14 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'account/register/_register.state.ts', ANGULAR_DIR + 'account/register/register.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.component.ts', ANGULAR_DIR + 'account/register/register.component.ts', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.service.ts', ANGULAR_DIR + 'account/register/register.service.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/reset/request/reset-request.html', ANGULAR_DIR + 'account/reset/request/reset-request.html');
-            this.copyJs(ANGULAR_DIR + 'account/reset/request/_reset-request.state.ts', ANGULAR_DIR + 'account/reset/request/reset-request.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/reset/request/_reset-request.component.ts', ANGULAR_DIR + 'account/reset/request/reset-request.component.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/reset/request/_reset-request.service.ts', ANGULAR_DIR + 'account/reset/request/reset-request.service.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/reset/finish/reset-finish.html', ANGULAR_DIR + 'account/reset/finish/reset-finish.html');
-            this.copyJs(ANGULAR_DIR + 'account/reset/finish/_reset-finish.state.ts', ANGULAR_DIR + 'account/reset/finish/reset-finish.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/reset/finish/_reset-finish.component.ts', ANGULAR_DIR + 'account/reset/finish/reset-finish.component.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/reset/finish/_reset-finish.service.ts', ANGULAR_DIR + 'account/reset/finish/reset-finish.service.ts', this, {});
+            this.copyHtml(ANGULAR_DIR + 'account/password-reset/init/password-reset-init.html', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.html');
+            this.copyJs(ANGULAR_DIR + 'account/password-reset/init/_password-reset-init.state.ts', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.state.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/password-reset/init/_password-reset-init.component.ts', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/password-reset/init/_password-reset-init.service.ts', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.service.ts', this, {});
+            this.copyHtml(ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.html', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.html');
+            this.copyJs(ANGULAR_DIR + 'account/password-reset/finish/_password-reset-finish.state.ts', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.state.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/password-reset/finish/_password-reset-finish.component.ts', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/password-reset/finish/_password-reset-finish.service.ts', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.service.ts', this, {});
             if (this.authenticationType === 'session') {
                 this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
                 this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.ts', ANGULAR_DIR + 'account/sessions/sessions.state.ts', this, {});

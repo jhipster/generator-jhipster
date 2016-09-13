@@ -3,7 +3,8 @@ import { TranslatePipe } from '../../../shared/translate.pipe';
 
 @Component({
     selector: 'password-reset-init',
-    templateUrl: 'app/account/reset/request/reset-request.html'
+    templateUrl: 'app/account/password-reset/init/password-reset-init.html'/*,
+    pipes: [TranslatePipe]*/
 })
 export class PasswordResetInitComponent implements OnInit {
     error: string;

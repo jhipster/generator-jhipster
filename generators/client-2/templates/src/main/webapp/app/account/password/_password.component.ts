@@ -3,7 +3,8 @@ import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
     selector: 'password',
-    templateUrl: 'app/account/password/password.html'
+    templateUrl: 'app/account/password/password.html'/*,
+    pipes: [TranslatePipe]*/
 })
 export class PasswordComponent implements OnInit {
         doNotMatch: string;
