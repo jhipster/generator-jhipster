@@ -490,6 +490,11 @@ function askForOptionalItems() {
         this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
         this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
         this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
+        console.log(this.serverSideOptions);
+        console.log(this.clusteredHttpSession);
+        console.log(this.websocket);
+        console.log(this.searchEngine);
+        console.log(this.enableSocialSignIn);
         done();
     }.bind(this));
 }

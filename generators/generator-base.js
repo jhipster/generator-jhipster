@@ -1653,6 +1653,7 @@ Generator.prototype.getOptionFromArray = function (array, option) {
             optionValue = value.split(':')[1];
         }
     });
+    optionValue = optionValue === 'true' ? true : optionValue;
     return optionValue;
 }
 
