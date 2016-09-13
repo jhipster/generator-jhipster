@@ -14,9 +14,9 @@ import { PasswordResetInitStateConfig } from "./reset/request/reset-request.stat
 import { PasswordResetFinishStateConfig } from "./reset/finish/reset-finish.state";
 
 import { RegisterComponent } from "./register/register.component";
-import { PasswordComponent } from "./password/password.controller";
-import { PasswordResetInitComponent } from "./reset/request/reset-request.controller";
-import { PasswordResetFinishComponent } from "./reset/finish/reset-finish.controller";
+import { PasswordComponent } from "./password/password.component";
+import { PasswordResetInitComponent } from "./reset/request/reset-request.component";
+import { PasswordResetFinishComponent } from "./reset/finish/reset-finish.component";
 
 <% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
 upgradeAdapter.upgradeNg1Provider('Auth');
