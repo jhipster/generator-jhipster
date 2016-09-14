@@ -1231,6 +1231,7 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <executable>true</executable>
+                            <fork>true</fork>
                         </configuration>
                         <executions>
                             <execution>
