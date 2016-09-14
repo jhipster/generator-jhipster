@@ -447,10 +447,10 @@ function askForOptionalItems() {
     var applicationType = this.applicationType;
     var choices = [];
     var defaultChoice = [];
-    if (applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
+    if (this.databaseType != 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
         choices.push(
             {
-                name: 'Social login (Google, Facebook, Twitter). Warning, this doesn\'t work with Cassandra!',
+                name: 'Social login (Google, Facebook, Twitter)',
                 value: 'enableSocialSignIn:true'
             }
         );
@@ -480,7 +480,7 @@ function askForOptionalItems() {
         type: 'checkbox',
         name: 'serverSideOptions',
         message: function (response) {
-            return getNumberedQuestion('Which server side options would you like to use?', true);
+            return getNumberedQuestion('Which other technologies would you like to use?', true);
         },
         choices: choices,
         default: defaultChoice
