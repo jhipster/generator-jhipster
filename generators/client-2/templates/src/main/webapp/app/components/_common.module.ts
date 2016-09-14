@@ -37,7 +37,7 @@ angular
         'ui.router'
     ])
     // bug 'showAsToast is not a function to fix'
-    .config(AlertServiceConfig)
+    //.config(AlertServiceConfig)
     .controller('LoginController', LoginController)
     .factory('Auth', Auth)
     .factory('AuthServerProvider', AuthServerProvider)
@@ -45,6 +45,6 @@ angular
     .factory('LoginService', LoginService)
     .factory('Principal', Principal)
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
-    .provider('AlertService', AlertService)<% if (enableTranslation) { %>
+    .factory('AlertService', upgradeAdapter.downgradeNg2Provider(AlertService))<% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent));
