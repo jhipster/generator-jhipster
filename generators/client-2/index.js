@@ -514,7 +514,7 @@ module.exports = JhipsterClientGenerator.extend({
 
             //alert service code
             this.template(ANGULAR_DIR + 'components/alert/_alert.service.ts', ANGULAR_DIR + 'components/alert/alert.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/alert/_alert.directive.ts', ANGULAR_DIR + 'components/alert/alert.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/alert/_alert.component.ts', ANGULAR_DIR + 'components/alert/alert.component.ts', this, {});
             this.template(ANGULAR_DIR + 'components/alert/_alert-error.directive.ts', ANGULAR_DIR + 'components/alert/alert-error.directive.ts', this, {});
         },
 

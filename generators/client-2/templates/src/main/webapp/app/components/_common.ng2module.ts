@@ -4,12 +4,14 @@ import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 
 import { ProfileService } from './profiles/profile.service';
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
+import { jhiAlertComponent } from "./alert/alert.directive";
 
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule
     ],
     declarations: [
+        jhiAlertComponent,
         PageRibbonComponent
     ],
     providers: [
