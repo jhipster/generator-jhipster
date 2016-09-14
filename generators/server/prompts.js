@@ -447,7 +447,7 @@ function askForOptionalItems() {
     var applicationType = this.applicationType;
     var choices = [];
     var defaultChoice = [];
-    if (this.databaseType != 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
+    if (this.databaseType !== 'cassandra' && applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
         choices.push(
             {
                 name: 'Social login (Google, Facebook, Twitter)',
