@@ -8,8 +8,8 @@
             <p class="lead" translate="home.subtitle">This is your homepage</p>
 
             <div [ngSwitch]="isAuthenticated()">
-                <div class="alert alert-success" *ngSwitchCase="true" *ngIf="account" translate="home.logged.message">
-                    You are logged in as user "{{account.login}}".
+                <div class="alert alert-success" *ngSwitchCase="true" translate="home.logged.message">
+                    <span *ngIf="account"> You are logged in as user "{{account.login}}". </span>
                 </div>
 
                 <div class="alert alert-warning" *ngSwitchCase="false" translate="global.messages.info.authenticated" translate-compile>
