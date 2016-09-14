@@ -49,7 +49,7 @@
                 <constraints nullable="true"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp" defaultValueDate="${now}"/>
         </createTable>
         <% if(prodDatabaseType != 'oracle') {%>
         <createIndex indexName="idx_user_login"
@@ -82,11 +82,12 @@
         <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/><% if (authenticationType == 'session') { %>
 
         <createTable tableName="jhi_persistent_token">
-            <column name="series" type="varchar(255)">
+            <!-- Maximum line length of Base64 output is 76 -->
+            <column name="series" type="varchar(76)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="bigint"/>
-            <column name="token_value" type="varchar(255)">
+            <column name="token_value" type="varchar(76)">
                 <constraints nullable="false" />
             </column>
             <column name="token_date" type="date"/>
@@ -134,7 +135,7 @@
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="principal" type="varchar(255)">
+            <column name="principal" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
                 <constraints nullable="false" />
             </column>
             <column name="event_date" type="timestamp"/>
@@ -145,7 +146,7 @@
             <column name="event_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="name" type="varchar(150)">
                 <constraints nullable="false"/>
             </column>
             <column name="value" type="varchar(255)"/>
@@ -155,7 +156,7 @@
         <createIndex indexName="idx_persistent_audit_event"
                      tableName="jhi_persistent_audit_event"
                      unique="false">
-            <column name="principal" type="varchar(255)"/>
+            <column name="principal" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)"/>
             <column name="event_date" type="timestamp"/>
         </createIndex>
 
@@ -233,7 +234,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_client_token"
-            constraintName="fk_oauth_client_tokn_user_name"
+            constraintName="fk_oauth_client_token_user_name"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
@@ -251,7 +252,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_access_token"
-            constraintName="fk_oauth_access_tokn_user_name"
+            constraintName="fk_oauth_access_token_user_name"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
@@ -263,6 +264,7 @@
 
         <createTable tableName="oauth_code">
             <column name="code" type="varchar(255)"/>
+            <column name="authentication" type="BLOB"/>
         </createTable>
 
         <createTable tableName="oauth_approvals">
@@ -273,5 +275,10 @@
             <column name="expiresAt" type="timestamp"/>
             <column name="lastModifiedAt" type="timestamp"/>
         </createTable>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/oauth_client_details.csv"
+                  separator=";"
+                  tableName="oauth_client_details"/>
     </changeSet><% } %>
 </databaseChangeLog>

@@ -49,6 +49,7 @@
                 }
                 return result;
             }
+
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
@@ -56,6 +57,7 @@
                     vm.<%= entityInstancePlural %>.push(data[i]);
                 }
             }
+
             function onError(error) {
                 AlertService.error(error.data.message);
             }
@@ -75,7 +77,9 @@
 
         function clear () {
             vm.<%= entityInstancePlural %> = [];
-            vm.links = null;
+            vm.links = {
+                last: 0
+            };
             vm.page = 0;
             vm.predicate = 'id';
             vm.reverse = true;
@@ -89,7 +93,9 @@
                 return vm.clear();
             }
             vm.<%= entityInstancePlural %> = [];
-            vm.links = null;
+            vm.links = {
+                last: 0
+            };
             vm.page = 0;
             vm.predicate = '_score';
             vm.reverse = false;

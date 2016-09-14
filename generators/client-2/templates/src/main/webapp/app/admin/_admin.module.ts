@@ -1,3 +1,5 @@
+import { upgradeAdapter } from '../upgrade_adapter';
+
 import { AdminStateConfig } from './admin.state';
 import { AuditStateConfig } from './audits/audits.state';
 import { ConfigStateConfig } from './configuration/configuration.state';
@@ -19,21 +21,10 @@ import { LogsComponent } from './logs/logs.component';
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalController } from "./metrics/metrics-modal.controller";
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringController } from "./metrics/metrics.controller";
 import { <%=jhiPrefixCapitalized%>HealthModalController } from "./health/health-modal.controller";
-
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
 
-import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
-import { LogsService } from './logs/logs.service';
-import { ParseLinks } from "../components/util/parse-links.service";
-
-import { upgradeAdapter } from '../upgrade_adapter';
-
-upgradeAdapter.addProvider(AuditsService);
-upgradeAdapter.addProvider(<%=jhiPrefixCapitalized%>HealthService);
-upgradeAdapter.addProvider(LogsService);
-upgradeAdapter.addProvider(ParseLinks);
 
 upgradeAdapter.upgradeNg1Provider('$uibModal');
 

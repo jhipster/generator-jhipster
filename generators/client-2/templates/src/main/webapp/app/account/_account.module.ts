@@ -10,7 +10,7 @@ import { upgradeAdapter } from "../upgrade_adapter";
 import { RegisterStateConfig } from "./register/register.state";
 import { AccountStateConfig } from "./account.state";
 
-import { RegisterComponent } from "./register/register.controller";
+import { RegisterComponent } from "./register/register.component";
 
 <% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
 upgradeAdapter.upgradeNg1Provider('Auth');

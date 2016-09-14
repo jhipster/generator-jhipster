@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { DatePipe } from "@angular/common";
+import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
-import { Audit } from "./audit.model";
-import { AuditsService } from "./audits.service";
-import { ParseLinks } from "../../components/util/parse-links.service";
+import { Audit } from './audit.model';
+import { AuditsService } from './audits.service';
+import { ParseLinks } from '../../shared/service/parse-links.service';
 
 @Component({
   selector: '<%=jhiPrefix%>-audit',
@@ -18,11 +18,12 @@ export class AuditsComponent implements OnInit {
     reverse: boolean;
     toDate: string;
     totalItems: number;
+    datePipe : DatePipe;
 
     constructor(private auditsService: AuditsService, private parseLinks: ParseLinks){ 
         this.page = 1;
         this.reverse = false;
-        this.orderProp = "timestamp";
+        this.orderProp = 'timestamp';
     }
 
     getAudits () {
@@ -59,7 +60,7 @@ export class AuditsComponent implements OnInit {
             fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
         }
 
-        this.fromDate = new DatePipe().transform(fromDate, dateFormat);
+        this.fromDate = this.datePipe.transform(fromDate, dateFormat);
     }
 
     today () {
@@ -68,7 +69,7 @@ export class AuditsComponent implements OnInit {
         let today: Date = new Date();
 
         let date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-        this.toDate = new DatePipe().transform(date, dateFormat);
+        this.toDate = this.datePipe.transform(date, dateFormat);
     }
 
     private sortAudits(audits: Audit[]) {

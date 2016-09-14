@@ -1,0 +1,55 @@
+node {
+<%_ if (applicationType !== 'microservice') { _%>
+    // uncomment these 2 lines and edit the name 'node-4.4.7' according to what you choose in configuration
+    // def nodeHome = tool name: 'node-4.4.7', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+    // env.PATH = "${nodeHome}/bin:${env.PATH}"
+
+    stage('check tools') {
+        sh "node -v"
+        sh "npm -v"
+        sh "bower -v"
+        sh "gulp -v"
+    }
+
+    stage('checkout') {
+        checkout scm
+    }
+
+    stage('npm install') {
+        sh "npm install"
+    }
+
+<%_ } _%>
+<%_ if (buildTool === 'maven') { _%>
+    stage('clean') {
+        sh "./mvnw clean"
+    }
+
+    stage('backend tests') {
+        sh "./mvnw test"
+    }
+
+<%_ } else if (buildTool === 'gradle') { _%>
+    stage('clean') {
+        sh "./gradlew clean"
+    }
+
+    stage('backend tests') {
+        sh "./gradlew test"
+    }
+
+<%_ } _%>
+<%_ if (applicationType !== 'microservice') { _%>
+    stage('frontend tests') {
+        sh "gulp test"
+    }
+
+<%_ } _%>
+    stage('packaging') {
+<%_ if (buildTool === 'maven') { _%>
+        sh "./mvnw package -Pprod -DskipTests"
+<%_ } else if (buildTool === 'gradle' ) { _%>
+        sh "./gradlew bootRepackage -Pprod -x test"
+<%_ } _%>
+    }
+}

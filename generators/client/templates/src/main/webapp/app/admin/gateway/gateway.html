@@ -1,21 +1,21 @@
 <div>
-    <h2 translate="gateway.title">Gateway</h2>
+    <h2 data-translate="gateway.title">Gateway</h2>
 
-    <h3 translate="gateway.routes.title">Current routes</h3>
+    <h3 data-translate="gateway.routes.title">Current routes</h3>
     <p>
         <button type="button" class="btn btn-primary" ng-click="vm.refresh()" ng-show="vm.updatingRoutes == false">
-            <span class="glyphicon glyphicon-refresh glyphicon-"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
+            <span class="glyphicon glyphicon-refresh glyphicon-"></span>&nbsp;<span data-translate="gateway.refresh.button">Refresh</span>
         </button>
         <button type="button" class="btn btn-danger" ng-show="vm.updatingRoutes">
-            <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
+            <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span data-translate="gateway.refresh.button">Refresh</span>
         </button>
     </p>
     <table class="table table-striped table-responsive">
         <thead>
         <tr>
-            <th translate="gateway.routes.url">URL</th>
-            <th translate="gateway.routes.service">Service</th>
-            <th translate="gateway.routes.servers">Available servers</th>
+            <th data-translate="gateway.routes.url">URL</th>
+            <th data-translate="gateway.routes.service">Service</th>
+            <th data-translate="gateway.routes.servers">Available servers</th>
         </tr>
         </thead>
 
@@ -23,7 +23,7 @@
             <td>{{route.path}}</td>
             <td>{{route.serviceId}}</td>
             <td>
-                <div ng-show="{{route.serviceInstances.length == 0}}" class="label label-danger" translate="gateway.routes.error">
+                <div ng-show="{{route.serviceInstances.length == 0}}" class="label label-danger" data-translate="gateway.routes.error">
                     Warning: no server available!
                 </div>
                 <table class="tabletable-responsive">
