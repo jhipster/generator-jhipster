@@ -1646,4 +1646,15 @@ Generator.prototype.isGitInstalled = function (callback) {
     }.bind(this));
 };
 
+Generator.prototype.getOptionFromArray = function (array, option) {
+    let optionValue = false;
+    array.forEach(function (value) {
+        if (_.includes(value, option)) {
+            optionValue = value.split(':')[1];
+        }
+    });
+    optionValue = optionValue === 'true' ? true : optionValue;
+    return optionValue;
+};
+
 Generator.prototype.contains = _.includes;

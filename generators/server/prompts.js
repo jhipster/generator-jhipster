@@ -7,6 +7,7 @@ var path = require('path'),
 module.exports = {
     askForModuleName,
     askForServerSideOpts,
+    askForOptionalItems,
     askFori18n
 };
 
@@ -117,28 +118,6 @@ function askForServerSideOpts() {
                     return 'Could not find a valid JHipster UAA server in path "' + input + '"';
                 }
             }.bind(this)
-        },
-        {
-            when: function (response) {
-                return applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt');
-            },
-            type: 'list',
-            name: 'enableSocialSignIn',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use social login (Google, Facebook, Twitter)? Warning, this doesn\'t work with Cassandra!',
-                    applicationType === 'monolith' && (response.authenticationType === 'session' || response.authenticationType === 'jwt'));
-            },
-            choices: [
-                {
-                    value: false,
-                    name: 'No'
-                },
-                {
-                    value: true,
-                    name: 'Yes, use social login'
-                }
-            ],
-            default: false
         },
         {
             when: function (response) {
@@ -391,69 +370,6 @@ function askForServerSideOpts() {
             default: (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') ? 2 : 1
         },
         {
-            when: function (response) {
-                return response.databaseType === 'sql';
-            },
-            type: 'list',
-            name: 'searchEngine',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use a search engine in your application?', response.databaseType === 'sql');
-            },
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'elasticsearch',
-                    name: 'Yes, with ElasticSearch'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return applicationType === 'monolith' || applicationType === 'gateway';
-            },
-            type: 'list',
-            name: 'clusteredHttpSession',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use clustered HTTP sessions?', applicationType === 'monolith' || applicationType === 'gateway');
-            },
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'hazelcast',
-                    name: 'Yes, with HazelCast'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return applicationType === 'monolith' || applicationType === 'gateway';
-            },
-            type: 'list',
-            name: 'websocket',
-            message: function (response) {
-                return getNumberedQuestion('Do you want to use WebSockets?', applicationType === 'monolith' || applicationType === 'gateway');
-            },
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'spring-websocket',
-                    name: 'Yes, with Spring Websocket'
-                }
-            ],
-            default: 0
-        },
-        {
             type: 'list',
             name: 'buildTool',
             message: function (response) {
@@ -499,14 +415,10 @@ function askForServerSideOpts() {
             this.serverPort = '8080';
         }
         this.hibernateCache = props.hibernateCache;
-        this.clusteredHttpSession = props.clusteredHttpSession;
-        this.websocket = props.websocket;
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
-        this.searchEngine = props.searchEngine;
         this.buildTool = props.buildTool;
-        this.enableSocialSignIn = props.enableSocialSignIn;
         this.uaaBaseName = getUaaAppName.call(this, props.uaaBaseName).baseName;
 
         if (this.databaseType === 'no') {
@@ -522,14 +434,65 @@ function askForServerSideOpts() {
             this.prodDatabaseType = 'cassandra';
             this.hibernateCache = 'no';
         }
-        if (this.searchEngine === undefined) {
-            this.searchEngine = 'no';
-        }
 
         done();
     }.bind(this));
 }
 
+function askForOptionalItems() {
+    if (this.existingProject) return;
+
+    var done = this.async();
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    var applicationType = this.applicationType;
+    var choices = [];
+    var defaultChoice = [];
+    if (applicationType === 'monolith' && (this.authenticationType === 'session' || this.authenticationType === 'jwt')) {
+        choices.push(
+            {
+                name: 'Social login (Google, Facebook, Twitter). Warning, this doesn\'t work with Cassandra!',
+                value: 'enableSocialSignIn:true'
+            }
+        );
+    }
+    if (this.databaseType === 'sql') {
+        choices.push(
+            {
+                name: 'Search engine using ElasticSearch',
+                value: 'searchEngine:elasticsearch'
+            }
+        );
+    }
+    if (applicationType === 'monolith' || applicationType === 'gateway') {
+        choices.push(
+            {
+                name: 'Clustered HTTP sessions using Hazelcast',
+                value: 'clusteredHttpSession:hazelcast'
+            },
+            {
+                name: 'WebSockets using Spring Websocket',
+                value: 'websocket:spring-websocket'
+            }
+        );
+    }
+
+    this.prompt({
+        type: 'checkbox',
+        name: 'serverSideOptions',
+        message: function (response) {
+            return getNumberedQuestion('Which server side options would you like to use?', true);
+        },
+        choices: choices,
+        default: defaultChoice
+    }).then(function (prompt) {
+        this.serverSideOptions = prompt.serverSideOptions;
+        this.clusteredHttpSession = this.getOptionFromArray(this.serverSideOptions, 'clusteredHttpSession');
+        this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
+        this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
+        this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
+        done();
+    }.bind(this));
+}
 
 function askFori18n() {
     if (this.existingProject || this.configOptions.skipI18nQuestion) return;

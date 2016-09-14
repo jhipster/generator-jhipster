@@ -113,7 +113,7 @@ module.exports = EntityGenerator.extend({
             this.hibernateCache = this.config.get('hibernateCache');
             this.databaseType = this.config.get('databaseType');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
-            this.searchEngine = this.config.get('searchEngine');
+            this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');

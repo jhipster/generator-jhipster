@@ -216,7 +216,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.hibernateCache) {
                 this.hibernateCache = this.configOptions.hibernateCache;
             }
-            if (this.configOptions.websocket) {
+            if (this.configOptions.websocket !== undefined) {
                 this.websocket = this.configOptions.websocket;
             }
             if (this.configOptions.databaseType) {
@@ -228,7 +228,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.prodDatabaseType) {
                 this.prodDatabaseType = this.configOptions.prodDatabaseType;
             }
-            if (this.configOptions.searchEngine) {
+            if (this.configOptions.searchEngine !== undefined) {
                 this.searchEngine = this.configOptions.searchEngine;
             }
             if (this.configOptions.buildTool) {
