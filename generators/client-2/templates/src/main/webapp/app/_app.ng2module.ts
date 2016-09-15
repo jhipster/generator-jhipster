@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 // TODO change this to NgbModule -->  after complete migration
+import {NgbAlertModule} from '@ng-bootstrap/ng-bootstrap/alert/alert.module';
 import {NgbCollapseModule} from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap/dropdown/dropdown.module';
 
@@ -22,6 +23,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
         BrowserModule,
         FormsModule,
         HttpModule,
+        NgbAlertModule,
         NgbCollapseModule,
         NgbDropdownModule,
         <%=angular2AppName%>SharedModule,
