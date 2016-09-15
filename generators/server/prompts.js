@@ -116,6 +116,10 @@ function askForServerSideOpts() {
                 {
                     value: 'consul',
                     name: 'Consul (using Spring Cloud Consul)'
+                },
+                {
+                    value: 'no',
+                    name: 'No Service Discovery and Configuration'
                 }
             ],
             default: 'eureka'
