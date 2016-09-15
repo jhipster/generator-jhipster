@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { TranslatePipe } from '../../shared/translate.pipe';
 
 @Component({
     selector: 'password',

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 
