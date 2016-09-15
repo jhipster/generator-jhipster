@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "repos" : [{
+    "name" : "config",
+    "url" : "https://github.com/PierreBesson/test-registry.git",
+    "branches" : ["master"],
+    "include_branch_name" : false,
+    "source_root": "consul-config/",
+    "hooks": [{
+      "type" : "polling",
+      "interval" : "1"
+    }]
+  }]
+}
