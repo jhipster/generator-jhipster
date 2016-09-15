@@ -18,6 +18,8 @@ import { jhiAlertComponent } from "./alert/alert.component";
     providers: [
         AlertService,
         ProfileService
-    ]
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+
 })
 export class <%=angular2AppName%>CommonModule {}
