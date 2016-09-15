@@ -3,11 +3,12 @@ import { AlertService } from "./alert.service";
 
 @Component({
     selector: 'jhi-alert-error',
-    template: '<div class="alerts" ng-cloak="">' +
-                    '<div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">' +
-                        '<ngb-alert type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></ngb-alert>' +
-                    '</div>' +
-                '</div>'
+    template: `
+        <div class="alerts" ng-cloak="">
+            <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
+                <ngb-alert type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></ngb-alert>
+            </div>
+        </div>`
 })
 export class JhiAlertErrorComponent implements OnDestroy {
 
