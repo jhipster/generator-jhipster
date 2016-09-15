@@ -16,7 +16,11 @@ import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfigurati
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+  <%_ if (serviceDiscoveryType == 'eureka') { _%>
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;  <%_ } _%>
+  <%_ if (serviceDiscoveryType == 'consul') { _%>
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -42,7 +46,12 @@ import java.util.Collection;
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %> })
 @EnableConfigurationProperties({ JHipsterProperties.class<% if (databaseType == 'sql') { %>, LiquibaseProperties.class<% } %> })
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+  <%_ if (serviceDiscoveryType == 'eureka') { _%>
 @EnableEurekaClient
+  <%_ } _%>
+  <%_ if (serviceDiscoveryType == 'consul') { _%>
+@EnableDiscoveryClient
+  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
 @EnableZuulProxy

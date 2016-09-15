@@ -25,11 +25,15 @@ public class LoggingConfiguration {
     @Value("${server.port}")
     private String serverPort;
 
-    <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+    <%_ if (serviceDiscoveryType == "eureka") { _%>
     @Value("${eureka.instance.instanceId}")
     private String instanceId;
-
     <%_ } _%>
+    <%_ if (serviceDiscoveryType == "consul") { _%>
+    @Value("${spring.cloud.consul.discovery.instanceId}")
+    private String instanceId;
+    <%_ } _%>
+
     @Inject
     private JHipsterProperties jHipsterProperties;
 
