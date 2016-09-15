@@ -561,10 +561,19 @@ module.exports = JhipsterServerGenerator.extend({
 
             if (this.databaseType === 'mongodb' && this.authenticationType === 'oauth2') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/oauth2/_MongoDBApprovalStore.java', javaDir + 'config/oauth2/MongoDBApprovalStore.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/oauth2/_MongoDBAuthorizationCodeServices.java', javaDir + 'config/oauth2/MongoDBAuthorizationCodeServices.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/oauth2/_MongoDBClientDetailsService.java', javaDir + 'config/oauth2/MongoDBClientDetailsService.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_OAuth2AuthenticationAccessToken.java', javaDir + 'domain/OAuth2AuthenticationAccessToken.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_OAuth2AuthenticationApproval.java', javaDir + 'domain/OAuth2AuthenticationApproval.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_OAuth2AuthenticationClientDetails.java', javaDir + 'domain/OAuth2AuthenticationClientDetails.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_OAuth2AuthenticationCode.java', javaDir + 'domain/OAuth2AuthenticationCode.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_OAuth2AuthenticationRefreshToken.java', javaDir + 'domain/OAuth2AuthenticationRefreshToken.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_OAuth2AccessTokenRepository.java', javaDir + 'repository/OAuth2AccessTokenRepository.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_OAuth2ApprovalRepository.java', javaDir + 'repository/OAuth2ApprovalRepository.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_OAuth2ClientDetailsRepository.java', javaDir + 'repository/OAuth2ClientDetailsRepository.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_OAuth2CodeRepository.java', javaDir + 'repository/OAuth2CodeRepository.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_OAuth2RefreshTokenRepository.java', javaDir + 'repository/OAuth2RefreshTokenRepository.java', this, {});
             }
 

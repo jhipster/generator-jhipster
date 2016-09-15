@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -22,14 +23,22 @@ public class OAuth2AuthenticationReadConverter implements Converter<DBObject, OA
     @Override
     public OAuth2Authentication convert(DBObject source) {
         DBObject storedRequest = (DBObject)source.get("storedRequest");
-        OAuth2Request oAuth2Request = new OAuth2Request((Map<String, String>)storedRequest.get("requestParameters"),
-                (String)storedRequest.get("clientId"), null, true, new HashSet((List)storedRequest.get("scope")),
-                null, null, null, null);
+        List<String> rsIds = (List<String>)storedRequest.get("resourceIds");
+        OAuth2Request oAuth2Request = new OAuth2Request(
+            (Map<String, String>)storedRequest.get("requestParameters"),
+            (String)storedRequest.get("clientId"),
+            getAuthorities((List<Map<String, String>>) storedRequest.get("authorities")),
+            (boolean) storedRequest.get("approved"),
+            new HashSet<>((List<String>)storedRequest.get("scope")),
+            new HashSet<>((List<String>)storedRequest.get("resourceIds")),
+            (String)storedRequest.get("redirectUri"),
+            new HashSet<>((List<String>)storedRequest.get("responseTypes")),
+            (Map<String, Serializable>)storedRequest.get("extensionProperties"));
 
         DBObject userAuthorization = (DBObject)source.get("userAuthentication");
         Object principal = getPrincipalObject(userAuthorization.get("principal"));
         Authentication userAuthentication = new UsernamePasswordAuthenticationToken(principal,
-                userAuthorization.get("credentials"), getAuthorities((List) userAuthorization.get("authorities")));
+                userAuthorization.get("credentials"), getAuthorities((List<Map<String, String>>) userAuthorization.get("authorities")));
 
         return new OAuth2Authentication(oAuth2Request,  userAuthentication );
     }
@@ -46,7 +55,7 @@ public class OAuth2AuthenticationReadConverter implements Converter<DBObject, OA
             boolean accountNonLocked = (boolean) principalDBObject.get("accountNonLocked");
 
             return new org.springframework.security.core.userdetails.User(userName, password, enabled,
-                    accountNonExpired, credentialsNonExpired, accountNonLocked, Collections.EMPTY_LIST);
+                    accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities((List<Map<String, String>>) principalDBObject.get("authorities")));
         } else {
             return principal;
         }
