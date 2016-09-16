@@ -59,15 +59,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see <%= entityClass %>Resource
  */
 @RunWith(SpringRunner.class)
-<% if (authenticationType === 'uaa') { %>
+<%_ if (authenticationType === 'uaa') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, SecurityBeanOverrideConfiguration.class})
-<% } else { %>
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
-<% } %>
-public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<%_ if (fieldsContainZonedDateTime == true) { _%>
+<%_ } _%>
+public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+    <%_ if (fieldsContainZonedDateTime == true) { _%>
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));<%_ } _%>
-<% for (idx in fields) {
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("Z"));
+    <%_ } _%>
+    <%_ for (idx in fields) {
     var defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
 
@@ -121,8 +123,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         for( var i = 0; i < sampleTextMinLength; i++ ) {
             sampleTextString += "A";
             updatedTextString += "B";
-        }
-        %>
+        }_%>
+
     private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
     private static final String <%=updatedValueName %> = "<%=updatedTextString %>";<% } else if (fieldType == 'Integer') { %>
 
