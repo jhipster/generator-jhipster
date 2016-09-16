@@ -10,21 +10,28 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
 eureka:
     client:
         enabled: false
     instance:
         appname: <%= baseName %>
         instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
-
 <%_ } _%>
+
 spring:
     application:
         name: <%= baseName %>
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType == 'consul') { _%>
+    cloud:
+        consul:
+            discovery:
+                enabled: false
+                instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
     <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
