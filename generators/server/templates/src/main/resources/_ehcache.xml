@@ -43,5 +43,5 @@
     </cache>
     <%_ } _%>
 
-    <!-- jhipster-needle-ehcache-add-entity -->
+    <!-- jhipster-needle-ehcache-add-entry -->
 </ehcache>

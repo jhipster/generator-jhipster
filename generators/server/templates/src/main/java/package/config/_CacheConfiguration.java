@@ -30,12 +30,15 @@ import org.springframework.security.core.session.SessionRegistryImpl;<% } %><% i
 import org.springframework.util.Assert;<% } %>
 
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;<% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+import javax.inject.Inject;
+<%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.PluralAttribute;
 import java.util.Set;
-import java.util.SortedSet;<% } %>
+import java.util.SortedSet;
+<%_ } _%>
 
 @SuppressWarnings("unused")
 @Configuration
@@ -76,40 +79,54 @@ public class CacheConfiguration {
         Hazelcast.shutdownAll();<% } %>
     }
 
-    @Bean<% if (hibernateCache == 'ehcache') { %>
+    @Bean
+    <%_ if (hibernateCache == 'ehcache') { _%>
     public CacheManager cacheManager(JHipsterProperties jHipsterProperties) {
         log.debug("Starting Ehcache");
         cacheManager = net.sf.ehcache.CacheManager.create();
         cacheManager.getConfiguration().setMaxBytesLocalHeap(jHipsterProperties.getCache().getEhcache().getMaxBytesLocalHeap());
-        log.debug("Registering Ehcache Metrics gauges");<% if (databaseType == 'sql') { %>
+        log.debug("Registering Ehcache Metrics gauges");
+        <%_ if (databaseType == 'sql') { _%>
         Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
         for (EntityType<?> entity : entities) {
-
             String name = entity.getName();
             if (name == null || entity.getJavaType() != null) {
                 name = entity.getJavaType().getName();
             }
             Assert.notNull(name, "entity cannot exist without an identifier");
-
-            net.sf.ehcache.Cache cache = cacheManager.getCache(name);
-            if (cache != null) {
-                cache.getCacheConfiguration().setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
-                net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
-                cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
+            reconfigureCache(name, jHipsterProperties);
+            for (PluralAttribute pluralAttribute : entity.getPluralAttributes()) {
+                reconfigureCache(name + "." + pluralAttribute.getName(), jHipsterProperties);
             }
-        }<% } %>
+        }
+        <%_ } _%>
         EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
         ehCacheManager.setCacheManager(cacheManager);
-        return ehCacheManager;<% } else if (hibernateCache == 'hazelcast') { %>
+        return ehCacheManager;
+    <%_ } else if (hibernateCache == 'hazelcast') { _%>
     public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
         log.debug("Starting HazelcastCacheManager");
         cacheManager = new com.hazelcast.spring.cache.HazelcastCacheManager(hazelcastInstance);
-        return cacheManager;<% } else { %>
+        return cacheManager;
+    <%_ } else { _%>
     public CacheManager cacheManager() {
         log.debug("No cache");
         cacheManager = new NoOpCacheManager();
-        return cacheManager;<% } %>
-    }<% if (hibernateCache == 'hazelcast') { %>
+        return cacheManager;
+    <%_ } _%>
+    }
+    <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
+
+    private void reconfigureCache(String name, JHipsterProperties jHipsterProperties) {
+        net.sf.ehcache.Cache cache = cacheManager.getCache(name);
+        if (cache != null) {
+            cache.getCacheConfiguration().setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
+            net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
+            cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
+        }
+    }
+    <%_ } _%>
+    <%_ if (hibernateCache == 'hazelcast') { _%>
 
     @Bean
     public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {

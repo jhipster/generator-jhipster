@@ -424,18 +424,38 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
 };
 
 /**
- * Add a new entry to the ehcache.xml file, for configuring the 2nd level cache of an entity.
+ * Add a new entity to the Ehcache, for the 2nd level cache of an entity and its relationships.
  *
- * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ * @param {string} name - the entity to cache.
+ * @parma {array} relationships - the relationships of this entity
  */
-Generator.prototype.addEntityToEhcache = function (entityClass) {
+Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
+    // Add the entity to ehcache
+    this.addEntryToEhcache(entityClass);
+    // Add the collections linked to that entity to ehcache
+    for (idx in relationships) {
+        var relationshipType = relationships[idx].relationshipType;
+        if (relationshipType === 'one-to-many') {
+            this.addEntryToEhcache(entityClass + '.' + relationships[idx].relationshipFieldNamePlural);
+        } else if (relationshipType === 'many-to-many') {
+            this.addEntryToEhcache(entityClass + '.' + relationships[idx].relationshipFieldNamePlural);
+        }
+    }
+};
+
+/**
+ * Add a new entry to the ehcache.xml file, for both entities and relationships.
+ *
+ * @param {string} name - the entry (either entity or relationship) to cache.
+ */
+Generator.prototype.addEntryToEhcache = function (entry) {
     try {
         var fullPath = SERVER_MAIN_RES_DIR + 'ehcache.xml';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-ehcache-add-entity',
+            needle: 'jhipster-needle-ehcache-add-entry',
             splicable: [
-                '<cache name="' + this.packageName + '.domain.' + entityClass + '"\n' +
+                '<cache name="' + this.packageName + '.domain.' + entry + '"\n' +
                 '           timeToLiveSeconds="3600">\n' +
                 '    </cache>\n'
             ]

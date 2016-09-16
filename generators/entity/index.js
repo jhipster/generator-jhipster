@@ -675,7 +675,7 @@ module.exports = EntityGenerator.extend({
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/mapper/' + this.entityClass + 'Mapper.java', this, {});
             }
             if (this.databaseType === 'sql' && this.hibernateCache === 'ehcache') {
-                this.addEntityToEhcache(this.entityClass);
+                this.addEntityToEhcache(this.entityClass, this.relationships);
             }
         },
 
