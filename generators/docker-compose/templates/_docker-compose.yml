@@ -14,11 +14,24 @@ services:
             service: kafka
 <%_ } _%>
 <%_ if (gatewayNb + microserviceNb > 0) { _%>
+    <%_ if (serviceDiscoveryType == 'eureka') { _%>
     jhipster-registry:
         extends:
             file: jhipster-registry.yml
             service: jhipster-registry
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType == 'consul') { _%>
+    consul:
+        extends:
+            file: consul.yml
+            service: consul
+    consul-config-loader:
+        extends:
+            file: consul.yml
+            service: consul-config-loader
+    <%_ } _%>
 <%_ } _%>
+
 <%_ if (useElk) { _%>
     jhipster-elasticsearch:
         extends:

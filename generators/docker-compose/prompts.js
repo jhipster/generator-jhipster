@@ -8,6 +8,7 @@ module.exports = {
     askForApps,
     askForClustersMode,
     askForElk,
+    askForServiceDiscovery,
     askForAdminPassword
 };
 
@@ -167,8 +168,69 @@ function askForElk() {
     }.bind(this));
 }
 
+function askForServiceDiscovery() {
+    if (this.regenerate) return;
+
+    var done = this.async();
+
+    var serviceDiscoveryEnabledApps = [];
+    this.appConfigs.forEach(function (appConfig, index) {
+        if(appConfig.serviceDiscoveryType !== 'no' && (appConfig.applicationType === 'microservice' || appConfig.applicationType === 'gateway')) {
+            serviceDiscoveryEnabledApps.push({baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType});
+        }
+    }, this);
+
+    if(serviceDiscoveryEnabledApps.length === 0) {
+        return;
+    }
+
+    if(serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'consul')){
+        this.serviceDiscoveryType = 'consul';
+        this.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
+        done();
+    }
+    else if(serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'eureka')){
+        this.serviceDiscoveryType = 'eureka';
+        this.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
+        done();
+    }
+    else {
+        this.log(chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'));
+        this.log('Your service discovery enabled apps:');
+        serviceDiscoveryEnabledApps.forEach(function(app){
+            this.log('  - ' + app.baseName + ' ('  + app.serviceDiscoveryType + ')');
+        }.bind(this));
+
+        var prompts = [{
+            type: 'list',
+            name: 'serviceDiscoveryType',
+            message: 'Which Service Discovery registry and Configuration server would you like to use ?',
+            choices: [
+                {
+                    value: 'eureka',
+                    name: 'JHipster Registry'
+                },
+                {
+                    value: 'consul',
+                    name: 'Consul'
+                },
+                {
+                    value: 'no',
+                    name: 'No Service Discovery and Configuration'
+                }
+            ],
+            default: 'eureka'
+        }];
+
+        this.prompt(prompts).then(function(props) {
+            this.serviceDiscoveryType = props.serviceDiscoveryType;
+            done();
+        }.bind(this));
+    }
+}
+
 function askForAdminPassword() {
-    if (this.regenerate || this.kubernetesApplicationType === 'monolith') return;
+    if (this.regenerate || this.kubernetesApplicationType === 'monolith' || this.serviceDiscoveryType !== 'eureka') return;
 
     var done = this.async();
 
