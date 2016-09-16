@@ -12,6 +12,18 @@
             "relationshipName": "secondRelationship",
             "otherEntityName": "testEntity",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "userOne",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "userTwo",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "ownerSide": true
         }
     ],
     "fields": [],
