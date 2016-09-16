@@ -455,9 +455,9 @@ module.exports = JhipsterServerGenerator.extend({
                 }
 
                 if (this.serviceDiscoveryType === 'eureka') {
-                  this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
-                  this.copy(DOCKER_DIR + 'config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
-                  this.copy(DOCKER_DIR + 'config/localhost-config/application.yml', DOCKER_DIR + 'central-server-config/localhost-config/application.yml');
+                    this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
+                    this.copy(DOCKER_DIR + 'config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
+                    this.copy(DOCKER_DIR + 'config/localhost-config/application.yml', DOCKER_DIR + 'central-server-config/localhost-config/application.yml');
                 }
             }
 
