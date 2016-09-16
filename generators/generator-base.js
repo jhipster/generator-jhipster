@@ -424,6 +424,28 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
 };
 
 /**
+ * Add a new entry to the ehcache.xml file, for configuring the 2nd level cache of an entity.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.addEntityToEhcache = function (entityClass) {
+    try {
+        var fullPath = SERVER_MAIN_RES_DIR + 'ehcache.xml';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-ehcache-add-entity',
+            splicable: [
+                '<cache name="' + this.packageName + '.domain.' + entityClass + '"\n' +
+                '           timeToLiveSeconds="3600">\n' +
+                '    </cache>\n'
+            ]
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+    }
+};
+
+/**
  * Add a new changelog to the Liquibase master.xml file.
  *
  * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).

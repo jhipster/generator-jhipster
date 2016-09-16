@@ -98,6 +98,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.isSupportedLanguage = this.isSupportedLanguage;
         jhipsterFunc.getAllInstalledLanguages = this.getAllInstalledLanguages;
         jhipsterFunc.addEntityTranslationKey = this.addEntityTranslationKey;
+        jhipsterFunc.addEntityToEhcache = this.addEntityToEhcache;
         jhipsterFunc.addChangelogToLiquibase = this.addChangelogToLiquibase;
         jhipsterFunc.addConstraintsChangelogToLiquibase = this.addConstraintsChangelogToLiquibase;
         jhipsterFunc.addLiquibaseChangelogToMaster = this.addLiquibaseChangelogToMaster;
