@@ -201,7 +201,9 @@ function getAppFolders(input, applicationType) {
                 try {
                     var fileData = this.fs.readJSON(input + file.name + '/.yo-rc.json');
                     if ((fileData['generator-jhipster'].baseName !== undefined)
-                        && ((applicationType === undefined) || (applicationType === fileData['generator-jhipster'].applicationType))) {
+                        && ((applicationType === undefined)
+                            || (applicationType === fileData['generator-jhipster'].applicationType)
+                            || ((applicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType)))) {
                         appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                     }
                 } catch(err) {
