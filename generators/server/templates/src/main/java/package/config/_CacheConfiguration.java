@@ -89,7 +89,7 @@ public class CacheConfiguration {
             if (name == null || entity.getJavaType() != null) {
                 name = entity.getJavaType().getName();
             }
-            Assert.notNull(name, "entity cannot exist without a identifier");
+            Assert.notNull(name, "entity cannot exist without an identifier");
 
             net.sf.ehcache.Cache cache = cacheManager.getCache(name);
             if (cache != null) {
