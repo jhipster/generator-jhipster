@@ -34,6 +34,8 @@ spring:
     <%_ if (serviceDiscoveryType == 'consul') { _%>
     cloud:
         consul:
+            discovery:
+               prefer-agent-address: true
             host: localhost
             port: 8500
     <%_ } _%>
