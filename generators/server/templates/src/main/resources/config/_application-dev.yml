@@ -25,6 +25,8 @@ eureka:
 <%_ } _%>
 
 spring:
+    profiles:
+        active: dev,swagger
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
