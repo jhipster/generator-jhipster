@@ -1,6 +1,6 @@
-NotificationInterceptor.$inject = ['$q', 'AlertService'];
+NotificationInterceptor.$inject = ['$q'];
 
-export function NotificationInterceptor ($q, AlertService) {
+export function NotificationInterceptor ($q) {
     var service = {
         response: response
     };
@@ -10,7 +10,7 @@ export function NotificationInterceptor ($q, AlertService) {
     function response (response) {
         var alertKey = response.headers('X-<%=angularAppName%>-alert');
         if (angular.isString(alertKey)) {
-            AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
+            //AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
         }
         return response;
     }
