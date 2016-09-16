@@ -38,7 +38,7 @@ services:
             - kafka:kafka
             - zookeeper:zookeeper
         <%_ } _%>
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+        <%_ if (serviceDiscoveryType == 'eureka' && (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa')) { _%>
             - jhipster-registry:registry
         <%_ } _%>
         environment:
