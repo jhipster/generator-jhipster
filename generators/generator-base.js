@@ -433,7 +433,7 @@ Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
     // Add the entity to ehcache
     this.addEntryToEhcache(entityClass);
     // Add the collections linked to that entity to ehcache
-    for (idx in relationships) {
+    for (var idx in relationships) {
         var relationshipType = relationships[idx].relationshipType;
         if (relationshipType === 'one-to-many') {
             this.addEntryToEhcache(entityClass + '.' + relationships[idx].relationshipFieldNamePlural);
@@ -461,7 +461,7 @@ Generator.prototype.addEntryToEhcache = function (entry) {
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache.xml file.\n'));
     }
 };
 
