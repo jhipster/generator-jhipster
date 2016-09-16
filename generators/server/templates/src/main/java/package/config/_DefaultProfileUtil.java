@@ -1,9 +1,14 @@
 package <%=packageName%>.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
-import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Utility class to load a Spring profile to be used as default
@@ -12,7 +17,31 @@ import java.util.*;
  */
 public final class DefaultProfileUtil {
 
-    private static final String SPRING_PROFILE_DEFAULT = "spring.profiles.default";
+    private static final long serialVersionUID = 1L;
+
+    private static final Logger log = LoggerFactory.getLogger(DefaultProfileUtil.class);
+
+    private static final String SPRING_PROFILE_ACTIVE = "spring.profiles.active";
+
+    private static final Properties BUILD_PROPERTIES = readProperties();
+
+    /**
+     * Get a default profile from <code>application.yml</code>.
+     *
+     * @return the default active profile
+     */
+    public static String getDefaultActiveProfiles(){
+        if (BUILD_PROPERTIES != null) {
+            String activeProfile = BUILD_PROPERTIES.getProperty(SPRING_PROFILE_ACTIVE);
+            if (activeProfile != null && !activeProfile.isEmpty() &&
+                (activeProfile.contains(Constants.SPRING_PROFILE_DEVELOPMENT) ||
+                    activeProfile.contains(Constants.SPRING_PROFILE_PRODUCTION))) {
+                return activeProfile;
+            }
+        }
+        log.warn("No Spring profile configured, running with default profile: {}", Constants.SPRING_PROFILE_DEVELOPMENT);
+        return Constants.SPRING_PROFILE_DEVELOPMENT;
+    }
 
     /**
      * Set a default to use when no profile is configured.
@@ -26,18 +55,23 @@ public final class DefaultProfileUtil {
         * This cannot be set in the <code>application.yml</code> file.
         * See https://github.com/spring-projects/spring-boot/issues/1219
         */
-        defProperties.put(SPRING_PROFILE_DEFAULT, Constants.SPRING_PROFILE_DEVELOPMENT);
+        defProperties.put(SPRING_PROFILE_ACTIVE, getDefaultActiveProfiles());
         app.setDefaultProperties(defProperties);
     }
 
     /**
-     * Get the profiles that are applied else get default profiles.
+     * Load application.yml from classpath.
+     *
+     * @return the YAML Properties
      */
-    public static String[] getActiveProfiles(Environment env) {
-        String[] profiles = env.getActiveProfiles();
-        if (profiles.length == 0) {
-            return env.getDefaultProfiles();
+    private static Properties readProperties() {
+        try {
+            YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
+            factory.setResources(new ClassPathResource("config/application.yml"));
+            return factory.getObject();
+        } catch (Exception e) {
+            log.error("Failed to read application.yml to get default profile");
         }
-        return profiles;
+        return null;
     }
 }
