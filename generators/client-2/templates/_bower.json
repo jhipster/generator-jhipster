@@ -29,7 +29,6 @@
     <%_ } else { _%>
     "bootstrap": "3.3.6",
     <%_ } _%>
-    "bootstrap-ui-datetime-picker": "2.4.0",
     "jquery": "2.2.4",
     "json3": "3.3.2",
     "messageformat": "0.3.1",
