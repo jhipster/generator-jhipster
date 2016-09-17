@@ -15,12 +15,6 @@ import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 
 @NgModule({
     imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        NgbAlertModule,
-        NgbCollapseModule,
-        NgbDropdownModule,
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>CommonModule,
         <%=angular2AppName%>AdminModule,
