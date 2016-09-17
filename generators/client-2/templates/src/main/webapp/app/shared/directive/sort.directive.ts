@@ -8,7 +8,7 @@ import { Directive, Host, OnInit, Renderer, EventEmitter, ElementRef } from '@an
         '(click)': 'onClick()'
     }
 })
-export class JhSort implements OnInit {
+export class JhSortDirective implements OnInit {
     predicate: string;
     ascending: boolean;
     callback: Function;

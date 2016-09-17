@@ -11,6 +11,7 @@ import { FindLanguageFromKeyPipe } from './components/language/language.pipe';
 
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
+import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import { NavbarComponent } from './layouts/navbar/navbar.component';
     declarations: [
         HomeComponent,
         NavbarComponent,
+        ActiveMenuDirective,
         FindLanguageFromKeyPipe
     ],
     providers: [

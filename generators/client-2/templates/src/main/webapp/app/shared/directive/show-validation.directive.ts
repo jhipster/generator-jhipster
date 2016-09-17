@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Input, Renderer } from '@angular/core';
 
 @Directive({ selector: 'form[show-validation]' })
-export class ShowValidation {
+export class ShowValidationDirective {
     constructor(el: ElementRef, renderer: Renderer) {
        $(el.nativeElement).find('.form-group').each(function() {
            var $formGroup = $(this);

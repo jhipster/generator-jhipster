@@ -12,7 +12,7 @@ import { TranslatePipe } from './pipe/translate.pipe';
 import { JhiItemCount } from './component/jhi-item-count.component';
 import { MaxbytesValidator } from './directive/maxbytes.directive';
 import { MinbytesValidator } from './directive/minbytes.directive';
-import { ShowValidation } from './directive/show-validation.directive';
+import { ShowValidationDirective } from './directive/show-validation.directive';
 
 @NgModule({
     imports: [<%=angular2AppName%>SharedLibsModule],
@@ -26,7 +26,7 @@ import { ShowValidation } from './directive/show-validation.directive';
         JhiItemCount,
         MaxbytesValidator,
         MinbytesValidator,
-        ShowValidation
+        ShowValidationDirective
     ],
     providers: [
     ],
@@ -41,7 +41,7 @@ import { ShowValidation } from './directive/show-validation.directive';
         JhiItemCount,
         MaxbytesValidator,
         MinbytesValidator,
-        ShowValidation
+        ShowValidationDirective
     ]
 })
 export class <%=angular2AppName%>SharedModule {}
