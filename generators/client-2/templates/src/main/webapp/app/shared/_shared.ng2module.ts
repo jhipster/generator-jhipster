@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 
+import { <%=angular2AppName%>SharedLibsModule } from './shared-libs.ng2module';
+
 import { TruncateCharactersPipe } from './pipe/truncate-characters.pipe';
 import { TruncateWordsPipe } from './pipe/truncate-words.pipe';
 import { CapitalizePipe } from './pipe/capitalize.pipe';
@@ -13,7 +15,7 @@ import { MinbytesValidator } from './directive/minbytes.directive';
 import { ShowValidation } from './directive/show-validation.directive';
 
 @NgModule({
-    imports: [],
+    imports: [<%=angular2AppName%>SharedLibsModule],
     declarations: [
         TruncateCharactersPipe,
         TruncateWordsPipe,
@@ -29,6 +31,7 @@ import { ShowValidation } from './directive/show-validation.directive';
     providers: [
     ],
     exports: [
+        <%=angular2AppName%>SharedLibsModule,
         TruncateCharactersPipe,
         TruncateWordsPipe,
         OrderByPipe,
