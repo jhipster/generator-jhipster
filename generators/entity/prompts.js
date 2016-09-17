@@ -3,15 +3,8 @@
 var chalk = require('chalk'),
     path = require('path'),
     _ = require('lodash'),
+    jhiCore = require('jhipster-core'),
     shelljs = require('shelljs');
-
-const constants = require('../generator-constants'),
-    RESERVED_WORDS_JAVA = constants.RESERVED_WORDS_JAVA,
-    RESERVED_WORDS_MYSQL = constants.RESERVED_WORDS_MYSQL,
-    RESERVED_WORDS_POSGRES = constants.RESERVED_WORDS_POSGRES,
-    RESERVED_WORDS_CASSANDRA = constants.RESERVED_WORDS_CASSANDRA,
-    RESERVED_WORDS_ORACLE = constants.RESERVED_WORDS_ORACLE,
-    RESERVED_WORDS_MONGO = constants.RESERVED_WORDS_MONGO;
 
 module.exports = {
     askForMicroserviceJson,
@@ -20,6 +13,7 @@ module.exports = {
     askForFieldsToRemove,
     askForRelationships,
     askForRelationsToRemove,
+    askForTableName,
     askForDTO,
     askForService,
     askForPagination
@@ -30,7 +24,7 @@ function askForMicroserviceJson() {
         return;
     }
 
-    var cb = this.async();
+    var done = this.async();
 
     var prompts = [
         {
@@ -64,7 +58,7 @@ function askForMicroserviceJson() {
         }
     ];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         if (props.useMicroserviceJson) {
             this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
             if(path.isAbsolute(props.microservicePath)) {
@@ -77,7 +71,7 @@ function askForMicroserviceJson() {
             this.useMicroserviceJson = true;
             this._loadJson();
         }
-        cb();
+        done();
     }.bind(this));
 }
 
@@ -88,7 +82,7 @@ function askForUpdate() {
     if (isForce || !this.useConfigurationFile) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -115,12 +109,12 @@ function askForUpdate() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.updateEntity = props.updateEntity;
         if (this.updateEntity === 'none') {
             this.env.error(chalk.green('Aborting entity update, no changes were made.'));
         }
-        cb();
+        done();
 
     }.bind(this));
 }
@@ -135,9 +129,9 @@ function askForFields() {
         logFieldsAndRelationships.call(this);
     }
 
-    var cb = this.async();
+    var done = this.async();
 
-    askForField.call(this, cb);
+    askForField.call(this, done);
 }
 
 function askForFieldsToRemove() {
@@ -145,7 +139,7 @@ function askForFieldsToRemove() {
     if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
 
     var prompts = [
         {
@@ -165,7 +159,7 @@ function askForFieldsToRemove() {
             default: true
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         if (props.confirmRemove) {
             this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
             var i;
@@ -178,7 +172,7 @@ function askForFieldsToRemove() {
                 }
             }
         }
-        cb();
+        done();
 
     }.bind(this));
 }
@@ -192,9 +186,9 @@ function askForRelationships() {
         return;
     }
 
-    var cb = this.async();
+    var done = this.async();
 
-    askForRelationship.call(this, cb);
+    askForRelationship.call(this, done);
 }
 
 function askForRelationsToRemove() {
@@ -206,7 +200,7 @@ function askForRelationsToRemove() {
         return;
     }
 
-    var cb = this.async();
+    var done = this.async();
 
     var prompts = [
         {
@@ -226,7 +220,7 @@ function askForRelationsToRemove() {
             default: true
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         if (props.confirmRemove) {
             this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
             var i;
@@ -239,8 +233,47 @@ function askForRelationsToRemove() {
                 }
             }
         }
-        cb();
+        done();
 
+    }.bind(this));
+}
+
+function askForTableName() {
+    // don't prompt if there are no relationships
+    var entityTableName = this.entityTableName;
+    var prodDatabaseType = this.prodDatabaseType;
+    if (!this.relationships || this.relationships.length === 0 || !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
+        return;
+    }
+    var done = this.async();
+    var prompts = [
+        {
+            type: 'input',
+            name: 'entityTableName',
+            message: 'The table name for this entity is too long to form constraint names. Please use a shorter table name',
+            validate: function (input) {
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'The table name cannot contain special characters';
+                } else if (input === '') {
+                    return 'The table name cannot be empty';
+                } else if (jhiCore.isReservedTableName(input, prodDatabaseType)) {
+                    return `The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`;
+                } else if (prodDatabaseType === 'oracle' && input.length > 14) {
+                    return 'The table name is too long for Oracle, try a shorter name';
+                } else if (input.length > 30) {
+                    return 'The table name is too long, try a shorter name';
+                }
+                return true;
+            },
+            default: entityTableName
+        }
+    ];
+    this.prompt(prompts).then(function (props) {
+        /* overwrite the table name for the entity using name obtained from the user*/
+        if (props.entityTableName !== this.entityTableName) {
+            this.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
+        }
+        done();
     }.bind(this));
 }
 
@@ -249,7 +282,7 @@ function askForDTO() {
     if (this.useConfigurationFile) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -268,9 +301,9 @@ function askForDTO() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.dto = props.dto;
-        cb();
+        done();
     }.bind(this));
 }
 
@@ -279,7 +312,7 @@ function askForService() {
     if (this.useConfigurationFile) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -302,9 +335,9 @@ function askForService() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.service = props.service;
-        cb();
+        done();
     }.bind(this));
 }
 
@@ -316,7 +349,7 @@ function askForPagination() {
     if (this.databaseType === 'cassandra') {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -343,17 +376,17 @@ function askForPagination() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
-        cb();
+        done();
     }.bind(this));
 }
 
 /**
  * ask question for a field creation
  */
-function askForField(cb) {
+function askForField(done) {
     this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
     var prodDatabaseType = this.prodDatabaseType;
     var databaseType = this.databaseType;
@@ -380,20 +413,10 @@ function askForField(cb) {
                     return 'Your field name cannot start with a upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
-                } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) !== -1) {
-                    return 'Your field name cannot contain a Java reserved keyword';
-                } else if (prodDatabaseType === 'mysql' && RESERVED_WORDS_MYSQL.indexOf(input.toUpperCase()) !== -1) {
-                    return 'Your field name cannot contain a MySQL reserved keyword';
-                } else if (prodDatabaseType === 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(input.toUpperCase()) !== -1) {
-                    return 'Your field name cannot contain a PostgreSQL reserved keyword';
-                } else if (prodDatabaseType === 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(input.toUpperCase()) !== -1) {
-                    return 'Your field name cannot contain a Cassandra reserved keyword';
-                } else if (prodDatabaseType === 'oracle' && RESERVED_WORDS_ORACLE.indexOf(input.toUpperCase()) !== -1) {
-                    return 'Your field name cannot contain a Oracle reserved keyword';
+                } else if (jhiCore.isReservedFieldName(input, prodDatabaseType)) {
+                    return `Your field name cannot contain a Java or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
-                } else if (prodDatabaseType === 'mongodb' && RESERVED_WORDS_MONGO.indexOf(input.toUpperCase()) !== -1) {
-                    return 'Your field name cannot contain a MongoDB reserved keyword';
                 }
                 return true;
             },
@@ -469,6 +492,8 @@ function askForField(cb) {
             validate: function (input) {
                 if (input === '') {
                     return 'Your class name cannot be empty.';
+                } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+                    return 'Your enum name cannot contain a Java reserved keyword';
                 }
                 if (this.enums.indexOf(input) !== -1) {
                     this.existingEnum = true;
@@ -881,7 +906,7 @@ function askForField(cb) {
             default: '^[a-zA-Z0-9]*$'
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         if (props.fieldAdd) {
             if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
@@ -896,7 +921,6 @@ function askForField(cb) {
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
                 fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
                 fieldValidateRulesPattern: props.fieldValidateRulesPattern,
-                fieldValidateRulesPatternJava: props.fieldValidateRulesPattern ? props.fieldValidateRulesPattern.replace(/\\/g, '\\\\') : props.fieldValidateRulesPattern,
                 fieldValidateRulesMin: props.fieldValidateRulesMin,
                 fieldValidateRulesMax: props.fieldValidateRulesMax,
                 fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
@@ -908,9 +932,9 @@ function askForField(cb) {
         }
         logFieldsAndRelationships.call(this);
         if (props.fieldAdd) {
-            askForField.call(this, cb);
+            askForField.call(this, done);
         } else {
-            cb();
+            done();
         }
     }.bind(this));
 }
@@ -918,7 +942,7 @@ function askForField(cb) {
 /**
  * ask question for a relationship creation
  */
-function askForRelationship(cb) {
+function askForRelationship(done) {
     var name = this.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
     var fieldNamesUnderscored = this.fieldNamesUnderscored;
@@ -940,7 +964,7 @@ function askForRelationship(cb) {
                     return 'Your other entity name cannot contain special characters';
                 } else if (input === '') {
                     return 'Your other entity name cannot be empty';
-                } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) !== -1) {
+                } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
                 }
                 return true;
@@ -960,7 +984,7 @@ function askForRelationship(cb) {
                     return 'Your relationship cannot be empty';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your relationship cannot use an already existing field name';
-                } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) !== -1) {
+                } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your relationship cannot contain a Java reserved keyword';
                 }
                 return true;
@@ -972,7 +996,7 @@ function askForRelationship(cb) {
         },
         {
             when: function (response) {
-                return response.relationshipAdd === true;
+                return response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== 'user';
             },
             type: 'list',
             name: 'relationshipType',
@@ -999,7 +1023,30 @@ function askForRelationship(cb) {
         },
         {
             when: function (response) {
-                return (response.relationshipAdd === true && (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'));
+                return response.relationshipAdd === true && response.otherEntityName.toLowerCase() === 'user';
+            },
+            type: 'list',
+            name: 'relationshipType',
+            message: 'What is the type of the relationship?',
+            choices: [
+                {
+                    value: 'many-to-one',
+                    name: 'many-to-one'
+                },
+                {
+                    value: 'many-to-many',
+                    name: 'many-to-many'
+                },
+                {
+                    value: 'one-to-one',
+                    name: 'one-to-one'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return (response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== 'user' && (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'));
             },
             type: 'confirm',
             name: 'ownerSide',
@@ -1009,8 +1056,8 @@ function askForRelationship(cb) {
         {
             when: function (response) {
                 return (response.relationshipAdd === true && (response.relationshipType === 'one-to-many' ||
-                (response.relationshipType === 'many-to-many' && response.ownerSide === false) ||
-                (response.relationshipType === 'one-to-one' && response.otherEntityName.toLowerCase() !== 'user')));
+                ((response.relationshipType === 'many-to-many' ||
+                response.relationshipType === 'one-to-one') && response.otherEntityName.toLowerCase() !== 'user')));
             },
             type: 'input',
             name: 'otherEntityRelationshipName',
@@ -1055,7 +1102,7 @@ function askForRelationship(cb) {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
 
         if (props.relationshipAdd) {
             var relationship = {
@@ -1067,15 +1114,20 @@ function askForRelationship(cb) {
                 ownerSide: props.ownerSide,
                 otherEntityRelationshipName: props.otherEntityRelationshipName
             };
+
+            if(props.otherEntityName.toLowerCase() === 'user') {
+                relationship.ownerSide = true;
+            }
+
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
             this.relationships.push(relationship);
         }
         logFieldsAndRelationships.call(this);
         if (props.relationshipAdd) {
-            askForRelationship.call(this, cb);
+            askForRelationship.call(this, done);
         } else {
             this.log('\n');
-            cb();
+            done();
         }
     }.bind(this));
 }

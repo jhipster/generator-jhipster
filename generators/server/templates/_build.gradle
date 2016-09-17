@@ -27,8 +27,12 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 apply plugin: 'io.spring.dependency-management'
+<%_ if (databaseType == 'sql') { _%>
+/* downgrade Hibernate to 4.3 */
+ext['hibernate.version'] = '${hibernate_entitymanager_version}'
+<%_ } _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 dependencyManagement {
   imports {
     mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+ spring_cloud_version
@@ -42,12 +46,13 @@ bootRepackage {
 }
 
 war {
-    rootSpec.exclude("**/tomcat-*.jar")
+
 }
 
 springBoot {
     mainClass = '<%= packageName %>.<%= mainClass %>'
     executable = true
+    buildInfo()
 }
 
 bootRun {
@@ -104,6 +109,7 @@ description = ''
 
 configurations {
     providedRuntime
+    compile.exclude module: "spring-boot-starter-tomcat"
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     // netty's native is pulled by spring-cloud-starter-ribbon, but is useless unless you explicitly add the native binary dependency.
     // Having it in the classpath without the binary can cause warnings
@@ -140,8 +146,8 @@ dependencies {
     }
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"<% if (databaseType == 'sql') { %>
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"<% } %>
     compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
@@ -154,6 +160,7 @@ dependencies {
     compile "com.hazelcast:hazelcast:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
+    compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
     compile("com.zaxxer:HikariCP:${HikariCP_version}") {
         exclude(module: 'tools')
     }
@@ -161,19 +168,18 @@ dependencies {
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     compile "commons-codec:commons-codec:${commons_codec_version}"
     <%_ } _%>
-    compile "commons-lang:commons-lang:${commons_lang_version}"
+    compile "org.apache.commons:commons-lang3:${commons_lang_version}"
     compile "commons-io:commons-io:${commons_io_version}"
     compile "javax.inject:javax.inject:${javax_inject_version}"
     compile "javax.transaction:javax.transaction-api"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
-    compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
     <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile ("org.hibernate:hibernate-ehcache") {
         exclude(module: 'ehcache-core')
-    }<% } %>
+    }<% } %><% if (databaseType == 'sql') { %>
     compile "org.hibernate:hibernate-envers"
-    compile "org.hibernate:hibernate-validator"<% if (databaseType == 'sql') { %>
+    compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
         exclude(module: 'jetty-servlet')
     }
@@ -184,13 +190,19 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-starter-aop"<% if (databaseType == 'sql') { %>
     compile "org.springframework.boot:spring-boot-starter-data-jpa"<% } %><% if (searchEngine == 'elasticsearch') { %>
-    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"<% } %><% if (databaseType == 'mongodb') { %>
+    compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+    // needed to get around elasticsearch stacktrace about jna not found
+    // https://github.com/elastic/elasticsearch/issues/13245
+    compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
     compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.springframework.boot:spring-boot-starter-web"<% if (websocket == 'spring-websocket') { %>
+    compile ("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile "org.springframework.boot:spring-boot-starter-undertow"<% if (websocket == 'spring-websocket') { %>
     compile "org.springframework.boot:spring-boot-starter-websocket"<% } %>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
-    compile("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {
+    compile ("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {
         exclude module: 'com.codahale.metrics'
     }
     compile "com.datastax.cassandra:cassandra-driver-extras:${datastax_driver_version}"
@@ -206,6 +218,12 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-starter-spectator"
     compile "org.springframework.cloud:spring-cloud-starter-config"
     compile "org.springframework.retry:spring-retry"
+    <%_ } _%>
+    <%_ if (authenticationType === 'uaa') { _%>
+    compile "org.springframework.cloud:spring-cloud-security"
+    <%_ } _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    compile "org.springframework.cloud:spring-cloud-starter-feign"
     <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector"
     compile "org.springframework.cloud:spring-cloud-spring-service-connector"
@@ -227,15 +245,24 @@ dependencies {
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
     compile group: 'org.springframework.security', name: 'spring-security-jwt'
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
-    compile "com.github.mongobee:mongobee:${mongobee_version}"<% } %>
+    <%_ if (databaseType === 'mongodb') { _%>
+    compile "com.github.mongobee:mongobee:${mongobee_version}"
+    <%_ } _%>
     compile("io.springfox:springfox-swagger2:${springfox_version}"){
         exclude module: 'mapstruct'
     }
-    <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
-    compile "mysql:mysql-connector-java"<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile "org.postgresql:postgresql"<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
-    compile "com.h2database:h2"<% } %>
+    <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
+    compile "mysql:mysql-connector-java"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+    compile "org.postgresql:postgresql"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
+    compile "org.mariadb.jdbc:mariadb-java-client:${mariadb_java_client_version}"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    compile "com.h2database:h2"
+    <%_ } _%>
     compile "fr.ippon.spark.metrics:metrics-spark-reporter:${metrics_spark_reporter_version}"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"<% if (enableSocialSignIn) { %>
     compile "org.apache.httpcomponents:httpclient"
@@ -251,6 +278,8 @@ dependencies {
     testCompile "info.cukes:cucumber-junit:${cucumber_version}"
     testCompile "info.cukes:cucumber-spring:${cucumber_version}"<% } %>
     testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.springframework.security:spring-security-test"
+    testCompile "org.springframework.boot:spring-boot-test"
     testCompile "org.assertj:assertj-core:${assertj_core_version}"
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core"<% if (databaseType == 'sql') { %>
@@ -276,11 +305,12 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '3.0'
 }
 
 task stage(dependsOn: 'bootRepackage') {
 }
 
 compileJava.dependsOn processResources
-processResources.dependsOn cleanResources
+processResources.dependsOn cleanResources,bootBuildInfo
+bootBuildInfo.mustRunAfter cleanResources

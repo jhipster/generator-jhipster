@@ -5,6 +5,7 @@ var util = require('util'),
     _ = require('lodash'),
     prompts = require('./prompts'),
     scriptBase = require('../generator-base'),
+    cleanup = require('../cleanup'),
     packagejs = require('../../package.json'),
     crypto = require('crypto'),
     mkdirp = require('mkdirp');
@@ -26,7 +27,20 @@ const constants = require('../generator-constants'),
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
-    SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+    SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR,
+
+    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
+    DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE,
+    DOCKER_MYSQL = constants.DOCKER_MYSQL,
+    DOCKER_MARIADB = constants.DOCKER_MARIADB,
+    DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL,
+    DOCKER_MONGODB = constants.DOCKER_MONGODB,
+    DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA,
+    DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH,
+    DOCKER_SONAR = constants.DOCKER_SONAR,
+    DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
+    DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
+    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
 
 var javaDir;
 
@@ -99,6 +113,19 @@ module.exports = JhipsterServerGenerator.extend({
             this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
             this.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
             this.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
+
+            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JAVA_JRE = DOCKER_JAVA_JRE,
+            this.DOCKER_MYSQL = DOCKER_MYSQL;
+            this.DOCKER_MARIADB = DOCKER_MARIADB;
+            this.DOCKER_POSTGRESQL = DOCKER_POSTGRESQL;
+            this.DOCKER_MONGODB = DOCKER_MONGODB;
+            this.DOCKER_CASSANDRA = DOCKER_CASSANDRA;
+            this.DOCKER_ELASTICSEARCH = DOCKER_ELASTICSEARCH;
+            this.DOCKER_SONAR = DOCKER_SONAR;
+            this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
 
             this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
             if (!this.applicationType) {
@@ -346,12 +373,17 @@ module.exports = JhipsterServerGenerator.extend({
 
     writing: {
 
+        cleanupOldServerFiles: function() {
+            cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
+        },
+
         writeGlobalFiles: function () {
             this.template('_README.md', 'README.md', this, {});
             this.copy('gitignore', '.gitignore');
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
             this.template('_travis.yml', '.travis.yml', this, {});
+            this.template('_Jenkinsfile', 'Jenkinsfile', this, {});
         },
 
         writeDockerFiles: function () {
@@ -389,7 +421,8 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
-                this.copy(DOCKER_DIR + 'central-server-config/application.yml', DOCKER_DIR + 'central-server-config/application.yml');
+                this.copy(DOCKER_DIR + 'central-server-config/localhost-config/application.yml', DOCKER_DIR + 'central-server-config/localhost-config/application.yml');
+                this.copy(DOCKER_DIR + 'central-server-config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
                 this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
             }
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
@@ -458,7 +491,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(SERVER_MAIN_RES_DIR + '/config/liquibase/master.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml');
             }
 
-            if (this.databaseType === 'mongodb') {
+            if (this.databaseType === 'mongodb' && !this.skipUserManagement) {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/_InitialSetupMigration.java', javaDir + 'config/dbmigrations/InitialSetupMigration.java', this, {});
             }
 
@@ -474,6 +507,10 @@ module.exports = JhipsterServerGenerator.extend({
                     this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000000_create-tables.cql', this, {});
                     this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_insert_default_users.cql', SERVER_MAIN_RES_DIR + 'config/cql/changelog/00000000000001_insert_default_users.cql', this, {});
                 }
+            }
+
+            if (this.applicationType === 'uaa') {
+                this.generateKeyStore();
             }
         },
 
@@ -500,6 +537,7 @@ module.exports = JhipsterServerGenerator.extend({
             if(this.applicationType === 'uaa') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaWebSecurityConfiguration.java', javaDir + 'config/UaaWebSecurityConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_UaaConfiguration.java', javaDir + 'config/UaaConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoadBalancedResourceDetails.java', javaDir + 'config/LoadBalancedResourceDetails.java', this, {});
             } else {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
             }
@@ -515,7 +553,7 @@ module.exports = JhipsterServerGenerator.extend({
 
 
             if (this.authenticationType === 'jwt') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoginDTO.java', javaDir + 'web/rest/dto/LoginDTO.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_LoginVM.java', javaDir + 'web/rest/vm/LoginVM.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_JWTToken.java', javaDir + 'web/rest/JWTToken.java', this, {});
             }
@@ -573,7 +611,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/ratelimiting/_RateLimitingRepository.java', javaDir + 'gateway/ratelimiting/RateLimitingRepository.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/accesscontrol/_AccessControlFilter.java', javaDir + 'gateway/accesscontrol/AccessControlFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilter.java', javaDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilter.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_RouteVM.java', javaDir + 'web/rest/vm/RouteVM.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
         },
 
@@ -581,6 +619,12 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa')) return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MicroserviceSecurityConfiguration.java', javaDir + 'config/MicroserviceSecurityConfiguration.java', this, {});
+            if (this.applicationType === 'microservice' && this.authenticationType === 'uaa') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoadBalancedResourceDetails.java', javaDir + 'config/LoadBalancedResourceDetails.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_FeignConfiguration.java', javaDir + 'config/FeignConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/client/_AuthorizedFeignClient.java', javaDir + 'client/AuthorizedFeignClient.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/client/_OAuth2InterceptedFeignConfiguration.java', javaDir + 'client/OAuth2InterceptedFeignConfiguration.java', this, {});
+            }
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
@@ -607,6 +651,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DefaultProfileUtil.java', javaDir + 'config/DefaultProfileUtil.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_package-info.java', javaDir + 'config/apidoc/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_SwaggerConfiguration.java', javaDir + 'config/apidoc/SwaggerConfiguration.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_PageableParameterBuilderPlugin.java', javaDir + 'config/apidoc/PageableParameterBuilderPlugin.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/async/_package-info.java', javaDir + 'async/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/async/_ExceptionHandlingAsyncTaskExecutor.java', javaDir + 'async/ExceptionHandlingAsyncTaskExecutor.java', this, {});
@@ -674,8 +719,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310LocalDateDeserializer.java', javaDir + 'domain/util/JSR310LocalDateDeserializer.java', this, {});
             if (this.databaseType === 'sql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
@@ -711,10 +754,10 @@ module.exports = JhipsterServerGenerator.extend({
             // error handler code - server side
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ErrorDTO.java', javaDir + 'web/rest/errors/ErrorDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ErrorVM.java', javaDir + 'web/rest/errors/ErrorVM.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_FieldErrorDTO.java', javaDir + 'web/rest/errors/FieldErrorDTO.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ParameterizedErrorDTO.java', javaDir + 'web/rest/errors/ParameterizedErrorDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_FieldErrorVM.java', javaDir + 'web/rest/errors/FieldErrorVM.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/errors/_ParameterizedErrorVM.java', javaDir + 'web/rest/errors/ParameterizedErrorVM.java', this, {});
 
         },
 
@@ -722,8 +765,8 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_package-info.java', javaDir + 'web/rest/vm/package-info.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_LoggerVM.java', javaDir + 'web/rest/vm/LoggerVM.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
@@ -767,6 +810,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
 
+            if (this.authenticationType === 'uaa') {
+                this.template(SERVER_TEST_SRC_DIR + 'package/security/_OAuth2TokenMockUtil.java', testDir + 'security/OAuth2TokenMockUtil.java', this, {});
+                this.template(SERVER_TEST_SRC_DIR + 'package/config/_SecurityBeanOverrideConfiguration.java', testDir + 'config/SecurityBeanOverrideConfiguration.java', this, {});
+            }
+
             if (this.hibernateCache === 'ehcache') {
                 this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});
             }
@@ -802,6 +850,9 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv');
+                if (this.authenticationType === 'oauth2') {
+                    this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/oauth_client_details.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/oauth_client_details.csv');
+                }
             }
 
             // Email templates
@@ -839,12 +890,16 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             /* User management java web files */
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/dto/_package-info.java', javaDir + 'service/dto/package-info.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/dto/_UserDTO.java', javaDir + 'service/dto/UserDTO.java', this, {});
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_ManagedUserVM.java', javaDir + 'web/rest/vm/ManagedUserVM.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/mapper/_UserMapper.java', javaDir + 'web/rest/mapper/UserMapper.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_KeyAndPasswordVM.java', javaDir + 'web/rest/vm/KeyAndPasswordVM.java', this, {});
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/mapper/_package-info.java', javaDir + 'service/mapper/package-info.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/mapper/_UserMapper.java', javaDir + 'service/mapper/UserMapper.java', this, {});
 
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
@@ -881,7 +936,10 @@ module.exports = JhipsterServerGenerator.extend({
 
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' in the `' + chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
+            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') + 'Please rename ' +
+                chalk.yellow.bold('ojdbc' + this.ojdbcVersion + '.jar') + ' to ' +
+                chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' and place it in the `' +
+                chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
         }
         this.log(chalk.green.bold('\nServer app generated successfully.\n'));
     }

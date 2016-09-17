@@ -1,6 +1,6 @@
 package <%=packageName%>.web.rest;
 
-import <%=packageName%>.web.rest.dto.RouteDTO;
+import <%=packageName%>.web.rest.vm.RouteVM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +40,16 @@ public class GatewayResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<RouteDTO>> activeRoutes() {
+    public ResponseEntity<List<RouteVM>> activeRoutes() {
         List<Route> routes = routeLocator.getRoutes();
-        List<RouteDTO> routeDTOs = new ArrayList<>();
+        List<RouteVM> routeVMs = new ArrayList<>();
         routes.forEach(route -> {
-            RouteDTO routeDTO = new RouteDTO();
-            routeDTO.setPath(route.getFullPath());
-            routeDTO.setServiceId(route.getId());
-            routeDTO.setServiceInstances(discoveryClient.getInstances(route.getId()));
-            routeDTOs.add(routeDTO);
+            RouteVM routeVM = new RouteVM();
+            routeVM.setPath(route.getFullPath());
+            routeVM.setServiceId(route.getId());
+            routeVM.setServiceInstances(discoveryClient.getInstances(route.getId()));
+            routeVMs.add(routeVM);
         });
-        return new ResponseEntity<>(routeDTOs, HttpStatus.OK);
+        return new ResponseEntity<>(routeVMs, HttpStatus.OK);
     }
 }

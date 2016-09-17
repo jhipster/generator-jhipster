@@ -1,6 +1,3 @@
-import { HttpModule, XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
@@ -19,9 +16,6 @@ import { LogsComponent } from './logs/logs.component';
 
 @NgModule({
     imports: [
-        BrowserModule,
-        HttpModule,
-        FormsModule,
         <%=angular2AppName%>SharedModule
     ],
     declarations: [
@@ -35,11 +29,7 @@ import { LogsComponent } from './logs/logs.component';
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         LogsService,
-        ParseLinks,
-        {
-            provide: XSRFStrategy,
-            useValue:  new CookieXSRFStrategy('CSRF-TOKEN', 'X-CSRF-TOKEN')
-        }
+        ParseLinks
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

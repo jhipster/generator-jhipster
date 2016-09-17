@@ -5,7 +5,6 @@ angular
         'ngResource',
         'ngFileUpload',
         'ui.bootstrap',
-        'ui.bootstrap.datetimepicker',
         'ui.router',
         'infinite-scroll'
     ]);

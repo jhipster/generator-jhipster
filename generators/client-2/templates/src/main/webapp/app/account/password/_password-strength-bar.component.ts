@@ -2,12 +2,17 @@ import {Component, Input, ElementRef} from '@angular/core';
 
 @Component({
     selector: 'password-strength-bar',
-    template: '<div id="strength">' +
-        '<small<% if (enableTranslation) { %> translate="global.messages.validate.newpassword.strength"<% } %>>Password strength:</small>' +
-        '<ul id="strengthBar">' +
-        '<li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li>' +
-        '</ul>' +
-        '</div>'
+    template: `
+        <div id="strength">
+            <small<% if (enableTranslation) { %> translate="global.messages.validate.newpassword.strength"<% } %>>Password strength:</small>
+            <ul id="strengthBar">
+                <li class="point"></li>
+                <li class="point"></li>
+                <li class="point"></li>
+                <li class="point"></li>
+                <li class="point"></li>
+            </ul>
+        </div>`
 })
 export class PasswordStrengthBarComponent {
     strength: any;

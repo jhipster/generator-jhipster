@@ -9,7 +9,7 @@ ext {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
+
 }
 
 def profiles = 'prod'

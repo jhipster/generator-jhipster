@@ -2,7 +2,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-postgresql:
         container_name: <%= baseName.toLowerCase() %>-postgresql
-        image: postgres:9.5.2
+        image: <%= DOCKER_POSTGRESQL %>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/
         environment:

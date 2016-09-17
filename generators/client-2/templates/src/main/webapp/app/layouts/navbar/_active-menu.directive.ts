@@ -1,33 +1,29 @@
-(function() {
-    'use strict';
+import { Directive, OnInit, ElementRef } from '@angular/core';
 
-    angular
-        .module('<%=angularAppName%>.app')
-        .directive('activeMenu', activeMenu);
+@Directive({
+    selector: '[active-menu]',
+    inputs: ['language:active-menu']
+})
+export class ActiveMenuDirective implements OnInit {
+    language: string;
+    $element: any;
 
-    activeMenu.$inject = ['$translate', '$locale', 'tmhDynamicLocale'];
+    constructor(el: ElementRef) {
+        this.$element = $(el.nativeElement);
+    }
 
-    function activeMenu($translate, $locale, tmhDynamicLocale) {
-        var directive = {
-            restrict: 'A',
-            link: linkFunc
-        };
-
-        return directive;
-
-        function linkFunc(scope, element, attrs) {
-            var language = attrs.activeMenu;
-
-            scope.$watch(function() {
-                return $translate.use();
-            }, function(selectedLanguage) {
-                if (language === selectedLanguage) {
-                    tmhDynamicLocale.set(language);
-                    element.addClass('active');
-                } else {
-                    element.removeClass('active');
-                }
-            });
+    ngOnInit() {
+        //TODO implement once translation is migrated
+        /*scope.$watch(function() {
+            return $translate.use();
+        }, setActive(selectedLanguage));*/
+        function setActive(selectedLanguage) {
+            if (this.language === selectedLanguage) {
+                //tmhDynamicLocale.set(this.language);
+                this.$element.addClass('active');
+            } else {
+                this.$element.removeClass('active');
+            }
         }
     }
-})();
+}

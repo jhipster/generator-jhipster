@@ -3,15 +3,15 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPlural %>",
-                "createLabel": "Create a new <%= entityClassHumanized %>",
-                "createOrEditLabel": "Create or edit a <%= entityClassHumanized %>",
-                "search": "Search for <%= entityClassHumanized %>"
+                "createLabel": "Genera un nuovo <%= entityClassHumanized %>",
+                "createOrEditLabel": "Genera o modifica un <%= entityClassHumanized %>",
+                "search": "Cerca <%= entityClassHumanized %>"
             },
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",
+            "created": "&Egrave; stato generato un nuovo <%= entityClassHumanized %> con identificatore { param }}",
+            "updated": "&Egrave; stato aggiornato <%= entityClassHumanized %> identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato <%= entityClassHumanized %> con identificatore {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClassHumanized %> {{ id }}?"
+                "question": "Sei sicuro di volere eliminare <%= entityClassHumanized %> {{ id }}?"
             },
             "detail": {
                 "title": "<%= entityClassHumanized %>"

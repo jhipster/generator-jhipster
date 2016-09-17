@@ -25,7 +25,7 @@ function askForInsightOptIn() {
         name: 'insight',
         message: 'May ' + chalk.cyan('JHipster') + ' anonymously report usage statistics to improve the tool over time?',
         default: true
-    }, function (prompt) {
+    }).then(function (prompt) {
         if (prompt.insight !== undefined) {
             insight.optOut = !prompt.insight;
         }
@@ -35,6 +35,12 @@ function askForInsightOptIn() {
 
 function askForApplicationType() {
     if (this.existingProject) return;
+
+    const DEFAULT_APPTYPE = 'monolith';
+    if (this.skipServer) {
+        this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
+        return;
+    }
 
     var done = this.async();
     var getNumberedQuestion = this.getNumberedQuestion.bind(this);
@@ -47,7 +53,7 @@ function askForApplicationType() {
         },
         choices: [
             {
-                value: 'monolith',
+                value: DEFAULT_APPTYPE,
                 name: 'Monolithic application (recommended for simple projects)'
             },
             {
@@ -63,8 +69,8 @@ function askForApplicationType() {
                 name: '[BETA] JHipster UAA server (for microservice OAuth2 authentication)'
             }
         ],
-        default: 'monolith'
-    }, function (prompt) {
+        default: DEFAULT_APPTYPE
+    }).then(function (prompt) {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
         done();
     }.bind(this));
@@ -90,12 +96,14 @@ function askForTestOpts() {
 
     var getNumberedQuestion = this.getNumberedQuestion.bind(this);
     var choices = [];
+    var defaultChoice = [];
     if (!this.skipServer) {
         // all server side test frameworks should be addded here
         choices.push(
             {name: 'Gatling', value: 'gatling'},
             {name: 'Cucumber', value: 'cucumber'}
         );
+        defaultChoice = ['gatling'];
     }
     if (!this.skipClient) {
         // all client side test frameworks should be addded here
@@ -112,8 +120,8 @@ function askForTestOpts() {
             return getNumberedQuestion('Which testing frameworks would you like to use?', true);
         },
         choices: choices,
-        default: ['gatling']
-    }, function (prompt) {
+        default: defaultChoice
+    }).then(function (prompt) {
         this.testFrameworks = prompt.testFrameworks;
         done();
     }.bind(this));
@@ -142,11 +150,11 @@ function askForClient() {
             },
             {
                 value: 'angular2',
-                name: '[BETA] Angular 2.x (rc4)'
+                name: '[BETA] Angular 2.x (stable)'
             }
         ],
         default: 'angular1'
-    }, function (prompt) {
+    }).then(function (prompt) {
         this.angularVersion = this.configOptions.angularVersion = prompt.angularVersion;
         done();
     }.bind(this));

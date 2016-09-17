@@ -46,6 +46,8 @@ const expectedFiles = {
         'README.md',
         '.gitignore',
         '.gitattributes',
+        'Jenkinsfile',
+        '.travis.yml',
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'ehcache.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
@@ -67,6 +69,7 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/aop/logging/LoggingAspect.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/SwaggerConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/PageableParameterBuilderPlugin.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/async/ExceptionHandlingAsyncTaskExecutor.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/package-info.java',
@@ -93,8 +96,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/PersistentToken.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/User.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateConverters.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateTimeSerializer.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310LocalDateDeserializer.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310PersistenceConverters.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/AuthorityRepository.java',
@@ -118,12 +119,18 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/UserService.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/MailService.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/util/RandomUtil.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/package-info.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/UserDTO.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/package-info.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/UserMapper.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CachingHttpHeadersFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CsrfCookieGeneratorFilter.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/package-info.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/LoggerDTO.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/UserDTO.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/package-info.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/LoggerVM.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/ManagedUserVM.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/LoggerVM.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/util/PaginationUtil.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/AccountResource.java',
@@ -230,7 +237,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-link.directive.js',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/services/user/user.service.js',
@@ -380,9 +386,17 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.ts',
 
-        CLIENT_MAIN_SRC_DIR + 'app/shared/account.model.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/filter.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/order-by.pipe.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/model/account.model.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/filter.pipe.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/order-by.pipe.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/truncate-characters.pipe.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/truncate-words.pipe.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/directive/show-validation.directive.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/directive/sort.directive.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/directive/sort-by.directive.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/service/parse-links.service.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/service/date-util.service.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/service/data-util.service.ts',
 
         CLIENT_MAIN_SRC_DIR + 'app/admin/admin.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.service.ts',
@@ -420,45 +434,37 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/auth-session.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/account.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/auth.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/form/show-validation.directive.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.pipe.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/base64.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/parse-links.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/truncate-characters.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/truncate-words.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/date-util.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/sort.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/sort-by.directive.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.html',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.controller.ts',
 
         CLIENT_MAIN_SRC_DIR + 'app/account/account.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset-request.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/finish/reset-finish.service.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.service.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/account.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.controller.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset-request.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset-request.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset-request.controller.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/finish/reset-finish.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/finish/reset-finish.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/reset/finish/reset-finish.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.html',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.state.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.html',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.state.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.controller.ts',
@@ -466,7 +472,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.controller.ts',
 
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-link.directive.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-menu.directive.ts',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.html',
@@ -543,7 +549,7 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/GatewayConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingRepository.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/RouteDTO.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/RouteVM.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/GatewayResource.java',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.state.js',
@@ -582,7 +588,8 @@ const expectedFiles = {
     ],
 
     containerizeWithDocker: [
-        DOCKER_DIR + 'central-server-config/application.yml',
+        DOCKER_DIR + 'central-server-config/localhost-config/application.yml',
+        DOCKER_DIR + 'central-server-config/docker-config/application.yml',
         DOCKER_DIR + 'jhipster-registry.yml',
         DOCKER_DIR + 'Dockerfile',
         DOCKER_DIR + 'app.yml'
@@ -734,6 +741,41 @@ describe('JHipster generator', function () {
                 SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java'
             ]);
             assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /package com\.otherpackage;/);
+            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /public class JhipsterApp/);
+        });
+    });
+
+    describe('bad application name for java', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, skipChecks: true})
+                .withPrompts({
+                    'baseName': '21Points',
+                    'packageName': 'com.otherpackage',
+                    'packageFolder': 'com/otherpackage',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'clusteredHttpSession': 'no',
+                    'websocket': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Memory',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'searchEngine': 'no'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with default application name', function () {
+            assert.file([
+                SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java'
+            ]);
+            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java', /public class Application/);
         });
     });
 

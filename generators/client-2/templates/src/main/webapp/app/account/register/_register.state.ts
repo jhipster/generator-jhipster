@@ -10,7 +10,7 @@ export function RegisterStateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                template: '<register></register>'
+                template: '<<%=jhiPrefix%>-register></<%=jhiPrefix%>-register>'
             }
         },
         resolve: {

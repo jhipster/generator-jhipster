@@ -11,13 +11,17 @@
         '@angular': 'vendor/@angular',
         'rxjs': 'vendor/rxjs',
         'main': 'app.main',
-        '@ng-bootstrap': 'vendor/@ng-bootstrap'
+        '@ng-bootstrap': 'vendor/@ng-bootstrap',
+        'ui-router-ng2': 'vendor/ui-router-ng2/_bundles/ui-router-ng2',
+        'jquery' : 'vendor/jquery/dist'
     };
     // packages tells the System loader how to load when no filename and/or no extension
     var packages = {
         'app': { main: 'app.main' },
         'rxjs': {},
-        '@ng-bootstrap/ng-bootstrap': {main: 'index.js', defaultExtension: 'js'}
+        '@ng-bootstrap/ng-bootstrap': {main: '/bundles/ng-bootstrap', defaultExtension: 'js'},
+        'ui-router-ng2': {},
+        'jquery': { main: 'jquery.min' }
     };
     var ngPackageNames = [
         'common',
@@ -27,28 +31,7 @@
         'http',
         'platform-browser',
         'platform-browser-dynamic',
-        'router',
         'upgrade',
-    ];
-    // Packages related to ngbootstrap 
-    var ngBootstrapPackageNames = [
-        'accordion',
-        'alert',
-        'radio',
-        'carousel',
-        'collapse',
-        'datepicker',
-        'dropdown',
-        'modal',
-        'pagination',
-        'popover',
-        'progressbar',
-        'rating',
-        'tabset',
-        'timepicker',
-        'tooltip',
-        'typeahead',
-        'util'
     ];
 
     // Individual files (~300 requests):
@@ -59,16 +42,13 @@
     function packUmd(pkgName) {
         packages['@angular/'+ pkgName] = { main: '/bundles/' + pkgName + '.umd' };
     };
-    // ng-bootstrap index packing
-    function ngBootstrapPackIndex(pkgName) {
-        packages['@ng-bootstrap/ng-bootstrap/' + pkgName] = {main: 'index.js', defaultExtension: 'js'};
-    };
     // Most environments should use UMD; some (Karma) need the individual index files
     var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
     // Add package entries for angular packages
     ngPackageNames.forEach(setPackageConfig);
-    ngBootstrapPackageNames.forEach(ngBootstrapPackIndex);
+
     var config = {
+        meta: { "ui-router-ng2": { format: "cjs" } },
         map: map,
         packages: packages
     }

@@ -64,7 +64,6 @@ public class SwaggerConfiguration {
             .apiInfo(apiInfo)
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
-            .ignoredParameterTypes(Pageable.class)
             .ignoredParameterTypes(java.sql.Date.class)
             .directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
             .directModelSubstitute(java.time.ZonedDateTime.class, Date.class)

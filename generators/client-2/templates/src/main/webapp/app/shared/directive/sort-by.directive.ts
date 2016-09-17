@@ -1,5 +1,5 @@
 import { Directive, Host } from '@angular/core';
-import { JhSort } from './sort.directive';
+import { JhSortDirective } from './sort.directive';
 
 @Directive({
     selector: '[jh-sort-by]',
@@ -8,10 +8,10 @@ import { JhSort } from './sort.directive';
         '(click)': 'onClick()'
     }
 })
-export class JhSortBy {
+export class JhSortByDirective {
     jhSortBy: string;
-    jhSort: JhSort;
-    constructor(@Host() jhSort: JhSort) {
+    jhSort: JhSortDirective;
+    constructor(@Host() jhSort: JhSortDirective) {
         this.jhSort = jhSort;
     }
     onClick() {

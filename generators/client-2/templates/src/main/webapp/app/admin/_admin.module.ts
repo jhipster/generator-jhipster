@@ -21,7 +21,6 @@ import { LogsComponent } from './logs/logs.component';
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalController } from "./metrics/metrics-modal.controller";
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringController } from "./metrics/metrics.controller";
 import { <%=jhiPrefixCapitalized%>HealthModalController } from "./health/health-modal.controller";
-
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
 

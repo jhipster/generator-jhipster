@@ -4,7 +4,7 @@ import { ProfileInfo } from './profile-info';
 
 @Component({
     selector: 'page-ribbon',
-    template: '<div class="ribbon {{cssClass}}"><a href="" translate="global.ribbon.{{ribbonEnv}}">{{ribbonEnv}}</a></div>'
+    template: `<div class="ribbon {{cssClass}}"><a href="" translate="global.ribbon.{{ribbonEnv}}">{{ribbonEnv}}</a></div>`
 })
 export class PageRibbonComponent implements OnInit {
 
