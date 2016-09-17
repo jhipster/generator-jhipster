@@ -1,4 +1,4 @@
-import { ITEMS_PER_PAGE } from '../../shared/pagination.constants';
+import { ITEMS_PER_PAGE } from '../../shared/constants/pagination.constants';
 
 PaginationConfig.$inject = ['uibPaginationConfig'];
 

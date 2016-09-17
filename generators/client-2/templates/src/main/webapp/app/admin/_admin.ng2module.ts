@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
-import { XSRFStrategyProvider } from '../shared/XSRF-strategy.provider';
 
 import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration/configuration.service';
@@ -30,8 +29,7 @@ import { LogsComponent } from './logs/logs.component';
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         LogsService,
-        ParseLinks,
-        XSRFStrategyProvider
+        ParseLinks
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
