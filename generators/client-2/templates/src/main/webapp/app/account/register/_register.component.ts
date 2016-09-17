@@ -21,10 +21,10 @@ export class RegisterComponent implements OnInit {
             @Inject('LoginService') private loginService,
             private elementRef: ElementRef,
             private renderer: Renderer) {
+        this.login = loginService.open;
     }
 
     ngOnInit() {
-        this.login = this.loginService.open;
         this.success = false;
         this.registerAccount = {};
     }
