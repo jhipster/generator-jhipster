@@ -108,7 +108,9 @@ function deps(){
         'node_modules/systemjs/dist/system.js',
         'node_modules/@angular/**/*.js',
         'node_modules/@ng-bootstrap/ng-bootstrap/**/*.js',
-        'node_modules/rxjs/**/*.js'
+        'node_modules/rxjs/**/*.js',
+        'node_modules/ui-router-ng2/**/*.js',
+        'node_modules/jquery/dist/*.js'
     ], { base: 'node_modules' })
     .pipe(gulp.dest(config.dist + 'vendor'));
 }

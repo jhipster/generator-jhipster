@@ -11,13 +11,17 @@
         '@angular': 'vendor/@angular',
         'rxjs': 'vendor/rxjs',
         'main': 'app.main',
-        '@ng-bootstrap': 'vendor/@ng-bootstrap'
+        '@ng-bootstrap': 'vendor/@ng-bootstrap',
+        'ui-router-ng2': 'vendor/ui-router-ng2/_bundles/ui-router-ng2',
+        'jquery' : 'vendor/jquery/dist'
     };
     // packages tells the System loader how to load when no filename and/or no extension
     var packages = {
         'app': { main: 'app.main' },
         'rxjs': {},
-        '@ng-bootstrap/ng-bootstrap': {main: '/bundles/ng-bootstrap', defaultExtension: 'js'}
+        '@ng-bootstrap/ng-bootstrap': {main: '/bundles/ng-bootstrap', defaultExtension: 'js'},
+        'ui-router-ng2': {},
+        'jquery': { main: 'jquery.min' }
     };
     var ngPackageNames = [
         'common',
@@ -27,7 +31,6 @@
         'http',
         'platform-browser',
         'platform-browser-dynamic',
-        'router',
         'upgrade',
     ];
 
@@ -45,6 +48,7 @@
     ngPackageNames.forEach(setPackageConfig);
 
     var config = {
+        meta: { "ui-router-ng2": { format: "cjs" } },
         map: map,
         packages: packages
     }
