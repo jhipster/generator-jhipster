@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <h1 translate="error.title">Error Page!</h1>
 
-            <div ng-show="errorMessage">
+            <div [hidden]="!errorMessage">
                 <div class="alert alert-danger">{{errorMessage}}
                 </div>
             </div>

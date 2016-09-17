@@ -237,7 +237,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-link.directive.js',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/services/user/user.service.js',
@@ -473,7 +472,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.controller.ts',
 
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-link.directive.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-menu.directive.ts',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.html',
