@@ -15,7 +15,7 @@
         <div class="navbar-collapse" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
-                    <a ui-sref="home" (click)="collapseNavbar()">
+                    <a ui-sref="home" href="#/home" (click)="collapseNavbar()">
                         <span class="glyphicon glyphicon-home"></span>
                         <span class="hidden-sm" translate="global.menu.home">Home</span>
                     </a>
@@ -47,20 +47,20 @@
                     </a>
                     <ul class="dropdown-menu" ngbDropdownMenu>
                         <li ui-sref-active="active" *ngSwitchCase="true">
-                            <a ui-sref="settings" (click)="collapseNavbar()">
+                            <a ui-sref="settings" href="#/settings" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-wrench"></span>&nbsp;
                                 <span translate="global.menu.account.settings">Settings</span>
                             </a>
                         </li>
                         <li ui-sref-active="active" *ngSwitchCase="true">
-                            <a ui-sref="password" (click)="collapseNavbar()">
+                            <a ui-sref="password" href="#/password" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-lock"></span>&nbsp;
                                 <span translate="global.menu.account.password">Password</span>
                             </a>
                         </li>
                         <%_ if (authenticationType == 'session') { _%>
                         <li ui-sref-active="active" *ngSwitchCase="true">
-                            <a ui-sref="sessions" (click)="collapseNavbar()">
+                            <a ui-sref="sessions" href="#/sessions" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-cloud"></span>&nbsp;
                                 <span translate="global.menu.account.sessions">Sessions</span>
                             </a>
@@ -79,7 +79,7 @@
                             </a>
                         </li>
                         <li ui-sref-active="active" *ngSwitchCase="false">
-                            <a ui-sref="register" (click)="collapseNavbar()">
+                            <a ui-sref="register" href="#/register" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;
                                 <span translate="global.menu.account.register">Register</span>
                             </a>
@@ -97,58 +97,58 @@
                     <ul class="dropdown-menu" ngbDropdownMenu>
                         <%_ if (applicationType == 'gateway') { _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="gateway" (click)="collapseNavbar()">
+                            <a ui-sref="gateway" href="#/gateway" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-road"></span>&nbsp;
                                 <span translate="global.menu.admin.gateway">Gateway</span>
                             </a>
                         </li>
                         <%_ } _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="user-management" (click)="collapseNavbar()">
+                            <a ui-sref="user-management" href="#/user-management" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-user"></span>&nbsp;
                                 <span translate="global.menu.admin.userManagement">User management</span>
                             </a>
                         </li>
                         <%_ if (websocket == 'spring-websocket') { _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-tracker" (click)="collapseNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-tracker" href="#/<%=jhiPrefix%>-tracker" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-eye-open"></span>&nbsp;
                                 <span translate="global.menu.admin.tracker">User tracker</span>
                             </a>
                         </li>
                         <%_ } _%>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-metrics" (click)="collapseNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-metrics" href="#/<%=jhiPrefix%>-metrics" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-dashboard"></span>&nbsp;
                                 <span translate="global.menu.admin.metrics">Metrics</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-health" (click)="collapseNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-health" href="#/<%=jhiPrefix%>-health" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-heart"></span>&nbsp;
                                 <span translate="global.menu.admin.health">Health</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="<%=jhiPrefix%>-configuration" (click)="collapseNavbar()">
+                            <a ui-sref="<%=jhiPrefix%>-configuration" href="#/<%=jhiPrefix%>-configuration" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-list-alt"></span>&nbsp;
                                 <span translate="global.menu.admin.configuration">Configuration</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="audits" (click)="collapseNavbar()">
+                            <a ui-sref="audits" href="#/audits" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-bell"></span>&nbsp;
                                 <span translate="global.menu.admin.audits">Audits</span>
                             </a>
                         </li>
                         <li ui-sref-active="active">
-                            <a ui-sref="logs" (click)="collapseNavbar()">
+                            <a ui-sref="logs" href="#/logs" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-tasks"></span>&nbsp;
                                 <span translate="global.menu.admin.logs">Logs</span>
                             </a>
                         </li>
                         <li *ngIf="swaggerEnabled" ui-sref-active="active">
-                            <a ui-sref="docs" (click)="collapseNavbar()">
+                            <a ui-sref="docs" href="#/docs" (click)="collapseNavbar()">
                                 <span class="glyphicon glyphicon-book"></span>&nbsp;
                                 <span translate="global.menu.admin.apidocs">API</span>
                             </a>
