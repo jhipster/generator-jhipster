@@ -75,6 +75,7 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity TestManyToMany
   moveEntity TestOneToOne
   moveEntity TestCustomTableName
+  moveEntity TestTwoRelationshipsSameEntity
 
   moveEntity EntityWithDTO
   moveEntity EntityWithPagination
@@ -153,6 +154,7 @@ generateEntity TestManyToOne
 generateEntity TestManyToMany
 generateEntity TestOneToOne
 generateEntity TestCustomTableName
+generateEntity TestTwoRelationshipsSameEntity
 
 generateEntity EntityWithDTO
 generateEntity EntityWithPagination
