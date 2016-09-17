@@ -10,10 +10,10 @@ import { Component, Input } from '@angular/core';
             of {{total}} items.
         </div>`
 })
-export class JhiItemCount {
+export class JhiItemCountComponent {
     page: any;
     total: any;
     itemsPerPage: any;
-    
+
     constructor() {}
 }

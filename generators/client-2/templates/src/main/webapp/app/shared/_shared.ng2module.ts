@@ -9,7 +9,7 @@ import { FilterPipe } from './pipe/filter.pipe';
 import { OrderByPipe } from './pipe/order-by.pipe';
 import { TranslatePipe } from './pipe/translate.pipe';
 
-import { JhiItemCount } from './component/jhi-item-count.component';
+import { JhiItemCountComponent } from './component/jhi-item-count.component';
 import { MaxbytesValidator } from './directive/maxbytes.directive';
 import { MinbytesValidator } from './directive/minbytes.directive';
 import { ShowValidationDirective } from './directive/show-validation.directive';
@@ -23,7 +23,7 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         FilterPipe,
         TranslatePipe,
         CapitalizePipe,
-        JhiItemCount,
+        JhiItemCountComponent,
         MaxbytesValidator,
         MinbytesValidator,
         ShowValidationDirective
@@ -38,7 +38,7 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         FilterPipe,
         TranslatePipe,
         CapitalizePipe,
-        JhiItemCount,
+        JhiItemCountComponent,
         MaxbytesValidator,
         MinbytesValidator,
         ShowValidationDirective
