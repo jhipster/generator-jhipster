@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { <%=angular2AppName%>SharedModule } from './shared/shared.ng2module';
 import { <%=angular2AppName%>CommonModule } from './components/common.ng2module';
@@ -15,6 +16,7 @@ import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 
 @NgModule({
     imports: [
+        BrowserModule,
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>CommonModule,
         <%=angular2AppName%>AdminModule,

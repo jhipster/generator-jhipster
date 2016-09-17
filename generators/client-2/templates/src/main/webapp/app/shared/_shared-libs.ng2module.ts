@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 
@@ -12,7 +11,6 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap/dropdown/dropdown.
 @NgModule({
     imports: [],
     exports: [
-        BrowserModule,
         FormsModule,
         HttpModule,
         CommonModule,
