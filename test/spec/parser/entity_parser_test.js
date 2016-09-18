@@ -88,7 +88,7 @@ describe('::convert', function () {
         expect(content.Employee.pagination).to.eq('no');
       });
     });
-    describe('when converting JDL to entity json with a required relationship', function() {
+    describe('when converting a JDL to JSON with a required relationship', function () {
       it('converts it', function() {
         var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
         var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
@@ -101,6 +101,20 @@ describe('::convert', function () {
           relationshipType: 'one-to-one',
           relationshipValidateRules: 'required'
         }]);
+      });
+    });
+    describe('when converting a JDL to JSON with fluent methods', function () {
+      it('converts it', function () {
+        var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
+        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
+        expect(content.A.fluentMethods).to.be.false;
+        expect(content.B.fluentMethods).to.be.true;
+        expect(content.C.fluentMethods).to.be.true;
+        input = parseFromFiles(['./test/test_files/fluent_methods2.jdl']);
+        content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
+        expect(content.A.fluentMethods).to.be.true;
+        expect(content.B.fluentMethods).to.be.false;
+        expect(content.C.fluentMethods).to.be.false;
       });
     });
   });

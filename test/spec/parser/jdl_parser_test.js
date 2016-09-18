@@ -244,6 +244,27 @@ describe('JDLParser', function () {
           expect(content.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
+      describe('when using the noFluentMethods option', function () {
+        it('adds it correctly', function () {
+          var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
+          var content = JDLParser.parse(input, 'sql');
+          expect(content.options).to.deep.eq([
+              new JDLUnaryOption({
+              name: UnaryOptions.NO_FLUENT_METHOD,
+              entityNames: ['A']
+            })
+          ]);
+          input = parseFromFiles(['./test/test_files/fluent_methods2.jdl']);
+          content = JDLParser.parse(input, 'sql');
+          expect(content.options).to.deep.eq([
+              new JDLUnaryOption({
+              name: UnaryOptions.NO_FLUENT_METHOD,
+              entityNames: ['*'],
+              excludedNames: ['A']
+            })
+          ]);
+        });
+      })
     });
   });
 });
