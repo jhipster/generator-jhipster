@@ -8,7 +8,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     constructor(private http:Http) {
     }
 
-    get():Observable<any> {
+    get(): Observable<any> {
         return this.http.get('management/configprops').map((res:Response) => {
             let properties:any[] = [];
 
