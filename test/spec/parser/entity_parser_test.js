@@ -117,5 +117,73 @@ describe('::convert', function () {
         expect(content.C.fluentMethods).to.be.false;
       });
     });
+    describe('when converting a JDL to JSON with all different types of relationships', function () {
+      it('converts it', function() {
+        var input = parseFromFiles(['./test/test_files/different_relationship_types.jdl']);
+        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
+        expect(content.A.relationships).to.deep.eq(
+          [
+            {
+              'relationshipName': 'bbbb',
+              'otherEntityName': 'b',
+              'relationshipType': 'one-to-one',
+              'otherEntityField': 'id',
+              'ownerSide': true,
+              'otherEntityRelationshipName': 'aaaa'
+            },
+            {
+              'relationshipName': 'b',
+              'otherEntityName': 'b',
+              'relationshipType': 'one-to-many',
+              'otherEntityRelationshipName': 'a'
+            },
+            {
+              'relationshipName': 'bb',
+              'otherEntityName': 'b',
+              'relationshipType': 'many-to-one',
+              'otherEntityField': 'id'
+            },
+            {
+              'relationshipName': 'bbb',
+              'otherEntityName': 'b',
+              'relationshipType': 'many-to-many',
+              'otherEntityField': 'id',
+              'ownerSide': true,
+              'otherEntityRelationshipName': 'aaa'
+            }
+          ]
+        );
+        expect(content.B.relationships).to.deep.eq(
+          [
+            {
+              'relationshipName': 'aaaa',
+              'otherEntityName': 'a',
+              'relationshipType': 'one-to-one',
+              'ownerSide': false,
+              'otherEntityRelationshipName': 'bbbb'
+            },
+            {
+              'relationshipName': 'a',
+              'otherEntityName': 'a',
+              'relationshipType': 'many-to-one',
+              'otherEntityField': 'id'
+            },
+            {
+              'relationshipName': 'aa',
+              'otherEntityName': 'a',
+              'relationshipType': 'one-to-many',
+              'otherEntityRelationshipName': 'bb'
+            },
+            {
+              'relationshipName': 'aaa',
+              'otherEntityName': 'a',
+              'relationshipType': 'many-to-many',
+              'ownerSide': false,
+              'otherEntityRelationshipName': 'bbb'
+            }
+          ]
+        );
+      });
+    });
   });
 });
