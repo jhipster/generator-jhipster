@@ -48,6 +48,7 @@ angular
     .directive('passwordResetFinish', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordResetFinishComponent))
     .factory('Register', Register)
     .factory('Activate', Activate)
+    //.factory('Activate', upgradeAdapter.downgradeNg2Provider(Activate))
     .factory('Password', Password)
     .factory('PasswordResetInit', PasswordResetInit)
     .factory('PasswordResetFinish', PasswordResetFinish);
