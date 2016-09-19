@@ -35,7 +35,7 @@ spring:
     cloud:
         consul:
             discovery:
-               prefer-agent-address: true
+               prefer-ip-address: true
             host: localhost
             port: 8500
     <%_ } _%>
