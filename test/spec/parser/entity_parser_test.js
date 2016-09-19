@@ -117,7 +117,7 @@ describe('::convert', function () {
         expect(content.C.fluentMethods).to.be.false;
       });
     });
-    describe('when converting a JDL to JSON with all different types of relationships', function () {
+    describe('when converting a JDL to JSON with all different types of bi-directional relationships', function () {
       it('converts it', function() {
         var input = parseFromFiles(['./test/test_files/different_relationship_types.jdl']);
         var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
