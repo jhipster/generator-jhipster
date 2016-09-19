@@ -10,7 +10,6 @@ var gulp = require('gulp'),<% if(useSass) { %>
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant'),
     rename = require('gulp-rename'),
-    replace = require('gulp-replace'),
     eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     argv = require('yargs').argv,
     gutil = require('gulp-util'),
@@ -186,9 +185,9 @@ gulp.task('eslint:fix', function () {
 
 // check app for any tslint errors
 gulp.task('tslint', function() {
-  return gulp.src('app/**/*.ts')
-    .pipe(tslint())
-    .pipe(tslint.report('verbose'));
+    return gulp.src('app/**/*.ts')
+        .pipe(tslint())
+        .pipe(tslint.report('verbose'));
 });
 
 gulp.task('test', ['inject:test', 'ngconstant:dev'], function (done) {
