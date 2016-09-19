@@ -101,7 +101,7 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return applicationType === 'gateway' || applicationType === 'microservice';
+                return applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa';
             },
             type: 'list',
             name: 'serviceDiscoveryType',
