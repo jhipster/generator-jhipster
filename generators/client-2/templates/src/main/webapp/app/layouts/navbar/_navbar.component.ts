@@ -1,6 +1,7 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
-import {ProfileService} from "../../components/profiles/profile.service";
+import { ProfileService } from '../../components/profiles/profile.service';
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components/language/language.service';
 
 @Component({
     selector: 'navbar',
@@ -18,7 +19,7 @@ export class NavbarComponent implements OnInit {
     constructor(@Inject('Principal') private principal,
                 @Inject('$state') private $state,
                 @Inject('Auth') private auth,
-                @Inject('<%=jhiPrefixCapitalized%>LanguageService') private languageService,
+                private languageService: <%=jhiPrefixCapitalized%>LanguageService,
                 @Inject('LoginService') private loginService,
                 private profileService: ProfileService) { }
 

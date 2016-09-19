@@ -1,9 +1,9 @@
 import { VERSION } from '../../app.constants';
 
-StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefixCapitalized%>LanguageService', 'TranslationHandler',<% } %> '$window',
+StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', /*'<%=jhiPrefixCapitalized%>LanguageService',*/ 'TranslationHandler',<% } %> '$window',
         'Auth', 'Principal'];
 
-export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, <%=jhiPrefixCapitalized%>LanguageService, TranslationHandler,<% } %> $window,
+export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, /*<%=jhiPrefixCapitalized%>LanguageService,*/ TranslationHandler,<% } %> $window,
     Auth, Principal) {
     return {
         initialize: initialize
@@ -28,10 +28,10 @@ export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableT
             }
 
             <% if (enableTranslation) { %>
-            // Update the language
-            <%=jhiPrefixCapitalized%>LanguageService.getCurrent().then(function (language) {
+            // Update the language //TODO needs to fixed after migration
+            /*<%=jhiPrefixCapitalized%>LanguageService.getCurrent().then(function (language) {
                 $translate.use(language);
-            });
+            });*/
             <% } %>
         });
 

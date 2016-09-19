@@ -23,7 +23,8 @@ import { PageRibbonComponent } from './profiles/page-ribbon.component';
 
 upgradeAdapter.upgradeNg1Provider('$state');
 upgradeAdapter.upgradeNg1Provider('Auth');<% if (enableTranslation) { %>
-upgradeAdapter.upgradeNg1Provider('<%=jhiPrefixCapitalized%>LanguageService');<% } %>
+upgradeAdapter.upgradeNg1Provider('$translate');
+upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');<% } %>
 upgradeAdapter.upgradeNg1Provider('LoginService');
 upgradeAdapter.upgradeNg1Provider('Principal');
 
@@ -46,5 +47,5 @@ angular
     .factory('Principal', Principal)
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
     .factory('AlertService', upgradeAdapter.downgradeNg2Provider(AlertService))<% if (enableTranslation) { %>
-    .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService)<% } %>
+    .factory('<%=jhiPrefixCapitalized%>LanguageService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>LanguageService))<% } %>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent));

@@ -7,6 +7,7 @@ import { AlertService } from "./alert/alert.service";
 import { ProfileService } from './profiles/profile.service';
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
 import { jhiAlertComponent } from "./alert/alert.component";
+import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.service';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { jhiAlertComponent } from "./alert/alert.component";
     ],
     providers: [
         AlertService,
-        ProfileService
+        ProfileService,
+        <%=jhiPrefixCapitalized%>LanguageService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
