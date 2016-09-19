@@ -17,9 +17,11 @@ elif [[ ("$JHIPSTER" == 'app-psql-es-noi18n') ]]; then
   if [ -a src/main/docker/postgresql.yml ]; then
     docker-compose -f src/main/docker/postgresql.yml up -d
   fi
-elif [[ ("$JHIPSTER" == 'app-gateway') || ("$JHIPSTER" == 'app-microservice') ]]; then
+elif [[ ("$JHIPSTER" == 'app-gateway') || ("$JHIPSTER" == 'app-microservice-eureka') ]]; then
   if [ -a src/main/docker/jhipster-registry.yml ]; then
     docker-compose -f src/main/docker/jhipster-registry.yml up -d
   fi
+elif [[ ("$JHIPSTER" == 'app-microservice-consul') && (-a src/main/docker/mysql.yml) ]]; then
+  docker-compose -f src/main/docker/consul.yml up -d
 fi
 docker ps -a

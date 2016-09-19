@@ -38,7 +38,20 @@ elif [ "$JHIPSTER" == "app-cassandra" ]; then
   moveEntity CassTestServiceClassEntity
   moveEntity CassTestServiceImplEntity
 
-elif [ "$JHIPSTER" == "app-microservice" ]; then
+elif [ "$JHIPSTER" == "app-microservice-eureka" ]; then
+  moveEntity MicroserviceBankAccount
+  moveEntity MicroserviceOperation
+  moveEntity MicroserviceLabel
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+
+elif [ "$JHIPSTER" == "app-microservice-consul" ]; then
   moveEntity MicroserviceBankAccount
   moveEntity MicroserviceOperation
   moveEntity MicroserviceLabel
