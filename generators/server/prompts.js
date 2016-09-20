@@ -475,23 +475,26 @@ function askForOptionalItems() {
             }
         );
     }
-
-    this.prompt({
-        type: 'checkbox',
-        name: 'serverSideOptions',
-        message: function (response) {
-            return getNumberedQuestion('Which other technologies would you like to use?', true);
-        },
-        choices: choices,
-        default: defaultChoice
-    }).then(function (prompt) {
-        this.serverSideOptions = prompt.serverSideOptions;
-        this.clusteredHttpSession = this.getOptionFromArray(this.serverSideOptions, 'clusteredHttpSession');
-        this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
-        this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
-        this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
+    if (choices.length > 0) {
+        this.prompt({
+            type: 'checkbox',
+            name: 'serverSideOptions',
+            message: function (response) {
+                return getNumberedQuestion('Which other technologies would you like to use?', true);
+            },
+            choices: choices,
+            default: defaultChoice
+        }).then(function (prompt) {
+            this.serverSideOptions = prompt.serverSideOptions;
+            this.clusteredHttpSession = this.getOptionFromArray(this.serverSideOptions, 'clusteredHttpSession');
+            this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
+            this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
+            this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
+            done();
+        }.bind(this));
+    } else {
         done();
-    }.bind(this));
+    }
 }
 
 function askFori18n() {
