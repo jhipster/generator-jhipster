@@ -16,7 +16,7 @@
     "@angular/platform-browser": "2.0.0",
     "@angular/platform-browser-dynamic": "2.0.0",
     "@angular/upgrade": "2.0.0",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.4",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.5",
     "core-js": "2.4.1",
     "jquery": "3.1.0",
     "reflect-metadata": "0.1.3",

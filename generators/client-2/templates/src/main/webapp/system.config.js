@@ -41,7 +41,7 @@
     // Bundled (~40 requests):
     function packUmd(pkgName) {
         packages['@angular/'+ pkgName] = { main: '/bundles/' + pkgName + '.umd' };
-    };
+    }
     // Most environments should use UMD; some (Karma) need the individual index files
     var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
     // Add package entries for angular packages
@@ -51,6 +51,6 @@
         meta: { "ui-router-ng2": { format: "cjs" } },
         map: map,
         packages: packages
-    }
+    };
     System.config(config);
 })(this);
