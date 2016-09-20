@@ -122,19 +122,8 @@ module.exports = HerokuGenerator.extend({
 
             var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
-            var dbAddOn = '';
-            if (this.prodDatabaseType === 'postgresql') {
-                dbAddOn = ' --addons heroku-postgresql';
-            } else if (this.prodDatabaseType === 'mysql') {
-                dbAddOn = ' --addons jawsdb:kitefin';
-            } else if (this.prodDatabaseType === 'mariadb') {
-                dbAddOn = ' --addons jawsdb-maria:kitefin';
-            } else if (this.prodDatabaseType === 'mongodb') {
-                dbAddOn = ' --addons mongolab:sandbox';
-            }
-
             this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-            var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
+            var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams;
             this.log(herokuCreateCmd);
 
             var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
@@ -161,7 +150,7 @@ module.exports = HerokuGenerator.extend({
                             if (props.herokuForceName === 'Yes') {
                                 herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName;
                             } else {
-                                herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
+                                herokuCreateCmd = 'heroku create ' + regionParams;
 
                                 // Extract from "Created random-app-name-1234... done"
                                 getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); };
@@ -196,6 +185,34 @@ module.exports = HerokuGenerator.extend({
                 } else {
                     this.log(output);
                 }
+            }.bind(this));
+        },
+
+        herokuAddonsCreate: function() {
+            if (this.abort) return;
+            var done = this.async();
+
+            var dbAddOn = '';
+            if (this.prodDatabaseType === 'postgresql') {
+                dbAddOn = 'heroku-postgresql --as DATABASE';
+            } else if (this.prodDatabaseType === 'mysql') {
+                dbAddOn = 'jawsdb:kitefin --as JAWSDB';
+            } else if (this.prodDatabaseType === 'mariadb') {
+                dbAddOn = 'jawsdb-maria:kitefin --as JAWSDB';
+            } else if (this.prodDatabaseType === 'mongodb') {
+                dbAddOn = 'mongolab:sandbox --as MONGODB';
+            } else {
+                return;
+            }
+
+            this.log(chalk.bold('Provisioning addons'));
+            exec(`heroku addons:create ${dbAddOn}`, {}, function (err, stdout, stderr) {
+                if (err) {
+                    this.log('No new addons created');
+                } else {
+                    this.log(`Created ${dbAddOn}`);
+                }
+                done();
             }.bind(this));
         },
 
