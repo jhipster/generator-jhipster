@@ -56,7 +56,7 @@
             }
         },
         "servicesstats": {
-            "title": "Statistiche Servizi (in millisecondi),
+            "title": "Statistiche Servizi (in millisecondi)",
             "table": {
                 "name": "Nome servizio",
                 "count": "Count",
