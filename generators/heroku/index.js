@@ -202,13 +202,13 @@ module.exports = HerokuGenerator.extend({
             } else if (this.prodDatabaseType === 'mongodb') {
                 dbAddOn = 'mongolab:sandbox --as MONGODB';
             } else {
-              return;
+                return;
             }
 
             this.log(chalk.bold('Provisioning addons'));
-            var child = exec(`heroku addons:create ${dbAddOn}`, {}, function (err, stdout, stderr) {
+            exec(`heroku addons:create ${dbAddOn}`, {}, function (err, stdout, stderr) {
                 if (err) {
-                    this.log("No new addons created");
+                    this.log('No new addons created');
                 } else {
                     this.log(`Created ${dbAddOn}`);
                 }
