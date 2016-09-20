@@ -475,6 +475,14 @@ function askForOptionalItems() {
             }
         );
     }
+
+    choices.push(
+        {
+            name: '[BETA] Asynchronous messages using Apache Kafka',
+            value: 'messageBroker:kafka'
+        }
+    );
+
     if (choices.length > 0) {
         this.prompt({
             type: 'checkbox',
@@ -490,6 +498,7 @@ function askForOptionalItems() {
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
+            this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
             done();
         }.bind(this));
     } else {

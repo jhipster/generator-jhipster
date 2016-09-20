@@ -351,6 +351,11 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/TokenProvider.java'
     ],
 
+    messageBroker: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MessagingConfiguration.java',
+        DOCKER_DIR + 'kafka.yml'
+    ],
+
     uaa: [
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/UaaConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/UaaWebSecurityConfiguration.java'
@@ -851,6 +856,50 @@ describe('JHipster generator', function () {
 
         it('creates expected files with JWT authentication', function () {
             assert.file(expectedFiles.jwt);
+        });
+    });
+
+    describe('Messaging with Kafka configuration', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'serverPort': '8080',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'clusteredHttpSession': false,
+                    'websocket': false,
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Disk',
+                    'prodDatabaseType': 'mysql',
+                    'searchEngine': false,
+                    'buildTool': 'maven',
+                    'enableSocialSignIn': false,
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'useSass': false,
+                    'applicationType': 'monolith',
+                    'testFrameworks': [
+                        'gatling'
+                    ],
+                    'jhiPrefix': 'jhi',
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': [
+                        'en'
+                    ],
+                    'serverSideOptions' : [
+                        'messageBroker:kafka'
+                    ]
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with Kafka message broker enabled', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.messageBroker);
         });
     });
 

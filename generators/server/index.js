@@ -37,6 +37,8 @@ const constants = require('../generator-constants'),
     DOCKER_MONGODB = constants.DOCKER_MONGODB,
     DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA,
     DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH,
+    DOCKER_KAFKA = constants.DOCKER_KAFKA,
+    DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER,
     DOCKER_SONAR = constants.DOCKER_SONAR,
     DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
     DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
@@ -122,6 +124,8 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_MONGODB = DOCKER_MONGODB;
             this.DOCKER_CASSANDRA = DOCKER_CASSANDRA;
             this.DOCKER_ELASTICSEARCH = DOCKER_ELASTICSEARCH;
+            this.DOCKER_KAFKA = DOCKER_KAFKA;
+            this.DOCKER_ZOOKEEPER = DOCKER_ZOOKEEPER;
             this.DOCKER_SONAR = DOCKER_SONAR;
             this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
             this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
@@ -142,6 +146,10 @@ module.exports = JhipsterServerGenerator.extend({
             this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
             if (this.searchEngine === undefined) {
                 this.searchEngine = false;
+            }
+            this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
+            if (this.messageBroker === undefined) {
+                this.messageBroker = false;
             }
             this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
@@ -259,6 +267,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.configOptions.devDatabaseType = this.devDatabaseType;
             this.configOptions.prodDatabaseType = this.prodDatabaseType;
             this.configOptions.searchEngine = this.searchEngine;
+            this.configOptions.messageBroker = this.messageBroker;
             this.configOptions.buildTool = this.buildTool;
             this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
             this.configOptions.authenticationType = this.authenticationType;
@@ -286,6 +295,7 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/devDatabaseType', this.devDatabaseType);
             insight.track('app/prodDatabaseType', this.prodDatabaseType);
             insight.track('app/searchEngine', this.searchEngine);
+            insight.track('app/messageBroker', this.messageBroker);
             insight.track('app/buildTool', this.buildTool);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
         },
@@ -336,6 +346,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('devDatabaseType', this.devDatabaseType);
             this.config.set('prodDatabaseType', this.prodDatabaseType);
             this.config.set('searchEngine', this.searchEngine);
+            this.config.set('messageBroker', this.messageBroker);
             this.config.set('buildTool', this.buildTool);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
@@ -419,6 +430,9 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (this.searchEngine === 'elasticsearch') {
                 this.template(DOCKER_DIR + '_elasticsearch.yml', DOCKER_DIR + 'elasticsearch.yml', this, {});
+            }
+            if (this.messageBroker === 'kafka') {
+                this.template(DOCKER_DIR + '_kafka.yml', DOCKER_DIR + 'kafka.yml', this, {});
             }
 
             if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
@@ -712,6 +726,9 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
+            }
+            if (this.messageBroker === 'kafka') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MessagingConfiguration.java', javaDir + 'config/MessagingConfiguration.java', this, {});
             }
         },
 

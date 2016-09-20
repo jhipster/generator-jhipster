@@ -251,6 +251,13 @@ module.exports = DockerComposeGenerator.extend({
                     delete searchEngineConfig.ports;
                     parentConfiguration[lowercaseBaseName + '-' + searchEngine] = searchEngineConfig;
                 }
+                // Add message broker support
+                var messageBroker = appConfig.messageBroker;
+                if (messageBroker === 'kafka') {
+                    var messageBrokerYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + messageBroker + '.yml'));
+                    var messageBrokerConfig = messageBrokerYaml.services[lowercaseBaseName + '-' + messageBroker];
+                    parentConfiguration[lowercaseBaseName + '-' + messageBroker] = messageBrokerConfig; 
+                }
                 // Dump the file
                 var yamlString = jsyaml.dump(parentConfiguration, {indent: 4});
 

@@ -1,0 +1,17 @@
+version: '2'
+services:
+    <%= baseName.toLowerCase() %>-zookeeper:
+        container_name: <%= baseName.toLowerCase() %>-zookeeper
+        image: <%= DOCKER_ZOOKEEPER %>
+        ports:
+          - 2181:2181
+    <%= baseName.toLowerCase() %>-kafka:
+        container_name: <%= baseName.toLowerCase() %>-kafka
+        image: <%= DOCKER_KAFKA %>
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: localhost
+            KAFKA_ADVERTISED_PORT: 9092
+            KAFKA_ZOOKEEPER_CONNECT: <%= baseName.toLowerCase() %>-zookeeper:2181
+            KAFKA_CREATE_TOPICS: "topic-jhipster:1:1"
+        ports:
+            - 9092:9092
