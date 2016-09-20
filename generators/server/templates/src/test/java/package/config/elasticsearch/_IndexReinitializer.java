@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class IndexReinitializer {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Inject
     private ElasticsearchTemplate elasticsearchTemplate;
 
