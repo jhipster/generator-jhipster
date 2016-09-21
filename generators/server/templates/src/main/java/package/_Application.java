@@ -21,6 +21,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 <%_ if (applicationType == 'gateway') { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 <% if(authenticationType === 'uaa') { %>import org.springframework.context.annotation.FilterType;
 <%_ } _%>import org.springframework.core.env.Environment;
@@ -54,6 +55,8 @@ public class <%= mainClass %> {
     @Inject
     private Environment env;
 
+    public static ApplicationContext context;
+
     /**
      * Initializes <%= baseName %>.
      * <p>
@@ -84,7 +87,8 @@ public class <%= mainClass %> {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
-        Environment env = app.run(args).getEnvironment();
+        context = app.run(args);
+        Environment env = context.getEnvironment();
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
                 "Local: \t\thttp://127.0.0.1:{}\n\t" +
