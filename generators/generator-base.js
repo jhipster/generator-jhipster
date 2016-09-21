@@ -1271,16 +1271,14 @@ Generator.prototype.generateKeyStore = function() {
         if (javaHome) {
             keytoolPath = javaHome + '/bin/';
         }
-        shelljs.exec(`"${keytoolPath}keytool"
-            -genkey
-            -noprompt
-            -keyalg RSA
-            -alias selfsigned
-            -keystore ${keyStoreFile}
-            -storepass password
-            -keypass password
-            -keysize 2048
-            -dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
+        shelljs.exec(`"${keytoolPath}keytool" -genkey -noprompt ` +
+            '-keyalg RSA ' +
+            '-alias selfsigned ' +
+            `-keystore ${keyStoreFile} ` +
+            '-storepass password ' +
+            '-keypass password ' +
+            '-keysize 2048 ' +
+            `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
         , function(code) {
             if (code !== 0) {
                 parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
