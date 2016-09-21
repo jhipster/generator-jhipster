@@ -412,7 +412,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
             this.copyHtml(ANGULAR_DIR + 'account/settings/settings.html', ANGULAR_DIR + 'account/settings/settings.html');
             this.copyJs(ANGULAR_DIR + 'account/settings/_settings.state.ts', ANGULAR_DIR + 'account/settings/settings.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'account/settings/_settings.controller.ts', ANGULAR_DIR + 'account/settings/settings.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'account/settings/_settings.component.ts', ANGULAR_DIR + 'account/settings/settings.component.ts', this, {});
             // Social
             if (this.enableSocialSignIn) {
                 this.copyHtml(ANGULAR_DIR + 'account/social/directive/_social.html', ANGULAR_DIR + 'account/social/directive/social.html');
