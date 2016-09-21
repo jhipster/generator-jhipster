@@ -30,7 +30,8 @@ import liquibase.integration.spring.SpringLiquibase;
  */
 public class AsyncSpringLiquibase extends SpringLiquibase {
 
-    private final Logger log = LoggerFactory.getLogger(AsyncSpringLiquibase.class);
+    //rename "log" by "logger" because is the same name of a field in "SpringLiquibase" 
+    private final Logger logger = LoggerFactory.getLogger(AsyncSpringLiquibase.class);
 
     @Inject
     @Qualifier("taskExecutor")
