@@ -22,8 +22,8 @@
 
         function encode (input) {
             var output = '',
-                chr1, chr2, chr3 = '',
-                enc1, enc2, enc3, enc4 = '',
+                chr1, chr2, chr3,
+                enc1, enc2, enc3, enc4,
                 i = 0;
 
             while (i < input.length) {
@@ -47,8 +47,6 @@
                     keyStr.charAt(enc2) +
                     keyStr.charAt(enc3) +
                     keyStr.charAt(enc4);
-                chr1 = chr2 = chr3 = '';
-                enc1 = enc2 = enc3 = enc4 = '';
             }
 
             return output;
@@ -56,8 +54,8 @@
 
         function decode (input) {
             var output = '',
-                chr1, chr2, chr3 = '',
-                enc1, enc2, enc3, enc4 = '',
+                chr1, chr2, chr3,
+                enc1, enc2, enc3, enc4,
                 i = 0;
 
             // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
@@ -81,9 +79,6 @@
                 if (enc4 !== 64) {
                     output = output + String.fromCharCode(chr3);
                 }
-
-                chr1 = chr2 = chr3 = '';
-                enc1 = enc2 = enc3 = enc4 = '';
             }
 
             return output;
