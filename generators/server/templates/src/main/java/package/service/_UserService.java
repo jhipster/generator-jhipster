@@ -261,7 +261,7 @@ public class UserService {
         if (optionalUser.isPresent()) {
           <%_ if (databaseType == 'sql') { _%>
             user.getAuthorities().size(); // eagerly load the association
-         <%_ } _%>
+          <%_ } _%>
            user = optionalUser.get();
          }
          return user;
