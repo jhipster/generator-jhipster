@@ -451,7 +451,7 @@ module.exports = JhipsterServerGenerator.extend({
                 if (this.serviceDiscoveryType === 'consul') {
                     this.template(DOCKER_DIR + '_consul.yml', DOCKER_DIR + 'consul.yml', this, {});
                     this.copy(DOCKER_DIR + 'config/git2consul.json', DOCKER_DIR + 'config/git2consul.json');
-                    this.copy(DOCKER_DIR + 'config/application-consul.yml', DOCKER_DIR + 'central-server-config/application.yml');
+                    this.copy(DOCKER_DIR + 'config/consul-config/application.yml', DOCKER_DIR + 'central-server-config/application.yml');
                 }
 
                 if (this.serviceDiscoveryType === 'eureka') {
