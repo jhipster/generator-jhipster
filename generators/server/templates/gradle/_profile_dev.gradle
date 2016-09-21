@@ -8,7 +8,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
 }
 
-def profiles = 'dev,swagger'
+def profiles = 'dev'
 if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
