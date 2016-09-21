@@ -45,13 +45,12 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-menu',
-            splicable: [
-                '<li ui-sref-active="active" >\n' +
-                '                    <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
-                '                        <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                        <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
-                '                    </a>\n' +
-                '                </li>'
+            splicable: [`<li ui-sref-active="active">
+                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                            </a>
+                        </li>`
             ]
         }, this);
     } catch (e) {
@@ -72,13 +71,12 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
-            splicable: [
-                '<li ui-sref-active="active" >\n' +
-                '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
-                '                                <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
-                '                            </a>\n' +
-                '                        </li>'
+            splicable: [`<li ui-sref-active="active" >
+                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                            </a>
+                        </li>`
             ]
         }, this);
     } catch (e) {
@@ -98,13 +96,12 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-entity-to-menu',
-            splicable: [
-                '<li ui-sref-active="active" >\n' +
-                '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
-                '                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;\n' +
-                '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
-                '                            </a>\n' +
-                '                        </li>'
+            splicable: [`<li ui-sref-active="active">
+                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                                <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                            </a>
+                        </li>`
             ]
         }, this);
     } catch (e) {
@@ -126,7 +123,7 @@ Generator.prototype.addElementTranslationKey = function (key, value, language) {
             file: fullPath,
             needle: 'jhipster-needle-menu-add-element',
             splicable: [
-                '"' + key + '": "' + _.startCase(value) + '",'
+                `"${key}": "${_.startCase(value)}",`
             ]
         }, this);
     } catch (e) {
@@ -148,7 +145,7 @@ Generator.prototype.addAdminElementTranslationKey = function (key, value, langua
             file: fullPath,
             needle: 'jhipster-needle-menu-add-admin-element',
             splicable: [
-                '"' + key + '": "' + _.startCase(value) + '",'
+                `"${key}": "${_.startCase(value)}",`
             ]
         }, this);
     } catch (e) {
@@ -170,7 +167,7 @@ Generator.prototype.addEntityTranslationKey = function (key, value, language) {
             file: fullPath,
             needle: 'jhipster-needle-menu-add-entry',
             splicable: [
-                '"' + key + '": "' + _.startCase(value) + '",'
+                `"${key}": "${_.startCase(value)}",`
             ]
         }, this);
     } catch (e) {
@@ -394,7 +391,7 @@ Generator.prototype.addAngularJsModule = function (moduleName) {
             file: fullPath,
             needle: 'jhipster-needle-angularjs-add-module',
             splicable: [
-                '\'' + moduleName + '\','
+                `'${moduleName}',`
             ]
         }, this);
     } catch (e) {
@@ -415,7 +412,7 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
             file: fullPath,
             needle: 'jhipster-needle-angularjs-add-interceptor',
             splicable: [
-                '$httpProvider.interceptors.push(\'' + interceptorName + '\');'
+                `$httpProvider.interceptors.push('${interceptorName}');`
             ]
         }, this);
     } catch (e) {
@@ -454,10 +451,10 @@ Generator.prototype.addEntryToEhcache = function (entry) {
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [
-                '<cache name="' + this.packageName + '.domain.' + entry + '"\n' +
-                '           timeToLiveSeconds="3600">\n' +
-                '    </cache>\n'
+            splicable: [`<cache name="${this.packageName}.domain.${entry}"
+                               timeToLiveSeconds="3600">
+                        </cache>
+                        `
             ]
         }, this);
     } catch (e) {
@@ -496,7 +493,7 @@ Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, nee
             file: fullPath,
             needle: needle,
             splicable: [
-                '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
+                `<include file="classpath:config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`
             ]
         }, this);
     } catch (e) {
@@ -538,7 +535,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
     var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
-        var serviceCode = 'case \'' + socialName + '\': return \'' + socialParameter + '\';';
+        var serviceCode = `case '${socialName}': return '${socialParameter}';`;
         jhipsterUtils.rewriteFile({
             file: socialServicefullPath,
             needle: 'jhipster-needle-add-social-button',
@@ -547,7 +544,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
             ]
         }, this);
 
-        var buttonCode = '<jh-social ng-provider="' + socialName + '"></jh-social>';
+        var buttonCode = `<jh-social ng-provider="${socialName}"></jh-social>`;
         this.log(chalk.yellow('update ') + loginfullPath);
         jhipsterUtils.rewriteFile({
             file: loginfullPath,
@@ -565,16 +562,16 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
             ]
         }, this);
 
-        var buttonStyle = '.jh-btn-' + socialName + ' {\n' +
-            '     background-color: ' + buttonColor + ';\n' +
-            '     border-color: rgba(0, 0, 0, 0.2);\n' +
-            '     color: #fff;\n' +
-            '}\n\n' +
-            '.jh-btn-' + socialName + ':hover, .jh-btn-' + socialName + ':focus, .jh-btn-' + socialName + ':active, .jh-btn-' + socialName + '.active, .open > .dropdown-toggle.jh-btn-' + socialName + ' {\n' +
-            '    background-color: ' + buttonHoverColor + ';\n' +
-            '    border-color: rgba(0, 0, 0, 0.2);\n' +
-            '    color: #fff;\n' +
-            '}';
+        var buttonStyle = `.jh-btn-${socialName} {
+                 background-color: ${buttonColor};
+                 border-color: rgba(0, 0, 0, 0.2);
+                 color: #fff;
+            }\n
+            .jh-btn-${socialName}:hover, .jh-btn-${socialName}:focus, .jh-btn-${socialName}:active, .jh-btn-${socialName}.active, .open > .dropdown-toggle.jh-btn-${socialName} {
+                background-color: ${buttonHoverColor};
+                border-color: rgba(0, 0, 0, 0.2);
+                color: #fff;
+            }`;
         this.addMainCSSStyle(isUseSass, buttonStyle, 'Add sign in style for ' + socialName);
 
     } catch (e) {
@@ -800,7 +797,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             file: fullPath,
             needle: 'jhipster-needle-gradle-buildscript-dependency',
             splicable: [
-                'classpath \'' + group + ':' + name + ':' + version + '\''
+                `classpath '${group}:${name}:${version}'`
             ]
         }, this);
     } catch (e) {
@@ -823,7 +820,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             file: fullPath,
             needle: 'jhipster-needle-gradle-dependency',
             splicable: [
-                scope + ' \'' + group + ':' + name + ':' + version + '\''
+                `${scope} '${group}:${name}:${version}'`
             ]
         }, this);
     } catch (e) {
@@ -843,7 +840,7 @@ Generator.prototype.applyFromGradleScript = function (name) {
             file: fullPath,
             needle: 'jhipster-needle-gradle-apply-from',
             splicable: [
-                'apply from: \'' + name + '.gradle\''
+                `apply from: '${name}.gradle'`
             ]
         }, this);
     } catch (e) {
@@ -878,7 +875,7 @@ Generator.prototype.dateFormatForLiquibase = function () {
     if (second.length === 1) {
         second = '0' + second;
     }
-    return year + '' + month + '' + day + '' + hour + '' + minute + '' + second;
+    return `${year}${month}${day}${hour}${minute}${second}`;
 };
 
 /**
@@ -1112,7 +1109,7 @@ Generator.prototype.getExistingEntities = function () {
  */
 Generator.prototype.copyI18nFilesByName = function (generator, webappDir, fileToCopy, lang) {
     var _this = generator || this;
-    _this.copy(webappDir + 'i18n/' + lang + '/' + fileToCopy, webappDir + 'i18n/' + lang + '/' + fileToCopy);
+    _this.copy(`${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
 };
 
 /**
@@ -1217,11 +1214,9 @@ Generator.prototype.getJoinTableName = function (entityName, relationshipName, p
 Generator.prototype.getConstraintName = function (entityName, relationshipName, prodDatabaseType, noSnakeCase) {
     var constraintName;
     if (noSnakeCase) {
-        constraintName = 'fk_' + entityName + '_' +
-            relationshipName + '_id';
+        constraintName = `fk_${entityName}_${relationshipName}_id`;
     } else {
-        constraintName = 'fk_' + this.getTableName(entityName) + '_' +
-            this.getTableName(relationshipName) + '_id';
+        constraintName = `fk_${this.getTableName(entityName)}_${this.getTableName(relationshipName)}_id`;
     }
     var limit = 0;
 
@@ -1267,7 +1262,7 @@ Generator.prototype.warning = function(msg) {
 Generator.prototype.generateKeyStore = function() {
     const keyStoreFile = SERVER_MAIN_RES_DIR + 'keystore.jks';
     if (this.fs.exists(keyStoreFile)) {
-        this.log(chalk.cyan('\nKeyStore \'' + keyStoreFile + '\' already exists. Leaving unchanged.\n'));
+        this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
     } else {
         shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
         var parent = this;
@@ -1276,21 +1271,21 @@ Generator.prototype.generateKeyStore = function() {
         if (javaHome) {
             keytoolPath = javaHome + '/bin/';
         }
-        shelljs.exec('"' + keytoolPath + 'keytool" '+
-            '-genkey ' +
-            '-noprompt ' +
-            '-keyalg RSA ' +
-            '-alias selfsigned ' +
-            '-keystore ' + keyStoreFile + ' ' +
-            '-storepass password ' +
-            '-keypass password ' +
-            '-keysize 2048 ' +
-            '-dname "CN=Java Hipster, OU=Development, O=' + this.packageName + ', L=, ST=, C="'
+        shelljs.exec(`"${keytoolPath}keytool"
+            -genkey
+            -noprompt
+            -keyalg RSA
+            -alias selfsigned
+            -keystore ${keyStoreFile}
+            -storepass password
+            -keypass password
+            -keysize 2048
+            -dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
         , function(code) {
             if (code !== 0) {
                 parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
             } else {
-                parent.log(chalk.green('\nKeyStore \'' + keyStoreFile + '\' generated successfully.\n'));
+                parent.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
             }
         });
     }
@@ -1478,7 +1473,7 @@ Generator.prototype.getNumberedQuestion = function (msg, cond) {
     if (cond) {
         ++this.currentQuestion;
     }
-    order = '(' + this.currentQuestion + '/' + this.totalQuestions + ') ';
+    order = `(${this.currentQuestion}/${this.totalQuestions}) `;
     return order + msg;
 };
 
