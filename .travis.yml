@@ -35,7 +35,9 @@ env:
     - JHIPSTER=app-oauth2
     - JHIPSTER=app-jwt
     - JHIPSTER=app-gateway
-    - JHIPSTER=app-microservice
+    - JHIPSTER=app-microservice-eureka
+    - JHIPSTER=app-microservice-consul
+
 before_install:
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
