@@ -23,7 +23,7 @@
 
         function addErrorAlert (message, key, data) {
             <%_ if (enableTranslation) { _%>
-            key = key && key !== null ? key : message;
+            key = key ? key : message;
             vm.alerts.push(
                 AlertService.add(
                     {

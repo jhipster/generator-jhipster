@@ -4,7 +4,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -17,12 +16,7 @@ public class JacksonConfiguration {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
-        return new Jackson2ObjectMapperBuilderCustomizer() {
-            @Override
-            public void customize(Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
-                jackson2ObjectMapperBuilder.serializers(new ZonedDateTimeSerializer(ISO_FIXED_FORMAT));
-            }
-        };
+        return jackson2ObjectMapperBuilder -> jackson2ObjectMapperBuilder.serializers(new ZonedDateTimeSerializer(ISO_FIXED_FORMAT));
     }
 
 }
