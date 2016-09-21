@@ -192,7 +192,7 @@ module.exports = DockerComposeGenerator.extend({
                     }
                 }, this);
                 // Configure the JHipster Registry if it is not already configured
-                if (!spring_cloud_config_uri_configured) {
+                if (!spring_cloud_config_uri_configured && appConfig.applicationType !== 'monolith') {
                     yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
                         this.adminPassword + '@registry:8761/config');
                 }
