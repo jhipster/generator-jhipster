@@ -259,10 +259,10 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         User user = null;
         if (optionalUser.isPresent()) {
+          user = optionalUser.get();
           <%_ if (databaseType == 'sql') { _%>
             user.getAuthorities().size(); // eagerly load the association
           <%_ } _%>
-           user = optionalUser.get();
          }
          return user;
     }
