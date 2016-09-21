@@ -3,7 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+// TODO change this to NgbModule -->  after complete migration
+//import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap/alert/alert.module';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap/collapse/collapse.module';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap/dropdown/dropdown.module';
 
 @NgModule({
     imports: [],
@@ -11,7 +15,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         FormsModule,
         HttpModule,
         CommonModule,
-        NgbModule
+        // NgbModule
+        NgbAlertModule,
+        NgbCollapseModule,
+        NgbDropdownModule
     ]
 })
 export class <%=angular2AppName%>SharedLibsModule {}

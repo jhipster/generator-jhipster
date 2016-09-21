@@ -19,7 +19,8 @@
     var packages = {
         'app': { main: 'app.main' },
         'rxjs': {},
-        '@ng-bootstrap/ng-bootstrap': {main: '/bundles/ng-bootstrap', defaultExtension: 'js'},
+        //'@ng-bootstrap/ng-bootstrap': {main: '/bundles/ng-bootstrap', defaultExtension: 'js'},
+        '@ng-bootstrap/ng-bootstrap': {main: 'index.js', defaultExtension: 'js'},
         'ui-router-ng2': {},
         'jquery': { main: 'jquery.min' }
     };
