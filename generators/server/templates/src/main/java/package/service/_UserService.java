@@ -256,11 +256,16 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public User getUserWithAuthorities() {
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
-        <%_ if (databaseType == 'sql') { _%>
-        user.getAuthorities().size(); // eagerly load the association
-        <%_ } _%>
-        return user;
+
+      Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
+       User user = null;
+       if(optionalUser.isPresent()){
+         <%_ if (databaseType == 'sql') { _%>
+         user.getAuthorities().size(); // eagerly load the association
+         <%_ } _%>
+           user = optionalUser.get();
+       }
+       return user;
     }
     <%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
 
