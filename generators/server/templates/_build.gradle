@@ -107,6 +107,12 @@ if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_dev.gradle'
 }
 
+if (project.hasProperty('shell')) {
+    dependencies {
+        compile "org.springframework.boot:spring-boot-starter-remote-shell"
+    }
+}
+
 group = '<%= packageName %>'
 version = '0.0.1-SNAPSHOT'
 
