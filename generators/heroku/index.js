@@ -37,7 +37,7 @@ module.exports = HerokuGenerator.extend({
     prompting: function () {
         var done = this.async();
 
-        if (this.herokuAppName && this.herokuAppName.length != 0) {
+        if (this.herokuAppName) {
             exec('heroku apps:info --json', function (err, stdout) {
                 if (err) {
                     this.abort = true;
