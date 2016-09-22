@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h2 translate="settings.title" translate-values="{username: '{{vm.settingsAccount.login}}'}">User settings for [<b>{{vm.settingsAccount.login}}</b>]</h2>
+            <h2 translate="settings.title" *ngIf="settingsAccount">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
 
             <div class="alert alert-success" *ngIf="success" translate="settings.messages.success">
                 <strong>Settings saved!</strong>
@@ -9,12 +9,12 @@
 
             <jhi-alert-error></jhi-alert-error>
 
-            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm">
+            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount">
 
                 <div class="form-group">
                     <label class="control-label" for="firstName" translate="settings.form.firstname">First Name</label>
                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{'settings.form.firstname.placeholder' | translate}}"
-                           [(ng-model)]="settingsAccount.firstName" minlength=1 maxlength=50 #firstNameInput="ngModel" required>
+                           [(ngModel)]="settingsAccount.firstName" minlength=1 maxlength=50 #firstNameInput="ngModel" required>
                     <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
                         <p class="help-block"
                            *ngIf="firstNameInput.errors.required" translate="settings.messages.validate.firstname.required">
@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label class="control-label" for="lastName" translate="settings.form.lastname">Last Name</label>
                     <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{'settings.form.lastname.placeholder' | translate}}"
-                           [(ng-model)]="settingsAccount.lastName" minlength=1 maxlength=50 #lastNameInput="ngModel" required>
+                           [(ngModel)]="settingsAccount.lastName" minlength=1 maxlength=50 #lastNameInput="ngModel" required>
                     <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
                         <p class="help-block"
                            *ngIf="lastNameInput.errors.required" translate="settings.messages.validate.lastname.required">
@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label class="control-label" for="email" translate="global.form.email">E-mail</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
-                           [(ng-model)]="settingsAccount.email" minlength=5 maxlength=100 #emailInput="ngModel" required>
+                           [(ngModel)]="settingsAccount.email" minlength=5 maxlength=100 #emailInput="ngModel" required>
                     <div *ngIf="emailInput.dirty && emailInput.invalid">
                         <p class="help-block"
                            *ngIf="emailInput.errors.required" translate="global.messages.validate.email.required">
@@ -71,12 +71,15 @@
                             Your e-mail cannot be longer than 100 characters.
                         </p>
                     </div>
-                </div><% if (enableTranslation){ %>
-                <div class="form-group">
+                </div>
+                <%_ if (enableTranslation){ _%>
+                <div class="form-group" *ngIf="languages && languages.length > 0">
                     <label for="langKey" translate="settings.form.language">Language</label>
-                    <select id="langKey" name="langKey" class="form-control" [(ng-model)]="settingsAccount.langKey" ng-controller="<%=jhiPrefixCapitalized%>LanguageController as languageVm" ng-options="code as (code | findLanguageFromKey) for code in languageVm.languages"></select>
-                </div><% } %>
-
+                    <select class="form-control" id="langKey" name="langKey" [(ngModel)]="settingsAccount.langKey">
+                        <option *ngFor="let language of languages" [value]="language">{{language}}</option>
+                    </select>
+                </div>
+                <%_ } _%>
                 <button type="submit" [disabled]="settingsForm.form.invalid" class="btn btn-primary" translate="settings.form.button">Save</button>
             </form>
         </div>

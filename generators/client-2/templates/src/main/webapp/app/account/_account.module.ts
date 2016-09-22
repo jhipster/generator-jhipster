@@ -20,7 +20,7 @@ import { ActivateComponent } from "./activate/activate.component";
 import { PasswordComponent } from "./password/password.component";
 import { PasswordResetInitComponent } from "./password-reset/init/password-reset-init.component";
 import { PasswordResetFinishComponent } from "./password-reset/finish/password-reset-finish.component";
-import { SettingsComponent } from "./settings/settings.component"
+import { SettingsComponent } from "./settings/settings.component";
 
 <% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
 upgradeAdapter.upgradeNg1Provider('Auth');

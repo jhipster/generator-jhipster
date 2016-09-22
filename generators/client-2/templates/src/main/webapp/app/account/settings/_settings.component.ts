@@ -1,4 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components/language/language.service';
 
 @Component({
     selector: 'settings',
@@ -8,22 +9,26 @@ export class SettingsComponent implements OnInit {
     error: string;
     success: string;
     settingsAccount: any;
+    languages: any[];
     Auth: any;
     Principal: any;
-    // <%=jhiPrefixCapitalized%>LanguageService: any;
+    <%=jhiPrefixCapitalized%>LanguageService: any;
 
-    constructor(@Inject('$translate') private $translate, @Inject('Auth') Auth, @Inject('Principal') Principal)
-    @Inject('<%=jhiPrefixCapitalized%>LanguageService') <%=jhiPrefixCapitalized%>LanguageService) {
+    constructor(@Inject('$translate') private $translate, @Inject('Auth') Auth, @Inject('Principal') Principal,
+                private languageService: <%=jhiPrefixCapitalized%>LanguageService) {
         this.Auth = Auth;
         this.Principal = Principal;
         this.<%=jhiPrefixCapitalized%>LanguageService = <%=jhiPrefixCapitalized%>LanguageService;
     }
 
     ngOnInit () {
-        let vm = this;
-        this.Principal.identity().then(function(account) {
-            vm.settingsAccount = this.copyAccount(account);
-        });
+        this.Principal.identity().then(function (account) {
+            this.settingsAccount = this.copyAccount(account);
+        }.bind(this));
+
+        this.languageService.getAll().then(function (languages) {
+            this.languages = languages;
+        }.bind(this));
     }
 
     save () {
@@ -31,14 +36,16 @@ export class SettingsComponent implements OnInit {
         this.Auth.updateAccount(vm.settingsAccount).then(function() {
             vm.error = null;
             vm.success = 'OK';
-            this.Principal.identity(true).then(function(account) {
-                vm.settingsAccount = this.copyAccount(account);
-            });<% if (enableTranslation){ %>
-            this.<%=jhiPrefixCapitalized%>LanguageService.getCurrent().then(function(current) {
+            vm.Principal.identity(true).then(function(account) {
+                vm.settingsAccount = vm.copyAccount(account);
+            });
+            <%_ if (enableTranslation){ _%>
+            vm.languageService.getCurrent().then(function(current) {
                 if (vm.settingsAccount.langKey !== current) {
-                    this.$translate.use(vm.settingsAccount.langKey);
+                    vm.$translate.use(vm.settingsAccount.langKey);
                 }
-            });<% } %>
+            });
+            <%_ } _%>
         }).catch(function() {
             vm.success = null;
             vm.error = 'ERROR';
