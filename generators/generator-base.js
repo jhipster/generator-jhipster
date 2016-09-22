@@ -452,9 +452,9 @@ Generator.prototype.addEntryToEhcache = function (entry) {
             file: fullPath,
             needle: 'jhipster-needle-ehcache-add-entry',
             splicable: [`<cache name="${this.packageName}.domain.${entry}"
-                               timeToLiveSeconds="3600">
-                        </cache>
-                        `
+        timeToLiveSeconds="3600">
+    </cache>
+`
             ]
         }, this);
     } catch (e) {
