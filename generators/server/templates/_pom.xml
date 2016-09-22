@@ -1103,6 +1103,15 @@
             </properties>
         </profile>
         <profile>
+            <id>shell</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-remote-shell</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
