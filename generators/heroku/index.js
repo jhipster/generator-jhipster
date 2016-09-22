@@ -31,31 +31,49 @@ module.exports = HerokuGenerator.extend({
         this.angularAppName = this.getAngularAppName();
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
+        this.herokuAppName = this.config.get('herokuAppName');
     },
 
     prompting: function () {
         var done = this.async();
 
-        var prompts = [
-            {
-                type: 'input',
-                name: 'herokuDeployedName',
-                message: 'Name to deploy as:',
-                default: this.baseName
-            },
-            {
-                type: 'list',
-                name: 'herokuRegion',
-                message: 'On which region do you want to deploy ?',
-                choices: ['us', 'eu'],
-                default: 0
-            }];
+        if (this.herokuAppName) {
+            exec('heroku apps:info --json', function (err, stdout) {
+                if (err) {
+                    this.abort = true;
+                    this.log.error(err);
+                } else {
+                    var json = JSON.parse(stdout);
+                    this.herokuAppName = json['app']['name'];
+                    this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
+                    this.herokuAppExists = true;
+                    this.config.set('herokuAppName', this.herokuAppName);
+                }
+                done();
+            }.bind(this));
+        } else {
+            var prompts = [
+                {
+                    type: 'input',
+                    name: 'herokuAppName',
+                    message: 'Name to deploy as:',
+                    default: this.baseName
+                },
+                {
+                    type: 'list',
+                    name: 'herokuRegion',
+                    message: 'On which region do you want to deploy ?',
+                    choices: ['us', 'eu'],
+                    default: 0
+                }];
 
-        this.prompt(prompts).then(function (props) {
-            this.herokuDeployedName = _.kebabCase(props.herokuDeployedName);
-            this.herokuRegion = props.herokuRegion;
-            done();
-        }.bind(this));
+            this.prompt(prompts).then(function (props) {
+                this.herokuAppName = _.kebabCase(props.herokuAppName);
+                this.herokuRegion = props.herokuRegion;
+                this.herokuAppExists = false;
+                done();
+            }.bind(this));
+        }
     },
     configuring: {
         checkInstallation: function () {
@@ -117,13 +135,13 @@ module.exports = HerokuGenerator.extend({
         },
 
         herokuCreate: function () {
-            if (this.abort) return;
+            if (this.abort || this.herokuAppExists) return;
             var done = this.async();
 
             var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
             this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-            var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams;
+            var herokuCreateCmd = 'heroku create ' + this.herokuAppName + regionParams;
             this.log(herokuCreateCmd);
 
             var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
@@ -133,7 +151,7 @@ module.exports = HerokuGenerator.extend({
                             {
                                 type: 'list',
                                 name: 'herokuForceName',
-                                message: 'The Heroku app "' + chalk.cyan(this.herokuDeployedName) + '" already exists! Use it anyways?',
+                                message: 'The Heroku app "' + chalk.cyan(this.herokuAppName) + '" already exists! Use it anyways?',
                                 choices: [{
                                     value: 'Yes',
                                     name: 'Yes, I have access to it'
@@ -148,7 +166,7 @@ module.exports = HerokuGenerator.extend({
                         this.prompt(prompts).then(function (props) {
                             var getHerokuAppName = function(def, stdout) { return def; };
                             if (props.herokuForceName === 'Yes') {
-                                herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName;
+                                herokuCreateCmd = 'heroku git:remote --app ' + this.herokuAppName;
                             } else {
                                 herokuCreateCmd = 'heroku create ' + regionParams;
 
@@ -160,9 +178,10 @@ module.exports = HerokuGenerator.extend({
                                     this.abort = true;
                                     this.log.error(err);
                                 } else {
-                                    this.herokuDeployedName = getHerokuAppName(this.herokuDeployedName, stdout);
-                                    this.log(stdout);
+                                    this.herokuAppName = getHerokuAppName(this.herokuAppName, stdout);
+                                    this.log(stdout.trim());
                                 }
+                                this.config.set('herokuAppName', this.herokuAppName);
                                 done();
                             }.bind(this));
                         }.bind(this));
@@ -183,7 +202,7 @@ module.exports = HerokuGenerator.extend({
                     this.log.error('Error: Not authenticated. Run \'heroku login\' to login to your heroku account and try again.');
                     done();
                 } else {
-                    this.log(output);
+                    this.log(output.trim());
                 }
             }.bind(this));
         },
@@ -205,7 +224,7 @@ module.exports = HerokuGenerator.extend({
                 return;
             }
 
-            this.log(chalk.bold('Provisioning addons'));
+            this.log(chalk.bold('\nProvisioning addons'));
             exec(`heroku addons:create ${dbAddOn}`, {}, function (err, stdout, stderr) {
                 if (err) {
                     this.log('No new addons created');
@@ -217,7 +236,7 @@ module.exports = HerokuGenerator.extend({
         },
 
         configureJHipsterRegistry: function() {
-            if (this.abort) return;
+            if (this.abort || this.herokuAppExists) return;
             var done = this.async();
 
             if (this.applicationType === 'microservice' || this.applicationType === 'gateway') {
@@ -230,7 +249,7 @@ module.exports = HerokuGenerator.extend({
 
                 this.log('');
                 this.prompt(prompts).then(function (props) {
-                    var configSetCmd = 'heroku config:set ' + 'JHIPSTER_REGISTRY_URL=' + props.herokuJHipsterRegistry + ' --app ' + this.herokuDeployedName;
+                    var configSetCmd = 'heroku config:set ' + 'JHIPSTER_REGISTRY_URL=' + props.herokuJHipsterRegistry + ' --app ' + this.herokuAppName;
                     var child = exec(configSetCmd, {}, function (err, stdout, stderr) {
                         if (err) {
                             this.abort = true;
@@ -283,7 +302,8 @@ module.exports = HerokuGenerator.extend({
             this.buildCmd = child.buildCmd;
 
             child.stdout.on('data', function (data) {
-                this.log(data.toString());
+                var line = data.toString().trim();
+                if (line.length !== 0) this.log(line);
             }.bind(this));
 
         },
@@ -298,24 +318,23 @@ module.exports = HerokuGenerator.extend({
                 herokuDeployCommand = 'heroku deploy:jar build/libs/*.war';
             }
 
-            herokuDeployCommand += ' --app ' + this.herokuDeployedName;
+            herokuDeployCommand += ' --app ' + this.herokuAppName;
 
-            this.log(chalk.bold('\nUploading your application code.\n This may take ' + chalk.cyan('several minutes') + ' depending on your connection speed...'));
+            this.log(chalk.bold('\nUploading your application code.\nThis may take ' + chalk.cyan('several minutes') + ' depending on your connection speed...'));
             var child = exec(herokuDeployCommand, function (err, stdout) {
                 if (err) {
                     this.abort = true;
                     this.log.error(err);
                 }
-                this.log(stdout);
                 this.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
                 this.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
-                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(this.buildCmd)));
-                this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
+                this.log(chalk.yellow('After application modification, redeploy it with\n\t' + chalk.bold('yo jhipster:heroku')));
                 done();
             }.bind(this));
 
             child.stdout.on('data', function (data) {
-                this.log(data.toString());
+                var line = data.toString().trimRight();
+                if (line.trim().length !== 0) this.log(line);
             }.bind(this));
         }
     }

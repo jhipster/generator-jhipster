@@ -13,7 +13,7 @@
 eureka:
 <%_ if (applicationType != 'gateway') { _%>
     instance:
-        hostname: <%= herokuDeployedName %>.herokuapp.com
+        hostname: <%= herokuAppName %>.herokuapp.com
         non-secure-port: 80
         prefer-ip-address: false
 <%_ } _%>
