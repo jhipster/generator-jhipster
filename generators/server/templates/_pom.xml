@@ -91,6 +91,9 @@
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <spring-cloud.version>Brixton.SR5</spring-cloud.version>
         <%_ } _%>
+        <%_ if (messageBroker === 'kafka') { _%>
+        <spring-cloud-stream.version>1.0.2.RELEASE</spring-cloud-stream.version>
+        <%_ } _%>
         <spring-security.version>4.1.0.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
@@ -140,7 +143,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-stream-dependencies</artifactId>
-                <version>1.0.2.RELEASE</version>
+                <version>${spring-cloud-stream.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

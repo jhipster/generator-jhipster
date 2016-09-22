@@ -35,8 +35,8 @@ services:
             - <%= baseName.toLowerCase() %>-elasticsearch:elasticsearch
         <%_ } _%>
         <%_ if (messageBroker == 'kafka') { _%>
-            - <%= baseName.toLowerCase() %>-kafka:kafka
-            - <%= baseName.toLowerCase() %>-zookeeper:zookeeper
+            - kafka:kafka
+            - zookeeper:zookeeper
         <%_ } _%>
         <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
             - jhipster-registry:registry
@@ -140,14 +140,14 @@ services:
             service: <%= baseName.toLowerCase() %>-elasticsearch
     <%_ } _%>
     <%_ if (messageBroker == 'kafka') { _%>
-    <%= baseName.toLowerCase() %>-kafka:
+    kafka:
         extends:
             file: kafka.yml
-            service: <%= baseName.toLowerCase() %>-kafka
-    <%= baseName.toLowerCase() %>-zookeeper:
+            service: kafka
+    zookeeper:
         extends:
             file: kafka.yml
-            service: <%= baseName.toLowerCase() %>-zookeeper
+            service: zookeeper
     <%_ } _%>
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     jhipster-registry:
