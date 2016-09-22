@@ -302,8 +302,8 @@ module.exports = HerokuGenerator.extend({
             this.buildCmd = child.buildCmd;
 
             child.stdout.on('data', function (data) {
-                var line = data.toString().trim()
-                if (line.length != 0) this.log(line);
+                var line = data.toString().trim();
+                if (line.length !== 0) this.log(line);
             }.bind(this));
 
         },
@@ -333,8 +333,8 @@ module.exports = HerokuGenerator.extend({
             }.bind(this));
 
             child.stdout.on('data', function (data) {
-                var line = data.toString().trimRight()
-                if (line.trim().length != 0) this.log(line);
+                var line = data.toString().trimRight();
+                if (line.trim().length !== 0) this.log(line);
             }.bind(this));
         }
     }
