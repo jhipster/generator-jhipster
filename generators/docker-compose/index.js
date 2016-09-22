@@ -15,10 +15,13 @@ var DockerComposeGenerator = generators.Base.extend({});
 util.inherits(DockerComposeGenerator, scriptBase);
 
 const constants = require('../generator-constants'),
+    DOCKER_KAFKA = constants.DOCKER_KAFKA,
+    DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER,
     DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
     DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
     DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
     DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+
 
 module.exports = DockerComposeGenerator.extend({
     constructor: function () {
@@ -33,6 +36,8 @@ module.exports = DockerComposeGenerator.extend({
 
         setupServerVars: function () {
             // Make constants available in templates
+            this.DOCKER_KAFKA = DOCKER_KAFKA;
+            this.DOCKER_ZOOKEEPER = DOCKER_ZOOKEEPER;
             this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
             this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
             this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
@@ -87,6 +92,7 @@ module.exports = DockerComposeGenerator.extend({
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.useElk = this.config.get('useElk');
+            this.useKafka = false;
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
@@ -251,6 +257,11 @@ module.exports = DockerComposeGenerator.extend({
                     delete searchEngineConfig.ports;
                     parentConfiguration[lowercaseBaseName + '-' + searchEngine] = searchEngineConfig;
                 }
+                // Add message broker support
+                var messageBroker = appConfig.messageBroker;
+                if (messageBroker === 'kafka') {
+                    this.useKafka = true;
+                }
                 // Dump the file
                 var yamlString = jsyaml.dump(parentConfiguration, {indent: 4});
 
@@ -287,6 +298,12 @@ module.exports = DockerComposeGenerator.extend({
 
             this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
             this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
+        },
+
+        writeKafkaFiles: function() {
+            if(!this.useKafka) return;
+
+            this.template('_kafka.yml', 'kafka.yml');
         },
 
         writeElkFiles: function() {

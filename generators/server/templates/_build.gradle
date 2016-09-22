@@ -32,10 +32,15 @@ apply plugin: 'io.spring.dependency-management'
 /* downgrade Hibernate to 4.3 */
 ext['hibernate.version'] = '${hibernate_entitymanager_version}'
 <%_ } _%>
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
 dependencyManagement {
   imports {
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+ spring_cloud_version
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
+    <%_ } _%>
+    <%_ if (messageBroker === 'kafka') { _%>
+    mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:' + spring_cloud_stream_version
+    <%_ } _%>
   }
 }
 <%_ } _%>
@@ -195,6 +200,9 @@ dependencies {
     // https://github.com/elastic/elasticsearch/issues/13245
     compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
+    <%_ if (messageBroker === 'kafka') { _%>
+    compile "org.springframework.cloud:spring-cloud-starter-stream-kafka"
+    <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-security"
     compile ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
@@ -290,6 +298,9 @@ dependencies {
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"<% } %>
     <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
     testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    <%_ if (messageBroker === 'kafka') { _%>
+    testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
+    <%_ } _%>
     runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
     runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
     optional "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"

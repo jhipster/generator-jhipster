@@ -34,6 +34,10 @@ services:
         <%_ if (searchEngine == 'elasticsearch') { _%>
             - <%= baseName.toLowerCase() %>-elasticsearch:elasticsearch
         <%_ } _%>
+        <%_ if (messageBroker == 'kafka') { _%>
+            - kafka:kafka
+            - zookeeper:zookeeper
+        <%_ } _%>
         <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
             - jhipster-registry:registry
         <%_ } _%>
@@ -63,6 +67,10 @@ services:
             <%_ } _%>
             <%_ if (searchEngine == 'elasticsearch') { _%>
             - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
+            <%_ } _%>
+            <%_ if (messageBroker == 'kafka') { _%>
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK-NODES=zookeeper
             <%_ } _%>
         <%_ if (applicationType == 'monolith' || applicationType == 'gateway') { _%>
         ports:
@@ -130,6 +138,16 @@ services:
         extends:
             file: elasticsearch.yml
             service: <%= baseName.toLowerCase() %>-elasticsearch
+    <%_ } _%>
+    <%_ if (messageBroker == 'kafka') { _%>
+    kafka:
+        extends:
+            file: kafka.yml
+            service: kafka
+    zookeeper:
+        extends:
+            file: kafka.yml
+            service: zookeeper
     <%_ } _%>
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     jhipster-registry:

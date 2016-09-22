@@ -91,6 +91,9 @@
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <spring-cloud.version>Brixton.SR5</spring-cloud.version>
         <%_ } _%>
+        <%_ if (messageBroker === 'kafka') { _%>
+        <spring-cloud-stream.version>1.0.2.RELEASE</spring-cloud-stream.version>
+        <%_ } _%>
         <spring-security.version>4.1.0.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
@@ -124,9 +127,10 @@
         <profile.swagger></profile.swagger>
     </properties>
 
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
     <dependencyManagement>
         <dependencies>
+            <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -134,9 +138,19 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <%_ } _%>
+            <%_ if (messageBroker === 'kafka') { _%>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-dependencies</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <%_ } _%>
         </dependencies>
     </dependencyManagement>
-    <%_ } _%>
+<%_ } _%>
 
     <dependencies>
         <dependency>
@@ -491,6 +505,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <%_ } _%>
+        <%_ if (messageBroker === 'kafka') { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-test-support</artifactId>
+            <scope>test</scope>
         </dependency>
         <%_ } _%>
         <dependency>

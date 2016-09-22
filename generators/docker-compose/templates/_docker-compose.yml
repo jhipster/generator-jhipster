@@ -3,6 +3,16 @@ services:
 <%_ for(var i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
 <%_ } _%>
+<%_ if (useKafka) { _%>
+    zookeeper:
+        extends:
+            file: kafka.yml
+            service: zookeeper
+    kafka:
+        extends:
+            file: kafka.yml
+            service: kafka
+<%_ } _%>
 <%_ if (gatewayNb + microserviceNb > 0) { _%>
     jhipster-registry:
         extends:

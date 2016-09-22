@@ -28,6 +28,17 @@ spring:
     <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
+    <%_ if (messageBroker == 'kafka') { _%>
+    cloud:
+        stream:
+            kafka:
+                binder:
+                    brokers: localhost
+                    zk-nodes: localhost
+            bindings:
+                output:
+                    destination: topic-jhipster
+    <%_ } _%>
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
