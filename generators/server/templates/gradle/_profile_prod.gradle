@@ -39,7 +39,12 @@ processResources {
             it.replace('#logback.loglevel#', logbackLoglevel)
         }
     }
+    <%_ if (applicationType === 'monolith') { _%>
     filesMatching('**/application.yml') {
+    <%_ } _%>
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    filesMatching('**/bootstrap.yml') {
+    <%_ } _%>
         filter {
             it.replace('#spring.profiles.active#', profiles)
         }
