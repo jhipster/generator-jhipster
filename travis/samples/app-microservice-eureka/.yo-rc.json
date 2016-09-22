@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "applicationType": "microserviceEureka",
+    "applicationType": "microservice",
     "baseName": "travisMicroserviceEureka",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",

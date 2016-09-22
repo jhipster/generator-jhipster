@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "applicationType": "microserviceConsul",
+    "applicationType": "microservice",
     "baseName": "travisMicroserviceConsul",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
