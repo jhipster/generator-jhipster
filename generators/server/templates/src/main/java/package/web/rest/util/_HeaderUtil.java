@@ -7,9 +7,12 @@ import org.springframework.http.HttpHeaders;
 /**
  * Utility class for HTTP headers creation.
  */
-public class HeaderUtil {
+public final class HeaderUtil {
 
     private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
+
+    private HeaderUtil(){
+    }
 
     public static HttpHeaders createAlert(String message, String param) {
         HttpHeaders headers = new HttpHeaders();
