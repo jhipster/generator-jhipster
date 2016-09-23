@@ -172,7 +172,7 @@ dependencies {
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
-    compile("com.zaxxer:HikariCP:${HikariCP_version}") {
+    compile("com.zaxxer:HikariCP") {
         exclude(module: 'tools')
     }
     <%_ } _%>
