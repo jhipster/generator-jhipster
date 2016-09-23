@@ -198,7 +198,7 @@ function askForServiceDiscovery() {
         this.log(chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'));
         this.log('Your service discovery enabled apps:');
         serviceDiscoveryEnabledApps.forEach(function(app){
-            this.log('  - ' + app.baseName + ' ('  + app.serviceDiscoveryType + ')');
+            this.log(` -${app.baseName} (${app.serviceDiscoveryType})`);
         }.bind(this));
 
         var prompts = [{
