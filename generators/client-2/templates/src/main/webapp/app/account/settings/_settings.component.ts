@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
+<%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components/language/language.service';
-
+<%_ } _%>
 @Component({
     selector: 'settings',
     templateUrl: 'app/account/settings/settings.html'
@@ -12,23 +13,28 @@ export class SettingsComponent implements OnInit {
     languages: any[];
     Auth: any;
     Principal: any;
+    <%_ if (enableTranslation){ _%>
     <%=jhiPrefixCapitalized%>LanguageService: any;
+    <%_ } _%>
 
-    constructor(@Inject('$translate') private $translate, @Inject('Auth') Auth, @Inject('Principal') Principal,
-                private languageService: <%=jhiPrefixCapitalized%>LanguageService) {
+    constructor(@Inject('Auth') Auth, @Inject('Principal') Principal<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
+                private languageService: <%=jhiPrefixCapitalized%>LanguageService <%_ } _%>) {
         this.Auth = Auth;
         this.Principal = Principal;
+        <%_ if (enableTranslation){ _%>
         this.<%=jhiPrefixCapitalized%>LanguageService = <%=jhiPrefixCapitalized%>LanguageService;
+        <%_ } _%>
     }
 
     ngOnInit () {
         this.Principal.identity().then(function (account) {
             this.settingsAccount = this.copyAccount(account);
         }.bind(this));
-
+        <%_ if (enableTranslation){ _%>
         this.languageService.getAll().then(function (languages) {
             this.languages = languages;
         }.bind(this));
+        <%_ } _%>
     }
 
     save () {

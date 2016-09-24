@@ -8,6 +8,9 @@ import { CapitalizePipe } from './pipe/capitalize.pipe';
 import { FilterPipe } from './pipe/filter.pipe';
 import { OrderByPipe } from './pipe/order-by.pipe';
 import { TranslatePipe } from './pipe/translate.pipe';
+<%_ if (enableTranslation){ _%>
+import { FindLanguageFromKeyPipe } from '../components/language/language.pipe';
+<%_ }_%>
 
 import { JhiItemCountComponent } from './component/jhi-item-count.component';
 import { MaxbytesValidator } from './directive/maxbytes.directive';
@@ -23,10 +26,14 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         FilterPipe,
         TranslatePipe,
         CapitalizePipe,
+        <%_ if (enableTranslation){ _%>
+        FindLanguageFromKeyPipe,
+        <%_ } _%>
         JhiItemCountComponent,
         MaxbytesValidator,
         MinbytesValidator,
         ShowValidationDirective
+
     ],
     providers: [
     ],
@@ -38,6 +45,9 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         FilterPipe,
         TranslatePipe,
         CapitalizePipe,
+        <%_ if (enableTranslation){ _%>
+        FindLanguageFromKeyPipe,
+        <%_ } _%>
         JhiItemCountComponent,
         MaxbytesValidator,
         MinbytesValidator,

@@ -9,7 +9,7 @@
 
             <jhi-alert-error></jhi-alert-error>
 
-            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount">
+            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate show-validation>
 
                 <div class="form-group">
                     <label class="control-label" for="firstName" translate="settings.form.firstname">First Name</label>
@@ -76,7 +76,7 @@
                 <div class="form-group" *ngIf="languages && languages.length > 0">
                     <label for="langKey" translate="settings.form.language">Language</label>
                     <select class="form-control" id="langKey" name="langKey" [(ngModel)]="settingsAccount.langKey">
-                        <option *ngFor="let language of languages" [value]="language">{{language}}</option>
+                        <option *ngFor="let language of languages" [value]="language">{{language | findLanguageFromKey}}</option>
                     </select>
                 </div>
                 <%_ } _%>

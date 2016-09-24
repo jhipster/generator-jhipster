@@ -7,7 +7,9 @@ import { AlertService } from "./alert/alert.service";
 import { ProfileService } from './profiles/profile.service';
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
 import { jhiAlertComponent } from "./alert/alert.component";
+<%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.service';
+<%_ } _%>
 
 @NgModule({
     imports: [
@@ -19,8 +21,10 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
     ],
     providers: [
         AlertService,
-        ProfileService,
+        ProfileService<%_ if (enableTranslation){ _%>,
         <%=jhiPrefixCapitalized%>LanguageService
+        <%_ } _%>
+
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
