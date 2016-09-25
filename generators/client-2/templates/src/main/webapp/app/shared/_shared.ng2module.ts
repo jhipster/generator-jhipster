@@ -8,6 +8,7 @@ import { CapitalizePipe } from './pipe/capitalize.pipe';
 import { FilterPipe } from './pipe/filter.pipe';
 import { OrderByPipe } from './pipe/order-by.pipe';
 import { TranslatePipe } from './pipe/translate.pipe';
+import { KeysPipe } from './pipe/keys.pipe';
 <%_ if (enableTranslation){ _%>
 import { FindLanguageFromKeyPipe } from '../components/language/language.pipe';
 <%_ }_%>
@@ -26,6 +27,7 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         FilterPipe,
         TranslatePipe,
         CapitalizePipe,
+        KeysPipe,
         <%_ if (enableTranslation){ _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
@@ -45,6 +47,7 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         FilterPipe,
         TranslatePipe,
         CapitalizePipe,
+        KeysPipe,
         <%_ if (enableTranslation){ _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
