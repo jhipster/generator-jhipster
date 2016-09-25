@@ -10,6 +10,7 @@ import { XSRFStrategyProvider } from './shared/XSRF-strategy.provider';
 
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
+import { FooterComponent } from './layouts/footer/footer.component';
 <%_ if (enableTranslation){ _%>
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 <%_ } _%>
@@ -24,7 +25,8 @@ import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
     ],
     declarations: [
         HomeComponent,
-        NavbarComponent<%_ if (enableTranslation){ _%>,
+        NavbarComponent,
+        FooterComponent<%_ if (enableTranslation){ _%>,
         ActiveMenuDirective
         <%_ } _%>
 
