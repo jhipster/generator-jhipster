@@ -8,6 +8,7 @@ import { RegisterComponent } from './register/register.component';
 import { PasswordComponent } from './password/password.component';
 import { PasswordResetInitComponent } from './password-reset/init/password-reset-init.component';
 import { PasswordResetFinishComponent } from './password-reset/finish/password-reset-finish.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { PasswordResetFinishComponent } from './password-reset/finish/password-r
         RegisterComponent,
         PasswordComponent,
         PasswordResetInitComponent,
-        PasswordResetFinishComponent
+        PasswordResetFinishComponent,
+        SettingsComponent
     ],
     providers: [
     ],

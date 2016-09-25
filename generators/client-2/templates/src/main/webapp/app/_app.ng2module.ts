@@ -8,11 +8,11 @@ import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { XSRFStrategyProvider } from './shared/XSRF-strategy.provider';
 
-import { FindLanguageFromKeyPipe } from './components/language/language.pipe';
-
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
+<%_ if (enableTranslation){ _%>
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
+<%_ } _%>
 
 @NgModule({
     imports: [
@@ -24,9 +24,10 @@ import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
     ],
     declarations: [
         HomeComponent,
-        NavbarComponent,
-        ActiveMenuDirective,
-        FindLanguageFromKeyPipe
+        NavbarComponent<%_ if (enableTranslation){ _%>,
+        ActiveMenuDirective
+        <%_ } _%>
+
     ],
     providers: [
         XSRFStrategyProvider

@@ -1,7 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 
 import { ProfileService } from '../../components/profiles/profile.service';
+<%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components/language/language.service';
+<%_ } _%>
 
 @Component({
     selector: 'navbar',
@@ -19,19 +21,22 @@ export class NavbarComponent implements OnInit {
     constructor(@Inject('Principal') private principal,
                 @Inject('$state') private $state,
                 @Inject('Auth') private auth,
+                <%_ if (enableTranslation){ _%>
                 private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+                <%_ } _%>
                 @Inject('LoginService') private loginService,
                 private profileService: ProfileService) { }
 
     ngOnInit() {
         //TODO: Remove this once language service in migrated and use 'subscribe' instead of 'then'
         let vm = this;
-
+        <%_ if (enableTranslation){ _%>
         this.languageService.getAll().then(function (languages) {
             vm.languages = languages;
         });
 
         this.changeLanguage = this.languageService.changeLanguage;
+        <%_ } _%>
 
         this.isAuthenticated = this.principal.isAuthenticated;
         this.profileService.getProfileInfo().subscribe(profileInfo => {
