@@ -28,7 +28,7 @@ zuul:
         connect-timeout-millis: 5000
         socket-timeout-millis: 10000
     <%_ if (serviceDiscoveryType == 'consul') { _%>
-    ignoredServices: 'consul,gateway' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
+    ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
     <%_ } _%>
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
