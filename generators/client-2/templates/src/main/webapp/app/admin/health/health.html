@@ -24,7 +24,7 @@
                     </span>
                 </td>
                 <td class="text-center">
-                    <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
+                    <a class="hand" (click)="showHealth(healthModal, health)" *ngIf="health.details || health.error">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
                 </td>
@@ -32,3 +32,7 @@
         </tbody>
     </table>
 </div>
+<!-- this is a workaround untill ng-bootstrap supports components as modal content https://github.com/ng-bootstrap/ng-bootstrap/issues/680 -->
+<template #healthModal let-dismiss="dismiss">
+    <<%=jhiPrefix%>-health-modal [currentHealth]="currentHealth" [dismiss]="dismiss"></<%=jhiPrefix%>-health-modal>
+</template>

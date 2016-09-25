@@ -1,5 +1,6 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnInit, TemplateRef } from "@angular/core";
 import { <%=jhiPrefixCapitalized%>HealthService } from "./health.service";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: '<%=jhiPrefix%>-health',
@@ -7,19 +8,18 @@ import { <%=jhiPrefixCapitalized%>HealthService } from "./health.service";
 })
 export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData:any;
+    currentHealth:any;
     updatingHealth:boolean;
     $uibModal: any;
 
-    constructor(@Inject('$uibModal') $uibModal, private jhiHealthService:<%=jhiPrefixCapitalized%>HealthService) {
-        this.$uibModal = $uibModal;
-    }
+    constructor(private modalService: NgbModal, private healthService:<%=jhiPrefixCapitalized%>HealthService) {}
 
     ngOnInit() {
         this.refresh();
     }
 
     baseName(name) {
-        return this.jhiHealthService.getBaseName(name);
+        return this.healthService.getBaseName(name);
     }
 
     getLabelClass(statusState) {
@@ -33,36 +33,23 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     refresh() {
         this.updatingHealth = true;
 
-        this.jhiHealthService.checkHealth().subscribe(health => {
-            this.healthData = this.jhiHealthService.transformHealthData(health);
+        this.healthService.checkHealth().subscribe(health => {
+            this.healthData = this.healthService.transformHealthData(health);
             this.updatingHealth = false;
         });
     }
 
-    showHealth(health) {
-        let vm = this;
-        this.$uibModal.open({
-            templateUrl: 'app/admin/health/health.modal.html',
-            controller: '<%=jhiPrefixCapitalized%>HealthModalController',
-            controllerAs: 'vm',
-            size: 'lg',
-            resolve: {
-                currentHealth: function() {
-                    return health;
-                },
-                baseName: function() {
-                    return vm.baseName;
-                },
-                subSystemName: function() {
-                    return vm.subSystemName;
-                }
-
-            }
+    showHealth(healthModal, health) {
+        this.currentHealth = health;
+        this.modalService.open(healthModal).result.then((result) => {
+            console.log(`Closed with: ${result}`);
+        }, (reason) => {
+            console.log(`Dismissed ${reason}`);
         });
     }
 
     subSystemName(name) {
-        return this.jhiHealthService.getSubSystemName(name);
+        return this.healthService.getSubSystemName(name);
     }
 
 }

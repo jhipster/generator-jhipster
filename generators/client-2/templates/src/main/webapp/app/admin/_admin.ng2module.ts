@@ -12,6 +12,7 @@ import { ParseLinks } from '../shared/service/parse-links.service';
 import { AuditsComponent } from './audits/audits.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
+import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health/health-modal.component';
 import { LogsComponent } from './logs/logs.component';
 
 @NgModule({
@@ -22,6 +23,7 @@ import { LogsComponent } from './logs/logs.component';
         AuditsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
+        <%=jhiPrefixCapitalized%>HealthModalComponent,
         LogsComponent
     ],
     providers: [
