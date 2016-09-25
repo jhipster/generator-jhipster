@@ -357,6 +357,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
 
             this.template(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', this, {});
@@ -555,6 +556,8 @@ module.exports = JhipsterClientGenerator.extend({
             }
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
             this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.component.ts', ANGULAR_DIR + 'layouts/navbar/navbar.component.ts', this, {});
+            this.copyHtml(ANGULAR_DIR + 'layouts/footer/footer.html', ANGULAR_DIR + 'layouts/footer/footer.html');
+            this.template(ANGULAR_DIR + 'layouts/footer/_footer.component.ts', ANGULAR_DIR + 'layouts/footer/footer.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
             this.copyHtml(ANGULAR_DIR + 'layouts/error/accessdenied.html', ANGULAR_DIR + 'layouts/error/accessdenied.html');
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.ts', ANGULAR_DIR + 'layouts/error/error.state.ts', this, {});
