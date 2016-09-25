@@ -26,13 +26,6 @@ spring:
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
     <%_ } _%>
-    <%_ if (serviceDiscoveryType == 'consul') { _%>
-    cloud:
-        consul:
-            discovery:
-                enabled: false
-                instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-    <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
     <%_ if (messageBroker == 'kafka') { _%>
