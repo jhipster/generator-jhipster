@@ -320,7 +320,6 @@ const expectedFiles = {
     client_2: [
         'bower.json',
         'package.json',
-        'typings.json',
         'tsconfig.json',
         '.bowerrc',
         '.eslintrc.json',

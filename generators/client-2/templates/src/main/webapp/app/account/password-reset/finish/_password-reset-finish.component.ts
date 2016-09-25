@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
 
 @Component({

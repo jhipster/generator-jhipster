@@ -9,10 +9,10 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
-        "outDir": "<%= DIST_DIR %>app"
+        "outDir": "<%= DIST_DIR %>app",
+        "lib": ["es6", "dom"]
     },
     "exclude": [
-        "node_modules",
-        "typings/index.d.ts"
+        "node_modules"
     ]
 }

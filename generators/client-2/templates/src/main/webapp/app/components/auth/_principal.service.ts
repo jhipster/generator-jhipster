@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 Principal.$inject = ['$q', 'Account'<% if (websocket == 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
 export function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {

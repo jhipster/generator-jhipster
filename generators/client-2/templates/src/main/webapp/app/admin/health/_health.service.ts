@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
@@ -48,7 +50,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
             'error': error,
             'status': status
         };
-        
+
         let details = {};
         let hasDetails = false;
 

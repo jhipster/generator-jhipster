@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 <%=jhiPrefixCapitalized%>MetricsMonitoringController.$inject = ['$scope','<%=jhiPrefixCapitalized%>MetricsService', '$uibModal'];
 
 export function <%=jhiPrefixCapitalized%>MetricsMonitoringController ($scope, <%=jhiPrefixCapitalized%>MetricsService, $uibModal) {

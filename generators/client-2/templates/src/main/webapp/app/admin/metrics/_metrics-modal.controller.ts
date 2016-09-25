@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 <%=jhiPrefixCapitalized%>MetricsMonitoringModalController.$inject = ['$uibModalInstance', 'threadDump'];
 
 export function <%=jhiPrefixCapitalized%>MetricsMonitoringModalController ($uibModalInstance, threadDump) {

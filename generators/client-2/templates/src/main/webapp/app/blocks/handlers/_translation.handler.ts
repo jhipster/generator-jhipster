@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 TranslationHandler.$inject = ['$rootScope', '$window', '$state', '$translate'];
 
 export function TranslationHandler($rootScope, $window, $state, $translate) {

@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModalInstance'];
 
 export function LoginController ($rootScope, $state, $timeout, Auth, $uibModalInstance) {

@@ -52,5 +52,9 @@
         map: map,
         packages: packages
     };
+
+    // Allow imports from "angular" even though it's loaded as a <script>
+    // This is similar to webpack `externals: []`
+    System.set('angular', System.newModule(window.angular));
     System.config(config);
 })(this);
