@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-
 public class MongoDBApprovalStore implements ApprovalStore {
 
     private final Log logger = LogFactory.getLog(getClass());
@@ -47,7 +46,6 @@ public class MongoDBApprovalStore implements ApprovalStore {
         }
         return true;
     }
-
 
     private void updateApproval(final OAuth2AuthenticationApproval mongoDBApproval, final Approval approval) {
         logger.debug(String.format("refreshing approval: [%s]", approval));

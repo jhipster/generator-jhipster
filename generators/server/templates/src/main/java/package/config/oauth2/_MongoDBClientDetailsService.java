@@ -21,7 +21,7 @@ public class MongoDBClientDetailsService implements ClientDetailsService, Client
     }
 
     /**
-     * @param passwordEncoder the password encoder to set
+     * @param passwordEncoder the password encoder to set.
      */
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
@@ -92,6 +92,5 @@ public class MongoDBClientDetailsService implements ClientDetailsService, Client
             mongoClientDetails.setAutoApproveScopes(((BaseClientDetails)clientDetails).getAutoApproveScopes());
         }
         oAuth2ClientDetailsRepository.save(mongoClientDetails);
-
     }
 }
