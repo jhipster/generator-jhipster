@@ -10,7 +10,6 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData:any;
     currentHealth:any;
     updatingHealth:boolean;
-    $uibModal: any;
 
     constructor(private modalService: NgbModal, private healthService:<%=jhiPrefixCapitalized%>HealthService) {}
 
@@ -18,7 +17,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         this.refresh();
     }
 
-    baseName(name) {
+    baseName(name: string) {
         return this.healthService.getBaseName(name);
     }
 
@@ -39,7 +38,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         });
     }
 
-    showHealth(healthModal, health) {
+    showHealth(healthModal: TemplateRef<any>, health: any) {
         this.currentHealth = health;
         this.modalService.open(healthModal).result.then((result) => {
             console.log(`Closed with: ${result}`);
@@ -48,7 +47,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         });
     }
 
-    subSystemName(name) {
+    subSystemName(name: string) {
         return this.healthService.getSubSystemName(name);
     }
 

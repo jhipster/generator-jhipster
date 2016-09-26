@@ -20,8 +20,8 @@ import { UserMgmntStateConfig } from './user-management/user-management.state';
 import { AuditsComponent } from "./audits/audits.component";
 import { LogsComponent } from './logs/logs.component';
 
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalController } from "./metrics/metrics-modal.controller";
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringController } from "./metrics/metrics.controller";
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from "./metrics/metrics-modal.component";
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from "./metrics/metrics.component";
 import { <%=jhiPrefixCapitalized%>HealthModalComponent } from "./health/health-modal.component";
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
@@ -29,7 +29,6 @@ import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration
 import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway/gateway.component';
 <%_ } _%>
 
-import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
 <%_ if (applicationType === 'gateway') { _%>
 import { GatewayRoutesService } from './gateway/gateway-routes.service';
 <%_ } _%>
@@ -61,15 +60,15 @@ angular
     .config(TrackerStateConfig)
     <%_ } _%>
     .config(UserMgmntStateConfig)
-    .controller('<%=jhiPrefixCapitalized%>MetricsMonitoringController', <%=jhiPrefixCapitalized%>MetricsMonitoringController)
-    .controller('<%=jhiPrefixCapitalized%>MetricsMonitoringModalController', <%=jhiPrefixCapitalized%>MetricsMonitoringModalController)
+    .directive('<%=jhiPrefix%>Metrics', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent))
+    .directive('<%=jhiPrefix%>MetricsModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent))
+    .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))
     .directive('<%=jhiPrefix%>HealthModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthModalComponent))
     .directive('<%=jhiPrefix%>Audit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(AuditsComponent))
     .directive('<%=jhiPrefix%>Configuration', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>ConfigurationComponent))
-    .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))
     .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
     <%_ if (applicationType === 'gateway') { _%>
     .directive('<%=jhiPrefix%>Gateway', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>GatewayComponent))
     .factory('GatewayRoutesService', upgradeAdapter.downgradeNg2Provider(GatewayRoutesService))
     <%_ } _%>
-    .factory('<%=jhiPrefixCapitalized%>HealthService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>HealthService));
+    ;

@@ -6,6 +6,7 @@ import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 import { AuditsService } from './audits/audits.service';
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration/configuration.service';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health/health.service';
+import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics/metrics.service';
 <%_ if (applicationType === 'gateway') { _%>
 import { GatewayRoutesService } from './gateway/gateway-routes.service';
 <%_ } _%>
@@ -20,6 +21,9 @@ import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health/health-m
 import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway/gateway.component';
 <%_ } _%>
 import { LogsComponent } from './logs/logs.component';
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics/metrics.component';
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics/metrics-modal.component';
+
 
 @NgModule({
     imports: [
@@ -33,12 +37,15 @@ import { LogsComponent } from './logs/logs.component';
         <%_ if (applicationType === 'gateway') { _%>
         <%=jhiPrefixCapitalized%>GatewayComponent,
         <%_ } _%>
+        <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
+        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
         LogsComponent
     ],
     providers: [
         AuditsService,
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
+        <%=jhiPrefixCapitalized%>MetricsService,
         <%_ if (applicationType === 'gateway') { _%>
         GatewayRoutesService,
         <%_ } _%>
