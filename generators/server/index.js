@@ -692,7 +692,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
             }
 
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_JHipsterProperties.java', javaDir + 'config/JHipsterProperties.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});

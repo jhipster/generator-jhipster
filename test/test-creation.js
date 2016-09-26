@@ -78,7 +78,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/Constants.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/CloudDatabaseConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/DatabaseConfiguration.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/JacksonConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/LocaleConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/LoggingAspectConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MetricsConfiguration.java',
