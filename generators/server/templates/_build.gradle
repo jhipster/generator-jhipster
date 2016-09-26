@@ -8,7 +8,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.0.1"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.6"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"<% if(!skipClient) {%>
