@@ -632,9 +632,6 @@ module.exports = JhipsterClientGenerator.extend({
                     '\n' +
                     '\nOr do all of the above:' +
                     '\n ' + chalk.yellow.bold('gulp install') +
-                    '\n' +
-                    '\nInstall Typescript typings:' +
-                    '\n ' + chalk.yellow.bold('npm run typings install') +
                     '\n'
                 );
             } else {
