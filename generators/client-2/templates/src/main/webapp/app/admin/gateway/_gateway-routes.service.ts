@@ -1,22 +1,16 @@
-import {Injectable} from '@angular/core';
+import * as angular from 'angular';
 
-GatewayRoutes.$inject = ['$resource'];
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+
+import { GatewayRoute } from './gateway-route.model';
 
 @Injectable()
-export function GatewayRoutes ($resource) {
-    var service = $resource('api/gateway/routes/:id', {}, {
-        'query': { method: 'GET', isArray: true},
-        'get': {
-            method: 'GET', isArray: false,
-            interceptor: {
-                response: function(response) {
-                    // expose response
-                    return response;
-                }
-            }
-        },
-        'update': { method:'PUT' }
-    });
+export class GatewayRoutesService {
+    constructor(private http: Http) { }
 
-    return service;
+    findAll(): Observable<GatewayRoute[]> {
+        return this.http.get('api/gateway/routes/').map((res: Response) => res.json());
+    }
 }
