@@ -29,9 +29,6 @@
     </prerequisites>
 
     <properties>
-        <%_ if (databaseType === 'sql') { _%>
-        <hikaricp.version>2.4.6</hikaricp.version>
-        <%_ } _%>
         <assertj-core.version>3.5.2</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
@@ -316,13 +313,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
-        -->
         <%_ } %>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <dependency>
