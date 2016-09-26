@@ -6,6 +6,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 })
 export class ErrorComponent implements OnInit {
     errorMessage: string;
+    error403: boolean;
 
     constructor() {}
 

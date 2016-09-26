@@ -11,7 +11,7 @@ export function ErrorStateConfig($stateProvider) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/layouts/error/error.html'
+                    template: '<error></error>'
                 }
             },
             resolve: {
@@ -29,7 +29,7 @@ export function ErrorStateConfig($stateProvider) {
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/layouts/error/accessdenied.html'
+                    template: '<error></error>'
                 }
             },
             resolve: {
