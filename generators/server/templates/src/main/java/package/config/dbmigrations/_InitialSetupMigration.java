@@ -6,9 +6,7 @@ import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Creates the initial database setup
@@ -26,6 +24,17 @@ public class InitialSetupMigration {
         authoritiesAdminAndUser[1].put("_id", "ROLE_ADMIN");
     }
 
+<%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
+    private Map<String, String>[] grantAuthorities = new Map[]{new HashMap<>(), new HashMap<>()};
+
+    {
+        grantAuthorities[0].put("role", "ROLE_ADMIN");
+        grantAuthorities[0].put("_class", "org.springframework.security.core.authority.SimpleGrantedAuthority");
+        grantAuthorities[1].put("role", "ROLE_USER");
+        grantAuthorities[1].put("_class", "org.springframework.security.core.authority.SimpleGrantedAuthority");
+    }
+
+<%_ } _%>
     @ChangeSet(order = "01", author = "initiator", id = "01-addAuthorities")
     public void addAuthorities(DB db) {
         DBCollection authorityCollection = db.getCollection("jhi_authority");
@@ -111,6 +120,43 @@ public class InitialSetupMigration {
                 .add("provider_user_id", 1)
                 .get(),
             "user-prov-provusr-idx", true);
+    }
+
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
+    @ChangeSet(order = "04", author = "initiator", id = "04-addOAuthClientDetails")
+    public void addOAuthClientDetails(DB db) {
+
+        DBCollection usersCollection = db.getCollection("OAUTH_AUTHENTICATION_CLIENT_DETAILS");
+        usersCollection.insert(BasicDBObjectBuilder.start()
+            .add("_id", "client-1")
+            .add("clientId", "mongooauthapp")
+            .add("clientSecret", "my-secret-token-to-change-in-production")
+            .add("resourceIds", Collections.singletonList("res_<%= baseName %>"))
+            .add("scope", Arrays.asList("read", "write"))
+            .add("authorizedGrantTypes", Arrays.asList("password", "refresh_token", "authorization_code", "implicit"))
+            //.add("web_server_redirect_uri", null)
+            .add("authorities", grantAuthorities)
+            .add("accessTokenValiditySeconds", 1800)
+            .add("refreshTokenValiditySeconds", 2000)
+            //.add("autoapprove", false)
+            .get()
+        );
+
+        usersCollection.insert(BasicDBObjectBuilder.start()
+            .add("_id", "client-2")
+            .add("clientId", "your-client-id")
+            .add("clientSecret", "your-client-secret-if-required")
+            .add("resourceIds", Collections.singletonList("res_<%= baseName %>"))
+            .add("scope", Collections.singletonList("access"))
+            .add("authorizedGrantTypes", Arrays.asList("refresh_token", "authorization_code", "implicit"))
+            //.add("web_server_redirect_uri", null)
+            .add("authorities", grantAuthorities)
+            .add("accessTokenValiditySeconds", 1800)
+            .add("refreshTokenValiditySeconds", 2000)
+            //.add("autoapprove", false)
+            .get()
+        );
     }
 <%_ } _%>
 }
