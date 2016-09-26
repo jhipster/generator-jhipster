@@ -1,14 +1,14 @@
 # <%= baseName %>
 
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>/](https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>).
+<% if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa' ) { %>
+This is a <%= applicationType %> application intended to be part of a microservice architecture, please refer to the [http://jhipster.github.io/microservices-architecture/]("Doing microservices with JHipster" page of the documentation) for more information.
 
-<%_ if (applicationType == 'gateway') { _%>
-<%- include('_micro_services_architecture.md'); %>
-<%_ } _%>
+<% if (applicationType == 'uaa' ) { %>This is also a JHipster User Account and Authentication (UAA) Server, refer to the [http://jhipster.github.io/using-uaa/](`Using UAA for Microservice Security` page) for details on how to secure JHipster microservices with OAuth2.<% } %><% } %>
 ## Development
 
-Before you can build this project, you must install and configure the following dependencies on your machine:
 <% if(!skipClient) { %>
+Before you can build this project, you must install and configure the following dependencies on your machine:
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
 
@@ -31,7 +31,7 @@ auto-refreshes when files change on your hard drive.
 Bower is used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in `bower.json`. You can also run `bower update` and `bower install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
-<% } %>
+<% } %>For instructions on how to start developing your JHipster application, have a look at the [http://jhipster.github.io/development/](`Using JHipster in development` page).
 
 ## Building for production
 
