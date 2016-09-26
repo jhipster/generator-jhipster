@@ -34,8 +34,6 @@ export class RegisterComponent implements OnInit {
     }
 
     register() {
-        //TODO: remove this once Auth service is migrated
-        let vm = this;
         if (this.registerAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
@@ -45,16 +43,16 @@ export class RegisterComponent implements OnInit {
             this.errorUserExists = null;
             this.errorEmailExists = null;
 
-            this.auth.createAccount(this.registerAccount).then(function () {
-                vm.success = true;
-            }).catch(function (response) {
-                vm.success = null;
+            this.auth.createAccount(this.registerAccount).then(() => {
+                this.success = true;
+            }).catch((response) => {
+                this.success = null;
                 if (response.status === 400 && response.data === 'login already in use') {
-                    vm.errorUserExists = 'ERROR';
+                    this.errorUserExists = 'ERROR';
                 } else if (response.status === 400 && response.data === 'e-mail address already in use') {
-                    vm.errorEmailExists = 'ERROR';
+                    this.errorEmailExists = 'ERROR';
                 } else {
-                    vm.error = 'ERROR';
+                    this.error = 'ERROR';
                 }
             });
         }

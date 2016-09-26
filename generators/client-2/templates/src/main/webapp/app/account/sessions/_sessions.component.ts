@@ -15,31 +15,27 @@ export class SessionsComponent implements OnInit {
     error: string;
     success: string;
     sessions: Session[];
-    Principal: any;
 
-    constructor(private sessionsService: SessionsService, @Inject('Principal') Principal) {
-        this.Principal = Principal;
-    }
+    constructor(private sessionsService: SessionsService, @Inject('Principal') private Principal) {}
 
     ngOnInit() {
         this.sessionsService.findAll().subscribe(sessions => this.sessions = sessions);
 
-        this.Principal.identity().then(function(account) {
+        this.Principal.identity().then((account) => {
             this.account = account;
-        }.bind(this));
+        });
     }
 
     invalidate (series) {
-        let vm = this;
         this.sessionsService.delete(encodeURIComponent(series)).subscribe(
             response => {
                 if (response.status === 200) {
-                    vm.error = null;
-                    vm.success = 'OK';
+                    this.error = null;
+                    this.success = 'OK';
                     this.sessionsService.findAll().subscribe(sessions => this.sessions = sessions);
                 } else {
-                    vm.success = null;
-                    vm.error = 'ERROR';
+                    this.success = null;
+                    this.error = 'ERROR';
                 }
             });
     }

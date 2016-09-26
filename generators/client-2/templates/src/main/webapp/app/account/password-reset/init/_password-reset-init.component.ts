@@ -9,11 +9,8 @@ export class PasswordResetInitComponent implements OnInit {
     errorEmailNotExists: string;
     resetAccount: any;
     success: string;
-    Auth: any;
 
-    constructor(@Inject('Auth') Auth, private elementRef: ElementRef, private renderer: Renderer) {
-        this.Auth = Auth;
-    }
+    constructor(@Inject('Auth') private Auth, private elementRef: ElementRef, private renderer: Renderer) {}
 
     ngOnInit() {
         this.resetAccount = {};
@@ -28,15 +25,14 @@ export class PasswordResetInitComponent implements OnInit {
         this.error = null;
         this.errorEmailNotExists = null;
 
-        let vm = this;
-        this.Auth.resetPasswordInit(this.resetAccount.email).then(function () {
-            vm.success = 'OK';
-        }).catch(function (response) {
-            vm.success = null;
+        this.Auth.resetPasswordInit(this.resetAccount.email).then(() => {
+            this.success = 'OK';
+        }).catch((response) => {
+            this.success = null;
             if (response.status === 400 && response.data === 'e-mail address not registered') {
-                vm.errorEmailNotExists = 'ERROR';
+                this.errorEmailNotExists = 'ERROR';
             } else {
-                vm.error = 'ERROR';
+                this.error = 'ERROR';
             }
         });
     }

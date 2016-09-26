@@ -14,16 +14,10 @@ export class PasswordResetFinishComponent implements OnInit {
     login: any;
     resetAccount: any;
     success: string;
-    Auth: any;
-    LoginService: any;
-    $stateParams: any;
 
-    constructor(@Inject('Auth') Auth, @Inject('LoginService') LoginService, @Inject('$stateParams') $stateParams,
-                private elementRef: ElementRef, private renderer: Renderer) {
-        this.Auth = Auth;
-        this.LoginService = LoginService;
-        this.$stateParams = $stateParams;
-    }
+    constructor(@Inject('Auth') private Auth, @Inject('LoginService') private LoginService,
+                @Inject('$stateParams') private $stateParams,
+                private elementRef: ElementRef, private renderer: Renderer) {}
 
     ngOnInit() {
         this.resetAccount = {};
@@ -32,8 +26,9 @@ export class PasswordResetFinishComponent implements OnInit {
     }
 
     ngAfterViewInit() {
-        if (this.elementRef.nativeElement.querySelector('#password') != null)
+        if (this.elementRef.nativeElement.querySelector('#password') != null) {
           this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#password'), 'focus', []);
+        }
     }
 
     finishReset() {
@@ -42,12 +37,11 @@ export class PasswordResetFinishComponent implements OnInit {
         if (this.resetAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            let vm = this;
-            this.Auth.resetPasswordFinish({key: this.$stateParams.key, newPassword: this.resetAccount.password}).then(function () {
-                vm.success = 'OK';
-            }).catch(function () {
-                vm.success = null;
-                vm.error = 'ERROR';
+            this.Auth.resetPasswordFinish({key: this.$stateParams.key, newPassword: this.resetAccount.password}).then(() => {
+                this.success = 'OK';
+            }).catch(() => {
+                this.success = null;
+                this.error = 'ERROR';
             });
         }
     }

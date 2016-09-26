@@ -8,25 +8,18 @@ export class ActivateComponent implements OnInit {
     error: string;
     login: Function;
     success: string;
-    Auth: any;
-    LoginService: any;
-    $stateParams: any;
 
-    constructor(@Inject('Auth') Auth, @Inject('LoginService') LoginService, @Inject('$stateParams') $stateParams) {
-        this.Auth = Auth;
-        this.LoginService = LoginService;
-        this.$stateParams = $stateParams;
+    constructor(@Inject('Auth') private Auth, @Inject('LoginService') private LoginService, @Inject('$stateParams') private $stateParams) {
         this.login = this.LoginService.open;
     }
 
     ngOnInit () {
-        let vm = this;
-        this.Auth.activateAccount({key: this.$stateParams.key}).then(function () {
-            vm.error = null;
-            vm.success = 'OK';
-        }).catch(function () {
-            vm.success = null;
-            vm.error = 'ERROR';
+        this.Auth.activateAccount({key: this.$stateParams.key}).then(() => {
+            this.error = null;
+            this.success = 'OK';
+        }).catch(() => {
+            this.success = null;
+            this.error = 'ERROR';
         });
     }
 

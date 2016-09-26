@@ -20,7 +20,7 @@ export class PasswordStrengthBarComponent {
     constructor(private el: ElementRef) {
         this.strength = {
             colors: ['#F00', '#F90', '#FF0', '#9F0', '#0F0'],
-            mesureStrength: function (p) {
+            mesureStrength: (p) => {
 
                 var _force = 0;
                 var _regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
@@ -31,7 +31,7 @@ export class PasswordStrengthBarComponent {
                 var _symbols = _regex.test(p);
 
                 var _flags = [_lowerLetters, _upperLetters, _numbers, _symbols];
-                var _passedMatches = $.grep(_flags, function (el) {
+                var _passedMatches = $.grep(_flags, (el) => {
                     return el === true;
                 }).length;
 
