@@ -14,6 +14,9 @@ public final class DefaultProfileUtil {
 
     private static final String SPRING_PROFILE_DEFAULT = "spring.profiles.default";
 
+    private DefaultProfileUtil(){
+    }
+
     /**
      * Set a default to use when no profile is configured.
      *
