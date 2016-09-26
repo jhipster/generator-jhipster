@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 @Injectable()
 export class DataUtils {
 
-    constructor (@Inject('Window') window: Window) {}
+    constructor (@Inject('Window') private window: Window) {}
 
     abbreviate (text: string) {
         if (typeof text !== 'string') {
@@ -46,7 +46,7 @@ export class DataUtils {
     }
 
     openFile (type: string, data: string) {
-        window.open('data:' + type + ';base64,' + data, '_blank', 'height=300,width=400');
+        this.window.open('data:' + type + ';base64,' + data, '_blank', 'height=300,width=400');
     }
 
     toBase64 (file: File, cb: Function) {

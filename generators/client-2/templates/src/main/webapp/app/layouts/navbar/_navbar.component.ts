@@ -28,11 +28,9 @@ export class NavbarComponent implements OnInit {
                 private profileService: ProfileService) { }
 
     ngOnInit() {
-        //TODO: Remove this once language service in migrated and use 'subscribe' instead of 'then'
-        let vm = this;
         <%_ if (enableTranslation){ _%>
-        this.languageService.getAll().then(function (languages) {
-            vm.languages = languages;
+        this.languageService.getAll().then((languages) => {
+            this.languages = languages;
         });
 
         this.changeLanguage = this.languageService.changeLanguage;

@@ -14,14 +14,13 @@ import { AlertService } from "./alert.service";
 })
 export class JhiAlertErrorComponent implements OnDestroy {
 
-    $rootScope: any;
     alerts: any[];
     cleanHttpErrorListener: Function;
 
-    constructor(private alertService: AlertService, @Inject('$rootScope') $rootScope, @Inject('$translate') $translate) {
+    constructor(private alertService: AlertService, @Inject('$rootScope') private $rootScope, @Inject('$translate') private $translate) {
         this.alerts = [];
 
-        this.cleanHttpErrorListener = $rootScope.$on('ng2TApp.httpError', function (event, httpResponse) {
+        this.cleanHttpErrorListener = $rootScope.$on('ng2TApp.httpError', (event, httpResponse) => {
             var i;
             event.stopPropagation();
             switch (httpResponse.status) {

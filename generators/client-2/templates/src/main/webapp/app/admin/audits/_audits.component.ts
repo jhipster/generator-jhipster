@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { Audit } from './audit.model';
@@ -20,10 +20,11 @@ export class AuditsComponent implements OnInit {
     totalItems: number;
     datePipe : DatePipe;
 
-    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks){ 
+    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string){ 
         this.page = 1;
         this.reverse = false;
         this.orderProp = 'timestamp';
+        this.datePipe =  new DatePipe(this.locale); //TODO see if there is a better way to inject pipes
     }
 
     getAudits () {
@@ -45,7 +46,6 @@ export class AuditsComponent implements OnInit {
         this.auditsService.query({page: this.page - 1, size: 20, fromDate: this.fromDate, toDate: this.toDate}).subscribe(res => {
             this.audits = res.json();
             this.links = this.parseLinks.parse(res.headers.get('link'));
-            console.log(this.audits);
             this.totalItems = + res.headers.get('X-Total-Count');
         });
     }
