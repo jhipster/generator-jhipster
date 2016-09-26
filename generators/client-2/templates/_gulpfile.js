@@ -104,9 +104,9 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
 });
 
 gulp.task('tscompile', function(cb){
-     return gulp.src([config.app + 'app/**/*.ts', 'typings/**/*.d.ts'])
+    return gulp.src([config.app + 'app/**/*.ts', 'typings/**/*.d.ts'])
         .pipe(sourcemaps.init())
-        .pipe(ts(tsProject))
+        .pipe(tsProject())
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(config.dist  + 'app'))
         .pipe(browserSync.reload({stream: true}));

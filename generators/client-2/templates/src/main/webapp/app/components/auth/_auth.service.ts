@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 Auth.$inject = ['$rootScope', '$state', '$sessionStorage', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
 export function Auth ($rootScope, $state, $sessionStorage, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {

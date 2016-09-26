@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import { Register } from './register/register.service';
 import { Activate } from './activate/activate.service';
 import { Password } from './password/password.service';

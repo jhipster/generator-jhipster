@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 NotificationInterceptor.$inject = ['$q'];
 
 export function NotificationInterceptor ($q) {

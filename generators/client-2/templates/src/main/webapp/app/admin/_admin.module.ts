@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import { upgradeAdapter } from '../upgrade_adapter';
 
 import { AdminStateConfig } from './admin.state';

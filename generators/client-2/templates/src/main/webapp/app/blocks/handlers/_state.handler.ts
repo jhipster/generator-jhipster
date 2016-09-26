@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import { VERSION } from '../../app.constants';
 
 StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', /*'<%=jhiPrefixCapitalized%>LanguageService',*/ 'TranslationHandler',<% } %> '$window',

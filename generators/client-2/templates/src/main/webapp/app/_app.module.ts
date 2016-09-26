@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import './components/common.module';
 import './account/account.module';
 import './admin/admin.module';

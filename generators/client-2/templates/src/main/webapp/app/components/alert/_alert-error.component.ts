@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import { Component, Inject, OnDestroy } from '@angular/core';
 import { AlertService } from "./alert.service";
 
