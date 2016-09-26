@@ -29,7 +29,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('3.6.0')) {
         generator.removeFile(javaDir + 'config/HerokuDatabaseConfiguration.java');
     }
-    if (generator.isJhipsterVersionLessThan('3.6.2')) {
+    if (generator.isJhipsterVersionLessThan('3.8.1')) {
         generator.removeFile(javaDir + 'config/JacksonConfiguration.java');
     }
 
