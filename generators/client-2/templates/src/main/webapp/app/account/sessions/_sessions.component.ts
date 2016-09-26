@@ -1,3 +1,5 @@
+import * as angular from 'angular';
+
 import {Component, OnInit, Inject} from '@angular/core';
 
 import { Session } from './session.model';
