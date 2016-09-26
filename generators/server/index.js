@@ -131,27 +131,29 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
 
+            this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+            this.packagejs = packagejs;
             this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
-            this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+
             this.packageName = this.config.get('packageName');
             this.serverPort = this.config.get('serverPort');
             if (this.serverPort === undefined) {
                 this.serverPort = '8080';
             }
-            this.authenticationType = this.config.get('authenticationType');
+            this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
             this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
             if (this.searchEngine === undefined) {
                 this.searchEngine = false;
             }
-            this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
+            this.messageBroker = this.config.get('messageBroker');
             if (this.messageBroker === undefined) {
                 this.messageBroker = false;
             }
-            this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
+
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';
@@ -174,8 +176,8 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
-            this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.authenticationType = this.config.get('authenticationType');
             if (this.authenticationType === 'session') {
                 this.rememberMeKey = this.config.get('rememberMeKey');
             }
@@ -189,6 +191,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
             var baseName = this.config.get('baseName');
             if (baseName) {
+                // to avoid overriding name from configOptions
                 this.baseName = baseName;
             }
 
