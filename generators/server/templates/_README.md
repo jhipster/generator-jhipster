@@ -1,6 +1,6 @@
 # <%= baseName %>
 
-This application was generated using JHipster, you can find documentation and help at [https://jhipster.github.io](https://jhipster.github.io).
+This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>/](https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>).
 
 <%_ if (applicationType == 'gateway') { _%>
 <%- include('_micro_services_architecture.md'); %>
