@@ -1,15 +1,18 @@
-(function() {
-    'use strict';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .factory('Sessions', Sessions);
+import { Session } from './session.model';
 
-    Sessions.$inject = ['$resource'];
+@Injectable()
+export class SessionsService {
+    constructor(private http: Http) { }
 
-    function Sessions ($resource) {
-        return $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/sessions/:series'<%} else { %>'api/account/sessions/:series'<% } %>, {}, {
-            'getAll': { method: 'GET', isArray: true}
-        });
+    findAll(): Observable<Session[]> {
+        return this.http.get(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/sessions/'<%} else { %>'api/account/sessions/'<% } %>).map((res: Response) => res.json());
     }
-})();
+
+    delete(series:string): Observable<Response> {
+        return this.http.delete(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/account/sessions/${series}`<%} else { %>`api/account/sessions/${series}`<% } %>);
+    }
+}

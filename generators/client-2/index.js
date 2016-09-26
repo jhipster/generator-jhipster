@@ -408,8 +408,9 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.authenticationType === 'session') {
                 this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
                 this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.ts', ANGULAR_DIR + 'account/sessions/sessions.state.ts', this, {});
-                this.template(ANGULAR_DIR + 'account/sessions/_sessions.controller.ts', ANGULAR_DIR + 'account/sessions/sessions.controller.ts', this, {});
+                this.template(ANGULAR_DIR + 'account/sessions/_sessions.component.ts', ANGULAR_DIR + 'account/sessions/sessions.component.ts', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_sessions.service.ts', ANGULAR_DIR + 'account/sessions/sessions.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'account/sessions/_session.model.ts', ANGULAR_DIR + 'account/sessions/session.model.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'account/settings/settings.html', ANGULAR_DIR + 'account/settings/settings.html');
             this.copyJs(ANGULAR_DIR + 'account/settings/_settings.state.ts', ANGULAR_DIR + 'account/settings/settings.state.ts', this, {});

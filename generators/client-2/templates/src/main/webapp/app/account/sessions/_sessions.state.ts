@@ -1,33 +1,23 @@
-(function() {
-    'use strict';
+SessionsStateConfig.$inject = ['$stateProvider'];
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .config(stateConfig);
-
-    stateConfig.$inject = ['$stateProvider'];
-
-    function stateConfig($stateProvider) {
-        $stateProvider.state('sessions', {
-            parent: 'account',
-            url: '/sessions',
-            data: {
-                authorities: ['ROLE_USER'],
-                pageTitle: 'global.menu.account.sessions'
-            },
-            views: {
-                'content@': {
-                    templateUrl: 'app/account/sessions/sessions.html',
-                    controller: 'SessionsController',
-                    controllerAs: 'vm'
-                }
-            },
-            resolve: {
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('sessions');
-                    return $translate.refresh();
-                }]
+export function SessionsStateConfig($stateProvider) {
+    $stateProvider.state('sessions', {
+        parent: 'account',
+        url: '/sessions',
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'global.menu.account.sessions'
+        },
+        views: {
+            'content@': {
+                template: '<sessions></sessions>'
             }
-        });
-    }
-})();
+        },
+        resolve: {
+            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                $translatePartialLoader.addPart('sessions');
+                return $translate.refresh();
+            }]
+        }
+    });
+}
