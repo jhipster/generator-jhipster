@@ -106,7 +106,7 @@ function askForServerSideOpts() {
             type: 'list',
             name: 'serviceDiscoveryType',
             message: function (response) {
-                return getNumberedQuestion('Which Service Discovery and Configuration solution would you like to use?', applicationType === 'gateway' || applicationType === 'microservice');
+                return getNumberedQuestion('Which Service Discovery and Configuration solution would you like to use?', applicationType === 'gateway' || applicationType === 'microservice' ||  applicationType === 'uaa');
             },
             choices: [
                 {
@@ -118,7 +118,7 @@ function askForServerSideOpts() {
                     name: 'Consul (using Spring Cloud Consul)'
                 },
                 {
-                    value: 'no',
+                    value: false,
                     name: 'No Service Discovery and Configuration'
                 }
             ],
