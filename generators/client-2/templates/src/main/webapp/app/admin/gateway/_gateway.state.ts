@@ -10,9 +10,7 @@ export function GatewayStateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/admin/gateway/gateway.html',
-                controller: 'GatewayController',
-                controllerAs: 'vm'
+                template: '<<%=jhiPrefix%>-gateway></<%=jhiPrefix%>-gateway>'
             }
         },
         resolve: {

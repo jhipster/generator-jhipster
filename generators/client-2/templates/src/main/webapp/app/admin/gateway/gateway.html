@@ -3,10 +3,7 @@
 
     <h3 translate="gateway.routes.title">Current routes</h3>
     <p>
-        <button type="button" class="btn btn-primary" ng-click="vm.refresh()" ng-show="vm.updatingRoutes == false">
-            <span class="glyphicon glyphicon-refresh glyphicon-"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
-        </button>
-        <button type="button" class="btn btn-danger" ng-show="vm.updatingRoutes">
+        <button type="button" class="btn btn-primary" (click)="refresh()" (disabled)="updatingRoutes">
             <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
         </button>
     </p>
@@ -19,18 +16,18 @@
         </tr>
         </thead>
 
-        <tr ng-repeat="route in vm.gatewayRoutes">
+        <tr *ngFor="let route of gatewayRoutes">
             <td>{{route.path}}</td>
             <td>{{route.serviceId}}</td>
             <td>
-                <div ng-show="{{route.serviceInstances.length == 0}}" class="label label-danger" translate="gateway.routes.error">
+                <div *ngIf="route.serviceInstances.length == 0" class="label label-danger" translate="gateway.routes.error">
                     Warning: no server available!
                 </div>
-                <table class="tabletable-responsive">
-                    <tr ng-repeat="instance in route.serviceInstances">
+                <table class="table table-responsive" *ngIf="route !== null">
+                    <tr *ngFor="let instance of route.serviceInstances">
                         <td>{{instance.host}}:{{instance.port}}</td>
-                        <td ng-show="{{instance.instanceInfo.status == 'UP'}}"><div class="label label-success">{{instance.instanceInfo.status}}</div></td>
-                        <td ng-hide="{{instance.instanceInfo.status == 'UP'}}"><div class="label label-danger">{{instance.instanceInfo.status}}</div></td>
+                        <td *ngIf="instance.instanceInfo.status == 'UP'"><div class="label label-success">{{instance.instanceInfo.status}}</div></td>
+                        <td *ngIf="!instance.instanceInfo.status == 'UP'"><div class="label label-danger">{{instance.instanceInfo.status}}</div></td>
                     </tr>
                 </table>
             </td>
