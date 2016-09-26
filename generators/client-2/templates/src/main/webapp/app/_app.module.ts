@@ -12,6 +12,7 @@ import { TranslationHandler } from './blocks/handlers/translation.handler';
 
 import { TranslationConfig } from './blocks/config/translation.config';
 import { TranslationStorageProvider } from './blocks/config/translation-storage.provider';<% } %>
+import { UIRouterDeferInterceptConfig } from "./blocks/config/ui-router-defer-intercept.config";
 
 import { CompileServiceConfig } from './blocks/config/compile.config';
 import { HttpConfig } from './blocks/config/http.config';
@@ -45,7 +46,7 @@ angular
         'ngCacheBuster',
         'ngFileUpload',
         'ui.bootstrap',
-        'ui.router',
+        'ui.router.upgrade',
         'infinite-scroll',
         'angular-loading-bar',
         // jhipster-needle-angularjs-add-module JHipster will add new module here
@@ -62,6 +63,7 @@ angular
     .config(AppStateConfig)
     .config(HomeStateConfig)
     .config(ErrorStateConfig)
+    .config(UIRouterDeferInterceptConfig)
     .directive('home', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(HomeComponent))
     .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
     .directive('footer', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(FooterComponent))

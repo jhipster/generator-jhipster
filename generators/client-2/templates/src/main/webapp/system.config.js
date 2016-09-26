@@ -12,7 +12,10 @@
         'rxjs': 'vendor/rxjs',
         'main': 'app.main',
         '@ng-bootstrap': 'vendor/@ng-bootstrap',
-        'ui-router-ng2': 'vendor/ui-router-ng2/_bundles/ui-router-ng2',
+        'angular-ui-router': 'vendor/angular-ui-router/release/angular-ui-router.js',
+        'ui-router-ng2': 'vendor/ui-router-ng2/_bundles/ui-router-ng2.js',
+        'ui-router-ng1-to-ng2': 'vendor/ui-router-ng1-to-ng2/ng1-to-ng2.js',
+        'ui-router-visualizer': 'vendor/ui-router-visualizer/release/visualizer.min.js',
         'jquery' : 'vendor/jquery/dist'
     };
     // packages tells the System loader how to load when no filename and/or no extension
@@ -48,7 +51,6 @@
     ngPackageNames.forEach(setPackageConfig);
 
     var config = {
-        meta: { "ui-router-ng2": { format: "cjs" } },
         map: map,
         packages: packages
     };
