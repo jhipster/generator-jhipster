@@ -468,6 +468,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/session.model.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.component.ts',
