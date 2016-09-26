@@ -424,7 +424,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/log.model.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.component.ts',
 
         CLIENT_MAIN_SRC_DIR + 'app/components/common.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/principal.service.ts',
@@ -476,7 +476,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.ts',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.html',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/error/accessdenied.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.state.ts',
 
         CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts',

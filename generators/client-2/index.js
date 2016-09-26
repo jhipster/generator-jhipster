@@ -460,8 +460,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics.html', ANGULAR_DIR + 'admin/metrics/metrics.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics-modal.html', ANGULAR_DIR + 'admin/metrics/metrics-modal.html', this, {}, true);
             this.copyJs(ANGULAR_DIR + 'admin/metrics/_metrics.state.ts', ANGULAR_DIR + 'admin/metrics/metrics.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/metrics/_metrics.controller.ts', ANGULAR_DIR + 'admin/metrics/metrics.controller.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/metrics/_metrics-modal.controller.ts', ANGULAR_DIR + 'admin/metrics/metrics-modal.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/metrics/_metrics.component.ts', ANGULAR_DIR + 'admin/metrics/metrics.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/metrics/_metrics-modal.component.ts', ANGULAR_DIR + 'admin/metrics/metrics-modal.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.service.ts', ANGULAR_DIR + 'admin/metrics/metrics.service.ts', this, {});
             if (this.websocket === 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
@@ -560,7 +560,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'layouts/footer/footer.html', ANGULAR_DIR + 'layouts/footer/footer.html');
             this.template(ANGULAR_DIR + 'layouts/footer/_footer.component.ts', ANGULAR_DIR + 'layouts/footer/footer.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
-            this.copyHtml(ANGULAR_DIR + 'layouts/error/accessdenied.html', ANGULAR_DIR + 'layouts/error/accessdenied.html');
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.ts', ANGULAR_DIR + 'layouts/error/error.state.ts', this, {});
             this.template(ANGULAR_DIR + 'layouts/error/_error.component.ts', ANGULAR_DIR + 'layouts/error/error.component.ts', this, {});
         },
