@@ -98,17 +98,11 @@ function askForTestOpts() {
     var defaultChoice = [];
     if (!this.skipServer) {
         // all server side test frameworks should be addded here
-        if (this.configOptions.messageBroker === 'kafka') {
-            choices.push(
-                {name: 'Cucumber', value: 'cucumber'}
-            );
-        } else {
-            choices.push(
-                {name: 'Gatling', value: 'gatling'},
-                {name: 'Cucumber', value: 'cucumber'}
-            );
-            defaultChoice = ['gatling'];
-        }
+        choices.push(
+            {name: 'Gatling', value: 'gatling'},
+            {name: 'Cucumber', value: 'cucumber'}
+        );
+        defaultChoice = ['gatling'];
     }
     if (!this.skipClient) {
         // all client side test frameworks should be addded here

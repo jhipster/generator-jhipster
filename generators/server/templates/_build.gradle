@@ -207,7 +207,8 @@ dependencies {
     compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
     <%_ if (messageBroker === 'kafka') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-stream-kafka"
+    compile "org.springframework.cloud:spring-cloud-stream"
+    compile "org.springframework.cloud:spring-cloud-stream-binder-kafka"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-security"
     compile ("org.springframework.boot:spring-boot-starter-web") {

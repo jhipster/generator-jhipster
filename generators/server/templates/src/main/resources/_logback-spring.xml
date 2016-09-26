@@ -54,6 +54,7 @@
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
     <%_ if (messageBroker == 'kafka') { _%>
+    <logger name="kafka" level="WARN"/>
     <logger name="org.I0Itec" level="WARN"/>
     <%_ } _%>
     <logger name="springfox" level="WARN"/>
