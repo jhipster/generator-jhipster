@@ -10,9 +10,7 @@ export function MetricsStateConfig($stateProvider) {
         },
         views: {
             'content@': {
-                templateUrl: 'app/admin/metrics/metrics.html',
-                controller: '<%=jhiPrefixCapitalized%>MetricsMonitoringController',
-                controllerAs: 'vm'
+                template: '<jhi-metrics></jhi-metrics>'
             }
         },
         resolve: {

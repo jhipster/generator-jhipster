@@ -1,29 +1,18 @@
-import { Injectable, Pipe, PipeTransform } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/map';
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-<%=jhiPrefixCapitalized%>MetricsService.$inject = ['$rootScope'];
 
-export function <%=jhiPrefixCapitalized%>MetricsService ($rootScope) {
-    var service = {
-        getMetrics: getMetrics,
-        threadDump: threadDump
-    };
+@Injectable()
+export class <%=jhiPrefixCapitalized%>MetricsService {
 
-    return service;    
+    constructor (private http: Http) {}
 
-    function getMetrics () {
-        return this.http.get('management/jhipster/metrics').toPromise().
-            then( (response) => {
-                return response.data;
-        });
+    getMetrics(): Observable<any> {
+        return this.http.get('management/jhipster/metrics').map((res: Response) => res.json());
     }
 
-    function threadDump () {
-        return this.http.get('management/dump').toPromise().
-            then(response => {
-                return response.data;
-        });
+    threadDump(): Observable<any> {
+        return this.http.get('management/dump').map((res: Response) => res.json());
     }
 }
