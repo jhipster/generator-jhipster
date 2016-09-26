@@ -17,6 +17,7 @@
         'ui-router-ng1-to-ng2': 'vendor/ui-router-ng1-to-ng2/ng1-to-ng2.js',
         'ui-router-visualizer': 'vendor/ui-router-visualizer/release/visualizer.min.js',
         'jquery' : 'vendor/jquery/dist',
+        'css' : 'vendor/systemjs-plugin-css/css.js',
         // app barrels
         'account' : 'app/account',
         'admin' : 'app/admin',
