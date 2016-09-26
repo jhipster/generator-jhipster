@@ -96,7 +96,6 @@
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.2.2",
     "typescript": "^2.0.3",
-    "typings ": "1.3.2",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
     <%_ } _%>
@@ -107,9 +106,10 @@
   },
   "scripts": {
     "test": "gulp test",
-    "postinstall": "typings install<% if (testFrameworks.indexOf('protractor') > -1) { %> && webdriver-manager update<% } %>",
+    <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
+    "postinstall": "webdriver-manager update",
+    <%_ } _%>
     "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "typings": "typings"
+    "tsc:w": "tsc -w"
   }
 }
