@@ -23,7 +23,6 @@
     "angular-translate-loader-partial": "2.11.0",
     "angular-translate-storage-cookie": "2.11.0",
     <%_ } _%>
-    "angular-ui-router": "0.3.0",
     <%_ if (useSass) { _%>
     "bootstrap-sass": "3.3.6",
     <%_ } else { _%>

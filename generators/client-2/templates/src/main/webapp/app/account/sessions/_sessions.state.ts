@@ -1,23 +1,20 @@
-SessionsStateConfig.$inject = ['$stateProvider'];
+import { SessionsComponent } from "./sessions.component";
 
-export function SessionsStateConfig($stateProvider) {
-    $stateProvider.state('sessions', {
-        parent: 'account',
-        url: '/sessions',
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'global.menu.account.sessions'
-        },
-        views: {
-            'content@': {
-                template: '<sessions></sessions>'
-            }
-        },
-        resolve: {
-            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                $translatePartialLoader.addPart('sessions');
-                return $translate.refresh();
-            }]
-        }
-    });
-}
+export const sessionsState = {
+    name: 'sessions',
+    parent: 'account',
+    url: '/sessions',
+    data: {
+        authorities: ['ROLE_USER'],
+        pageTitle: 'global.menu.account.sessions'
+    },
+    views: {
+        'content@': { component: SessionsComponent }
+    },
+    resolve: {
+        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+            $translatePartialLoader.addPart('sessions');
+            return $translate.refresh();
+        }]
+    }
+};

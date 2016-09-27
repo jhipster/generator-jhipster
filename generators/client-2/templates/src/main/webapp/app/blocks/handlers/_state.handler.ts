@@ -1,29 +1,30 @@
-import * as angular from 'angular';
+import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
+import { Transition } from "ui-router-ng2";
+declare var SystemJS;
 
-import { VERSION } from '../../app.constants';
+StateHandler.$inject = ['$rootScope', '$transitions', <% if (enableTranslation) { %>'$translate', /*'<%=jhiPrefixCapitalized%>LanguageService',*/ 'TranslationHandler',<% } %> '$window',
+        'Auth', 'Principal', '$uiRouter', '$trace'];
 
-StateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', <% if (enableTranslation) { %>'$translate', /*'<%=jhiPrefixCapitalized%>LanguageService',*/ 'TranslationHandler',<% } %> '$window',
-        'Auth', 'Principal'];
+export function StateHandler($rootScope, $transitions, <% if (enableTranslation) { %>$translate, /*<%=jhiPrefixCapitalized%>LanguageService,*/ TranslationHandler,<% } %> $window,
+    Auth, Principal, $uiRouter, $trace) {
 
-export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableTranslation) { %>$translate, /*<%=jhiPrefixCapitalized%>LanguageService,*/ TranslationHandler,<% } %> $window,
-    Auth, Principal) {
+    if (DEBUG_INFO_ENABLED) {
+        $trace.enable('TRANSITION');
+        SystemJS.import('ui-router-visualizer').then(vis => vis.visualizer($uiRouter));
+    }
+
     return {
         initialize: initialize
     };
 
     function initialize() {
         $rootScope.VERSION = VERSION;
+        let deregistrationFns = [];
 
-        var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
-            $rootScope.toState = toState;
-            $rootScope.toStateParams = toStateParams;
-            $rootScope.fromState = fromState;
-
-            // Redirect to a state with an external URL (http://stackoverflow.com/a/30221248/1098564)
-            if (toState.external) {
-                event.preventDefault();
-                $window.open(toState.url, '_self');
-            }
+        deregistrationFns.push($transitions.onStart({}, (transition: Transition) => {
+            $rootScope.toState = transition.to();
+            $rootScope.toParams = transition.params();
+            $rootScope.fromState = transition.from();
 
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
@@ -35,9 +36,16 @@ export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableT
                 $translate.use(language);
             });*/
             <% } %>
-        });
+        }));
 
-        var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
+        // Redirect to a state with an external URL (http://stackoverflow.com/a/30221248/1098564)
+        deregistrationFns.push($transitions.onStart({ to: state => state.external }, (transition: Transition) => {
+            $window.open(transition.to().url, '_self');
+            return false;
+        }));
+
+        deregistrationFns.push($transitions.onSuccess({}, (transition: Transition) => {
+            let toState = transition.to();
             var titleKey =<% if (enableTranslation) { %> 'global.title' <% }else { %> '<%= baseName %>' <% } %>;
 
             // Set the page title key to the one configured in state or use default one
@@ -45,15 +53,10 @@ export function StateHandler($rootScope, $state, $sessionStorage, <% if (enableT
                 titleKey = toState.data.pageTitle;
             }
             <% if (enableTranslation) { %>TranslationHandler.updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
-        });
+        }));
 
         $rootScope.$on('$destroy', function () {
-            if(angular.isDefined(stateChangeStart) && stateChangeStart !== null){
-                stateChangeStart();
-            }
-            if(angular.isDefined(stateChangeSuccess) && stateChangeSuccess !== null){
-                stateChangeSuccess();
-            }
+            deregistrationFns.forEach(deregisterFn => deregisterFn());
         });
     }
 }

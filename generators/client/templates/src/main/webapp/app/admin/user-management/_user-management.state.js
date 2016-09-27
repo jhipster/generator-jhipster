@@ -80,7 +80,6 @@
             }
         })
         .state('user-management.new', {
-            parent: 'user-management',
             url: '/new',
             data: {
                 authorities: ['ROLE_ADMIN']
@@ -110,7 +109,6 @@
             }]
         })
         .state('user-management.edit', {
-            parent: 'user-management',
             url: '/{login}/edit',
             data: {
                 authorities: ['ROLE_ADMIN']
@@ -135,7 +133,6 @@
             }]
         })
         .state('user-management.delete', {
-            parent: 'user-management',
             url: '/{login}/delete',
             data: {
                 authorities: ['ROLE_ADMIN']
