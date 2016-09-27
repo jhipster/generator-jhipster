@@ -131,13 +131,17 @@ describe('::exportToJSON', function () {
         Exporter.exportToJSON(content);
         expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
         var changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
+        this.timeout(3000);
+        // hack to introduce a 1 second delay
+        // http://stackoverflow.com/questions/14249506/how-can-i-wait-in-node-js-javascript-l-need-to-pause-for-a-period-of-time#answer-37575602
+        var waitTill = new Date(new Date().getTime() + 1 * 1000);
+        while(waitTill > new Date()){}
         input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
         content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
-        Exporter.exportToJSON(content);
+        Exporter.exportToJSON(content, true);
         expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
         var newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
         expect(newChangeLogDate).to.eq(changeLogDate);
-
         // clean up the mess...
         fs.unlinkSync('.jhipster/A.json');
         fs.unlinkSync('.jhipster/B.json');
