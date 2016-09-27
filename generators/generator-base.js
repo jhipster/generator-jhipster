@@ -46,8 +46,8 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
-                '<li uiSrefActive="active" >\n' +
-                '                    <a uiSref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
+                '<li ui-sref-active="active" >\n' +
+                '                    <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                        <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
                 '                        <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                    </a>\n' +
@@ -73,8 +73,8 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [
-                '<li uiSrefActive="active" >\n' +
-                '                            <a uiSref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
+                '<li ui-sref-active="active" >\n' +
+                '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-' + glyphiconName + '"></span>&nbsp;\n' +
                 '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
@@ -99,8 +99,8 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             file: fullPath,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
-                '<li uiSrefActive="active" >\n' +
-                '                            <a uiSref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
+                '<li ui-sref-active="active" >\n' +
+                '                            <a ui-sref="' + routerName + '" ng-click="vm.collapseNavbar()">\n' +
                 '                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;\n' +
                 '                                <span ' + ( enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : '' ) + '>' + _.startCase(routerName) + '</span>\n' +
                 '                            </a>\n' +
