@@ -3,7 +3,8 @@ node_modules
 test/temp
 npm-debug.log
 out/
-.jhipster/
+/.jhipster/
+jhipster-jdl.jh
 .sonar
 coverage/*
 sonar-project.properties
