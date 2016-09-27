@@ -7,8 +7,10 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     VALIDATIONS = require('../lib/core/jhipster/validations'),
     DATABASE_TYPES = require('../lib/core/jhipster/database_types'),
     JDLReader = require('../lib/reader/jdl_reader'),
+    JsonReader = require('../lib/reader/json_reader'),
     convertToJDL = require('../lib/parser/jdl_parser').parse,
     convertToJHipsterJSON = require('../lib/parser/entity_parser').parse,
+    JsonParser = require('../lib/parser/json_parser'),
     JDLObject = require('../lib/core/jdl_object'),
     JDLEntity = require('../lib/core/jdl_entity'),
     JDLField = require('../lib/core/jdl_field'),
@@ -20,6 +22,7 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     JDLBinaryOption = require('../lib/core/jdl_binary_option'),
     exportToJSON = require('../lib/export/json_exporter').exportToJSON,
     createJHipsterJSONFolder = require('../lib/export/json_exporter').createJHipsterJSONFolder,
+    exportToJDL = require('../lib/export/jdl_exporter').exportToJDL,
     toFilePath = require('../lib/reader/json_file_reader').toFilePath,
     readEntityJSON = require('../lib/reader/json_file_reader').readEntityJSON,
     ReservedKeywords = require('../lib/core/jhipster/reserved_keywords'),
@@ -51,11 +54,18 @@ module.exports = {
   /* JDL reading */
   parse: JDLReader.parse,
   parseFromFiles: JDLReader.parseFromFiles,
+  /* Json reading */
+  parseJsonFromDir: JsonReader.parseFromDir,
   /* JDL conversion */
   convertToJDL: convertToJDL,
   convertToJHipsterJSON: convertToJHipsterJSON,
+  /* Json conversion */
+  convertJsonEntitiesToJDL: JsonParser.parseEntities,
+  convertJsonServerOptionsToJDL: JsonParser.parseServerOptions,
   /* JSON exporting */
   exportToJSON: exportToJSON,
+  /* JDL exporting */
+  exportToJDL: exportToJDL,
   /* JDL utils */
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */
