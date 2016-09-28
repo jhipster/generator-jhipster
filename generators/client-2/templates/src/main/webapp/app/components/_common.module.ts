@@ -4,8 +4,6 @@ import { upgradeAdapter } from '../upgrade_adapter';
 
 import { AlertServiceConfig } from '../blocks/config/alert.config';
 
-import { LoginController } from './login/login.controller';
-
 import {
     AuthService,
     AuthServerProvider,
@@ -26,7 +24,6 @@ upgradeAdapter.upgradeNg1Provider('$sessionStorage');
 upgradeAdapter.upgradeNg1Provider('$localStorage');<% if (enableTranslation) { %>
 upgradeAdapter.upgradeNg1Provider('$translate');
 upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');<% } %>
-upgradeAdapter.upgradeNg1Provider('LoginService');
 
 angular
     .module('<%=angularAppName%>.common', [
@@ -43,9 +40,12 @@ angular
     .factory('Auth', upgradeAdapter.downgradeNg2Provider(AuthService))
     .factory('AuthServerProvider', upgradeAdapter.downgradeNg2Provider(AuthServerProvider))
     .factory('Account', upgradeAdapter.downgradeNg2Provider(Account))
-    .factory('LoginService', LoginService)
     .factory('Principal', upgradeAdapter.downgradeNg2Provider(Principal))
+    .factory('LoginService', upgradeAdapter.downgradeNg2Provider(LoginService))
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
+    .factory('Auth', Auth)
+    .factory('AuthServerProvider', AuthServerProvider)
+    .factory('Account', Account)
     .factory('AlertService', upgradeAdapter.downgradeNg2Provider(AlertService))<% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>LanguageService))<% } %>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent));

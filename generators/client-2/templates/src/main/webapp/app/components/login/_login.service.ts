@@ -1,34 +1,25 @@
-LoginService.$inject = ['$uibModal'];
+import * as angular from 'angular';
 
-export function LoginService ($uibModal) {
-    var service = {
-        open: open
-    };
+import { Injectable } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-    var modalInstance = null;
-    var resetModal = function () {
-        modalInstance = null;
-    };
 
-    return service;
+@Injectable()
+export class LoginService {
+    modalInstance: any;
 
-    function open () {
-        if (modalInstance !== null) return;
-        modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'app/components/login/login.html',
-            controller: 'LoginController',
-            controllerAs: 'vm',
-            resolve: {
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('login');
-                    return $translate.refresh();
-                }]
-            }
-        });
-        modalInstance.result.then(
-            resetModal,
-            resetModal
+    constructor (private modalService: NgbModal) {
+        this.modalInstance = null;
+    }
+
+    resetModal () : any {
+        this.modalInstance = null;
+    }
+
+    open (loginTemplate)  {
+        this.modalService.open(loginTemplate).result.then(
+            this.resetModal,
+            this.resetModal
         );
     }
 }

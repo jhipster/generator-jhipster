@@ -8,6 +8,8 @@ import { <%=angular2AppName%>CommonModule } from './components';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module'; //TODO these couldnt be used from barrels due to an error
 import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
+import {<%=jhiPrefixCapitalized%>LoginModalComponent} from "./components/login/login.component";
+
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
 import { NavbarComponent, FooterComponent, <% if (enableTranslation){ %>ActiveMenuDirective, <% } %>ErrorComponent, errorState, accessdeniedState } from './layouts';
@@ -33,6 +35,7 @@ let routerConfig = {
         <%=angular2AppName%>AccountModule
     ],
     declarations: [
+        <%=jhiPrefixCapitalized%>LoginModalComponent,
         HomeComponent,
         NavbarComponent,
         ErrorComponent,

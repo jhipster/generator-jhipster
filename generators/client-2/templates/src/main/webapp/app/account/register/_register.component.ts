@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { Register } from './register.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -12,17 +13,17 @@ export class RegisterComponent implements OnInit {
     error: string;
     errorEmailExists: string;
     errorUserExists: string;
-    login: Function;
     registerAccount: any;
     success: boolean;
+    modalRef: NgbModalRef;
 
     constructor(
             @Inject('$translate') private $translate,
             @Inject('LoginService') private loginService,
             private registerService: Register,
+            private modalService: NgbModal,
             private elementRef: ElementRef,
             private renderer: Renderer) {
-        this.login = loginService.open;
     }
 
     ngOnInit() {
@@ -58,5 +59,10 @@ export class RegisterComponent implements OnInit {
                 }
             });
         }
+    }
+
+    login(template) {
+        this.modalRef = this.modalService.open(template);
+        this.loginService.open(template, this.modalRef);
     }
 }

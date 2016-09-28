@@ -30,6 +30,8 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
+import {<%=jhiPrefixCapitalized%>LoginModalComponent} from "./components/login/login.component";
+
 angular
     .module('<%=angularAppName%>.app', [
         'ngStorage',<% if (enableTranslation) { %>
@@ -56,6 +58,7 @@ angular
     .config(PagerConfig)
     .config(PaginationConfig)
     .config(UIRouterDeferInterceptConfig)
+    .directive('<%=jhiPrefix%>LoginModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>LoginModalComponent))
     .directive('home', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(HomeComponent))
     .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
     .directive('footer', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(FooterComponent))

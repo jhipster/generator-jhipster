@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Account } from '../shared';
 import { Principal } from "../components";
@@ -10,12 +11,13 @@ import { Principal } from "../components";
 })
 export class HomeComponent implements OnInit {
     account: Account;
-    login: Function;
+    modalRef: NgbModalRef;
 
     constructor(private principal: Principal,
                 private $state: StateService,
+                private modalService: NgbModal,
                 @Inject('LoginService') loginService) {
-        this.login = loginService.open;
+
     }
 
     ngOnInit() {
@@ -30,5 +32,10 @@ export class HomeComponent implements OnInit {
 
     register() {
         this.$state.go('register');
+    }
+
+    login(template) {
+        this.modalRef = this.modalService.open(template);
+        this.loginService.open(template, this.modalRef);
     }
 }
