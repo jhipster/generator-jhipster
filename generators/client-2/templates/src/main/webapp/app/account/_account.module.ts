@@ -37,16 +37,6 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
-    .config(AccountStateConfig)
-    .config(ActivateStateConfig)
-    .config(RegisterStateConfig)
-    .config(PasswordStateConfig)
-    .config(PasswordResetInitStateConfig)
-    .config(PasswordResetFinishStateConfig)
-    .config(SettingsStateConfig)
-    <%_ if (authenticationType === 'session') { _%>
-    .config(SessionsStateConfig)
-    <%_ } _%>
     .directive('<%=jhiPrefix%>LoginModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>LoginModalComponent))
     .directive('passwordStrengthBar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordStrengthBarComponent))
     .directive('jhiRegister', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(RegisterComponent))
