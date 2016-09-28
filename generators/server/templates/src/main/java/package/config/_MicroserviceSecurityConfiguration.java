@@ -73,6 +73,9 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+<%_ if (hibernateCache !== 'hazelcast') { _%>
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+<%_ } _%>
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -100,6 +103,11 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     @Inject
     JHipsterProperties jHipsterProperties;
+
+    <%_ if (hibernateCache !== 'hazelcast') { _%>
+    @Inject
+    DiscoveryClient discoveryClient;
+    <%_ } _%>
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -144,6 +152,10 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     private RestTemplate keyUriRestTemplate;
 
     private String getKeyFromAuthorizationServer() {
+        <%_ if (hibernateCache !== 'hazelcast') { _%>
+        // Load available UAA servers
+        discoveryClient.getServices();
+        <%_ } _%>
         HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
         return (String) this.keyUriRestTemplate
             .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
