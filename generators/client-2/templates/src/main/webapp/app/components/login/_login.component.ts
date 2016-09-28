@@ -7,7 +7,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     templateUrl: 'app/components/login/login.html',
     inputs: ['modalRef', 'dismiss']
 })
-export class JhiLoginModalComponent implements OnInit {
+export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     authenticationError: boolean;
     password: string;
     rememberMe: boolean;
