@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
     isNavbarCollapsed: boolean;
     languages: any[];
     swaggerEnabled: boolean;
+    modalRef: NgbModalRef;
 
     constructor(
         private $state: StateService,

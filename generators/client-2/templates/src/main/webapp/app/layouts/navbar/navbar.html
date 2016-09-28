@@ -73,7 +73,7 @@
                             </a>
                         </li>
                         <li *ngSwitchCase="false">
-                            <a href="" (click)="login()" id="login">
+                            <a (click)="login(loginModal)" id="login">
                                 <span class="glyphicon glyphicon-log-in"></span>&nbsp;
                                 <span translate="global.menu.account.login">Sign in</span>
                             </a>
@@ -184,3 +184,7 @@
         </div>
     </div>
 </nav>
+<!-- this is a workaround untill ng-bootstrap supports components as modal content https://github.com/ng-bootstrap/ng-bootstrap/issues/680 -->
+<template #loginModal let-dismiss="dismiss">
+    <<%=jhiPrefix%>-login-modal [modalRef]="modalRef" [dismiss]="dismiss"></<%=jhiPrefix%>-login-modal>
+</template>

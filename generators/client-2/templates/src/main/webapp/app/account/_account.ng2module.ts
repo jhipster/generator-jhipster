@@ -47,6 +47,7 @@ let ACCOUNT_STATES = [
 
 @NgModule({
     imports: [
+        BrowserModule,
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>CommonModule,
         UIRouterModule.forChild({ states: ACCOUNT_STATES })
