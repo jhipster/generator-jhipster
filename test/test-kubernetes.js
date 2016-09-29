@@ -56,17 +56,21 @@ describe('JHipster Kubernetes Sub Generator', function () {
                     chosenApps: [
                         '01-gateway'
                     ],
-                    dockerRepositoryName: 'jhipster',
+                    adminPassword: 'meetup',
+                    dockerRepositoryName: 'jhipsterrepository',
                     dockerPushCommand: 'docker push',
-                    kubernetesNamespace: 'default'
+                    kubernetesNamespace: 'jhipsternamespace'
                 })
                 .on('end', done);
         });
-        it('creates expected registry files', function () {
+        it('creates expected registry files and content', function () {
             assert.file(expectedFiles.registry);
+            assert.fileContent('registry/jhipster-registry.yml', /http:\/\/admin:meetup/);
         });
-        it('creates expected gateway files', function () {
+        it('creates expected gateway files and content', function () {
             assert.file(expectedFiles.jhgate);
+            assert.fileContent('jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+            assert.fileContent('jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
         });
     });
 
@@ -96,7 +100,6 @@ describe('JHipster Kubernetes Sub Generator', function () {
         it('creates expected gateway files', function () {
             assert.file(expectedFiles.jhgate);
         });
-
         it('creates expected mysql files', function () {
             assert.file(expectedFiles.msmysql);
         });
