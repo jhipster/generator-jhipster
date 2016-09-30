@@ -1,12 +1,13 @@
 # <%= baseName %>
 
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>/](https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>).
-<%_ if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa' ) { _%>
+<%_ if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { _%>
 
-This is a <%= applicationType %> application intended to be part of a microservice architecture, please refer to the [http://jhipster.github.io/microservices-architecture/]("Doing microservices with JHipster" page of the documentation) for more information.
-<% if (applicationType == 'uaa' ) { %>
-This is also a JHipster User Account and Authentication (UAA) Server, refer to the [http://jhipster.github.io/using-uaa/](`Using UAA for Microservice Security` page) for details on how to secure JHipster microservices with OAuth2.<% } %>
+This is a "<%= applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
+<% if (applicationType == 'uaa') { %>
+This is also a JHipster User Account and Authentication (UAA) Server, refer to [Using UAA for Microservice Security][] for details on how to secure JHipster microservices with OAuth2.<% } %>
 <%_ } _%>
+
 ## Development
 
 <%_ if(skipClient) { _%>
@@ -40,12 +41,54 @@ Bower is used to manage CSS and JavaScript dependencies used in this application
 specifying a newer version in `bower.json`. You can also run `bower update` and `bower install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
 <%_ } _%>
-For further instructions on how to develop with JHipster, have a look at the [http://jhipster.github.io/development/](`Using JHipster in development` page).
 
-## Using Docker to simplify development
+For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the `src/main/docker` folder to help you start required third party services.
-To start a <%= prodDatabaseType%> database in a docker container, run:
+## Building for production
+
+To optimize the <%= baseName %> application for production, run:
+<% if (buildTool == 'maven') { %>
+    ./mvnw -Pprod clean package<% } %><% if (buildTool == 'gradle') { %>
+    ./gradlew -Pprod clean bootRepackage<% } %>
+
+<%_ if(!skipClient) { _%>
+This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
+<%_ } _%>
+To ensure everything worked, run:
+<% if (buildTool == 'maven') { %>
+    java -jar target/*.war<% } %><% if (buildTool == 'gradle') { %>
+    java -jar build/libs/*.war<% } %>
+
+<% if(!skipClient) { %>Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+<% } %>
+Refer to [Using JHipster in production][] for more details.
+
+## Testing
+
+To launch your application's tests, run:
+
+    <% if (buildTool == 'maven') { %>./mvnw clean test<% } else { %>./gradlew test<% } %>
+<% if(!skipClient) { %>
+### Client tests
+
+Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in `<%= CLIENT_TEST_SRC_DIR %>` and can be run with:
+
+    gulp test
+
+<% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
+and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
+<% } %><% if (testFrameworks.indexOf("gatling") > -1) { %>### Other tests
+
+Performance tests are run by [Gatling][] and written in Scala. They're located in `src/test/gatling` and can be run with:
+
+    <% if (buildTool == 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
+<% } %>
+For more information, refer to the [Running tests page][].
+
+## Using Docker to simplify development (optional)
+
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the `src/main/docker` folder to launch required third party services.
+For example, to start a <%= prodDatabaseType%> database in a docker container, run:
 
     docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml up -d
 
@@ -53,7 +96,7 @@ To stop it and remove the container, run:
 
     docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml down
 
-You can also fully dockerize your application and all the services it is depending on.
+You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
     <% if (buildTool == 'maven') { %>./mvnw package -Pprod docker:build<% } %><% if (buildTool == 'gradle') { %>./gradlew bootRepackage -Pprod buildDocker<% } %>
@@ -62,70 +105,29 @@ Then run:
 
     docker-compose -f src/main/docker/app.yml up -d
 
-For more information refer to [Docker and Docker-Compose production](http://jhipster.github.io/docker-compose), this page also contains information on the docker-compose subgenerator (`yo jhipster:docker-compose), that is able to generate docker configurations for one or several JHipster applications.
+For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`yo jhipster:docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
-## Building for production
+## Continuous Integration (optional)
 
-To optimize the <%= baseName %> application for production, run:
-<% if (buildTool == 'maven') { %>
-    ./mvnw -Pprod clean package<% } %><% if (buildTool == 'gradle') { %>
-    ./gradlew -Pprod clean bootRepackage<% } %>
-<% if(!skipClient) { %>
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references
-these new files.
-<% } %>
-To ensure everything worked, run:
-<% if (buildTool == 'maven') { %>
-    java -jar target/*.war<% } %><% if (buildTool == 'gradle') { %>
-    java -jar build/libs/*.war<% } %>
-<% if(!skipClient) { %>
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+To set up a CI environment, consult the [Setting up Continuous Integration][] page.
 
-## Testing
+[JHipster Homepage and latest documentation]: https://jhipster.github.io/
+[JHipster <%= jhipsterVersion %> archive]: https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>/
+<% if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { %>[Doing microservices with JHipster]: http://jhipster.github.io/microservices-architecture/<% } %>
+<%_ if (applicationType == 'uaa') { _%>[Using UAA for Microservice Security]: http://jhipster.github.io/using-uaa/<%_ } _%>
+[Using JHipster in development]: http://jhipster.github.io/development/
+[Using Docker and Docker-Compose]: http://jhipster.github.io/docker-compose
+[Using JHipster in production]: http://jhipster.github.io/production/
+[Running tests page]: http://jhipster.github.io/running-tests/
+[Setting up Continuous Integration]: http://jhipster.github.io/setting-up-ci/
 
-Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in `<%= CLIENT_TEST_SRC_DIR %>` and can be run with:
-
-    gulp test
-
-<% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
-and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
-<% } %><% if (testFrameworks.indexOf("gatling") > -1) { %>
-Performance tests are run by [Gatling]() and written in Scala. They're located in `src/test/gatling` and can be run with:
-
-    <% if (buildTool == 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
-
-<% } %>
-## Continuous Integration
-
-To setup this project in Jenkins, use the following configuration:
-
-* Project name: `<%= baseName %>`
-* Source Code Management
-    * Git Repository: `git@github.com:xxxx/<%= baseName %>.git`
-    * Branches to build: `*/master`
-    * Additional Behaviours: `Wipe out repository & force clone`
-* Build Triggers
-    * Poll SCM / Schedule: `H/5 * * * *`
-* Build<% if (buildTool == 'maven') { %>
-    * Invoke Maven / Tasks: `-Pprod clean package`<% } %><% if (buildTool == 'gradle') { %>
-    * Invoke Gradle script / Use Gradle Wrapper / Tasks: `-Pprod clean test bootRepackage`<% } %><% if (testFrameworks.indexOf("protractor") > -1) { %>
-    * Execute Shell / Command:
-        ````
-        <% if (buildTool == 'maven') { %>./mvnw spring-boot:run &<% } %><% if (buildTool == 'gradle') { %>./gradlew bootRun &<% } %>
-        bootPid=$!
-        sleep 30s
-        gulp itest
-        kill $bootPid
-        ````<% } %>
-* Post-build Actions
-    * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml<% if (testFrameworks.indexOf("protractor") > -1) { %>,build/reports/e2e/*.xml<% } %>`
-
-[JHipster]: https://jhipster.github.io/
-[Gatling]: http://gatling.io/<% if(!skipClient) {%>
+<% if (testFrameworks.indexOf("gatling") > -1) { %>[Gatling]: http://gatling.io/<% } %>
+<%_ if(!skipClient) {_%>
 [Node.js]: https://nodejs.org/
 [Bower]: http://bower.io/
 [Gulp]: http://gulpjs.com/
 [BrowserSync]: http://www.browsersync.io/
 [Karma]: http://karma-runner.github.io/
 [Jasmine]: http://jasmine.github.io/2.0/introduction.html
-[Protractor]: https://angular.github.io/protractor/<% } %>
+[Protractor]: https://angular.github.io/protractor/
+<%_ } _%>
