@@ -101,6 +101,26 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
+                return ((applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
+            },
+            type: 'input',
+            name: 'uaaBaseName',
+            message: function (response) {
+                return getNumberedQuestion('What is the folder path of your UAA application?.', (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
+            },
+            default: '../uaa',
+            validate: function (input) {
+                var uaaAppData = getUaaAppName.call(this, input);
+
+                if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
+                    return true;
+                } else {
+                    return 'Could not find a valid JHipster UAA server in path "' + input + '"';
+                }
+            }.bind(this)
+        },
+        {
+            when: function (response) {
                 return applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa';
             },
             type: 'list',
@@ -123,26 +143,6 @@ function askForServerSideOpts() {
                 }
             ],
             default: 'eureka'
-        },
-        {
-            when: function (response) {
-                return ((applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
-            },
-            type: 'input',
-            name: 'uaaBaseName',
-            message: function (response) {
-                return getNumberedQuestion('What is the folder path of your UAA application?.', (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa');
-            },
-            default: '../uaa',
-            validate: function (input) {
-                var uaaAppData = getUaaAppName.call(this, input);
-
-                if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
-                    return true;
-                } else {
-                    return 'Could not find a valid JHipster UAA server in path "' + input + '"';
-                }
-            }.bind(this)
         },
         {
             when: function (response) {
