@@ -65,7 +65,6 @@ describe('JHipster Kubernetes Sub Generator', function () {
         });
         it('creates expected registry files and content', function () {
             assert.file(expectedFiles.registry);
-            assert.fileContent('registry/jhipster-registry.yml', /http:\/\/admin:meetup/);
         });
         it('creates expected gateway files and content', function () {
             assert.file(expectedFiles.jhgate);
