@@ -1,6 +1,6 @@
 # <%= baseName %>
 
-This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>/](https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>).
+This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
 <%_ if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { _%>
 
 This is a "<%= applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
@@ -111,15 +111,15 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To set up a CI environment, consult the [Setting up Continuous Integration][] page.
 
-[JHipster Homepage and latest documentation]: https://jhipster.github.io/
-[JHipster <%= jhipsterVersion %> archive]: https://jhipster.github.io/documentation-archive/v<%= jhipsterVersion %>/
-<% if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { %>[Doing microservices with JHipster]: http://jhipster.github.io/microservices-architecture/<% } %>
-<%_ if (applicationType == 'uaa') { _%>[Using UAA for Microservice Security]: http://jhipster.github.io/using-uaa/<%_ } _%>
-[Using JHipster in development]: http://jhipster.github.io/development/
-[Using Docker and Docker-Compose]: http://jhipster.github.io/docker-compose
-[Using JHipster in production]: http://jhipster.github.io/production/
-[Running tests page]: http://jhipster.github.io/running-tests/
-[Setting up Continuous Integration]: http://jhipster.github.io/setting-up-ci/
+[JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
+[JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>
+<% if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
+<%_ if (applicationType == 'uaa') { _%>[Using UAA for Microservice Security]: <%= DOCUMENTATION_ARCHIVE_URL %>/using-uaa/<%_ } _%>
+[Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
+[Using Docker and Docker-Compose]: <%= DOCUMENTATION_ARCHIVE_URL %>/docker-compose
+[Using JHipster in production]: <%= DOCUMENTATION_ARCHIVE_URL %>/production/
+[Running tests page]: <%= DOCUMENTATION_ARCHIVE_URL %>/running-tests/
+[Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
 <% if (testFrameworks.indexOf("gatling") > -1) { %>[Gatling]: http://gatling.io/<% } %>
 <%_ if(!skipClient) {_%>
