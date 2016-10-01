@@ -1,23 +1,20 @@
-MetricsStateConfig.$inject = ['$stateProvider'];
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
 
-export function MetricsStateConfig($stateProvider) {
-    $stateProvider.state('<%=jhiPrefix%>-metrics', {
-        parent: 'admin',
-        url: '/metrics',
-        data: {
-            authorities: ['ROLE_ADMIN'],
-            pageTitle: 'metrics.title'
-        },
-        views: {
-            'content@': {
-                template: '<jhi-metrics></jhi-metrics>'
-            }
-        },
-        resolve: {
-            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                $translatePartialLoader.addPart('metrics');
-                return $translate.refresh();
-            }]
-        }
-    });
+export const metricsState = {
+    name: '<%=jhiPrefix%>-metrics',
+    parent: 'admin',
+    url: '/metrics',
+    data: {
+        authorities: ['ROLE_ADMIN'],
+        pageTitle: 'metrics.title'
+    },
+    views: {
+        'content@': { component: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent }
+    },
+    resolve: {
+        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+            $translatePartialLoader.addPart('metrics');
+            return $translate.refresh();
+        }]
+    }
 }
