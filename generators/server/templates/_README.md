@@ -28,7 +28,7 @@ After installing Node, you should be able to run the following command to instal
 
 We use [Gulp][] as our build system. Install the Gulp command-line tool globally with:
 
-    npm install -g gulp
+    npm install -g gulp-cli
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
