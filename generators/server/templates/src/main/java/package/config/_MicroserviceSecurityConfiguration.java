@@ -53,6 +53,9 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
         .and()
             .authorizeRequests()
             .antMatchers("/api/**").authenticated()
+            <%_ if (serviceDiscoveryType == 'consul') { _%>
+            .antMatchers("/management/health").permitAll()
+            <%_ } _%>
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/swagger-resources/configuration/ui").permitAll()
         .and()
@@ -116,6 +119,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
             .authorizeRequests()
             .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
+            <%_ if (serviceDiscoveryType == 'consul') { _%>
+            .antMatchers("/management/health").permitAll()
+            <%_ } _%>
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/swagger-resources/configuration/ui").permitAll();
     }
