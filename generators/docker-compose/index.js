@@ -97,6 +97,9 @@ module.exports = DockerComposeGenerator.extend({
             this.useElk = this.config.get('useElk');
             this.useKafka = false;
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            if (this.serviceDiscoveryType === undefined) {
+                this.serviceDiscoveryType = 'eureka';
+            }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
@@ -315,7 +318,7 @@ module.exports = DockerComposeGenerator.extend({
             if(this.serviceDiscoveryType === 'consul'){
                 this.template('_consul.yml', 'consul.yml');
             }
-            if(this.serviceDiscoveryType !== 'no'){
+            if(this.serviceDiscoveryType !== false){
                 this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
             }
         },
