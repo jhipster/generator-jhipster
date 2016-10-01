@@ -1,8 +1,5 @@
-AdminStateConfig.$inject = ['$stateProvider'];
-
-export function AdminStateConfig ($stateProvider) {
-    $stateProvider.state('admin', {
-        abstract: true,
-        parent: 'app'
-    });
-}
+export const adminState = {
+    name: 'admin',
+    abstract: true,
+    parent: 'app'
+};
