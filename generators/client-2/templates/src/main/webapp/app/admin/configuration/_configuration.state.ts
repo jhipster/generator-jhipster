@@ -1,23 +1,20 @@
-ConfigStateConfig.$inject = ['$stateProvider'];
+import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
 
-export function ConfigStateConfig($stateProvider) {
-    $stateProvider.state('<%=jhiPrefix%>-configuration', {
-        parent: 'admin',
-        url: '/configuration',
-        data: {
-            authorities: ['ROLE_ADMIN'],
-            pageTitle: 'configuration.title'
-        },
-        views: {
-            'content@': {
-                template: '<jhi-configuration></jhi-configuration>'
-            }
-        },
-        resolve: {
-            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                $translatePartialLoader.addPart('configuration');
-                return $translate.refresh();
-            }]
-        }
-    });
+export const configState = {
+    name: '<%=jhiPrefix%>-configuration',
+    parent: 'admin',
+    url: '/configuration',
+    data: {
+        authorities: ['ROLE_ADMIN'],
+        pageTitle: 'configuration.title'
+    },
+    views: {
+        'content@': { component: <%=jhiPrefixCapitalized%>ConfigurationComponent }
+    },
+    resolve: {
+        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+            $translatePartialLoader.addPart('configuration');
+            return $translate.refresh();
+        }]
+    }
 }
