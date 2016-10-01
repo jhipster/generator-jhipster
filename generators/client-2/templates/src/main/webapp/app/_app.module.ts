@@ -31,10 +31,6 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
-import { AppStateConfig } from './app.state';
-import { HomeStateConfig } from './home/home.state';
-import { ErrorStateConfig } from './layouts/error/error.state';
-
 angular
     .module('<%=angularAppName%>.app', [
         'ngStorage',<% if (enableTranslation) { %>
@@ -60,9 +56,6 @@ angular
     .config(LocalStorageConfig)
     .config(PagerConfig)
     .config(PaginationConfig)
-    .config(AppStateConfig)
-    .config(HomeStateConfig)
-    .config(ErrorStateConfig)
     .config(UIRouterDeferInterceptConfig)
     .directive('home', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(HomeComponent))
     .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
