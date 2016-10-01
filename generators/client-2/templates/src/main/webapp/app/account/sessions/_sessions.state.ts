@@ -1,4 +1,4 @@
-import { SessionsComponent } from "./sessions.component";
+import { SessionsComponent } from './sessions.component';
 
 export const sessionsState = {
     name: 'sessions',

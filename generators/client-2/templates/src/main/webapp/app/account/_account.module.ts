@@ -9,19 +9,19 @@ import { PasswordResetFinish } from './password-reset/finish/password-reset-fini
 import { SessionsService } from './sessions/sessions.service';
 <%_ } _%>
 
-import { PasswordStrengthBarComponent} from "./password/password-strength-bar.component";
-import { upgradeAdapter } from "../upgrade_adapter";
+import { PasswordStrengthBarComponent} from './password/password-strength-bar.component';
+import { upgradeAdapter } from '../upgrade_adapter';
 
 
-import { RegisterComponent } from "./register/register.component";
-import { ActivateComponent } from "./activate/activate.component";
-import { PasswordComponent } from "./password/password.component";
-import { PasswordResetInitComponent } from "./password-reset/init/password-reset-init.component";
-import { PasswordResetFinishComponent } from "./password-reset/finish/password-reset-finish.component";
+import { RegisterComponent } from './register/register.component';
+import { ActivateComponent } from './activate/activate.component';
+import { PasswordComponent } from './password/password.component';
+import { PasswordResetInitComponent } from './password-reset/init/password-reset-init.component';
+import { PasswordResetFinishComponent } from './password-reset/finish/password-reset-finish.component';
 <%_ if (authenticationType === 'session') { _%>
 import { SessionsComponent } from './sessions/sessions.component';
 <%_ } _%>
-import { SettingsComponent } from "./settings/settings.component";
+import { SettingsComponent } from './settings/settings.component';
 
 <% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
 upgradeAdapter.upgradeNg1Provider('Auth');

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
     selector: 'password',

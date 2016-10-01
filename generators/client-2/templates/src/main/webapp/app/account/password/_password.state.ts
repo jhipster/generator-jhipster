@@ -1,4 +1,4 @@
-import { PasswordComponent } from "./password.component";
+import { PasswordComponent } from './password.component';
 
 export const passwordState = {
     name: 'password',

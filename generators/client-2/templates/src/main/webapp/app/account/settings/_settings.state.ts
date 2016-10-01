@@ -1,4 +1,4 @@
-import { SettingsComponent } from "./settings.component";
+import { SettingsComponent } from './settings.component';
 
 export const settingsState = {
     name: 'settings',

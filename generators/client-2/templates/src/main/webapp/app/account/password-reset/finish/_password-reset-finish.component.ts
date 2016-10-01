@@ -1,5 +1,3 @@
-import * as angular from 'angular';
-
 import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
 
 @Component({
@@ -22,7 +20,7 @@ export class PasswordResetFinishComponent implements OnInit {
     ngOnInit() {
         this.resetAccount = {};
         this.login = this.LoginService.open;
-        this.keyMissing = angular.isUndefined(this.$stateParams.key);
+        this.keyMissing = !this.$stateParams || !this.$stateParams.key;
     }
 
     ngAfterViewInit() {

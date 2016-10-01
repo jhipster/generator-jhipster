@@ -1,4 +1,4 @@
-import { RegisterComponent } from "./register.component";
+import { RegisterComponent } from './register.component';
 
 export const registerState = {
     name: 'register',

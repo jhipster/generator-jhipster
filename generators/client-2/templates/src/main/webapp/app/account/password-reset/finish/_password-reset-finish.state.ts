@@ -1,4 +1,4 @@
-import { PasswordResetFinishComponent } from "./password-reset-finish.component";
+import { PasswordResetFinishComponent } from './password-reset-finish.component';
 
 export const finishResetState = {
     name: 'finishReset',

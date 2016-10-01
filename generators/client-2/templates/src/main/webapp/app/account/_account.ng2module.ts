@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { UIRouterModule } from "ui-router-ng2";
+import { UIRouterModule } from 'ui-router-ng2';
 
 import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 
@@ -22,12 +22,12 @@ import { settingsState } from './settings/settings.state';
 <%_ if (authenticationType === 'session') { _%>
 import { sessionsState } from './sessions/sessions.state';
 <%_ } _%>
-import { activateState } from "./activate/activate.state";
-import { passwordState } from "./password/password.state";
-import { finishResetState } from "./password-reset/finish/password-reset-finish.state";
-import { requestResetState } from "./password-reset/init/password-reset-init.state";
-import { registerState } from "./register/register.state";
-import { accountState } from "./account.state";
+import { activateState } from './activate/activate.state';
+import { passwordState } from './password/password.state';
+import { finishResetState } from './password-reset/finish/password-reset-finish.state';
+import { requestResetState } from './password-reset/init/password-reset-init.state';
+import { registerState } from './register/register.state';
+import { accountState } from './account.state';
 
 
 

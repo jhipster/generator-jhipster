@@ -1,4 +1,4 @@
-import { ActivateComponent } from "./activate.component";
+import { ActivateComponent } from './activate.component';
 
 export const activateState = {
     name: 'activate',
