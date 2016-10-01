@@ -169,7 +169,7 @@ function askForElk() {
 }
 
 function askForServiceDiscovery() {
-    if (this.regenerate) return;
+    if (this.regenerate || this.kubernetesApplicationType === 'monolith') return;
 
     var done = this.async();
 
