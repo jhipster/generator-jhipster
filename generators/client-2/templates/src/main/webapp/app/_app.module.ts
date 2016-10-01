@@ -37,9 +37,9 @@ import { ErrorStateConfig } from './layouts/error/error.state';
 
 angular
     .module('<%=angularAppName%>.app', [
-        'ngStorage', <% if (enableTranslation) { %>
+        'ngStorage',<% if (enableTranslation) { %>
         'tmh.dynamicLocale',
-        'pascalprecht.translate', <% } %>
+        'pascalprecht.translate',<% } %>
         'ngResource',
         'ngCookies',
         'ngAria',

@@ -31,7 +31,6 @@ import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
         FooterComponent<%_ if (enableTranslation){ _%>,
         ActiveMenuDirective
         <%_ } _%>
-
     ],
     providers: [
         XSRFStrategyProvider
