@@ -1,22 +1,19 @@
-DocsStateConfig.$inject = ['$stateProvider'];
+import { <%=jhiPrefixCapitalized%>DocsComponent } from './docs.component';
 
-export function DocsStateConfig($stateProvider) {
-    $stateProvider.state('docs', {
-        parent: 'admin',
-        url: '/docs',
-        data: {
-            authorities: ['ROLE_ADMIN'],
-            pageTitle: 'global.menu.admin.apidocs'
-        },
-        views: {
-            'content@': {
-                templateUrl: 'app/admin/docs/docs.html'
-            }
-        },
-        resolve: {
-            translatePartialLoader: ['$translate', function ($translate) {
-                return $translate.refresh();
-            }]
-        }
-    });
+export const docsState = {
+    name: 'docs',
+    parent: 'admin',
+    url: '/docs',
+    data: {
+        authorities: ['ROLE_ADMIN'],
+        pageTitle: 'global.menu.admin.apidocs'
+    },
+    views: {
+        'content@': { component: <%=jhiPrefixCapitalized%>DocsComponent }
+    },
+    resolve: {
+        translatePartialLoader: ['$translate', function ($translate) {
+            return $translate.refresh();
+        }]
+    }
 }
