@@ -61,6 +61,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
                 .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
+                <%_ if (serviceDiscoveryType == 'consul') { _%>
+                .antMatchers("/management/health").permitAll()
+                <%_ } _%>
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/v2/api-docs/**").permitAll()
                 .antMatchers("/swagger-resources/configuration/ui").permitAll()
