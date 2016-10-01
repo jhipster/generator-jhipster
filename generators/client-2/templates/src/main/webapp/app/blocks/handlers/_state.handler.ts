@@ -1,5 +1,5 @@
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
-import { Transition } from "ui-router-ng2";
+import { Transition } from 'ui-router-ng2';
 declare var SystemJS;
 
 StateHandler.$inject = ['$rootScope', '$transitions', <% if (enableTranslation) { %>'$translate', /*'<%=jhiPrefixCapitalized%>LanguageService',*/ 'TranslationHandler',<% } %> '$window',

@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
-import { <%=jhiPrefixCapitalized%>ConfigurationService } from "./configuration.service";
+import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-configuration',

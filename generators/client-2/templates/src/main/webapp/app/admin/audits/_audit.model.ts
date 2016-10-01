@@ -1,4 +1,4 @@
-import { AuditData } from "./audit-data.model";
+import { AuditData } from './audit-data.model';
 
 export class Audit {
     constructor(

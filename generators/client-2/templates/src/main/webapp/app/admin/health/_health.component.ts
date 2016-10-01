@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit, TemplateRef } from "@angular/core";
-import { <%=jhiPrefixCapitalized%>HealthService } from "./health.service";
+import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
+import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({

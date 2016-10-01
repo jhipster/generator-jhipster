@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { <%=jhiPrefixCapitalized%>HealthService } from "./health.service";
+import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-health-modal',

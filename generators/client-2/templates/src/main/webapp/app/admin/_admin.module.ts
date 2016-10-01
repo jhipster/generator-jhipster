@@ -17,12 +17,12 @@ import { TrackerStateConfig } from './tracker/tracker.state';
 <%_ } _%>
 import { UserMgmntStateConfig } from './user-management/user-management.state';
 
-import { AuditsComponent } from "./audits/audits.component";
+import { AuditsComponent } from './audits/audits.component';
 import { LogsComponent } from './logs/logs.component';
 
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from "./metrics/metrics-modal.component";
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from "./metrics/metrics.component";
-import { <%=jhiPrefixCapitalized%>HealthModalComponent } from "./health/health-modal.component";
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics/metrics-modal.component';
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics/metrics.component';
+import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health/health-modal.component';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
 <%_ if (applicationType === 'gateway') { _%>

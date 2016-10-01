@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import { <%=jhiPrefixCapitalized%>TrackerService } from "./<%=jhiPrefixCapitalized%>TrackerService";
+import { <%=jhiPrefixCapitalized%>TrackerService } from './tracker.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-tracker',
@@ -33,7 +33,7 @@ export class <%=jhiPrefixCapitalized%>TrackerController{
     this.<%=jhiPrefixCapitalized%>TrackerService.receive().toPromise.then(
         (null,null, (activity) => {
             this.showActivity(activity);
-        })    
+        })
     );
 
 }
