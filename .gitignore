@@ -7,3 +7,4 @@ atlassian-ide-plugin.xml
 /.project
 test/temp/
 npm-debug.log
+.vscode
