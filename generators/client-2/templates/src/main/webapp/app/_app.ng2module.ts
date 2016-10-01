@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Ng1ToNg2Module } from "ui-router-ng1-to-ng2";
+import { Ng1ToNg2Module } from 'ui-router-ng1-to-ng2';
 
 import { <%=angular2AppName%>SharedModule } from './shared/shared.ng2module';
 import { <%=angular2AppName%>CommonModule } from './components/common.ng2module';

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Account } from "../shared/model/account.model";
+import { Account } from '../shared/model/account.model';
 
 @Component({
     selector: 'home',

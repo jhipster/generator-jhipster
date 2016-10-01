@@ -5,14 +5,14 @@ import './account/account.module';
 import './admin/admin.module';
 import './entities/entity.module';
 
-import { upgradeAdapter } from "./upgrade_adapter";
+import { upgradeAdapter } from './upgrade_adapter';
 
 import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
 import { TranslationHandler } from './blocks/handlers/translation.handler';
 
 import { TranslationConfig } from './blocks/config/translation.config';
 import { TranslationStorageProvider } from './blocks/config/translation-storage.provider';<% } %>
-import { UIRouterDeferInterceptConfig } from "./blocks/config/ui-router-defer-intercept.config";
+import { UIRouterDeferInterceptConfig } from './blocks/config/ui-router-defer-intercept.config';
 
 import { CompileServiceConfig } from './blocks/config/compile.config';
 import { HttpConfig } from './blocks/config/http.config';

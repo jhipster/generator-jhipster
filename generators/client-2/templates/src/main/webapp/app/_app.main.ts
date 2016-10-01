@@ -1,4 +1,4 @@
-import { UpgradeAdapterRef } from "@angular/upgrade";
+import { UpgradeAdapterRef } from '@angular/upgrade';
 import { upgradeAdapter } from './upgrade_adapter';
 import './app.module';
 
