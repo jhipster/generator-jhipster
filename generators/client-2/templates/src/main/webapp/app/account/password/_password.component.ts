@@ -1,4 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from "@angular/core";
+import { Principal } from '../../components/auth/principal.service';
+import { Password } from './password.service';
 
 @Component({
     selector: 'password',
@@ -12,10 +14,10 @@ export class PasswordComponent implements OnInit {
     password: string;
     confirmPassword: string;
 
-    constructor(@Inject('Auth') private Auth, @Inject('Principal') private Principal) {}
+    constructor(private passwordService: Password, private principal: Principal) {}
 
     ngOnInit () {
-        this.Principal.identity().then((account) => {
+        this.principal.identity().then((account) => {
             this.account = account;
         });
     }
@@ -27,10 +29,10 @@ export class PasswordComponent implements OnInit {
             this.doNotMatch = 'ERROR';
         } else {
             this.doNotMatch = null;
-            this.Auth.changePassword(this.password).then(() => {
+            this.passwordService.save(this.password).subscribe(() => {
                 this.error = null;
                 this.success = 'OK';
-            }).catch(() => {
+            }, () => {
                 this.success = null;
                 this.error = 'ERROR';
             });
