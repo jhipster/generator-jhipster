@@ -24,7 +24,6 @@ import { SessionsComponent } from './sessions/sessions.component';
 import { SettingsComponent } from './settings/settings.component';
 
 <% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
-upgradeAdapter.upgradeNg1Provider('Auth');
 upgradeAdapter.upgradeNg1Provider('LoginService');
 upgradeAdapter.upgradeNg1Provider('$stateParams');
 
@@ -49,12 +48,11 @@ angular
     .directive('sessions', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SessionsComponent))
     <%_ } _%>
     .directive('settings', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SettingsComponent))
-    .factory('Register', Register)
-    .factory('Activate', Activate)
-    //.factory('Activate', upgradeAdapter.downgradeNg2Provider(Activate))
-    .factory('Password', Password)
-    .factory('PasswordResetInit', PasswordResetInit)
+    .factory('Register', upgradeAdapter.downgradeNg2Provider(Register))
+    .factory('Activate', upgradeAdapter.downgradeNg2Provider(Activate))
+    .factory('Password',upgradeAdapter.downgradeNg2Provider( Password))
+    .factory('PasswordResetInit', upgradeAdapter.downgradeNg2Provider(PasswordResetInit))
     <%_ if (authenticationType === 'session') { _%>
-    .factory('SessionsService', SessionsService)
+    .factory('SessionsService', upgradeAdapter.downgradeNg2Provider(SessionsService))
     <%_ } _%>
-    .factory('PasswordResetFinish', PasswordResetFinish);
+    .factory('PasswordResetFinish', upgradeAdapter.downgradeNg2Provider(PasswordResetFinish));

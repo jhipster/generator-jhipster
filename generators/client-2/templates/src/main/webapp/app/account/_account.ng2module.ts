@@ -4,6 +4,11 @@ import { UIRouterModule } from 'ui-router-ng2';
 
 import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 
+import { Register } from './register/register.service';
+import { Activate } from './activate/activate.service';
+import { Password } from './password/password.service';
+import { PasswordResetInit } from './password-reset/init/password-reset-init.service';
+import { PasswordResetFinish } from './password-reset/finish/password-reset-finish.service';
 <%_ if (authenticationType === 'session') { _%>
 import { SessionsService } from './sessions/sessions.service';
 <%_ } _%>
@@ -62,8 +67,13 @@ let ACCOUNT_STATES = [
     ],
     providers: [
         <%_ if (authenticationType === 'session') { _%>
-        SessionsService
+        SessionsService,
         <%_ } _%>
+        Register,
+        Activate,
+        Password,
+        PasswordResetInit,
+        PasswordResetFinish
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
