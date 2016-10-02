@@ -1,4 +1,5 @@
-import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
+import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
+import { PasswordResetInit } from './password-reset-init.service';
 
 @Component({
     selector: 'password-reset-init',
@@ -10,7 +11,7 @@ export class PasswordResetInitComponent implements OnInit {
     resetAccount: any;
     success: string;
 
-    constructor(@Inject('Auth') private Auth, private elementRef: ElementRef, private renderer: Renderer) {}
+    constructor(private passwordResetInit: PasswordResetInit, private elementRef: ElementRef, private renderer: Renderer) {}
 
     ngOnInit() {
         this.resetAccount = {};
@@ -25,9 +26,9 @@ export class PasswordResetInitComponent implements OnInit {
         this.error = null;
         this.errorEmailNotExists = null;
 
-        this.Auth.resetPasswordInit(this.resetAccount.email).then(() => {
+        this.passwordResetInit.save(this.resetAccount.email).subscribe(() => {
             this.success = 'OK';
-        }).catch((response) => {
+        }, (response) => {
             this.success = null;
             if (response.status === 400 && response.data === 'e-mail address not registered') {
                 this.errorEmailNotExists = 'ERROR';

@@ -1,4 +1,5 @@
-import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
+import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
+import { PasswordResetFinish } from './password-reset-finish.service';
 
 @Component({
     selector: 'password-reset-finish',
@@ -13,9 +14,11 @@ export class PasswordResetFinishComponent implements OnInit {
     resetAccount: any;
     success: string;
 
-    constructor(@Inject('Auth') private Auth, @Inject('LoginService') private LoginService,
-                @Inject('$stateParams') private $stateParams,
-                private elementRef: ElementRef, private renderer: Renderer) {}
+    constructor(private passwordResetFinish: PasswordResetFinish,
+        @Inject('LoginService') private LoginService,
+        @Inject('$stateParams') private $stateParams,
+        private elementRef: ElementRef, private renderer: Renderer
+    ) {}
 
     ngOnInit() {
         this.resetAccount = {};
@@ -35,9 +38,9 @@ export class PasswordResetFinishComponent implements OnInit {
         if (this.resetAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.Auth.resetPasswordFinish({key: this.$stateParams.key, newPassword: this.resetAccount.password}).then(() => {
+            this.passwordResetFinish.save({key: this.$stateParams.key, newPassword: this.resetAccount.password}).subscribe(() => {
                 this.success = 'OK';
-            }).catch(() => {
+            }, () => {
                 this.success = null;
                 this.error = 'ERROR';
             });
