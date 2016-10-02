@@ -4,6 +4,8 @@ import { ProfileService } from '../../components/profiles/profile.service';
 <%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components/language/language.service';
 <%_ } _%>
+import { Principal } from '../../components/auth/principal.service';
+import { AuthService } from '../../components/auth/auth.service';
 
 @Component({
     selector: 'navbar',
@@ -13,19 +15,20 @@ export class NavbarComponent implements OnInit {
 
     changeLanguage: Function;
     inProduction: boolean;
-    isAuthenticated: Function;
     isNavbarCollapsed: boolean;
     languages: any[];
     swaggerEnabled: boolean;
 
-    constructor(@Inject('Principal') private principal,
-                @Inject('$state') private $state,
-                @Inject('Auth') private auth,
-                <%_ if (enableTranslation){ _%>
-                private languageService: <%=jhiPrefixCapitalized%>LanguageService,
-                <%_ } _%>
-                @Inject('LoginService') private loginService,
-                private profileService: ProfileService) { }
+    constructor(
+        @Inject('$state') private $state,
+        @Inject('LoginService') private loginService,
+        <%_ if (enableTranslation){ _%>
+        private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+        <%_ } _%>
+        private principal: Principal,
+        private authService: AuthService,
+        private profileService: ProfileService
+    ) { }
 
     ngOnInit() {
         <%_ if (enableTranslation){ _%>
@@ -36,7 +39,6 @@ export class NavbarComponent implements OnInit {
         this.changeLanguage = this.languageService.changeLanguage;
         <%_ } _%>
 
-        this.isAuthenticated = this.principal.isAuthenticated;
         this.profileService.getProfileInfo().subscribe(profileInfo => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
@@ -47,6 +49,10 @@ export class NavbarComponent implements OnInit {
         this.isNavbarCollapsed = true;
     }
 
+    isAuthenticated() {
+        return this.principal.isAuthenticated();
+    }
+
     login() {
         this.collapseNavbar();
         this.loginService.open();
@@ -54,7 +60,7 @@ export class NavbarComponent implements OnInit {
 
     logout() {
         this.collapseNavbar();
-        this.auth.logout();
+        this.authService.logout();
         this.$state.go('home');
     }
 
