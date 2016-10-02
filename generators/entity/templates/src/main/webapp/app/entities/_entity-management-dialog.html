@@ -57,12 +57,12 @@
                     <%_ } else { _%>
                     <span class="pull-left">{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } _%>
-                    <button ng-click="vm.<%= entityInstance %>.<%= fieldName %>=null;vm.<%= entityInstance %>.<%= fieldName %>ContentType=null;"
+                    <button type="button" ng-click="vm.<%= entityInstance %>.<%= fieldName %>=null;vm.<%= entityInstance %>.<%= fieldName %>ContentType=null;"
                             class="btn btn-default btn-xs pull-right">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>
-                <button type="file" ngf-select class="btn btn-default btn-block"
+                <button type="button" ngf-select class="btn btn-default btn-block"
                         ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> accept="image/*" data-translate="entity.action.addimage"<% } else { %> data-translate="entity.action.addblob"<% } %>>
                     <% if (fieldTypeBlobContent == 'image') { %>Add image<% } else { %>Add blob<% } %>
                 </button>
