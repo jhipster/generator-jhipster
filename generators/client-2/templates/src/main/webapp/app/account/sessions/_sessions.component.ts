@@ -2,6 +2,7 @@ import {Component, OnInit, Inject} from '@angular/core';
 
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
+import { Principal } from '../../components/auth/principal.service';
 
 @Component({
     selector: 'sessions',
@@ -14,12 +15,12 @@ export class SessionsComponent implements OnInit {
     success: string;
     sessions: Session[];
 
-    constructor(private sessionsService: SessionsService, @Inject('Principal') private Principal) {}
+    constructor(private sessionsService: SessionsService, private principal: Principal) {}
 
     ngOnInit() {
         this.sessionsService.findAll().subscribe(sessions => this.sessions = sessions);
 
-        this.Principal.identity().then((account) => {
+        this.principal.identity().then((account) => {
             this.account = account;
         });
     }
