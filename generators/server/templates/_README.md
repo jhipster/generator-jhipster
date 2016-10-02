@@ -7,6 +7,9 @@ This is a "<%= applicationType %>" application intended to be part of a microser
 <% if (applicationType == 'uaa') { %>
 This is also a JHipster User Account and Authentication (UAA) Server, refer to [Using UAA for Microservice Security][] for details on how to secure JHipster microservices with OAuth2.<% } %>
 <%_ } _%>
+<%_ if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryType === 'eureka') { %>the JHipster-Registry<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryType === 'eureka') { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryType === 'consul') { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryType === 'eureka') { %> For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].<% } %><% if (serviceDiscoveryType === 'consul') { %> For more information, read our documentation on [Service Discovery and Configuration with Consul][].<% } %>
+<%_ } _%>
 
 ## Development
 
@@ -116,6 +119,12 @@ To set up a CI environment, consult the [Setting up Continuous Integration][] pa
 <% if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { %>[Doing microservices with JHipster]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/<% } %>
 <%_ if (applicationType == 'uaa') { _%>[Using UAA for Microservice Security]: <%= DOCUMENTATION_ARCHIVE_URL %>/using-uaa/<%_ } _%>
 [Using JHipster in development]: <%= DOCUMENTATION_ARCHIVE_URL %>/development/
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
+[Service Discovery and Configuration with the JHipster-Registry]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#jhipster-registry
+<%_ } _%>
+<%_ if (serviceDiscoveryType == 'consul') { _%>
+[Service Discovery and Configuration with Consul]: <%= DOCUMENTATION_ARCHIVE_URL %>/microservices-architecture/#consul
+<%_ } _%>
 [Using Docker and Docker-Compose]: <%= DOCUMENTATION_ARCHIVE_URL %>/docker-compose
 [Using JHipster in production]: <%= DOCUMENTATION_ARCHIVE_URL %>/production/
 [Running tests page]: <%= DOCUMENTATION_ARCHIVE_URL %>/running-tests/
