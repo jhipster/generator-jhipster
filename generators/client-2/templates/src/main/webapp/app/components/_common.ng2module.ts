@@ -5,11 +5,15 @@ import { <%=angular2AppName%>SharedModule } from '../shared/shared.ng2module';
 
 import { AlertService } from './alert/alert.service';
 import { ProfileService } from './profiles/profile.service';
-import { PageRibbonComponent } from './profiles/page-ribbon.component';
-import { jhiAlertComponent } from './alert/alert.component';
 <%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.service';
 <%_ } _%>
+import { Account } from './auth/account.service';
+import { Principal } from './auth/principal.service';
+import { AuthService } from './auth/auth.service';
+
+import { PageRibbonComponent } from './profiles/page-ribbon.component';
+import { jhiAlertComponent } from './alert/alert.component';
 
 @NgModule({
     imports: [
@@ -21,10 +25,12 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
     ],
     providers: [
         AlertService,
-        ProfileService<%_ if (enableTranslation){ _%>,
-        <%=jhiPrefixCapitalized%>LanguageService
+        ProfileService,<%_ if (enableTranslation){ _%>
+        <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
-
+        Account,
+        Principal,
+        AuthService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 

@@ -6,7 +6,7 @@ import { AlertServiceConfig } from '../blocks/config/alert.config';
 
 import { LoginController } from './login/login.controller';
 
-import { Auth } from './auth/auth.service';
+import { AuthService } from './auth/auth.service';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { AuthServerProvider } from './auth/auth-oauth2.service';
 <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -24,11 +24,11 @@ import { AlertService } from './alert/alert.service';
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
 
 upgradeAdapter.upgradeNg1Provider('$state');
-upgradeAdapter.upgradeNg1Provider('Auth');<% if (enableTranslation) { %>
+upgradeAdapter.upgradeNg1Provider('$rootScope');
+upgradeAdapter.upgradeNg1Provider('$sessionStorage');<% if (enableTranslation) { %>
 upgradeAdapter.upgradeNg1Provider('$translate');
 upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');<% } %>
 upgradeAdapter.upgradeNg1Provider('LoginService');
-upgradeAdapter.upgradeNg1Provider('Principal');
 
 angular
     .module('<%=angularAppName%>.common', [
@@ -42,11 +42,11 @@ angular
     // bug 'showAsToast is not a function to fix'
     //.config(AlertServiceConfig)
     .controller('LoginController', LoginController)
-    .factory('Auth', Auth)
+    .factory('Auth', upgradeAdapter.downgradeNg2Provider(AuthService))
     .factory('AuthServerProvider', AuthServerProvider)
-    .factory('Account', Account)
+    .factory('Account', upgradeAdapter.downgradeNg2Provider(Account))
     .factory('LoginService', LoginService)
-    .factory('Principal', Principal)
+    .factory('Principal', upgradeAdapter.downgradeNg2Provider(Principal))
     .factory('ProfileService',upgradeAdapter.downgradeNg2Provider(ProfileService))
     .factory('AlertService', upgradeAdapter.downgradeNg2Provider(AlertService))<% if (enableTranslation) { %>
     .factory('<%=jhiPrefixCapitalized%>LanguageService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>LanguageService))<% } %>

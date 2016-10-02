@@ -3,10 +3,10 @@ import { Transition } from 'ui-router-ng2';
 declare var SystemJS;
 
 StateHandler.$inject = ['$rootScope', '$transitions', <% if (enableTranslation) { %>'$translate', /*'<%=jhiPrefixCapitalized%>LanguageService',*/ 'TranslationHandler',<% } %> '$window',
-        'Auth', 'Principal', '$uiRouter', '$trace'];
+        /*'Auth', 'Principal',*/ '$uiRouter', '$trace'];
 
 export function StateHandler($rootScope, $transitions, <% if (enableTranslation) { %>$translate, /*<%=jhiPrefixCapitalized%>LanguageService,*/ TranslationHandler,<% } %> $window,
-    Auth, Principal, $uiRouter, $trace) {
+    /*Auth, Principal,*/ $uiRouter, $trace) {
 
     if (DEBUG_INFO_ENABLED) {
         $trace.enable('TRANSITION');
@@ -26,9 +26,9 @@ export function StateHandler($rootScope, $transitions, <% if (enableTranslation)
             $rootScope.toParams = transition.params();
             $rootScope.fromState = transition.from();
 
-            if (Principal.isIdentityResolved()) {
+            /*if (Principal.isIdentityResolved()) { //TODO needs to fixed after migration
                 Auth.authorize();
-            }
+            }*/
 
             <% if (enableTranslation) { %>
             // Update the language //TODO needs to fixed after migration
