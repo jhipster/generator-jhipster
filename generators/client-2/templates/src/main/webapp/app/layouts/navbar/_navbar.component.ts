@@ -1,4 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { StateService } from "ui-router-ng2";
 
 import { ProfileService } from '../../components/profiles/profile.service';
 <%_ if (enableTranslation){ _%>
@@ -20,7 +21,7 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
 
     constructor(
-        @Inject('$state') private $state,
+        private $state: StateService,
         @Inject('LoginService') private loginService,
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,

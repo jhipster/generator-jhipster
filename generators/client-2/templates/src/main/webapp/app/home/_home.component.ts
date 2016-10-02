@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Account } from '../shared/model/account.model';
+import { Principal } from "../components/auth/principal.service";
+import { StateService } from "ui-router-ng2";
 
 @Component({
     selector: 'home',
@@ -10,7 +12,7 @@ export class HomeComponent implements OnInit {
     login: Function;
 
     constructor(private principal: Principal,
-                @Inject('$state') private $state,
+                private $state: StateService,
                 @Inject('LoginService') loginService) {
         this.login = loginService.open;
     }

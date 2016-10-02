@@ -29,6 +29,7 @@ upgradeAdapter.upgradeNg1Provider('$sessionStorage');<% if (enableTranslation) {
 upgradeAdapter.upgradeNg1Provider('$translate');
 upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');<% } %>
 upgradeAdapter.upgradeNg1Provider('LoginService');
+upgradeAdapter.upgradeNg1Provider('AuthServerProvider');
 
 angular
     .module('<%=angularAppName%>.common', [

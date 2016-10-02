@@ -29,7 +29,7 @@ export class Principal {
 
     hasAuthority (authority): Promise<any> {
         if (!this.authenticated) {
-           return new Promise((resolve) => resolve(false));
+           return Promise.resolve(false);
         }
 
         return this.identity().then(id => {
@@ -47,7 +47,7 @@ export class Principal {
         // check and see if we have retrieved the _identity data from the server.
         // if we have, reuse it by immediately resolving
         if (this._identity) {
-            return new Promise((resolve) => resolve(this._identity));
+            return Promise.resolve(this._identity);
         }
 
         // retrieve the _identity data from the server, update the _identity object, and then resolve.
@@ -55,14 +55,12 @@ export class Principal {
             if (account) {
                 this._identity = account;
                 this.authenticated = true;
-                resolve(this._identity)
                 <%_ if (websocket === 'spring-websocket') { _%>
                 this.<%=jhiPrefixCapitalized%>TrackerService.connect();
                 <%_ } _%>
             } else {
                 this._identity = null;
                 this.authenticated = false;
-                resolve(this._identity)
             }
             return this._identity;
         }).catch(err => {
