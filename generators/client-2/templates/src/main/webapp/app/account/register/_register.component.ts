@@ -1,4 +1,5 @@
-import {Component, OnInit, Inject, Renderer, ElementRef} from '@angular/core';
+import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
+import { Register } from './register.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -17,8 +18,8 @@ export class RegisterComponent implements OnInit {
 
     constructor(
             @Inject('$translate') private $translate,
-            @Inject('Auth') private auth,
             @Inject('LoginService') private loginService,
+            private registerService: Register,
             private elementRef: ElementRef,
             private renderer: Renderer) {
         this.login = loginService.open;
@@ -43,9 +44,9 @@ export class RegisterComponent implements OnInit {
             this.errorUserExists = null;
             this.errorEmailExists = null;
 
-            this.auth.createAccount(this.registerAccount).then(() => {
+            this.registerService.save(this.registerAccount).subscribe(() => {
                 this.success = true;
-            }).catch((response) => {
+            }, (response) => {
                 this.success = null;
                 if (response.status === 400 && response.data === 'login already in use') {
                     this.errorUserExists = 'ERROR';
