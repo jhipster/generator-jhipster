@@ -1,7 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 <%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components/language/language.service';
 <%_ } _%>
+import { Principal } from '../../components/auth/principal.service';
+import { Account } from '../../components/auth/account.service';
+
 @Component({
     selector: 'settings',
     templateUrl: 'app/account/settings/settings.html'
@@ -12,11 +15,11 @@ export class SettingsComponent implements OnInit {
     settingsAccount: any;
     languages: any[];
 
-    constructor(@Inject('Auth') private Auth, @Inject('Principal') private Principal<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
+    constructor(private account: Account, private principal: Principal<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
                 private languageService: <%=jhiPrefixCapitalized%>LanguageService <%_ } _%>) {}
 
     ngOnInit () {
-        this.Principal.identity().then((account) => {
+        this.principal.identity().then((account) => {
             this.settingsAccount = this.copyAccount(account);
         });
         <%_ if (enableTranslation){ _%>
@@ -27,10 +30,10 @@ export class SettingsComponent implements OnInit {
     }
 
     save () {
-        this.Auth.updateAccount(this.settingsAccount).then(() => {
+        this.account.save(this.settingsAccount).subscribe(() => {
             this.error = null;
             this.success = 'OK';
-            this.Principal.identity(true).then((account) => {
+            this.principal.identity(true).then((account) => {
                 this.settingsAccount = this.copyAccount(account);
             });
             <%_ if (enableTranslation){ _%>
@@ -40,7 +43,7 @@ export class SettingsComponent implements OnInit {
                 }
             });
             <%_ } _%>
-        }).catch(() => {
+        }, () => {
             this.success = null;
             this.error = 'ERROR';
         });
