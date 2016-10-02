@@ -47,6 +47,7 @@ export class RegisterComponent implements OnInit {
             this.registerService.save(this.registerAccount).subscribe(() => {
                 this.success = true;
             }, (response) => {
+                //TODO handle this.logout(); on error
                 this.success = null;
                 if (response.status === 400 && response.data === 'login already in use') {
                     this.errorUserExists = 'ERROR';
