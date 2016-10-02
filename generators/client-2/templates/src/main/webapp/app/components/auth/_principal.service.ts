@@ -50,22 +50,25 @@ export class Principal {
             return new Promise((resolve) => resolve(this._identity));
         }
 
-        return new Promise((resolve) => {
-            // retrieve the _identity data from the server, update the _identity object, and then resolve.
-            this.account.get().subscribe(account => {
-                if (account) {
-                    this._identity = account;
-                    this.authenticated = true;
-                    resolve(this._identity)
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    this.<%=jhiPrefixCapitalized%>TrackerService.connect();
-                    <%_ } _%>
-                } else {
-                    this._identity = null;
-                    this.authenticated = false;
-                    resolve(this._identity)
-                }
-            });
+        // retrieve the _identity data from the server, update the _identity object, and then resolve.
+        return this.account.get().toPromise().then(account => {
+            if (account) {
+                this._identity = account;
+                this.authenticated = true;
+                resolve(this._identity)
+                <%_ if (websocket === 'spring-websocket') { _%>
+                this.<%=jhiPrefixCapitalized%>TrackerService.connect();
+                <%_ } _%>
+            } else {
+                this._identity = null;
+                this.authenticated = false;
+                resolve(this._identity)
+            }
+            return this._identity;
+        }).catch(err => {
+            this._identity = null;
+            this.authenticated = false;
+            return null;
         });
     }
 
