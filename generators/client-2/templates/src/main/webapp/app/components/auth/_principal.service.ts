@@ -1,34 +1,25 @@
-import * as angular from 'angular';
+import { Injectable, Inject } from '@angular/core';
+import { Account } from './account.service';
 
-Principal.$inject = ['$q', 'Account'<% if (websocket == 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
+@Injectable()
+export class Principal {
+    private _identity: any;
+    private authenticated: boolean = false;
 
-export function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
-    var _identity,
-        _authenticated = false;
+    constructor(private account: Account<% if (websocket === 'spring-websocket') { %>, @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService<% } %>){}
 
-    var service = {
-        authenticate: authenticate,
-        hasAnyAuthority: hasAnyAuthority,
-        hasAuthority: hasAuthority,
-        identity: identity,
-        isAuthenticated: isAuthenticated,
-        isIdentityResolved: isIdentityResolved
-    };
-
-    return service;
-
-    function authenticate (identity) {
-        _identity = identity;
-        _authenticated = identity !== null;
+    authenticate (_identity) {
+        this._identity = _identity;
+        this.authenticated = _identity !== null;
     }
 
-    function hasAnyAuthority (authorities) {
-        if (!_authenticated || !_identity || !_identity.authorities) {
+    hasAnyAuthority (authorities) {
+        if (!this.authenticated || !this._identity || !this._identity.authorities) {
             return false;
         }
 
         for (var i = 0; i < authorities.length; i++) {
-            if (_identity.authorities.indexOf(authorities[i]) !== -1) {
+            if (this._identity.authorities.indexOf(authorities[i]) !== -1) {
                 return true;
             }
         }
@@ -36,59 +27,53 @@ export function Principal ($q, Account<% if (websocket == 'spring-websocket') { 
         return false;
     }
 
-    function hasAuthority (authority) {
-        if (!_authenticated) {
-            return $q.when(false);
+    hasAuthority (authority): Promise<any> {
+        if (!this.authenticated) {
+           return new Promise((resolve) => resolve(false));
         }
 
-        return this.identity().then(function(_id) {
-            return _id.authorities && _id.authorities.indexOf(authority) !== -1;
-        }, function(){
+        return this.identity().then(id => {
+            return id.authorities && id.authorities.indexOf(authority) !== -1;
+        }, () => {
             return false;
         });
     }
 
-    function identity (force) {
-        var deferred = $q.defer();
-
+    identity (force?: boolean): Promise<any> {
         if (force === true) {
-            _identity = undefined;
+            this._identity = undefined;
         }
 
-        // check and see if we have retrieved the identity data from the server.
+        // check and see if we have retrieved the _identity data from the server.
         // if we have, reuse it by immediately resolving
-        if (angular.isDefined(_identity)) {
-            deferred.resolve(_identity);
-
-            return deferred.promise;
+        if (this._identity) {
+            return new Promise((resolve) => resolve(this._identity));
         }
 
-        // retrieve the identity data from the server, update the identity object, and then resolve.
-        Account.get().$promise
-            .then(getAccountThen)
-            .catch(getAccountCatch);
-
-        return deferred.promise;
-
-        function getAccountThen (account) {
-            _identity = account.data;
-            _authenticated = true;
-            deferred.resolve(_identity);<% if (websocket == 'spring-websocket') { %>
-            <%=jhiPrefixCapitalized%>TrackerService.connect();<% } %>
-        }
-
-        function getAccountCatch () {
-            _identity = null;
-            _authenticated = false;
-            deferred.resolve(_identity);
-        }
+        return new Promise((resolve) => {
+            // retrieve the _identity data from the server, update the _identity object, and then resolve.
+            this.account.get().subscribe(account => {
+                if (account) {
+                    this._identity = account;
+                    this.authenticated = true;
+                    resolve(this._identity)
+                    <%_ if (websocket === 'spring-websocket') { _%>
+                    this.<%=jhiPrefixCapitalized%>TrackerService.connect();
+                    <%_ } _%>
+                } else {
+                    this._identity = null;
+                    this.authenticated = false;
+                    resolve(this._identity)
+                }
+            });
+        });
     }
 
-    function isAuthenticated () {
-        return _authenticated;
+    isAuthenticated (): boolean {
+        return this.authenticated;
     }
 
-    function isIdentityResolved () {
-        return angular.isDefined(_identity);
+    isIdentityResolved (): boolean {
+        return this._identity !== undefined;
     }
 }

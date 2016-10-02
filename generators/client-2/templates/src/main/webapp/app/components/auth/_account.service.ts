@@ -1,16 +1,16 @@
-Account.$inject = ['$resource'];
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-export function Account ($resource) {
-    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, {}, {
-        'get': { method: 'GET', params: {}, isArray: false,
-            interceptor: {
-                response: function(response) {
-                    // expose response
-                    return response;
-                }
-            }
-        }
-    });
+@Injectable()
+export class Account  {
+    constructor(private http: Http) { }
 
-    return service;
+    get(): Observable<any> {
+        return this.http.get(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>).map((res: Response) => res.json());
+    }
+
+    save(account: any): Observable<Response> {
+        return this.http.post(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, account).map((res: Response) => res.json());
+    }
 }
