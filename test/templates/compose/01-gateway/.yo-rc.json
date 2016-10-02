@@ -13,6 +13,7 @@
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
     "searchEngine": "no",
+    "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
     "jwtSecretKey": "1ab78a668a06b55d1a25551d5f332ae97afcaf27",
     "useSass": false,

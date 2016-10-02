@@ -1,9 +1,10 @@
 # ===================================================================
-# Spring Cloud Config bootstrap configuration for the "dev" profile
+# Spring Cloud <% if (serviceDiscoveryType == 'consul') { %>Consul<% } %> Config bootstrap configuration for the "dev" profile
 # ===================================================================
 
 spring:
     cloud:
+      <%_ if (serviceDiscoveryType == 'eureka') { _%>
         config:
             fail-fast: true
             uri: http://admin:admin@localhost:8761/config
@@ -12,3 +13,11 @@ spring:
             profile: dev # profile(s) of the property source
             label: master # toggle to switch to a different version of the configuration as stored in git
             # it can be set to any label, branch or commit of the config source git repository
+      <%_ } _%>
+      <%_ if (serviceDiscoveryType == 'consul') { _%>
+        consul:
+            config:
+                fail-fast: true
+                format: yaml
+                profile-separator: "-"
+      <%_ } _%>

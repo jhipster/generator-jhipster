@@ -135,6 +135,8 @@ module.exports = KubernetesGenerator.extend({
         // cluster for mongodb: it can be done later
         // askForClustersMode: prompts.askForClustersMode,
 
+        askForServiceDiscovery: prompts.askForServiceDiscovery,
+
         askForAdminPassword: prompts.askForAdminPassword,
 
         askForKubernetesNamespace: prompts.askForKubernetesNamespace,

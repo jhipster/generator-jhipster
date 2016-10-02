@@ -10,15 +10,15 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
 eureka:
     client:
         enabled: false
     instance:
         appname: <%= baseName %>
         instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
-
 <%_ } _%>
+
 spring:
     application:
         name: <%= baseName %>

@@ -42,7 +42,9 @@ const constants = require('../generator-constants'),
     DOCKER_SONAR = constants.DOCKER_SONAR,
     DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
     DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
-    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH,
+    DOCKER_CONSUL = constants.DOCKER_CONSUL;
+
 
 var javaDir;
 
@@ -130,6 +132,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
             this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_CONSUL = DOCKER_CONSUL;
 
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packagejs = packagejs;
@@ -154,6 +157,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.messageBroker = false;
             }
 
+            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';
@@ -271,6 +275,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.configOptions.prodDatabaseType = this.prodDatabaseType;
             this.configOptions.searchEngine = this.searchEngine;
             this.configOptions.messageBroker = this.messageBroker;
+            this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
             this.configOptions.buildTool = this.buildTool;
             this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
             this.configOptions.authenticationType = this.authenticationType;
@@ -299,6 +304,7 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/prodDatabaseType', this.prodDatabaseType);
             insight.track('app/searchEngine', this.searchEngine);
             insight.track('app/messageBroker', this.messageBroker);
+            insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
             insight.track('app/buildTool', this.buildTool);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
         },
@@ -350,6 +356,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('prodDatabaseType', this.prodDatabaseType);
             this.config.set('searchEngine', this.searchEngine);
             this.config.set('messageBroker', this.messageBroker);
+            this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('buildTool', this.buildTool);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
@@ -439,10 +446,22 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
-                this.copy(DOCKER_DIR + 'central-server-config/localhost-config/application.yml', DOCKER_DIR + 'central-server-config/localhost-config/application.yml');
-                this.copy(DOCKER_DIR + 'central-server-config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
-                this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
+                this.template(DOCKER_DIR + 'config/_README.md', DOCKER_DIR + 'central-server-config/README.md',this, {});
+
+                if (this.serviceDiscoveryType === 'consul') {
+                    this.template(DOCKER_DIR + '_consul.yml', DOCKER_DIR + 'consul.yml', this, {});
+                    this.copy(DOCKER_DIR + 'config/git2consul.json', DOCKER_DIR + 'config/git2consul.json');
+                    this.copy(DOCKER_DIR + 'config/consul-config/application.yml', DOCKER_DIR + 'central-server-config/application.yml');
+                }
+
+                if (this.serviceDiscoveryType === 'eureka') {
+                    this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
+                    this.copy(DOCKER_DIR + 'config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
+                    this.copy(DOCKER_DIR + 'config/localhost-config/application.yml', DOCKER_DIR + 'central-server-config/localhost-config/application.yml');
+                }
             }
+
+
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
         },
 
