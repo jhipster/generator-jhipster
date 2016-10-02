@@ -1,13 +1,4 @@
-Activate.$inject = ['$resource'];
-
-export function Activate ($resource) {
-    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/activate'<%} else { %>'api/activate'<% } %>, {}, {
-        'get': { method: 'GET', params: {}, isArray: false}
-    });
-
-    return service;
-}
-/*import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
@@ -25,4 +16,4 @@ export class Activate {
             search: params
         }).map((res: Response) => res.json());
     }
-}*/
+}

@@ -1,4 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { Activate } from './activate.service';
 
 @Component({
     selector: 'activate',
@@ -9,15 +10,15 @@ export class ActivateComponent implements OnInit {
     login: Function;
     success: string;
 
-    constructor(@Inject('Auth') private Auth, @Inject('LoginService') private LoginService, @Inject('$stateParams') private $stateParams) {
+    constructor(private activate: Activate, @Inject('LoginService') private LoginService, @Inject('$stateParams') private $stateParams) {
         this.login = this.LoginService.open;
     }
 
     ngOnInit () {
-        this.Auth.activateAccount({key: this.$stateParams.key}).then(() => {
+        this.activate.get(this.$stateParams.key).subscribe(() => {
             this.error = null;
             this.success = 'OK';
-        }).catch(() => {
+        }, () => {
             this.success = null;
             this.error = 'ERROR';
         });
