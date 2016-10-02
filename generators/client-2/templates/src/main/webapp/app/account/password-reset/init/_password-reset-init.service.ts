@@ -9,6 +9,6 @@ export class PasswordResetInit {
     constructor (private http: Http) {}
 
     save(mail: string): Observable<any> {
-        return this.http.post(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/reset_password/init'<%} else { %>'api/account/reset_password/init'<% } %>, mail).map((res: Response) => res.json());
+        return this.http.post(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account/reset_password/init'<%} else { %>'api/account/reset_password/init'<% } %>, mail);
     }
 }

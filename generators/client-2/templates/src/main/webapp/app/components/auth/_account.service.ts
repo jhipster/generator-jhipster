@@ -11,6 +11,6 @@ export class Account  {
     }
 
     save(account: any): Observable<Response> {
-        return this.http.post(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, account).map((res: Response) => res.json());
+        return this.http.post(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/account'<%} else { %>'api/account'<% } %>, account);
     }
 }
