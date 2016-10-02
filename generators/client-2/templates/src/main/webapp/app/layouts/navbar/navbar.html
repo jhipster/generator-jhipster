@@ -35,7 +35,7 @@
                         <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                     </ul>
                 </li>
-                <li uiSrefActive="active" ngbDropdown class="dropdown pointer">
+                <li ngbDropdown class="dropdown pointer">
                     <a class="dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                         <span>
                             <span class="glyphicon glyphicon-user"></span>
@@ -66,13 +66,13 @@
                             </a>
                         </li>
                         <%_ } _%>
-                        <li uiSrefActive="active" *ngSwitchCase="true">
+                        <li *ngSwitchCase="true">
                             <a href="" (click)="logout()" id="logout">
                                 <span class="glyphicon glyphicon-log-out"></span>&nbsp;
                                 <span translate="global.menu.account.logout">Sign out</span>
                             </a>
                         </li>
-                        <li uiSrefActive="active" *ngSwitchCase="false">
+                        <li *ngSwitchCase="false">
                             <a href="" (click)="login()" id="login">
                                 <span class="glyphicon glyphicon-log-in"></span>&nbsp;
                                 <span translate="global.menu.account.login">Sign in</span>
@@ -86,7 +86,7 @@
                         </li>
                     </ul>
                 </li>
-                <li uiSrefActive="active"  *ngSwitchCase="true" has-authority="ROLE_ADMIN" ngbDropdown class="dropdown pointer">
+                <li *ngSwitchCase="true" has-authority="ROLE_ADMIN" ngbDropdown class="dropdown pointer">
                     <a class="dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                         <span>
                             <span class="glyphicon glyphicon-tower"></span>
@@ -165,7 +165,7 @@
                     </ul>
                 </li>
                 <%_ if (enableTranslation){ _%>
-                <li *ngIf="languages" uiSrefActive="active" ngbDropdown class="dropdown pointer">
+                <li *ngIf="languages" ngbDropdown class="dropdown pointer">
                     <a class="dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" *ngIf="languages.length > 1">
                         <span>
                             <span class="glyphicon glyphicon-flag"></span>
