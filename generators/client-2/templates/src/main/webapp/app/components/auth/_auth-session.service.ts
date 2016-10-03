@@ -46,7 +46,7 @@ export class AuthServerProvider {
 
             delete this.$localStorage.authenticationToken;
             // to get a new csrf token call the api
-            this.http.get('api/account').subscribe();
+            this.http.get('api/account').subscribe(() => {}, () => {});
             return response;
         });
         <%_ } _%>
