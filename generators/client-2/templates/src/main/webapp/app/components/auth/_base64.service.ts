@@ -1,4 +1,7 @@
 //TODO see if this can be replaced with any inbuilt angular/js way
+import { Injectable } from '@angular/core';
+
+@Injectable()
 export class Base64 {
     let keyStr: string = 'ABCDEFGHIJKLMNOP' +
         'QRSTUVWXYZabcdef' +

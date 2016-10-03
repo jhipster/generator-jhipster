@@ -11,8 +11,14 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
 import { Account } from './auth/account.service';
 import { Principal } from './auth/principal.service';
 import { AuthService } from './auth/auth.service';
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') _%>
+import { AuthServerProvider } from './auth/auth-jwt.service';
+<%_ } else if (authenticationType === 'oauth2') { _%>
+import { AuthServerProvider } from './auth/auth-oauth2.service';
+import { Base64 } from './auth/base64.service';
+<%_ } else { _%>
 import { AuthServerProvider } from './auth/auth-session.service';
-
+<%_ } _%>
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
 import { jhiAlertComponent } from './alert/alert.component';
 
@@ -33,6 +39,9 @@ import { jhiAlertComponent } from './alert/alert.component';
         Account,
         Principal,
         AuthService,
+        <%_ if (authenticationType === 'oauth2') { _%>
+        Base64,
+        <%_ } _%>
         AuthServerProvider
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
