@@ -43,8 +43,10 @@ const constants = require('../generator-constants'),
     DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
     DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
     DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH,
-    DOCKER_CONSUL = constants.DOCKER_CONSUL;
+    DOCKER_CONSUL = constants.DOCKER_CONSUL,
 
+    JHIPSTER_DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL,
+    JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
 
 var javaDir;
 
@@ -288,6 +290,9 @@ module.exports = JhipsterServerGenerator.extend({
             } else {
                 this.CLIENT_DIST_DIR = 'build/' + CLIENT_DIST_DIR;
             }
+            // Make documentation URL available in templates
+            this.DOCUMENTATION_URL = JHIPSTER_DOCUMENTATION_URL;
+            this.DOCUMENTATION_ARCHIVE_URL = JHIPSTER_DOCUMENTATION_URL + JHIPSTER_DOCUMENTATION_ARCHIVE_PATH + 'v' + this.jhipsterVersion;
         }
     },
 
