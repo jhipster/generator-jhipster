@@ -65,7 +65,7 @@ export class AuthService {
         var cb = callback || function(){};
 
         return new Promise((resolve, reject) => {
-            this.AuthServerProvider.login(credentials).subscribe(data => {
+            this.authServerProvider.login(credentials).subscribe(data => {
                 this.principal.identity(true).then(account => {
                     <%_ if (enableTranslation){ _%>
                     // After the login the language will be changed to
