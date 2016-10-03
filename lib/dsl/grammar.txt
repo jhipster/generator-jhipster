@@ -102,7 +102,7 @@ validationList
 
 //Relationship
 relationDecl
-  = 'relationship' space rt:relationshipType space* "{" space* JDLComment? space* bodies:relationshipBodies space* "}" {
+  = 'relationship' space rt:relationshipType space* "{" space* JDLComment? space* bodies:relationshipBodies space* JDLComment? space* "}" {
         addCardinalityToRelationships(rt, bodies);
         return concat([], bodies);
     }
