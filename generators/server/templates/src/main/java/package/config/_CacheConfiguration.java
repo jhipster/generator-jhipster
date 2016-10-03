@@ -12,12 +12,12 @@ import com.hazelcast.config.MaxSizeConfig;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-<%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType !== false && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+<%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 <%_ } _%>
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-<%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType !== false && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+<%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 <%_ } _%>
@@ -54,7 +54,7 @@ public class CacheConfiguration {
     private EntityManager entityManager;<% } %><% if (hibernateCache == 'hazelcast') { %>
 
     @Inject
-    private Environment env;<% } %><% if (hibernateCache == 'hazelcast' && serviceDiscoveryType !== false && (applicationType == 'microservice' || applicationType == 'gateway')) { %>
+    private Environment env;<% } %><% if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { %>
 
     @Inject
     private DiscoveryClient discoveryClient;
@@ -133,7 +133,7 @@ public class CacheConfiguration {
         log.debug("Configuring Hazelcast");
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
-        <%_ if (serviceDiscoveryType !== false && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+        <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
         // The serviceId is by default the application's name, see Spring Boot's eureka.instance.appname property
         String serviceId = discoveryClient.getLocalServiceInstance().getServiceId();
         log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);

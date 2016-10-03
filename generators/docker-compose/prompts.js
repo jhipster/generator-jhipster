@@ -175,7 +175,7 @@ function askForServiceDiscovery() {
 
     var serviceDiscoveryEnabledApps = [];
     this.appConfigs.forEach(function (appConfig, index) {
-        if(appConfig.serviceDiscoveryType !== false && (appConfig.applicationType === 'microservice' || appConfig.applicationType === 'gateway')) {
+        if(appConfig.serviceDiscoveryType && (appConfig.applicationType === 'microservice' || appConfig.applicationType === 'gateway')) {
             serviceDiscoveryEnabledApps.push({baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType});
         }
     }, this);
