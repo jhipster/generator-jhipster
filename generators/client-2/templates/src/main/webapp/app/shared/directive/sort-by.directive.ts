@@ -3,7 +3,7 @@ import { JhSortDirective } from './sort.directive';
 
 @Directive({
     selector: '[jh-sort-by]',
-    inputs: ['jhSortBy'],
+    inputs: ['jhSortBy:jh-sort-by'],
     host: {
         '(click)': 'onClick()'
     }

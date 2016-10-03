@@ -2,7 +2,7 @@ import { Directive, Host, OnInit, Renderer, EventEmitter, ElementRef } from '@an
 
 @Directive({
     selector: '[jh-sort]',
-    inputs: ['predicate:jhSort', 'ascending', 'callback'],
+    inputs: ['predicate:jh-sort', 'ascending', 'callback'],
     outputs: ['jhSortChange', 'ascendingChange'],
     host: {
         '(click)': 'onClick()'
