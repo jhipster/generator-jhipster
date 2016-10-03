@@ -33,7 +33,7 @@ upgradeAdapter.upgradeNg1Provider('LoginService');
 
 angular
     .module('<%=angularAppName%>.common', [
-        'ngStorage', <% if (enableTranslation) { %>
+        'ngStorage',<% if (enableTranslation) { %>
         'tmh.dynamicLocale',
         'pascalprecht.translate',<% } %>
         'ngResource',
