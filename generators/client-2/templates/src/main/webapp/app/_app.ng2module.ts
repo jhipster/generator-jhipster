@@ -13,6 +13,7 @@ import { XSRFStrategyProvider } from './shared/XSRF-strategy.provider';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { FooterComponent } from './layouts/footer/footer.component';
+import { ErrorComponent } from './layouts/error/error.component';
 <%_ if (enableTranslation){ _%>
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 <%_ } _%>
@@ -35,7 +36,7 @@ let routerConfig = {
     imports: [
         BrowserModule,
         Ng1ToNg2Module,
-        UIRouterModule.forRoot(routerConfig),
+        UIRouterModule.forChild(routerConfig),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>CommonModule,
         <%=angular2AppName%>AdminModule,
@@ -44,6 +45,7 @@ let routerConfig = {
     declarations: [
         HomeComponent,
         NavbarComponent,
+        ErrorComponent,
         FooterComponent<%_ if (enableTranslation){ _%>,
         ActiveMenuDirective
         <%_ } _%>

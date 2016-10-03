@@ -51,7 +51,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         AuthServerProvider
     ],
     exports: [
-        jhiAlertComponent,
+        JhiAlertComponent,
         JhiAlertErrorComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective
