@@ -23,12 +23,10 @@ task manifestJar(dependsOn:'compileTestScala',type: Jar) {
 task gatlingRun(dependsOn:'manifestJar') << {
     group = "gatling"
 
-    println project.properties
     def String gatlingSimulationClass = "*"
     if (project.hasProperty('gatlingSimulationClass')) {
         gatlingSimulationClass = project.property('gatlingSimulationClass')
     }
-    standardInput = System.in
 
     createGatlingRunTask(gatlingSimulationClassName).dependsOn('manifestJar').execute()
 }
