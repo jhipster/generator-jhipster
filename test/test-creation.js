@@ -24,6 +24,7 @@ const expectedFiles = {
         'settings.gradle',
         'gradlew',
         'gradlew.bat',
+        'gradle/docker.gradle',
         'gradle/gatling.gradle',
         'gradle/liquibase.gradle',
         'gradle/mapstruct.gradle',
@@ -361,6 +362,10 @@ const expectedFiles = {
     ],
 
     gateway: [
+        SERVER_MAIN_RES_DIR + 'config/bootstrap.yml',
+        SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml',
+        SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml',
+        SERVER_TEST_RES_DIR + 'config/bootstrap.yml',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/GatewayConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/gateway/ratelimiting/RateLimitingRepository.java',
@@ -380,12 +385,32 @@ const expectedFiles = {
         'gradle/docker.gradle'
     ],
 
-    dockerServicesDev: [
-        DOCKER_DIR + 'app.yml'
+    dockerServices: [
+        DOCKER_DIR + 'app.yml',
+        DOCKER_DIR + 'Dockerfile',
+        DOCKER_DIR + 'sonar.yml'
     ],
 
-    dockerServicesProd: [
-        DOCKER_DIR + 'sonar.yml'
+    mysql: [
+        DOCKER_DIR + 'mysql.yml'
+    ],
+
+    mariadb: [
+        DOCKER_DIR + 'mariadb.yml'
+    ],
+
+    postgresql: [
+        DOCKER_DIR + 'postgresql.yml'
+    ],
+
+    mongodb: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/dbmigrations/InitialSetupMigration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/CloudMongoDbConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateConverters.java',
+        DOCKER_DIR + 'mongodb.yml',
+        DOCKER_DIR + 'mongodb-cluster.yml',
+        DOCKER_DIR + 'mongodb/MongoDB.Dockerfile',
+        DOCKER_DIR + 'mongodb/scripts/init_replicaset.js'
     ],
 
     cassandra: [
@@ -402,12 +427,23 @@ const expectedFiles = {
         DOCKER_DIR + 'cassandra.yml'
     ],
 
-    containerizeWithDocker: [
+    elasticsearch: [
+        DOCKER_DIR + 'elasticsearch.yml',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/search/UserSearchRepository.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/ElasticSearchConfiguration.java',
+        SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/config/elasticsearch/IndexReinitializer.java'
+    ],
+
+    eureka: [
         DOCKER_DIR + 'central-server-config/localhost-config/application.yml',
         DOCKER_DIR + 'central-server-config/docker-config/application.yml',
-        DOCKER_DIR + 'jhipster-registry.yml',
-        DOCKER_DIR + 'Dockerfile',
-        DOCKER_DIR + 'app.yml'
+        DOCKER_DIR + 'jhipster-registry.yml'
+    ],
+
+    consul: [
+        DOCKER_DIR + 'central-server-config/application.yml',
+        DOCKER_DIR + 'consul.yml',
+        DOCKER_DIR + 'config/git2consul.json'
     ]
 };
 
@@ -443,8 +479,8 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
-            assert.file(expectedFiles.dockerServicesProd);
-            assert.file(['gulpfile.js']);
+            assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.mysql);
         });
     });
 
@@ -478,8 +514,8 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
-            assert.file(expectedFiles.dockerServicesProd);
-            assert.file(['gulpfile.js']);
+            assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.mariadb);
         });
     });
 
@@ -511,9 +547,9 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.file(expectedFiles.client);
-            assert.file(expectedFiles.dockerServicesProd);
-            assert.file(['gulpfile.js']);
             assert.file(['gradle/yeoman.gradle']);
+            assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.mysql);
         });
     });
 
@@ -674,6 +710,71 @@ describe('JHipster generator', function () {
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/hazelcast/HazelcastCacheRegionFactory.java',
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/hazelcast/package-info.java'
             ]);
+        });
+    });
+
+    describe('postgresql and elasticsearch', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'no',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'postgresql',
+                    'prodDatabaseType': 'postgresql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'skipClient': false,
+                    'skipUserManagement': false,
+                    'serverSideOptions' : [
+                        'searchEngine:elasticsearch'
+                    ]
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with "PostgreSQL" and "Elasticsearch"', function () {
+            assert.file(expectedFiles.postgresql);
+            assert.file(expectedFiles.elasticsearch);
+        });
+    });
+
+    describe('mongodb', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'no',
+                    'databaseType': 'mongodb',
+                    'devDatabaseType': 'mongodb',
+                    'prodDatabaseType': 'mongodb',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'skipClient': false,
+                    'skipUserManagement': false,
+                    'serverSideOptions' : []
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with "MongoDB"', function () {
+            assert.file(expectedFiles.mongodb);
         });
     });
 
@@ -929,7 +1030,6 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
-            assert.noFile(['gulpfile.js']);
         });
     });
 
@@ -960,12 +1060,11 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.noFile(expectedFiles.client);
-            assert.noFile(['gulpfile.js']);
             assert.noFile(['gradle/yeoman.gradle']);
         });
     });
 
-    describe('gateway', function () {
+    describe('gateway with eureka', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -985,7 +1084,8 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    'serverSideOptions' : [],
+                    'serviceDiscoveryType' : 'eureka'
                 })
                 .on('end', done);
         });
@@ -993,11 +1093,12 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
-            assert.file(expectedFiles.containerizeWithDocker);
+            assert.file(expectedFiles.eureka);
+            assert.noFile(expectedFiles.consul);
         });
     });
 
-    describe('microservice', function () {
+    describe('microservice with eureka', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -1017,7 +1118,8 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    'serverSideOptions' : [],
+                    'serviceDiscoveryType' : 'eureka'
                 })
                 .on('end', done);
         });
@@ -1025,13 +1127,82 @@ describe('JHipster generator', function () {
         it('creates expected files with the microservice application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
-            assert.file(expectedFiles.dockerServicesDev);
-            assert.file(expectedFiles.dockerServicesProd);
-            assert.file(expectedFiles.containerizeWithDocker);
+            assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.eureka);
+            assert.noFile(expectedFiles.consul);
         });
     });
 
-    describe('microservice with gradle', function () {
+    describe('gateway with consul', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'applicationType': 'gateway',
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'jwt',
+                    'hibernateCache': 'ehcache',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Memory',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'serverSideOptions' : [],
+                    'serviceDiscoveryType' : 'consul'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the gateway application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.gateway);
+            assert.noFile(expectedFiles.eureka);
+            assert.file(expectedFiles.consul);
+        });
+    });
+
+    describe('microservice with consul', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    'applicationType': 'microservice',
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'jwt',
+                    'hibernateCache': 'ehcache',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'mysql',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'serverSideOptions' : [],
+                    'serviceDiscoveryType' : 'consul'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the microservice application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.dockerServices);
+            assert.noFile(expectedFiles.eureka);
+            assert.file(expectedFiles.consul);
+        });
+    });
+
+    describe('microservice with gradle and eureka', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -1053,7 +1224,8 @@ describe('JHipster generator', function () {
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
                     'serverSideOptions' : [],
                     'skipClient': true,
-                    'skipUserManagement': true
+                    'skipUserManagement': true,
+                    'serviceDiscoveryType' : 'eureka'
                 })
                 .on('end', done);
         });
@@ -1062,7 +1234,8 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.microserviceGradle);
-            assert.file(expectedFiles.containerizeWithDocker);
+            assert.file(expectedFiles.eureka);
+            assert.noFile(expectedFiles.consul);
         });
     });
 
@@ -1076,7 +1249,6 @@ describe('JHipster generator', function () {
                     'packageName': 'com.mycompany.myapp',
                     'packageFolder': 'com/mycompany/myapp',
                     'serverPort': '9999',
-                    'serviceDiscoveryType': 'eureka',
                     'authenticationType': 'uaa',
                     'hibernateCache': 'no',
                     'databaseType': 'sql',
@@ -1088,20 +1260,20 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    'serverSideOptions' : [],
+                    'serviceDiscoveryType' : 'eureka'
                 })
                 .on('end', done);
         });
 
         it('creates expected files with the UAA application type', function () {
             assert.file(expectedFiles.uaa);
-            assert.file(expectedFiles.dockerServicesDev);
-            assert.file(expectedFiles.dockerServicesProd);
-            assert.file(expectedFiles.containerizeWithDocker);
+            assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.eureka);
         });
     });
 
-    describe('Gateway with UAA server', function () {
+    describe('UAA gateway with eureka', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -1126,7 +1298,8 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    'serverSideOptions' : [],
+                    'serviceDiscoveryType' : 'eureka'
                 })
                 .on('end', done);
         });
@@ -1134,9 +1307,8 @@ describe('JHipster generator', function () {
         it('creates expected files for UAA auth with the Gateway application type', function () {
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.gateway);
-            assert.file(expectedFiles.dockerServicesDev);
-            assert.file(expectedFiles.dockerServicesProd);
-            assert.file(expectedFiles.containerizeWithDocker);
+            assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.eureka);
         });
     });
 });
@@ -1169,7 +1341,6 @@ describe('JHipster server generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
-            assert.noFile(['gulpfile.js']);
         });
     });
 });
@@ -1193,7 +1364,6 @@ describe('JHipster client generator', function () {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.client);
-            assert.file(['gulpfile.js']);
         });
     });
 });
