@@ -11,7 +11,7 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
 import { Account } from './auth/account.service';
 import { Principal } from './auth/principal.service';
 import { AuthService } from './auth/auth.service';
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') _%>
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from './auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'oauth2') { _%>
 import { AuthServerProvider } from './auth/auth-oauth2.service';
