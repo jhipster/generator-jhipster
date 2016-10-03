@@ -3,6 +3,7 @@
 const expect = require('chai').expect,
     fail = expect.fail,
     toFilePath = require('../../../lib/reader/json_file_reader').toFilePath,
+    doesfileExist = require('../../../lib/reader/json_file_reader').doesfileExist,
     readEntityJSON = require('../../../lib/reader/json_file_reader').readEntityJSON;
 
 describe('JSONFileReader', function () {
@@ -103,6 +104,25 @@ describe('JSONFileReader', function () {
           let expectedFirstLetter = 'M';
           let name = 'myEntity';
           expect(toFilePath(name)).to.eq(`.jhipster/${expectedFirstLetter}${name.slice(1, name.length)}.json`)
+        });
+      });
+    });
+  });
+  describe('::doesfileExist', function () {
+    describe('when checking a file path', function () {
+      describe('with a nil file path', function () {
+        it('return false', function () {
+          expect(doesfileExist()).to.be.false;
+        });
+      });
+      describe('with an invalid file path', function () {
+        it('return false', function () {
+          expect(doesfileExist('someInvalidPath')).to.be.false;
+        });
+      });
+      describe('with a valid file path', function () {
+        it('return true', function () {
+          expect(doesfileExist(`./test/test_files/MyEntity.json`)).to.be.true;
         });
       });
     });
