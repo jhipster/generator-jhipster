@@ -1,54 +1,55 @@
-(function() {
-    'use strict';
+import { Directive, ElementRef, Input, Renderer, OnInit } from '@angular/core';
+import { Principal } from './principal.service';
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .directive('hasAuthority', hasAuthority);
+@Directive({
+    selector: '[has-authority]',
+    inputs: ['hasAuthority:has-authority']
+})
+export class HasAuthorityDirective implements OnInit {
 
-    hasAuthority.$inject = ['Principal'];
+    hasAuthority: string;
+    authority: string;
+    element: any;
 
-    function hasAuthority(Principal) {
-        var directive = {
-            restrict: 'A',
-            link: linkFunc
-        };
+    constructor(private principal: Principal, el: ElementRef, private renderer: Renderer) {
+        this.element = $(el.nativeElement);
+    }
 
-        return directive;
+    ngOnInit() {
+        this.authority = this.hasAuthority.replace(/\s+/g, '');
 
-        function linkFunc(scope, element, attrs) {
-            var authority = attrs.hasAuthority.replace(/\s+/g, '');
+        if (this.authority.length > 0) {
+            this.defineVisibility(true);
 
-            var setVisible = function () {
-                    element.removeClass('hidden');
-                },
-                setHidden = function () {
-                    element.addClass('hidden');
-                },
-                defineVisibility = function (reset) {
-
-                    if (reset) {
-                        setVisible();
-                    }
-
-                    Principal.hasAuthority(authority)
-                        .then(function (result) {
-                            if (result) {
-                                setVisible();
-                            } else {
-                                setHidden();
-                            }
-                        });
-                };
-
-            if (authority.length > 0) {
+            //TODO this needs to be migrated
+            /*scope.$watch(function() {
+                return Principal.isAuthenticated();
+            }, function() {
                 defineVisibility(true);
-
-                scope.$watch(function() {
-                    return Principal.isAuthenticated();
-                }, function() {
-                    defineVisibility(true);
-                });
-            }
+            });*/
         }
     }
-})();
+
+    private setVisible () {
+        this.element.removeClass('hidden');
+    }
+
+    private setHidden () {
+        this.element.addClass('hidden');
+    }
+
+    private defineVisibility (reset) {
+
+        if (reset) {
+            this.setVisible();
+        }
+
+        this.principal.hasAuthority(this.authority).then(result => {
+            if (result) {
+                this.setVisible();
+            } else {
+                this.setHidden();
+            }
+        });
+    }
+}

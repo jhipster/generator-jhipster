@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import {AlertService} from './alert.service';
+import { AlertService } from './alert.service';
 
 @Component({
     selector: 'jhi-alert',
@@ -10,7 +10,7 @@ import {AlertService} from './alert.service';
             </div>
         </div>`
 })
-export class jhiAlertComponent implements OnInit, OnDestroy {
+export class JhiAlertComponent implements OnInit, OnDestroy {
     alerts: any[];
 
     constructor(private alertService: AlertService) { }

@@ -1,52 +1,54 @@
-(function() {
-    'use strict';
+import { Directive, ElementRef, Input, Renderer, OnInit } from '@angular/core';
+import { Principal } from './principal.service';
 
-    angular
-        .module('<%=angularAppName%>.common')
-        .directive('hasAnyAuthority', hasAnyAuthority);
+@Directive({
+    selector: '[has-any-authority]',
+    inputs: ['hasAnyAuthority:has-any-authority']
+})
+export class HasAnyAuthorityDirective implements OnInit {
 
-    hasAnyAuthority.$inject = ['Principal'];
+    hasAnyAuthority: string;
+    authority: string[];
+    element: any;
 
-    function hasAnyAuthority(Principal) {
-        var directive = {
-            restrict: 'A',
-            link: linkFunc
-        };
+    constructor(private principal: Principal, el: ElementRef, private renderer: Renderer) {
+        this.element = $(el.nativeElement);
+    }
 
-        return directive;
+    ngOnInit() {
+        this.authority = this.hasAnyAuthority.replace(/\s+/g, '').split(',');
 
-        function linkFunc(scope, element, attrs) {
-            var authorities = attrs.hasAnyAuthority.replace(/\s+/g, '').split(',');
+        if (this.authority.length > 0) {
+            this.defineVisibility(true);
 
-            var setVisible = function () {
-                    element.removeClass('hidden');
-                },
-                setHidden = function () {
-                    element.addClass('hidden');
-                },
-                defineVisibility = function (reset) {
-                    var result;
-                    if (reset) {
-                        setVisible();
-                    }
-
-                    result = Principal.hasAnyAuthority(authorities);
-                    if (result) {
-                        setVisible();
-                    } else {
-                        setHidden();
-                    }
-                };
-
-            if (authorities.length > 0) {
+            //TODO this needs to be migrated
+            /*scope.$watch(function() {
+                return Principal.isAuthenticated();
+            }, function() {
                 defineVisibility(true);
-
-                scope.$watch(function() {
-                    return Principal.isAuthenticated();
-                }, function() {
-                    defineVisibility(true);
-                });
-            }
+            });*/
         }
     }
-})();
+
+    private setVisible () {
+        this.element.removeClass('hidden');
+    }
+
+    private setHidden () {
+        this.element.addClass('hidden');
+    }
+
+    private defineVisibility (reset) {
+
+        if (reset) {
+            this.setVisible();
+        }
+
+        let result = this.principal.hasAnyAuthority(this.authority)
+        if (result) {
+            this.setVisible();
+        } else {
+            this.setHidden();
+        }
+    }
+}
