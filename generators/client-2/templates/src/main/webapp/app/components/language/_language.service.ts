@@ -15,11 +15,11 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
     }
 
     getAll(): Promise<any> {
-        return new Promise((resolve) => resolve(LANGUAGES));
+        return Promise.resolve(LANGUAGES);
     }
 
     getCurrent(): Promise<any> {
         var language = this.$translate.storage().get('NG_TRANSLATE_LANG_KEY');
-        return new Promise((resolve) => resolve(language));
+        return Promise.resolve(language);
     }
 }
