@@ -57,7 +57,7 @@ let ADMIN_STATES = [
     ],
     declarations: [
         AuditsComponent,
-        LogsComponent
+        LogsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
         <%=jhiPrefixCapitalized%>HealthModalComponent,

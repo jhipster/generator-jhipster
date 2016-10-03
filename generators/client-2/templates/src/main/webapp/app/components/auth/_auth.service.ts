@@ -1,11 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
 import { Principal } from './principal.service';
+import { StateService } from 'ui-router-ng2';
 
 @Injectable()
 export class AuthService {
 
     constructor(
         private principal: Principal,
+        private $state: StateService,
         <%_ if (websocket === 'spring-websocket') { _%>
         @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
@@ -19,6 +21,7 @@ export class AuthService {
     ){}
 
     authorize (force) {
+        var $state = this.$state;
         var authReturn = this.principal.identity(force).then(authThen.bind(this));
 
         return authReturn;
