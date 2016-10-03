@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { Principal } from './principal.service';
 import { StateService } from 'ui-router-ng2';
+
+import { Principal } from './principal.service';
+import { AuthServerProvider } from './auth-session.service';
 
 @Injectable()
 export class AuthService {
@@ -8,6 +10,7 @@ export class AuthService {
     constructor(
         private principal: Principal,
         private $state: StateService,
+        private authServerProvider: AuthServerProvider,
         <%_ if (websocket === 'spring-websocket') { _%>
         @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
@@ -16,12 +19,10 @@ export class AuthService {
         <%_ } _%>
         @Inject('$rootScope') private $rootScope,
         @Inject('LoginService') private LoginService,
-        @Inject('$sessionStorage') private $sessionStorage,
-        @Inject('AuthServerProvider') private AuthServerProvider
+        @Inject('$sessionStorage') private $sessionStorage
     ){}
 
     authorize (force) {
-        var $state = this.$state;
         var authReturn = this.principal.identity(force).then(authThen.bind(this));
 
         return authReturn;
@@ -31,7 +32,7 @@ export class AuthService {
 
             // an authenticated user can't access to login and register pages
             if (isAuthenticated && this.$rootScope.toState.parent === 'account' && (this.$rootScope.toState.name === 'login' || this.$rootScope.toState.name === 'register'<% if (authenticationType == 'jwt') { %> || this.$rootScope.toState.name === 'social-auth'<% } %>)) {
-                $state.go('home');
+                this.$state.go('home');
             }
 
             // recover and clear previousState after external login redirect (e.g. oauth2)
@@ -64,8 +65,7 @@ export class AuthService {
         var cb = callback || function(){};
 
         return new Promise((resolve, reject) => {
-            this.AuthServerProvider.login(credentials)
-            .then(data => {
+            this.AuthServerProvider.login(credentials).subscribe(data => {
                 this.principal.identity(true).then(account => {
                     <%_ if (enableTranslation){ _%>
                     // After the login the language will be changed to
@@ -82,8 +82,7 @@ export class AuthService {
                     resolve(data);
                 });
                 return cb();
-            })
-            .catch(err => {
+            }, err => {
                 this.logout();
                 reject(err);
                 return cb(err);
@@ -93,12 +92,12 @@ export class AuthService {
 
     <%_ if (authenticationType == 'jwt') { _%>
     loginWithToken(jwt, rememberMe) {
-        return this.AuthServerProvider.loginWithToken(jwt, rememberMe);
+        return this.authServerProvider.loginWithToken(jwt, rememberMe);
     }
     <%_ } _%>
 
     logout () {
-        this.AuthServerProvider.logout();
+        this.authServerProvider.logout().subscribe();
         this.principal.authenticate(null);
     }
 

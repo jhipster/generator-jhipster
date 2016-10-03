@@ -11,6 +11,7 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from './language/language.se
 import { Account } from './auth/account.service';
 import { Principal } from './auth/principal.service';
 import { AuthService } from './auth/auth.service';
+import { AuthServerProvider } from './auth/auth-session.service';
 
 import { PageRibbonComponent } from './profiles/page-ribbon.component';
 import { jhiAlertComponent } from './alert/alert.component';
@@ -25,12 +26,14 @@ import { jhiAlertComponent } from './alert/alert.component';
     ],
     providers: [
         AlertService,
-        ProfileService,<%_ if (enableTranslation){ _%>
+        ProfileService,
+        <%_ if (enableTranslation){ _%>
         <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
         Account,
         Principal,
-        AuthService
+        AuthService,
+        AuthServerProvider
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 

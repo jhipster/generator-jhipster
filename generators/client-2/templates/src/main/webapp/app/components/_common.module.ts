@@ -25,11 +25,11 @@ import { PageRibbonComponent } from './profiles/page-ribbon.component';
 
 upgradeAdapter.upgradeNg1Provider('$state');
 upgradeAdapter.upgradeNg1Provider('$rootScope');
-upgradeAdapter.upgradeNg1Provider('$sessionStorage');<% if (enableTranslation) { %>
+upgradeAdapter.upgradeNg1Provider('$sessionStorage');
+upgradeAdapter.upgradeNg1Provider('$localStorage');<% if (enableTranslation) { %>
 upgradeAdapter.upgradeNg1Provider('$translate');
 upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');<% } %>
 upgradeAdapter.upgradeNg1Provider('LoginService');
-upgradeAdapter.upgradeNg1Provider('AuthServerProvider');
 
 angular
     .module('<%=angularAppName%>.common', [
@@ -44,7 +44,7 @@ angular
     //.config(AlertServiceConfig)
     .controller('LoginController', LoginController)
     .factory('Auth', upgradeAdapter.downgradeNg2Provider(AuthService))
-    .factory('AuthServerProvider', AuthServerProvider)
+    .factory('AuthServerProvider', upgradeAdapter.downgradeNg2Provider(AuthServerProvider))
     .factory('Account', upgradeAdapter.downgradeNg2Provider(Account))
     .factory('LoginService', LoginService)
     .factory('Principal', upgradeAdapter.downgradeNg2Provider(Principal))

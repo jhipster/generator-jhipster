@@ -1,52 +1,54 @@
-AuthServerProvider.$inject = ['$http', '$localStorage' <% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
+import { Injectable, Inject } from '@angular/core';
+import { Http, Response, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-export function AuthServerProvider ($http, $localStorage <% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
-    var service = {
-        getToken: getToken,
-        hasValidToken: hasValidToken,
-        login: login,
-        logout: logout
-    };
+@Injectable()
+export class AuthServerProvider {
 
-    return service;
+    constructor(
+        private http: Http,
+        <%_ if (websocket === 'spring-websocket') { _%>
+        @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService,
+        <%_ } _%>
+        @Inject('$localStorage') private $localStorage
+    ){}
 
-    function getToken () {
-        var token = $localStorage.authenticationToken;
-        return token;
+    getToken () {
+        return this.$localStorage.authenticationToken;;
     }
 
-    function hasValidToken () {
-        var token = this.getToken();
-        return !!token;
+    hasValidToken () {
+        return !!this.getToken();
     }
 
-    function login (credentials) {
-        var data = 'j_username=' + encodeURIComponent(credentials.username) +
+    login (credentials): Observable<any> {
+        let data = 'j_username=' + encodeURIComponent(credentials.username) +
             '&j_password=' + encodeURIComponent(credentials.password) +
             '&remember-me=' + credentials.rememberMe + '&submit=Login';
+        let headers = new Headers ({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        });
 
-        return $http.post('api/authentication', data, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).success(function (response) {
-            return response;
+        return this.http.post('api/authentication', data, {
+            headers: headers
         });
     }
 
-    function logout () {<% if (websocket === 'spring-websocket') { %>
-        <%=jhiPrefixCapitalized%>TrackerService.disconnect();<% } %>
-
-        <% if(authenticationType === 'uaa') { %>
-            delete $localStorage.authenticationToken;
-        <% } else { %>
+    logout (): Observable<any> {
+        <%_ if (websocket === 'spring-websocket') { _%>
+        <%=jhiPrefixCapitalized%>TrackerService.disconnect();
+        <%_ } _%>
+        <%_ if(authenticationType === 'uaa') { _%>
+        delete this.$localStorage.authenticationToken;
+        <%_ } else { _%>
         // logout from the server
-        $http.post('api/logout').success(function (response) {
-            delete $localStorage.authenticationToken;
+        return this.http.post('api/logout', {}).map((response: Response) => {
+
+            delete this.$localStorage.authenticationToken;
             // to get a new csrf token call the api
-            $http.get('api/account');
+            this.http.get('api/account').subscribe();
             return response;
         });
-        <% } %>
+        <%_ } _%>
     }
 }
