@@ -1,4 +1,4 @@
-import { LANGUAGES } from '../../components';
+import { LANGUAGES } from './language.constants';
 import { Injectable, Inject } from '@angular/core';
 
 @Injectable()

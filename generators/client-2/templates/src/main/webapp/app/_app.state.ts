@@ -1,4 +1,4 @@
-import { NavbarComponent } from './layouts/navbar/navbar.component';
+import { NavbarComponent } from './layouts';
 
 export const appState = {
     name: 'app',
