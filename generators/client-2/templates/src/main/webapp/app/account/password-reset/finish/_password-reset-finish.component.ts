@@ -14,8 +14,6 @@ export class PasswordResetFinishComponent implements OnInit {
     keyMissing: boolean;
     resetAccount: any;
     success: string;
-    Auth: any;
-    $stateParams: any;
     modalRef: NgbModalRef;
 
     constructor(private passwordResetFinish: PasswordResetFinish,
@@ -27,7 +25,6 @@ export class PasswordResetFinishComponent implements OnInit {
 
     ngOnInit() {
         this.resetAccount = {};
-        this.login = this.LoginService.open;
         this.keyMissing = !this.$stateParams || !this.$stateParams.key;
     }
 

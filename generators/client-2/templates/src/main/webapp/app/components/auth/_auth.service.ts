@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
-
+import { LoginService } from "../login/login.service";
 import { Principal } from './principal.service';
 import { AuthServerProvider } from './auth-session.service';
 
@@ -18,7 +18,7 @@ export class AuthService {
         @Inject('$translate') private $translate,
         <%_ } _%>
         @Inject('$rootScope') private $rootScope,
-        @Inject('LoginService') private LoginService,
+        private loginService : LoginService,
         @Inject('$sessionStorage') private $sessionStorage
     ){}
 

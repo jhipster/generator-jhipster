@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { Register } from './register.service';
+import { LoginService } from "../../components/login/login.service";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -19,7 +20,7 @@ export class RegisterComponent implements OnInit {
 
     constructor(
             @Inject('$translate') private $translate,
-            @Inject('LoginService') private loginService,
+            private loginService : LoginService,
             private registerService: Register,
             private modalService: NgbModal,
             private elementRef: ElementRef,
