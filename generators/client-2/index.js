@@ -554,12 +554,14 @@ module.exports = JhipsterClientGenerator.extend({
             // home module
             this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
             this.copyJs(ANGULAR_DIR + 'home/_home.state.ts', ANGULAR_DIR + 'home/home.state.ts', this, {});
+            this.template(ANGULAR_DIR + 'home/_index.ts', ANGULAR_DIR + 'home/index.ts', this, {});
             this.template(ANGULAR_DIR + 'home/_home.component.ts', ANGULAR_DIR + 'home/home.component.ts', this, {});
 
             // layouts
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.ts', this, {});
             }
+            this.template(ANGULAR_DIR + 'layouts/navbar/_index.ts', ANGULAR_DIR + 'layouts/navbar/index.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
             this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.component.ts', ANGULAR_DIR + 'layouts/navbar/navbar.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/footer/footer.html', ANGULAR_DIR + 'layouts/footer/footer.html');

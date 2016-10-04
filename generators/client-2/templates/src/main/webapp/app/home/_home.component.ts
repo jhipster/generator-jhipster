@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { Account } from '../shared/model/account.model';
-import { Principal } from "../components/auth/principal.service";
 import { StateService } from "ui-router-ng2";
+
+import { Account } from '../shared';
+import { Principal } from "../components";
 
 @Component({
     selector: 'home',
