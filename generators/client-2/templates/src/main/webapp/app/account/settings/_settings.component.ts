@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 <%_ if (enableTranslation){ _%>
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components/language/language.service';
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components';
 <%_ } _%>
-import { Principal } from '../../components/auth/principal.service';
-import { Account } from '../../components/auth/account.service';
+import { Principal } from '../../components';
+import { Account } from '../../components';
 
 @Component({
     selector: 'settings',

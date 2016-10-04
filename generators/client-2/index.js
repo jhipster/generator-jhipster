@@ -381,6 +381,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularAuthFiles: function () {
             // account module
+            this.template(ANGULAR_DIR + 'account/_index.ts', ANGULAR_DIR + 'account/index.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.module.ts', ANGULAR_DIR + 'account/account.module.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.ng2module.ts', ANGULAR_DIR + 'account/account.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.state.ts', ANGULAR_DIR + 'account/account.state.ts', this, {});
