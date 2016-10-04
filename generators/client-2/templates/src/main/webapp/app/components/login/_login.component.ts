@@ -17,7 +17,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
 
     constructor(@Inject('Auth') private Auth,
                 @Inject('Principal') private Principal,
-                //@Inject('$rootScope') private $rootScope,
+                @Inject('$rootScope') private $rootScope,
                 @Inject('$state') private $state,
                 private elementRef: ElementRef,
                 private renderer: Renderer) {
@@ -54,7 +54,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
                 this.$state.go('home');
             }
 
-            //this.$rootScope.$broadcast('authenticationSuccess');
+            this.$rootScope.$broadcast('authenticationSuccess');
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
             // since login is succesful, go to stored previousState and clear previousState
