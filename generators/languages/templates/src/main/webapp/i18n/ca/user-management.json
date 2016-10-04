@@ -1,30 +1,30 @@
 {
     "userManagement": {
         "home": {
-            "title": "Users",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "title": "Usuaris",
+            "createLabel": "Crear un nou usuari",
+            "createOrEditLabel": "Crear o editar un usuari"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "Un nou usuari ha estat creat amb l'identificador {{ param }}",
+        "updated": "Un usuari ha estat actualitzat amb l'identificador {{ param }}",
+        "deleted": "Un usuari ha estat borrat amb l'identificador {{ param }}",
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "Està segur que vol borrar l'usuari {{ login }}?"
         },
         "detail": {
-            "title": "User"
+            "title": "Usuari"
         },
         "login": "Login",
-        "firstName": "First name",
-        "lastName": "Last name",
+        "firstName": "Nom",
+        "lastName": "Cognom",
         "email": "Email",
-        "activated": "Activated",
-        "deactivated": "Deactivated",
-        "profiles": "Profiles",
-        "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date"
+        "activated": "Activat",
+        "deactivated": "Desactivat",
+        "profiles": "Perfils",
+        "langKey": "Llenguatge",
+        "createdBy": "Creat per",
+        "createdDate": "Data de creació",
+        "lastModifiedBy": "Modificat per",
+        "lastModifiedDate": "Data de modificació"
     }
 }
