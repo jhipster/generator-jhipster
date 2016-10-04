@@ -21,8 +21,6 @@ import {
     SettingsComponent
 } from './';
 
-import {<%=jhiPrefixCapitalized%>LoginModalComponent} from "../components/login/login.component";
-
 <% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
 upgradeAdapter.upgradeNg1Provider('$stateParams');
 
@@ -37,7 +35,6 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
-    .directive('<%=jhiPrefix%>LoginModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>LoginModalComponent))
     .directive('passwordStrengthBar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordStrengthBarComponent))
     .directive('jhiRegister', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(RegisterComponent))
     .directive('activate', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(ActivateComponent))

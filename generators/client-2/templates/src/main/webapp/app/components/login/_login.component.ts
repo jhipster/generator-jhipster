@@ -42,30 +42,29 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     }
 
     login () {
-        let vm = this;
         this.Auth.login({
             username: this.username,
             password: this.password,
             rememberMe: this.rememberMe
-        }).then(function () {
-            vm.authenticationError = false;
-            vm.modalRef.dismiss('cancel');
-            if (vm.$state.current.name === 'register' || vm.$state.current.name === 'activate' ||
-                vm.$state.current.name === 'finishReset' || vm.$state.current.name === 'requestReset') {
-                vm.$state.go('home');
+        }).then(() => {
+            this.authenticationError = false;
+            this.modalRef.dismiss('cancel');
+            if (this.$state.current.name === 'register' || this.$state.current.name === 'activate' ||
+                this.$state.current.name === 'finishReset' || this.$state.current.name === 'requestReset') {
+                this.$state.go('home');
             }
 
-            //vm.$rootScope.$broadcast('authenticationSuccess');
+            //this.$rootScope.$broadcast('authenticationSuccess');
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
             // since login is succesful, go to stored previousState and clear previousState
-            if (vm.Auth.getPreviousState()) {
-                var previousState = vm.Auth.getPreviousState();
-                vm.Auth.resetPreviousState();
-                vm.$state.go(previousState.name, previousState.params);
+            if (this.Auth.getPreviousState()) {
+                var previousState = this.Auth.getPreviousState();
+                this.Auth.resetPreviousState();
+                this.$state.go(previousState.name, previousState.params);
             }
-        }).catch(function () {
-            vm.authenticationError = true;
+        }).catch(() => {
+            this.authenticationError = true;
         });
     }
 

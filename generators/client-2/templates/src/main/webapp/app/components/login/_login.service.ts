@@ -1,14 +1,12 @@
 import * as angular from 'angular';
 
 import { Injectable } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 
 @Injectable()
 export class LoginService {
     modalInstance: any;
 
-    constructor (private modalService: NgbModal) {
+    constructor () {
         this.modalInstance = null;
     }
 
@@ -16,10 +14,11 @@ export class LoginService {
         this.modalInstance = null;
     }
 
-    open (loginTemplate)  {
-        this.modalService.open(loginTemplate).result.then(
-            this.resetModal,
-            this.resetModal
-        );
+    open (loginTemplate, modalRef)  {
+        modalRef.result.then((result) => {
+            console.log(`Closed with: ${result}`);
+        }, (reason) => {
+            console.log(`Dismissed ${reason}`);
+        });
     }
 }

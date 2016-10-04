@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { PasswordResetFinish } from './password-reset-finish.service';
+import { LoginService } from "../../../components/login/login.service";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -11,7 +12,6 @@ export class PasswordResetFinishComponent implements OnInit {
     doNotMatch: string;
     error: string;
     keyMissing: boolean;
-    login: any;
     resetAccount: any;
     success: string;
     Auth: any;
@@ -19,7 +19,7 @@ export class PasswordResetFinishComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(private passwordResetFinish: PasswordResetFinish,
-        @Inject('LoginService') private LoginService,
+        private loginService : LoginService,
         private modalService: NgbModal,
         @Inject('$stateParams') private $stateParams,
         private elementRef: ElementRef, private renderer: Renderer

@@ -35,7 +35,6 @@ let routerConfig = {
         <%=angular2AppName%>AccountModule
     ],
     declarations: [
-        <%=jhiPrefixCapitalized%>LoginModalComponent,
         HomeComponent,
         NavbarComponent,
         ErrorComponent,

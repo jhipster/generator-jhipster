@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
+import { LoginService } from "../components/login/login.service";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Account } from '../shared';
@@ -16,7 +17,7 @@ export class HomeComponent implements OnInit {
     constructor(private principal: Principal,
                 private $state: StateService,
                 private modalService: NgbModal,
-                @Inject('LoginService') loginService) {
+                private loginService : LoginService) {
 
     }
 
