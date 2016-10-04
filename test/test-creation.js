@@ -398,6 +398,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/shared/service/data-util.service.ts',
 
         CLIENT_MAIN_SRC_DIR + 'app/admin/admin.module.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/index.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.service.ts',
@@ -426,6 +427,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.state.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.component.ts',
 
+        CLIENT_MAIN_SRC_DIR + 'app/components/index.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/common.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/principal.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/auth/has-authority.directive.ts',
@@ -440,6 +442,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.controller.ts',
 
+        CLIENT_MAIN_SRC_DIR + 'app/account/index.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/account.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.service.ts',

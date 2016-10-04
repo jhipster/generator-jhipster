@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
-import { ProfileInfo } from './profile-info';
+import { ProfileInfo } from './profile-info.model';
 
 @Component({
     selector: 'page-ribbon',
