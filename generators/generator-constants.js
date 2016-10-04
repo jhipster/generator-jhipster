@@ -27,6 +27,10 @@ const CLIENT_DIST_DIR = 'www/';
 
 const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
+// documentation constants
+const JHIPSTER_DOCUMENTATION_URL = 'https://jhipster.github.io';
+const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
+
 const constants = {
     QUESTIONS: 13, // maximum possible number of questions
     CLIENT_QUESTIONS: 3,
@@ -50,6 +54,9 @@ const constants = {
     //entity related
     SUPPORTED_VALIDATION_RULES: SUPPORTED_VALIDATION_RULES,
 
+    JHIPSTER_DOCUMENTATION_URL: JHIPSTER_DOCUMENTATION_URL,
+    JHIPSTER_DOCUMENTATION_ARCHIVE_PATH: JHIPSTER_DOCUMENTATION_ARCHIVE_PATH,
+
     DOCKER_JHIPSTER_REGISTRY: DOCKER_JHIPSTER_REGISTRY,
     DOCKER_JAVA_JRE: DOCKER_JAVA_JRE,
     DOCKER_MYSQL: DOCKER_MYSQL,
@@ -66,5 +73,6 @@ const constants = {
     DOCKER_JHIPSTER_LOGSTASH: DOCKER_JHIPSTER_LOGSTASH,
     DOCKER_CONSUL: DOCKER_CONSUL
 };
+
 
 module.exports = constants;
