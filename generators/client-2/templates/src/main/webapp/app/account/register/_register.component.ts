@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
         }
     }
 
-    login(template) {
+    loginFromRegistration(template) {
         this.modalRef = this.modalService.open(template);
         this.loginService.open(template, this.modalRef);
     }
