@@ -562,7 +562,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.ts', this, {});
             }
-            this.template(ANGULAR_DIR + 'layouts/navbar/_index.ts', ANGULAR_DIR + 'layouts/navbar/index.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/_index.ts', ANGULAR_DIR + 'layouts/index.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
             this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.component.ts', ANGULAR_DIR + 'layouts/navbar/navbar.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/footer/footer.html', ANGULAR_DIR + 'layouts/footer/footer.html');
