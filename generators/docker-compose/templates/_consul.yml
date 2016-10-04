@@ -11,7 +11,7 @@ services:
         command: consul agent -dev -ui -client 0.0.0.0 -config-dir /consul-conf
 
     consul-config-loader:
-        image: pbesson/consul-config-loader
+        image: jhipster/consul-config-loader
         volumes:
             - ./central-server-config:/config
         environment:
