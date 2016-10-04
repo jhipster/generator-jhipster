@@ -16,7 +16,14 @@
         'ui-router-ng2': 'vendor/ui-router-ng2/_bundles/ui-router-ng2.js',
         'ui-router-ng1-to-ng2': 'vendor/ui-router-ng1-to-ng2/ng1-to-ng2.js',
         'ui-router-visualizer': 'vendor/ui-router-visualizer/release/visualizer.min.js',
-        'jquery' : 'vendor/jquery/dist'
+        'jquery' : 'vendor/jquery/dist',
+        // app barrels
+        'account' : 'app/account',
+        'admin' : 'app/admin',
+        'components' : 'app/components',
+        'home' : 'app/home',
+        'layouts' : 'app/layouts',
+        'shared' : 'app/shared'
     };
     // packages tells the System loader how to load when no filename and/or no extension
     var packages = {
@@ -24,7 +31,14 @@
         'rxjs': {},
         '@ng-bootstrap/ng-bootstrap': {main: '/bundles/ng-bootstrap', defaultExtension: 'js'},
         'ui-router-ng2': {},
-        'jquery': { main: 'jquery.min' }
+        'jquery': { main: 'jquery.min' },
+        // app barrels
+        'account' : { main: 'index',  defaultExtension: 'js' },
+        'admin' : { main: 'index',  defaultExtension: 'js' },
+        'components' : { main: 'index',  defaultExtension: 'js' },
+        'home' : { main: 'index',  defaultExtension: 'js' },
+        'layouts' : { main: 'index',  defaultExtension: 'js' },
+        'shared' : { main: 'index',  defaultExtension: 'js' }
     };
     var ngPackageNames = [
         'common',
