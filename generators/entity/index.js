@@ -612,6 +612,27 @@ module.exports = EntityGenerator.extend({
             this.copy(this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json', this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
         },
 
+        writeDbFiles: function() {
+            if (this.skipServer) return;
+
+            if (this.databaseType === 'sql') {
+                this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
+                    SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
+
+                if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
+                    this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity_constraints.xml',
+                        SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_constraints_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.addConstraintsChangelogToLiquibase(this.changelogDate + '_added_entity_constraints_' + this.entityClass);
+                }
+
+                this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
+            }
+            if (this.databaseType === 'cassandra') {
+                this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_added_entity.cql',
+                    SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
+            }
+        },
+
         writeEnumFiles: function() {
             for (var idx in this.fields) {
                 var field = this.fields[idx];
@@ -676,27 +697,6 @@ module.exports = EntityGenerator.extend({
             }
             if (this.databaseType === 'sql' && this.hibernateCache === 'ehcache') {
                 this.addEntityToEhcache(this.entityClass, this.relationships);
-            }
-        },
-
-        writeDbFiles: function() {
-            if (this.skipServer) return;
-
-            if (this.databaseType === 'sql') {
-                this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
-                    SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
-
-                if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
-                    this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity_constraints.xml',
-                        SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_constraints_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
-                    this.addConstraintsChangelogToLiquibase(this.changelogDate + '_added_entity_constraints_' + this.entityClass);
-                }
-
-                this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
-            }
-            if (this.databaseType === 'cassandra') {
-                this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_added_entity.cql',
-                    SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
             }
         },
 
