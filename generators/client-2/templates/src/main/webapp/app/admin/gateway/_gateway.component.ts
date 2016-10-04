@@ -1,6 +1,5 @@
-import * as angular from 'angular';
-
 import { Component, OnInit } from '@angular/core';
+
 import { GatewayRoutesService } from './gateway-routes.service';
 import { GatewayRoute } from './gateway-route.model';
 

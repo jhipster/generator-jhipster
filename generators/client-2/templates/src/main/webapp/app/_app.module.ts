@@ -20,9 +20,8 @@ import { LocalStorageConfig } from './blocks/config/localstorage.config';
 import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
-import { HomeComponent } from './home/home.component';
-import { NavbarComponent } from './layouts/navbar/navbar.component';
-import { FooterComponent } from './layouts/footer/footer.component';
+import { HomeComponent } from './home';
+import { NavbarComponent, FooterComponent } from './layouts';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>

@@ -1,4 +1,4 @@
-import {LANGUAGES} from '../../components/language/language.constants';
+import {LANGUAGES} from '../../components';
 
 TranslationStorageProvider.$inject = ['$cookies', '$log'];
 

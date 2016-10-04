@@ -7,21 +7,19 @@ import { TrackerStateConfig } from './tracker/tracker.state';
 <%_ } _%>
 import { UserMgmntStateConfig } from './user-management/user-management.state';
 
-import { AuditsComponent } from './audits/audits.component';
-import { LogsComponent } from './logs/logs.component';
-
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics/metrics-modal.component';
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics/metrics.component';
-import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health/health-modal.component';
-import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
-import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
-<%_ if (applicationType === 'gateway') { _%>
-import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway/gateway.component';
-<%_ } _%>
-
-<%_ if (applicationType === 'gateway') { _%>
-import { GatewayRoutesService } from './gateway/gateway-routes.service';
-<%_ } _%>
+import {
+    AuditsComponent,
+    LogsComponent,
+    <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
+    <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
+    <%=jhiPrefixCapitalized%>HealthModalComponent,
+    <%=jhiPrefixCapitalized%>HealthCheckComponent,
+    <%_ if (applicationType === 'gateway') { _%>
+    <%=jhiPrefixCapitalized%>GatewayComponent,
+    GatewayRoutesService,
+    <%_ } _%>
+    <%=jhiPrefixCapitalized%>ConfigurationComponent
+} from './';
 
 upgradeAdapter.upgradeNg1Provider('$uibModal');
 

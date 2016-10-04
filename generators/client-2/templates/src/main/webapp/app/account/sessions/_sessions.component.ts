@@ -2,7 +2,7 @@ import {Component, OnInit, Inject} from '@angular/core';
 
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
-import { Principal } from '../../components/auth/principal.service';
+import { Principal } from '../../components';
 
 @Component({
     selector: 'sessions',

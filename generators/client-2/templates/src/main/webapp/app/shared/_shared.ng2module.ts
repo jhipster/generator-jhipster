@@ -1,22 +1,21 @@
 import { NgModule } from '@angular/core';
 
-import { <%=angular2AppName%>SharedLibsModule } from './shared-libs.ng2module';
-
-import { TruncateCharactersPipe } from './pipe/truncate-characters.pipe';
-import { TruncateWordsPipe } from './pipe/truncate-words.pipe';
-import { CapitalizePipe } from './pipe/capitalize.pipe';
-import { FilterPipe } from './pipe/filter.pipe';
-import { OrderByPipe } from './pipe/order-by.pipe';
-import { TranslatePipe } from './pipe/translate.pipe';
-import { KeysPipe } from './pipe/keys.pipe';
-<%_ if (enableTranslation){ _%>
-import { FindLanguageFromKeyPipe } from '../components/language/language.pipe';
-<%_ }_%>
-
-import { JhiItemCountComponent } from './component/jhi-item-count.component';
-import { MaxbytesValidator } from './directive/maxbytes.directive';
-import { MinbytesValidator } from './directive/minbytes.directive';
-import { ShowValidationDirective } from './directive/show-validation.directive';
+import {
+    <%=angular2AppName%>SharedLibsModule,
+    TruncateCharactersPipe,
+    TruncateWordsPipe,
+    CapitalizePipe,
+    FilterPipe,
+    OrderByPipe,
+    <%_ if (enableTranslation){ _%>
+    TranslatePipe,
+    <%_ }_%>
+    KeysPipe,
+    MaxbytesValidator,
+    MinbytesValidator,
+    ShowValidationDirective,
+    JhiItemCountComponent
+} from './';
 
 @NgModule({
     imports: [<%=angular2AppName%>SharedLibsModule],
@@ -25,11 +24,10 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         TruncateWordsPipe,
         OrderByPipe,
         FilterPipe,
-        TranslatePipe,
         CapitalizePipe,
         KeysPipe,
         <%_ if (enableTranslation){ _%>
-        FindLanguageFromKeyPipe,
+        TranslatePipe,
         <%_ } _%>
         JhiItemCountComponent,
         MaxbytesValidator,
@@ -45,11 +43,10 @@ import { ShowValidationDirective } from './directive/show-validation.directive';
         TruncateWordsPipe,
         OrderByPipe,
         FilterPipe,
-        TranslatePipe,
         CapitalizePipe,
         KeysPipe,
         <%_ if (enableTranslation){ _%>
-        FindLanguageFromKeyPipe,
+        TranslatePipe,
         <%_ } _%>
         JhiItemCountComponent,
         MaxbytesValidator,

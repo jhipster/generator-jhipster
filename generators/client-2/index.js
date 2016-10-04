@@ -349,6 +349,7 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularSharedFiles: function () {
+            this.template(ANGULAR_DIR + 'shared/_index.ts', ANGULAR_DIR + 'shared/index.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/_shared.ng2module.ts', ANGULAR_DIR + 'shared/shared.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/_shared-libs.ng2module.ts', ANGULAR_DIR + 'shared/shared-libs.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', this, {});
@@ -381,6 +382,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularAuthFiles: function () {
             // account module
+            this.template(ANGULAR_DIR + 'account/_index.ts', ANGULAR_DIR + 'account/index.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.module.ts', ANGULAR_DIR + 'account/account.module.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.ng2module.ts', ANGULAR_DIR + 'account/account.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.state.ts', ANGULAR_DIR + 'account/account.state.ts', this, {});
@@ -432,6 +434,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularAdminModuleFiles: function () {
             // admin modules
+            this.template(ANGULAR_DIR + 'admin/_index.ts', ANGULAR_DIR + 'admin/index.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/_admin.module.ts', ANGULAR_DIR + 'admin/admin.module.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/_admin.ng2module.ts', ANGULAR_DIR + 'admin/admin.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/_admin.state.ts', ANGULAR_DIR + 'admin/admin.state.ts', this, {});
@@ -499,6 +502,7 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularComponentFiles: function () {
+            this.template(ANGULAR_DIR + 'components/_index.ts', ANGULAR_DIR + 'components/index.ts', this, {});
             this.template(ANGULAR_DIR + 'components/_common.module.ts', ANGULAR_DIR + 'components/common.module.ts', this, {});
             this.template(ANGULAR_DIR + 'components/_common.ng2module.ts', ANGULAR_DIR + 'components/common.ng2module.ts', this, {});
             //components
@@ -551,12 +555,14 @@ module.exports = JhipsterClientGenerator.extend({
             // home module
             this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
             this.copyJs(ANGULAR_DIR + 'home/_home.state.ts', ANGULAR_DIR + 'home/home.state.ts', this, {});
+            this.template(ANGULAR_DIR + 'home/_index.ts', ANGULAR_DIR + 'home/index.ts', this, {});
             this.template(ANGULAR_DIR + 'home/_home.component.ts', ANGULAR_DIR + 'home/home.component.ts', this, {});
 
             // layouts
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.ts', this, {});
             }
+            this.template(ANGULAR_DIR + 'layouts/_index.ts', ANGULAR_DIR + 'layouts/index.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
             this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.component.ts', ANGULAR_DIR + 'layouts/navbar/navbar.component.ts', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/footer/footer.html', ANGULAR_DIR + 'layouts/footer/footer.html');
@@ -569,7 +575,7 @@ module.exports = JhipsterClientGenerator.extend({
         writeAngularProfileServiceFiles: function () {
             // services
             this.template(ANGULAR_DIR + 'components/profiles/_profile.service.ts', ANGULAR_DIR + 'components/profiles/profile.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/profiles/_profile-info.ts', ANGULAR_DIR + 'components/profiles/profile-info.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/profiles/_profile-info.model.ts', ANGULAR_DIR + 'components/profiles/profile-info.model.ts', this, {});
             this.template(ANGULAR_DIR + 'components/profiles/_page-ribbon.component.ts', ANGULAR_DIR + 'components/profiles/page-ribbon.component.ts', this, {});
         },
 

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
-import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-metrics',
