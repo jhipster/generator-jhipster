@@ -29,6 +29,7 @@
     </prerequisites>
 
     <properties>
+        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj-core.version>3.5.2</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
@@ -51,6 +52,9 @@
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate.version>4.3.11.Final</hibernate.version>
+        <%_ } _%>
+        <%_ if (databaseType === 'sql') { _%>
+        <hikaricp.version>2.4.6</hikaricp.version>
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <datastax-driver.version>3.0.1</datastax-driver.version>
@@ -919,7 +923,6 @@
                 </executions>
                 <%_ } _%>
                 <configuration>
-                    <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
@@ -937,8 +940,6 @@
                         <configuration>
                             <!-- Sets the path to the file which contains the execution data. -->
                             <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
-                            <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
-                            <propertyName>surefireArgLine</propertyName>
                         </configuration>
                     </execution>
                     <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
@@ -1166,6 +1167,48 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration><% if (!skipClient) { %>
                             <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory><% } %>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-compile</id>
+                                <phase>none</phase>
+                            </execution>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>net.alchim31.maven</groupId>
+                        <artifactId>scala-maven-plugin</artifactId>
+                        <version>3.2.2</version>
+                        <executions>
+                            <execution>
+                                <id>compile</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>test-compile</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                    <goal>testCompile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <recompileMode>incremental</recompileMode>
+                            <verbose>true</verbose>
+                            <scalaVersion>2.11.7</scalaVersion>
                         </configuration>
                     </plugin>
                 </plugins>
