@@ -314,6 +314,7 @@ module.exports = DockerComposeGenerator.extend({
             }
             if(this.serviceDiscoveryType === 'consul'){
                 this.template('_consul.yml', 'consul.yml');
+                this.copy('consul_conf/acl_config.json', 'consul_conf/acl_config.json');
             }
             if(this.serviceDiscoveryType !== 'no'){
                 this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
