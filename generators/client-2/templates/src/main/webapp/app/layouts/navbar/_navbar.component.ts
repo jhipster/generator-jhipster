@@ -1,12 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 
-import { ProfileService } from '../../components';
-<%_ if (enableTranslation){ _%>
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../components';
-<%_ } _%>
-import { Principal } from '../../components';
-import { AuthService } from '../../components';
+import { ProfileService, <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService } from '../../components';
 
 @Component({
     selector: 'navbar',
