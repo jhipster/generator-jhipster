@@ -10,10 +10,7 @@ import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
-import { NavbarComponent, FooterComponent, ErrorComponent, errorState, accessdeniedState } from './layouts';
-<%_ if (enableTranslation){ _%>
-import { ActiveMenuDirective } from './layouts';
-<%_ } _%>
+import { NavbarComponent, FooterComponent, <% if (enableTranslation){ %>ActiveMenuDirective, <% } %>ErrorComponent, errorState, accessdeniedState } from './layouts';
 
 let routerConfig = {
     otherwise: '/',
