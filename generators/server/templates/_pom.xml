@@ -1121,7 +1121,6 @@
              </plugins>
         </pluginManagement>
     </build>
-
     <profiles>
         <profile>
             <id>no-liquibase</id>
@@ -1296,11 +1295,46 @@
             <!--
                 Profile for doing "continuous compilation" with the Scala Maven plugin.
                 It allows automatic compilation of Java classes as soon as they are saved.
-                Use it with the dev profile: './mvnw -Pdev,cc scala:cc'
+                To use it, run in 3 terminals:
+                - './mvnw -Pcc scala:cc' for continous compilation of your classes
+                - './mvnw -Pcc' for hot reload of Spring boot
+                - 'gulp' for hot reload of the HTML/JavaScript assets
+                Everything should hot reload automatically!
             -->
             <id>cc</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <optional>true</optional>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <warSourceDirectory>src/main/webapp/</warSourceDirectory>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>true</executable>
+                            <fork>true</fork>
+                            <addResources>true</addResources>
+                            <!--
+                            Enable the line below to have remote debugging of your application on port 5005
+                            <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
+                            -->
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
@@ -1345,6 +1379,12 @@
                     </plugin>
                 </plugins>
             </build>
+            <properties>
+                <!-- log configuration -->
+                <logback.loglevel>DEBUG</logback.loglevel>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>dev,swagger</spring.profiles.active>
+            </properties>
         </profile>
     </profiles>
 </project>
