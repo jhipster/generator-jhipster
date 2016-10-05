@@ -16,7 +16,7 @@ const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.1';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v1.3.1';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v1.3.1';
 const DOCKER_CONSUL = 'consul:v0.7.0 ';
-const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.1.1';
+const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.1.2';
 
 // all constants used throughout all generators
 
