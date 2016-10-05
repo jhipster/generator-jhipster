@@ -856,7 +856,7 @@ module.exports = JhipsterServerGenerator.extend({
             // Create Gatling test files
             if (this.testFrameworks.indexOf('gatling') !== -1) {
                 this.copy(TEST_DIR + 'gatling/conf/gatling.conf', TEST_DIR + 'gatling/conf/gatling.conf');
-                this.copy(TEST_DIR = 'gatling/conf/logback.xml', TEST_DIR + 'gatling/conf/logback.xml');
+                this.copy(TEST_DIR + 'gatling/conf/logback.xml', TEST_DIR + 'gatling/conf/logback.xml');
                 mkdirp(TEST_DIR + 'gatling/data');
                 mkdirp(TEST_DIR + 'gatling/bodies');
                 mkdirp(TEST_DIR + 'gatling/simulations');
