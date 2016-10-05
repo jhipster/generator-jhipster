@@ -1,5 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
 import { Activate } from './activate.service';
+import { LoginService } from "../../components";
 
 @Component({
     selector: 'activate',
@@ -7,12 +10,13 @@ import { Activate } from './activate.service';
 })
 export class ActivateComponent implements OnInit {
     error: string;
-    login: Function;
     success: string;
+    modalRef: NgbModalRef;
 
-    constructor(private activate: Activate, @Inject('LoginService') private LoginService, @Inject('$stateParams') private $stateParams) {
-        this.login = this.LoginService.open;
-    }
+    constructor(private activate: Activate,
+                private loginService : LoginService,
+                @Inject('$stateParams') private $stateParams
+        ) {}
 
     ngOnInit () {
         this.activate.get(this.$stateParams.key).subscribe(() => {
@@ -24,4 +28,7 @@ export class ActivateComponent implements OnInit {
         });
     }
 
+    login(template) {
+        this.modalRef = this.loginService.open(template);
+    }
 }

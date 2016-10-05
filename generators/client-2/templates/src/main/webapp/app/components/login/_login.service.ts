@@ -1,34 +1,25 @@
-LoginService.$inject = ['$uibModal'];
+import { Injectable } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-export function LoginService ($uibModal) {
-    var service = {
-        open: open
-    };
+@Injectable()
+export class LoginService {
+    modalInstance: any;
 
-    var modalInstance = null;
-    var resetModal = function () {
-        modalInstance = null;
-    };
+    constructor (private modalService: NgbModal) {
+        this.modalInstance = null;
+    }
 
-    return service;
+    resetModal () : any {
+        this.modalInstance = null;
+    }
 
-    function open () {
-        if (modalInstance !== null) return;
-        modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'app/components/login/login.html',
-            controller: 'LoginController',
-            controllerAs: 'vm',
-            resolve: {
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('login');
-                    return $translate.refresh();
-                }]
-            }
+    open (template): NgbModalRef {
+        let modalRef = this.modalService.open(template);
+        modalRef.result.then(result => {
+            console.log(`Closed with: ${result}`);
+        }, (reason) => {
+            console.log(`Dismissed ${reason}`);
         });
-        modalInstance.result.then(
-            resetModal,
-            resetModal
-        );
+        return modalRef;
     }
 }

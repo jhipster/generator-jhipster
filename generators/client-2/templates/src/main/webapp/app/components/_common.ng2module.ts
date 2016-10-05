@@ -22,7 +22,8 @@ import {
     JhiAlertComponent,
     JhiAlertErrorComponent,
     HasAuthorityDirective,
-    HasAnyAuthorityDirective
+    HasAnyAuthorityDirective,
+    <%=jhiPrefixCapitalized%>LoginModalComponent
 } from './';
 
 @NgModule({
@@ -32,6 +33,7 @@ import {
     declarations: [
         JhiAlertComponent,
         JhiAlertErrorComponent,
+        <%=jhiPrefixCapitalized%>LoginModalComponent,
         PageRibbonComponent,
         <%_ if (enableTranslation){ _%>
         FindLanguageFromKeyPipe,
@@ -40,6 +42,7 @@ import {
         HasAnyAuthorityDirective
     ],
     providers: [
+        LoginService,
         AlertService,
         ProfileService,
         <%_ if (enableTranslation){ _%>
@@ -59,6 +62,7 @@ import {
         <%_ if (enableTranslation){ _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
+        <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective
     ],

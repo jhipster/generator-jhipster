@@ -440,7 +440,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.ts',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.html',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/components/login/login.controller.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/components/login/login.component.ts',
 
         CLIENT_MAIN_SRC_DIR + 'app/account/index.ts',
         CLIENT_MAIN_SRC_DIR + 'app/account/account.module.ts',

@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-            ng-click="vm.cancel()">&times;</button>
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="dismiss('closed')"><span aria-hidden="true">x</span>
+    </button>
     <h4 class="modal-title" translate="login.title">Sign in</h4>
 </div>
 <div class="modal-body">
@@ -9,7 +9,7 @@
             <h1 translate="login.title">Sign in</h1>
         </div>
         <div class="col-md-8 col-md-offset-2">
-            <div class="alert alert-danger" ng-show="vm.authenticationError" translate="login.messages.error.authentication">
+            <div class="alert alert-danger" *ngIf="authenticationError" translate="login.messages.error.authentication">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
         </div>
@@ -18,32 +18,31 @@
         <%_ } else { _%>
         <div class="col-md-8 col-md-offset-2">
         <%_ } _%>
-            <form class="form" role="form" ng-submit="vm.login($event)">
+            <form class="form" role="form" (ngSubmit)="login()">
                 <div class="form-group">
                     <label for="username" translate="global.form.username">Login</label>
-                    <input type="text" class="form-control" id="username" placeholder="{{'global.form.username.placeholder' | translate}}" ng-model="vm.username">
+                    <input type="text" class="form-control" name="username" id="username" placeholder="{{'global.form.username.placeholder' | translate}}"
+                    [(ngModel)]="username">
                 </div>
                 <div class="form-group">
                     <label for="password" translate="login.form.password">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
-                           ng-model="vm.password">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
+                           [(ngModel)]="password">
                 </div>
-                <%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
                 <div class="form-group">
                     <label for="rememberMe">
-                        <input type="checkbox" id="rememberMe" ng-model="vm.rememberMe" checked>
+                        <input type="checkbox" name="rememberMe" id="rememberMe" [(ngModel)]="rememberMe" checked>
                         <span translate="login.form.rememberme">Remember me</span>
                     </label>
                 </div>
-                <%_ } _%>
                 <button type="submit" class="btn btn-primary" translate="login.form.button">Sign in</button>
             </form>
             <p></p>
             <div class="alert alert-warning">
-                <a class="alert-link" href="" ng-click="vm.requestResetPassword()" translate="login.password.forgot">Did you forget your password?</a>
+                <a class="alert-link" href="" (click)="requestResetPassword()" translate="login.password.forgot">Did you forget your password?</a>
             </div>
             <div class="alert alert-warning" translate="global.messages.info.register" translate-compile>
-                You don't have an account yet? <a class="alert-link" href="" ng-click="vm.register()">Register a new account</a>
+                You don't have an account yet? <a class="alert-link" href="" (click)="register()">Register a new account</a>
             </div>
         </div>
         <%_ if (enableSocialSignIn) { _%>

@@ -19,7 +19,7 @@ export * from './language/language.constants';
 export * from './language/language.service';
 export * from './language/language.pipe';
 <%_ } _%>
-export * from './login/login.controller';
+export * from './login/login.component';
 export * from './login/login.service';
 export * from './profiles/page-ribbon.component';
 export * from './profiles/profile.service';

@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ProfileService, <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService } from '../../components';
+import { ProfileService, <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService, LoginService } from '../../components';
 
 @Component({
     selector: 'navbar',
@@ -14,10 +15,11 @@ export class NavbarComponent implements OnInit {
     isNavbarCollapsed: boolean;
     languages: any[];
     swaggerEnabled: boolean;
+    modalRef: NgbModalRef;
 
     constructor(
         private $state: StateService,
-        @Inject('LoginService') private loginService,
+        private loginService : LoginService,
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
@@ -49,9 +51,8 @@ export class NavbarComponent implements OnInit {
         return this.principal.isAuthenticated();
     }
 
-    login() {
-        this.collapseNavbar();
-        this.loginService.open();
+    login(template) {
+        this.modalRef = this.loginService.open(template);
     }
 
     logout() {

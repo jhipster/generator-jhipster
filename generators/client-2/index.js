@@ -513,7 +513,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
             this.copyHtml(ANGULAR_DIR + 'components/login/login.html', ANGULAR_DIR + 'components/login/login.html');
             this.template(ANGULAR_DIR + 'components/login/_login.service.ts', ANGULAR_DIR + 'components/login/login.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/login/_login.controller.ts', ANGULAR_DIR + 'components/login/login.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'components/login/_login.component.ts', ANGULAR_DIR + 'components/login/login.component.ts', this, {});
 
             // interceptor code
             if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {

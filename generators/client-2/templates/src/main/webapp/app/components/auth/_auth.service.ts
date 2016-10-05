@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
-
+import { LoginService } from "../login/login.service";
 import { Principal } from './principal.service';
 import { AuthServerProvider } from './auth-session.service';
 
@@ -11,6 +11,7 @@ export class AuthService {
         private principal: Principal,
         private $state: StateService,
         private authServerProvider: AuthServerProvider,
+        private loginService : LoginService,
         <%_ if (websocket === 'spring-websocket') { _%>
         @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
@@ -18,7 +19,6 @@ export class AuthService {
         @Inject('$translate') private $translate,
         <%_ } _%>
         @Inject('$rootScope') private $rootScope,
-        @Inject('LoginService') private LoginService,
         @Inject('$sessionStorage') private $sessionStorage
     ){}
 
@@ -54,14 +54,14 @@ export class AuthService {
 
                     // now, send them to the signin state so they can log in
                     this.$state.go('accessdenied').then(function() {
-                        this.LoginService.open();
+                        //this.loginService.open(); //TODO needs to fixed once modal supports components
                     });
                 }
             }
         }
     }
 
-    login (credentials, callback) {
+    login (credentials, callback?) {
         var cb = callback || function(){};
 
         return new Promise((resolve, reject) => {
