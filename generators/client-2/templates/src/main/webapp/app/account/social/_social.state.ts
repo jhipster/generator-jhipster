@@ -1,14 +1,16 @@
-(function() {
+/*(function() {
     'use strict';
 
     angular
         .module('<%=angularAppName%>.account')
         .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+    stateConfig.$inject = ['$stateProvider'];*/
 
-    function stateConfig($stateProvider) {
-        $stateProvider.state('social-register', {
+import { SocialRegisterComponent } from './social-register.component';
+
+    export const socialRegisterState = {
+            name: 'social-register',
             parent: 'account',
             url: '/social-register/:provider?{success:boolean}',
             data: {
@@ -17,9 +19,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/account/social/social-register.html',
-                    controller: 'SocialRegisterController',
-                    controllerAs: 'vm'
+                    component: SocialRegisterComponent
                 }
             },
             resolve: {
@@ -28,8 +28,14 @@
                     return $translate.refresh();
                 }]
             }
-        })<% if (authenticationType == 'jwt') { %>
-        .state('social-auth', {
+        };
+
+<% if (authenticationType == 'jwt') { %>
+
+import { SocialAuthComponent } from './social-auth.component';
+
+    export const socialAuthState = {
+            name: 'social-auth',
             parent: 'account',
             url: '/social-auth',
             data: {
@@ -37,9 +43,8 @@
             },
             views: {
                 'content@': {
-                    controller: 'SocialAuthController'
+                    component: SocialAuthComponent
                 }
             }
-        })<% } %>;
-    }
-})();
+        };
+<% } %>

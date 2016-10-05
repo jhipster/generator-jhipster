@@ -25,3 +25,10 @@ export * from './settings/settings.state';
 export * from './account.module';
 export * from './account.ng2module';
 export * from './account.state';
+<% if (authenticationType == 'jwt') { %>
+	export * from './social/social-auth.component';
+<% } %>
+export * from './social/social-register.component';
+export * from './social/social.service';
+export * from './social/social.state';
+export * from './social/directive/social.component';

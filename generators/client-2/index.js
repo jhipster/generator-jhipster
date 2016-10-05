@@ -386,14 +386,14 @@ module.exports = JhipsterClientGenerator.extend({
             // Social
             if (this.enableSocialSignIn) {
                 this.copyHtml(ANGULAR_DIR + 'account/social/directive/_social.html', ANGULAR_DIR + 'account/social/directive/social.html');
-                this.template(ANGULAR_DIR + 'account/social/directive/_social.directive.ts', ANGULAR_DIR + 'account/social/directive/social.directive.ts', this, {});
+                this.template(ANGULAR_DIR + 'account/social/directive/_social.component.ts', ANGULAR_DIR + 'account/social/directive/social.component.ts', this, {});
                 this.copyHtml(ANGULAR_DIR + 'account/social/_social-register.html', ANGULAR_DIR + 'account/social/social-register.html');
-                this.template(ANGULAR_DIR + 'account/social/_social-register.controller.ts', ANGULAR_DIR + 'account/social/social-register.controller.ts', this, {});
+                this.template(ANGULAR_DIR + 'account/social/_social-register.component.ts', ANGULAR_DIR + 'account/social/social-register.component.ts', this, {});
                 this.template(ANGULAR_DIR + 'account/social/_social.service.ts', ANGULAR_DIR + 'account/social/social.service.ts', this, {});
                 this.copyJs(ANGULAR_DIR + 'account/social/_social.state.ts', ANGULAR_DIR + 'account/social/social.state.ts', this, {});
 
                 if (this.authenticationType === 'jwt') {
-                    this.template(ANGULAR_DIR + 'account/social/_social-auth.controller.ts', ANGULAR_DIR + 'account/social/social-auth.controller.ts', this, {});
+                    this.template(ANGULAR_DIR + 'account/social/_social-auth.component.ts', ANGULAR_DIR + 'account/social/social-auth.component.ts', this, {});
                 }
             }
         },

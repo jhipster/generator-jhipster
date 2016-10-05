@@ -1,22 +1,11 @@
-(function() {
-    'use strict';
+import { Injectable, Inject } from '@angular/core';
 
-    angular
-        .module('<%=angularAppName%>.account')
-        .factory('SocialService', SocialService);
+@Injectable()
+    export class SocialService {
 
-    SocialService.$inject = ['$document'];
+        constructor (@Inject('$document') private $document) {}
 
-    function SocialService ($document) {
-        var socialService = {
-            getProviderSetting: getProviderSetting,
-            getProviderURL: getProviderURL,
-            getCSRF: getCSRF
-        };
-
-        return socialService;
-
-        function getProviderSetting (provider) {
+        getProviderSetting (provider) {
             switch(provider) {
             case 'google': return 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
             case 'facebook': return 'public_profile,email';
@@ -26,14 +15,14 @@
             }
         }
 
-        function getProviderURL (provider) {
+        getProviderURL (provider) {
             return 'signin/' + provider;
         }
-        // use the CSRFService
-        function getCSRF () {
+
+        getCSRF () {
             /* globals document */
             var name = 'CSRF-TOKEN=';
-            var ca = $document[0].cookie.split(';');
+            var ca = this.$document[0].cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
                 while (c.charAt(0) === ' ') {
@@ -46,4 +35,4 @@
             return '';
         }
     }
-})();
+
