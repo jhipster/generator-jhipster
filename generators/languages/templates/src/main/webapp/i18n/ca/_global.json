@@ -114,13 +114,13 @@
         }
     },
     "error": {
-        "server.not.reachable": "Server not reachable",
-        "url.not.found": "Not found",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "server.not.reachable": "Servidor no accesible",
+        "url.not.found": "No s'ha trobat",
+        "NotNull": "El camp {{fieldName}} no pot ser buit!",
+        "Size": "El camp {{fieldName}} no compleix els requeriments de tamany mínim/màxim!",
+        "userexists": "Nom d'usuari ja en ús!",
+        "emailexists": "E-mail ja en ús!",
+        "idexists": "Una nova {{entityName}} no pot ja tenir un ID"
     },
     "footer": "Aquest és el teu peu de pàgina"
 }

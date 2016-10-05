@@ -12,7 +12,8 @@ util.inherits(UpgradeGenerator, scriptBase);
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster',
-    UPGRADE_BRANCH = 'jhipster_upgrade';
+    UPGRADE_BRANCH = 'jhipster_upgrade',
+    GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
 
 module.exports = UpgradeGenerator.extend({
     constructor: function () {
@@ -145,12 +146,26 @@ module.exports = UpgradeGenerator.extend({
 
         prepareUpgradeBranch: function() {
             var done = this.async();
+            var getGitVersion = function(callback) {
+                this.gitExec(['--version'], function(code, msg) {
+                    callback(String(msg.match(/([0-9]+\.[0-9]+\.[0-9]+)/g)));
+                }.bind(this));
+            }.bind(this);
+
             var recordCodeHasBeenGenerated = function() {
-                this.gitExec(['merge', '--strategy=ours', '-q', '--no-edit', UPGRADE_BRANCH], function(code, msg, err) {
-                    if (code !== 0) this.error('Unable to record current code has been generated with version ' +
-                        this.currentVersion + ':\n' + msg + ' ' + err);
-                    this.log('Current code recorded as generated with version ' + this.currentVersion);
-                    done();
+                getGitVersion(function(gitVersion) {
+                    var args;
+                    if (semver.lt(gitVersion, GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES)) {
+                        args = ['merge', '--strategy=ours', '-q', '--no-edit', UPGRADE_BRANCH];
+                    } else {
+                        args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
+                    }
+                    this.gitExec(args, function(code, msg, err) {
+                        if (code !== 0) this.error('Unable to record current code has been generated with version ' +
+                            this.currentVersion + ':\n' + msg + ' ' + err);
+                        this.log('Current code recorded as generated with version ' + this.currentVersion);
+                        done();
+                    }.bind(this));
                 }.bind(this));
             }.bind(this);
 
