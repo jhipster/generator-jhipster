@@ -1,12 +1,16 @@
 import { Injectable, Inject } from '@angular/core';
 import { Account } from './account.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../../admin/tracker/tracker.service';
 
 @Injectable()
 export class Principal {
     private _identity: any;
     private authenticated: boolean = false;
 
-    constructor(private account: Account<% if (websocket === 'spring-websocket') { %>, @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService<% } %>){}
+    constructor(
+        private account: Account<% if (websocket === 'spring-websocket') { %>,
+        private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>
+    ){}
 
     authenticate (_identity) {
         this._identity = _identity;
@@ -56,7 +60,7 @@ export class Principal {
                 this._identity = account;
                 this.authenticated = true;
                 <%_ if (websocket === 'spring-websocket') { _%>
-                this.<%=jhiPrefixCapitalized%>TrackerService.connect();
+                this.trackerService.connect();
                 <%_ } _%>
             } else {
                 this._identity = null;

@@ -1,97 +1,111 @@
-(function() {
-    'use strict';
-    /* globals SockJS, Stomp */
+declare var SockJS;
+declare var Stomp;
+import { Injectable, Inject } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-    angular
-        .module('<%=angularAppName%>.admin')
-        .factory('<%=jhiPrefixCapitalized%>TrackerService', <%=jhiPrefixCapitalized%>TrackerService);
 
-    <%=jhiPrefixCapitalized%>TrackerService.$inject = ['$rootScope', '$window', '$cookies', '$http', '$q'<% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>, 'AuthServerProvider'<%}%><% if (authenticationType === 'oauth2') { %>, '$localStorage'<%}%>];
+@Injectable()
+export class <%=jhiPrefixCapitalized%>TrackerService {
+    stompClient = null;
+    subscriber = null;
+    listener: Promise<any>;
+    connected: Promise<any>;
+    alreadyConnectedOnce: boolean = false;
 
-    function <%=jhiPrefixCapitalized%>TrackerService ($rootScope, $window, $cookies, $http, $q<% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>, AuthServerProvider<%}%><% if (authenticationType === 'oauth2') { %>, $localStorage<%}%>) {
-        var stompClient = null;
-        var subscriber = null;
-        var listener = $q.defer();
-        var connected = $q.defer();
-        var alreadyConnectedOnce = false;
+    constructor(
+        @Inject('$rootScope') private $rootScope,
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
+        private authServerProvider: AuthServerProvider,
+        <%_ } if (authenticationType === 'oauth2') { _%>
+        @Inject('$localStorage') private $localStorage,
+        <%_ } _%>
+        private $document: Document,
+        private $window: Window,
+        private $json: JSON
+    ) {}
 
-        var service = {
-            connect: connect,
-            disconnect: disconnect,
-            receive: receive,
-            sendActivity: sendActivity,
-            subscribe: subscribe,
-            unsubscribe: unsubscribe
-        };
-
-        return service;
-
-        function connect () {
-            //building absolute path so that websocket doesnt fail when deploying with a context path
-            var loc = $window.location;
-            var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType === 'oauth2') { %>
-            /*jshint camelcase: false */
-            var authToken = angular.fromJson($localStorage.authenticationToken).access_token;
-            url += '?access_token=' + authToken;<% } %><% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>
-            var authToken = AuthServerProvider.getToken();
-            if(authToken){
-                url += '?access_token=' + authToken;
-            }<% } %>
-            var socket = new SockJS(url);
-            stompClient = Stomp.over(socket);
-            var stateChangeStart;
-            var headers = {};<% if (authenticationType === 'session') { %>
-            headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];<% } %>
-            stompClient.connect(headers, function() {
-                connected.resolve('success');
-                sendActivity();
-                if (!alreadyConnectedOnce) {
-                    stateChangeStart = $rootScope.$on('$stateChangeStart', function () {
-                        sendActivity();
-                    });
-                    alreadyConnectedOnce = true;
-                }
-            });
-            $rootScope.$on('$destroy', function () {
-                if(angular.isDefined(stateChangeStart) && stateChangeStart !== null){
-                    stateChangeStart();
-                }
-            });
+    connect () {
+        //building absolute path so that websocket doesnt fail when deploying with a context path
+        var loc = this.$window.location;
+        var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+        <%_ if (authenticationType === 'oauth2') { _%>
+        /*jshint camelcase: false */
+        var authToken = this.$json.stringify(this.$localStorage.authenticationToken).access_token;
+        url += '?access_token=' + authToken;
+        <%_ } if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        var authToken = AuthServerProvider.getToken();
+        if(authToken) {
+            url += '?access_token=' + authToken;
         }
-
-        function disconnect () {
-            if (stompClient !== null) {
-                stompClient.disconnect();
-                stompClient = null;
-            }
-        }
-
-        function receive () {
-            return listener.promise;
-        }
-
-        function sendActivity() {
-            if (stompClient !== null && stompClient.connected) {
-                stompClient
-                    .send('/topic/activity',
-                    {},
-                    angular.toJson({'page': $rootScope.toState.name}));
-            }
-        }
-
-        function subscribe () {
-            connected.promise.then(function() {
-                subscriber = stompClient.subscribe('/topic/tracker', function(data) {
-                    listener.notify(angular.fromJson(data.body));
+        <%_ } _%>
+        var socket = new SockJS(url);
+        this.stompClient = Stomp.over(socket);
+        var stateChangeStart;
+        var headers = {};
+        <%_ if (authenticationType === 'session') { _%>
+        headers['X-CSRF-TOKEN'] = this.getCSRF('CSRF-TOKEN');
+        <%_ } _%>
+        this.stompClient.connect(headers, () => {
+            this.connected = Promise.resolve('success');
+            this.sendActivity();
+            if (!this.alreadyConnectedOnce) {
+                stateChangeStart = this.$rootScope.$on('$stateChangeStart', () => {
+                    this.sendActivity();
                 });
-            }, null, null);
-        }
-
-        function unsubscribe () {
-            if (subscriber !== null) {
-                subscriber.unsubscribe();
+                this.alreadyConnectedOnce = true;
             }
-            listener = $q.defer();
+        });
+        this.$rootScope.$on('$destroy', () => {
+            if(stateChangeStart && stateChangeStart !== null){
+                stateChangeStart();
+            }
+        });
+    }
+
+    disconnect () {
+        if (this.stompClient !== null) {
+            this.stompClient.disconnect();
+            this.stompClient = null;
         }
     }
-})();
+
+    receive () {
+        return this.listener;
+    }
+
+    sendActivity() {
+        if (this.stompClient !== null && this.stompClient.connected) {
+            this.stompClient
+                .send('/topic/activity',
+                {},
+                this.$json.stringify({'page': this.$rootScope.toState.name}));
+        }
+    }
+
+    subscribe () {
+        this.connected.then(() => {
+            this.subscriber = this.stompClient.subscribe('/topic/tracker', data => {
+                this.listener = Promise.resolve(this.$json.parse(data.body));
+            });
+        });
+    }
+
+    unsubscribe () {
+        if (this.subscriber !== null) {
+            this.subscriber.unsubscribe();
+        }
+        this.listener = null;
+    }
+
+    private getCSRF(name) {
+        name = `${name}=`;
+        let ca = this.$document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+        }
+        return '';
+    }
+}

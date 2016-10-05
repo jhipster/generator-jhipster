@@ -2,13 +2,15 @@ import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../../admin/tracker/tracker.service';
+
 @Injectable()
 export class AuthServerProvider {
 
     constructor(
         private http: Http,
         <%_ if (websocket === 'spring-websocket') { _%>
-        @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService,
+        private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         @Inject('$localStorage') private $localStorage
     ){}
@@ -36,7 +38,7 @@ export class AuthServerProvider {
 
     logout (): Observable<any> {
         <%_ if (websocket === 'spring-websocket') { _%>
-        <%=jhiPrefixCapitalized%>TrackerService.disconnect();
+        this.trackerService.disconnect();
         <%_ } _%>
         <%_ if(authenticationType === 'uaa') { _%>
         delete this.$localStorage.authenticationToken;

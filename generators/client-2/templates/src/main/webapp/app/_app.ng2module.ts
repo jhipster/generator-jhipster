@@ -41,7 +41,10 @@ let routerConfig = {
         <%_ } _%>
     ],
     providers: [
-        XSRFStrategyProvider
+        XSRFStrategyProvider,
+        { provide: Window, useValue: window },
+        { provide: Document, useValue: document },
+        { provide: JSON, useValue: JSON }
     ],
     bootstrap: [ HomeComponent ]
 })

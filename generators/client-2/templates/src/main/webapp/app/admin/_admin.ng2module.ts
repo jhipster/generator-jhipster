@@ -22,6 +22,11 @@ import {
     <%=jhiPrefixCapitalized%>GatewayComponent,
     gatewayState,
     <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
+    <%=jhiPrefixCapitalized%>TrackerComponent,
+    <%=jhiPrefixCapitalized%>TrackerService,
+    trackerState,
+    <%_ } _%>
     LogsService,
     adminState,
     auditState,
@@ -42,6 +47,9 @@ let ADMIN_STATES = [
     <%_ if (applicationType === 'gateway') { _%>
     gatewayState,
     <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
+    trackerState,
+    <%_ } _%>
     metricsState
 ];
 
@@ -60,6 +68,9 @@ let ADMIN_STATES = [
         <%_ if (applicationType === 'gateway') { _%>
         <%=jhiPrefixCapitalized%>GatewayComponent,
         <%_ } _%>
+        <%_ if (websocket === 'spring-websocket') { _%>
+        <%=jhiPrefixCapitalized%>TrackerComponent,
+        <%_ } _%>
         <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
     ],
@@ -70,6 +81,9 @@ let ADMIN_STATES = [
         <%=jhiPrefixCapitalized%>MetricsService,
         <%_ if (applicationType === 'gateway') { _%>
         GatewayRoutesService,
+        <%_ } _%>
+        <%_ if (websocket === 'spring-websocket') { _%>
+        <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         LogsService,
         ParseLinks

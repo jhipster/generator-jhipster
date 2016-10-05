@@ -3,6 +3,7 @@ import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Base64 } from './base64.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../../admin/tracker/tracker.service';
 
 @Injectable()
 export function AuthServerProvider ($http, $localStorage, Base64) {
@@ -10,7 +11,7 @@ export function AuthServerProvider ($http, $localStorage, Base64) {
     constructor(
         private http: Http,
         <%_ if (websocket === 'spring-websocket') { _%>
-        @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService,
+        private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         private base64: Base64,
         @Inject('$localStorage') private $localStorage
@@ -44,6 +45,9 @@ export function AuthServerProvider ($http, $localStorage, Base64) {
     }
 
     logout (): Observable<any> {
+        <%_ if (websocket === 'spring-websocket') { _%>
+        this.trackerService.disconnect();
+        <%_ } _%>
         this.http.post('api/logout', {}).map(resp => {
             delete this.$localStorage.authenticationToken;
             return resp;
