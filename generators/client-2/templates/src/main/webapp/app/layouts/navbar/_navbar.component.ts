@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
 import { ProfileService, <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService, LoginService } from '../../components';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'navbar',
@@ -19,7 +20,6 @@ export class NavbarComponent implements OnInit {
     constructor(
         private $state: StateService,
         private loginService : LoginService,
-        private modalService: NgbModal,
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
@@ -52,8 +52,7 @@ export class NavbarComponent implements OnInit {
     }
 
     login(template) {
-        this.modalRef = this.modalService.open(template);
-        this.loginService.open(template, this.modalRef);
+        this.modalRef = this.loginService.open(template);
     }
 
     logout() {

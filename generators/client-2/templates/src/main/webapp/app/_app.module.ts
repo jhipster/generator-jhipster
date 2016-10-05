@@ -30,7 +30,7 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
-import {<%=jhiPrefixCapitalized%>LoginModalComponent} from "./components/login/login.component";
+import { <%=jhiPrefixCapitalized%>LoginModalComponent } from "./components";
 
 angular
     .module('<%=angularAppName%>.app', [

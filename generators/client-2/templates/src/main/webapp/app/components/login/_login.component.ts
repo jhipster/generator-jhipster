@@ -1,6 +1,8 @@
-import * as angular from 'angular';
 import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { StateService } from "ui-router-ng2";
+
+import { AuthService, Principal } from '../';
 
 @Component({
     selector: '<%=jhiPrefix%>-login-modal',
@@ -15,12 +17,14 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     credentials: any;
     modalRef: NgbModalRef;
 
-    constructor(@Inject('Auth') private Auth,
-                @Inject('Principal') private Principal,
-                @Inject('$rootScope') private $rootScope,
-                @Inject('$state') private $state,
-                private elementRef: ElementRef,
-                private renderer: Renderer) {
+    constructor(
+        @Inject('$rootScope') private $rootScope,
+        private $state: StateService,
+        private principal: Principal,
+        private auth: AuthService,
+        private elementRef: ElementRef,
+        private renderer: Renderer
+    ) {
         this.credentials = {};
     }
 
@@ -42,7 +46,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     }
 
     login () {
-        this.Auth.login({
+        this.auth.login({
             username: this.username,
             password: this.password,
             rememberMe: this.rememberMe
@@ -58,9 +62,9 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
             // since login is succesful, go to stored previousState and clear previousState
-            if (this.Auth.getPreviousState()) {
-                var previousState = this.Auth.getPreviousState();
-                this.Auth.resetPreviousState();
+            var previousState = this.auth.getPreviousState();
+            if (previousState) {
+                this.auth.resetPreviousState();
                 this.$state.go(previousState.name, previousState.params);
             }
         }).catch(() => {
