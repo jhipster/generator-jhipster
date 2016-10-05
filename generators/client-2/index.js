@@ -471,7 +471,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.websocket === 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
                 this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.state.ts', ANGULAR_DIR + 'admin/tracker/tracker.state.ts', this, {});
-                this.template(ANGULAR_DIR + 'admin/tracker/_tracker.controller.ts', ANGULAR_DIR + 'admin/tracker/tracker.controller.ts', this, {});
+                this.template(ANGULAR_DIR + 'admin/tracker/_tracker.component.ts', ANGULAR_DIR + 'admin/tracker/tracker.component.ts', this, {});
                 this.template(ANGULAR_DIR + 'admin/tracker/_tracker.service.ts', ANGULAR_DIR + 'admin/tracker/tracker.service.ts', this, {});
             }
         },
