@@ -21,7 +21,8 @@ const constants = require('../generator-constants'),
     DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
     DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
     DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH,
-    DOCKER_CONSUL = constants.DOCKER_CONSUL;
+    DOCKER_CONSUL = constants.DOCKER_CONSUL,
+    DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
 
 
 
@@ -45,6 +46,7 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_CONSUL = DOCKER_CONSUL;
+            this.DOCKER_CONSUL_CONFIG_LOADER = DOCKER_CONSUL_CONFIG_LOADER;
         },
 
         checkDocker: function() {
