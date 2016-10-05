@@ -4,6 +4,7 @@ var chalk = require('chalk'),
     shelljs = require('shelljs');
 
 module.exports = {
+    askForApplicationType,
     askForPath,
     askForApps,
     askForClustersMode,
@@ -12,13 +13,39 @@ module.exports = {
     askForAdminPassword
 };
 
+function askForApplicationType() {
+    var done = this.async();
+
+    var prompts = [{
+        type: 'list',
+        name: 'composeApplicationType',
+        message: 'Which *type* of application would you like to deploy?',
+        choices: [
+            {
+                value: 'monolith',
+                name: 'Monolithic application'
+            },
+            {
+                value: 'microservice',
+                name: 'Microservice application'
+            }
+        ],
+        default: 'monolith'
+    }];
+
+    this.prompt(prompts).then(function(props) {
+        this.composeApplicationType = props.composeApplicationType;
+        done();
+    }.bind(this));
+}
+
 function askForPath() {
     if (this.regenerate) return;
 
     var done = this.async();
-    var kubernetesApplicationType = this.kubernetesApplicationType;
+    var composeApplicationType = this.composeApplicationType;
     var messageAskForPath;
-    if (kubernetesApplicationType === 'monolith') {
+    if (composeApplicationType === 'monolith') {
         messageAskForPath = 'Enter the root directory where your applications are located';
     } else {
         messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
@@ -31,7 +58,7 @@ function askForPath() {
         validate: function (input) {
             var path = this.destinationPath(input);
             if(shelljs.test('-d', path)) {
-                var appsFolders = getAppFolders.call(this, input, kubernetesApplicationType);
+                var appsFolders = getAppFolders.call(this, input, composeApplicationType);
 
                 if(appsFolders.length === 0) {
                     return 'No microservice or gateway found in ' + path;
@@ -47,7 +74,7 @@ function askForPath() {
     this.prompt(prompts).then(function (props) {
         this.directoryPath = props.directoryPath;
 
-        this.appsFolders = getAppFolders.call(this, this.directoryPath, kubernetesApplicationType);
+        this.appsFolders = getAppFolders.call(this, this.directoryPath, composeApplicationType);
 
         //Removing registry from appsFolders, using reverse for loop
         for(var i = this.appsFolders.length - 1; i >= 0; i--) {
@@ -66,13 +93,7 @@ function askForApps() {
     if (this.regenerate) return;
 
     var done = this.async();
-    var kubernetesApplicationType = this.kubernetesApplicationType;
-    var messageAskForApps;
-    if (kubernetesApplicationType === undefined) {
-        messageAskForApps = 'Which applications do you want to include in your Docker Compose configuration?';
-    } else {
-        messageAskForApps = 'Which applications do you want to include in your Kubernetes configuration?';
-    }
+    var messageAskForApps = 'Which applications do you want to include in your configuration?';
 
     var prompts = [{
         type: 'checkbox',
@@ -169,7 +190,7 @@ function askForElk() {
 }
 
 function askForServiceDiscovery() {
-    if (this.regenerate || this.kubernetesApplicationType === 'monolith') return;
+    if (this.regenerate || this.composeApplicationType === 'monolith') return;
 
     var done = this.async();
 
@@ -230,7 +251,7 @@ function askForServiceDiscovery() {
 }
 
 function askForAdminPassword() {
-    if (this.regenerate || this.kubernetesApplicationType === 'monolith' || this.serviceDiscoveryType !== 'eureka') return;
+    if (this.regenerate || this.composeApplicationType === 'monolith' || this.serviceDiscoveryType !== 'eureka') return;
 
     var done = this.async();
 
