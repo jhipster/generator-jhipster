@@ -4,8 +4,7 @@ import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.s
 
 @Component({
     selector: '<%=jhiPrefix%>-configuration',
-    templateUrl: 'app/admin/configuration/configuration.html',
-    providers: [ <%=jhiPrefixCapitalized%>ConfigurationService ]
+    templateUrl: 'app/admin/configuration/configuration.html'
 })
 export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     allConfiguration:any = null;
