@@ -1,3 +1,7 @@
+<% if(serviceDiscoveryType === 'consul') { %>
+consul:
+    token: to-change-in-production-client
+<% } %>
 spring:
     application:
         name: <%= baseName %>
