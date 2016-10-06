@@ -21,9 +21,6 @@ import {
     SettingsComponent
 } from './';
 
-<% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
-upgradeAdapter.upgradeNg1Provider('$stateParams');
-
 angular
     .module('<%=angularAppName%>.account', [
         'ngStorage',

@@ -6,7 +6,7 @@ import { AuthService, Principal } from '../';
 
 @Component({
     selector: '<%=jhiPrefix%>-login-modal',
-    templateUrl: 'app/components/login/login.html',
+    templateUrl: 'app/shared/login/login.html',
     inputs: ['modalRef', 'dismiss']
 })
 export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {

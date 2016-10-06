@@ -31,13 +31,6 @@ import { NotificationInterceptor } from './blocks/interceptor/notification.inter
 
 import { <%=jhiPrefixCapitalized%>LoginModalComponent, AuthService } from "./shared";
 
-upgradeAdapter.upgradeNg1Provider('$state');
-upgradeAdapter.upgradeNg1Provider('$rootScope');
-upgradeAdapter.upgradeNg1Provider('$sessionStorage');
-upgradeAdapter.upgradeNg1Provider('$localStorage');
-upgradeAdapter.upgradeNg1Provider('$translate');
-upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');
-
 angular
     .module('<%=angularAppName%>.app', [
         'ngStorage',<% if (enableTranslation) { %>

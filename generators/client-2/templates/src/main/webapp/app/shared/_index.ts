@@ -45,5 +45,5 @@ export * from './service/pagination-util.service';
 export * from './service/parse-links.service';
 export * from './XSRF-strategy.provider';
 export * from './shared-libs.ng2module';
-export * from './shared-auth.ng2module';
+export * from './shared-common.ng2module';
 export * from './shared.ng2module';

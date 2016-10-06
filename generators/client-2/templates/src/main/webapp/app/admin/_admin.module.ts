@@ -18,8 +18,6 @@ import {
     <%=jhiPrefixCapitalized%>ConfigurationComponent
 } from './';
 
-upgradeAdapter.upgradeNg1Provider('$uibModal');
-
 angular
     .module('<%=angularAppName%>.admin', [
         'ngStorage',

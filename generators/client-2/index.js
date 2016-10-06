@@ -512,6 +512,7 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularSharedComponentFiles: function () {
+            this.template(ANGULAR_DIR + 'shared/_shared-common.ng2module.ts', ANGULAR_DIR + 'shared/shared-common.ng2module.ts', this, {});
             //components
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'shared/language/_language.pipe.ts', ANGULAR_DIR + 'shared/language/language.pipe.ts', this, {});
@@ -529,7 +530,6 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularAuthServiceFiles: function () {
-            this.template(ANGULAR_DIR + 'shared/_shared-auth.ng2module.ts', ANGULAR_DIR + 'shared/shared-auth.ng2module.ts', this, {});
             // services
             this.template(ANGULAR_DIR + 'shared/auth/_auth.service.ts', ANGULAR_DIR + 'shared/auth/auth.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_principal.service.ts', ANGULAR_DIR + 'shared/auth/principal.service.ts', this, {});

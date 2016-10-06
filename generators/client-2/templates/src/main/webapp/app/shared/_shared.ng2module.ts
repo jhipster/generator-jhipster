@@ -1,82 +1,55 @@
 import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import {
     <%=angular2AppName%>SharedLibsModule,
-    <%=angular2AppName%>SharedAuthModule,
-    TruncateCharactersPipe,
-    TruncateWordsPipe,
-    CapitalizePipe,
-    FilterPipe,
-    OrderByPipe,
-    <%_ if (enableTranslation){ _%>
-    TranslatePipe,
-    <%=jhiPrefixCapitalized%>LanguageService,
-    FindLanguageFromKeyPipe,
-    <%_ }_%>
+    <%=angular2AppName%>CommonModule,
+    AuthService,
+    AuthServerProvider,
+    <%_ if (authenticationType === 'oauth2') { _%>
+    Base64,
+    <%_ } _%>
+    AccountService,
+    LoginService,
+    Principal,
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerService,
     <%_ } _%>
-    KeysPipe,
-    MaxbytesValidator,
-    MinbytesValidator,
-    ShowValidationDirective,
-    JhiItemCountComponent,
-    AlertService,
-    JhiAlertComponent,
-    JhiAlertErrorComponent
+    HasAuthorityDirective,
+    HasAnyAuthorityDirective,
+    <%=jhiPrefixCapitalized%>LoginModalComponent
 } from './';
 
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedLibsModule,
-        <%=angular2AppName%>SharedAuthModule
+        <%=angular2AppName%>CommonModule,
     ],
     declarations: [
-        TruncateCharactersPipe,
-        TruncateWordsPipe,
-        OrderByPipe,
-        FilterPipe,
-        CapitalizePipe,
-        KeysPipe,
-        <%_ if (enableTranslation){ _%>
-        TranslatePipe,
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiItemCountComponent,
-        MaxbytesValidator,
-        MinbytesValidator,
-        ShowValidationDirective
+        <%=jhiPrefixCapitalized%>LoginModalComponent,
+        HasAuthorityDirective,
+        HasAnyAuthorityDirective
     ],
     providers: [
-        <%_ if (enableTranslation){ _%>
-        <%=jhiPrefixCapitalized%>LanguageService,
+        LoginService,
+        AccountService,
+        Principal,
+        AuthService,
+        <%_ if (authenticationType === 'oauth2') { _%>
+        Base64,
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        AlertService
+        AuthServerProvider
     ],
     exports: [
-        <%=angular2AppName%>SharedLibsModule,
-        <%=angular2AppName%>SharedAuthModule,
-        TruncateCharactersPipe,
-        TruncateWordsPipe,
-        OrderByPipe,
-        FilterPipe,
-        CapitalizePipe,
-        KeysPipe,
-        <%_ if (enableTranslation){ _%>
-        TranslatePipe,
-        FindLanguageFromKeyPipe,
-        <%_ } _%>
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiItemCountComponent,
-        MaxbytesValidator,
-        MinbytesValidator,
-        ShowValidationDirective
-    ]
+        <%=angular2AppName%>CommonModule,
+        <%=jhiPrefixCapitalized%>LoginModalComponent,
+        HasAuthorityDirective,
+        HasAnyAuthorityDirective
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+
 })
 export class <%=angular2AppName%>SharedModule {}

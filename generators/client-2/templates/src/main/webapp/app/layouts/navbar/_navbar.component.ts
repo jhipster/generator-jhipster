@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ProfileService } from '../';
+import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
 import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService, LoginService } from '../../shared';
 
 @Component({

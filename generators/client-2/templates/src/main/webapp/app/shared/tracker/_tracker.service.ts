@@ -3,7 +3,7 @@ declare var Stomp;
 import { Injectable, Inject } from '@angular/core';
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
-import { AuthServerProvider } from '../'
+import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
 
 @Injectable()
