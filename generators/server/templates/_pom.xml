@@ -345,6 +345,13 @@
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- include netty handler explicitly to overcome dependency mismatch when using cassandra -->
+        <%_ if (databaseType === 'cassandra') { _%>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>4.0.36.Final</version>
+        </dependency><%_ } _%>
         <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
