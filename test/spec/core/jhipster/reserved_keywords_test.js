@@ -40,10 +40,44 @@ describe('ReservedKeywords', function () {
         expect(isReserved('DOCUMENT', 'MONGODB')).to.be.true;
       });
     });
+  });
+  describe('::isReservedClassName', function() {
+    describe('when passing a valid entity name', function() {
+      it('returns false', function() {
+        expect(isReservedClassName('document')).to.be.false;
+        expect(isReservedClassName('region')).to.be.false;
+      });
+    });
     describe('when passing an invalid entity name', function() {
       it('returns true', function() {
         expect(isReservedClassName('CONTINUE')).to.be.true;
         expect(isReservedClassName('ACCOUNT')).to.be.true;
+      });
+    });
+  });
+  describe('::isReservedFieldName', function() {
+    describe('when passing a valid field name', function() {
+      it('returns false', function() {
+        expect(isReservedFieldName('item', 'sql')).to.be.false;
+        expect(isReservedFieldName('mySuperField', 'cassandra')).to.be.false;
+      });
+    });
+    describe('when passing an invalid field name', function() {
+      it('returns true', function() {
+        expect(isReservedFieldName('ANALYZE', 'sql')).to.be.true;
+        expect(isReservedFieldName('CONTINUE', 'sql')).to.be.true;
+      });
+    });
+  });
+  describe('::isReservedTableName', function() {
+        describe('when passing a valid table name', function() {
+      it('returns false', function() {
+        expect(isReservedTableName('job_history', 'sql')).to.be.false;
+        expect(isReservedTableName('job', 'mysql')).to.be.false;
+        expect(isReservedTableName('document', 'postgresql')).to.be.false;
+        expect(isReservedTableName('region', 'oracle')).to.be.false;
+        expect(isReservedTableName('item', 'cassandra')).to.be.false;
+        expect(isReservedTableName('person', 'mongodb')).to.be.false;
       });
     });
     describe('when passing an invalid table name', function() {
@@ -54,12 +88,6 @@ describe('ReservedKeywords', function () {
         expect(isReservedTableName('ACCESS', 'oracle')).to.be.true;
         expect(isReservedTableName('ADD', 'cassandra')).to.be.true;
         expect(isReservedTableName('DOCUMENT', 'mongodb')).to.be.true;
-      });
-    });
-    describe('when passing an invalid entity field name', function() {
-      it('returns true', function() {
-        expect(isReservedFieldName('ANALYZE', 'sql')).to.be.true;
-        expect(isReservedFieldName('CONTINUE', 'sql')).to.be.true;
       });
     });
   });
