@@ -27,7 +27,7 @@
     <%_ if (useSass) { _%>
     "bootstrap-sass": "3.3.7",
     <%_ } else { _%>
-    "bootstrap": "3.3.6",
+    "bootstrap": "3.3.7",
     <%_ } _%>
     "bootstrap-ui-datetime-picker": "2.4.3",
     "jquery": "3.1.0",
