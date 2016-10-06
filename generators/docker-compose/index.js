@@ -110,6 +110,8 @@ module.exports = DockerComposeGenerator.extend({
     },
 
     prompting: {
+        askForApplicationType: prompts.askForApplicationType,
+
         askForPath: prompts.askForPath,
 
         askForApps: prompts.askForApps,

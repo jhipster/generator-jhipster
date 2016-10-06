@@ -51,7 +51,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '01-gateway'
@@ -82,7 +82,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '01-gateway',
@@ -113,7 +113,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '02-mysql',
@@ -147,7 +147,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '01-gateway',
@@ -190,7 +190,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    kubernetesApplicationType: 'monolith',
+                    composeApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: [
                         '08-monolith'
@@ -201,7 +201,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('create expected registry files', function () {
+        it('creates expected registry files', function () {
             assert.noFile(expectedFiles.registry);
         });
         it('creates expected default files', function () {
