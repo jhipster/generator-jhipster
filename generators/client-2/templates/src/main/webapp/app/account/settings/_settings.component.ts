@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
-import { Principal, Account<% if (enableTranslation){ %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../components';
+import { Principal, Account<% if (enableTranslation){ %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../shared';
 
 @Component({
     selector: 'settings',

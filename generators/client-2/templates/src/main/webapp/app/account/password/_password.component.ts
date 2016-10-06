@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { Principal } from '../../components';
+import { Principal } from '../../shared';
 import { Password } from './password.service';
 
 @Component({
