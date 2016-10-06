@@ -3,7 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import {
     <%=angular2AppName%>SharedLibsModule,
-    <%=angular2AppName%>CommonModule,
+    <%=angular2AppName%>SharedCommonModule,
     AuthService,
     AuthServerProvider,
     <%_ if (authenticationType === 'oauth2') { _%>
@@ -23,7 +23,7 @@ import {
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedLibsModule,
-        <%=angular2AppName%>CommonModule,
+        <%=angular2AppName%>SharedCommonModule,
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>LoginModalComponent,
@@ -44,7 +44,7 @@ import {
         AuthServerProvider
     ],
     exports: [
-        <%=angular2AppName%>CommonModule,
+        <%=angular2AppName%>SharedCommonModule,
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective

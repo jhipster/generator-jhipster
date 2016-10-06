@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { AccountService } from './account.service';
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';//Barrel doesnt work here. No idea why!
 
 @Injectable()
 export class Principal {
@@ -8,7 +8,7 @@ export class Principal {
     private authenticated: boolean = false;
 
     constructor(
-        private account: Account<% if (websocket === 'spring-websocket') { %>,
+        private account: AccountService<% if (websocket === 'spring-websocket') { %>,
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>
     ){}
 
