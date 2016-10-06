@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Account } from './account.service';
+import { AccountService } from './account.service';
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../';
 
 @Injectable()

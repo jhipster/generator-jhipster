@@ -7,7 +7,7 @@ import {
     <%_ if (authenticationType === 'oauth2') { _%>
     Base64,
     <%_ } _%>
-    Account,
+    AccountService,
     LoginService,
     Principal,
     HasAuthorityDirective,
@@ -25,8 +25,7 @@ import {
     ],
     providers: [
         LoginService,
-        AlertService,
-        Account,
+        AccountService,
         Principal,
         AuthService,
         <%_ if (authenticationType === 'oauth2') { _%>

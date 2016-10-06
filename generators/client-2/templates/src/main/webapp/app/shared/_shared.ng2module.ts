@@ -56,6 +56,7 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
+        AlertService
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,
