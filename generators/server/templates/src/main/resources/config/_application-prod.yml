@@ -48,7 +48,6 @@ spring:
             kafka:
                 binder:
                     brokers: localhost
-                    defaultBrokerPort: 9093
                     zk-nodes: localhost
             bindings:
                 output:
