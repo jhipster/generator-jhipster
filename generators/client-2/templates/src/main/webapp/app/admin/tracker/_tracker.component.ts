@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
-import 'rxjs/add/operator/toPromise';
-import { <%=jhiPrefixCapitalized%>TrackerService } from './tracker.service';
+import { Component, OnInit } from '@angular/core';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-tracker',
-    templateUrl: './tracker.html',
-    providers: [ <%=jhiPrefixCapitalized%>TrackerService ]
+    templateUrl: 'app/admin/tracker/tracker.html'
 })
-export class <%=jhiPrefixCapitalized%>TrackerController{
+export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
 
-    constructor(private <%=jhiPrefix%>TrackerService: <%=jhiPrefixCapitalized%>TrackerService){}
+    constructor(private trackerService: <%=jhiPrefixCapitalized%>TrackerService){}
 
     activities: any[] = [];
 
@@ -30,10 +28,10 @@ export class <%=jhiPrefixCapitalized%>TrackerController{
         }
     }
 
-    this.<%=jhiPrefixCapitalized%>TrackerService.receive().toPromise.then(
-        (null,null, (activity) => {
+    ngOnInit() {
+        this.trackerService.receive().then(activity => {
             this.showActivity(activity);
-        })
-    );
+        });
+    }
 
 }

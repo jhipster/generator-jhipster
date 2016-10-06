@@ -3,7 +3,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UIRouterModule } from 'ui-router-ng2';
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
-import { <%=angular2AppName%>CommonModule } from '../components';
 
 import {
     Register,
@@ -48,7 +47,6 @@ let ACCOUNT_STATES = [
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        <%=angular2AppName%>CommonModule,
         UIRouterModule.forChild({ states: ACCOUNT_STATES })
     ],
     declarations: [

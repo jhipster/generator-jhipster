@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Activate } from './activate.service';
-import { LoginService } from "../../components";
+import { LoginService } from "../../shared";
 
 @Component({
     selector: 'activate',

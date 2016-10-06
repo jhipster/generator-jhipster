@@ -21,9 +21,6 @@ import {
     SettingsComponent
 } from './';
 
-<% if (enableTranslation) { %>upgradeAdapter.upgradeNg1Provider('$translate');<% } %>
-upgradeAdapter.upgradeNg1Provider('$stateParams');
-
 angular
     .module('<%=angularAppName%>.account', [
         'ngStorage',
@@ -44,12 +41,4 @@ angular
     <%_ if (authenticationType === 'session') { _%>
     .directive('sessions', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SessionsComponent))
     <%_ } _%>
-    .directive('settings', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SettingsComponent))
-    .factory('Register', upgradeAdapter.downgradeNg2Provider(Register))
-    .factory('Activate', upgradeAdapter.downgradeNg2Provider(Activate))
-    .factory('Password',upgradeAdapter.downgradeNg2Provider( Password))
-    .factory('PasswordResetInit', upgradeAdapter.downgradeNg2Provider(PasswordResetInit))
-    <%_ if (authenticationType === 'session') { _%>
-    .factory('SessionsService', upgradeAdapter.downgradeNg2Provider(SessionsService))
-    <%_ } _%>
-    .factory('PasswordResetFinish', upgradeAdapter.downgradeNg2Provider(PasswordResetFinish));
+    .directive('settings', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SettingsComponent));

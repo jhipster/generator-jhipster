@@ -1,6 +1,5 @@
 import * as angular from 'angular';
 
-import './components/common.module';
 import './account/account.module';
 import './admin/admin.module';
 import './entities/entity.module';
@@ -21,7 +20,7 @@ import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
 import { HomeComponent } from './home';
-import { NavbarComponent, FooterComponent } from './layouts';
+import { NavbarComponent, FooterComponent, PageRibbonComponent } from './layouts';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -30,7 +29,7 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
-import { <%=jhiPrefixCapitalized%>LoginModalComponent } from "./components";
+import { <%=jhiPrefixCapitalized%>LoginModalComponent, AuthService } from "./shared";
 
 angular
     .module('<%=angularAppName%>.app', [
@@ -47,7 +46,6 @@ angular
         'infinite-scroll',
         'angular-loading-bar',
         // jhipster-needle-angularjs-add-module JHipster will add new module here
-        '<%=angularAppName%>.common',
         '<%=angularAppName%>.account',
         '<%=angularAppName%>.admin',
         '<%=angularAppName%>.entity'
@@ -72,6 +70,8 @@ angular
     .factory('TranslationStorageProvider', TranslationStorageProvider)
     .config(TranslationConfig)
     .factory('TranslationHandler',TranslationHandler)<% } %>
+    .factory('Auth', upgradeAdapter.downgradeNg2Provider(AuthService))
+    .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))
     .run(run);
 
 run.$inject = ['StateHandler'<% if (enableTranslation) { %>, 'TranslationHandler'<% } %>];

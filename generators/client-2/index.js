@@ -348,38 +348,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_ui-router-defer-intercept.config.ts', ANGULAR_DIR + 'blocks/config/ui-router-defer-intercept.config.ts', this, {});
         },
 
-        writeAngularSharedFiles: function () {
-            this.template(ANGULAR_DIR + 'shared/_index.ts', ANGULAR_DIR + 'shared/index.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/_shared.ng2module.ts', ANGULAR_DIR + 'shared/shared.ng2module.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/_shared-libs.ng2module.ts', ANGULAR_DIR + 'shared/shared-libs.ng2module.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/constants/pagination.constants.ts', ANGULAR_DIR + 'shared/constants/pagination.constants.ts', this, {});
-
-            this.template(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
-
-            this.template(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', this, {});
-
-            this.template(ANGULAR_DIR + 'shared/directive/sort.directive.ts', ANGULAR_DIR + 'shared/directive/sort.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', this, {});
-
-            this.template(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/service/pagination-util.service.ts', ANGULAR_DIR + 'shared/service/pagination-util.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/service/parse-links.service.ts', ANGULAR_DIR + 'shared/service/parse-links.service.ts', this, {});
-
-            this.template(ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', this, {});
-        },
-
         writeAngularAuthFiles: function () {
             // account module
             this.template(ANGULAR_DIR + 'account/_index.ts', ANGULAR_DIR + 'account/index.ts', this, {});
@@ -471,8 +439,8 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.websocket === 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
                 this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.state.ts', ANGULAR_DIR + 'admin/tracker/tracker.state.ts', this, {});
-                this.template(ANGULAR_DIR + 'admin/tracker/_tracker.controller.ts', ANGULAR_DIR + 'admin/tracker/tracker.controller.ts', this, {});
-                this.template(ANGULAR_DIR + 'admin/tracker/_tracker.service.ts', ANGULAR_DIR + 'admin/tracker/tracker.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'admin/tracker/_tracker.component.ts', ANGULAR_DIR + 'admin/tracker/tracker.component.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/tracker/_tracker.service.ts', ANGULAR_DIR + 'shared/tracker/tracker.service.ts', this, {});
             }
         },
 
@@ -501,20 +469,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/gateway/_gateway-route.model.ts', ANGULAR_DIR + 'admin/gateway/gateway-route.model.ts', this, {});
         },
 
-        writeAngularComponentFiles: function () {
-            this.template(ANGULAR_DIR + 'components/_index.ts', ANGULAR_DIR + 'components/index.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/_common.module.ts', ANGULAR_DIR + 'components/common.module.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/_common.ng2module.ts', ANGULAR_DIR + 'components/common.ng2module.ts', this, {});
-            //components
-            if (this.enableTranslation) {
-                this.template(ANGULAR_DIR + 'components/language/_language.pipe.ts', ANGULAR_DIR + 'components/language/language.pipe.ts', this, {});
-                this.template(ANGULAR_DIR + 'components/language/_language.constants.ts', ANGULAR_DIR + 'components/language/language.constants.ts', this, {});
-                this.template(ANGULAR_DIR + 'components/language/_language.service.ts', ANGULAR_DIR + 'components/language/language.service.ts', this, {});
-            }
-            this.copyHtml(ANGULAR_DIR + 'components/login/login.html', ANGULAR_DIR + 'components/login/login.html');
-            this.template(ANGULAR_DIR + 'components/login/_login.service.ts', ANGULAR_DIR + 'components/login/login.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/login/_login.component.ts', ANGULAR_DIR + 'components/login/login.component.ts', this, {});
-
+        writeBlockInterceptors: function () {
             // interceptor code
             if (this.authenticationType === 'oauth2' || this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
                 this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.ts', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.ts', this, {});
@@ -522,28 +477,73 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.ts', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/interceptor/_errorhandler.interceptor.ts', ANGULAR_DIR + 'blocks/interceptor/errorhandler.interceptor.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/interceptor/_notification.interceptor.ts', ANGULAR_DIR + 'blocks/interceptor/notification.interceptor.ts', this, {});
+        },
+
+        writeAngularSharedFiles: function () {
+            this.template(ANGULAR_DIR + 'shared/_index.ts', ANGULAR_DIR + 'shared/index.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/_shared.ng2module.ts', ANGULAR_DIR + 'shared/shared.ng2module.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/_shared-libs.ng2module.ts', ANGULAR_DIR + 'shared/shared-libs.ng2module.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/constants/pagination.constants.ts', ANGULAR_DIR + 'shared/constants/pagination.constants.ts', this, {});
+
+            this.template(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
+
+            this.template(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', this, {});
+
+            this.template(ANGULAR_DIR + 'shared/directive/sort.directive.ts', ANGULAR_DIR + 'shared/directive/sort.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', this, {});
+
+            this.template(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/service/pagination-util.service.ts', ANGULAR_DIR + 'shared/service/pagination-util.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/service/parse-links.service.ts', ANGULAR_DIR + 'shared/service/parse-links.service.ts', this, {});
+
+            this.template(ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', this, {});
+        },
+
+        writeAngularSharedComponentFiles: function () {
+            this.template(ANGULAR_DIR + 'shared/_shared-common.ng2module.ts', ANGULAR_DIR + 'shared/shared-common.ng2module.ts', this, {});
+            //components
+            if (this.enableTranslation) {
+                this.template(ANGULAR_DIR + 'shared/language/_language.pipe.ts', ANGULAR_DIR + 'shared/language/language.pipe.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/language/_language.constants.ts', ANGULAR_DIR + 'shared/language/language.constants.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/language/_language.service.ts', ANGULAR_DIR + 'shared/language/language.service.ts', this, {});
+            }
+            this.copyHtml(ANGULAR_DIR + 'shared/login/login.html', ANGULAR_DIR + 'shared/login/login.html');
+            this.template(ANGULAR_DIR + 'shared/login/_login.service.ts', ANGULAR_DIR + 'shared/login/login.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/login/_login.component.ts', ANGULAR_DIR + 'shared/login/login.component.ts', this, {});
 
             //alert service code
-            this.template(ANGULAR_DIR + 'components/alert/_alert.service.ts', ANGULAR_DIR + 'components/alert/alert.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/alert/_alert.component.ts', ANGULAR_DIR + 'components/alert/alert.component.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/alert/_alert-error.component.ts', ANGULAR_DIR + 'components/alert/alert-error.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/alert/_alert.service.ts', ANGULAR_DIR + 'shared/alert/alert.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/alert/_alert.component.ts', ANGULAR_DIR + 'shared/alert/alert.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/alert/_alert-error.component.ts', ANGULAR_DIR + 'shared/alert/alert-error.component.ts', this, {});
         },
 
         writeAngularAuthServiceFiles: function () {
             // services
-            this.template(ANGULAR_DIR + 'components/auth/_auth.service.ts', ANGULAR_DIR + 'components/auth/auth.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/_principal.service.ts', ANGULAR_DIR + 'components/auth/principal.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/_has-authority.directive.ts', ANGULAR_DIR + 'components/auth/has-authority.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'components/auth/has-any-authority.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/auth/_auth.service.ts', ANGULAR_DIR + 'shared/auth/auth.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/auth/_principal.service.ts', ANGULAR_DIR + 'shared/auth/principal.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/auth/_has-authority.directive.ts', ANGULAR_DIR + 'shared/auth/has-authority.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'shared/auth/has-any-authority.directive.ts', this, {});
             if (this.authenticationType === 'oauth2') {
-                this.template(ANGULAR_DIR + 'components/auth/_auth-oauth2.service.ts', ANGULAR_DIR + 'components/auth/auth-oauth2.service.ts', this, {});
-                this.template(ANGULAR_DIR + 'components/auth/_base64.service.ts', ANGULAR_DIR + 'components/auth/base64.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/auth/_auth-oauth2.service.ts', ANGULAR_DIR + 'shared/auth/auth-oauth2.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/auth/_base64.service.ts', ANGULAR_DIR + 'shared/auth/base64.service.ts', this, {});
             } else if (this.authenticationType === 'jwt' || this.authenticationType === 'uaa') {
-                this.template(ANGULAR_DIR + 'components/auth/_auth-jwt.service.ts', ANGULAR_DIR + 'components/auth/auth-jwt.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/auth/_auth-jwt.service.ts', ANGULAR_DIR + 'shared/auth/auth-jwt.service.ts', this, {});
             } else {
-                this.template(ANGULAR_DIR + 'components/auth/_auth-session.service.ts', ANGULAR_DIR + 'components/auth/auth-session.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/auth/_auth-session.service.ts', ANGULAR_DIR + 'shared/auth/auth-session.service.ts', this, {});
             }
-            this.template(ANGULAR_DIR + 'components/auth/_account.service.ts', ANGULAR_DIR + 'components/auth/account.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/auth/_account.service.ts', ANGULAR_DIR + 'shared/auth/account.service.ts', this, {});
 
         },
 
@@ -574,9 +574,9 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularProfileServiceFiles: function () {
             // services
-            this.template(ANGULAR_DIR + 'components/profiles/_profile.service.ts', ANGULAR_DIR + 'components/profiles/profile.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/profiles/_profile-info.model.ts', ANGULAR_DIR + 'components/profiles/profile-info.model.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/profiles/_page-ribbon.component.ts', ANGULAR_DIR + 'components/profiles/page-ribbon.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/profiles/_profile.service.ts', ANGULAR_DIR + 'layouts/profiles/profile.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/profiles/_profile-info.model.ts', ANGULAR_DIR + 'layouts/profiles/profile-info.model.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/profiles/_page-ribbon.component.ts', ANGULAR_DIR + 'layouts/profiles/page-ribbon.component.ts', this, {});
         },
 
         writeImageFiles: function () {

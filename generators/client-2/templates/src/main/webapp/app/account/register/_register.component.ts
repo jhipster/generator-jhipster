@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Register } from './register.service';
-import { LoginService } from "../../components";
+import { LoginService } from "../../shared";
 
 @Component({
     selector: '<%=jhiPrefix%>-register',

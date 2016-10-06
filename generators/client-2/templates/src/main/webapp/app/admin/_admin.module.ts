@@ -2,9 +2,6 @@ import * as angular from 'angular';
 
 import { upgradeAdapter } from '../upgrade_adapter';
 
-<%_ if (websocket === 'spring-websocket') { _%>
-import { TrackerStateConfig } from './tracker/tracker.state';
-<%_ } _%>
 import { UserMgmntStateConfig } from './user-management/user-management.state';
 
 import {
@@ -21,8 +18,6 @@ import {
     <%=jhiPrefixCapitalized%>ConfigurationComponent
 } from './';
 
-upgradeAdapter.upgradeNg1Provider('$uibModal');
-
 angular
     .module('<%=angularAppName%>.admin', [
         'ngStorage',
@@ -34,9 +29,6 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
-    <%_ if (websocket === 'spring-websocket') { _%>
-    .config(TrackerStateConfig)
-    <%_ } _%>
     .config(UserMgmntStateConfig)
     .directive('<%=jhiPrefix%>Metrics', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent))
     .directive('<%=jhiPrefix%>MetricsModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent))
@@ -47,6 +39,5 @@ angular
     .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
     <%_ if (applicationType === 'gateway') { _%>
     .directive('<%=jhiPrefix%>Gateway', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>GatewayComponent))
-    .factory('GatewayRoutesService', upgradeAdapter.downgradeNg2Provider(GatewayRoutesService))
     <%_ } _%>
     ;

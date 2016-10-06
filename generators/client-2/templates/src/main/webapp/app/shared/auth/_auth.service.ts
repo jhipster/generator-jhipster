@@ -3,6 +3,7 @@ import { StateService } from 'ui-router-ng2';
 import { LoginService } from "../login/login.service";
 import { Principal } from './principal.service';
 import { AuthServerProvider } from './auth-session.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +14,7 @@ export class AuthService {
         private authServerProvider: AuthServerProvider,
         private loginService : LoginService,
         <%_ if (websocket === 'spring-websocket') { _%>
-        @Inject('<%=jhiPrefixCapitalized%>TrackerService') private <%=jhiPrefixCapitalized%>TrackerService,
+        private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         <%_ if (enableTranslation){ _%>
         @Inject('$translate') private $translate,
@@ -53,7 +54,7 @@ export class AuthService {
                     this.storePreviousState(this.$rootScope.toState.name, this.$rootScope.toStateParams);
 
                     // now, send them to the signin state so they can log in
-                    this.$state.go('accessdenied').then(function() {
+                    this.$state.go('accessdenied').then(() => {
                         //this.loginService.open(); //TODO needs to fixed once modal supports components
                     });
                 }
@@ -71,13 +72,13 @@ export class AuthService {
                     // After the login the language will be changed to
                     // the language selected by the user during his registration
                     if (account!== null) { //TODO migrate
-                        /*$translate.use(account.langKey).then(function () {
-                            $translate.refresh();
-                        });*/
+                        this.$translate.use(account.langKey).then(() => {
+                            this.$translate.refresh();
+                        });
                     }
                     <%_ } _%>
                     <%_ if (websocket === 'spring-websocket') { _%>
-                    this.<%=jhiPrefixCapitalized%>TrackerService.sendActivity();
+                    this.trackerService.sendActivity();
                     <%_ } _%>
                     resolve(data);
                 });

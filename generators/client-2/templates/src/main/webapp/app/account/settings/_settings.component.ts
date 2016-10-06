@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
-import { Principal, Account<% if (enableTranslation){ %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../components';
+import { Principal, AccountService<% if (enableTranslation){ %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../shared';
 
 @Component({
     selector: 'settings',
@@ -12,7 +12,7 @@ export class SettingsComponent implements OnInit {
     settingsAccount: any;
     languages: any[];
 
-    constructor(private account: Account, private principal: Principal<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
+    constructor(private account: AccountService, private principal: Principal<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
                 private languageService: <%=jhiPrefixCapitalized%>LanguageService <%_ } _%>) {}
 
     ngOnInit () {
