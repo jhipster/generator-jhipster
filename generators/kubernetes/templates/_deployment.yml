@@ -57,5 +57,9 @@ spec:
         - name: SPRING_DATA_MONGODB_DATABASE
           value: <%= app.baseName %>
         <%_ } _%>
+        <%_ if (app.searchEngine === 'elasticsearch') { _%>
+        - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES
+          value: <%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9300
+        <%_ } _%>
         ports:
         - containerPort: <%= app.serverPort %>
