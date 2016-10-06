@@ -31,14 +31,6 @@ spring:
     autoconfigure:
         exclude: org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
     <%_ } _%>
-    <%_ if (serviceDiscoveryType == 'consul') { _%>
-    cloud:
-        consul:
-            discovery:
-               prefer-ip-address: true
-            host: localhost
-            port: 8500
-    <%_ } _%>
     devtools:
         restart:
             enabled: true
@@ -46,8 +38,16 @@ spring:
             enabled: false # we use gulp + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
-    <%_ if (messageBroker == 'kafka') { _%>
+    <%_ if (messageBroker == 'kafka' || serviceDiscoveryType == 'consul') { _%>
     cloud:
+        <%_ if (serviceDiscoveryType == 'consul') { _%>
+        consul:
+            discovery:
+               prefer-ip-address: true
+            host: localhost
+            port: 8500
+        <%_ } _%>
+        <%_ if (messageBroker == 'kafka') { _%>
         stream:
             kafka:
                 binder:
@@ -56,6 +56,7 @@ spring:
             bindings:
                 output:
                     destination: topic-jhipster
+        <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType == 'sql') { _%>
     datasource:
