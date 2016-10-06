@@ -574,9 +574,9 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularProfileServiceFiles: function () {
             // services
-            this.template(ANGULAR_DIR + 'components/profiles/_profile.service.ts', ANGULAR_DIR + 'components/profiles/profile.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/profiles/_profile-info.model.ts', ANGULAR_DIR + 'components/profiles/profile-info.model.ts', this, {});
-            this.template(ANGULAR_DIR + 'components/profiles/_page-ribbon.component.ts', ANGULAR_DIR + 'components/profiles/page-ribbon.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/profiles/_profile.service.ts', ANGULAR_DIR + 'layouts/profiles/profile.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/profiles/_profile-info.model.ts', ANGULAR_DIR + 'layouts/profiles/profile-info.model.ts', this, {});
+            this.template(ANGULAR_DIR + 'layouts/profiles/_page-ribbon.component.ts', ANGULAR_DIR + 'layouts/profiles/page-ribbon.component.ts', this, {});
         },
 
         writeImageFiles: function () {
