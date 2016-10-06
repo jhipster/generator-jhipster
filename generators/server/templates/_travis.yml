@@ -52,18 +52,6 @@ script:
 <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew bootRepackage -Pprod -x test
 <%_ } _%>
-  - docker-compose up -d
-  - sleep 30s
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-<%_ if (buildTool === 'maven') { _%>
-  - ./mvnw spring-boot:run &
-<%_ } else if (buildTool === 'gradle') { _%>
-  - ./gradlew bootRun &
-<%_ } _%>
-  - bootPid=$!
-  - sleep 120s
-  - grunt itest
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
