@@ -3,9 +3,9 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from './tracker.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-tracker',
-    templateUrl: './tracker.html'
+    templateUrl: 'app/admin/tracker/tracker.html'
 })
-export class <%=jhiPrefixCapitalized%>TrackerController implements OnInit {
+export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
 
     constructor(private trackerService: <%=jhiPrefixCapitalized%>TrackerService){}
 
@@ -29,11 +29,9 @@ export class <%=jhiPrefixCapitalized%>TrackerController implements OnInit {
     }
 
     ngOnInit() {
-        this.trackerService.receive().then(
-            ((activity) => {
-                this.showActivity(activity);
-            })
-        );
+        this.trackerService.receive().then(activity => {
+            this.showActivity(activity);
+        });
     }
 
 }

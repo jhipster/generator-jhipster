@@ -1,9 +1,6 @@
 declare var SockJS;
 declare var Stomp;
 import { Injectable, Inject } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>TrackerService {
@@ -21,9 +18,10 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         @Inject('$localStorage') private $localStorage,
         <%_ } _%>
         private $document: Document,
-        private $window: Window,
-        private $json: JSON
-    ) {}
+        private $window: Window
+    ) {
+        this.listener = new Promise(() => {});
+    }
 
     connect () {
         //building absolute path so that websocket doesnt fail when deploying with a context path
@@ -34,7 +32,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         var authToken = this.$json.stringify(this.$localStorage.authenticationToken).access_token;
         url += '?access_token=' + authToken;
         <%_ } if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        var authToken = AuthServerProvider.getToken();
+        var authToken = this.authServerProvider.getToken();
         if(authToken) {
             url += '?access_token=' + authToken;
         }
@@ -79,14 +77,14 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
             this.stompClient
                 .send('/topic/activity',
                 {},
-                this.$json.stringify({'page': this.$rootScope.toState.name}));
+                JSON.stringify({'page': this.$rootScope.toState.name}));
         }
     }
 
     subscribe () {
         this.connected.then(() => {
             this.subscriber = this.stompClient.subscribe('/topic/tracker', data => {
-                this.listener = Promise.resolve(this.$json.parse(data.body));
+                this.listener = Promise.resolve(JSON.parse(data.body));
             });
         });
     }
@@ -95,7 +93,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         if (this.subscriber !== null) {
             this.subscriber.unsubscribe();
         }
-        this.listener = null;
+        this.listener = new Promise(() => {});
     }
 
     private getCSRF(name) {

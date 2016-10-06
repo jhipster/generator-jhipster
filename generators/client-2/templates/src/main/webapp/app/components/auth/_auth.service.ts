@@ -72,8 +72,8 @@ export class AuthService {
                     // After the login the language will be changed to
                     // the language selected by the user during his registration
                     if (account!== null) { //TODO migrate
-                        $translate.use(account.langKey).then(function () {
-                            $translate.refresh();
+                        this.$translate.use(account.langKey).then(function () {
+                            this.$translate.refresh();
                         });
                     }
                     <%_ } _%>

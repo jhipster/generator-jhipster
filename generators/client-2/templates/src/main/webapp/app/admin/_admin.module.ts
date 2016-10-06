@@ -2,9 +2,6 @@ import * as angular from 'angular';
 
 import { upgradeAdapter } from '../upgrade_adapter';
 
-<%_ if (websocket === 'spring-websocket') { _%>
-import { TrackerStateConfig } from './tracker/tracker.state';
-<%_ } _%>
 import { UserMgmntStateConfig } from './user-management/user-management.state';
 
 import {
@@ -34,9 +31,6 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
-    <%_ if (websocket === 'spring-websocket') { _%>
-    .config(TrackerStateConfig)
-    <%_ } _%>
     .config(UserMgmntStateConfig)
     .directive('<%=jhiPrefix%>Metrics', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent))
     .directive('<%=jhiPrefix%>MetricsModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent))
