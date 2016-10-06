@@ -53,15 +53,15 @@
 
         function onSuccess(data, headers) {
             //hide anonymous user from user management: it's a required user for Spring Security
-            var x = 0;
+            var hiddenUsersSize = 0;
             for (var i in data) {
                 if (data[i]['login'] === 'anonymoususer') {
                     data.splice(i, 1);
-                    x++;
+                    hiddenUsersSize++;
                 }
             }
             <% if (databaseType !== 'cassandra') { %>vm.links = ParseLinks.parse(headers('link'));
-            vm.totalItems = headers('X-Total-Count') - x;
+            vm.totalItems = headers('X-Total-Count') - hiddenUsersSize;
             vm.queryCount = vm.totalItems;
             vm.page = pagingParams.page;<% } %>
             vm.users = data;
