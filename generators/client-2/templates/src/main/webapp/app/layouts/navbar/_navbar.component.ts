@@ -2,7 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ProfileService, <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService, LoginService } from '../../components';
+import { ProfileService } from '../';
+import { ProfileService, <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService, LoginService } from '../../shared';
 
 @Component({
     selector: 'navbar',

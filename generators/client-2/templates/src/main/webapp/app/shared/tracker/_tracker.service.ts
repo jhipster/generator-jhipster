@@ -2,6 +2,10 @@ declare var SockJS;
 declare var Stomp;
 import { Injectable, Inject } from '@angular/core';
 
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
+import { AuthServerProvider } from '../'
+<%_ } _%>
+
 @Injectable()
 export class <%=jhiPrefixCapitalized%>TrackerService {
     stompClient = null;

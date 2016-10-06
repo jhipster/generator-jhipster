@@ -41,6 +41,5 @@ angular
     .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
     <%_ if (applicationType === 'gateway') { _%>
     .directive('<%=jhiPrefix%>Gateway', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>GatewayComponent))
-    .factory('GatewayRoutesService', upgradeAdapter.downgradeNg2Provider(GatewayRoutesService))
     <%_ } _%>
     ;

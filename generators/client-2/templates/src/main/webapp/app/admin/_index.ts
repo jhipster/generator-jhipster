@@ -24,7 +24,6 @@ export * from './gateway/gateway-route.model';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
 export * from './tracker/tracker.component';
-export * from './tracker/tracker.service';
 export * from './tracker/tracker.state';
 <%_ } _%>
 export * from './metrics/metrics.component';

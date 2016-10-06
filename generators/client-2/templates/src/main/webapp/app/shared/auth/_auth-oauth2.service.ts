@@ -3,7 +3,7 @@ import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Base64 } from './base64.service';
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../admin/tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../';
 
 @Injectable()
 export function AuthServerProvider ($http, $localStorage, Base64) {

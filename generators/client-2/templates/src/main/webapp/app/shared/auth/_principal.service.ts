@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Account } from './account.service';
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../admin/tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../';
 
 @Injectable()
 export class Principal {

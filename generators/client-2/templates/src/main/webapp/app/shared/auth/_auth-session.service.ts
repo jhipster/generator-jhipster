@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../admin/tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../';
 
 @Injectable()
 export class AuthServerProvider {

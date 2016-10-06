@@ -24,7 +24,6 @@ import {
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerComponent,
-    <%=jhiPrefixCapitalized%>TrackerService,
     trackerState,
     <%_ } _%>
     LogsService,
@@ -81,9 +80,6 @@ let ADMIN_STATES = [
         <%=jhiPrefixCapitalized%>MetricsService,
         <%_ if (applicationType === 'gateway') { _%>
         GatewayRoutesService,
-        <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>
-        <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         LogsService,
         ParseLinks

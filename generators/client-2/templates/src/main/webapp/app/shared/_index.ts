@@ -20,6 +20,9 @@ export * from './language/language.service';
 export * from './language/language.pipe';
 export * from './pipe/translate.pipe';
 <%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+export * from './tracker/tracker.service';
+<%_ } _%>
 export * from './login/login.component';
 export * from './login/login.service';
 export * from './component/jhi-item-count.component';

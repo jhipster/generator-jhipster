@@ -13,6 +13,9 @@ import {
     <%=jhiPrefixCapitalized%>LanguageService,
     FindLanguageFromKeyPipe,
     <%_ }_%>
+    <%_ if (websocket === 'spring-websocket') { _%>
+    <%=jhiPrefixCapitalized%>TrackerService,
+    <%_ } _%>
     KeysPipe,
     MaxbytesValidator,
     MinbytesValidator,
@@ -48,7 +51,10 @@ import {
     ],
     providers: [
         <%_ if (enableTranslation){ _%>
-        <%=jhiPrefixCapitalized%>LanguageService
+        <%=jhiPrefixCapitalized%>LanguageService,
+        <%_ } _%>
+        <%_ if (websocket === 'spring-websocket') { _%>
+        <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
     ],
     exports: [

@@ -2,8 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Account } from '../shared';
-import { LoginService, Principal } from "../components";
+import { Account, LoginService, Principal } from "../shared";
 
 @Component({
     selector: 'home',
