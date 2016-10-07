@@ -1,3 +1,4 @@
+import { Transition } from 'ui-router-ng2';
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
 
 export const trackerState = {
@@ -17,10 +18,10 @@ export const trackerState = {
             return $translate.refresh();
         }]
     }/*,
-    onEnter: ['<%=jhiPrefixCapitalized%>TrackerService', function(trackerService) {
-        trackerService.subscribe();
-    }],
-    onExit: ['<%=jhiPrefixCapitalized%>TrackerService', function(trackerService) {
-        trackerService.unsubscribe();
-    }]*/
+    onEnter: (trans: Transition) => {
+        trans.injector().get('TrackerService').subscribe();
+    },
+    onExit: (trans: Transition) => {
+        trans.injector().get('TrackerService').unsubscribe();
+    }*/
 }

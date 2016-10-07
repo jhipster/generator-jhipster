@@ -29,7 +29,7 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
-import { <%=jhiPrefixCapitalized%>LoginModalComponent, AuthService } from "./shared";
+import { <%=jhiPrefixCapitalized%>LoginModalComponent } from "./shared";
 
 angular
     .module('<%=angularAppName%>.app', [
@@ -70,7 +70,6 @@ angular
     .factory('TranslationStorageProvider', TranslationStorageProvider)
     .config(TranslationConfig)
     .factory('TranslationHandler',TranslationHandler)<% } %>
-    .factory('Auth', upgradeAdapter.downgradeNg2Provider(AuthService))
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))
     .run(run);
 

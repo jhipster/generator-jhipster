@@ -6,14 +6,16 @@ export const appState = {
     views: {
         'navbar@': { component: NavbarComponent }
     },
-    resolve: {
-        authorize: ['Auth',
-            function (Auth) {
-                return Auth.authorize();
-            }
-        ],
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('global');
-        }]
-    }
+    resolve: [
+        {
+            token: 'authorize',
+            deps: [AuthService],
+            resolveFn: (auth) => auth.authorize()
+        }/*,
+        {
+            token: 'translatePartialLoader',
+            deps: [@Inject('$translatePartialLoader')],
+            resolveFn: (translatePartialLoader) => translatePartialLoader.addPart('global')
+        }*/
+    ]
 };
