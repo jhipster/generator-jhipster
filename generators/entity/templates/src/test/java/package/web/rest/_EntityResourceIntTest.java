@@ -122,35 +122,45 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         }_%>
 
     private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";<% } else if (fieldType == 'Integer') { %>
+    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
+    <%_ } else if (fieldType == 'Integer') { _%>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
-    private static final Integer <%=updatedValueName %> = <%= updatedValue %>;<% } else if (fieldType == 'Long') { %>
+    private static final Integer <%=updatedValueName %> = <%= updatedValue %>;
+    <%_ } else if (fieldType == 'Long') { _%>
 
     private static final Long <%=defaultValueName %> = <%= defaultValue %>L;
-    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;<% } else if (fieldType == 'Float') { %>
+    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;
+    <%_ } else if (fieldType == 'Float') { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>F;
-    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>F;<% } else if (fieldType == 'Double') { %>
+    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>F;
+    <%_ } else if (fieldType == 'Double') { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>D;
-    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>D;<% } else if (fieldType == 'BigDecimal') { %>
+    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>D;
+    <%_ } else if (fieldType == 'BigDecimal') { _%>
 
     private static final BigDecimal <%=defaultValueName %> = new BigDecimal(<%= defaultValue %>);
-    private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);<% } else if (fieldType == 'UUID') { %>
+    private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);
+    <%_ } else if (fieldType == 'UUID') { _%>
 
     private static final UUID <%=defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fieldType == 'LocalDate') { %>
+    private static final UUID <%=updatedValueName %> = UUID.randomUUID();
+    <%_ } else if (fieldType == 'LocalDate') { _%>
 
     private static final LocalDate <%=defaultValueName %> = LocalDate.ofEpochDay(0L);
-    private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());<% } else if (fieldType == 'ZonedDateTime') { %>
+    private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    <%_ } else if (fieldType == 'ZonedDateTime') { _%>
 
     private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
     private static final ZonedDateTime <%=updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final String <%=defaultValueName %>_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
+    private static final String <%=defaultValueName %>_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(<%= defaultValueName %>);
+    <%_ } else if (fieldType == 'Boolean') { _%>
 
     private static final Boolean <%=defaultValueName %> = false;
-    private static final Boolean <%=updatedValueName %> = true;<% } else if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { %>
+    private static final Boolean <%=updatedValueName %> = true;
+    <%_ } else if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
 
     <%_ if (databaseType !== 'cassandra') { _%>
     private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(<%= defaultValue %>, "0");
@@ -160,13 +170,16 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final ByteBuffer <%=updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(<%= updatedValue %>, "1"));
     <%_ } _%>
     private static final String <%=defaultValueName %>_CONTENT_TYPE = "image/jpg";
-    private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";<% } else if (fieldTypeBlobContent == 'text') { %>
+    private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";
+    <%_ } else if (fieldTypeBlobContent == 'text') { _%>
 
     private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";<% } else if (isEnum) { %>
+    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
+    <%_ } else if (isEnum) { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
-    private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
+    private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;
+    <%_ } } _%>
 
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %>
