@@ -1,0 +1,7 @@
+{
+  "datacenter": "local",
+  "acl_datacenter": "local",
+  "acl_master_token": "to-change-in-production",
+  "acl_default_policy": "deny"
+}
+

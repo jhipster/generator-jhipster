@@ -44,9 +44,8 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
 
     @Override
     public void addCookie(HttpServletResponse response, String cookieValue) {
-        // Mandatory cookie modification for angular to support the locale switching on the server side.
-        cookieValue = "%22" + cookieValue + "%22";
-        super.addCookie(response, cookieValue);
+        // Mandatory cookie modification for AngularJS to support the locale switching on the server side.
+        super.addCookie(response, "%22" + cookieValue + "%22");
     }
 
     private void parseLocaleCookieIfNecessary(HttpServletRequest request) {

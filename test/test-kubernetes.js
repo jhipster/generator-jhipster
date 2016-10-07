@@ -23,7 +23,8 @@ const expectedFiles = {
     mspsql : [
         'mspsql/mspsql-deployment.yml',
         'mspsql/mspsql-postgresql.yml',
-        'mspsql/mspsql-service.yml'
+        'mspsql/mspsql-service.yml',
+        'mspsql/mspsql-elasticsearch.yml'
     ],
     msmongodb : [
         'msmongodb/msmongodb-deployment.yml',
@@ -38,7 +39,8 @@ const expectedFiles = {
     monolith : [
         'samplemysql/samplemysql-deployment.yml',
         'samplemysql/samplemysql-mysql.yml',
-        'samplemysql/samplemysql-service.yml'
+        'samplemysql/samplemysql-service.yml',
+        'samplemysql/samplemysql-elasticsearch.yml'
     ],
 };
 
@@ -50,8 +52,9 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({checkInstall: false})
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '01-gateway'
@@ -81,8 +84,9 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({checkInstall: false})
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '01-gateway',
@@ -112,8 +116,9 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({checkInstall: false})
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '02-mysql',
@@ -146,8 +151,9 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({checkInstall: false})
                 .withPrompts({
-                    kubernetesApplicationType: 'microservice',
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: [
                         '01-gateway',
@@ -189,8 +195,9 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({checkInstall: false})
                 .withPrompts({
-                    kubernetesApplicationType: 'monolith',
+                    composeApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: [
                         '08-monolith'
@@ -201,7 +208,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('create expected registry files', function () {
+        it('creates expected registry files', function () {
             assert.noFile(expectedFiles.registry);
         });
         it('creates expected default files', function () {
