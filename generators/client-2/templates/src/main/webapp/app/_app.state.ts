@@ -1,4 +1,5 @@
 import { NavbarComponent } from './layouts';
+import { AuthService } from './shared';
 
 export const appState = {
     name: 'app',
@@ -11,11 +12,11 @@ export const appState = {
             token: 'authorize',
             deps: [AuthService],
             resolveFn: (auth) => auth.authorize()
-        }/*,
+        },
         {
             token: 'translatePartialLoader',
-            deps: [@Inject('$translatePartialLoader')],
+            deps: ['$translatePartialLoader'],
             resolveFn: (translatePartialLoader) => translatePartialLoader.addPart('global')
-        }*/
+        }
     ]
 };

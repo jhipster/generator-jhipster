@@ -17,11 +17,11 @@ export const trackerState = {
             $translatePartialLoader.addPart('tracker');
             return $translate.refresh();
         }]
-    }/*,
-    onEnter: (trans: Transition) => {
-        trans.injector().get('TrackerService').subscribe();
     },
-    onExit: (trans: Transition) => {
+    onEnter: ['$transition$', (trans: Transition) => {
+        trans.injector().get('TrackerService').subscribe();
+    }],
+    onExit: ['$transition$', (trans: Transition) => {
         trans.injector().get('TrackerService').unsubscribe();
-    }*/
+    }]
 }

@@ -29,7 +29,7 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
-import { <%=jhiPrefixCapitalized%>LoginModalComponent } from "./shared";
+import { <%=jhiPrefixCapitalized%>LoginModalComponent<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %> } from "./shared";
 
 angular
     .module('<%=angularAppName%>.app', [
@@ -70,6 +70,9 @@ angular
     .factory('TranslationStorageProvider', TranslationStorageProvider)
     .config(TranslationConfig)
     .factory('TranslationHandler',TranslationHandler)<% } %>
+    <%_ if (websocket === 'spring-websocket') { _%>
+    .factory('TrackerService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>TrackerService))
+    <%_ } _%>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))
     .run(run);
 
