@@ -34,8 +34,10 @@ env:
     - JHIPSTER=app-mongodb
     - JHIPSTER=app-oauth2
     - JHIPSTER=app-jwt
-    - JHIPSTER=app-gateway
+    - JHIPSTER=app-mariadb-kafka
+    - JHIPSTER=app-gateway-eureka
     - JHIPSTER=app-microservice-eureka
+    - JHIPSTER=app-gateway-consul
     - JHIPSTER=app-microservice-consul
 
 before_install:
