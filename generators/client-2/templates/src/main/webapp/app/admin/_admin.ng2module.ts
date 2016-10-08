@@ -6,6 +6,7 @@ import { <%=angular2AppName%>SharedModule, ParseLinks } from '../shared';
 import {
     AuditsComponent,
     UserMgmtComponent,
+    UserMgmtDetailComponent,
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
@@ -35,7 +36,8 @@ import {
     healthState,
     logsState,
     metricsState,
-    userMgmtState
+    userMgmtState,
+    userMgmtDetailState
 } from './';
 
 let ADMIN_STATES = [
@@ -52,7 +54,8 @@ let ADMIN_STATES = [
     trackerState,
     <%_ } _%>
     metricsState,
-    userMgmtState
+    userMgmtState,
+    userMgmtDetailState
 ];
 
 @NgModule({
@@ -63,6 +66,7 @@ let ADMIN_STATES = [
     declarations: [
         AuditsComponent,
         UserMgmtComponent,
+        UserMgmtDetailComponent,
         LogsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,

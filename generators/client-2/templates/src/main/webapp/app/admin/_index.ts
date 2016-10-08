@@ -30,6 +30,7 @@ export * from './metrics/metrics.component';
 export * from './metrics/metrics-modal.component';
 export * from './metrics/metrics.service';
 export * from './metrics/metrics.state';
+export * from './user-management/user-management-detail.component';
 export * from './user-management/user-management.component';
 export * from './user-management/user-management.state';
 export * from './user-management/user.service';

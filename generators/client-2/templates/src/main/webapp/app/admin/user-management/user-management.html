@@ -3,7 +3,7 @@
     <jhi-alert></jhi-alert>
     <div class="row">
         <div class="col-md-4">
-            <button class="btn btn-primary" ui-sref="user-management.new">
+            <button class="btn btn-primary" uiSref="user-management.new">
                 <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
             </button>
         </div>
@@ -30,7 +30,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let user of users; trackBy: user?.id">
-                <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
+                <td><a uiSref="user-management-detail" [uiParams]="{ login: user.login }">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
@@ -51,19 +51,22 @@
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                ui-sref="user-management-detail({login:user.login})"
+                                uiSref="user-management-detail"
+                                [uiParams]="{ login: user.login }"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>
                             <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
                         </button>
                         <button type="submit"
-                                ui-sref="user-management.edit({login:user.login})"
+                                uiSref="user-management.edit"
+                                [uiParams]="{ login: user.login }"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>
                             <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
-                                ui-sref="user-management.delete({login:user.login})"
+                                uiSref="user-management.delete"
+                                [uiParams]="{ login: user.login }"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="glyphicon glyphicon-remove-circle"></span>
                             <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>

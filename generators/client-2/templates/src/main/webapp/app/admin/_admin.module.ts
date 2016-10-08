@@ -6,6 +6,7 @@ import { upgradeAdapter } from '../upgrade_adapter';
 import {
     AuditsComponent,
     UserMgmtComponent,
+    UserMgmtDetailComponent,
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
@@ -29,6 +30,7 @@ angular
         'ui.router'
     ])
     .directive('userMgmt', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtComponent))
+    .directive('userMgmtDetail', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtDetailComponent))
     .directive('<%=jhiPrefix%>Metrics', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent))
     .directive('<%=jhiPrefix%>MetricsModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent))
     .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))

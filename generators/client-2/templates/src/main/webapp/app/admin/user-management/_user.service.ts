@@ -12,7 +12,7 @@ export class UserService {
         return this.http.put(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users`<%} else { %>`api/users`<% } %>, user);
     }
 
-    find(login:string): Observable<User[]> {
+    find(login:string): Observable<User> {
         return this.http.get(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users/${login}`<%} else { %>`api/users/${login}`<% } %>).map((res: Response) => res.json());
     }
 
