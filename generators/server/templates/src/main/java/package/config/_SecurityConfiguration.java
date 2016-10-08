@@ -11,8 +11,9 @@ import <%=packageName%>.security.jwt.*;
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
 import <%=packageName%>.config.JHipsterProperties;
-
 <%_ } _%>
+
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
@@ -74,10 +75,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     }
 
     @Inject
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
+        try {
+            auth
+                .userDetailsService(userDetailsService)
+                    .passwordEncoder(passwordEncoder());
+        } catch (Exception e) {
+            throw new BeanInitializationException("Security configuration failed", e);
+        }
     }
 
     @Override

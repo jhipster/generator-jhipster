@@ -160,6 +160,9 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            if (this.serviceDiscoveryType === undefined) {
+                this.serviceDiscoveryType = this.applicationType !== 'monolith' ? 'eureka' : false;
+            }
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';

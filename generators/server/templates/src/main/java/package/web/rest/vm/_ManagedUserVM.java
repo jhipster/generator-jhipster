@@ -27,7 +27,6 @@ public class ManagedUserVM extends UserDTO {
 
     private ZonedDateTime lastModifiedDate;<% } %>
 
-    @NotNull
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
