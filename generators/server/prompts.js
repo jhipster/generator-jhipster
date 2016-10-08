@@ -135,7 +135,7 @@ function askForServerSideOpts() {
                 },
                 {
                     value: 'consul',
-                    name: 'Consul (using Spring Cloud Consul)'
+                    name: '[BETA] Consul (using Spring Cloud Consul)'
                 },
                 {
                     value: false,
