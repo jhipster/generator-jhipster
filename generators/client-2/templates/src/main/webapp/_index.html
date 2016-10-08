@@ -16,6 +16,8 @@
     <%_ } _%>
     <!-- endbuild -->
     <!-- build:css content/css/main.css -->
+    <!-- bower:css -->
+    <!-- endinject -->
     <link rel="stylesheet" href="content/css/main.css">
     <!-- endbuild -->
 </head>
@@ -97,12 +99,7 @@
     <script src="vendor/systemjs/dist/system.js"></script>
     <script src="system.config.js"></script>
     <script>
-        System.import('app').then(()=> {
-            System.import('vendor/bootstrap/dist/css/bootstrap.css!').then(() => {
-                 System.import('bower_components/angular-loading-bar/build/loading-bar.css!')
-                 .catch(function(err){ console.error(err)});
-            }).catch(function(err){ console.error(err); });
-        }).catch(function(err){ console.error(err); });
+        System.import('app').catch(function(err){ console.error(err); });
     </script>
 
 </body>

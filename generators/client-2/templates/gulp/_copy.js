@@ -115,7 +115,6 @@ function deps(){
         'node_modules/ui-router-visualizer/**/*.js',
         'node_modules/jquery/dist/*.js',
         'node_modules/tether/dist/js/tether.min.js',
-        'node_modules/bootstrap/dist/js/*.js',
         'node_modules/bootstrap/dist/css/*.css',
         'node_modules/systemjs-plugin-css/css.js'
     ], { base: 'node_modules' })
