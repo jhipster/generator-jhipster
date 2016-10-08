@@ -5,6 +5,7 @@ import { <%=angular2AppName%>SharedModule, ParseLinks } from '../shared';
 
 import {
     AuditsComponent,
+    UserMgmtComponent,
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
@@ -13,6 +14,7 @@ import {
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
     AuditsService,
+    UserService,
     <%=jhiPrefixCapitalized%>ConfigurationService,
     <%=jhiPrefixCapitalized%>HealthService,
     <%=jhiPrefixCapitalized%>MetricsService,
@@ -32,7 +34,8 @@ import {
     docsState,
     healthState,
     logsState,
-    metricsState
+    metricsState,
+    userMgmtState
 } from './';
 
 let ADMIN_STATES = [
@@ -48,7 +51,8 @@ let ADMIN_STATES = [
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerState,
     <%_ } _%>
-    metricsState
+    metricsState,
+    userMgmtState
 ];
 
 @NgModule({
@@ -58,6 +62,7 @@ let ADMIN_STATES = [
     ],
     declarations: [
         AuditsComponent,
+        UserMgmtComponent,
         LogsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
@@ -74,6 +79,7 @@ let ADMIN_STATES = [
     ],
     providers: [
         AuditsService,
+        UserService,
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         <%=jhiPrefixCapitalized%>MetricsService,

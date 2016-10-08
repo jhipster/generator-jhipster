@@ -1,22 +1,27 @@
-User.$inject = ['$resource'];
+import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-export function User ($resource) {
-    var service = $resource(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/users/:login'<%} else { %>'api/users/:login'<% } %>, {}, {
-        'query': {method: 'GET', isArray: true},
-        'get': {
-            method: 'GET', isArray: false,
-            interceptor: {
-                response: function(response) {
-                    // expose response
-                    return response;
-                }
-            }
-        },
-        'save': { method:'POST' },
-        'update': { method:'PUT' },
-        'delete':{ method:'DELETE'}
-    });
+import { User } from './user.model';
 
-    return service;
+@Injectable()
+export class UserService {
+    constructor(private http: Http) { }
+
+    update(user:User): Observable<Response> {
+        return this.http.put(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users`<%} else { %>`api/users`<% } %>, user);
+    }
+
+    find(login:string): Observable<User[]> {
+        return this.http.get(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users/${login}`<%} else { %>`api/users/${login}`<% } %>).map((res: Response) => res.json());
+    }
+
+    findAll(): Observable<Response> {
+        return this.http.get(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/users'<%} else { %>'api/users'<% } %>);
+    }
+
+    delete(login:string): Observable<Response> {
+        return this.http.delete(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users/${login}`<%} else { %>`api/users/${login}`<% } %>);
+    }
 }
 

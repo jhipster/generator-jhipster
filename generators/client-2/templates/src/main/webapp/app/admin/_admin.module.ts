@@ -2,10 +2,10 @@ import * as angular from 'angular';
 
 import { upgradeAdapter } from '../upgrade_adapter';
 
-import { UserMgmntStateConfig } from './user-management/user-management.state';
 
 import {
     AuditsComponent,
+    UserMgmtComponent,
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
@@ -28,7 +28,7 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
-    .config(UserMgmntStateConfig)
+    .directive('userMgmt', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtComponent))
     .directive('<%=jhiPrefix%>Metrics', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent))
     .directive('<%=jhiPrefix%>MetricsModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent))
     .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))

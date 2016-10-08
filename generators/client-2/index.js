@@ -450,7 +450,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.html');
             this.copyJs(ANGULAR_DIR + 'admin/user-management/_user-management.state.ts', ANGULAR_DIR + 'admin/user-management/user-management.state.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/user-management/_user-management.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/user-management/_user-management.component.ts', ANGULAR_DIR + 'admin/user-management/user-management.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/user-management/_user.model.ts', ANGULAR_DIR + 'admin/user-management/user.model.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-detail.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-detail.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-dialog.controller.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.ts', this, {});
