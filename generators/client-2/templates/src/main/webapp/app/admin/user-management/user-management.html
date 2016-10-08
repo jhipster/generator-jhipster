@@ -84,3 +84,7 @@
     </div>
     <%_ } _%>
 </div>
+<!-- this is a workaround until ng-bootstrap supports components as modal content https://github.com/ng-bootstrap/ng-bootstrap/issues/680 -->
+<template #userManagementDeleteDialog let-dismiss="dismiss">
+    <user-mgmt-delete-dialog [modalRef]="modalRef" [dismiss]="dismiss"></user-mgmt-delete-dialog>
+</template>

@@ -454,7 +454,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/user-management/_user.model.ts', ANGULAR_DIR + 'admin/user-management/user.model.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-detail.component.ts', ANGULAR_DIR + 'admin/user-management/user-management-detail.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-dialog.controller.ts', this, {});
-            this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.ts', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.ts', this, {});
+            this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.component.ts', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.componentr.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user.service.ts', ANGULAR_DIR + 'admin/user-management/user.service.ts', this, {});
         },
 
