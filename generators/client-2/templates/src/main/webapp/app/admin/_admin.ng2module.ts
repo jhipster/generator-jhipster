@@ -7,6 +7,7 @@ import {
     AuditsComponent,
     UserMgmtComponent,
     UserMgmtDetailComponent,
+    UserMgmtDialogComponent,
     UserMgmtDeleteDialogComponent,
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
@@ -38,8 +39,10 @@ import {
     logsState,
     metricsState,
     userMgmtState,
-    userMgmtDetailState
-    userMgmtDeleteDialogState
+    userMgmtDetailState,
+    userMgmtNewState,
+    userMgmtEditState,
+    userMgmtDeleteState
 } from './';
 
 let ADMIN_STATES = [
@@ -57,8 +60,10 @@ let ADMIN_STATES = [
     <%_ } _%>
     metricsState,
     userMgmtState,
-    userMgmtDetailState
-    userMgmtDeleteDialogState
+    userMgmtDetailState,
+    userMgmtNewState,
+    userMgmtEditState,
+    userMgmtDeleteState
 ];
 
 @NgModule({
@@ -70,6 +75,7 @@ let ADMIN_STATES = [
         AuditsComponent,
         UserMgmtComponent,
         UserMgmtDetailComponent,
+        UserMgmtDialogComponent,
         UserMgmtDeleteDialogComponent,
         LogsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
