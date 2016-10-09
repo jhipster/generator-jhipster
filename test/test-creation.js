@@ -373,7 +373,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/app.constants.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/http.config.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/localstorage.config.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/alert.config.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation-storage.provider.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/compile.config.ts',
@@ -409,6 +408,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/shared/login/login.html',
         CLIENT_MAIN_SRC_DIR + 'app/shared/login/login.service.ts',
         CLIENT_MAIN_SRC_DIR + 'app/shared/login/login.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/shared/alert/alert.provider.ts',
 
         CLIENT_MAIN_SRC_DIR + 'app/admin/admin.module.ts',
         CLIENT_MAIN_SRC_DIR + 'app/admin/index.ts',
