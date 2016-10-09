@@ -3,7 +3,9 @@ import { StateService } from 'ui-router-ng2';
 import { LoginService } from "../login/login.service";
 import { Principal } from './principal.service';
 import { AuthServerProvider } from './auth-session.service';
+<%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+<%_ } _%>
 
 @Injectable()
 export class AuthService {
