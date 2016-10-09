@@ -39,6 +39,7 @@ env:
     - JHIPSTER=app-microservice-eureka
     - JHIPSTER=app-gateway-consul
     - JHIPSTER=app-microservice-consul
+    - JHIPSTER=app-gateway-uaa
 
 before_install:
   - sudo /etc/init.d/postgresql stop
