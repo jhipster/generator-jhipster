@@ -1,17 +1,18 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
 
 @Injectable()
 export class AuthServerProvider {
     constructor(
         private http: Http,
-        @Inject('$localStorage') private $localStorage,
-        @Inject('$sessionStorage') private $sessionStorage
+        private $localStorage: LocalStorageService,
+        private $sessionStorage: SessionStorageService
     ){}
 
     getToken () {
-        return this.$localStorage.authenticationToken || this.$sessionStorage.authenticationToken;
+        return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
     }
 
     login (credentials): Observable<any> {
@@ -72,15 +73,15 @@ export class AuthServerProvider {
 
     storeAuthenticationToken(jwt, rememberMe) {
         if(rememberMe){
-            this.$localStorage.authenticationToken = jwt;
+            this.$localStorage.store('authenticationToken', jwt);
         } else {
-            this.$sessionStorage.authenticationToken = jwt;
+            this.$sessionStorage.store('authenticationToken', jwt);
         }
     }
 
     logout (): Observable<any> {
         //TODO make this observable
-        delete this.$localStorage.authenticationToken;
-        delete this.$sessionStorage.authenticationToken;
+        this.$localStorage.clear('authenticationToken');
+        this.$sessionStorage.clear('authenticationToken');
     }
 }

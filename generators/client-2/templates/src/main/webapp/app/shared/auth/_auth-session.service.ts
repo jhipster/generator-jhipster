@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { LocalStorageService } from 'ng2-webstorage';
 
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
@@ -14,11 +15,12 @@ export class AuthServerProvider {
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        @Inject('$localStorage') private $localStorage
+        private $localStorage: LocalStorageService
+
     ){}
 
     getToken () {
-        return this.$localStorage.authenticationToken;;
+        return this.$localStorage.retrieve('authenticationToken');
     }
 
     hasValidToken () {
@@ -43,12 +45,12 @@ export class AuthServerProvider {
         this.trackerService.disconnect();
         <%_ } _%>
         <%_ if(authenticationType === 'uaa') { _%>
-        delete this.$localStorage.authenticationToken;
+        this.$localStorage.clear('authenticationToken');
         <%_ } else { _%>
         // logout from the server
         return this.http.post('api/logout', {}).map((response: Response) => {
 
-            delete this.$localStorage.authenticationToken;
+            this.$localStorage.clear('authenticationToken');
             // to get a new csrf token call the api
             this.http.get('api/account').subscribe(() => {}, () => {});
             return response;

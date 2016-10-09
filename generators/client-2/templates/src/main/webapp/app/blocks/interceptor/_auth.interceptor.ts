@@ -1,6 +1,6 @@
-AuthInterceptor.$inject = ['$rootScope', '$q', '$location', '$localStorage', '$sessionStorage'];
+AuthInterceptor.$inject = ['$rootScope', '$q', '$location'/*, '$localStorage', '$sessionStorage'*/];
 
-export function AuthInterceptor ($rootScope, $q, $location, $localStorage, $sessionStorage) {
+export function AuthInterceptor ($rootScope, $q, $location/*, $localStorage, $sessionStorage*/) {
     var service = {
         request: request
     };
@@ -10,7 +10,7 @@ export function AuthInterceptor ($rootScope, $q, $location, $localStorage, $sess
     function request (config) {
         /*jshint camelcase: false */
         config.headers = config.headers || {};
-        var token = $localStorage.authenticationToken || $sessionStorage.authenticationToken;
+        var token /*= $localStorage.authenticationToken || $sessionStorage.authenticationToken*/;
         <% if (authenticationType === 'oauth2') { %>
         if (token && token.expires_at && token.expires_at > new Date().getTime()) {
             config.headers.Authorization = 'Bearer ' + token.access_token;

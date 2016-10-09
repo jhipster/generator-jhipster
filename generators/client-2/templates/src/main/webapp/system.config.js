@@ -17,6 +17,7 @@
         'ui-router-ng1-to-ng2': 'vendor/ui-router-ng1-to-ng2/ng1-to-ng2.js',
         'ui-router-visualizer': 'vendor/ui-router-visualizer/release/visualizer.min.js',
         'jquery' : 'vendor/jquery/dist',
+        'ng2-webstorage': 'vendor/ng2-webstorage',
         // app barrels
         'account' : 'app/account',
         'admin' : 'app/admin',
@@ -32,6 +33,7 @@
         '@ng-bootstrap/ng-bootstrap': { main: '/bundles/ng-bootstrap', defaultExtension: 'js' },
         'ui-router-ng2': {},
         'jquery': { main: 'jquery.min', defaultExtension: 'js' },
+        'ng2-webstorage': { main: 'bundles/core.umd.js', defaultExtension: 'js' },
         // app barrels
         'account' : { main: 'index',  defaultExtension: 'js' },
         'admin' : { main: 'index',  defaultExtension: 'js' },

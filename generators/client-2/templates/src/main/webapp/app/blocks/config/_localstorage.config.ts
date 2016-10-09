@@ -1,6 +1,5 @@
-LocalStorageConfig.$inject = ['$localStorageProvider', '$sessionStorageProvider'];
+import { KeyStorageHelper } from 'ng2-webstorage';
 
-export function LocalStorageConfig($localStorageProvider, $sessionStorageProvider) {
-  $localStorageProvider.setKeyPrefix('jhi-');
-  $sessionStorageProvider.setKeyPrefix('jhi-');
+export function localStorageConfig() {
+    KeyStorageHelper.setStorageKeyPrefix('jhi-');
 }

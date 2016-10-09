@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UIRouterModule } from 'ui-router-ng2';
 import { Ng1ToNg2Module } from 'ui-router-ng1-to-ng2';
+import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule, XSRFStrategyProvider } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module'; //TODO these couldnt be used from barrels due to an error
@@ -21,6 +22,9 @@ import {
     errorState,
     accessdeniedState
 } from './layouts';
+import { localStorageConfig } from './blocks/config/localstorage.config';
+
+localStorageConfig();
 
 let routerConfig = {
     otherwise: '/',
@@ -35,6 +39,7 @@ let routerConfig = {
 @NgModule({
     imports: [
         BrowserModule,
+        Ng2Webstorage,
         Ng1ToNg2Module,
         UIRouterModule.forChild(routerConfig),
         <%=angular2AppName%>SharedModule,

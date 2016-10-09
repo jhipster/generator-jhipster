@@ -1,5 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
+import { SessionStorageService } from 'ng2-webstorage';
+
 import { LoginService } from "../login/login.service";
 import { Principal } from './principal.service';
 import { AuthServerProvider } from './auth-session.service';
@@ -15,14 +17,14 @@ export class AuthService {
         private $state: StateService,
         private authServerProvider: AuthServerProvider,
         private loginService : LoginService,
+        private $sessionStorage: SessionStorageService,
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         <%_ if (enableTranslation){ _%>
         @Inject('$translate') private $translate,
         <%_ } _%>
-        @Inject('$rootScope') private $rootScope,
-        @Inject('$sessionStorage') private $sessionStorage
+        @Inject('$rootScope') private $rootScope
     ){}
 
     authorize (force) {
@@ -105,16 +107,15 @@ export class AuthService {
     }
 
     getPreviousState() {
-        var previousState = this.$sessionStorage.previousState;
-        return previousState;
+        return this.$sessionStorage.retrieve('previousState');
     }
 
     resetPreviousState() {
-        delete this.$sessionStorage.previousState;
+        this.$sessionStorage.clear('previousState');
     }
 
     storePreviousState(previousStateName, previousStateParams) {
         var previousState = { "name": previousStateName, "params": previousStateParams };
-        this.$sessionStorage.previousState = previousState;
+        this.$sessionStorage.store('previousState', previousState);
     }
 }

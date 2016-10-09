@@ -2,8 +2,11 @@ declare var SockJS;
 declare var Stomp;
 import { Injectable, Inject } from '@angular/core';
 import { Observable, Observer } from 'rxjs/Rx';
-import { CSRFService } from '../auth/csrf.service';
+<%_ } if (authenticationType === 'oauth2') { _%>
+import { LocalStorageService } from 'ng2-webstorage';
+<%_ } _%>
 
+import { CSRFService } from '../auth/csrf.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
@@ -23,7 +26,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
         private authServerProvider: AuthServerProvider,
         <%_ } if (authenticationType === 'oauth2') { _%>
-        @Inject('$localStorage') private $localStorage,
+        private $localStorage: LocalStorageService,
         <%_ } _%>
         private $document: Document,
         private $window: Window,
@@ -40,7 +43,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
         <%_ if (authenticationType === 'oauth2') { _%>
         /*jshint camelcase: false */
-        var authToken = this.$json.stringify(this.$localStorage.authenticationToken).access_token;
+        var authToken = this.$json.stringify(this.$localStorage.retrieve('authenticationToken')).access_token;
         url += '?access_token=' + authToken;
         <%_ } if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         var authToken = this.authServerProvider.getToken();

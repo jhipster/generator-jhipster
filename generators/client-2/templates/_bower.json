@@ -13,7 +13,6 @@
     "angular-dynamic-locale": "0.1.32",
     "angular-i18n": "1.5.5",
     <%_ } _%>
-    "ngstorage": "0.3.10",
     "angular-loading-bar": "0.9.0",
     "angular-resource": "1.5.5",
     "angular-sanitize": "1.5.5",

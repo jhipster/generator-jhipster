@@ -9,8 +9,6 @@ upgradeAdapter.upgradeNg1Provider('$stateParams');
 upgradeAdapter.upgradeNg1Provider('$uibModal');
 upgradeAdapter.upgradeNg1Provider('$state');
 upgradeAdapter.upgradeNg1Provider('$rootScope');
-upgradeAdapter.upgradeNg1Provider('$sessionStorage');
-upgradeAdapter.upgradeNg1Provider('$localStorage');
 <%_ if (enableTranslation) { _%>
 upgradeAdapter.upgradeNg1Provider('$translate');
 upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');

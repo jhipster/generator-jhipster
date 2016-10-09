@@ -1,12 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { LocalStorageService } from 'ng2-webstorage';
 
 import { Base64 } from './base64.service';
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
 
 @Injectable()
-export function AuthServerProvider ($http, $localStorage, Base64) {
+export class AuthServerProvider {
 
     constructor(
         private http: Http,
@@ -14,11 +15,11 @@ export function AuthServerProvider ($http, $localStorage, Base64) {
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         private base64: Base64,
-        @Inject('$localStorage') private $localStorage
+        private $localStorage: LocalStorageService
     ){}
 
     getToken () {
-        return this.$localStorage.authenticationToken;
+        return this.$localStorage.retrieve('authenticationToken');
     }
 
     login (credentials): Observable<any> {
@@ -39,7 +40,7 @@ export function AuthServerProvider ($http, $localStorage, Base64) {
             let expiredAt = new Date();
             expiredAt.setSeconds(expiredAt.getSeconds() + response.expires_in);
             response.expires_at = expiredAt.getTime();
-            this.$localStorage.authenticationToken = response;
+            this.$localStorage.store('authenticationToken', response);
             return response;
         }
     }
@@ -49,7 +50,7 @@ export function AuthServerProvider ($http, $localStorage, Base64) {
         this.trackerService.disconnect();
         <%_ } _%>
         this.http.post('api/logout', {}).map(resp => {
-            delete this.$localStorage.authenticationToken;
+            this.$localStorage.clear('authenticationToken');
             return resp;
         });
     }

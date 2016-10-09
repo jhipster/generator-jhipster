@@ -15,7 +15,6 @@ import { UIRouterDeferInterceptConfig } from './blocks/config/ui-router-defer-in
 
 import { CompileServiceConfig } from './blocks/config/compile.config';
 import { HttpConfig } from './blocks/config/http.config';
-import { LocalStorageConfig } from './blocks/config/localstorage.config';
 import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
@@ -52,7 +51,6 @@ angular
     ])
     .config(CompileServiceConfig)
     .config(HttpConfig)
-    .config(LocalStorageConfig)
     .config(PagerConfig)
     .config(PaginationConfig)
     .config(UIRouterDeferInterceptConfig)
