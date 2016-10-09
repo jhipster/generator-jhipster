@@ -2,7 +2,7 @@ declare var SockJS;
 declare var Stomp;
 import { Injectable, Inject } from '@angular/core';
 import { Observable, Observer } from 'rxjs/Rx';
-<%_ } if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import { LocalStorageService } from 'ng2-webstorage';
 <%_ } _%>
 
