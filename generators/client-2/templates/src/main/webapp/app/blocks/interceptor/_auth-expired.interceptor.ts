@@ -53,7 +53,7 @@ export function AuthExpiredInterceptor($rootScope, $q, $injector, $document) {
         }
         return $q.reject(response);
     }
-
+    // use the CSRFService
     function getCSRF() {
         var doc = $document[0];
         if (doc) {

@@ -4,6 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
     <%=angular2AppName%>SharedLibsModule,
     <%=angular2AppName%>SharedCommonModule,
+    CSRFService,
     AuthService,
     AuthServerProvider,
     <%_ if (authenticationType === 'oauth2') { _%>
@@ -34,6 +35,7 @@ import {
         LoginService,
         AccountService,
         Principal,
+        CSRFService,
         AuthService,
         <%_ if (authenticationType === 'oauth2') { _%>
         Base64,

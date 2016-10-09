@@ -2,6 +2,7 @@ declare var SockJS;
 declare var Stomp;
 import { Injectable, Inject } from '@angular/core';
 import { Observable, Observer } from 'rxjs/Rx';
+import { CSRFService } from '../auth/csrf.service';
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
 import { AuthServerProvider } from '../auth/auth-jwt.service';
@@ -25,7 +26,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         @Inject('$localStorage') private $localStorage,
         <%_ } _%>
         private $document: Document,
-        private $window: Window
+        private $window: Window,
+        private csrfService: CSRFService
     ) {
         this.connection = new Promise(
             (resolve, reject) => this.connectedPromise = resolve
@@ -52,7 +54,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         var stateChangeStart;
         var headers = {};
         <%_ if (authenticationType === 'session') { _%>
-        headers['X-CSRF-TOKEN'] = this.getCSRF('CSRF-TOKEN');
+        headers['X-CSRF-TOKEN'] = this.csrfService.getCSRF('CSRF-TOKEN');
         <%_ } _%>
         this.stompClient.connect(headers, () => {
             this.connectedPromise('success');
@@ -106,17 +108,6 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
             this.subscriber.unsubscribe();
         }
         this.listener = this.createListener();
-    }
-
-    private getCSRF(name) {
-        name = `${name}=`;
-        let ca = this.$document.cookie.split(';');
-        for(var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') c = c.substring(1);
-            if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
-        }
-        return '';
     }
 
     private createListener() {

@@ -1,6 +1,7 @@
 export * from './alert/alert.component';
 export * from './alert/alert-error.component';
 export * from './alert/alert.service';
+export * from './auth/csrf.service';
 export * from './auth/account.service';
 <%_ if (authenticationType === 'oauth2') { _%>
 export * from './auth/auth-oauth2.service';

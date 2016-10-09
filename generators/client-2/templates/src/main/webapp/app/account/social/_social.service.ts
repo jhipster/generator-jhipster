@@ -29,7 +29,7 @@
         function getProviderURL (provider) {
             return 'signin/' + provider;
         }
-
+        // use the CSRFService
         function getCSRF () {
             /* globals document */
             var name = 'CSRF-TOKEN=';
