@@ -351,7 +351,8 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
             <version>4.0.36.Final</version>
-        </dependency><%_ } _%>
+        </dependency>
+        <%_ } _%>
         <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
