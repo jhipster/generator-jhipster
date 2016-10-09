@@ -11,19 +11,19 @@
     <div class="table-responsive" *ngIf="users">
         <table class="table table-striped">
             <thead>
-            <tr<% if (databaseType !== 'cassandra') { %> jh-sort="predicate" ascending="reverse" callback="transition()"<% } %>>
-                <th<% if (databaseType !== 'cassandra') { %> (click)="orderProp = 'id'; reverse=!reverse"<% } %>><span translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="glyphicon glyphicon-sort"></span><%_ } _%></th>
-                <th<% if (databaseType !== 'cassandra') { %> (click)="orderProp = 'login'; reverse=!reverse"<% } %>><span translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
-                <th<% if (databaseType !== 'cassandra') { %> (click)="orderProp = 'email'; reverse=!reverse"<% } %>><span translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+            <tr<% if (databaseType !== 'cassandra') { %> [attr.jh-sort]="predicate" [attr.ascending]="reverse" [attr.callback]="transition"<% } %>>
+                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="id"<% } %>><span translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="glyphicon glyphicon-sort"></span><%_ } _%></th>
+                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="login"<% } %>><span translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="email"<% } %>><span translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                 <th></th>
                 <%_ if (enableTranslation) { _%>
-                <th <% if (databaseType !== 'cassandra') { %> (click)="orderProp = 'langKey'; reverse=!reverse"<% } %>> <span translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th <% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="langKey"<% } %>> <span translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                 <%_ } _%>
                 <th><span translate="userManagement.profiles">Profiles</span></th>
                 <%_ if (databaseType !== 'cassandra') { _%>
-                <th (click)="orderProp = 'createdDate'; reverse=!reverse"><span translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th (click)="orderProp = 'lastModifiedBy'; reverse=!reverse"><span translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th (click)="orderProp = 'lastModifiedDate'; reverse=!reverse"><span translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th [attr.jh-sort-by]="createdDate"><span translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th [attr.jh-sort-by]="lastModifiedBy"><span translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th [attr.jh-sort-by]="lastModifiedDate"><span translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <%_ } _%>
                 <th></th>
             </tr>
@@ -79,16 +79,8 @@
     </div>
     <%_ if (databaseType !== 'cassandra') { _%>
     <div class="text-center">
-        <jhi-item-count page="page" total="queryCount" items-per-page="itemsPerPage"></jhi-item-count>
-        <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" (click)="transition()"></ngb-pagination>
+        <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" (click)="loadPage(page)"></ngb-pagination>
     </div>
     <%_ } _%>
 </div>
-<!-- this is a workaround until ng-bootstrap supports components as modal content https://github.com/ng-bootstrap/ng-bootstrap/issues/680 -->
-<template #userManagementDialog let-dismiss="dismiss">
-    <user-mgmt-dialog [modalRef]="modalRef" [dismiss]="dismiss"></user-mgmt-dialog>
-</template>
-
-<template #userManagementDeleteDialog let-dismiss="dismiss">
-    <user-mgmt-delete-dialog [modalRef]="modalRef" [dismiss]="dismiss"></user-mgmt-delete-dialog>
-</template>

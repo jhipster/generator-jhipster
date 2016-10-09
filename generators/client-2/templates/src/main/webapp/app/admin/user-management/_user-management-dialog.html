@@ -1,4 +1,4 @@
-<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -17,9 +17,9 @@
         <div class="form-group">
             <label class="control-label" translate="userManagement.login">Login</label>
             <input type="text" class="form-control" name="login" #loginInput="ngModel"
-                   [(ngModel)]="user.login" ng-required="user.id == null" minlength=1 maxlength=50 ng-pattern="/^[_'.@A-Za-z0-9-]*$/">
+                   [(ngModel)]="user.login" required minlength=1 maxlength=50 pattern="^[_'.@A-Za-z0-9-]*$">
 
-            <div *ngIf="loginInput.invalid">
+            <div *ngIf="loginInput.dirty && loginInput.invalid">
                 <p class="help-block"
                    *ngIf="loginInput.errors.required" translate="entity.validation.required">
                     This field is required.
@@ -37,7 +37,7 @@
             <input type="text" class="form-control" name="firstName" #firstNameInput="ngModel"
                    [(ngModel)]="user.firstName" maxlength="50">
 
-            <div *ngIf="firstNameInput.invalid">
+            <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
                 <p class="help-block"
                    *ngIf="firstNameInput.errors.maxlength" translate="entity.validation.maxlength"
                    translate-value-max="50">
@@ -50,7 +50,7 @@
             <input type="text" class="form-control" name="lastName" #lastNameInput="ngModel"
                    [(ngModel)]="user.lastName" maxlength="50">
 
-            <div *ngIf="lastNameInput.invalid">
+            <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
                 <p class="help-block"
                    *ngIf="lastNameInput.errors.maxlength" translate="entity.validation.maxlength"
                    translate-value-max="50">
@@ -63,7 +63,7 @@
             <input type="email" class="form-control" name="email" #emailInput="ngModel"
                    [(ngModel)]="user.email" required maxlength="100">
 
-            <div *ngIf="emailInput.invalid">
+            <div *ngIf="emailInput.dirty && emailInput.invalid">
                 <p class="help-block"
                    *ngIf="emailInput.errors.required" translate="entity.validation.required">
                     This field is required.
@@ -82,7 +82,7 @@
         </div>
         <div class="form-group">
             <label for="activated">
-                <input [disabled]="user.id === null" type="checkbox" id="activated" [(ngModel)]="user.activated">
+                <input [disabled]="user.id === null" type="checkbox" id="activated" name="activated" [(ngModel)]="user.activated">
                 <span translate="userManagement.activated">Activated</span>
             </label>
         </div>
@@ -97,8 +97,8 @@
         <%_ } _%>
         <div class="form-group">
             <label translate="userManagement.profiles">Profiles</label>
-            <select class="form-control" multiple name="authority" [(ngModel)]="user.authorities"
-                    *ngFor="let authority of authorities">
+            <select class="form-control" multiple name="authority" [(ngModel)]="user.authorities">
+                <option *ngFor="let authority of authorities" [value]="authority">{{authority}}</option>
             </select>
         </div>
     </div>
@@ -107,7 +107,7 @@
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
             translate="entity.action.cancel">Cancel</span>
         </button>
-        <button type="submit" [disabled]="editForm.$invalid || isSaving" class="btn btn-primary">
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
         </button>
     </div>

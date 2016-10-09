@@ -1,5 +1,7 @@
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
+import { UserMgmtDialogComponent } from './user-management-dialog.component';
+import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 
 export const userMgmtState = {
     name: 'user-management',
@@ -9,19 +11,20 @@ export const userMgmtState = {
         authorities: ['ROLE_ADMIN'],
         pageTitle: 'user-management.home.title'
     },
-        views: {
-            'content@': { component: UserMgmtComponent }
-        },<%_ if (databaseType !== 'cassandra') { _%>
-        params: {
-            page: {
-                value: '1',
-                    squash: true
-            },
-            sort: {
-                value: 'id,asc',
-                    squash: true
-            }
+    views: {
+        'content@': { component: UserMgmtComponent }
+    },
+    <%_ if (databaseType !== 'cassandra') { _%>
+    params: {
+        page: {
+            value: '1',
+            squash: true
         },
+        sort: {
+            value: 'id,asc',
+            squash: true
+        }
+    },
     resolve: {
         // pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
         //     return {

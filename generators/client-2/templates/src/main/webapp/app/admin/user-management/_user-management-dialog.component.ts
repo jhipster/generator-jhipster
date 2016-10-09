@@ -20,13 +20,14 @@ export class UserMgmtDialogComponent implements OnInit {
     authorities: any[];
     isSaving: Boolean;
 
-    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams, @Inject('User') private userEntity<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
+    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams, @Inject('entity') private entity<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
     private languageService: <%=jhiPrefixCapitalized%>LanguageService <%_ } _%>) {
-        this.user = userEntity;
-        this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-}
+        this.user = entity;
+    }
 
     ngOnInit() {
+        this.isSaving = false;
+        this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         <%_ if (enableTranslation){ _%>
         this.languageService.getAll().then((languages) => {
             this.languages = languages;
@@ -44,7 +45,7 @@ export class UserMgmtDialogComponent implements OnInit {
             this.userService.update(this.user).subscribe((response) => this.onSaveSuccess, () => this.onSaveError);
         } else {<% if (!enableTranslation){ %>
             this.user.langKey = 'en';<% } %>
-            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess, () => this.onSaveError);
+            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess, () => this.onSaveError);
         }
     }
     onSaveSuccess (result) {

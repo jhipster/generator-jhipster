@@ -3,10 +3,8 @@ import { Response } from '@angular/http';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { Principal } from '../../shared';
-import { AlertService } from "../../shared";
-import { ParseLinks } from "../../shared/";
-import { ITEMS_PER_PAGE } from '../../shared';
+import { AlertService, ITEMS_PER_PAGE, ParseLinks, Principal } from '../../shared';
+import { StateService } from "ui-router-ng2";
 
 @Component({
     selector: 'user-mgmt',
@@ -26,8 +24,16 @@ export class UserMgmtComponent implements OnInit {
     predicate: any;
     reverse: any;
 
-    constructor(private userService: UserService, private parseLinks: ParseLinks, private alertService: AlertService, private principal: Principal) {
+    constructor(private userService: UserService,
+                private parseLinks: ParseLinks,
+                private alertService: AlertService,
+                private principal: Principal,
+                private $state: StateService
+    ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
+        this.page = 1;
+        this.reverse = false;
+        this.predicate = 'id';
     }
 
     ngOnInit() {
@@ -53,7 +59,7 @@ export class UserMgmtComponent implements OnInit {
             });
     }
     loadAll () {
-        this.userService.findAll().subscribe((res: Response) => this.onSuccess(res.json(), res.headers), (res: Response) => this.onError(res.json()));
+        this.userService.query({page: this.page -1, size: this.itemsPerPage, sort: this.sort()}).subscribe((res: Response) => this.onSuccess(res.json(), res.headers), (res: Response) => this.onError(res.json()));
     }
     onSuccess (data, headers) {
         //hide anonymous user from user management: it's a required user for Spring Security
@@ -69,7 +75,7 @@ export class UserMgmtComponent implements OnInit {
         this.users = data;
     }
     onError (error) {
-        // this.alertService.error(error.data.message);
+        this.alertService.error(error.error, error.message, null);
     }
     sort () {
         var result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
@@ -83,29 +89,9 @@ export class UserMgmtComponent implements OnInit {
         this.transition();
     }
     transition () {
-        console.log("TRANSITIONING")
-        // $state.transitionTo($state.$current, {
-        //     page: this.page,
-        //     sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        // });
+        this.$state.transitionTo(this.$state.$current, {
+            page: this.page,
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        });
     }
 }
-
-
-//     UserManagementController.$inject = ['Principal', 'User', 'ParseLinks'<% if (databaseType !== 'cassandra') { %>, '$state', 'pagingParams', 'paginationConstants'<% } %><% if (enableTranslation) { %>, '<%=jhiPrefixCapitalized%>LanguageService'<% } %>, 'AlertService' ];
-//     function UserManagementController(Principal, User, ParseLinks<% if (databaseType !== 'cassandra') { %>, $state, pagingParams, paginationConstants<% } %><% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %>, AlertService ) {
-//         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-//         vm.languages = null;
-//          vm.page = 1;
-//         vm.totalItems = null;
-//         vm.clear = clear;
-//         vm.links = null;
-//         vm.loadPage = loadPage;
-//         vm.predicate = pagingParams.predicate;
-//         vm.reverse = pagingParams.ascending;
-//         vm.itemsPerPage = paginationConstants.itemsPerPage;
-//
-//         <% if (enableTranslation) { %>
-//         <%=jhiPrefixCapitalized%>LanguageService.getAll().then(function (languages) {
-//             vm.languages = languages;
-//         });<% } %>

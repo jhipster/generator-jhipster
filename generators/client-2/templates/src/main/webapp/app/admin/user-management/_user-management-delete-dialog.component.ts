@@ -14,8 +14,8 @@ export class UserMgmtDeleteDialogComponent implements OnInit {
     user: User;
     modalRef: NgbModalRef;
 
-    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams, @Inject('User') private userEntity) {
-        this.user = userEntity;
+    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams, @Inject('entity') private entity) {
+        this.user = entity;
     }
 
     ngOnInit() {
