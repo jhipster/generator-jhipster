@@ -307,8 +307,10 @@ dependencies {
     testCompile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %><% if (databaseType == 'mongodb') { %>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"<% } %>
     testCompile "org.hamcrest:hamcrest-library"
-    <% if (testFrameworks.indexOf('gatling') != -1) { %>
-    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"<% } %>
+    <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
+    <%_ if (databaseType === 'cassandra') { _%>
+    compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
     <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
     testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
     <%_ if (messageBroker === 'kafka') { _%>
