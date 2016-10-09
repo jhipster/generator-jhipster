@@ -58,8 +58,7 @@ public class AccountResource {
      * @param request the HTTP request
      * @return the ResponseEntity with status 201 (Created) if the user is registered or 400 (Bad Request) if the login or e-mail is already in use
      */
-    @RequestMapping(value = "/register",
-                    method = RequestMethod.POST,
+    @PostMapping(value = "/register",
                     produces={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
     @Timed
     public ResponseEntity<?> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM, HttpServletRequest request) {
@@ -94,8 +93,7 @@ public class AccountResource {
      * @param key the activation key
      * @return the ResponseEntity with status 200 (OK) and the activated user in body, or status 500 (Internal Server Error) if the user couldn't be activated
      */
-    @RequestMapping(value = "/activate",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/activate",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
@@ -110,8 +108,7 @@ public class AccountResource {
      * @param request the HTTP request
      * @return the login if the user is authenticated
      */
-    @RequestMapping(value = "/authenticate",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/authenticate",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public String isAuthenticated(HttpServletRequest request) {
@@ -124,8 +121,7 @@ public class AccountResource {
      *
      * @return the ResponseEntity with status 200 (OK) and the current user in body, or status 500 (Internal Server Error) if the user couldn't be returned
      */
-    @RequestMapping(value = "/account",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/account",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<UserDTO> getAccount() {
@@ -140,8 +136,7 @@ public class AccountResource {
      * @param userDTO the current user information
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) or 500 (Internal Server Error) if the user couldn't be updated
      */
-    @RequestMapping(value = "/account",
-        method = RequestMethod.POST,
+    @PostMapping(value = "/account",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<String> saveAccount(@Valid @RequestBody UserDTO userDTO) {
@@ -165,8 +160,7 @@ public class AccountResource {
      * @param password the new password
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) if the new password is not strong enough
      */
-    @RequestMapping(value = "/account/change_password",
-        method = RequestMethod.POST,
+    @PostMapping(value = "/account/change_password",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity<?> changePassword(@RequestBody String password) {
@@ -183,8 +177,7 @@ public class AccountResource {
      * @return the ResponseEntity with status 200 (OK) and the current open sessions in body,
      *  or status 500 (Internal Server Error) if the current open sessions couldn't be retrieved
      */
-    @RequestMapping(value = "/account/sessions",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/account/sessions",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<PersistentToken>> getCurrentSessions() {
@@ -211,8 +204,7 @@ public class AccountResource {
      * @param series the series of an existing session
      * @throws UnsupportedEncodingException if the series couldnt be URL decoded
      */
-    @RequestMapping(value = "/account/sessions/{series}",
-        method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/account/sessions/{series}")
     @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
@@ -230,8 +222,7 @@ public class AccountResource {
      * @param request the HTTP request
      * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registered
      */
-    @RequestMapping(value = "/account/reset_password/init",
-        method = RequestMethod.POST,
+    @PostMapping(value = "/account/reset_password/init",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity<?> requestPasswordReset(@RequestBody String mail, HttpServletRequest request) {
@@ -255,8 +246,7 @@ public class AccountResource {
      * @return the ResponseEntity with status 200 (OK) if the password has been reset,
      * or status 400 (Bad Request) or 500 (Internal Server Error) if the password could not be reset
      */
-    @RequestMapping(value = "/account/reset_password/finish",
-        method = RequestMethod.POST,
+    @PostMapping(value = "/account/reset_password/finish",
         produces = MediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {

@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/management/jhipster")
 public class LogsResource {
 
-    @RequestMapping(value = "/logs",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/logs",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<LoggerVM> getList() {
@@ -32,8 +31,7 @@ public class LogsResource {
             .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/logs",
-        method = RequestMethod.PUT)
+    @PutMapping(value = "/logs")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Timed
     public void changeLevel(@RequestBody LoggerVM jsonLogger) {

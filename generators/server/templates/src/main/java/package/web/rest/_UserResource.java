@@ -87,8 +87,7 @@ public class UserResource {
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/users",
-        method = RequestMethod.POST,
+    @PostMapping(value = "/users",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
@@ -127,8 +126,7 @@ public class UserResource {
      * or with status 400 (Bad Request) if the login or email is already in use,
      * or with status 500 (Internal Server Error) if the user couldn't be updated
      */
-    @RequestMapping(value = "/users",
-        method = RequestMethod.PUT,
+    @PutMapping(value = "/users",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
@@ -158,8 +156,7 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK) and with body all users
      * @throws URISyntaxException if the pagination headers couldn't be generated
      */
-    @RequestMapping(value = "/users",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/users",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public ResponseEntity<List<ManagedUserVM>> getAllUsers(Pageable pageable)
@@ -190,8 +187,7 @@ public class UserResource {
      * @param login the login of the user to find
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<ManagedUserVM> getUser(@PathVariable String login) {
@@ -208,8 +204,7 @@ public class UserResource {
      * @param login the login of the user to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
-        method = RequestMethod.DELETE,
+    @DeleteMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
@@ -226,8 +221,7 @@ public class UserResource {
      * @param query the query to search
      * @return the result of the search
      */
-    @RequestMapping(value = "/_search/users/{query}",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/_search/users/{query}",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<User> search(@PathVariable String query) {
