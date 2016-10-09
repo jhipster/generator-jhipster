@@ -20,7 +20,6 @@ import {
 
 angular
     .module('<%=angularAppName%>.admin', [
-        'ngStorage',
         <%_ if (enableTranslation) { _%>
         'tmh.dynamicLocale',
         'pascalprecht.translate',

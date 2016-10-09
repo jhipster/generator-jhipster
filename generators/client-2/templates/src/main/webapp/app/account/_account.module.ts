@@ -23,7 +23,6 @@ import {
 
 angular
     .module('<%=angularAppName%>.account', [
-        'ngStorage',
         <%_ if (enableTranslation) { _%>
         'tmh.dynamicLocale',
         'pascalprecht.translate',

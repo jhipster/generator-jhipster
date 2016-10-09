@@ -31,8 +31,7 @@ import { NotificationInterceptor } from './blocks/interceptor/notification.inter
 import { <%=jhiPrefixCapitalized%>LoginModalComponent<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %> } from "./shared";
 
 angular
-    .module('<%=angularAppName%>.app', [
-        'ngStorage',<% if (enableTranslation) { %>
+    .module('<%=angularAppName%>.app', [<% if (enableTranslation) { %>
         'tmh.dynamicLocale',
         'pascalprecht.translate',<% } %>
         'ngResource',
