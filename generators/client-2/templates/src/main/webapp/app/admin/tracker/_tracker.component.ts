@@ -29,7 +29,7 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.trackerService.receive().then(activity => {
+        this.trackerService.receive().subscribe(activity => {
             this.showActivity(activity);
         });
     }
