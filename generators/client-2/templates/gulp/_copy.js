@@ -113,7 +113,10 @@ function deps(){
         'node_modules/ui-router-ng1-to-ng2/**/*.js',
         'node_modules/ui-router-ng2/**/*.js',
         'node_modules/ui-router-visualizer/**/*.js',
-        'node_modules/jquery/dist/*.js'
+        'node_modules/jquery/dist/*.js',
+        'node_modules/tether/dist/js/tether.min.js',
+        'node_modules/bootstrap/dist/css/*.css',
+        'node_modules/systemjs-plugin-css/css.js'
     ], { base: 'node_modules' })
     .pipe(gulp.dest(config.dist + 'vendor'));
 }
