@@ -29,13 +29,12 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         private $window: Window,
         private csrfService: CSRFService
     ) {
-        this.connection = new Promise(
-            (resolve, reject) => this.connectedPromise = resolve
-        );
+        this.connection = this.createConnection();
         this.listener = this.createListener();
     }
 
     connect () {
+        if (this.connectedPromise === null) this.connection = this.createConnection();
         //building absolute path so that websocket doesnt fail when deploying with a context path
         var loc = this.$window.location;
         var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
@@ -110,9 +109,13 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         this.listener = this.createListener();
     }
 
-    private createListener() {
+    private createListener(): Observable<any> {
         return new Observable(observer => {
             this.listenerObserver = observer;
         });
+    }
+
+    private createConnection(): Promise<any> {
+        return new Promise((resolve, reject) => this.connectedPromise = resolve);
     }
 }
