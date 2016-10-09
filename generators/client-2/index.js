@@ -532,6 +532,7 @@ module.exports = JhipsterClientGenerator.extend({
         writeAngularAuthServiceFiles: function () {
             // services
             this.template(ANGULAR_DIR + 'shared/auth/_auth.service.ts', ANGULAR_DIR + 'shared/auth/auth.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/auth/_csrf.service.ts', ANGULAR_DIR + 'shared/auth/csrf.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_principal.service.ts', ANGULAR_DIR + 'shared/auth/principal.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_has-authority.directive.ts', ANGULAR_DIR + 'shared/auth/has-authority.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'shared/auth/has-any-authority.directive.ts', this, {});
