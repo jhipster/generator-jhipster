@@ -17,7 +17,7 @@ import {
     MinbytesValidator,
     ShowValidationDirective,
     JhiItemCountComponent,
-    AlertService,
+    alertServiceProvider,
     JhiAlertComponent,
     JhiAlertErrorComponent
 } from './';
@@ -48,7 +48,7 @@ import {
         <%_ if (enableTranslation){ _%>
         <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
-        AlertService
+        alertServiceProvider()
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,

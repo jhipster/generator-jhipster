@@ -6,13 +6,11 @@ export class AlertService {
     private alertId: number;
     private alerts: any[];
     private timeout: number;
-    private toast: boolean;
 
-    constructor(private sanitizer: Sanitizer) {
+    constructor(private sanitizer: Sanitizer, private toast: boolean) {
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
         this.timeout = 5000; // default timeout
-        this.toast = false;
     }
 
     clear() {

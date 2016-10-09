@@ -339,7 +339,6 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'blocks/config/_translation.config.ts', ANGULAR_DIR + 'blocks/config/translation.config.ts', this, {});
                 this.template(ANGULAR_DIR + 'blocks/config/_translation-storage.provider.ts', ANGULAR_DIR + 'blocks/config/translation-storage.provider.ts', this, {});
             }
-            this.template(ANGULAR_DIR + 'blocks/config/_alert.config.ts', ANGULAR_DIR + 'blocks/config/alert.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_http.config.ts', ANGULAR_DIR + 'blocks/config/http.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_localstorage.config.ts', ANGULAR_DIR + 'blocks/config/localstorage.config.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_compile.config.ts', ANGULAR_DIR + 'blocks/config/compile.config.ts', this, {});
@@ -525,6 +524,7 @@ module.exports = JhipsterClientGenerator.extend({
 
             //alert service code
             this.template(ANGULAR_DIR + 'shared/alert/_alert.service.ts', ANGULAR_DIR + 'shared/alert/alert.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/alert/_alert.provider.ts', ANGULAR_DIR + 'shared/alert/alert.provider.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/alert/_alert.component.ts', ANGULAR_DIR + 'shared/alert/alert.component.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/alert/_alert-error.component.ts', ANGULAR_DIR + 'shared/alert/alert-error.component.ts', this, {});
         },
