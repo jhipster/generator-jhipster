@@ -324,7 +324,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularAppFiles: function () {
             this.copyHtml(MAIN_SRC_DIR + '_index.html', MAIN_SRC_DIR + 'index.html');
-            this.copy(MAIN_SRC_DIR + 'system.config.js', MAIN_SRC_DIR + 'system.config.js');
+            this.copy(MAIN_SRC_DIR + '_system.config.js', MAIN_SRC_DIR + 'system.config.js');
 
             // Angular JS module
             this.template(ANGULAR_DIR + '_upgrade_adapter.ts', ANGULAR_DIR + 'upgrade_adapter.ts', this, {});
@@ -501,6 +501,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/jhi-translate.ts', ANGULAR_DIR + 'shared/directive/jhi-translate.ts', this, {});
 
             this.template(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
@@ -517,6 +518,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'shared/language/_language.pipe.ts', ANGULAR_DIR + 'shared/language/language.pipe.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.constants.ts', ANGULAR_DIR + 'shared/language/language.constants.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.service.ts', ANGULAR_DIR + 'shared/language/language.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/language/_jhiMissing.translation.ts', ANGULAR_DIR + 'shared/language/jhiMissing.translation.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'shared/login/login.html', ANGULAR_DIR + 'shared/login/login.html');
             this.template(ANGULAR_DIR + 'shared/login/_login.service.ts', ANGULAR_DIR + 'shared/login/login.service.ts', this, {});

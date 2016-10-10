@@ -1,6 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
+<%_ if (enableTranslation){ _%>
+import { TranslateModule, TranslateLoader, TranslateStaticLoader, TranslateService,MissingTranslationHandler } from 'ng2-translate/ng2-translate';
+import { <%=jhiPrefixCapitalized%>MissingTranslationHandler} from './language/<%=jhiPrefix%>Missing.translation';
+<%_ } _%>
+
+import {<%=jhiPrefix%>-translate} from './directive/<%=jhiPrefix%>-translate';
+
 import {
     <%=angular2AppName%>SharedLibsModule,
     <%=angular2AppName%>SharedCommonModule,
@@ -24,12 +31,19 @@ import {
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedLibsModule,
-        <%=angular2AppName%>SharedCommonModule,
+        <%=angular2AppName%>SharedCommonModule<%_ if (enableTranslation){ _%>,
+        TranslateModule.forRoot({
+          provide: TranslateLoader,
+          useFactory: (http: Http) => new TranslateStaticLoader(http, '/i18n', '.json'),
+          deps: [Http]
+        })
+        <%_ } _%>
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        <%=jhiPrefix%>-translate
     ],
     providers: [
         LoginService,
@@ -43,15 +57,27 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        AuthServerProvider
+        AuthServerProvider<%_ if (enableTranslation){ _%>,
+        { provide: MissingTranslationHandler, useClass: CustomMissingTranslationHandler }
+        <%_ } _%>
     ],
     exports: [
         <%=angular2AppName%>SharedCommonModule,
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        <%=jhiPrefix%>-translate
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
-export class <%=angular2AppName%>SharedModule {}
+export class <%=angular2AppName%>SharedModule {
+    <%_ if (enableTranslation){ _%>
+     static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: TranslateSharedModule,
+            providers: [TranslateService],
+        };
+    }
+    <%_ } _%>
+}

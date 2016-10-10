@@ -1,17 +1,28 @@
-import { LANGUAGES } from './language.constants';
 import { Injectable, Inject } from '@angular/core';
+
+import { TranslateService } from 'ng2-translate/ng2-translate';
+
+import { LANGUAGES } from './language.constants';
+import { <%=angular2AppName%>SharedCommonModule } from '../../shared';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>LanguageService {
 
-    constructor(
-        @Inject('$translate') private $translate,
-        @Inject('tmhDynamicLocale') private tmhDynamicLocale
-    ) { }
+    currentLang = 'en';
+    currentLocation = 'home';
+
+    constructor (public translateService: TranslateService){
+        this.translateService = translateService;
+        this.translateService.currentLang = this.currentLang;
+     }
+
 
     changeLanguage(languageKey) {
-        this.$translate.use(languageKey);
-        this.tmhDynamicLocale.set(languageKey);
+       this.translateService.use(languageKey+'/'+ this.currentLocation);
+    }
+
+    setLocation(){
+       this.translateService.use(this.currentLang+'/'+this.currentLocation);
     }
 
     getAll(): Promise<any> {
@@ -19,7 +30,6 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
     }
 
     getCurrent(): Promise<any> {
-        var language = this.$translate.storage().get('NG_TRANSLATE_LANG_KEY');
-        return Promise.resolve(language);
+        return Promise.resolve(this.currentLang);
     }
 }

@@ -18,6 +18,9 @@
         'ui-router-visualizer': 'vendor/ui-router-visualizer/release/visualizer.min.js',
         'jquery' : 'vendor/jquery/dist',
         'ng2-webstorage': 'vendor/ng2-webstorage',
+        <%_ if (enableTranslation){ _%>
+        'ng2-translate': 'vendor/ng2-translate/bundles',
+        <%_ } _%>
         // app barrels
         'account' : 'app/account',
         'admin' : 'app/admin',
@@ -34,6 +37,9 @@
         'ui-router-ng2': {},
         'jquery': { main: 'jquery.min', defaultExtension: 'js' },
         'ng2-webstorage': { main: 'bundles/core.umd.js', defaultExtension: 'js' },
+        <%_ if (enableTranslation){ _%>
+        'ng2-translate': {main: 'ng2-translate', defaultExtension: 'js'},
+        <%_ } _%>
         // app barrels
         'account' : { main: 'index',  defaultExtension: 'js' },
         'admin' : { main: 'index',  defaultExtension: 'js' },
