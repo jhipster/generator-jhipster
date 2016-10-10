@@ -1,8 +1,8 @@
 <div class="modal-header">
     <button aria-label="Close" data-dismiss="modal" class="close" type="button" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title" id="showHealthLabel"><% if (enableTranslation){ %>
-		{{'health.indicator.' + vm.baseName(vm.currentHealth.name) | translate}}<% }else{ %><span class="text-capitalize">{{ vm.baseName(vm.currentHealth.name) }}</span><% } %>
+    <h4 class="modal-title" id="showHealthLabel"><% if (enableTranslation) { %>
+		{{'health.indicator.' + vm.baseName(vm.currentHealth.name) | translate}}<% } else { %><span class="text-capitalize">{{ vm.baseName(vm.currentHealth.name) }}</span><% } %>
         {{vm.subSystemName(vm.currentHealth.name)}}
     </h4>
 </div>
