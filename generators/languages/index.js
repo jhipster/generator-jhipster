@@ -166,7 +166,6 @@ module.exports = LanguagesGenerator.extend({
         }, this);
         if (!this.skipClient) {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
-            this.updateLanguagesInLanguageConstantNg2(this.config.get('languages'));
         }
     }
 });

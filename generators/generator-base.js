@@ -1550,25 +1550,6 @@ Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
     }
 };
 
-Generator.prototype.updateLanguagesInLanguageConstantNg2 = function (languages) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
-    try {
-        var content = '';
-        for (var i = 0, len = languages.length; i < len; i++) {
-            var language = languages[i];
-            content += '            \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
-        }
-        
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: 'jhipster-needle-i18n-language-constant',
-            splicable: [ content ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
-    }
-};
-
 Generator.prototype.insight = function () {
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
