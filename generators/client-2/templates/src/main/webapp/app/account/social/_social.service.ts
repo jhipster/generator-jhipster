@@ -1,38 +1,38 @@
 import { Injectable, Inject } from '@angular/core';
 
 @Injectable()
-    export class SocialService {
+export class SocialService {
 
-        constructor (@Inject('$document') private $document) {}
+    constructor (@Inject('$document') private $document) {}
 
-        getProviderSetting (provider) {
-            switch(provider) {
+    getProviderSetting (provider) {
+        switch(provider) {
             case 'google': return 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
             case 'facebook': return 'public_profile,email';
             case 'twitter': return '';
-                // jhipster-needle-add-social-button
+            // jhipster-needle-add-social-button
             default: return 'Provider setting not defined';
-            }
-        }
-
-        getProviderURL (provider) {
-            return 'signin/' + provider;
-        }
-
-        getCSRF () {
-            /* globals document */
-            var name = 'CSRF-TOKEN=';
-            var ca = this.$document[0].cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) === ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) !== -1) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return '';
         }
     }
+
+    getProviderURL (provider) {
+        return 'signin/' + provider;
+    }
+
+    getCSRF () {
+        /* globals document */
+        var name = 'CSRF-TOKEN=';
+        var ca = this.$document[0].cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) !== -1) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    }
+}
 

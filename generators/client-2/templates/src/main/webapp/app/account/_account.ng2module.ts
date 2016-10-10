@@ -4,22 +4,16 @@ import { UIRouterModule } from 'ui-router-ng2';
 import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import {
-    jhSocial,
     Register,
     Activate,
     Password,
     PasswordResetInit,
     PasswordResetFinish,
-    SocialService,
     <%_ if (authenticationType === 'session') { _%>
     SessionsService,
     SessionsComponent,
     sessionsState,
     <%_ } _%>
-<% if (authenticationType == 'jwt') { %>
-    SocialAuthComponent,
-<% } %>
-    SocialRegisterComponent,
     PasswordStrengthBarComponent,
     RegisterComponent,
     ActivateComponent,
@@ -34,10 +28,16 @@ import {
     requestResetState,
     registerState,
     accountState,
+<% if (enableSocialSignIn) { %>
+    JhSocialComponent,
+    SocialService,
+    SocialRegisterComponent,
+    socialRegisterState,
 <% if (authenticationType == 'jwt') { %>
+    SocialAuthComponent,
     socialAuthState,
 <% } %>
-    socialRegisterState
+<% } %>
 } from './';
 
 let ACCOUNT_STATES = [
@@ -51,10 +51,12 @@ let ACCOUNT_STATES = [
     sessionsState,
     <%_ } _%>
     settingsState,
+<% if (enableSocialSignIn) { %>
 <% if (authenticationType == 'jwt') { %>
     socialAuthState,
 <% } %>
     socialRegisterState
+<% } %>
 ];
 
 @NgModule({
@@ -63,10 +65,13 @@ let ACCOUNT_STATES = [
         UIRouterModule.forChild({ states: ACCOUNT_STATES })
     ],
     declarations: [
+<% if (enableSocialSignIn) { %>
+        JhSocialComponent,
+        SocialRegisterComponent,
 <% if (authenticationType == 'jwt') { %>
         SocialAuthComponent,
 <% } %>
-        SocialRegisterComponent,
+<% } %>
         ActivateComponent,
         RegisterComponent,
         PasswordComponent,
@@ -75,14 +80,15 @@ let ACCOUNT_STATES = [
         <%_ if (authenticationType === 'session') { _%>
         SessionsComponent,
         <%_ } _%>
-        SettingsComponent,
-        jhSocial
+        SettingsComponent
     ],
     providers: [
         <%_ if (authenticationType === 'session') { _%>
         SessionsService,
         <%_ } _%>
+<% if (enableSocialSignIn) { %>
         SocialService,
+<% } %>
         Register,
         Activate,
         Password,
@@ -90,7 +96,9 @@ let ACCOUNT_STATES = [
         PasswordResetFinish
     ],
     exports: [
-        jhSocial
+<% if (enableSocialSignIn) { %>
+        JhSocialComponent
+<% } %>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
