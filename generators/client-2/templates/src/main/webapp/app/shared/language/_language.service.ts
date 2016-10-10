@@ -8,6 +8,7 @@ import { <%=angular2AppName%>SharedCommonModule } from '../../shared';
 @Injectable()
 export class <%=jhiPrefixCapitalized%>LanguageService {
     
+    // TODO: Replace this with nativeLanguage
     currentLang = 'en';
     currentLocation = 'home';
 
