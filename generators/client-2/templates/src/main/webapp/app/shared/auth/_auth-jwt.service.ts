@@ -67,7 +67,7 @@ export class AuthServerProvider {
             this.storeAuthenticationToken(jwt, rememberMe);
             return Promise.resolve(jwt);
         } else {
-            return Promise.reject();
+            return Promise.reject("auth-jwt-service Promise reject"); //Put appropriate error message here
         }
     }
 
@@ -80,8 +80,10 @@ export class AuthServerProvider {
     }
 
     logout (): Observable<any> {
-        //TODO make this observable
-        this.$localStorage.clear('authenticationToken');
-        this.$sessionStorage.clear('authenticationToken');
+        return new Observable(observer => {
+            this.$localStorage.clear('authenticationToken');
+            this.$sessionStorage.clear('authenticationToken');
+            observer.complete();
+        });
     }
 }
