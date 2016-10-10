@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { SessionStorageService } from 'ng2-webstorage';
 
-import { LoginModalService } from "../login/login.modal.service";
+import { LoginModalService } from "../login/login-modal.service";
 import { Principal } from './principal.service';
 import { StateStorageService } from './state-storage.service';
 
@@ -53,7 +53,7 @@ export class AuthService {
 
                     // now, send them to the signin state so they can log in
                     this.$state.go('accessdenied').then(() => {
-                        this.loginModalService.open(); //TODO needs to fixed once modal supports components
+                        this.loginModalService.open();
                     });
                 }
             }
