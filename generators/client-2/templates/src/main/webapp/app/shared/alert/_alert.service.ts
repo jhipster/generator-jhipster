@@ -108,10 +108,6 @@ export class AlertService {
         return thisAlerts.splice(index, 1);
     }
 
-    showAsToast(isToast: boolean) {
-        this.toast = isToast;
-    }
-
     isToast(): boolean {
         return this.toast;
     }
