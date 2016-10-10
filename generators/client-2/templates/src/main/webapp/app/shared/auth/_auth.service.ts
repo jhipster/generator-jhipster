@@ -4,7 +4,13 @@ import { SessionStorageService } from 'ng2-webstorage';
 
 import { LoginService } from "../login/login.service";
 import { Principal } from './principal.service';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { AuthServerProvider } from './auth-oauth2.service';
+<%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+import { AuthServerProvider } from './auth-jwt.service';
+<%_ } else { _%>
 import { AuthServerProvider } from './auth-session.service';
+<%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
