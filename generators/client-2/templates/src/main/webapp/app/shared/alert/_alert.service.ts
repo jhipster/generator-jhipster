@@ -87,11 +87,10 @@ export class AlertService {
     addAlert(alertOptions, extAlerts): any {
         alertOptions.alertId = this.alertId++;
         //alertOptions.msg = $translate.instant(alertOptions.msg, alertOptions.params);
-        var that = this;
         var alert = this.factory(alertOptions);
         if (alertOptions.timeout && alertOptions.timeout > 0) {
             setTimeout(() => {
-                that.closeAlert(alertOptions.alertId, extAlerts);
+                this.closeAlert(alertOptions.alertId, extAlerts);
             }, alertOptions.timeout);
         }
         return alert;
