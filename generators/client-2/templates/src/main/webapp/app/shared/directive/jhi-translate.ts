@@ -2,8 +2,8 @@ import { Directive, ElementRef, HostListener, Input, Renderer, OnInit, TemplateR
 
 
 @Directive({
-  selector: '[jhi-translate]',
-  exportAs: 'jhi-translate'
+  selector: '[jhiTranslate]',
+  exportAs: 'jhiTranslate'
 })
 export class JhiTranslate {
 

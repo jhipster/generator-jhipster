@@ -2,11 +2,14 @@ import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 <%_ if (enableTranslation){ _%>
+import { ModuleWithProviders } from '@angular/core';
+import { Http } from '@angular/http';
+
 import { TranslateModule, TranslateLoader, TranslateStaticLoader, TranslateService,MissingTranslationHandler } from 'ng2-translate/ng2-translate';
 import { <%=jhiPrefixCapitalized%>MissingTranslationHandler} from './language/<%=jhiPrefix%>Missing.translation';
 <%_ } _%>
 
-import {<%=jhiPrefix%>-translate} from './directive/<%=jhiPrefix%>-translate';
+import {<%=jhiPrefixCapitalized%>Translate} from './directive/<%=jhiPrefix%>-translate';
 
 import {
     <%=angular2AppName%>SharedLibsModule,
@@ -43,7 +46,7 @@ import {
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective,
-        <%=jhiPrefix%>-translate
+        <%=jhiPrefixCapitalized%>Translate
     ],
     providers: [
         LoginService,
@@ -58,7 +61,7 @@ import {
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         AuthServerProvider<%_ if (enableTranslation){ _%>,
-        { provide: MissingTranslationHandler, useClass: CustomMissingTranslationHandler }
+        { provide: MissingTranslationHandler, useClass: <%=jhiPrefixCapitalized%>MissingTranslationHandler }
         <%_ } _%>
     ],
     exports: [
@@ -66,7 +69,8 @@ import {
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective,
-        <%=jhiPrefix%>-translate
+        TranslateModule,
+        <%=jhiPrefixCapitalized%>Translate
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
@@ -75,7 +79,7 @@ export class <%=angular2AppName%>SharedModule {
     <%_ if (enableTranslation){ _%>
      static forRoot(): ModuleWithProviders {
         return {
-            ngModule: TranslateSharedModule,
+            ngModule: <%=angular2AppName%>SharedModule,
             providers: [TranslateService],
         };
     }

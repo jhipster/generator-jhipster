@@ -7,7 +7,7 @@ import { <%=angular2AppName%>SharedCommonModule } from '../../shared';
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>LanguageService {
-
+    
     currentLang = 'en';
     currentLocation = 'home';
 
@@ -17,11 +17,12 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
      }
 
 
-    changeLanguage(languageKey) {
+    changeLanguage(languageKey: string) {
        this.translateService.use(languageKey+'/'+ this.currentLocation);
     }
 
-    setLocation(){
+    setLocation(locationKey: string){
+       this.currentLocation = location;
        this.translateService.use(this.currentLang+'/'+this.currentLocation);
     }
 
