@@ -518,7 +518,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'shared/language/_language.pipe.ts', ANGULAR_DIR + 'shared/language/language.pipe.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.constants.ts', ANGULAR_DIR + 'shared/language/language.constants.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.service.ts', ANGULAR_DIR + 'shared/language/language.service.ts', this, {});
-                this.template(ANGULAR_DIR + 'shared/language/_jhiMissing.translation.ts', ANGULAR_DIR + 'shared/language/jhiMissing.translation.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/language/_jhi-missing-translation.config.ts', ANGULAR_DIR + 'shared/language/jhi-missing-translation.config.ts', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'shared/login/login.html', ANGULAR_DIR + 'shared/login/login.html');
             this.template(ANGULAR_DIR + 'shared/login/_login.service.ts', ANGULAR_DIR + 'shared/login/login.service.ts', this, {});
