@@ -15,9 +15,6 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 <%_ if (service == 'no') { _%>
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } } _%>
-<%_ if (pagination != 'no') { _%>
-import io.swagger.annotations.ApiParam;
-<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
