@@ -3,7 +3,6 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.config.DefaultProfileUtil;
 import <%=packageName%>.config.JHipsterProperties;
 import org.springframework.core.env.Environment;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -21,8 +20,7 @@ public class ProfileInfoResource {
     @Inject
     private JHipsterProperties jHipsterProperties;
 
-    @GetMapping(value = "/profile-info",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/profile-info")
     public ProfileInfoResponse getActiveProfiles() {
         return new ProfileInfoResponse(DefaultProfileUtil.getActiveProfiles(env), getRibbonEnv());
     }

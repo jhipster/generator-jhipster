@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;<% } %>
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -87,8 +86,7 @@ public class UserResource {
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping(value = "/users",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/users")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<?> createUser(@RequestBody ManagedUserVM managedUserVM, HttpServletRequest request) throws URISyntaxException {
@@ -126,8 +124,7 @@ public class UserResource {
      * or with status 400 (Bad Request) if the login or email is already in use,
      * or with status 500 (Internal Server Error) if the user couldn't be updated
      */
-    @PutMapping(value = "/users",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/users")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<ManagedUserVM> updateUser(@RequestBody ManagedUserVM managedUserVM) {
@@ -156,8 +153,7 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK) and with body all users
      * @throws URISyntaxException if the pagination headers couldn't be generated
      */
-    @GetMapping(value = "/users",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/users")
     @Timed<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public ResponseEntity<List<ManagedUserVM>> getAllUsers(Pageable pageable)
         throws URISyntaxException {
@@ -187,8 +183,7 @@ public class UserResource {
      * @param login the login of the user to find
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
      */
-    @GetMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
     public ResponseEntity<ManagedUserVM> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
@@ -204,8 +199,7 @@ public class UserResource {
      * @param login the login of the user to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping(value = "/users/{login:" + Constants.LOGIN_REGEX + "}",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
@@ -221,8 +215,7 @@ public class UserResource {
      * @param query the query to search
      * @return the result of the search
      */
-    @GetMapping(value = "/_search/users/{query}",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/_search/users/{query}")
     @Timed
     public List<User> search(@PathVariable String query) {
         return StreamSupport

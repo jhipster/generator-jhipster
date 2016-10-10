@@ -25,7 +25,7 @@ public class SocialController {
     @Inject
     private ProviderSignInUtils providerSignInUtils;
 
-    @GetMapping(value = "/signup")
+    @GetMapping("/signup")
     public RedirectView signUp(WebRequest webRequest, @CookieValue(name = "NG_TRANSLATE_LANG_KEY", required = false, defaultValue = "\"<%= nativeLanguage %>\"") String langKey) {
         try {
             Connection<?> connection = providerSignInUtils.getConnectionFromSession(webRequest);

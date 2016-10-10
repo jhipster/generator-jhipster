@@ -30,7 +30,7 @@ public class UserJWTController {
     @Inject
     private AuthenticationManager authenticationManager;
 
-    @PostMapping(value = "/authenticate")
+    @PostMapping("/authenticate")
     @Timed
     public ResponseEntity<?> authorize(@Valid @RequestBody LoginVM loginVM, HttpServletResponse response) {
 

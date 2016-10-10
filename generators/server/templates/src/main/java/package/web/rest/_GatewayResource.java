@@ -36,8 +36,7 @@ public class GatewayResource {
      *
      * @return the ResponseEntity with status 200 (OK) and with body the list of routes
      */
-    @GetMapping(value = "/routes",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/routes")
     @Timed
     public ResponseEntity<List<RouteVM>> activeRoutes() {
         List<Route> routes = routeLocator.getRoutes();

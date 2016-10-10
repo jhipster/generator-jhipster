@@ -24,7 +24,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;<% } %>
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,8 +60,7 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 201 (Created) and with body the new <%= instanceName %>, or with status 400 (Bad Request) if the <%= entityInstance %> has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping(value = "/<%= entityApiUrl %>",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/<%= entityApiUrl %>")
     @Timed
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
@@ -83,8 +81,7 @@ public class <%= entityClass %>Resource {
      * or with status 500 (Internal Server Error) if the <%= instanceName %> couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PutMapping(value = "/<%= entityApiUrl %>",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/<%= entityApiUrl %>")
     @Timed
     public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
@@ -104,8 +101,7 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body<% if (pagination != 'no') { %>
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
      */
-    @GetMapping(value = "/<%= entityApiUrl %>",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/<%= entityApiUrl %>")
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
     /**
@@ -114,8 +110,7 @@ public class <%= entityClass %>Resource {
      * @param id the id of the <%= instanceName %> to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found)
      */
-    @GetMapping(value = "/<%= entityApiUrl %>/{id}",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/<%= entityApiUrl %>/{id}")
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
@@ -132,8 +127,7 @@ public class <%= entityClass %>Resource {
      * @param id the id of the <%= instanceName %> to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping(value = "/<%= entityApiUrl %>/{id}",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping("/<%= entityApiUrl %>/{id}")
     @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
@@ -149,8 +143,7 @@ public class <%= entityClass %>Resource {
      * @return the result of the search<% if (pagination != 'no') { %>
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
      */
-    @GetMapping(value = "/_search/<%= entityApiUrl %>",
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/_search/<%= entityApiUrl %>")
     @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
 
 }
