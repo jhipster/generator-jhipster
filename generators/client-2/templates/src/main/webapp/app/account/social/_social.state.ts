@@ -1,12 +1,3 @@
-/*(function() {
-    'use strict';
-
-    angular
-        .module('<%=angularAppName%>.account')
-        .config(stateConfig);
-
-    stateConfig.$inject = ['$stateProvider'];*/
-
 import { SocialRegisterComponent } from './social-register.component';
 
     export const socialRegisterState = {

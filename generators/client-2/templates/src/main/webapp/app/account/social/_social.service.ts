@@ -1,9 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Injectable()
 export class SocialService {
 
-    constructor (@Inject('$document') private $document) {}
+    constructor () {}
 
     getProviderSetting (provider) {
         switch(provider) {
@@ -22,7 +23,7 @@ export class SocialService {
     getCSRF () {
         /* globals document */
         var name = 'CSRF-TOKEN=';
-        var ca = this.$document[0].cookie.split(';');
+        var ca = DOCUMENT[0].cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
             var c = ca[i];
             while (c.charAt(0) === ' ') {
@@ -35,4 +36,3 @@ export class SocialService {
         return '';
     }
 }
-
