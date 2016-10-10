@@ -22,7 +22,7 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
     }
 
     setLocation(locationKey: string){
-       this.currentLocation = location;
+       this.currentLocation = locationKey;
        this.translateService.use(this.currentLang+'/'+this.currentLocation);
     }
 
