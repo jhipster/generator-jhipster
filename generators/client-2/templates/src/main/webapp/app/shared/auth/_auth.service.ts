@@ -2,9 +2,14 @@ import { Injectable, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { LoginService } from "../login/login.service";
 import { Principal } from './principal.service';
+<%_ if (authenticationType === 'jwt') { _%>
+import { AuthServerProvider } from './auth-jwt.service';
+<%_ } else { _%> 
 import { AuthServerProvider } from './auth-session.service';
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
-
+<%_ } _%>
 @Injectable()
 export class AuthService {
 
