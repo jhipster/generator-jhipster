@@ -22,8 +22,7 @@ export class HomeComponent implements OnInit {
                 translateService: TranslateService,
                 <%=jhiPrefix%>LangService: <%=jhiPrefixCapitalized%>LanguageService<%_ } _%>) {
         <%_ if (enableTranslation){ _%>
-        <%=jhiPrefix%>LangService.currentLocation = 'home';
-        <%=jhiPrefix%>LangService.setLocation();    
+        <%=jhiPrefix%>LangService.setLocation('home');    
         <%_ } _%>
     }
 
