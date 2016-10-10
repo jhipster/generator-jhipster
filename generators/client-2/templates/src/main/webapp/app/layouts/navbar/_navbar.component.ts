@@ -2,10 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-<%_ if (enableTranslation){ _%>
-import { TranslateService } from 'ng2-translate/ng2-translate';
-<%_ } _%>
-
 import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
 import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService, LoginService } from '../../shared';
 
@@ -15,7 +11,6 @@ import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, 
 })
 export class NavbarComponent implements OnInit {
 
-    changeLanguage: Function;
     inProduction: boolean;
     isNavbarCollapsed: boolean;
     languages: any[];
@@ -27,7 +22,6 @@ export class NavbarComponent implements OnInit {
         private loginService : LoginService,
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
-        private translateService: TranslateService,
         <%_ } _%>
         private principal: Principal,
         private authService: AuthService,
@@ -39,8 +33,6 @@ export class NavbarComponent implements OnInit {
         this.languageService.getAll().then((languages) => {
             this.languages = languages;
         });
-
-        this.changeLanguage = this.languageService.changeLanguage;
         <%_ } _%>
 
         this.profileService.getProfileInfo().subscribe(profileInfo => {
@@ -48,6 +40,12 @@ export class NavbarComponent implements OnInit {
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
     }
+
+    <%_ if (enableTranslation){ _%>
+    changeLanguage(languageKey: string) {
+      this.languageService.changeLanguage(languageKey);
+    }
+    <%_ } _%>
 
     collapseNavbar() {
         this.isNavbarCollapsed = true;

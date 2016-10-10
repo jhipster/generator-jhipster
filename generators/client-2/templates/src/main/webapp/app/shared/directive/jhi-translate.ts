@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Input, Renderer, OnInit, TemplateRef } from '@angular/core';
+import { Directive, ElementRef, Input, Renderer, TemplateRef } from '@angular/core';
 
 
 @Directive({
@@ -8,7 +8,7 @@ import { Directive, ElementRef, HostListener, Input, Renderer, OnInit, TemplateR
 export class JhiTranslate {
 
   private _jhiTranslate: string | TemplateRef<any>;
- 
+
   constructor(private el: ElementRef, private renderer: Renderer) { }
 
   @Input()

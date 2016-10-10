@@ -1,5 +1,7 @@
 import { HomeComponent } from './home.component';
 
+import { JhiLanguageService } from "../shared";
+
 export const homeState = {
     name: 'home',
     parent: 'app',
@@ -10,10 +12,9 @@ export const homeState = {
     views: {
         'content@': { component: HomeComponent }
     },
-    resolve: {
-        mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate,$translatePartialLoader) {
-            $translatePartialLoader.addPart('home');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+      token: 'translate',
+      deps: [JhiLanguageService],
+      resolveFn: (jhiLanguageService) => jhiLanguageService.setLocation('home')
+    }]
 }

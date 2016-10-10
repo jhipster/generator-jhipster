@@ -6,7 +6,7 @@ import { ModuleWithProviders } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { TranslateModule, TranslateLoader, TranslateStaticLoader, TranslateService,MissingTranslationHandler } from 'ng2-translate/ng2-translate';
-import { <%=jhiPrefixCapitalized%>MissingTranslationHandler} from './language/<%=jhiPrefix%>Missing.translation';
+import { <%=jhiPrefixCapitalized%>MissingTranslationHandler} from './language/<%=jhiPrefix%>-missing-translation.config';
 <%_ } _%>
 
 import {<%=jhiPrefixCapitalized%>Translate} from './directive/<%=jhiPrefix%>-translate';
