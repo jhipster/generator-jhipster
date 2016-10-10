@@ -3,7 +3,7 @@ import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
-import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, AuthService, LoginService } from '../../shared';
+import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
 @Component({
     selector: 'navbar',
@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
         private principal: Principal,
-        private authService: AuthService,
+        private loginModalService: LoginModalService,
         private profileService: ProfileService
     ) { }
 
@@ -52,13 +52,13 @@ export class NavbarComponent implements OnInit {
         return this.principal.isAuthenticated();
     }
 
-    login(template) {
-        this.modalRef = this.loginService.open(template);
+    login() {
+        this.modalRef = this.loginModalService.open();
     }
 
     logout() {
         this.collapseNavbar();
-        this.authService.logout();
+        this.loginService.logout();
         this.$state.go('home');
     }
 

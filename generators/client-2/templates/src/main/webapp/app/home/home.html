@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="alert alert-warning" *ngSwitchCase="false" translate="global.messages.info.authenticated" translate-compile>
-                    If you want to <a class="alert-link" href="" (click)="login(loginModal)">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+                    If you want to <a class="alert-link" href="" (click)="login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
                 </div>
 
 
@@ -40,7 +40,3 @@
         </div>
     </div>
 </div>
-<!-- this is a workaround untill ng-bootstrap supports components as modal content https://github.com/ng-bootstrap/ng-bootstrap/issues/680 -->
-<template #loginModal let-dismiss="dismiss">
-    <<%=jhiPrefix%>-login-modal [modalRef]="modalRef" [dismiss]="dismiss"></<%=jhiPrefix%>-login-modal>
-</template>

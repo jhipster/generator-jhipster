@@ -3,6 +3,7 @@ export * from './alert/alert-error.component';
 export * from './alert/alert.service';
 export * from './alert/alert.provider';
 export * from './auth/csrf.service';
+export * from './auth/state-storage.service';
 export * from './auth/account.service';
 <%_ if (authenticationType === 'oauth2') { _%>
 export * from './auth/auth-oauth2.service';
@@ -27,6 +28,7 @@ export * from './tracker/tracker.service';
 <%_ } _%>
 export * from './login/login.component';
 export * from './login/login.service';
+export * from './login/login-modal.service';
 export * from './component/jhi-item-count.component';
 export * from './constants/pagination.constants';
 export * from './directive/maxbytes.directive';

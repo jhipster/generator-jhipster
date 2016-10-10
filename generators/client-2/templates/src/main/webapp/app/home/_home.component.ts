@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Account, LoginService, Principal } from "../shared";
+import { Account, LoginModalService, Principal } from "../shared";
 
 @Component({
     selector: 'home',
@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
 
     constructor(private principal: Principal,
                 private $state: StateService,
-                private loginService : LoginService) {
+                private loginModalService : LoginModalService) {
     }
 
     ngOnInit() {
@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
         this.$state.go('register');
     }
 
-    login(template) {
-        this.modalRef = this.loginService.open(template);
+    login() {
+        this.modalRef = this.loginModalService.open();
     }
 }

@@ -520,6 +520,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
             this.copyHtml(ANGULAR_DIR + 'shared/login/login.html', ANGULAR_DIR + 'shared/login/login.html');
             this.template(ANGULAR_DIR + 'shared/login/_login.service.ts', ANGULAR_DIR + 'shared/login/login.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/login/_login-modal.service.ts', ANGULAR_DIR + 'shared/login/login-modal.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/login/_login.component.ts', ANGULAR_DIR + 'shared/login/login.component.ts', this, {});
 
             //alert service code
@@ -533,6 +534,7 @@ module.exports = JhipsterClientGenerator.extend({
             // services
             this.template(ANGULAR_DIR + 'shared/auth/_auth.service.ts', ANGULAR_DIR + 'shared/auth/auth.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_csrf.service.ts', ANGULAR_DIR + 'shared/auth/csrf.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/auth/_state-storage.service.ts', ANGULAR_DIR + 'shared/auth/state-storage.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_principal.service.ts', ANGULAR_DIR + 'shared/auth/principal.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_has-authority.directive.ts', ANGULAR_DIR + 'shared/auth/has-authority.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/auth/_has-any-authority.directive.ts', ANGULAR_DIR + 'shared/auth/has-any-authority.directive.ts', this, {});

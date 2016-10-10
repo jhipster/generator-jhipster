@@ -11,7 +11,9 @@ import {
     Base64,
     <%_ } _%>
     AccountService,
+    StateStorageService,
     LoginService,
+    LoginModalService,
     Principal,
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerService,
@@ -33,7 +35,9 @@ import {
     ],
     providers: [
         LoginService,
+        LoginModalService,
         AccountService,
+        StateStorageService,
         Principal,
         CSRFService,
         AuthService,
@@ -45,6 +49,7 @@ import {
         <%_ } _%>
         AuthServerProvider
     ],
+    entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
         <%=angular2AppName%>SharedCommonModule,
         <%=jhiPrefixCapitalized%>LoginModalComponent,
