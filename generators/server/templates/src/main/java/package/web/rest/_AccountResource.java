@@ -133,7 +133,7 @@ public class AccountResource {
      * @param userDTO the current user information
      * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) or 500 (Internal Server Error) if the user couldn't be updated
      */
-    @PostMapping(path = "/account")
+    @PostMapping("/account")
     @Timed
     public ResponseEntity<String> saveAccount(@Valid @RequestBody UserDTO userDTO) {
         Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
