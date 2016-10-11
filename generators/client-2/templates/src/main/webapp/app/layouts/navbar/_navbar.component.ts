@@ -11,7 +11,6 @@ import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, 
 })
 export class NavbarComponent implements OnInit {
 
-    changeLanguage: Function;
     inProduction: boolean;
     isNavbarCollapsed: boolean;
     languages: any[];
@@ -34,8 +33,6 @@ export class NavbarComponent implements OnInit {
         this.languageService.getAll().then((languages) => {
             this.languages = languages;
         });
-
-        this.changeLanguage = this.languageService.changeLanguage;
         <%_ } _%>
 
         this.profileService.getProfileInfo().subscribe(profileInfo => {
@@ -43,6 +40,12 @@ export class NavbarComponent implements OnInit {
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
     }
+
+    <%_ if (enableTranslation){ _%>
+    changeLanguage(languageKey: string) {
+      this.languageService.changeLanguage(languageKey);
+    }
+    <%_ } _%>
 
     collapseNavbar() {
         this.isNavbarCollapsed = true;

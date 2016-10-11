@@ -12,10 +12,11 @@ export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
 
-    constructor(private principal: Principal,
-                private $state: StateService,
-                private loginModalService : LoginModalService) {
-    }
+    constructor(
+        private principal: Principal,
+        private $state: StateService,
+        private loginModalService : LoginModalService
+    ) {}
 
     ngOnInit() {
         this.principal.identity().then((account) => {

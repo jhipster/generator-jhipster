@@ -1,25 +1,48 @@
-import { LANGUAGES } from './language.constants';
 import { Injectable, Inject } from '@angular/core';
+import { TranslateService } from 'ng2-translate/ng2-translate';
+
+import { LANGUAGES } from './language.constants';
+import { TranslatePartialLoader } from './translate-partial-loader.provider';
+
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>LanguageService {
 
-    constructor(
-        @Inject('$translate') private $translate,
-        @Inject('tmhDynamicLocale') private tmhDynamicLocale
-    ) { }
+    defaultLang = '<%= nativeLanguage %>';
+    defaultLocation = 'global';
+    currentLang = '<%= nativeLanguage %>';
+    locations: string[] = ['home'];
 
-    changeLanguage(languageKey) {
-        this.$translate.use(languageKey);
-        this.tmhDynamicLocale.set(languageKey);
-    }
+    constructor (public translateService: TranslateService){
+        translateService.setDefaultLang(this.defaultLang);
+        this.translateService.currentLang = this.currentLang;
+     }
+
+
+     changeLanguage(languageKey: string) {
+         this.currentLang = languageKey;
+         this.reload();
+     }
+
+     setLocations(locations: string[]) {
+         this.locations = locations;
+         this.locations.push(this.defaultLocation);
+         this.reload();
+     }
+
+     reload() {
+         this.translateService.setDefaultLang(this.currentLang);
+         let translatePartialLoader: TranslatePartialLoader = <TranslatePartialLoader> this.translateService.currentLoader;
+         translatePartialLoader.setLocations(this.locations);
+
+         this.translateService.use(this.currentLang);
+     }
 
     getAll(): Promise<any> {
         return Promise.resolve(LANGUAGES);
     }
 
     getCurrent(): Promise<any> {
-        var language = this.$translate.storage().get('NG_TRANSLATE_LANG_KEY');
-        return Promise.resolve(language);
+        return Promise.resolve(this.currentLang);
     }
 }

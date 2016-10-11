@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import {
     <%=angular2AppName%>SharedLibsModule,
@@ -26,7 +25,7 @@ import {
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedLibsModule,
-        <%=angular2AppName%>SharedCommonModule,
+        <%=angular2AppName%>SharedCommonModule
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>LoginModalComponent,

@@ -21,7 +21,8 @@ export * from './auth/has-authority.directive';
 export * from './language/language.constants';
 export * from './language/language.service';
 export * from './language/language.pipe';
-export * from './pipe/translate.pipe';
+export * from './language/jhi-translate.directive';
+export * from './language/jhi-missing-translation.config';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
 export * from './tracker/tracker.service';
