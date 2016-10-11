@@ -6,13 +6,13 @@ import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Parameter;
-import springfox.documentation.service.ResolvedMethodParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.contexts.ModelContext;
 import springfox.documentation.spi.service.ParameterBuilderPlugin;
@@ -45,7 +45,7 @@ public class PageableParameterBuilderPlugin implements ParameterBuilderPlugin {
 
     private Function<ResolvedType, ? extends ModelReference>
     createModelRefFactory(ParameterContext context) {
-        ModelContext modelContext = inputParam(context.resolvedMethodParameter().getParameterType(),
+        ModelContext modelContext = inputParam(context.methodParameter().getParameterType(),
             context.getDocumentationType(),
             context.getAlternateTypeProvider(),
             context.getGenericNamingStrategy(),
@@ -55,8 +55,8 @@ public class PageableParameterBuilderPlugin implements ParameterBuilderPlugin {
 
     @Override
     public void apply(ParameterContext context) {
-        ResolvedMethodParameter parameter = context.resolvedMethodParameter();
-        Class<?> type = parameter.getParameterType().getErasedType();
+        MethodParameter parameter = context.methodParameter();
+        Class<?> type = parameter.getParameterType();
         if (type != null && Pageable.class.isAssignableFrom(type)) {
             Function<ResolvedType, ? extends ModelReference> factory =
                 createModelRefFactory(context);

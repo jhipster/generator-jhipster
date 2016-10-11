@@ -9,13 +9,12 @@ buildscript {
     }
     dependencies {
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.6"
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"<% if(!skipClient) {%>
-        classpath "com.moowork.gradle:gradle-node-plugin:0.12"
-        classpath "com.moowork.gradle:gradle-gulp-plugin:0.12"<% } %>
-        classpath "se.transmode.gradle:gradle-docker:1.2"
-        classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
+        classpath "com.moowork.gradle:gradle-node-plugin:0.13"
+        classpath "com.moowork.gradle:gradle-gulp-plugin:0.13"<% } %>
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -307,8 +306,10 @@ dependencies {
     testCompile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %><% if (databaseType == 'mongodb') { %>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"<% } %>
     testCompile "org.hamcrest:hamcrest-library"
-    <% if (testFrameworks.indexOf('gatling') != -1) { %>
-    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"<% } %>
+    <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
+    <%_ if (databaseType === 'cassandra') { _%>
+    compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
     <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
     testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
     <%_ if (messageBroker === 'kafka') { _%>

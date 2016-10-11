@@ -44,8 +44,8 @@
         <frontend-maven-plugin.version>1.0</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
-        <gatling.version>2.1.7</gatling.version>
-        <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
+        <gatling.version>2.2.0</gatling.version>
+        <gatling-maven-plugin.version>2.2.0</gatling-maven-plugin.version>
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
         <hazelcast.version>3.6.5</hazelcast.version>
@@ -99,7 +99,7 @@
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
-        <springfox.version>2.6.0</springfox.version>
+        <springfox.version>2.5.0</springfox.version>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
         <httpclient.version>4.5.1</httpclient.version>
@@ -349,6 +349,14 @@
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- include netty handler explicitly to overcome dependency mismatch when using cassandra -->
+        <%_ if (databaseType === 'cassandra') { _%>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>4.0.36.Final</version>
+        </dependency>
+        <%_ } _%>
         <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
@@ -817,6 +825,9 @@
                     <resultsFolder>target/gatling/results</resultsFolder>
                     <bodiesFolder><%= TEST_DIR %>gatling/bodies</bodiesFolder>
                     <simulationsFolder><%= TEST_DIR %>gatling/simulations</simulationsFolder>
+                    <!-- This will run multiple simulations one by one. Useful when doing gatling tests in CI
+                         You must remove the simulationClass property in order to run multiple simulations -->
+                    <!--<runMultipleSimulations>true</runMultipleSimulations>-->
                     <!-- This will force Gatling to ask which simulation to run
                       This is useful when you have multiple simulations -->
                     <simulationClass>*</simulationClass>
