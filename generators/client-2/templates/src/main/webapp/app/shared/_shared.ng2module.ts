@@ -1,6 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
+<%_ if (enableTranslation){ _%>
+import { ModuleWithProviders } from '@angular/core';
+import { Http } from '@angular/http';
+
+import { TranslateModule, TranslateLoader, TranslateStaticLoader, TranslateService,MissingTranslationHandler } from 'ng2-translate/ng2-translate';
+import { <%=jhiPrefixCapitalized%>MissingTranslationHandler} from './language/<%=jhiPrefix%>-missing-translation.config';
+<%_ } _%>
+
+import {<%=jhiPrefixCapitalized%>Translate} from './directive/<%=jhiPrefix%>-translate';
+
 import {
     <%=angular2AppName%>SharedLibsModule,
     <%=angular2AppName%>SharedCommonModule,
@@ -26,12 +36,19 @@ import {
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedLibsModule,
-        <%=angular2AppName%>SharedCommonModule,
+        <%=angular2AppName%>SharedCommonModule<%_ if (enableTranslation){ _%>,
+        TranslateModule.forRoot({
+          provide: TranslateLoader,
+          useFactory: (http: Http) => new TranslateStaticLoader(http, '/i18n', '.json'),
+          deps: [Http]
+        })
+        <%_ } _%>
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        <%=jhiPrefixCapitalized%>Translate
     ],
     providers: [
         LoginService,
@@ -47,16 +64,29 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        AuthServerProvider
+        AuthServerProvider<%_ if (enableTranslation){ _%>,
+        { provide: MissingTranslationHandler, useClass: <%=jhiPrefixCapitalized%>MissingTranslationHandler }
+        <%_ } _%>
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
         <%=angular2AppName%>SharedCommonModule,
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        TranslateModule,
+        <%=jhiPrefixCapitalized%>Translate
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
-export class <%=angular2AppName%>SharedModule {}
+export class <%=angular2AppName%>SharedModule {
+    <%_ if (enableTranslation){ _%>
+     static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: <%=angular2AppName%>SharedModule,
+            providers: [TranslateService],
+        };
+    }
+    <%_ } _%>
+}

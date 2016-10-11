@@ -4,7 +4,7 @@
             <span class="hipster img-responsive img-rounded"></span>
         </div>
         <div class="col-md-8">
-            <h1 translate="home.title">Welcome, Java Hipster!</h1>
+            <h1 [jhiTranslate]="'home.title' | translate">Welcome, Java Hipster!</h1>
             <p class="lead" translate="home.subtitle">This is your homepage</p>
 
             <div [ngSwitch]="isAuthenticated()">
