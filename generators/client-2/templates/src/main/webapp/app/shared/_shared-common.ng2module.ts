@@ -8,7 +8,8 @@ import {
     FilterPipe,
     OrderByPipe,
     <%_ if (enableTranslation){ _%>
-    TranslatePipe,
+    <%=jhiPrefixCapitalized%>Translate,
+    <%=jhiPrefixCapitalized%>MissingTranslationHandler,
     <%=jhiPrefixCapitalized%>LanguageService,
     FindLanguageFromKeyPipe,
     <%_ }_%>
@@ -34,7 +35,7 @@ import {
         CapitalizePipe,
         KeysPipe,
         <%_ if (enableTranslation){ _%>
-        TranslatePipe,
+        <%=jhiPrefixCapitalized%>Translate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
         JhiAlertComponent,
@@ -47,6 +48,7 @@ import {
     providers: [
         <%_ if (enableTranslation){ _%>
         <%=jhiPrefixCapitalized%>LanguageService,
+        { provide: MissingTranslationHandler, useClass: <%=jhiPrefixCapitalized%>MissingTranslationHandler }
         <%_ } _%>
         alertServiceProvider()
     ],
@@ -59,7 +61,7 @@ import {
         CapitalizePipe,
         KeysPipe,
         <%_ if (enableTranslation){ _%>
-        TranslatePipe,
+        <%=jhiPrefixCapitalized%>Translate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
         JhiAlertComponent,

@@ -15,6 +15,6 @@ export const homeState = {
     resolve: [{
       token: 'translate',
       deps: [JhiLanguageService],
-      resolveFn: (jhiLanguageService) => jhiLanguageService.setLocation('home')
+      resolveFn: (jhiLanguageService) => jhiLanguageService.setLocations(['home'])
     }]
 }
