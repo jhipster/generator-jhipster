@@ -487,7 +487,6 @@ module.exports = JhipsterClientGenerator.extend({
 
             this.template(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
 
-            this.template(ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', ANGULAR_DIR + 'shared/pipe/translate.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
