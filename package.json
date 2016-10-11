@@ -8,8 +8,8 @@
     "DSL"
   ],
   "scripts": {
-    "test": "mocha test/**/*.js",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test/**/*.js -- --ui bdd -R spec -t 5000",
+    "test": "mocha test",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test -- -t 5000",
     "peg-parse": "pegjs lib/dsl/grammar.txt lib/dsl/pegjs_parser.js"
   },
   "homepage": "https://github.com/jhipster/jhipster-core#readme",
@@ -38,7 +38,8 @@
     "pegjs": "0.10.0",
     "mocha": "3.1.0",
     "chai": "3.5.0",
-    "istanbul": "0.4.5"
+    "istanbul": "0.4.5",
+    "mocha-clean": "1.0.0"
   },
   "peerDependencies": {},
   "engines": {

@@ -1,0 +1,5 @@
+  --ui bdd
+  --reporter spec
+  --recursive
+  --require mocha-clean
+  
