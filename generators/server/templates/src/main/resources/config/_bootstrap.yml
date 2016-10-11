@@ -1,7 +1,7 @@
-<% if(serviceDiscoveryType === 'consul') { %>
+<%_ if (serviceDiscoveryType === 'consul') { _%>
 consul:
     token: to-change-in-production-client
-<% } %>
+<%_ } _%>
 spring:
     application:
         name: <%= baseName %>

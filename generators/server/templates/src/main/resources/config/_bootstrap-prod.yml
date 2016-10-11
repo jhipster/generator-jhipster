@@ -1,10 +1,10 @@
 # ===================================================================
-# Spring Cloud <% if (serviceDiscoveryType == 'consul') { %>Consul<% } %> Config bootstrap configuration for the "prod" profile
+# Spring Cloud <% if (serviceDiscoveryType === 'consul') { %>Consul <% } %>Config bootstrap configuration for the "prod" profile
 # ===================================================================
 
 spring:
     cloud:
-      <%_ if (serviceDiscoveryType == 'eureka') { _%>
+      <%_ if (serviceDiscoveryType === 'eureka') { _%>
         config:
             fail-fast: true
             retry:
@@ -18,7 +18,7 @@ spring:
             label: master # toggle to switch to a different version of the configuration as stored in git
             # it can be set to any label, branch or commit of the config source git repository
       <%_ } _%>
-      <%_ if (serviceDiscoveryType == 'consul') { _%>
+      <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             config:
                 fail-fast: true
