@@ -1,13 +1,13 @@
 import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateService } from "ui-router-ng2";
 
-import { AuthService, Principal } from '../';
+import { LoginService } from '../login/login.service';
+import { StateStorageService } from '../auth/state-storage.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-login-modal',
-    templateUrl: 'app/shared/login/login.html',
-    inputs: ['modalRef', 'dismiss']
+    templateUrl: 'app/shared/login/login.html'
 })
 export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     authenticationError: boolean;
@@ -15,15 +15,15 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     rememberMe: boolean;
     username: string;
     credentials: any;
-    modalRef: NgbModalRef;
 
     constructor(
         @Inject('$rootScope') private $rootScope,
         private $state: StateService,
-        private principal: Principal,
-        private auth: AuthService,
+        private loginService: LoginService,
+        private stateStorageService: StateStorageService,
         private elementRef: ElementRef,
-        private renderer: Renderer
+        private renderer: Renderer,
+        private activeModal: NgbActiveModal
     ) {
         this.credentials = {};
     }
@@ -42,17 +42,17 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
             rememberMe: true
         };
         this.authenticationError = false;
-        this.modalRef.dismiss('cancel');
+        this.activeModal.dismiss('cancel');
     }
 
     login () {
-        this.auth.login({
+        this.loginService.login({
             username: this.username,
             password: this.password,
             rememberMe: this.rememberMe
         }).then(() => {
             this.authenticationError = false;
-            this.modalRef.dismiss('cancel');
+            this.activeModal.dismiss('login success');
             if (this.$state.current.name === 'register' || this.$state.current.name === 'activate' ||
                 this.$state.current.name === 'finishReset' || this.$state.current.name === 'requestReset') {
                 this.$state.go('home');
@@ -62,9 +62,9 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
             // since login is succesful, go to stored previousState and clear previousState
-            var previousState = this.auth.getPreviousState();
+            var previousState = this.stateStorageService.getPreviousState();
             if (previousState) {
-                this.auth.resetPreviousState();
+                this.stateStorageService.resetPreviousState();
                 this.$state.go(previousState.name, previousState.params);
             }
         }).catch(() => {
@@ -73,12 +73,12 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     }
 
     register () {
-        this.modalRef.dismiss('cancel');
+        this.activeModal.dismiss('to state register');
         this.$state.go('register');
     }
 
     requestResetPassword () {
-        this.modalRef.dismiss('cancel');
+        this.activeModal.dismiss('to state requestReset');
         this.$state.go('requestReset');
     }
 }

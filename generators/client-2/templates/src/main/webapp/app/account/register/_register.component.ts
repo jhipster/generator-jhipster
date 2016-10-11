@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Register } from './register.service';
-import { LoginService } from "../../shared";
+import { LoginModalService } from "../../shared";
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
 
     constructor(
             @Inject('$translate') private $translate,
-            private loginService : LoginService,
+            private loginModalService : LoginModalService,
             private registerService: Register,
             private elementRef: ElementRef,
             private renderer: Renderer) {
@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
         }
     }
 
-    openLogin(template) {
-        this.modalRef = this.loginService.open(template);
+    openLogin() {
+        this.modalRef = this.loginModalService.open();
     }
 }

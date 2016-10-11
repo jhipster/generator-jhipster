@@ -2,18 +2,9 @@ import { Injectable, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { SessionStorageService } from 'ng2-webstorage';
 
-import { LoginService } from "../login/login.service";
+import { LoginModalService } from "../login/login-modal.service";
 import { Principal } from './principal.service';
-<%_ if (authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from './auth-oauth2.service';
-<%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider } from './auth-jwt.service';
-<%_ } else { _%>
-import { AuthServerProvider } from './auth-session.service';
-<%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
-<%_ } _%>
+import { StateStorageService } from './state-storage.service';
 
 @Injectable()
 export class AuthService {
@@ -21,12 +12,9 @@ export class AuthService {
     constructor(
         private principal: Principal,
         private $state: StateService,
-        private authServerProvider: AuthServerProvider,
-        private loginService : LoginService,
+        private stateStorageService: StateStorageService,
+        private loginModalService : LoginModalService,
         private $sessionStorage: SessionStorageService,
-        <%_ if (websocket === 'spring-websocket') { _%>
-        private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
-        <%_ } _%>
         <%_ if (enableTranslation){ _%>
         @Inject('$translate') private $translate,
         <%_ } _%>
@@ -47,9 +35,9 @@ export class AuthService {
             }
 
             // recover and clear previousState after external login redirect (e.g. oauth2)
-            if (isAuthenticated && !this.$rootScope.fromState.name && this.getPreviousState()) {
-                var previousState = this.getPreviousState();
-                this.resetPreviousState();
+            var previousState = this.stateStorageService.getPreviousState();
+            if (isAuthenticated && !this.$rootScope.fromState.name && previousState) {
+                this.stateStorageService.resetPreviousState();
                 this.$state.go(previousState.name, previousState.params);
             }
 
@@ -61,67 +49,14 @@ export class AuthService {
                 else {
                     // user is not authenticated. stow the state they wanted before you
                     // send them to the login service, so you can return them when you're done
-                    this.storePreviousState(this.$rootScope.toState.name, this.$rootScope.toStateParams);
+                    this.stateStorageService.storePreviousState(this.$rootScope.toState.name, this.$rootScope.toStateParams);
 
                     // now, send them to the signin state so they can log in
                     this.$state.go('accessdenied').then(() => {
-                        //this.loginService.open(); //TODO needs to fixed once modal supports components
+                        this.loginModalService.open();
                     });
                 }
             }
         }
-    }
-
-    login (credentials, callback?) {
-        var cb = callback || function(){};
-
-        return new Promise((resolve, reject) => {
-            this.authServerProvider.login(credentials).subscribe(data => {
-                this.principal.identity(true).then(account => {
-                    <%_ if (enableTranslation){ _%>
-                    // After the login the language will be changed to
-                    // the language selected by the user during his registration
-                    if (account!== null) { //TODO migrate
-                        this.$translate.use(account.langKey).then(() => {
-                            this.$translate.refresh();
-                        });
-                    }
-                    <%_ } _%>
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    this.trackerService.sendActivity();
-                    <%_ } _%>
-                    resolve(data);
-                });
-                return cb();
-            }, err => {
-                this.logout();
-                reject(err);
-                return cb(err);
-            });
-        });
-    }
-
-    <%_ if (authenticationType == 'jwt') { _%>
-    loginWithToken(jwt, rememberMe) {
-        return this.authServerProvider.loginWithToken(jwt, rememberMe);
-    }
-    <%_ } _%>
-
-    logout () {
-        this.authServerProvider.logout().subscribe();
-        this.principal.authenticate(null);
-    }
-
-    getPreviousState() {
-        return this.$sessionStorage.retrieve('previousState');
-    }
-
-    resetPreviousState() {
-        this.$sessionStorage.clear('previousState');
-    }
-
-    storePreviousState(previousStateName, previousStateParams) {
-        var previousState = { "name": previousStateName, "params": previousStateParams };
-        this.$sessionStorage.store('previousState', previousState);
     }
 }

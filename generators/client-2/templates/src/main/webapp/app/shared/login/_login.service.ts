@@ -1,25 +1,66 @@
-import { Injectable } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Injectable, Inject } from '@angular/core';
+
+import { Principal } from '../auth/principal.service';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { AuthServerProvider } from '../auth/auth-oauth2.service';
+<%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+import { AuthServerProvider } from '../auth/auth-jwt.service';
+<%_ } else { _%>
+import { AuthServerProvider } from '../auth/auth-session.service';
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+<%_ } _%>
 
 @Injectable()
 export class LoginService {
-    modalInstance: any;
 
-    constructor (private modalService: NgbModal) {
-        this.modalInstance = null;
-    }
+    constructor (
+        @Inject('$translate') private $translate,
+        private principal: Principal,
+        <%_ if (websocket === 'spring-websocket') { _%>
+        private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
+        <%_ } _%>
+        private authServerProvider: AuthServerProvider
+    ) {}
 
-    resetModal () : any {
-        this.modalInstance = null;
-    }
+    login (credentials, callback?) {
+        var cb = callback || function(){};
 
-    open (template): NgbModalRef {
-        let modalRef = this.modalService.open(template);
-        modalRef.result.then(result => {
-            console.log(`Closed with: ${result}`);
-        }, (reason) => {
-            console.log(`Dismissed ${reason}`);
+        return new Promise((resolve, reject) => {
+            this.authServerProvider.login(credentials).subscribe(data => {
+                this.principal.identity(true).then(account => {
+                    <%_ if (enableTranslation){ _%>
+                    // After the login the language will be changed to
+                    // the language selected by the user during his registration
+                    if (account!== null) { //TODO migrate
+                        this.$translate.use(account.langKey).then(() => {
+                            this.$translate.refresh();
+                        });
+                    }
+                    <%_ } _%>
+                    <%_ if (websocket === 'spring-websocket') { _%>
+                    this.trackerService.sendActivity();
+                    <%_ } _%>
+                    resolve(data);
+                });
+                return cb();
+            }, err => {
+                this.logout();
+                reject(err);
+                return cb(err);
+            });
         });
-        return modalRef;
+    }
+
+    <%_ if (authenticationType == 'jwt') { _%>
+    loginWithToken(jwt, rememberMe) {
+        return this.authServerProvider.loginWithToken(jwt, rememberMe);
+    }
+    <%_ } _%>
+
+    logout () {
+        this.authServerProvider.logout().subscribe();
+        this.principal.authenticate(null);
     }
 }
