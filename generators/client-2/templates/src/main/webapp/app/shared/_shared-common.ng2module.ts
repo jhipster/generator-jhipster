@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MissingTranslationHandler } from 'ng2-translate/ng2-translate';
 
 import {
     <%=angular2AppName%>SharedLibsModule,
@@ -48,7 +49,7 @@ import {
     providers: [
         <%_ if (enableTranslation){ _%>
         <%=jhiPrefixCapitalized%>LanguageService,
-        { provide: MissingTranslationHandler, useClass: <%=jhiPrefixCapitalized%>MissingTranslationHandler }
+        { provide: MissingTranslationHandler, useClass: <%=jhiPrefixCapitalized%>MissingTranslationHandler },
         <%_ } _%>
         alertServiceProvider()
     ],
