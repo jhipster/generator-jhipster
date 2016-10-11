@@ -1,5 +1,4 @@
 import { Injectable, Inject } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
 
 @Injectable()
 export class SocialService {
@@ -23,7 +22,7 @@ export class SocialService {
     getCSRF () {
         /* globals document */
         var name = 'CSRF-TOKEN=';
-        var ca = DOCUMENT[0].cookie.split(';');
+        var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
             var c = ca[i];
             while (c.charAt(0) === ' ') {
