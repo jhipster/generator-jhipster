@@ -7,7 +7,7 @@ import { LocalStorageService } from 'ng2-webstorage';
 <%_ } _%>
 
 import { CSRFService } from '../auth/csrf.service';
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
 
@@ -23,7 +23,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
 
     constructor(
         @Inject('$rootScope') private $rootScope,
-        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>,
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         private authServerProvider: AuthServerProvider,
         <%_ } if (authenticationType === 'oauth2') { _%>
         private $localStorage: LocalStorageService,
