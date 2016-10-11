@@ -500,7 +500,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/jhi-translate.ts', ANGULAR_DIR + 'shared/directive/jhi-translate.ts', this, {});
 
             this.template(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
@@ -514,6 +513,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'shared/_shared-common.ng2module.ts', ANGULAR_DIR + 'shared/shared-common.ng2module.ts', this, {});
             //components
             if (this.enableTranslation) {
+                this.template(ANGULAR_DIR + 'shared/language/jhi-translate.directive.ts', ANGULAR_DIR + 'shared/language/jhi-translate.directive.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/language/translate-partial-loader.provider.ts', ANGULAR_DIR + 'shared/language/translate-partial-loader.provider.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.pipe.ts', ANGULAR_DIR + 'shared/language/language.pipe.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.constants.ts', ANGULAR_DIR + 'shared/language/language.constants.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.service.ts', ANGULAR_DIR + 'shared/language/language.service.ts', this, {});
