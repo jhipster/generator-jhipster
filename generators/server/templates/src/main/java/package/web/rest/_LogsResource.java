@@ -7,7 +7,6 @@ import ch.qos.logback.classic.LoggerContext;
 import com.codahale.metrics.annotation.Timed;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +19,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/management/jhipster")
 public class LogsResource {
 
-    @RequestMapping(value = "/logs",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/logs")
     @Timed
     public List<LoggerVM> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -32,8 +29,7 @@ public class LogsResource {
             .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/logs",
-        method = RequestMethod.PUT)
+    @PutMapping("/logs")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Timed
     public void changeLevel(@RequestBody LoggerVM jsonLogger) {
