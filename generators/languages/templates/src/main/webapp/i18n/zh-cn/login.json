@@ -1,6 +1,6 @@
 {
     "login": {
-        "title": "验证",
+        "title": "登录",
         "form": {
             "password": "密码",
             "password.placeholder": "您的密码",
@@ -9,7 +9,7 @@
         },
         "messages": {
             "error": {
-                "authentication": "<strong>验证失败!</strong> 请检查您的登录信息, 并重试一次."
+                "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次."
             }
         },
         "password" : {

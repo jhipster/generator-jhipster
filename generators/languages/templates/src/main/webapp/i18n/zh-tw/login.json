@@ -1,6 +1,6 @@
 {
     "login": {
-        "title": "驗證",
+        "title": "登入",
         "form": {
             "password": "密碼",
             "password.placeholder": "您的密碼",
@@ -9,7 +9,7 @@
         },
         "messages": {
             "error": {
-                "authentication": "<strong>驗證失敗！</strong> 請檢查您的認證，並重試一次。"
+                "authentication": "<strong>登入失敗！</strong> 請檢查您的認證，並重試一次。"
             }
         },
         "password" : {
