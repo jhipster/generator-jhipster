@@ -89,6 +89,15 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity EntityWithServiceImplAndPagination
   moveEntity EntityWithServiceImplPaginationAndDTO
 
+elif [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+
 else
   moveEntity BankAccount
   moveEntity Label

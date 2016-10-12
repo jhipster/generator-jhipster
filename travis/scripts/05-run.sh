@@ -3,7 +3,7 @@
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
-launchProtractor() {
+launchCurlOrProtractor() {
     retryCount=1
     maxRetry=10
     httpUrl="http://localhost:8080"
@@ -19,16 +19,26 @@ launchProtractor() {
     done
 
     if [ "$status" -ne 0 ]; then
-      echo "[$(date)] Not connected after" $retryCount " retries. Abort protractor tests."
-      exit 0
+        echo "[$(date)] Not connected after" $retryCount " retries."
+        exit 1
     fi
 
-    echo "[$(date)] Connected to application. Start protractor tests."
-    gulp itest --no-notification
+    if [ "$PROTRACTOR" == 1 ]; then
+        echo "[$(date)] Connected to application. Start protractor tests."
+        gulp itest --no-notification
+    fi
 }
 
 #-------------------------------------------------------------------------------
-# Start the application
+# Package UAA
+#-------------------------------------------------------------------------------
+if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+    cd "$HOME"/uaa
+    ./mvnw package -DskipTests=true -P"$PROFILE"
+fi
+
+#-------------------------------------------------------------------------------
+# Package the application
 #-------------------------------------------------------------------------------
 cd "$HOME"/app
 
@@ -47,13 +57,21 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+#-------------------------------------------------------------------------------
+# Run the application
+#-------------------------------------------------------------------------------
 if [ "$RUN_APP" == 1 ]; then
+    if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+        cd "$HOME"/uaa
+        java -jar target/*.war --spring.profiles.active="$PROFILE" &
+        sleep 40
+    fi
+
+    cd "$HOME"/app
     java -jar app.war --spring.profiles.active="$PROFILE" &
-    sleep 20
-    #-------------------------------------------------------------------------------
-    # Launch protractor tests
-    #-------------------------------------------------------------------------------
-    if [ "$PROTRACTOR" == 1 ]; then
-        launchProtractor
+    sleep 40
+
+    if [[ ("$JHIPSTER" != 'app-microservice-eureka') && ("$JHIPSTER" != 'app-microservice-consul') ]]; then
+        launchCurlOrProtractor
     fi
 fi
