@@ -1,16 +1,5 @@
-(function() {
-    'use strict';
-
-    angular
-        .module('<%=angularAppName%>.entity')
-        .config(stateConfig);
-
-    stateConfig.$inject = ['$stateProvider'];
-
-    function stateConfig($stateProvider) {
-        $stateProvider.state('entity', {
-            abstract: true,
-            parent: 'app'
-        });
-    }
-})();
+export const entityState = {
+    name: 'entity',
+    abstract: true,
+    parent: 'app'
+};
