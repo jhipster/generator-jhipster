@@ -21,7 +21,7 @@
             "admin": {
                 "main": "管理",
                 <%_ if (applicationType == 'gateway') { _%>
-                "gateway": "Gateway",
+                "gateway": "网关",
                 <%_ } _%>
                 "userManagement": "用户管理",
                 "tracker": "追踪使用者",
