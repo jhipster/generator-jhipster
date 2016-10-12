@@ -1,15 +1,15 @@
 {
     "gateway": {
-        "title": "网关",
+        "title": "缃戝叧",
         "routes": {
-            "title": "当前路由",
-            "url": "URL",
-            "service": "服务",
-            "servers": "可用服务",
-            "error": "警告: 没有可用服务!"
+            "title": "褰撳墠鍙敤璺敱",
+            "url": "鏄犲皠璺緞",
+            "service": "鏈嶅姟鍚嶇О",
+            "servers": "鏈嶅姟瀹炰緥鍦板潃",
+            "error": "璀﹀憡: 娌℃湁鍙敤鏈嶅姟瀹炰緥!"
         },
         "refresh": {
-            "button": "刷新"
+            "button": "鍒锋柊"
         }
     }
 }
