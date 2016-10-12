@@ -14,10 +14,10 @@
         },
         "table": {
             "header": {
-                "principal": "使用者",
+                "principal": "用戶",
                 "date": "日期",
                 "status": "狀態",
-                "data": "額外的資料"
+                "data": "其它"
             },
             "data": {
                 "remoteAddress": "遠端位址:"

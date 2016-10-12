@@ -1,15 +1,15 @@
 {
     "gateway": {
-        "title": "Gateway",
+        "title": "网关",
         "routes": {
-            "title": "Current routes",
+            "title": "当前路由",
             "url": "URL",
-            "service": "service",
-            "servers": "Available servers",
-            "error": "Warning: no server available!"
+            "service": "服务",
+            "servers": "可用服务",
+            "error": "警告: 没有可用服务!"
         },
         "refresh": {
-            "button": "Refresh"
+            "button": "刷新"
         }
     }
 }

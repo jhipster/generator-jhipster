@@ -16,7 +16,7 @@
         "finish" : {
             "title": "重置密码",
             "form": {
-                "button": "验证新密码"
+                "button": "确定"
             },
             "messages": {
                 "info": "请设置新密码",
