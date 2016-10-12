@@ -38,6 +38,11 @@ elif [[ ("$JHIPSTER" == 'app-gateway-consul') || ("$JHIPSTER" == 'app-microservi
     if [ -a src/main/docker/consul.yml ]; then
         docker-compose -f src/main/docker/consul.yml up -d
     fi
+
+elif [[ "$JHIPSTER" == 'app-gateway-uaa' ]]; then
+    if [ -a src/main/docker/jhipster-registry.yml ]; then
+        docker-compose -f src/main/docker/jhipster-registry.yml up -d
+    fi
 fi
 
 docker ps -a
