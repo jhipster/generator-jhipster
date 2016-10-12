@@ -1,9 +1,11 @@
+/*global describe, it*/
+/* eslint-disable no-console */
 'use strict';
 
 const assert = require('assert'),
-Generator = require('../generators/generator-base');
+    Generator = require('../generators/generator-base');
 
-Generator.prototype.log = function (msg) {console.log(msg)};
+Generator.prototype.log = function (msg) {console.log(msg);};
 
 describe('Generator Base', function () {
     describe('getAllSupportedLanguages', function () {
@@ -94,13 +96,13 @@ describe('Generator Base', function () {
     describe('getAngularAppName', function () {
         describe('when called with name', function () {
             it('return the angular app name', function () {
-                Generator.prototype.baseName = 'myTest'
+                Generator.prototype.baseName = 'myTest';
                 assert.equal(Generator.prototype.getAngularAppName(), 'myTestApp');
             });
         });
         describe('when called with name having App', function () {
             it('return the angular app name', function () {
-                Generator.prototype.baseName = 'myApp'
+                Generator.prototype.baseName = 'myApp';
                 assert.equal(Generator.prototype.getAngularAppName(), 'myApp');
             });
         });
@@ -108,19 +110,19 @@ describe('Generator Base', function () {
     describe('getMainClassName', function () {
         describe('when called with name', function () {
             it('return the app name', function () {
-                Generator.prototype.baseName = 'myTest'
+                Generator.prototype.baseName = 'myTest';
                 assert.equal(Generator.prototype.getMainClassName(), 'MyTestApp');
             });
         });
         describe('when called with name having App', function () {
             it('return the app name', function () {
-                Generator.prototype.baseName = 'myApp'
+                Generator.prototype.baseName = 'myApp';
                 assert.equal(Generator.prototype.getMainClassName(), 'MyApp');
             });
         });
         describe('when called with name having invalid java chars', function () {
             it('return the default app name', function () {
-                Generator.prototype.baseName = '9myApp'
+                Generator.prototype.baseName = '9myApp';
                 assert.equal(Generator.prototype.getMainClassName(), 'Application');
             });
         });
