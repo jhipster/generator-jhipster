@@ -52,7 +52,7 @@ export class AuthServerProvider {
         return this.http.post('api/authenticate', data).map(authenticateSuccess.bind(this));
 
         function authenticateSuccess (resp) {
-            var bearerToken = resp.headers('Authorization');
+            var bearerToken = resp.headers.get('Authorization');
             if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
                 var jwt = bearerToken.slice(7, bearerToken.length);
                 this.storeAuthenticationToken(jwt, credentials.rememberMe);
