@@ -428,22 +428,20 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
  */
 Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
     // Add the entity to ehcache
-    this.addEntryToEhcache(entityClass);
+    this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}`);
     // Add the collections linked to that entity to ehcache
     for (var idx in relationships) {
         var relationshipType = relationships[idx].relationshipType;
-        if (relationshipType === 'one-to-many') {
-            this.addEntryToEhcache(entityClass + '.' + relationships[idx].relationshipFieldNamePlural);
-        } else if (relationshipType === 'many-to-many') {
-            this.addEntryToEhcache(entityClass + '.' + relationships[idx].relationshipFieldNamePlural);
+        if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+            this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.${relationships[idx].relationshipFieldNamePlural}`);
         }
     }
 };
 
 /**
- * Add a new entry to the ehcache.xml file, for both entities and relationships.
+ * Add a new entry to the ehcache.xml file
  *
- * @param {string} name - the entry (either entity or relationship) to cache.
+ * @param {string} name - the entry (including package name) to cache.
  */
 Generator.prototype.addEntryToEhcache = function (entry) {
     try {
@@ -451,7 +449,7 @@ Generator.prototype.addEntryToEhcache = function (entry) {
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`<cache name="${this.packageName}.domain.${entry}"
+            splicable: [`<cache name="${entry}"
         timeToLiveSeconds="3600">
     </cache>
 `
