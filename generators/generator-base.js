@@ -1161,7 +1161,26 @@ Generator.prototype.getTableName = function (value) {
  * @param {string} value - table column name string
  */
 Generator.prototype.getColumnName = function (value) {
-    return _.snakeCase(value).toLowerCase();
+    value = value.replace('.', '_');
+    var res = '';
+    if(value && value.length > 0)
+        res = value[0];
+    for (var i = 1, len = value.length-1; i < len; i++) {
+        if(
+            value[i-1] !== value[i-1].toUpperCase() &&
+            value[i] !== value[i].toLowerCase() &&
+            value[i+1] !== value[i+1].toUpperCase()
+        ) {
+            res += '_' + value[i];
+        } else {
+            res += value[i];
+        }
+    }
+
+    if(value && value.length > 0)
+        res += value[value.length -1];
+
+    return res.toLowerCase();
 };
 
 /**
