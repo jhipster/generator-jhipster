@@ -1152,7 +1152,7 @@ Generator.prototype.gitExec = function (args, options, callback) {
  * @param {string} value - table name string
  */
 Generator.prototype.getTableName = function (value) {
-    return _.snakeCase(value).toLowerCase();
+    return this.hibernateSnakeCase(value);
 };
 
 /**
@@ -1161,7 +1161,34 @@ Generator.prototype.getTableName = function (value) {
  * @param {string} value - table column name string
  */
 Generator.prototype.getColumnName = function (value) {
-    return _.snakeCase(value).toLowerCase();
+    return this.hibernateSnakeCase(value);
+};
+
+/**
+ * get hibernate SnakeCase in JHipster preferred style.
+ *
+ * @param {string} value - table column name or table name string
+ * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+ */
+Generator.prototype.hibernateSnakeCase = function (value) {
+    let res = '';
+    if (value) {
+        value = value.replace('.', '_');
+        res = value[0];
+        for (var i = 1, len = value.length - 1; i < len; i++) {
+            if (value[i-1] !== value[i-1].toUpperCase() &&
+                value[i] !== value[i].toLowerCase() &&
+                value[i+1] !== value[i+1].toUpperCase()
+            ) {
+                res += '_' + value[i];
+            } else {
+                res += value[i];
+            }
+        }
+        res += value[value.length -1];
+        res = res.toLowerCase();
+    }
+    return res;
 };
 
 /**
