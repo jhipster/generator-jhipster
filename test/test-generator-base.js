@@ -45,6 +45,7 @@ describe('Generator Base', function () {
         describe('when called with a value', function () {
             it('returns a column name', function () {
                 assert.equal(Generator.prototype.getColumnName('colName'), 'col_name');
+                assert.equal(Generator.prototype.getColumnName('colNName'), 'colnname');
             });
         });
     });
@@ -64,6 +65,7 @@ describe('Generator Base', function () {
         describe('when called with a long name', function () {
             it('returns a proper join table name', function () {
                 assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
+                assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle'), 'entity_name_lon_relationship_n');
             });
         });
     });
@@ -75,7 +77,8 @@ describe('Generator Base', function () {
         });
         describe('when called with a long name', function () {
             it('returns a proper constraint name', function () {
-                assert.equal(Generator.prototype.getConstraintName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
+                assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle').length, 30);
+                assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle'), 'entity_name_lo_relationship_id');
             });
         });
     });

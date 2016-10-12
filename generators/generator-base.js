@@ -1165,33 +1165,6 @@ Generator.prototype.getColumnName = function (value) {
 };
 
 /**
- * get hibernate SnakeCase in JHipster preferred style.
- *
- * @param {string} value - table column name or table name string
- * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
- */
-Generator.prototype.hibernateSnakeCase = function (value) {
-    let res = '';
-    if (value) {
-        value = value.replace('.', '_');
-        res = value[0];
-        for (var i = 1, len = value.length - 1; i < len; i++) {
-            if (value[i-1] !== value[i-1].toUpperCase() &&
-                value[i] !== value[i].toLowerCase() &&
-                value[i+1] !== value[i+1].toUpperCase()
-            ) {
-                res += '_' + value[i];
-            } else {
-                res += value[i];
-            }
-        }
-        res += value[value.length -1];
-        res = res.toLowerCase();
-    }
-    return res;
-};
-
-/**
  * get a table column names plural form in JHipster preferred style.
  *
  * @param {string} value - table column name string
@@ -1221,8 +1194,8 @@ Generator.prototype.getJoinTableName = function (entityName, relationshipName, p
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-            entityTable = this.getTableName(this.getTableName(entityName).substring(0, halfLimit)),
-            relationTable = this.getTableName(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            entityTable = _.snakeCase(this.getTableName(entityName).substring(0, halfLimit)),
+            relationTable = _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}`;
     }
     return joinTableName;
@@ -1256,8 +1229,8 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
     }
     if (limit > 0) {
         var halfLimit = Math.floor(limit/2),
-            entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(this.getTableName(entityName).substring(0, halfLimit)),
-            relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : this.getTableName(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : _.snakeCase(this.getTableName(entityName).substring(0, halfLimit)),
+            relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}_id`;
     }
     return constraintName;
@@ -1715,6 +1688,33 @@ Generator.prototype.getOptionFromArray = function (array, option) {
     });
     optionValue = optionValue === 'true' ? true : optionValue;
     return optionValue;
+};
+
+/**
+ * get hibernate SnakeCase in JHipster preferred style.
+ *
+ * @param {string} value - table column name or table name string
+ * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+ */
+Generator.prototype.hibernateSnakeCase = function (value) {
+    let res = '';
+    if (value) {
+        value = value.replace('.', '_');
+        res = value[0];
+        for (var i = 1, len = value.length - 1; i < len; i++) {
+            if (value[i-1] !== value[i-1].toUpperCase() &&
+                value[i] !== value[i].toLowerCase() &&
+                value[i+1] !== value[i+1].toUpperCase()
+            ) {
+                res += '_' + value[i];
+            } else {
+                res += value[i];
+            }
+        }
+        res += value[value.length -1];
+        res = res.toLowerCase();
+    }
+    return res;
 };
 
 Generator.prototype.contains = _.includes;
