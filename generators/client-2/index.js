@@ -281,7 +281,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('_bower.json', 'bower.json', this, {});
             this.template('_tsconfig.json', 'tsconfig.json', this, {});
             this.template('_bowerrc', '.bowerrc', this, {});
-            this.template('tslint.json', 'tslint.json', this, {});
+            this.template('_tslint.json', 'tslint.json', this, {});
             this.template('_eslintrc.json', '.eslintrc.json', this, {});
             this.template('_eslintignore', '.eslintignore', this, {});
             this.template('_gulpfile.js', 'gulpfile.js', this, {});
@@ -297,13 +297,13 @@ module.exports = JhipsterClientGenerator.extend({
         writeCssFiles: function () {
             // normal CSS or SCSS?
             if (this.useSass) {
-                this.template(MAIN_SRC_DIR + 'scss/main.scss', MAIN_SRC_DIR + 'scss/main.scss');
-                this.template(MAIN_SRC_DIR + 'scss/vendor.scss', MAIN_SRC_DIR + 'scss/vendor.scss');
+                this.template(MAIN_SRC_DIR + 'scss/_main.scss', MAIN_SRC_DIR + 'scss/main.scss');
+                this.template(MAIN_SRC_DIR + 'scss/_vendor.scss', MAIN_SRC_DIR + 'scss/vendor.scss');
             }
             // this css file will be overwritten by the sass generated css if sass is enabled
             // but this will avoid errors when running app without running sass task first
-            this.template(MAIN_SRC_DIR + 'content/css/main.css', MAIN_SRC_DIR + 'content/css/main.css');
-            this.copy(MAIN_SRC_DIR + 'content/css/documentation.css', MAIN_SRC_DIR + 'content/css/documentation.css');
+            this.template(MAIN_SRC_DIR + 'content/css/_main.css', MAIN_SRC_DIR + 'content/css/main.css');
+            this.copy(MAIN_SRC_DIR + 'content/css/_documentation.css', MAIN_SRC_DIR + 'content/css/documentation.css');
         },
 
         writeCommonWebFiles: function () {
@@ -311,15 +311,15 @@ module.exports = JhipsterClientGenerator.extend({
             mkdirp(MAIN_SRC_DIR);
 
             // HTML5 BoilerPlate
-            this.copy(MAIN_SRC_DIR + 'favicon.ico', MAIN_SRC_DIR + 'favicon.ico');
-            this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
-            this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
+            this.copy(MAIN_SRC_DIR + '_favicon.ico', MAIN_SRC_DIR + 'favicon.ico');
+            this.copy(MAIN_SRC_DIR + '_robots.txt', MAIN_SRC_DIR + 'robots.txt');
+            this.copy(MAIN_SRC_DIR + '_404.html', MAIN_SRC_DIR + '404.html');
         },
 
         writeSwaggerFiles: function () {
             // Swagger-ui for Jhipster
             this.template(MAIN_SRC_DIR + 'swagger-ui/_index.html', MAIN_SRC_DIR + 'swagger-ui/index.html', this, {});
-            this.copy(MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif', MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif');
+            this.copy(MAIN_SRC_DIR + 'swagger-ui/images/_throbber.gif', MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif');
         },
 
         writeAngularAppFiles: function () {
@@ -353,35 +353,35 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'account/_account.module.ts', ANGULAR_DIR + 'account/account.module.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.ng2module.ts', ANGULAR_DIR + 'account/account.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'account/_account.state.ts', ANGULAR_DIR + 'account/account.state.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
+            this.copyHtml(ANGULAR_DIR + 'account/activate/_activate.html', ANGULAR_DIR + 'account/activate/activate.html');
             this.copyJs(ANGULAR_DIR + 'account/activate/_activate.state.ts', ANGULAR_DIR + 'account/activate/activate.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/activate/_activate.component.ts', ANGULAR_DIR + 'account/activate/activate.component.ts', this, {});
             this.template(ANGULAR_DIR + 'account/activate/_activate.service.ts', ANGULAR_DIR + 'account/activate/activate.service.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/password/password.html', ANGULAR_DIR + 'account/password/password.html');
+            this.copyHtml(ANGULAR_DIR + 'account/password/_password.html', ANGULAR_DIR + 'account/password/password.html');
             this.copyJs(ANGULAR_DIR + 'account/password/_password.state.ts', ANGULAR_DIR + 'account/password/password.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.component.ts', ANGULAR_DIR + 'account/password/password.component.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.service.ts', ANGULAR_DIR + 'account/password/password.service.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password-strength-bar.component.ts', ANGULAR_DIR + 'account/password/password-strength-bar.component.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/register/register.html', ANGULAR_DIR + 'account/register/register.html');
+            this.copyHtml(ANGULAR_DIR + 'account/register/_register.html', ANGULAR_DIR + 'account/register/register.html');
             this.copyJs(ANGULAR_DIR + 'account/register/_register.state.ts', ANGULAR_DIR + 'account/register/register.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.component.ts', ANGULAR_DIR + 'account/register/register.component.ts', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.service.ts', ANGULAR_DIR + 'account/register/register.service.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/password-reset/init/password-reset-init.html', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.html');
+            this.copyHtml(ANGULAR_DIR + 'account/password-reset/init/_password-reset-init.html', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.html');
             this.copyJs(ANGULAR_DIR + 'account/password-reset/init/_password-reset-init.state.ts', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password-reset/init/_password-reset-init.component.ts', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.component.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password-reset/init/_password-reset-init.service.ts', ANGULAR_DIR + 'account/password-reset/init/password-reset-init.service.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.html', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.html');
+            this.copyHtml(ANGULAR_DIR + 'account/password-reset/finish/_password-reset-finish.html', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.html');
             this.copyJs(ANGULAR_DIR + 'account/password-reset/finish/_password-reset-finish.state.ts', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password-reset/finish/_password-reset-finish.component.ts', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.component.ts', this, {});
             this.template(ANGULAR_DIR + 'account/password-reset/finish/_password-reset-finish.service.ts', ANGULAR_DIR + 'account/password-reset/finish/password-reset-finish.service.ts', this, {});
             if (this.authenticationType === 'session') {
-                this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
+                this.copyHtml(ANGULAR_DIR + 'account/sessions/_sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
                 this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.ts', ANGULAR_DIR + 'account/sessions/sessions.state.ts', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_sessions.component.ts', ANGULAR_DIR + 'account/sessions/sessions.component.ts', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_sessions.service.ts', ANGULAR_DIR + 'account/sessions/sessions.service.ts', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_session.model.ts', ANGULAR_DIR + 'account/sessions/session.model.ts', this, {});
             }
-            this.copyHtml(ANGULAR_DIR + 'account/settings/settings.html', ANGULAR_DIR + 'account/settings/settings.html');
+            this.copyHtml(ANGULAR_DIR + 'account/settings/_settings.html', ANGULAR_DIR + 'account/settings/settings.html');
             this.copyJs(ANGULAR_DIR + 'account/settings/_settings.state.ts', ANGULAR_DIR + 'account/settings/settings.state.ts', this, {});
             this.template(ANGULAR_DIR + 'account/settings/_settings.component.ts', ANGULAR_DIR + 'account/settings/settings.component.ts', this, {});
             // Social
@@ -405,26 +405,26 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/_admin.module.ts', ANGULAR_DIR + 'admin/admin.module.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/_admin.ng2module.ts', ANGULAR_DIR + 'admin/admin.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/_admin.state.ts', ANGULAR_DIR + 'admin/admin.state.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.component.html', ANGULAR_DIR + 'admin/audits/audits.component.html');
+            this.copyHtml(ANGULAR_DIR + 'admin/audits/_audits.component.html', ANGULAR_DIR + 'admin/audits/audits.component.html');
             this.copyJs(ANGULAR_DIR + 'admin/audits/_audits.state.ts', ANGULAR_DIR + 'admin/audits/audits.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audit-data.model.ts', ANGULAR_DIR + 'admin/audits/audit-data.model.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audit.model.ts', ANGULAR_DIR + 'admin/audits/audit.model.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audits.component.ts', ANGULAR_DIR + 'admin/audits/audits.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audits.service.ts', ANGULAR_DIR + 'admin/audits/audits.service.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'admin/configuration/configuration.html', ANGULAR_DIR + 'admin/configuration/configuration.html');
+            this.copyHtml(ANGULAR_DIR + 'admin/configuration/_configuration.html', ANGULAR_DIR + 'admin/configuration/configuration.html');
             this.copyJs(ANGULAR_DIR + 'admin/configuration/_configuration.state.ts', ANGULAR_DIR + 'admin/configuration/configuration.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/configuration/_configuration.component.ts', ANGULAR_DIR + 'admin/configuration/configuration.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/configuration/_configuration.service.ts', ANGULAR_DIR + 'admin/configuration/configuration.service.ts', this, {});
-            this.copy(ANGULAR_DIR + 'admin/docs/docs.html', ANGULAR_DIR + 'admin/docs/docs.html');
+            this.copy(ANGULAR_DIR + 'admin/docs/_docs.html', ANGULAR_DIR + 'admin/docs/docs.html');
             this.template(ANGULAR_DIR + 'admin/docs/_docs.component.ts', ANGULAR_DIR + 'admin/docs/docs.component.ts', this, {});
             this.copyJs(ANGULAR_DIR + 'admin/docs/_docs.state.ts', ANGULAR_DIR + 'admin/docs/docs.state.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'admin/health/health.html', ANGULAR_DIR + 'admin/health/health.html');
+            this.copyHtml(ANGULAR_DIR + 'admin/health/_health.html', ANGULAR_DIR + 'admin/health/health.html');
             this.copyHtml(ANGULAR_DIR + 'admin/health/_health-modal.html', ANGULAR_DIR + 'admin/health/health-modal.html');
             this.copyJs(ANGULAR_DIR + 'admin/health/_health.state.ts', ANGULAR_DIR + 'admin/health/health.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.component.ts', ANGULAR_DIR + 'admin/health/health.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health-modal.component.ts', ANGULAR_DIR + 'admin/health/health-modal.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.service.ts', ANGULAR_DIR + 'admin/health/health.service.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'admin/logs/logs.html', ANGULAR_DIR + 'admin/logs/logs.html');
+            this.copyHtml(ANGULAR_DIR + 'admin/logs/_logs.html', ANGULAR_DIR + 'admin/logs/logs.html');
             this.copyJs(ANGULAR_DIR + 'admin/logs/_logs.state.ts', ANGULAR_DIR + 'admin/logs/logs.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/logs/_logs.component.ts', ANGULAR_DIR + 'admin/logs/logs.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/logs/_log.model.ts', ANGULAR_DIR + 'admin/logs/log.model.ts', this, {});
@@ -436,7 +436,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics-modal.component.ts', ANGULAR_DIR + 'admin/metrics/metrics-modal.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.service.ts', ANGULAR_DIR + 'admin/metrics/metrics.service.ts', this, {});
             if (this.websocket === 'spring-websocket') {
-                this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
+                this.copyHtml(ANGULAR_DIR + 'admin/tracker/_tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
                 this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.state.ts', ANGULAR_DIR + 'admin/tracker/tracker.state.ts', this, {});
                 this.template(ANGULAR_DIR + 'admin/tracker/_tracker.component.ts', ANGULAR_DIR + 'admin/tracker/tracker.component.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/tracker/_tracker.service.ts', ANGULAR_DIR + 'shared/tracker/tracker.service.ts', this, {});
@@ -461,7 +461,7 @@ module.exports = JhipsterClientGenerator.extend({
         writeAngularGatewayFiles: function () {
             if (this.applicationType !== 'gateway') return;
 
-            this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
+            this.copyHtml(ANGULAR_DIR + 'admin/gateway/_gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.state.ts', ANGULAR_DIR + 'admin/gateway/gateway.state.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/gateway/_gateway.component.ts', ANGULAR_DIR + 'admin/gateway/gateway.component.ts', this, {});
             this.template(ANGULAR_DIR + 'admin/gateway/_gateway-routes.service.ts', ANGULAR_DIR + 'admin/gateway/gateway-routes.service.ts', this, {});
@@ -482,45 +482,45 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'shared/_index.ts', ANGULAR_DIR + 'shared/index.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/_shared.ng2module.ts', ANGULAR_DIR + 'shared/shared.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/_shared-libs.ng2module.ts', ANGULAR_DIR + 'shared/shared-libs.ng2module.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/constants/pagination.constants.ts', ANGULAR_DIR + 'shared/constants/pagination.constants.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/_XSRF-strategy.provider.ts', ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/constants/_pagination.constants.ts', ANGULAR_DIR + 'shared/constants/pagination.constants.ts', this, {});
 
-            this.template(ANGULAR_DIR + 'shared/model/account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/model/_account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
 
-            this.template(ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/_keys.pipe.ts', ANGULAR_DIR + 'shared/pipe/keys.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/_filter.pipe.ts', ANGULAR_DIR + 'shared/pipe/filter.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/_order-by.pipe.ts', ANGULAR_DIR + 'shared/pipe/order-by.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/_capitalize.pipe.ts', ANGULAR_DIR + 'shared/pipe/capitalize.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/_truncate-characters.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-characters.pipe.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/pipe/_truncate-words.pipe.ts', ANGULAR_DIR + 'shared/pipe/truncate-words.pipe.ts', this, {});
 
-            this.template(ANGULAR_DIR + 'shared/directive/sort.directive.ts', ANGULAR_DIR + 'shared/directive/sort.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/_sort.directive.ts', ANGULAR_DIR + 'shared/directive/sort.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/_sort-by.directive.ts', ANGULAR_DIR + 'shared/directive/sort-by.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/_show-validation.directive.ts', ANGULAR_DIR + 'shared/directive/show-validation.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/_maxbytes.directive.ts', ANGULAR_DIR + 'shared/directive/maxbytes.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/_minbytes.directive.ts', ANGULAR_DIR + 'shared/directive/minbytes.directive.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/directive/_number-of-bytes.ts', ANGULAR_DIR + 'shared/directive/number-of-bytes.ts', this, {});
 
-            this.template(ANGULAR_DIR + 'shared/service/date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/service/data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/service/pagination-util.service.ts', ANGULAR_DIR + 'shared/service/pagination-util.service.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/service/parse-links.service.ts', ANGULAR_DIR + 'shared/service/parse-links.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/service/_date-util.service.ts', ANGULAR_DIR + 'shared/service/date-util.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/service/_data-util.service.ts', ANGULAR_DIR + 'shared/service/data-util.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/service/_pagination-util.service.ts', ANGULAR_DIR + 'shared/service/pagination-util.service.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/service/_parse-links.service.ts', ANGULAR_DIR + 'shared/service/parse-links.service.ts', this, {});
 
-            this.template(ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', this, {});
+            this.template(ANGULAR_DIR + 'shared/component/_jhi-item-count.component.ts', ANGULAR_DIR + 'shared/component/jhi-item-count.component.ts', this, {});
         },
 
         writeAngularSharedComponentFiles: function () {
             this.template(ANGULAR_DIR + 'shared/_shared-common.ng2module.ts', ANGULAR_DIR + 'shared/shared-common.ng2module.ts', this, {});
             //components
             if (this.enableTranslation) {
-                this.template(ANGULAR_DIR + 'shared/language/jhi-translate.directive.ts', ANGULAR_DIR + 'shared/language/jhi-translate.directive.ts', this, {});
-                this.template(ANGULAR_DIR + 'shared/language/translate-partial-loader.provider.ts', ANGULAR_DIR + 'shared/language/translate-partial-loader.provider.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/language/_jhi-translate.directive.ts', ANGULAR_DIR + 'shared/language/jhi-translate.directive.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/language/_translate-partial-loader.provider.ts', ANGULAR_DIR + 'shared/language/translate-partial-loader.provider.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.pipe.ts', ANGULAR_DIR + 'shared/language/language.pipe.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.constants.ts', ANGULAR_DIR + 'shared/language/language.constants.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_language.service.ts', ANGULAR_DIR + 'shared/language/language.service.ts', this, {});
                 this.template(ANGULAR_DIR + 'shared/language/_jhi-missing-translation.config.ts', ANGULAR_DIR + 'shared/language/jhi-missing-translation.config.ts', this, {});
             }
-            this.copyHtml(ANGULAR_DIR + 'shared/login/login.html', ANGULAR_DIR + 'shared/login/login.html');
+            this.copyHtml(ANGULAR_DIR + 'shared/login/_login.html', ANGULAR_DIR + 'shared/login/login.html');
             this.template(ANGULAR_DIR + 'shared/login/_login.service.ts', ANGULAR_DIR + 'shared/login/login.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/login/_login-modal.service.ts', ANGULAR_DIR + 'shared/login/login-modal.service.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/login/_login.component.ts', ANGULAR_DIR + 'shared/login/login.component.ts', this, {});
@@ -558,7 +558,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'entities/_entity.state.ts', ANGULAR_DIR + 'entities/entity.state.ts', this, {});
 
             // home module
-            this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
+            this.copyHtml(ANGULAR_DIR + 'home/_home.html', ANGULAR_DIR + 'home/home.html');
             this.copyJs(ANGULAR_DIR + 'home/_home.state.ts', ANGULAR_DIR + 'home/home.state.ts', this, {});
             this.template(ANGULAR_DIR + 'home/_index.ts', ANGULAR_DIR + 'home/index.ts', this, {});
             this.template(ANGULAR_DIR + 'home/_home.component.ts', ANGULAR_DIR + 'home/home.component.ts', this, {});
@@ -568,11 +568,11 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.ts', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.ts', this, {});
             }
             this.template(ANGULAR_DIR + 'layouts/_index.ts', ANGULAR_DIR + 'layouts/index.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
+            this.copyHtml(ANGULAR_DIR + 'layouts/navbar/_navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
             this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.component.ts', ANGULAR_DIR + 'layouts/navbar/navbar.component.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'layouts/footer/footer.html', ANGULAR_DIR + 'layouts/footer/footer.html');
+            this.copyHtml(ANGULAR_DIR + 'layouts/footer/_footer.html', ANGULAR_DIR + 'layouts/footer/footer.html');
             this.template(ANGULAR_DIR + 'layouts/footer/_footer.component.ts', ANGULAR_DIR + 'layouts/footer/footer.component.ts', this, {});
-            this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
+            this.copyHtml(ANGULAR_DIR + 'layouts/error/_error.html', ANGULAR_DIR + 'layouts/error/error.html');
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.ts', ANGULAR_DIR + 'layouts/error/error.state.ts', this, {});
             this.template(ANGULAR_DIR + 'layouts/error/_error.component.ts', ANGULAR_DIR + 'layouts/error/error.component.ts', this, {});
         },
@@ -586,9 +586,9 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeImageFiles: function () {
             // Images
-            this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
-            this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
-            this.copy(MAIN_SRC_DIR + 'content/images/logo-jhipster.png', MAIN_SRC_DIR + 'content/images/logo-jhipster.png');
+            this.copy(MAIN_SRC_DIR + 'content/images/_hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
+            this.copy(MAIN_SRC_DIR + 'content/images/_hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
+            this.copy(MAIN_SRC_DIR + 'content/images/_logo-jhipster.png', MAIN_SRC_DIR + 'content/images/logo-jhipster.png');
         },
 
         writeClientTestFwFiles: function () {
