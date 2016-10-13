@@ -150,7 +150,7 @@ describe('::parse', function () {
   describe('when parsing app config file to JDL', function () {
     it('parses server options', function () {
       var yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
-      var content = Parser.parseServerOptions(yoRcJson);
+      var content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
       expect(content.options.filter( o => o.name === UnaryOptions.SKIP_CLIENT && o.entityNames.has('*')).length).eq(1);
       expect(content.options.filter( o => o.name === UnaryOptions.SKIP_SERVER && o.entityNames.has('*')).length).eq(1);
     });
