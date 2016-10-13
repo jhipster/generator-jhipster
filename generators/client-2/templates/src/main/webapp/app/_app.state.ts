@@ -1,5 +1,5 @@
 import { NavbarComponent } from './layouts';
-import { AuthService, JhiLanguageService } from './shared';
+import { AuthService, <%=jhiPrefixCapitalized%>LanguageService } from './shared';
 
 export const appState = {
     name: 'app',
@@ -15,7 +15,7 @@ export const appState = {
         },
         {
             token: 'translate',
-            deps: [JhiLanguageService],
+            deps: [<%=jhiPrefixCapitalized%>LanguageService],
             resolveFn: (languageService) => languageService.setLocations([])
         }
     ]
