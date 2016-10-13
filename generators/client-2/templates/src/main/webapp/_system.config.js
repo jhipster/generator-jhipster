@@ -21,6 +21,7 @@
         <%_ if (enableTranslation){ _%>
         'ng2-translate': 'vendor/ng2-translate/bundles',
         <%_ } _%>
+        'css' : 'vendor/systemjs-plugin-css/css.js',
         // app barrels
         'account' : 'app/account',
         'admin' : 'app/admin',

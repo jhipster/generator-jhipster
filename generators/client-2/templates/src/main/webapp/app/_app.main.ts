@@ -1,6 +1,9 @@
 import { UpgradeAdapterRef } from '@angular/upgrade';
 import { upgradeAdapter } from './upgrade_adapter';
 import { UrlRouter } from 'ui-router-ng2';
+
+import '../vendor/bootstrap/dist/css/bootstrap.css!';
+
 import './app.module';
 
 function readyFn(ref: UpgradeAdapterRef) {

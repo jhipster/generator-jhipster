@@ -117,7 +117,10 @@ function deps(){
         <%_ if(enableTranslation) { _%>
         'node_modules/ng2-translate/bundles/ng2-translate.js',
         <%_ } _%>
-        'node_modules/jquery/dist/*.js'
+        'node_modules/jquery/dist/*.js',
+        'node_modules/tether/dist/js/tether.min.js',
+        'node_modules/bootstrap/dist/css/*.css',
+        'node_modules/systemjs-plugin-css/css.js'
     ], { base: 'node_modules' })
     .pipe(gulp.dest(config.dist + 'vendor'));
 }

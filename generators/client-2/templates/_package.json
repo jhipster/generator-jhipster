@@ -18,6 +18,7 @@
     "@angular/upgrade": "2.0.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.7",
     "angular-ui-router": "1.0.0-beta.3",
+    "bootstrap": "^4.0.0-alpha.4",
     "core-js": "2.4.1",
     "jquery": "3.1.0",
     <%_ if (enableTranslation){ _%>
@@ -30,6 +31,7 @@
     "ui-router-ng1-to-ng2": "1.0.15",
     "ui-router-ng2": "1.0.0-beta.3",
     "ui-router-visualizer": "2.0.11",
+    "systemjs-plugin-css": "^0.1.29",
     "zone.js": "0.6.23"
   },
   "devDependencies": {
