@@ -16,27 +16,27 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
     constructor (public translateService: TranslateService){
         translateService.setDefaultLang(this.defaultLang);
         this.translateService.currentLang = this.currentLang;
-     }
+    }
+    
 
+    changeLanguage(languageKey: string) {
+        this.currentLang = languageKey;
+        this.reload();
+    }
 
-     changeLanguage(languageKey: string) {
-         this.currentLang = languageKey;
-         this.reload();
-     }
+    setLocations(locations: string[]) {
+        this.locations = locations;
+        this.locations.push(this.defaultLocation);
+        this.reload();
+    }
 
-     setLocations(locations: string[]) {
-         this.locations = locations;
-         this.locations.push(this.defaultLocation);
-         this.reload();
-     }
-
-     reload() {
-         this.translateService.setDefaultLang(this.currentLang);
-         let translatePartialLoader: TranslatePartialLoader = <TranslatePartialLoader> this.translateService.currentLoader;
-         translatePartialLoader.setLocations(this.locations);
-
-         this.translateService.use(this.currentLang);
-     }
+    reload() {
+        this.translateService.setDefaultLang(this.currentLang);
+        let translatePartialLoader: TranslatePartialLoader = <TranslatePartialLoader> this.translateService.currentLoader;
+        translatePartialLoader.setLocations(this.locations);
+        //reset the language cache //FIXME not ideal as this increases the http requests
+        this.translateService.resetLang(this.currentLang);
+    }
 
     getAll(): Promise<any> {
         return Promise.resolve(LANGUAGES);

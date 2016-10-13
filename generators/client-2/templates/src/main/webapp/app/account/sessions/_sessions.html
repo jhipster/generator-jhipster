@@ -1,5 +1,5 @@
 <div>
-    <h2 translate="sessions.title" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
+    <h2 translate="sessions.title" translate-values="{username: '{{account.login}}'}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
 
     <div class="alert alert-success" *ngIf="success" translate="sessions.messages.success">
         <strong>Session invalidated!</strong>

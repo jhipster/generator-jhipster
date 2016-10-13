@@ -1,4 +1,5 @@
 import { ActivateComponent } from './activate.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const activateState = {
     name: 'activate',
@@ -11,10 +12,9 @@ export const activateState = {
     views: {
         'content@': { component: ActivateComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('activate');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['activate'])
+    }]
 };

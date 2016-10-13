@@ -1,4 +1,5 @@
 import { PasswordResetFinishComponent } from './password-reset-finish.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../../shared";
 
 export const finishResetState = {
     name: 'finishReset',
@@ -10,10 +11,9 @@ export const finishResetState = {
     views: {
         'content@': { component:  PasswordResetFinishComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('reset');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['reset'])
+    }]
 };

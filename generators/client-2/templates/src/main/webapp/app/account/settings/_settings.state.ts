@@ -1,4 +1,5 @@
 import { SettingsComponent } from './settings.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const settingsState = {
     name: 'settings',
@@ -13,10 +14,9 @@ export const settingsState = {
             component: SettingsComponent
         }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('settings');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['settings'])
+    }]
 };

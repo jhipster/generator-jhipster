@@ -1,4 +1,5 @@
 import { PasswordComponent } from './password.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const passwordState = {
     name: 'password',
@@ -11,10 +12,9 @@ export const passwordState = {
     views: {
         'content@': { component: PasswordComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('password');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['password'])
+    }]
 };

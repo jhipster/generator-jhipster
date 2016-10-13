@@ -1,4 +1,5 @@
 import { RegisterComponent } from './register.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const registerState = {
     name: 'register',
@@ -11,10 +12,9 @@ export const registerState = {
     views: {
         'content@': { component: RegisterComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('register');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['register'])
+    }]
 };

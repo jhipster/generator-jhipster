@@ -1,5 +1,5 @@
 import { NavbarComponent } from './layouts';
-import { AuthService } from './shared';
+import { AuthService, JhiLanguageService } from './shared';
 
 export const appState = {
     name: 'app',
@@ -14,9 +14,9 @@ export const appState = {
             resolveFn: (auth) => auth.authorize()
         },
         {
-            token: 'translatePartialLoader',
-            deps: ['$translatePartialLoader'],
-            resolveFn: (translatePartialLoader) => translatePartialLoader.addPart('global')
+            token: 'translate',
+            deps: [JhiLanguageService],
+            resolveFn: (languageService) => languageService.setLocations([])
         }
     ]
 };
