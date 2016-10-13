@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
     constructor(
         private principal: Principal,
         private $state: StateService,
-        private loginModalService : LoginModalService
+        private loginModalService: LoginModalService
     ) {}
 
     ngOnInit() {

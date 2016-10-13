@@ -16,7 +16,9 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 export class LoginService {
 
     constructor (
-        @Inject('$translate') private $translate,
+        <%_ if (enableTranslation){ _%>
+        private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+        <%_ } _%>
         private principal: Principal,
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
@@ -33,10 +35,8 @@ export class LoginService {
                     <%_ if (enableTranslation){ _%>
                     // After the login the language will be changed to
                     // the language selected by the user during his registration
-                    if (account!== null) { //TODO migrate
-                        this.$translate.use(account.langKey).then(() => {
-                            this.$translate.refresh();
-                        });
+                    if (account!== null) {
+                        this.languageService.changeLanguage(account.langKey);
                     }
                     <%_ } _%>
                     <%_ if (websocket === 'spring-websocket') { _%>

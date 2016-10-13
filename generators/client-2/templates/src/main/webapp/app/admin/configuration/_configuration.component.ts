@@ -14,7 +14,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     orderProp: string;
     reverse: boolean;
 
-    constructor(private <%=jhiPrefix%>ConfigurationService:<%=jhiPrefixCapitalized%>ConfigurationService){
+    constructor(private configurationService:<%=jhiPrefixCapitalized%>ConfigurationService){
         this.configKeys = [];
         this.filter = '';
         this.orderProp = 'prefix';
@@ -27,7 +27,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     }
 
     ngOnInit() {
-        this.<%=jhiPrefix%>ConfigurationService.get().subscribe((configuration) => {
+        this.configurationService.get().subscribe((configuration) => {
             this.configuration = configuration;
 
             for(var config of configuration) {
@@ -35,7 +35,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
             }
         });
 
-        this.<%=jhiPrefix%>ConfigurationService.getEnv().subscribe((configuration) => {
+        this.configurationService.getEnv().subscribe((configuration) => {
             this.allConfiguration = configuration;
         });
     }

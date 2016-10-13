@@ -14,10 +14,6 @@ export class AuthService {
         private $state: StateService,
         private stateStorageService: StateStorageService,
         private loginModalService : LoginModalService,
-        private $sessionStorage: SessionStorageService,
-        <%_ if (enableTranslation){ _%>
-        @Inject('$translate') private $translate,
-        <%_ } _%>
         @Inject('$rootScope') private $rootScope
     ){}
 

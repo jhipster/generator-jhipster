@@ -12,7 +12,7 @@ export class SettingsComponent implements OnInit {
     settingsAccount: any;
     languages: any[];
 
-    constructor(private account: AccountService, private principal: Principal<%_ if (enableTranslation){ _%>, private languageService: <%=jhiPrefixCapitalized%>LanguageService <%_ } _%>) {}
+    constructor(private account: AccountService, private principal: Principal<% if (enableTranslation){ %>, private languageService: <%=jhiPrefixCapitalized%>LanguageService <% } %>) {}
 
     ngOnInit () {
         this.principal.identity().then((account) => {
@@ -35,7 +35,7 @@ export class SettingsComponent implements OnInit {
             <%_ if (enableTranslation){ _%>
             this.languageService.getCurrent().then((current) => {
                 if (this.settingsAccount.langKey !== current) {
-                    this.languageService.changeLanguage(this.settingsAccount.langKey)
+                    this.languageService.changeLanguage(this.settingsAccount.langKey);
                 }
             });
             <%_ } _%>
