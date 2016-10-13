@@ -1,19 +1,14 @@
-import { Directive, Host, OnInit, Renderer, EventEmitter, ElementRef } from '@angular/core';
+import { Directive, Host, Input, Output, OnInit, Renderer, EventEmitter, ElementRef } from '@angular/core';
 
 @Directive({
-    selector: '[jh-sort]',
-    inputs: ['predicate:jh-sort', 'ascending', 'callback'],
-    outputs: ['jhSortChange', 'ascendingChange'],
-    host: {
-        '(click)': 'onClick()'
-    }
+    selector: '[jh-sort]'
 })
 export class JhSortDirective implements OnInit {
-    predicate: string;
-    ascending: boolean;
-    callback: Function;
-    jhSortChange: EventEmitter<any> = new EventEmitter();
-    ascendingChange: EventEmitter<any> = new EventEmitter();
+    @Input('jh-sort') predicate: string;
+    @Input() ascending: boolean;
+    @Input() callback: Function;
+    @Output() jhSortChange: EventEmitter<any> = new EventEmitter();
+    @Output() ascendingChange: EventEmitter<any> = new EventEmitter();
     $element: any;
 
     constructor(el: ElementRef, renderer: Renderer) {

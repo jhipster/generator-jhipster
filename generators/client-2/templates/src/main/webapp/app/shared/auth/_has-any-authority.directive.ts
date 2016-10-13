@@ -2,12 +2,11 @@ import { Directive, ElementRef, Input, Renderer, OnInit } from '@angular/core';
 import { Principal } from './principal.service';
 
 @Directive({
-    selector: '[has-any-authority]',
-    inputs: ['hasAnyAuthority:has-any-authority']
+    selector: '[has-any-authority]'
 })
 export class HasAnyAuthorityDirective implements OnInit {
 
-    hasAnyAuthority: string;
+    @Input('has-any-authority') hasAnyAuthority: string;
     authority: string[];
     element: any;
 

@@ -1,13 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: '[jhi-translate],[jhiTranslate]',
-    template: '<span [innerHTML]="key | translate:args"></span>',
-    inputs: ['key:jhi-translate', 'args:translate-values']
+    selector: '[jhi-translate],[translate]',
+    template: '<span [innerHTML]="key | translate:args"></span>'
 })
 export class <%=jhiPrefixCapitalized%>Translate {
-
     private key: string;
-    private args: any;
+    private _jhiTranslate: string;
+    private _translate: string;
+
+    @Input('translate-values') args: any;
+
+    @Input('jhi-translate')
+    set jhiTranslate(key: string) {
+        if (key) {
+            this.key = key;
+        }
+    }
+
+    @Input('translate')
+    set translate(key: string) {
+        if (key) {
+            this.key = key;
+        }
+    }
+
     //FIXME add support to pass translate-compile/ directives in translated content doesnt work
 }
