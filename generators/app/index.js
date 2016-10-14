@@ -272,6 +272,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.enableTranslation = this.enableTranslation;
             this.configOptions.nativeLanguage = this.nativeLanguage;
             this.configOptions.languages = this.languages;
+            this.configOptions.angularVersion = this.angularVersion;
         },
 
         insight: function () {

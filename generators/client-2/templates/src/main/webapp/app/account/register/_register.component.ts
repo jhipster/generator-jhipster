@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
         if (this.registerAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.registerAccount.langKey = <% if (enableTranslation){ %>this.languageService.getCurrent();<% } else {%> 'en' <% } %>;
+            this.registerAccount.langKey = <% if (enableTranslation){ %>this.languageService.getCurrent()<% } else {%> 'en' <% } %>;
             this.doNotMatch = null;
             this.error = null;
             this.errorUserExists = null;

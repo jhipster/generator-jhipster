@@ -35,7 +35,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     var errorHeader = httpResponse.headers('X-<%=angularAppName%>-error');
                     var entityKey = httpResponse.headers('X-<%=angularAppName%>-params');
                     if (errorHeader) {
-                        var entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey);<% }else{ %>entityKey<% } %>;
+                        var entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
                     } else if (httpResponse.data && httpResponse.data.fieldErrors) {
                         for (i = 0; i < httpResponse.data.fieldErrors.length; i++) {
