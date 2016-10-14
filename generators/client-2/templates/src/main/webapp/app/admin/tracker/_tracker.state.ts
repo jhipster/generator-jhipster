@@ -1,5 +1,6 @@
 import { Transition } from 'ui-router-ng2';
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const trackerState = {
     name: '<%=jhiPrefix%>-tracker',
@@ -12,12 +13,11 @@ export const trackerState = {
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>TrackerComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('tracker');
-            return $translate.refresh();
-        }]
-    },
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['tracker'])
+    }],
     onEnter: ['$transition$', (trans: Transition) => {
         trans.injector().get('TrackerService').subscribe();
     }],

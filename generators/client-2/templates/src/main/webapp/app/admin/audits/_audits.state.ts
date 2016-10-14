@@ -1,4 +1,5 @@
 import { AuditsComponent } from './audits.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const auditState = {
     name: 'audits',
@@ -11,10 +12,9 @@ export const auditState = {
     views: {
         'content@': { component: AuditsComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('audits');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['audits'])
+    }]
 }

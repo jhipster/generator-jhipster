@@ -1,4 +1,5 @@
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const configState = {
     name: '<%=jhiPrefix%>-configuration',
@@ -11,10 +12,9 @@ export const configState = {
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>ConfigurationComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('configuration');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['configuration'])
+    }]
 }

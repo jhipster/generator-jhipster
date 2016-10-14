@@ -10,10 +10,5 @@ export const docsState = {
     },
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>DocsComponent }
-    },
-    resolve: {
-        translatePartialLoader: ['$translate', function ($translate) {
-            return $translate.refresh();
-        }]
     }
 }

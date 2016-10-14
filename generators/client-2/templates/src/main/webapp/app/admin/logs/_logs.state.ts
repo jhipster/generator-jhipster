@@ -1,4 +1,5 @@
 import { LogsComponent } from './logs.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const logsState = {
     name: 'logs',
@@ -11,10 +12,9 @@ export const logsState = {
     views: {
         'content@': { component: LogsComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('logs');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['logs'])
+    }]
 }

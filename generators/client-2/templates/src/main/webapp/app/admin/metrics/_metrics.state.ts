@@ -1,4 +1,5 @@
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const metricsState = {
     name: '<%=jhiPrefix%>-metrics',
@@ -11,10 +12,9 @@ export const metricsState = {
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('metrics');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['metrics'])
+    }]
 }

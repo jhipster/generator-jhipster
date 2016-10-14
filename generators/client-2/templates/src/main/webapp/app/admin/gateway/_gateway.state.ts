@@ -1,4 +1,5 @@
 import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway.component';
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
 
 export const gatewayState = {
     name: 'gateway',
@@ -11,10 +12,9 @@ export const gatewayState = {
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>GatewayComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('gateway');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['gateway'])
+    }]
 }
