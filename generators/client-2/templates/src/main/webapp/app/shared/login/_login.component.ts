@@ -2,6 +2,9 @@ import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateService } from "ui-router-ng2";
 
+<%_ if (enableTranslation){ _%>
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.service';
+<%_ } _%>
 import { LoginService } from '../login/login.service';
 import { StateStorageService } from '../auth/state-storage.service';
 
@@ -19,6 +22,9 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     constructor(
         @Inject('$rootScope') private $rootScope,
         private $state: StateService,
+        <%_ if (enableTranslation){ _%>
+        private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+        <%_ } _%>
         private loginService: LoginService,
         private stateStorageService: StateStorageService,
         private elementRef: ElementRef,
@@ -29,6 +35,9 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     }
 
     ngOnInit() {
+        <%_ if (enableTranslation){ _%>
+        this.languageService.addLocation('login');
+        <%_ } _%>
     }
 
     ngAfterViewInit() {

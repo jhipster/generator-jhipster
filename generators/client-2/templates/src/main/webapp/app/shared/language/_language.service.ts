@@ -11,7 +11,7 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
     defaultLang = '<%= nativeLanguage %>';
     defaultLocation = 'global';
     currentLang = '<%= nativeLanguage %>';
-    locations: string[] = ['login'];
+    locations: string[] = [];
 
     constructor (public translateService: TranslateService){
         translateService.setDefaultLang(this.defaultLang);
@@ -30,12 +30,20 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
         this.reload();
     }
 
+    addLocation(location: string) {
+        if (this.locations.indexOf(location) === -1) {
+            this.locations.push(location);
+            this.reload();
+        }
+    }
+
     reload() {
         this.translateService.setDefaultLang(this.currentLang);
         let translatePartialLoader: TranslatePartialLoader = <TranslatePartialLoader> this.translateService.currentLoader;
         translatePartialLoader.setLocations(this.locations);
         //reset the language cache //FIXME not ideal as this increases the http requests
         this.translateService.resetLang(this.currentLang);
+        this.translateService.use(this.currentLang);
     }
 
     getAll(): Promise<any> {
