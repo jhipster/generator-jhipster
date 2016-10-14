@@ -16,7 +16,7 @@ export const appState = {
         {
             token: 'translate',
             deps: [<%=jhiPrefixCapitalized%>LanguageService],
-            resolveFn: (languageService) => languageService.setLocations(['login'])
+            resolveFn: (languageService) => languageService.setLocations([])
         }
     ]
 };

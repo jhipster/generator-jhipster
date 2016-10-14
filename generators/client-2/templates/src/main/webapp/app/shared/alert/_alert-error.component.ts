@@ -1,6 +1,8 @@
-import * as angular from 'angular';
-
 import { Component, Inject, OnDestroy } from '@angular/core';
+<%_ if (enableTranslation){ _%>
+import { TranslateService } from 'ng2-translate/ng2-translate';
+<%_ } _%>
+
 import { AlertService } from './alert.service';
 
 @Component({
@@ -17,10 +19,10 @@ export class JhiAlertErrorComponent implements OnDestroy {
     alerts: any[];
     cleanHttpErrorListener: Function;
 
-    constructor(private alertService: AlertService, @Inject('$rootScope') private $rootScope, @Inject('$translate') private $translate) {
+    constructor(private alertService: AlertService, @Inject('$rootScope') private $rootScope<% if (enableTranslation){ %>, private translateService: TranslateService<% } %>) {
         this.alerts = [];
 
-        this.cleanHttpErrorListener = $rootScope.$on('ng2TApp.httpError', (event, httpResponse) => {
+        this.cleanHttpErrorListener = $rootScope.$on('<%=angularAppName%>.httpError', (event, httpResponse) => {
             var i;
             event.stopPropagation();
             switch (httpResponse.status) {
@@ -30,17 +32,17 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     break;
 
                 case 400:
-                    var errorHeader = httpResponse.headers('X-ng2TApp-error');
-                    var entityKey = httpResponse.headers('X-ng2TApp-params');
+                    var errorHeader = httpResponse.headers('X-<%=angularAppName%>-error');
+                    var entityKey = httpResponse.headers('X-<%=angularAppName%>-params');
                     if (errorHeader) {
-                        var entityName = $translate.instant('global.menu.entities.' + entityKey);
+                        var entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey);<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
                     } else if (httpResponse.data && httpResponse.data.fieldErrors) {
                         for (i = 0; i < httpResponse.data.fieldErrors.length; i++) {
                             var fieldError = httpResponse.data.fieldErrors[i];
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                             var convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            var fieldName = $translate.instant('ng2TApp.' + fieldError.objectName + '.' + convertedField);
+                            var fieldName = <% if (enableTranslation) { %>translateService.instant('<%=angularAppName%>.' + fieldError.objectName + '.' + convertedField)<% }else{ %>convertedField.charAt(0).toUpperCase() + convertedField.slice(1)<% } %>;
                             this.addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                         }
                     } else if (httpResponse.data && httpResponse.data.message) {
@@ -58,7 +60,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     if (httpResponse.data && httpResponse.data.message) {
                         this.addErrorAlert(httpResponse.data.message);
                     } else {
-                        this.addErrorAlert(angular.toJson(httpResponse));
+                        this.addErrorAlert(JSON.parse(httpResponse));
                     }
             }
         });
@@ -72,6 +74,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
     }
 
     addErrorAlert (message, key?, data?) {
+        <%_ if (enableTranslation) { _%>
         key = key && key !== null ? key : message;
         this.alerts.push(
             this.alertService.addAlert(
@@ -86,5 +89,19 @@ export class JhiAlertErrorComponent implements OnDestroy {
                 this.alerts
             )
         );
+        <%_ } else { _%>
+        this.alerts.push(
+            this.alertService.addAlert(
+                {
+                    type: 'danger',
+                    msg: message,
+                    timeout: 5000,
+                    toast: this.alertService.isToast(),
+                    scoped: true
+                },
+                this.alerts
+            )
+        );
+        <%_ } _%>
     }
 }

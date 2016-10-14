@@ -7,7 +7,6 @@ import './entities/entity.module';
 import { upgradeAdapter } from './upgrade_adapter';
 
 import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
-import { TranslationHandler } from './blocks/handlers/translation.handler';
 
 import { TranslationConfig } from './blocks/config/translation.config';
 import { TranslationStorageProvider } from './blocks/config/translation-storage.provider';<% } %>
@@ -65,17 +64,15 @@ angular
     .factory('NotificationInterceptor', NotificationInterceptor)
     .factory('StateHandler',StateHandler)<% if (enableTranslation) { %>
     .factory('TranslationStorageProvider', TranslationStorageProvider)
-    .config(TranslationConfig)
-    .factory('TranslationHandler',TranslationHandler)<% } %>
+    .config(TranslationConfig)<% } %>
     <%_ if (websocket === 'spring-websocket') { _%>
     .factory('TrackerService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>TrackerService))
     <%_ } _%>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))
     .run(run);
 
-run.$inject = ['StateHandler'<% if (enableTranslation) { %>, 'TranslationHandler'<% } %>];
+run.$inject = ['StateHandler'];
 
-function run(StateHandler<% if (enableTranslation) { %>, TranslationHandler<% } %>) {
-    StateHandler.initialize();<% if (enableTranslation) { %>
-    TranslationHandler.initialize();<% } %>
+function run(StateHandler) {
+    StateHandler.initialize();
 }

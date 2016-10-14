@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 @Injectable()
 export class DataUtils {
 
-    constructor (@Inject('Window') private window: Window) {}
+    constructor (private window: Window) {}
 
     abbreviate (text: string) {
         if (typeof text !== 'string') {

@@ -335,7 +335,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + '_app.constants.ts', ANGULAR_DIR + 'app.constants.ts', this, {});
             this.template(ANGULAR_DIR + 'blocks/handlers/_state.handler.ts', ANGULAR_DIR + 'blocks/handlers/state.handler.ts', this, {});
             if (this.enableTranslation) {
-                this.template(ANGULAR_DIR + 'blocks/handlers/_translation.handler.ts', ANGULAR_DIR + 'blocks/handlers/translation.handler.ts', this, {});
                 this.template(ANGULAR_DIR + 'blocks/config/_translation.config.ts', ANGULAR_DIR + 'blocks/config/translation.config.ts', this, {});
                 this.template(ANGULAR_DIR + 'blocks/config/_translation-storage.provider.ts', ANGULAR_DIR + 'blocks/config/translation-storage.provider.ts', this, {});
             }

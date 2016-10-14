@@ -10,6 +10,5 @@ upgradeAdapter.upgradeNg1Provider('$uibModal');
 upgradeAdapter.upgradeNg1Provider('$state');
 upgradeAdapter.upgradeNg1Provider('$rootScope');
 <%_ if (enableTranslation) { _%>
-upgradeAdapter.upgradeNg1Provider('$translate');
 upgradeAdapter.upgradeNg1Provider('tmhDynamicLocale');
 <%_ } _%>

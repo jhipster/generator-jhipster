@@ -379,7 +379,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/uib-pager.config.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/uib-pagination.config.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/state.handler.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/auth-expired.interceptor.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.ts',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.ts',

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Register } from './register.service';
-import { LoginModalService } from "../../shared";
+import { LoginModalService<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% }%> } from "../../shared";
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -20,11 +20,13 @@ export class RegisterComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(
-            @Inject('$translate') private $translate,
-            private loginModalService : LoginModalService,
-            private registerService: Register,
-            private elementRef: ElementRef,
-            private renderer: Renderer) {
+        <%_ if (enableTranslation) { _%>
+        private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+        <%_ } _%>
+        private loginModalService : LoginModalService,
+        private registerService: Register,
+        private elementRef: ElementRef,
+        private renderer: Renderer) {
     }
 
     ngOnInit() {
@@ -40,7 +42,7 @@ export class RegisterComponent implements OnInit {
         if (this.registerAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.registerAccount.langKey = <% if (enableTranslation){ %>this.$translate.use()<% }else {%> 'en' <% } %>;
+            this.registerAccount.langKey = <% if (enableTranslation){ %>this.languageService.getCurrent();<% } else {%> 'en' <% } %>;
             this.doNotMatch = null;
             this.error = null;
             this.errorUserExists = null;

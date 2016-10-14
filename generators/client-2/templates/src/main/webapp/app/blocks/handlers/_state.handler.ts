@@ -2,10 +2,10 @@ import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 import { Transition } from 'ui-router-ng2';
 declare var SystemJS;
 
-StateHandler.$inject = ['$rootScope', '$transitions', <% if (enableTranslation) { %>'$translate', /*'<%=jhiPrefixCapitalized%>LanguageService',*/ 'TranslationHandler',<% } %> '$window',
+StateHandler.$inject = ['$rootScope', '$transitions', <% if (enableTranslation) { %>/*'<%=jhiPrefixCapitalized%>LanguageService',*/<% } %> '$window',
         /*'Auth', 'Principal',*/ '$uiRouter', '$trace'];
 
-export function StateHandler($rootScope, $transitions, <% if (enableTranslation) { %>$translate, /*<%=jhiPrefixCapitalized%>LanguageService,*/ TranslationHandler,<% } %> $window,
+export function StateHandler($rootScope, $transitions, <% if (enableTranslation) { %>/*<%=jhiPrefixCapitalized%>LanguageService,*/<% } %> $window,
     /*Auth, Principal,*/ $uiRouter, $trace) {
 
     if (DEBUG_INFO_ENABLED) {
@@ -52,7 +52,11 @@ export function StateHandler($rootScope, $transitions, <% if (enableTranslation)
             if (toState.data.pageTitle) {
                 titleKey = toState.data.pageTitle;
             }
-            <% if (enableTranslation) { %>TranslationHandler.updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
+            <%_ if (enableTranslation) { _%>
+            //JhiLanguageService.updateTitle(titleKey); //TODO needs to fixed after migration
+            <%_ } else { _%>
+            $window.document.title = titleKey;
+            <%_ } _%>
         }));
 
         $rootScope.$on('$destroy', function () {
