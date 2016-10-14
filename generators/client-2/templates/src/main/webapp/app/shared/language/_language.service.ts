@@ -11,13 +11,13 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
     defaultLang = '<%= nativeLanguage %>';
     defaultLocation = 'global';
     currentLang = '<%= nativeLanguage %>';
-    locations: string[] = ['home'];
+    locations: string[] = ['login'];
 
     constructor (public translateService: TranslateService){
         translateService.setDefaultLang(this.defaultLang);
         this.translateService.currentLang = this.currentLang;
     }
-    
+
 
     changeLanguage(languageKey: string) {
         this.currentLang = languageKey;
