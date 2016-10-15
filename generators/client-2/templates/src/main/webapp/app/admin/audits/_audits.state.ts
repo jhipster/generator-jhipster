@@ -1,5 +1,7 @@
 import { AuditsComponent } from './audits.component';
+<%_ if (enableTranslation) { _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+<%_ } _%>
 
 export const auditState = {
     name: 'audits',
@@ -11,10 +13,11 @@ export const auditState = {
     },
     views: {
         'content@': { component: AuditsComponent }
-    },
+    }<%_ if (enableTranslation) { _%>,
     resolve: [{
         token: 'translate',
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['audits'])
+        resolveFn: (languageService) => languageService.setLocations(['activate'])
     }]
+    <%_ } _%>
 }
