@@ -1,5 +1,7 @@
 import { RegisterComponent } from './register.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+<%_ if (enableTranslation) { _%>
+import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+<%_ } _%>
 
 export const registerState = {
     name: 'register',
@@ -11,10 +13,11 @@ export const registerState = {
     },
     views: {
         'content@': { component: RegisterComponent }
-    },
+    }<%_ if (enableTranslation) { _%>,
     resolve: [{
         token: 'translate',
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['register'])
+        resolveFn: (languageService) => languageService.setLocations(['activate'])
     }]
+    <%_ } _%>
 };
