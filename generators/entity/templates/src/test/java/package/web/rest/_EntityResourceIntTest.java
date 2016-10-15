@@ -109,14 +109,14 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         // Generate Strings, using the min and max string length if they are configured
         var sampleTextString = "";
         var updatedTextString = "";
-        var sampleTextMinLength = fields[idx].fieldValidateRulesMinlength;
-        if (sampleTextMinLength == undefined) {
-            sampleTextMinLength = fields[idx].fieldValidateRulesMaxlength;
-            if (sampleTextMinLength == undefined) {
-                sampleTextMinLength = 5;
-            }
+        var sampleTextLength = 10;
+        if (fields[idx].fieldValidateRulesMinlength > sampleTextLength) {
+            sampleTextLength = fields[idx].fieldValidateRulesMinlength;
         }
-        for( var i = 0; i < sampleTextMinLength; i++ ) {
+        if (fields[idx].fieldValidateRulesMaxlength < sampleTextLength) {
+            sampleTextLength = fields[idx].fieldValidateRulesMaxlength;
+        }
+        for( var i = 0; i < sampleTextLength; i++ ) {
             sampleTextString += "A";
             updatedTextString += "B";
         }_%>
@@ -173,8 +173,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";
     <%_ } else if (fieldTypeBlobContent == 'text') { _%>
 
-    private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
+    private static final String <%=defaultValueName %> = "";
+    private static final String <%=updatedValueName %> = "";
     <%_ } else if (isEnum) { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
