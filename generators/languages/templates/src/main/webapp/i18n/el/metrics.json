@@ -75,8 +75,7 @@
             "objects": "Αντικείμενα",
             "hits": "Κτυπήματα",
             "misses": "Αποφυγές",
-            "evictioncount": "Αριθμός εξώσεων",
-            "mean": "Μέσος χρόνος (ms)"
+            "evictioncount": "Αριθμός εξώσεων"
         },
         "datasource": {
         	"usage": "Χρήση",

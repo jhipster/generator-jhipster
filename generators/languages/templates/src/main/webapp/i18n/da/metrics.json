@@ -75,8 +75,7 @@
             "objects": "Objekter",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Antal udsættelser",
-            "mean": "Middel get time (ms)"
+            "evictioncount": "Antal udsættelser"
         },
         "datasource": {
         	"usage": "Usage",

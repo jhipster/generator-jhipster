@@ -75,8 +75,7 @@
             "objects": "Objets",
             "hits": "Données existantes",
             "misses": "Données non existantes",
-            "evictioncount": "Nombre de suppressions",
-            "mean": "Temps de réponse (ms)"
+            "evictioncount": "Nombre de suppressions"
         },
         "datasource": {
         	"usage": "Usage",

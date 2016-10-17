@@ -75,8 +75,7 @@
             "objects": "Objetos",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Número de despejos",
-            "mean": "Mediana (ms)"
+            "evictioncount": "Número de despejos"
         },
         "datasource": {
         	"usage": "Utilização",
