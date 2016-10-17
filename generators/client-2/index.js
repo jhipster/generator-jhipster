@@ -386,10 +386,10 @@ module.exports = JhipsterClientGenerator.extend({
             // Social
             if (this.enableSocialSignIn) {
                 this.copyHtml(ANGULAR_DIR + 'account/social/_social.html', ANGULAR_DIR + 'account/social/social.html');
-                this.template(ANGULAR_DIR + 'account/social/_social.component.ts', ANGULAR_DIR + 'account/social/social.component.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/social/_social.component.ts', ANGULAR_DIR + 'shared/social/social.component.ts', this, {});
                 this.copyHtml(ANGULAR_DIR + 'account/social/_social-register.html', ANGULAR_DIR + 'account/social/social-register.html');
                 this.template(ANGULAR_DIR + 'account/social/_social-register.component.ts', ANGULAR_DIR + 'account/social/social-register.component.ts', this, {});
-                this.template(ANGULAR_DIR + 'account/social/_social.service.ts', ANGULAR_DIR + 'account/social/social.service.ts', this, {});
+                this.template(ANGULAR_DIR + 'shared/social/_social.service.ts', ANGULAR_DIR + 'shared/social/social.service.ts', this, {});
                 this.copyJs(ANGULAR_DIR + 'account/social/_social.state.ts', ANGULAR_DIR + 'account/social/social.state.ts', this, {});
 
                 if (this.authenticationType === 'jwt') {

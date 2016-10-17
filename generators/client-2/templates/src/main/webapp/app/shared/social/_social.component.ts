@@ -5,7 +5,7 @@ import { SocialService } from './social.service';
     selector: 'jh-social',
     templateUrl: 'app/account/social/social.html'
 })
-export class JhSocialComponent implements OnInit {
+export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
     @Input() provider: string;
     label: string;
     providerSetting: string;

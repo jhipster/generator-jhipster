@@ -19,8 +19,17 @@ import {
     <%_ } _%>
     HasAuthorityDirective,
     HasAnyAuthorityDirective,
-    <%=jhiPrefixCapitalized%>LoginModalComponent
+    <%=jhiPrefixCapitalized%>LoginModalComponent,
+<% if (enableSocialSignIn) { %>
+    SocialService,
+    //<%=jhiPrefixCapitalized%>SocialComponent,
+<%_ } _%>
 } from './';
+
+<% if (enableSocialSignIn) { %>
+    import { <%=jhiPrefixCapitalized%>SocialComponent } from './social/social.component';
+<%_ } _%>
+
 
 @NgModule({
     imports: [
@@ -28,6 +37,9 @@ import {
         <%=angular2AppName%>SharedCommonModule
     ],
     declarations: [
+<% if (enableSocialSignIn) { %>
+        <%=jhiPrefixCapitalized%>SocialComponent,
+<% } %>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective
@@ -46,10 +58,16 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        AuthServerProvider
+        AuthServerProvider,
+<% if (enableSocialSignIn) { %>
+        SocialService,
+<% } %>
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
+<% if (enableSocialSignIn) { %>
+        <%=jhiPrefixCapitalized%>SocialComponent,
+<% } %>
         <%=angular2AppName%>SharedCommonModule,
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,

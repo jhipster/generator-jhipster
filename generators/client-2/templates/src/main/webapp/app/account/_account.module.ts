@@ -20,8 +20,6 @@ import {
     PasswordResetFinishComponent,
     SettingsComponent,
 <% if (enableSocialSignIn) { %>
-    JhSocialComponent,
-    SocialService,
 <% if (authenticationType == 'jwt') { %>
     SocialAuthComponent,
 <% } %>
@@ -55,6 +53,3 @@ angular
     .directive('sessions', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SessionsComponent))
     <%_ } _%>
     .directive('settings', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SettingsComponent))
-<% if (enableSocialSignIn) { %>
-    .factory('SocialService', upgradeAdapter.downgradeNg2Provider(SocialService))
-<% } %>

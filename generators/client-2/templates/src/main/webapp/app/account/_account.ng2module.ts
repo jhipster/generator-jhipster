@@ -29,8 +29,6 @@ import {
     registerState,
     accountState,
 <% if (enableSocialSignIn) { %>
-    JhSocialComponent,
-    SocialService,
     SocialRegisterComponent,
     socialRegisterState,
 <% if (authenticationType == 'jwt') { %>
@@ -66,7 +64,6 @@ let ACCOUNT_STATES = [
     ],
     declarations: [
 <% if (enableSocialSignIn) { %>
-        JhSocialComponent,
         SocialRegisterComponent,
 <% if (authenticationType == 'jwt') { %>
         SocialAuthComponent,
@@ -86,9 +83,6 @@ let ACCOUNT_STATES = [
         <%_ if (authenticationType === 'session') { _%>
         SessionsService,
         <%_ } _%>
-<% if (enableSocialSignIn) { %>
-        SocialService,
-<% } %>
         Register,
         Activate,
         Password,
@@ -96,9 +90,6 @@ let ACCOUNT_STATES = [
         PasswordResetFinish
     ],
     exports: [
-<% if (enableSocialSignIn) { %>
-        JhSocialComponent
-<% } %>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

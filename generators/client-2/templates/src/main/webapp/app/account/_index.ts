@@ -30,7 +30,5 @@ export * from './account.state';
 	export * from './social/social-auth.component';
 <% } %>
 export * from './social/social-register.component';
-export * from './social/social.service';
 export * from './social/social.state';
-export * from './social/social.component';
 <% } %>

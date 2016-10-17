@@ -52,3 +52,7 @@ export * from './XSRF-strategy.provider';
 export * from './shared-libs.ng2module';
 export * from './shared-common.ng2module';
 export * from './shared.ng2module';
+<% if (enableSocialSignIn) { %>
+export * from './social/social.service';
+export * from './social/social.component';
+<% } %>
