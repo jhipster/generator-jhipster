@@ -22,6 +22,7 @@ module.exports = {
 function app() {
     return gulp.src(config.app + 'index.html')
         .pipe(inject(gulp.src(config.app + 'app/**/*.js')
+            .pipe(plumber({errorHandler: handleErrors}))
             .pipe(naturalSort())
             .pipe(angularFilesort()), {relative: true}))
         .pipe(gulp.dest(config.app));
