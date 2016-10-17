@@ -38,8 +38,8 @@ public class CustomSignInAdapter implements SignInAdapter {
     <%_ if (authenticationType == 'jwt') { _%>
     @Inject
     private TokenProvider tokenProvider;
-    <%_ } _%>
 
+    <%_ } _%>
     <%_ if (authenticationType == 'jwt') { _%>
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request){
