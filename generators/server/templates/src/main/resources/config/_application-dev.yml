@@ -190,9 +190,9 @@ jhipster:
     <%_ } _%>
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
-        timeToLiveSeconds: 3600
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         hazelcast:
+            timeToLiveSeconds: 3600
             backupCount: 1
         <%_ } _%>
         <%_ if (hibernateCache == 'ehcache') { _%>

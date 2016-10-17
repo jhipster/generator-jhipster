@@ -152,26 +152,15 @@ public class JHipsterProperties {
     }
 
     public static class Cache {
-
-        private int timeToLiveSeconds = 3600;
         <%_ if (hibernateCache == 'ehcache') { _%>
-
         private final Ehcache ehcache = new Ehcache();
+
         <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         private final Hazelcast hazelcast = new Hazelcast();
 
         <%_ } _%>
-
-        public int getTimeToLiveSeconds() {
-            return timeToLiveSeconds;
-        }
-
-        public void setTimeToLiveSeconds(int timeToLiveSeconds) {
-            this.timeToLiveSeconds = timeToLiveSeconds;
-        }
         <%_ if (hibernateCache == 'ehcache') { _%>
-
         public Ehcache getEhcache() {
             return ehcache;
         }
@@ -197,7 +186,17 @@ public class JHipsterProperties {
 
         public static class Hazelcast {
 
+            private int timeToLiveSeconds = 3600;
+
             private int backupCount = 1;
+
+            public int getTimeToLiveSeconds() {
+                return timeToLiveSeconds;
+            }
+
+            public void setTimeToLiveSeconds(int timeToLiveSeconds) {
+                this.timeToLiveSeconds = timeToLiveSeconds;
+            }
 
             public int getBackupCount() {
                 return backupCount;

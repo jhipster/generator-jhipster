@@ -26,18 +26,15 @@ import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 
 import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
 import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-import org.springframework.util.Assert;<% } %>
+import org.springframework.security.core.session.SessionRegistryImpl;<% } %>
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.PluralAttribute;
-import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Stream;
 <%_ } _%>
 
 @SuppressWarnings("unused")
@@ -87,18 +84,10 @@ public class CacheConfiguration {
         cacheManager.getConfiguration().setMaxBytesLocalHeap(jHipsterProperties.getCache().getEhcache().getMaxBytesLocalHeap());
         log.debug("Registering Ehcache Metrics gauges");
         <%_ if (databaseType == 'sql') { _%>
-        Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
-        for (EntityType<?> entity : entities) {
-            String name = entity.getName();
-            if (name == null || entity.getJavaType() != null) {
-                name = entity.getJavaType().getName();
-            }
-            Assert.notNull(name, "entity cannot exist without an identifier");
-            reconfigureCache(name, jHipsterProperties);
-            for (PluralAttribute pluralAttribute : entity.getPluralAttributes()) {
-                reconfigureCache(name + "." + pluralAttribute.getName(), jHipsterProperties);
-            }
-        }
+        Stream.of(cacheManager.getCacheNames()).forEach(name -> {
+            net.sf.ehcache.Cache cache = cacheManager.getCache(name);
+            cacheManager.replaceCacheWithDecoratedCache(cache, InstrumentedEhcache.instrument(metricRegistry, cache));
+        });
         <%_ } _%>
         EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
         ehCacheManager.setCacheManager(cacheManager);
@@ -115,17 +104,6 @@ public class CacheConfiguration {
         return cacheManager;
     <%_ } _%>
     }
-    <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
-
-    private void reconfigureCache(String name, JHipsterProperties jHipsterProperties) {
-        net.sf.ehcache.Cache cache = cacheManager.getCache(name);
-        if (cache != null) {
-            cache.getCacheConfiguration().setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
-            net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
-            cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
-        }
-    }
-    <%_ } _%>
     <%_ if (hibernateCache == 'hazelcast') { _%>
 
     @Bean
@@ -162,7 +140,7 @@ public class CacheConfiguration {
                 config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
             }
         }
-        <% } else { %>
+        <%_ } else { _%>
         config.getNetworkConfig().setPort(5701);
         config.getNetworkConfig().setPortAutoIncrement(true);
 
@@ -174,11 +152,14 @@ public class CacheConfiguration {
             config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         }
-        <% } %>
-        <% if (hibernateCache == 'hazelcast') { %>
+        <%_ } _%>
+        <%_ if (hibernateCache == 'hazelcast') { _%>
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
-        config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
-        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(jHipsterProperties));<% } %>
+        config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
+        <%_ } _%>
+        <%_ if (clusteredHttpSession == 'hazelcast') { _%>
+        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(jHipsterProperties));
+        <%_ } _%>
 
         hazelcastInstance = HazelcastInstanceFactory.newHazelcastInstance(config);
 
@@ -225,8 +206,7 @@ public class CacheConfiguration {
 
     private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
-
-        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
+        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
 
@@ -235,15 +215,17 @@ public class CacheConfiguration {
     */
     public static HazelcastInstance getHazelcastInstance() {
         return hazelcastInstance;
-    }<% if (clusteredHttpSession == 'hazelcast') { %>
+    }
+    <%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
     private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
-
         mapConfig.setBackupCount(jHipsterProperties.getCache().getHazelcast().getBackupCount());
-        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
+        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
-    }<% } %><% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+    }
+    <%_ } } _%>
+    <%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
     /**
      * Use by Spring Security, to get events from Hazelcast.
@@ -253,5 +235,6 @@ public class CacheConfiguration {
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
-    }<% } %>
+    }
+    <%_ } _%>
 }
