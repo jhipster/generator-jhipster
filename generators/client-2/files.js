@@ -610,9 +610,7 @@ const files = {
         },
         {
             type: 'template',
-            condition: generator => {
-                generator.testFrameworks.indexOf('protractor') !== -1
-            },
+            condition: generator => generator.testFrameworks.indexOf('protractor') !== -1,
             from: TEST_SRC_DIR,
             templates: [
                 'e2e/account/_account.js',
@@ -621,7 +619,7 @@ const files = {
             ]
         }
     ]
-}
+};
 
 module.exports = {
     writeFiles,
@@ -649,5 +647,5 @@ function writeFiles() {
                 }
             }
         }
-    }
+    };
 }

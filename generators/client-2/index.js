@@ -17,8 +17,7 @@ const constants = require('../generator-constants'),
     QUESTIONS = constants.CLIENT_QUESTIONS,
     DIST_DIR = constants.CLIENT_DIST_DIR,
     MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR = constants.ANGULAR_DIR;
+    TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
 module.exports = JhipsterClientGenerator.extend({
     constructor: function () {
