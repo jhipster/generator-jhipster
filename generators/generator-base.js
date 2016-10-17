@@ -1630,11 +1630,11 @@ Generator.prototype.formatAsFieldJavadoc = function (text) {
 };
 
 Generator.prototype.formatAsApiModel = function (text) {
-    return jhipsterUtils.wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true);
+    return text;
 };
 
 Generator.prototype.formatAsApiModelProperty = function (text) {
-    return jhipsterUtils.wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true);
+    return text;
 };
 
 Generator.prototype.isNumber = function (input) {
