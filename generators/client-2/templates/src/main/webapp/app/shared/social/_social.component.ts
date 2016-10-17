@@ -1,5 +1,7 @@
 import { Inject, Component, Input, OnInit } from '@angular/core';
 import { SocialService } from './social.service';
+import { CSRFService } from '../';
+import { JhiLanguageService } from "../";
 
 @Component({
     selector: 'jh-social',
@@ -13,21 +15,17 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
     csrf: string;
 
         constructor (
-                    <% if (enableTranslation){ %>
-                        @Inject('$translatePartialLoader') private $translatePartialLoader,
-                        @Inject('$translate') private $translate, <% } %>
+                    <% if (enableTranslation){ %> private languageService: JhiLanguageService, <% } %>
+                        private CSRFService: CSRFService,
                         private SocialService: SocialService)
         {}
 
         ngOnInit() {
-            <% if (enableTranslation){ %>
-            this.$translatePartialLoader.addPart('social');
-            this.$translate.refresh();
-            <% } %>
+            <% if (enableTranslation){ %> this.languageService.addLocation('social'); <% } %>
             this.label = this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
             this.providerSetting = this.SocialService.getProviderSetting(this.provider);
             this.providerURL = this.SocialService.getProviderURL(this.provider);
-            this.csrf = this.SocialService.getCSRF();
+            this.csrf = this.CSRFService.getCSRF();
         }
 
 }

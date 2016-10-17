@@ -19,8 +19,7 @@ export class SocialService {
         return 'signin/' + provider;
     }
 
-    getCSRF () {
-        /* globals document */
+    /*getCSRF () {
         var name = 'CSRF-TOKEN=';
         var ca = document.cookie.split(';');
         for (var i = 0; i < ca.length; i++) {
@@ -33,5 +32,5 @@ export class SocialService {
             }
         }
         return '';
-    }
+    }*/
 }

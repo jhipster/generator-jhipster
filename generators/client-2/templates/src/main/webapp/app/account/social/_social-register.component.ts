@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -7,7 +7,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 export class SocialRegisterComponent implements OnInit  {
     success: boolean;
     error: boolean;
-    provider: string;
+    @Input() provider: string;
     providerLabel: string;
 
     constructor (@Inject('$stateParams') private $stateParams)
