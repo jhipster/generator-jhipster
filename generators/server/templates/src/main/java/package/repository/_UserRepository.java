@@ -41,8 +41,6 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByEmail(String email);
 
     Optional<User> findOneByLogin(String login);
-
-    Optional<User> findOneById(<%= pkType %> userId);
     <%_ if (databaseType == 'sql') { _%>
 
     @Query(value = "select distinct user from User user left join fetch user.authorities",
@@ -149,10 +147,6 @@ public class UserRepository {
 
     public User findOne(String id) {
         return mapper.get(id);
-    }
-
-    public Optional<User> findOneById(String id) {
-        return Optional.of(findOne(id));
     }
 
     public Optional<User> findOneByActivationKey(String activationKey) {
