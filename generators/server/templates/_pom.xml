@@ -349,8 +349,8 @@
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- include netty handler explicitly to overcome dependency mismatch when using cassandra -->
         <%_ if (databaseType === 'cassandra') { _%>
+        <!-- include netty handler explicitly to overcome dependency mismatch when using cassandra -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
