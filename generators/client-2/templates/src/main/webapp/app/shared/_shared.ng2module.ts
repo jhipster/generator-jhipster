@@ -19,17 +19,15 @@ import {
     <%_ } _%>
     HasAuthorityDirective,
     HasAnyAuthorityDirective,
-    <%=jhiPrefixCapitalized%>LoginModalComponent,
 <% if (enableSocialSignIn) { %>
     SocialService,
-    //<%=jhiPrefixCapitalized%>SocialComponent,
 <%_ } _%>
+    <%=jhiPrefixCapitalized%>LoginModalComponent
 } from './';
 
 <% if (enableSocialSignIn) { %>
-    import { <%=jhiPrefixCapitalized%>SocialComponent } from './social/social.component';
+import { <%=jhiPrefixCapitalized%>SocialComponent } from './social/social.component';
 <%_ } _%>
-
 
 @NgModule({
     imports: [

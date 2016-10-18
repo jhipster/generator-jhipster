@@ -7,7 +7,9 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.s
 <%_ } _%>
 import { LoginService } from '../login/login.service';
 import { StateStorageService } from '../auth/state-storage.service';
+<% if (enableSocialSignIn) { %>
 import { SocialService } from '../social/social.service';
+<%_ } _%>
 
 @Component({
     selector: '<%=jhiPrefix%>-login-modal',

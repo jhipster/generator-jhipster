@@ -4,8 +4,8 @@ import { AuthService } from '../../shared';
 import { LoginService } from '../../shared';
 
 @Component({
-    selector: '<%=jhiPrefix%>-register',
-    templateUrl: 'app/account/register/register.html'
+    selector: '<%=jhiPrefix%>-auth',
+    templateUrl: 'app/shared/login/login.html'
 })
 export class SocialAuthComponent implements OnInit {
 

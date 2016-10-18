@@ -27,7 +27,6 @@ import {
     finishResetState,
     requestResetState,
     registerState,
-    accountState,
 <% if (enableSocialSignIn) { %>
     SocialRegisterComponent,
     socialRegisterState,
@@ -36,6 +35,7 @@ import {
     socialAuthState,
 <% } %>
 <% } %>
+    accountState
 } from './';
 
 let ACCOUNT_STATES = [
@@ -48,13 +48,13 @@ let ACCOUNT_STATES = [
     <%_ if (authenticationType === 'session') { _%>
     sessionsState,
     <%_ } _%>
-    settingsState,
 <% if (enableSocialSignIn) { %>
-<% if (authenticationType == 'jwt') { %>
+    <% if (authenticationType == 'jwt') { %>
     socialAuthState,
+    <% } %>
+    socialRegisterState,
 <% } %>
-    socialRegisterState
-<% } %>
+    settingsState
 ];
 
 @NgModule({
@@ -88,8 +88,6 @@ let ACCOUNT_STATES = [
         Password,
         PasswordResetInit,
         PasswordResetFinish
-    ],
-    exports: [
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
