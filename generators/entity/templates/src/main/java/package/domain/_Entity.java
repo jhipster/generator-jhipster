@@ -35,7 +35,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
  */
 <% } else { -%>
 <%- formatAsClassJavadoc(javadoc) %>
-@ApiModel(description = "<%- formatAsApiModel(javadoc) %>")
+@ApiModel(description = "<%- javadoc %>")
 <% } -%>
 <% if (databaseType == 'sql') { -%>
 @Entity
@@ -59,7 +59,7 @@ public class <%= entityClass %> implements Serializable {
 <%_ for (idx in fields) {
     if (typeof fields[idx].javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(fields[idx].javadoc) %>
-    @ApiModelProperty(value = "<%- formatAsApiModelProperty(fields[idx].javadoc) %>")
+    @ApiModelProperty(value = "<%- fields[idx].javadoc %>")
     <%_ }
     var required = false;
     var fieldValidate = fields[idx].fieldValidate;
@@ -130,7 +130,7 @@ public class <%= entityClass %> implements Serializable {
         }
         if (typeof relationships[idx].javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(relationships[idx].javadoc) %>
-    @ApiModelProperty(value = "<%- formatAsApiModelProperty(relationships[idx].javadoc) %>")
+    @ApiModelProperty(value = "<%- relationships[idx].javadoc %>")
     <%_ }
         if (relationshipType == 'one-to-many') {
     _%>
