@@ -251,7 +251,7 @@ module.exports = UpgradeGenerator.extend({
             this.log('Merging changes back to ' + this.sourceBranch + '...');
             var done = this.async();
             this.gitExec(['merge', '-q', UPGRADE_BRANCH], function(code, msg, err) {
-                this.log(chalk.green('Merge done !'));
+                this.log(chalk.green('Merge done!'));
                 done();
             }.bind(this));
         }
@@ -292,7 +292,7 @@ module.exports = UpgradeGenerator.extend({
     },
 
     end: function () {
-        this.log(chalk.green.bold('\nUpgraded successfully. Please now fix conflicts if any, and commit !'));
+        this.log(chalk.green.bold('\nUpgraded successfully. Please now fix conflicts if any, and commit!'));
     }
 
 });
