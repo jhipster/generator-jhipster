@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "pegjs": "0.10.0",
-    "mocha": "3.1.0",
+    "mocha": "3.1.2",
     "chai": "3.5.0",
     "istanbul": "0.4.5",
     "mocha-clean": "1.0.0"
