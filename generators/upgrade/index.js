@@ -41,14 +41,17 @@ module.exports = UpgradeGenerator.extend({
     },
 
     _cleanUp: function() {
-        if (shelljs.rm('-rf', '!(.yo-rc.json|.git)').code === 0 ) {
-            this.log('Cleaned up directory');
-        }
+        shelljs.ls('-A').forEach( file => {
+            if(['.yo-rc.json', '.jhipster', 'node_modules', '.git'].indexOf(file) === -1) {
+                shelljs.rm('-rf', file);
+            }
+        });
+        this.log('Cleaned up directory');
     },
 
     _generate: function(version, callback) {
         this.log('Regenerating app with jhipster ' + version + '...');
-        shelljs.exec('yo jhipster --with-entities --force', {silent:false}, function (code, msg, err) {
+        shelljs.exec('yo jhipster --with-entities --force --skip-install', {silent:false}, function (code, msg, err) {
             if (code === 0) this.log(chalk.green('Successfully regenerated app with jhipster ' + version));
             else this.error('Something went wrong while generating project! '+ err);
             callback();
@@ -169,12 +172,19 @@ module.exports = UpgradeGenerator.extend({
                 }.bind(this));
             }.bind(this);
 
-            var installJhipsterLocally = function(version, callback) {
-                this.log('Installing JHipster ' + version + ' locally');
-                shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, {silent:true}, function (code, msg, err) {
-                    if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
-                    else this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
-                    callback();
+            var installJhipsterLocally = function (version, callback) {
+                shelljs.exec('npm ll -p --depth=0 ' + GENERATOR_JHIPSTER, { silent: true }, function (code, msg, err) {
+                    if (code !== 0 || msg.split('@')[1].split(':')[0] !== this.currentVersion) {
+                        this.log('Installing JHipster ' + version + ' locally');
+                        shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, { silent: true }, function (code, msg, err) {
+                            if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
+                            else this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
+                            callback();
+                        }.bind(this));
+                    } else {
+                        this.log('Using already installed JHipster ' + version);
+                        callback();
+                    }
                 }.bind(this));
             }.bind(this);
 
@@ -214,7 +224,7 @@ module.exports = UpgradeGenerator.extend({
         updateJhipster: function() {
             this.log(chalk.yellow('Updating ' + GENERATOR_JHIPSTER + '. This might take some time...'));
             var done = this.async();
-            shelljs.exec('npm install -g ' + GENERATOR_JHIPSTER, {silent:true}, function (code, msg, err) {
+            shelljs.exec('npm install ' + GENERATOR_JHIPSTER, {silent:true}, function (code, msg, err) {
                 if (code === 0) this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
                 else this.error('Something went wrong while updating generator! ' + msg + ' ' + err);
                 done();
@@ -241,14 +251,48 @@ module.exports = UpgradeGenerator.extend({
             this.log('Merging changes back to ' + this.sourceBranch + '...');
             var done = this.async();
             this.gitExec(['merge', '-q', UPGRADE_BRANCH], function(code, msg, err) {
-                this.log(chalk.green('Merge done !') + '\n\tPlease now fix conflicts if any, and commit !');
+                this.log(chalk.green('Merge done !'));
                 done();
             }.bind(this));
         }
     },
 
+    install: function () {
+        var injectDependenciesAndConstants = function () {
+            if (this.options['skip-install']) {
+                this.log(
+                    'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
+                    '\n' +
+                    '\nInject your front end dependencies into your source code:' +
+                    '\n ' + chalk.yellow.bold('gulp inject') +
+                    '\n' +
+                    '\nGenerate the Angular constants:' +
+                    '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
+                    (this.useSass ?
+                    '\n' +
+                    '\nCompile your Sass style sheets:' +
+                    '\n ' + chalk.yellow.bold('gulp sass') : '') +
+                    '\n' +
+                    '\nOr do all of the above:' +
+                    '\n ' + chalk.yellow.bold('gulp install') +
+                    '\n'
+                );
+            } else {
+                this.spawnCommandSync('gulp', ['install']);
+            }
+        };
+        if (!this.options['skip-install']) {
+            shelljs.rm('-rf', 'node_modules');
+            this.installDependencies({
+                callback: injectDependenciesAndConstants.bind(this)
+            });
+        } else {
+            injectDependenciesAndConstants.call(this);
+        }
+    },
+
     end: function () {
-        this.log(chalk.green.bold('\nUpgraded successfully.\n'));
+        this.log(chalk.green.bold('\nUpgraded successfully. Please now fix conflicts if any, and commit !'));
     }
 
 });
