@@ -197,7 +197,7 @@ function deepFind(obj, path, placeholder) {
     return current;
 }
 
-function wordwrap (text, width, seperator, keepLF) {
+function wordwrap (text, width, separator, keepLF) {
     var wrappedText = '';
     var rows = text.split('\n');
     for (var i = 0; i < rows.length; i++) {
@@ -205,7 +205,7 @@ function wordwrap (text, width, seperator, keepLF) {
         if (keepLF === true && i !== 0) {
             wrappedText = wrappedText + '\\n';
         }
-        wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;
+        wrappedText = wrappedText + separator + _.padEnd(row,width) + separator;
     }
     return wrappedText;
 }
