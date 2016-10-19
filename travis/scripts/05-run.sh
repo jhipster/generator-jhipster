@@ -64,7 +64,7 @@ if [ "$RUN_APP" == 1 ]; then
     if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
         cd "$HOME"/uaa
         java -jar target/*.war --spring.profiles.active="$PROFILE" &
-        sleep 40
+        sleep 80
     fi
 
     cd "$HOME"/app
