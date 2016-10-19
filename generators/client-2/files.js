@@ -446,7 +446,7 @@ function writeFiles() {
         },
 
         writeAllFiles: function () {
-            this.writeFilesToDisk(files)
+            this.writeFilesToDisk(files);
         }
     };
 }
