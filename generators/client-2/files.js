@@ -7,10 +7,13 @@ const constants = require('../generator-constants'),
     TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     ANGULAR_DIR = constants.ANGULAR_DIR;
 
+/**
+ * The default is to use a file path string. It implies use of the template method.
+ * For any other config an object { file:.., method:.., template:.. } can be used
+*/
 const files = {
     common: [
         {
-            type: 'template',
             templates: [
                 '_package.json',
                 '_bower.json',
@@ -33,76 +36,57 @@ const files = {
         // this css file will be overwritten by the sass generated css if sass is enabled
         // but this will avoid errors when running app without running sass task first
         {
-            type: 'template',
-            from: MAIN_SRC_DIR,
+            path: MAIN_SRC_DIR,
             templates: [
-                'content/css/_main.css'
-            ]
-        },
-        {
-            type: 'copy',
-            from: MAIN_SRC_DIR,
-            templates: [
-                'content/css/_documentation.css'
+                'content/css/_main.css',
+                { file: 'content/css/_documentation.css', method: 'copy' }
             ]
         }
     ],
     sass: [
         {
-            type: 'template',
-            condition: () => this.useSass,
-            from: MAIN_SRC_DIR,
+            condition: generator => generator.useSass,
+            path: MAIN_SRC_DIR,
             templates: [
                 'scss/_main.scss',
                 'scss/_vendor.scss'
             ]
         }
     ],
-    commonWeb: [
+    image: [
         {
-            type: 'copy',
-            from: MAIN_SRC_DIR,
+            path: MAIN_SRC_DIR,
             templates: [
-                '_favicon.ico',
-                '_robots.txt',
-                '_404.html',
+                { file: 'content/images/_hipster.png', method: 'copy' },
+                { file: 'content/images/_hipster2x.png', method: 'copy' },
+                { file: 'content/images/_logo-jhipster.png', method: 'copy' }
             ]
         }
     ],
     swagger: [
         {
-            type: 'template',
-            from: MAIN_SRC_DIR,
+            path: MAIN_SRC_DIR,
             templates: [
-                'swagger-ui/_index.html'
+                'swagger-ui/_index.html',
+                { file: 'swagger-ui/images/_throbber.gif', method: 'copy' }
             ]
-        },
+        }
+    ],
+    commonWeb: [
         {
-            type: 'copy',
-            from: MAIN_SRC_DIR,
+            path: MAIN_SRC_DIR,
             templates: [
-                'swagger-ui/images/_throbber.gif'
+                { file: '_favicon.ico', method: 'copy' },
+                { file: '_robots.txt', method: 'copy' },
+                { file: '_404.html', method: 'copy' },
+                { file: '_index.html', method: 'copyHtml' },
+                { file: '_system.config.js', method: 'copy' }
             ]
         }
     ],
     angularApp: [
         {
-            type: 'copyHtml',
-            from: MAIN_SRC_DIR,
-            templates: [
-                '_index.html'
-            ]
-        },
-        {
-            type: 'copy',
-            from: MAIN_SRC_DIR,
-            templates: [
-                '_system.config.js'
-            ]
-        },
-        {
-            type: 'template',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 '_upgrade_adapter.ts',
                 '_app.main.ts',
@@ -116,23 +100,66 @@ const files = {
                 'blocks/config/_compile.config.ts',
                 'blocks/config/_uib-pager.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
-                'blocks/config/_ui-router-defer-intercept.config.ts'
+                'blocks/config/_ui-router-defer-intercept.config.ts',
+                //interceptors
+                'blocks/interceptor/_auth-expired.interceptor.ts',
+                'blocks/interceptor/_errorhandler.interceptor.ts',
+                'blocks/interceptor/_notification.interceptor.ts'
             ]
         },
         {
-            type: 'template',
             condition: generator => generator.enableTranslation,
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'blocks/config/_translation.config.ts',
                 'blocks/config/_translation-storage.provider.ts'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
+            path: ANGULAR_DIR,
+            templates: [
+                'blocks/interceptor/_auth.interceptor.ts'
+            ]
         }
     ],
-    angularAuth: [
+    angularMain: [
         {
-            type: 'template',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
+            templates: [
+                // entities
+                'entities/_entity.module.ts',
+                { file: 'entities/_entity.state.ts', method: 'copyJs' },
+                // home module
+                'home/_index.ts',
+                'home/_home.component.ts',
+                { file: 'home/_home.state.ts', method: 'copyJs' },
+                { file: 'home/_home.html', method: 'copyHtml' },
+                // layouts
+                'layouts/_index.ts',
+                'layouts/profiles/_profile.service.ts',
+                'layouts/profiles/_profile-info.model.ts',
+                'layouts/profiles/_page-ribbon.component.ts',
+                'layouts/navbar/_navbar.component.ts',
+                { file: 'layouts/navbar/_navbar.html', method: 'copyHtml' },
+                'layouts/footer/_footer.component.ts',
+                { file: 'layouts/footer/_footer.html', method: 'copyHtml' },
+                'layouts/error/_error.component.ts',
+                { file: 'layouts/error/_error.state.ts', method: 'copyJs' },
+                { file: 'layouts/error/_error.html', method: 'copyHtml' }
+            ]
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: ANGULAR_DIR,
+            templates: [
+                'layouts/navbar/_active-menu.directive.ts'
+            ]
+        }
+    ],
+    angularAccountModule: [
+        {
+            path: ANGULAR_DIR,
             templates: [
                 'account/_index.ts',
                 'account/_account.module.ts',
@@ -140,109 +167,64 @@ const files = {
                 'account/_account.state.ts',
                 'account/activate/_activate.component.ts',
                 'account/activate/_activate.service.ts',
+                { file: 'account/activate/_activate.html', method: 'copyHtml' },
+                { file: 'account/activate/_activate.state.ts', method: 'copyJs' },
                 'account/password/_password.component.ts',
                 'account/password/_password.service.ts',
+                { file: 'account/password/_password.html', method: 'copyHtml' },
+                { file: 'account/password/_password.state.ts', method: 'copyJs' },
                 'account/password/_password-strength-bar.component.ts',
                 'account/register/_register.component.ts',
                 'account/register/_register.service.ts',
+                { file: 'account/register/_register.state.ts', method: 'copyJs' },
+                { file: 'account/register/_register.html', method: 'copyHtml' },
+                { file: 'account/password-reset/init/_password-reset-init.state.ts', method: 'copyJs' },
                 'account/password-reset/init/_password-reset-init.component.ts',
+                { file: 'account/password-reset/init/_password-reset-init.html', method: 'copyHtml' },
                 'account/password-reset/init/_password-reset-init.service.ts',
+                { file: 'account/password-reset/finish/_password-reset-finish.state.ts', method: 'copyJs' },
                 'account/password-reset/finish/_password-reset-finish.component.ts',
+                { file: 'account/password-reset/finish/_password-reset-finish.html', method: 'copyHtml' },
                 'account/password-reset/finish/_password-reset-finish.service.ts',
-                'account/settings/_settings.component.ts'
+                'account/settings/_settings.component.ts',
+                { file: 'account/settings/_settings.html', method: 'copyHtml' },
+                { file: 'account/settings/_settings.state.ts', method: 'copyJs' }
             ]
         },
         {
-            type: 'copyHtml',
-            from: ANGULAR_DIR,
-            templates: [
-                'account/activate/_activate.html',
-                'account/password/_password.html',
-                'account/register/_register.html',
-                'account/password-reset/init/_password-reset-init.html',
-                'account/password-reset/finish/_password-reset-finish.html',
-                'account/settings/_settings.html'
-
-            ]
-        },
-        {
-            type: 'copyJs',
-            from: ANGULAR_DIR,
-            templates: [
-                'account/activate/_activate.state.ts',
-                'account/password/_password.state.ts',
-                'account/register/_register.state.ts',
-                'account/password-reset/init/_password-reset-init.state.ts',
-                'account/password-reset/finish/_password-reset-finish.state.ts',
-                'account/settings/_settings.state.ts'
-            ]
-        },
-        {
-            type: 'copyJs',
             condition: generator => generator.authenticationType === 'session',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
-                'account/sessions/_sessions.state.ts'
-            ]
-        },
-        {
-            type: 'copyHtml',
-            condition: generator => generator.authenticationType === 'session',
-            from: ANGULAR_DIR,
-            templates: [
-                'account/sessions/_sessions.html'
-            ]
-        },
-        {
-            type: 'template',
-            condition: generator => generator.authenticationType === 'session',
-            from: ANGULAR_DIR,
-            templates: [
+                { file: 'account/sessions/_sessions.state.ts', method: 'copyJs' },
+                { file: 'account/sessions/_sessions.html', method: 'copyHtml' },
                 'account/sessions/_sessions.component.ts',
                 'account/sessions/_sessions.service.ts',
                 'account/sessions/_session.model.ts'
             ]
         },
         {
-            type: 'copyHtml',
             condition: generator => generator.enableSocialSignIn,
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
-                'account/social/directive/_social.html',
-                'account/social/_social-register.html'
-            ]
-        },
-        {
-            type: 'template',
-            condition: generator => generator.enableSocialSignIn,
-            from: ANGULAR_DIR,
-            templates: [
+                { file: 'account/social/directive/_social.html', method: 'copyHtml' },
+                { file: 'account/social/_social-register.html', method: 'copyHtml' },
                 'account/social/directive/_social.directive.ts',
                 'account/social/_social-register.controller.ts',
-                'account/social/_social.service.ts'
+                'account/social/_social.service.ts',
+                { file: 'account/social/_social.state.ts', method: 'copyJs' }
             ]
         },
         {
-            type: 'copyJs',
-            condition: generator => generator.enableSocialSignIn,
-            from: ANGULAR_DIR,
+            condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
+            path: ANGULAR_DIR,
             templates: [
-                'account/social/_social.state.ts'
-            ]
-        },
-        {
-            type: 'copyJs',
-            condition: generator => generator.enableSocialSignIn && this.authenticationType === 'jwt',
-            from: ANGULAR_DIR,
-            templates: [
-                'account/social/_social-auth.controller.ts'
+                { file: 'account/social/_social-auth.controller.ts', method: 'copyJs' }
             ]
         }
     ],
     angularAdminModule: [
         {
-            type: 'template',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'admin/_index.ts',
                 'admin/_admin.module.ts',
@@ -252,207 +234,108 @@ const files = {
                 'admin/audits/_audit-data.model.ts',
                 'admin/audits/_audit.model.ts',
                 'admin/audits/_audits.component.ts',
+                { file: 'admin/audits/_audits.component.html', method: 'copyHtml' },
+                { file: 'admin/audits/_audits.state.ts', method: 'copyJs' },
                 'admin/audits/_audits.service.ts',
                 'admin/configuration/_configuration.component.ts',
+                { file: 'admin/configuration/_configuration.html', method: 'copyHtml' },
+                { file: 'admin/configuration/_configuration.state.ts', method: 'copyJs' },
                 'admin/configuration/_configuration.service.ts',
                 'admin/docs/_docs.component.ts',
                 'admin/docs/_docs.html',
+                { file: 'admin/docs/_docs.state.ts', method: 'copyJs' },
                 'admin/health/_health.component.ts',
                 'admin/health/_health-modal.component.ts',
                 'admin/health/_health.service.ts',
+                { file: 'admin/health/_health.html', method: 'copyHtml' },
+                { file: 'admin/health/_health-modal.html', method: 'copyHtml' },
+                { file: 'admin/health/_health.state.ts', method: 'copyJs' },
                 'admin/logs/_logs.component.ts',
                 'admin/logs/_log.model.ts',
                 'admin/logs/_logs.service.ts',
+                { file: 'admin/logs/_logs.html', method: 'copyHtml' },
+                { file: 'admin/logs/_logs.state.ts', method: 'copyJs' },
                 'admin/metrics/_metrics.component.ts',
                 'admin/metrics/_metrics-modal.component.ts',
-                'admin/metrics/_metrics.service.ts'
-
+                'admin/metrics/_metrics.service.ts',
+                { file: 'admin/metrics/_metrics.html', method: 'copyHtml', template: true },
+                { file: 'admin/metrics/_metrics-modal.html', method: 'copyHtml', template: true },
+                { file: 'admin/metrics/_metrics.state.ts', method: 'copyJs' }
             ]
         },
         {
-            type: 'copyHtml',
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/audits/_audits.component.html',
-                'admin/configuration/_configuration.html',
-                'admin/health/_health.html',
-                'admin/health/_health-modal.html',
-                'admin/logs/_logs.html'
-            ]
-        },
-        {
-            type: 'copyHtml',
-            template: true,
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/metrics/_metrics.html',
-                'admin/metrics/_metrics-modal.html'
-
-            ]
-        },
-        {
-            type: 'copyJs',
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/audits/_audits.state.ts',
-                'admin/configuration/_configuration.state.ts',
-                'admin/docs/_docs.state.ts',
-                'admin/health/_health.state.ts',
-                'admin/logs/_logs.state.ts',
-                'admin/metrics/_metrics.state.ts'
-            ]
-        },
-        {
-            type: 'copyJs',
             condition: generator => generator.websocket === 'spring-websocket',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
-                'admin/tracker/_tracker.state.ts'
-            ]
-        },
-        {
-            type: 'copyHtml',
-            condition: generator => generator.websocket === 'spring-websocket',
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/tracker/_tracker.html'
-            ]
-        },
-        {
-            type: 'template',
-            condition: generator => generator.websocket === 'spring-websocket',
-            from: ANGULAR_DIR,
-            templates: [
+                { file: 'admin/tracker/_tracker.state.ts', method: 'copyJs' },
+                { file: 'admin/tracker/_tracker.html', method: 'copyHtml' },
                 'admin/tracker/_tracker.component.ts',
                 'shared/tracker/_tracker.service.ts'
             ]
         },
         {
-            type: 'template',
-            condition: () => !this.skipUserManagement,
-            from: ANGULAR_DIR,
+            condition: generator => !generator.skipUserManagement,
+            path: ANGULAR_DIR,
             templates: [
                 'admin/user-management/_user-management.controller.ts',
                 'admin/user-management/_user-management-detail.controller.ts',
                 'admin/user-management/_user-management-dialog.controller.ts',
                 'admin/user-management/_user-management-delete-dialog.controller.ts',
                 'admin/user-management/_user.service.ts',
+                { file: 'admin/user-management/_user-management.state.ts', method: 'copyJs' },
+                { file: 'admin/user-management/user-management.html', method: 'copyHtml' },
+                { file: 'admin/user-management/_user-management-detail.html', method: 'copyHtml' },
+                { file: 'admin/user-management/_user-management-dialog.html', method: 'copyHtml' },
+                { file: 'admin/user-management/_user-management-delete-dialog.html', method: 'copyHtml' }
             ]
         },
         {
-            type: 'copyJs',
-            condition: () => !this.skipUserManagement,
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/user-management/_user-management.state.ts'
-            ]
-        },
-        {
-            type: 'copyHtml',
-            condition: () => !this.skipUserManagement,
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/user-management/user-management.html',
-                'admin/user-management/_user-management-detail.html',
-                'admin/user-management/_user-management-dialog.html',
-                'admin/user-management/_user-management-delete-dialog.html'
-            ]
-        },
-        {
-            type: 'template',
             condition: generator => generator.applicationType === 'gateway',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'admin/gateway/_gateway.component.ts',
                 'admin/gateway/_gateway-routes.service.ts',
-                'admin/gateway/_gateway-route.model.ts'
-            ]
-        },
-        {
-            type: 'copyJs',
-            condition: generator => generator.applicationType === 'gateway',
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/gateway/_gateway.state.ts'
-            ]
-        },
-        {
-            type: 'copyHtml',
-            condition: generator => generator.applicationType === 'gateway',
-            from: ANGULAR_DIR,
-            templates: [
-                'admin/gateway/_gateway.html'
-            ]
-        }
-    ],
-    blockInterceptors: [
-        {
-            type: 'template',
-            from: ANGULAR_DIR,
-            templates: [
-                'blocks/interceptor/_auth-expired.interceptor.ts',
-                'blocks/interceptor/_errorhandler.interceptor.ts',
-                'blocks/interceptor/_notification.interceptor.ts'
-            ]
-        },
-        {
-            type: 'template',
-            condition: generator => generator.authenticationType === 'oauth2' || this.authenticationType === 'jwt' || this.authenticationType === 'uaa',
-            from: ANGULAR_DIR,
-            templates: [
-                'blocks/interceptor/_auth.interceptor.ts'
+                'admin/gateway/_gateway-route.model.ts',
+                { file: 'admin/gateway/_gateway.state.ts', method: 'copyJs' },
+                { file: 'admin/gateway/_gateway.html', method: 'copyHtml' }
             ]
         }
     ],
     angularShared: [
         {
-            type: 'template',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'shared/_index.ts',
                 'shared/_shared.ng2module.ts',
                 'shared/_shared-libs.ng2module.ts',
+                'shared/_shared-common.ng2module.ts',
                 'shared/_XSRF-strategy.provider.ts',
                 'shared/constants/_pagination.constants.ts',
-
+                //models
                 'shared/model/_account.model.ts',
-
+                //pipes
                 'shared/pipe/_keys.pipe.ts',
                 'shared/pipe/_filter.pipe.ts',
                 'shared/pipe/_order-by.pipe.ts',
                 'shared/pipe/_capitalize.pipe.ts',
                 'shared/pipe/_truncate-characters.pipe.ts',
                 'shared/pipe/_truncate-words.pipe.ts',
-
+                //directives
                 'shared/directive/_sort.directive.ts',
                 'shared/directive/_sort-by.directive.ts',
                 'shared/directive/_show-validation.directive.ts',
                 'shared/directive/_maxbytes.directive.ts',
                 'shared/directive/_minbytes.directive.ts',
                 'shared/directive/_number-of-bytes.ts',
-
+                //services
                 'shared/service/_date-util.service.ts',
                 'shared/service/_data-util.service.ts',
                 'shared/service/_pagination-util.service.ts',
                 'shared/service/_parse-links.service.ts',
-
-                'shared/component/_jhi-item-count.component.ts'
-            ]
-        }
-    ],
-    angularSharedComponent: [
-        {
-            type: 'copyHtml',
-            from: ANGULAR_DIR,
-            templates: [
-                'shared/login/_login.html'
-            ]
-        },
-        {
-            type: 'template',
-            from: ANGULAR_DIR,
-            templates: [
-                'shared/_shared-common.ng2module.ts',
+                //components
+                'shared/component/_jhi-item-count.component.ts',
+                //login
+                { file: 'shared/login/_login.html', method: 'copyHtml' },
                 'shared/login/_login.service.ts',
                 'shared/login/_login-modal.service.ts',
                 'shared/login/_login.component.ts',
@@ -464,9 +347,8 @@ const files = {
             ]
         },
         {
-            type: 'template',
             condition: generator => generator.enableTranslation,
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'shared/language/_jhi-translate.directive.ts',
                 'shared/language/_translate-partial-loader.provider.ts',
@@ -479,8 +361,7 @@ const files = {
     ],
     angularAuthService: [
         {
-            type: 'template',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'shared/auth/_auth.service.ts',
                 'shared/auth/_csrf.service.ts',
@@ -492,98 +373,31 @@ const files = {
             ]
         },
         {
-            type: 'template',
             condition: generator => generator.authenticationType === 'oauth2',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'shared/auth/_auth-oauth2.service.ts',
                 'shared/auth/_base64.service.ts'
             ]
         },
         {
-            type: 'template',
-            condition: generator => generator.authenticationType === 'jwt' || this.authenticationType === 'uaa',
-            from: ANGULAR_DIR,
+            condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
+            path: ANGULAR_DIR,
             templates: [
                 'shared/auth/_auth-jwt.service.ts'
             ]
         },
         {
-            type: 'template',
             condition: generator => generator.authenticationType === 'session',
-            from: ANGULAR_DIR,
+            path: ANGULAR_DIR,
             templates: [
                 'shared/auth/_auth-session.service.ts'
             ]
         }
     ],
-    angularMain: [
-        {
-            type: 'template',
-            from: ANGULAR_DIR,
-            templates: [
-                // entities
-                'entities/_entity.module.ts',
-                // home module
-                'home/_index.ts',
-                'home/_home.component.ts',
-                // layouts
-                'layouts/_index.ts',
-                'layouts/navbar/_navbar.component.ts',
-                'layouts/footer/_footer.component.ts',
-                'layouts/error/_error.component.ts',
-
-                'layouts/profiles/_profile.service.ts',
-                'layouts/profiles/_profile-info.model.ts',
-                'layouts/profiles/_page-ribbon.component.ts'
-            ]
-        },
-        {
-            type: 'template',
-            condition: generator => generator.enableTranslation,
-            from: ANGULAR_DIR,
-            templates: [
-                'layouts/navbar/_active-menu.directive.ts'
-            ]
-        },
-        {
-            type: 'copyJs',
-            from: ANGULAR_DIR,
-            templates: [
-                // entities
-                'entities/_entity.state.ts',
-                // home module
-                'home/_home.state.ts',
-                'layouts/error/_error.state.ts'
-            ]
-        },
-        {
-            type: 'copyHtml',
-            from: ANGULAR_DIR,
-            templates: [
-                // home module
-                'home/_home.html',
-                'layouts/navbar/_navbar.html',
-                'layouts/footer/_footer.html',
-                'layouts/error/_error.html'
-            ]
-        }
-    ],
-    image: [
-        {
-            type: 'copy',
-            from: MAIN_SRC_DIR,
-            templates: [
-                'content/images/_hipster.png',
-                'content/images/_hipster2x.png',
-                'content/images/_logo-jhipster.png'
-            ]
-        }
-    ],
     clientTestFw: [
         {
-            type: 'template',
-            from: TEST_SRC_DIR,
+            path: TEST_SRC_DIR,
             templates: [
                 '_karma.conf.js',
                 'spec/helpers/_module.js',
@@ -601,17 +415,15 @@ const files = {
             ]
         },
         {
-            type: 'template',
             condition: generator => generator.authenticationType === 'session',
-            from: TEST_SRC_DIR,
+            path: TEST_SRC_DIR,
             templates: [
                 'spec/app/account/sessions/_sessions.controller.spec.js'
             ]
         },
         {
-            type: 'template',
             condition: generator => generator.testFrameworks.indexOf('protractor') !== -1,
-            from: TEST_SRC_DIR,
+            path: TEST_SRC_DIR,
             templates: [
                 'e2e/account/_account.js',
                 'e2e/admin/_administration.js',
@@ -633,19 +445,8 @@ function writeFiles() {
             mkdirp(MAIN_SRC_DIR);
         },
 
-        writeFiles: function () {
-            // using the fastest method for iterations
-            for (let i = 0, types = Object.keys(files); i < types.length; i++) {
-                for (let j = 0, fileTypes = files[types[i]]; j < fileTypes.length; j++) {
-                    let template = fileTypes[j];
-                    if (!template.condition || template.condition(this)) {
-                        let path = template.from ? template.from : '';
-                        template.templates.map(templatePath => {
-                            this[template.type](path + templatePath, path + templatePath.replace(/_/, ''), this, {}, template.template);
-                        });
-                    }
-                }
-            }
+        writeAllFiles: function () {
+            this.writeFilesToDisk(files)
         }
     };
 }
