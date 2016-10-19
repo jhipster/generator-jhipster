@@ -151,21 +151,7 @@ const expectedFiles = {
         '.editorconfig'
     ],
 
-    client: [
-        'bower.json',
-        'package.json',
-        '.bowerrc',
-        '.eslintrc.json',
-        '.eslintignore',
-        'gulpfile.js',
-        'gulp/build.js',
-        'gulp/config.js',
-        'gulp/serve.js',
-        'gulp/utils.js',
-        'gulp/handle-errors.js',
-        CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
-        CLIENT_MAIN_SRC_DIR + 'favicon.ico',
-        CLIENT_MAIN_SRC_DIR + 'robots.txt',
+    i18nJson: [
         CLIENT_MAIN_SRC_DIR + 'i18n/en/activate.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/audits.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/configuration.json',
@@ -199,7 +185,24 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/sessions.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/settings.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/reset.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json',
+        CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json'
+    ],
+
+    client: [
+        'bower.json',
+        'package.json',
+        '.bowerrc',
+        '.eslintrc.json',
+        '.eslintignore',
+        'gulpfile.js',
+        'gulp/build.js',
+        'gulp/config.js',
+        'gulp/serve.js',
+        'gulp/utils.js',
+        'gulp/handle-errors.js',
+        CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
+        CLIENT_MAIN_SRC_DIR + 'favicon.ico',
+        CLIENT_MAIN_SRC_DIR + 'robots.txt',
         CLIENT_MAIN_SRC_DIR + 'app/app.module.js',
         CLIENT_MAIN_SRC_DIR + 'app/app.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/app.constants.js',
@@ -442,6 +445,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
         });
@@ -480,6 +484,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
         });
@@ -515,6 +520,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
             assert.file(['gradle/yeoman.gradle']);
@@ -913,6 +919,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
+            assert.noFile(expectedFiles.i18nJson);
             assert.noFile(['gulpfile.js']);
         });
     });
@@ -946,6 +953,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.noFile(expectedFiles.client);
+            assert.noFile(expectedFiles.i18nJson);
             assert.noFile(['gulpfile.js']);
             assert.noFile(['gradle/yeoman.gradle']);
         });
@@ -1170,6 +1178,7 @@ describe('JHipster server generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
+            assert.noFile(expectedFiles.i18nJson);
             assert.noFile(['gulpfile.js']);
         });
     });
@@ -1194,6 +1203,7 @@ describe('JHipster client generator', function () {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(['gulpfile.js']);
         });
     });
@@ -1217,6 +1227,7 @@ describe('JHipster client-2 generator', function () {
         it('creates expected files for default configuration for client-2 generator', function () {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
+            assert.file(expectedFiles.i18nJson);
             assert.file(getFilesForOptions(require('../generators/client-2/files').files, {
                 useSass: true,
                 enableTranslation: true,
