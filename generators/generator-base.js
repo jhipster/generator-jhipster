@@ -1471,8 +1471,9 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
  * @param {object} files - files to write
  * @param {object} generator - the generator instance to use
  */
-Generator.prototype.writeFilesToDisk = function (files, generator) {
-    var _this = generator || this;
+Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles) {
+    let _this = generator || this;
+    let filesOut = [];
     // using the fastest method for iterations
     for (let i = 0, blocks = Object.keys(files); i < blocks.length; i++) {
         for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {
@@ -1490,11 +1491,16 @@ Generator.prototype.writeFilesToDisk = function (files, generator) {
                         method = templateObj.method ? templateObj.method : method;
                         useTemplate = templateObj.template ? templateObj.template : useTemplate;
                     }
-                    _this[method](path + templatePath, path + templatePath.replace(/_/, ''), _this, {}, useTemplate);
+                    if (returnFiles) {
+                        filesOut.push(path + templatePath.replace(/_/, ''));
+                    } else {
+                        _this[method](path + templatePath, path + templatePath.replace(/_/, ''), _this, {}, useTemplate);
+                    }
                 });
             }
         }
     }
+    return filesOut;
 };
 
 /*========================================================================*/
