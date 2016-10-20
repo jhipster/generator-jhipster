@@ -1484,17 +1484,20 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles) 
                     let templatePath;
                     let method = 'template';
                     let useTemplate = false;
+                    let interpolateRegex = {};
                     if (typeof templateObj === 'string') {
-                        templatePath = templateObj;
+                        templatePath = path + templateObj;
                     } else {
-                        templatePath = templateObj.file;
+                        templatePath = path + templateObj.file;
                         method = templateObj.method ? templateObj.method : method;
                         useTemplate = templateObj.template ? templateObj.template : useTemplate;
+                        interpolateRegex = templateObj.interpolate ? templateObj.interpolate : interpolateRegex;
                     }
+                    let templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
                     if (returnFiles) {
-                        filesOut.push(path + templatePath.replace(/_/, ''));
+                        filesOut.push(templatePathTo);
                     } else {
-                        _this[method](path + templatePath, path + templatePath.replace(/_/, ''), _this, {}, useTemplate);
+                        _this[method](templatePath, templatePathTo, _this, interpolateRegex, useTemplate);
                     }
                 });
             }
