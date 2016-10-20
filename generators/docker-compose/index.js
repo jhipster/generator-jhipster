@@ -321,7 +321,7 @@ module.exports = DockerComposeGenerator.extend({
             }
             if(this.serviceDiscoveryType === 'consul'){
                 this.template('_consul.yml', 'consul.yml');
-                this.copy('consul-conf/acl_config.json', 'consul-conf/acl_config.json');
+                this.copy('consul-conf/_acl_config.json', 'consul-conf/acl_config.json');
             }
             if(this.serviceDiscoveryType){
                 this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
@@ -337,9 +337,9 @@ module.exports = DockerComposeGenerator.extend({
         writeElkFiles: function() {
             if(!this.useElk) return;
 
-            this.copy('jhipster-console.yml', 'jhipster-console.yml');
-            this.copy('log-conf/logstash.conf', 'log-conf/logstash.conf');
-            this.copy('log-data/gitignore', 'log-data/.gitignore');
+            this.copy('_jhipster-console.yml', 'jhipster-console.yml');
+            this.copy('log-conf/_logstash.conf', 'log-conf/logstash.conf');
+            this.copy('log-data/_.gitignore', 'log-data/.gitignore');
         }
     },
     end: function() {
