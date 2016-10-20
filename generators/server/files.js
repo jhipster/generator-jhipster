@@ -1,8 +1,7 @@
 'use strict';
 
 const mkdirp = require('mkdirp'),
-    cleanup = require('../cleanup'),
-    _ = require('lodash');
+    cleanup = require('../cleanup');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),

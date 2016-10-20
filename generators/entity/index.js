@@ -12,7 +12,6 @@ const util = require('util'),
 
 /* constants used througout */
 const constants = require('../generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
 
@@ -98,7 +97,7 @@ module.exports = EntityGenerator.extend({
     initializing: {
         getConfig: function (args) {
             this.useConfigurationFile = false;
-            this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
+            this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
             this.applicationType = this.config.get('applicationType');

@@ -4,10 +4,7 @@ var util = require('util'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base');
 
-const constants = require('../generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const constants = require('../generator-constants');
 
 var ModulesGenerator = generators.Base.extend({});
 
@@ -61,9 +58,9 @@ module.exports = ModulesGenerator.extend({
 
         jhipsterVar.angularAppName = this.getAngularAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
-        jhipsterVar.javaDir = SERVER_MAIN_SRC_DIR + packageFolder + '/';
-        jhipsterVar.resourceDir = SERVER_MAIN_RES_DIR;
-        jhipsterVar.webappDir = CLIENT_MAIN_SRC_DIR;
+        jhipsterVar.javaDir = constants.SERVER_MAIN_SRC_DIR + packageFolder + '/';
+        jhipsterVar.resourceDir = constants.SERVER_MAIN_RES_DIR;
+        jhipsterVar.webappDir = constants.CLIENT_MAIN_SRC_DIR;
         jhipsterVar.CONSTANTS = constants;
 
         // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules

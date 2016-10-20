@@ -15,17 +15,7 @@ var DockerComposeGenerator = generators.Base.extend({});
 
 util.inherits(DockerComposeGenerator, scriptBase);
 
-const constants = require('../generator-constants'),
-    DOCKER_KAFKA = constants.DOCKER_KAFKA,
-    DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER,
-    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
-    DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
-    DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
-    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH,
-    DOCKER_CONSUL = constants.DOCKER_CONSUL,
-    DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-
-
+const constants = require('../generator-constants');
 
 module.exports = DockerComposeGenerator.extend({
     constructor: function () {
@@ -40,14 +30,14 @@ module.exports = DockerComposeGenerator.extend({
 
         setupServerVars: function () {
             // Make constants available in templates
-            this.DOCKER_KAFKA = DOCKER_KAFKA;
-            this.DOCKER_ZOOKEEPER = DOCKER_ZOOKEEPER;
-            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
-            this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
-            this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
-            this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
-            this.DOCKER_CONSUL = DOCKER_CONSUL;
-            this.DOCKER_CONSUL_CONFIG_LOADER = DOCKER_CONSUL_CONFIG_LOADER;
+            this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
+            this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
+            this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+            this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
         },
 
         checkDocker: function() {

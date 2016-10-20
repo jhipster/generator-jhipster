@@ -7,9 +7,7 @@ var util = require('util'),
     _ = require('lodash'),
     scriptBase = require('../generator-base');
 
-const constants = require('../generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const constants = require('../generator-constants');
 
 var HerokuGenerator = generators.Base.extend({});
 
@@ -21,7 +19,7 @@ module.exports = HerokuGenerator.extend({
     },
     initializing: function () {
         this.log(chalk.bold('Heroku configuration is starting'));
-        this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
+        this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
         this.baseName = this.config.get('baseName');
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
@@ -275,8 +273,8 @@ module.exports = HerokuGenerator.extend({
             var done = this.async();
             this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-            this.template('_bootstrap-heroku.yml', SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
-            this.template('_application-heroku.yml', SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
+            this.template('_bootstrap-heroku.yml', constants.SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
+            this.template('_application-heroku.yml', constants.SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
             this.template('_Procfile', 'Procfile');
 
             this.conflicter.resolve(function (err) {

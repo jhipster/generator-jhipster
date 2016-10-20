@@ -1,7 +1,6 @@
 'use strict';
 
-const mkdirp = require('mkdirp'),
-    _ = require('lodash');
+const _ = require('lodash');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
