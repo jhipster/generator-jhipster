@@ -176,4 +176,49 @@ describe('::parse', function () {
     });
   });
 
+  describe('when parsing entities with relationships to User', function () {
+    describe('when skipUserManagement flag is not set', function () {
+      describe('when there is no User.json entity', function () {
+        it('parses relationships to the JHipster managed User entity', function () {
+          var entities = {
+            Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json')
+          };
+          var content = Parser.parseEntities(entities);
+          expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{user}_User');
+        });
+      });
+      describe('when there is a User.json entity', function () {
+        it('throws an error ', function () {
+          try {
+            var entities = {
+              Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json'),
+              User: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Region.json')
+            };
+            Parser.parseEntities(entities);
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('IllegalNameException')
+          }
+        });
+      });
+    });
+    describe('when skipUserManagement flag is set', function () {
+      it('parses the User.json entity if skipUserManagement flag is set', function () {
+        var entities = {
+          Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json'),
+          User: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Region.json')
+        };
+        entities.User.relationships[0].otherEntityRelationshipName = 'user';
+        var yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
+        yoRcJson['generator-jhipster'].skipUserManagement = true;
+        var content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
+        Parser.parseEntities(entities, content);
+        expect(content.entities.Country).not.to.be.undefined;
+        expect(content.entities.User).not.to.be.undefined;
+        expect(content.entities.User.fields.regionId).not.to.be.undefined;
+        expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{user}_User{country}');
+      });
+    });
+  });
+
 });
