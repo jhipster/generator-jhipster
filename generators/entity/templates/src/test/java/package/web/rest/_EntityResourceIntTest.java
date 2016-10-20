@@ -260,7 +260,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%= otherEntityNameCapitalized %> <%= relationshipFieldName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
         em.persist(<%= relationshipFieldName %>);
         em.flush();
-            <%_ if (relationshipType == 'many-to-many') { _%>
+            <%_ if (relationshipType == 'many-to-many' || relationshipType == 'one-to-many') { _%>
         <%= entityInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= relationshipFieldName %>);
             <%_ } else { _%>
         <%= entityInstance %>.set<%= relationshipNameCapitalized %>(<%= relationshipFieldName %>);
