@@ -13,8 +13,13 @@ const constants = require('../generator-constants'),
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 module.exports = {
-    writeFiles
+    writeFiles,
+    removeFiles
 };
+
+function removeFiles(){
+
+}
 
 function writeFiles() {
     return {

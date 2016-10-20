@@ -8,6 +8,7 @@ const util = require('util'),
     prompts = require('./prompts'),
     jhiCore = require('jhipster-core'),
     writeFiles = require('./files').writeFiles,
+    removeFiles = require('./files').removeFiles,
     scriptBase = require('../generator-base');
 
 /* constants used througout */
@@ -69,6 +70,14 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
+
+        // This method adds support for a `--[no-]regenerate` flag
+        this.option('remove', {
+            desc: 'Remove the entity',
+            type: Boolean,
+            defaults: false
+        });
+
         // remove extention if feeding json files
         if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');
@@ -80,6 +89,8 @@ module.exports = EntityGenerator.extend({
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
+        this.remove = this.options['remove'];
+
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
@@ -597,7 +608,12 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    writing : writeFiles(),
+    writing : function() {
+        if(this.remove)
+            removeFiles();
+        else
+            writeFiles();
+    },
 
     install: function () {
         var injectJsFilesToIndex = function () {
