@@ -8,9 +8,7 @@ var util = require('util'),
     prompts = require('./prompts'),
     scriptBase = require('../generator-base');
 
-const constants = require('../generator-constants'),
-    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const constants = require('../generator-constants');
 
 var exec = childProcess.exec;
 
@@ -26,7 +24,7 @@ module.exports = CloudFoundryGenerator.extend({
     initializing: {
         getConfig: function () {
             this.log(chalk.bold('CloudFoundry configuration is starting'));
-            this.env.options.appPath = this.config.get('appPath') || MAIN_SRC_DIR;
+            this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
             this.buildTool = this.config.get('buildTool');
             this.packageName = this.config.get('packageName');
@@ -51,7 +49,7 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.abort) return;
             this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
             this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
-            this.template('_application-cloudfoundry.yml', MAIN_RES_DIR + 'config/application-cloudfoundry.yml');
+            this.template('_application-cloudfoundry.yml', constants.SERVER_MAIN_RES_DIR + 'config/application-cloudfoundry.yml');
         },
 
         checkInstallation: function () {

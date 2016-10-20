@@ -14,10 +14,7 @@ util.inherits(JhipsterClientGenerator, scriptBase);
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
-    QUESTIONS = constants.CLIENT_QUESTIONS,
-    DIST_DIR = constants.CLIENT_DIST_DIR,
-    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+    QUESTIONS = constants.CLIENT_QUESTIONS;
 
 module.exports = JhipsterClientGenerator.extend({
     constructor: function () {
@@ -124,8 +121,8 @@ module.exports = JhipsterClientGenerator.extend({
 
         setupClientVars: function () {
             // Make constants available in templates
-            this.MAIN_SRC_DIR = MAIN_SRC_DIR;
-            this.TEST_SRC_DIR = TEST_SRC_DIR;
+            this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+            this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
             this.serverPort = this.config.get('serverPort') || this.configOptions.serverPort || 8080;
             this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
@@ -262,7 +259,7 @@ module.exports = JhipsterClientGenerator.extend({
             } else {
                 this.BUILD_DIR = 'build/';
             }
-            this.DIST_DIR = this.BUILD_DIR + DIST_DIR;
+            this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
         },
 
         composeLanguages: function () {
