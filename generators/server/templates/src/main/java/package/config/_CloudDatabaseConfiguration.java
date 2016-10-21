@@ -4,11 +4,10 @@ package <%=packageName%>.config;
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
 
 import com.github.mongobee.Mongobee;
-<%_ } _%>
 <%_ if (authenticationType == 'oauth2') { _%>
 
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
-<%_ } _%>
+<%_ } } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (hibernateCache == 'hazelcast') { %>
