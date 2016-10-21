@@ -14,11 +14,12 @@ export class UserMgmtDeleteDialogComponent implements OnInit {
     user: User;
     modalRef: NgbModalRef;
 
-    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams, @Inject('entity') private entity) {
-        this.user = entity;
+    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams) {
+
     }
 
     ngOnInit() {
+        this.userService.find(this.$stateParams.login).subscribe(response => this.user = response.json());
     }
 
     clear () {

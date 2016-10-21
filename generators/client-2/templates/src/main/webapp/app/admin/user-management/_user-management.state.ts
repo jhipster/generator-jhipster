@@ -25,29 +25,34 @@ export const userMgmtState = {
             squash: true
         }
     },
-    resolve: {
-        // pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
-        //     return {
-        //         page: PaginationUtil.parsePage($stateParams.page),
-        //         sort: $stateParams.sort,
-        //         predicate: PaginationUtil.parsePredicate($stateParams.sort),
-        //         ascending: PaginationUtil.parseAscending($stateParams.sort)
-        //     };
-        // }]<%_ if (enableTranslation){ _%>,
-            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('user-management');
-            return $translate.refresh();
-        }]
+    resolve: [
+        // {
+        //     token: 'pagingParams',
+        //     deps: ['PaginationUtil', 'StateParams'],
+        //     resolveFn: (paginationUtil, stateParams) => {
+        //         return {
+        //             page: paginationUtil.parsePage(stateParams['page']),
+        //             sort: stateParams['sort'],
+        //             predicate: paginationUtil.parsePredicate(stateParams['sort']),
+        //             ascending: paginationUtil.parseAscending(stateParams['sort'])
+        //         };
+        //     }
+        // }<%_ if (enableTranslation){ _%>,
+        {
+            token: 'translatePartialLoader',
+            deps: ['$translatePartialLoader'],
+            resolveFn: (translatePartialLoader) => translatePartialLoader.addPart('user-management')
+        }
         <%_ } _%>
 
-    }<%_ } else { _%>
-
-        resolve: {
-            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                $translatePartialLoader.addPart('user-management');
-                return $translate.refresh();
-            }]
+    ]<%_ } else { _%>
+    resolve: [
+        {
+            token: 'translatePartialLoader',
+            deps: ['$translatePartialLoader'],
+            resolveFn: (translatePartialLoader) => translatePartialLoader.addPart('user-management')
         }
+    ]
     <%_ } _%>
 
 };

@@ -5,10 +5,12 @@ import { <%=angular2AppName%>SharedModule, ParseLinks } from '../shared';
 
 import {
     AuditsComponent,
+    <%_ if (!skipUserManagement) { _%>
     UserMgmtComponent,
     UserMgmtDetailComponent,
     UserMgmtDialogComponent,
     UserMgmtDeleteDialogComponent,
+    <%_ } _%>
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
@@ -37,12 +39,14 @@ import {
     docsState,
     healthState,
     logsState,
-    metricsState,
+    <%_ if (!skipUserManagement) { _%>
     userMgmtState,
     userMgmtDetailState,
     userMgmtNewState,
     userMgmtEditState,
-    userMgmtDeleteState
+    userMgmtDeleteState,
+    <%_ } _%>
+    metricsState
 } from './';
 
 let ADMIN_STATES = [
@@ -58,12 +62,14 @@ let ADMIN_STATES = [
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerState,
     <%_ } _%>
-    metricsState,
+    <%_ if (!skipUserManagement) { _%>
     userMgmtState,
     userMgmtDetailState,
     userMgmtNewState,
     userMgmtEditState,
-    userMgmtDeleteState
+    userMgmtDeleteState,
+    <%_ } _%>
+    metricsState
 ];
 
 @NgModule({
@@ -73,10 +79,12 @@ let ADMIN_STATES = [
     ],
     declarations: [
         AuditsComponent,
+        <%_ if (!skipUserManagement) { _%>
         UserMgmtComponent,
         UserMgmtDetailComponent,
         UserMgmtDialogComponent,
         UserMgmtDeleteDialogComponent,
+        <%_ } _%>
         LogsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,

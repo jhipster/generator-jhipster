@@ -5,10 +5,12 @@ import { upgradeAdapter } from '../upgrade_adapter';
 
 import {
     AuditsComponent,
+    <%_ if (!skipUserManagement) { _%>
     UserMgmtComponent,
     UserMgmtDetailComponent,
     UserMgmtDialogComponent,
     UserMgmtDeleteDialogComponent,
+    <%_ } _%>
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
@@ -31,10 +33,12 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
+    <%_ if (!skipUserManagement) { _%>
     .directive('userMgmt', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtComponent))
     .directive('userMgmtDetail', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtDetailComponent))
     .directive('userMgmtDialog', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtDialogComponent))
     .directive('userMgmtDeleteDialog', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtDeleteDialogComponent))
+    <%_ } _%>
     .directive('<%=jhiPrefix%>Metrics', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent))
     .directive('<%=jhiPrefix%>MetricsModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent))
     .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))

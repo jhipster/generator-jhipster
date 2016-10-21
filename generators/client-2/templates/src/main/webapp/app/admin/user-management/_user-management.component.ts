@@ -16,6 +16,7 @@ export class UserMgmtComponent implements OnInit {
     users: User[];
     error: any;
     success: any;
+    <%_ if (databaseType !== 'cassandra') { _%>
     links: any;
     totalItems: any;
     queryCount: any;
@@ -23,11 +24,14 @@ export class UserMgmtComponent implements OnInit {
     page: any;
     predicate: any;
     reverse: any;
+    <%_ } _%>
 
     constructor(private userService: UserService,
                 private parseLinks: ParseLinks,
                 private alertService: AlertService,
+                <%_ if (databaseType !== 'cassandra') { _%>
                 private principal: Principal,
+                <%_ } _%>
                 private $state: StateService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -59,24 +63,34 @@ export class UserMgmtComponent implements OnInit {
             });
     }
     loadAll () {
-        this.userService.query({page: this.page -1, size: this.itemsPerPage, sort: this.sort()}).subscribe((res: Response) => this.onSuccess(res.json(), res.headers), (res: Response) => this.onError(res.json()));
+        this.userService.query({
+            page: this.page -1,
+            size: this.itemsPerPage,
+            sort: this.sort()
+        }).subscribe(
+            (res: Response) => this.onSuccess(res.json(), res.headers),
+            (res: Response) => this.onError(res.json())
+        );
     }
-    onSuccess (data, headers) {
+    private onSuccess (data, headers) {
         //hide anonymous user from user management: it's a required user for Spring Security
         for (var i in data) {
             if (data[i]['login'] === 'anonymoususer') {
                 data.splice(i, 1);
             }
         }
+        <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
+        <%_ } _%>
         this.users = data;
     }
-    onError (error) {
+    private onError (error) {
         this.alertService.error(error.error, error.message, null);
     }
+    <%_ if (databaseType !== 'cassandra') { _%>
     sort () {
         var result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
@@ -94,4 +108,5 @@ export class UserMgmtComponent implements OnInit {
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         });
     }
+    <%_ } _%>
 }

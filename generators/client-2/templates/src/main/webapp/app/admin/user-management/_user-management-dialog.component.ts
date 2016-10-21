@@ -20,12 +20,12 @@ export class UserMgmtDialogComponent implements OnInit {
     authorities: any[];
     isSaving: Boolean;
 
-    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams, @Inject('entity') private entity<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
+    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams<%_ if (enableTranslation){ _%>, @Inject('$translate') private $translate,
     private languageService: <%=jhiPrefixCapitalized%>LanguageService <%_ } _%>) {
-        this.user = entity;
     }
 
     ngOnInit() {
+        this.userService.find(this.$stateParams.login).subscribe(response => this.user = response.json());
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         <%_ if (enableTranslation){ _%>
@@ -48,12 +48,12 @@ export class UserMgmtDialogComponent implements OnInit {
             this.userService.create(this.user).subscribe((response) => this.onSaveSuccess, () => this.onSaveError);
         }
     }
-    onSaveSuccess (result) {
+    private onSaveSuccess (result) {
         this.isSaving = false;
         this.modalRef.dismiss(result);
     }
 
-    onSaveError () {
+    private onSaveError () {
         this.isSaving = false;
     }
 
