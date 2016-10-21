@@ -3,9 +3,6 @@ package <%=packageName%>.config;
 <%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.*;
 <%_ } _%>
-<%_ if (authenticationType == 'session') { _%>
-import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;
-<%_ } _%>
 <%_ if (authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.jwt.*;
 <%_ } _%>
@@ -32,7 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 <%_ if (authenticationType == 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 <%_ } _%>
 
 import javax.inject.Inject;
@@ -109,12 +106,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .maximumSessions(32) // maximum number of concurrent sessions for one user
             .sessionRegistry(sessionRegistry)
             .and().and()<% } %><% if (authenticationType == 'session') { %>
-            .csrf()<% if (websocket == 'spring-websocket') { %>
+            .csrf()
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())<% if (websocket == 'spring-websocket') { %>
             .ignoringAntMatchers("/websocket/**")<% } %>
-        .and()
-            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
-            .exceptionHandling()<% if (authenticationType == 'session') { %>
-            .accessDeniedHandler(new CustomAccessDeniedHandler())<% } %>
+        .and()<% } %>
+            .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
         .and()
             .rememberMe()
@@ -132,8 +128,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
         .and()
             .logout()
             .logoutUrl("/api/logout")
-            .logoutSuccessHandler(ajaxLogoutSuccessHandler)
-            .deleteCookies("JSESSIONID", "CSRF-TOKEN"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
+            .logoutSuccessHandler(ajaxLogoutSuccessHandler)<% if (clusteredHttpSession == 'hazelcast') { %>
+            .deleteCookies("hazelcast.sessionId")<% } %>
             .permitAll()<% } %>
         .and()<% if (authenticationType == 'jwt') { %>
             .csrf()

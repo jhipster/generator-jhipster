@@ -32,7 +32,7 @@
 
         function getCSRF () {
             /* globals document */
-            var name = 'CSRF-TOKEN=';
+            var name = 'XSRF-TOKEN=';
             var ca = $document[0].cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];

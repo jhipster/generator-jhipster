@@ -108,6 +108,11 @@ security:
     basic:
         enabled: false
 
+server:
+    session:
+        cookie:
+            http-only: true
+
 # ===================================================================
 # JHipster specific properties
 # ===================================================================

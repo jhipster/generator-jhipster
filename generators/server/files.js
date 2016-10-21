@@ -254,9 +254,7 @@ function writeFiles() {
             }
 
             if (this.authenticationType === 'session') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomAccessDeniedHandler.java', javaDir + 'security/CustomAccessDeniedHandler.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
-                this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
             }
 
             if (this.enableSocialSignIn) {
