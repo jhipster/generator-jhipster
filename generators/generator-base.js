@@ -48,7 +48,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             splicable: [`<li ui-sref-active="active">
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
                             </a>
                         </li>`
             ]
