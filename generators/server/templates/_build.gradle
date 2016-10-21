@@ -245,9 +245,7 @@ dependencies {
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-feign"
     <%_ } _%>
-    compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector"
-    compile "org.springframework.cloud:spring-cloud-spring-service-connector"
-    compile "org.springframework.cloud:spring-cloud-localconfig-connector"
+    compile "org.springframework.boot:spring-boot-starter-cloud-connectors"
     compile ("org.springframework:spring-context-support") {
         exclude(module: 'quartz')
     }

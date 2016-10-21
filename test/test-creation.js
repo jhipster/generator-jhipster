@@ -405,7 +405,6 @@ const expectedFiles = {
 
     mongodb: [
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/dbmigrations/InitialSetupMigration.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/CloudMongoDbConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateConverters.java',
         DOCKER_DIR + 'mongodb.yml',
         DOCKER_DIR + 'mongodb-cluster.yml',
