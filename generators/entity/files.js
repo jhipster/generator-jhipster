@@ -1,6 +1,7 @@
 'use strict';
 
-const _ = require('lodash');
+const _ = require('lodash'),
+  chalk = require('chalk');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
@@ -13,17 +14,145 @@ const constants = require('../generator-constants'),
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 module.exports = {
-    writeFiles,
-    removeFiles
+    writeFiles
 };
 
-function removeFiles(){
-
-}
-
-function writeFiles() {
+function writeFiles(){
     return {
+        deleteRemoteEntityPath: function () {
+            if(!this.remove) return;
+
+            if (_.isUndefined(this.microservicePath)) {
+                return;
+            }
+
+            this.fs.delete(this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
+        },
+
+        deleteDbFiles: function () {
+            if(!this.remove) return;
+
+            if (this.skipServer) return;
+
+            if (this.databaseType === 'sql') {
+                this.warning('Please update manually the liquibase to deal with data before drop the table');
+            }
+            if (this.databaseType === 'cassandra') {
+                this.warning('Please update manually the cql script to deal with data before drop the column family');
+            }
+        },
+
+        deleteEnumFiles: function () {
+            if(!this.remove) return;
+
+            for (var idx in this.fields) {
+                var field = this.fields[idx];
+                if (field.fieldIsEnum === true) {
+                    var fieldType = field.fieldType;
+                    if (!this.skipServer) {
+                        this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java');
+                    }
+
+                    // Copy for each
+                    if (!this.skipClient && this.enableTranslation) {
+                        var languages = this.languages || this.getAllInstalledLanguages();
+                        languages.forEach(function (language) {
+                            this.fs.delete(CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + _.lowerFirst(fieldType) + '.json');
+                        }, this);
+                    }
+
+                }
+            }
+        },
+
+        deleteServerFiles: function () {
+            if(!this.remove) return;
+
+            if (this.skipServer) return;
+
+            this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java');
+
+            this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java');
+
+            if (this.searchEngine === 'elasticsearch') {
+                this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java');
+            }
+
+            this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'Resource.java');
+            if (this.service === 'serviceImpl') {
+                this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java');
+                this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.entityClass + 'ServiceImpl.java');
+            } else if (this.service === 'serviceClass') {
+                this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java');
+            }
+            if (this.dto === 'mapstruct') {
+                this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/dto/' + this.entityClass + 'DTO.java');
+
+                this.fs.delete(SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/mapper/' + this.entityClass + 'Mapper.java');
+            }
+            if (this.databaseType === 'sql' && this.hibernateCache === 'ehcache') {
+                this.removeEntityFromEhcache(this.entityClass, this.relationships);
+            }
+        },
+
+        deleteClientFiles: function () {
+            if(!this.remove) return;
+
+            if (this.skipClient) {
+                return;
+            }
+
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityPluralFileName + '.html');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.html');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.html');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.html');
+
+            this.removeEntityFromMenu(this.entityStateName, this.enableTranslation);
+
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js');
+            this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js');
+            if (this.searchEngine === 'elasticsearch') {
+                this.fs.delete(ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js');
+            }
+
+            // Copy for each
+            if (this.enableTranslation) {
+                var languages = this.languages || this.getAllInstalledLanguages();
+                languages.forEach(function (language) {
+                    this.deleteI18n(language);
+                }, this);
+            }
+        },
+
+        deleteClientTestFiles: function () {
+            if(!this.remove) return;
+
+            if (this.skipClient) return;
+
+            this.fs.delete(CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js');
+            // Create Protractor test files
+            if (this.testFrameworks.indexOf('protractor') !== -1) {
+                this.fs.delete(CLIENT_TEST_SRC_DIR + 'e2e/entities/' + this.entityFileName + '.js');
+            }
+        },
+
+        deleteTestFiles: function () {
+            if (this.skipServer) return;
+
+            this.fs.delete(SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java');
+
+            if (this.testFrameworks.indexOf('gatling') !== -1) {
+                this.fs.delete(TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala');
+            }
+        },
+
         saveRemoteEntityPath: function() {
+            if(this.remove) return;
+
             if (_.isUndefined(this.microservicePath)) {
                 return;
             }
@@ -32,6 +161,7 @@ function writeFiles() {
         },
 
         writeDbFiles: function() {
+            if(this.remove) return;
             if (this.skipServer) return;
 
             if (this.databaseType === 'sql') {
@@ -53,6 +183,7 @@ function writeFiles() {
         },
 
         writeEnumFiles: function() {
+            if(this.remove) return;
             for (var idx in this.fields) {
                 var field = this.fields[idx];
                 if (field.fieldIsEnum === true) {
@@ -83,6 +214,7 @@ function writeFiles() {
         },
 
         writeServerFiles: function() {
+            if(this.remove) return;
             if (this.skipServer) return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Entity.java',
@@ -120,6 +252,7 @@ function writeFiles() {
         },
 
         writeClientFiles: function () {
+            if(this.remove) return;
             if (this.skipClient) {
                 return;
             }
@@ -151,6 +284,7 @@ function writeFiles() {
         },
 
         writeClientTestFiles: function () {
+            if(this.remove) return;
             if (this.skipClient) return;
 
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
@@ -162,6 +296,7 @@ function writeFiles() {
         },
 
         writeTestFiles: function() {
+            if(this.remove) return;
             if (this.skipServer) return;
 
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',

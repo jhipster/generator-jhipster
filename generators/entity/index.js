@@ -8,7 +8,6 @@ const util = require('util'),
     prompts = require('./prompts'),
     jhiCore = require('jhipster-core'),
     writeFiles = require('./files').writeFiles,
-    removeFiles = require('./files').removeFiles,
     scriptBase = require('../generator-base');
 
 /* constants used througout */
@@ -187,6 +186,10 @@ module.exports = EntityGenerator.extend({
                 this.validation = false;
                 this.dto = 'no';
                 this.service = 'no';
+            } else if(this.remove) {
+                //existing entity reading values from file
+                this.log(`\nThe entity ${ this.name } is being removed.\n`);
+                this._loadJson();
             } else {
                 //existing entity reading values from file
                 this.log(`\nThe entity ${ this.name } is being updated.\n`);
@@ -608,12 +611,7 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    writing : function() {
-        if(this.remove)
-            removeFiles();
-        else
-            writeFiles();
-    },
+    writing : writeFiles(),
 
     install: function () {
         var injectJsFilesToIndex = function () {

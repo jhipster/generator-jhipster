@@ -77,7 +77,7 @@ function askForMicroserviceJson() {
 
 function askForUpdate() {
     // ask only if running an existing entity without arg option --force or --regenerate
-    var isForce = this.options['force'] || this.regenerate;
+    var isForce = this.options['force'] || this.regenerate || this.remove;
     this.updateEntity = 'regenerate'; // default if skipping questions by --force
     if (isForce || !this.useConfigurationFile) {
         return;
