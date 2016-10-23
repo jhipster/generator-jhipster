@@ -70,7 +70,7 @@ module.exports = EntityGenerator.extend({
             defaults: false
         });
 
-        // This method adds support for a `--[no-]regenerate` flag
+        // This method adds support for a `--[no-]remove` flag
         this.option('remove', {
             desc: 'Remove the entity',
             type: Boolean,

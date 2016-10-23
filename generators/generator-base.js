@@ -131,7 +131,7 @@ Generator.prototype.removeEntityFromMenu = function (routerName, enableTranslati
             regex: false
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required reference to ') + routerName + ' ' + chalk.yellow('not removed from menu.\n'));
     }
 };
 
@@ -190,7 +190,7 @@ Generator.prototype.addAdminElementTranslationKey = function (key, value, langua
 Generator.prototype.addEntityTranslationKey = function (key, value, language) {
     var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
-        jhipsterUtils.replaceContent({
+        jhipsterUtils.rewriteFile({
             file: fullPath,
             pattern: `"${key}": "${_.startCase(value)}",`,
             content: '',
@@ -218,7 +218,7 @@ Generator.prototype.removeEntityTranslationKey = function (key, value, language)
             regex: false
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required reference to ') + language + chalk.yellow(' not removed as an old entity in the menu.\n'));
     }
 };
 
@@ -543,7 +543,7 @@ Generator.prototype.removeEntryFromEhcache = function (entry) {
             regex: false
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache.xml file.\n'));
+        this.log(chalk.yellow('\nUnable to remove ' + entry + ' from ehcache.xml file.\n'));
     }
 };
 
@@ -558,12 +558,30 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 };
 
 /**
+ * Remove an old changelog from the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.removeChangelogFromLiquibase = function (changelogName) {
+    this.removeLiquibaseChangelogFromMaster(changelogName);
+};
+
+/**
  * Add a new constraints changelog to the Liquibase master.xml file.
  *
  * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
  */
 Generator.prototype.addConstraintsChangelogToLiquibase = function (changelogName) {
     this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-constraints-changelog');
+};
+
+/**
+ * Remove an old constraints changelog from the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.removeConstraintsChangelogFromLiquibase = function (changelogName) {
+    this.removeLiquibaseChangelogFromMaster(changelogName);
 };
 
 /**
@@ -584,6 +602,25 @@ Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, nee
         }, this);
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+    }
+};
+
+/**
+ * Remove an old changelog from the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.removeLiquibaseChangelogFromMaster = function (changelogName) {
+    var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
+    try {
+        jhipsterUtils.replaceContent({
+            file: fullPath,
+            pattern: `<include file="classpath:config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`,
+            content: '',
+            regex: false
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing reference to ') + changelogName + '.xml ' + chalk.yellow('not removed.\n'));
     }
 };
 

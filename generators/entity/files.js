@@ -35,10 +35,18 @@ function writeFiles(){
             if (this.skipServer) return;
 
             if (this.databaseType === 'sql') {
+                this.fs.delete(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml');
+
+                if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
+                    this.fs.delete(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_constraints_' + this.entityClass + '.xml');
+                    this.removeConstraintsChangelogFromLiquibase(this.changelogDate + '_added_entity_constraints_' + this.entityClass);
+                }
+                this.removeChangelogFromLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
                 this.warning('Please update manually the liquibase to deal with data before drop the table');
             }
             if (this.databaseType === 'cassandra') {
-                this.warning('Please update manually the cql script to deal with data before drop the column family');
+                this.fs.delete(SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql');
+                this.warning('Please do a manual update of the cql script to choose what to do with data before dropping the column family');
             }
         },
 
