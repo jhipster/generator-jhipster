@@ -1697,6 +1697,15 @@ Generator.prototype.copyEnumI18n = function (language, enumInfo) {
     }
 };
 
+Generator.prototype.removeEnumI18n = function (language, enumInstance) {
+    try {
+        this.fs.delete(CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInstance + '.json');
+    } catch (e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
 Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
     var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
     try {

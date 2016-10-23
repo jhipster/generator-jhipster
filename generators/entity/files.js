@@ -1,7 +1,6 @@
 'use strict';
 
-const _ = require('lodash'),
-  chalk = require('chalk');
+const _ = require('lodash');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
@@ -65,7 +64,7 @@ function writeFiles(){
                     if (!this.skipClient && this.enableTranslation) {
                         var languages = this.languages || this.getAllInstalledLanguages();
                         languages.forEach(function (language) {
-                            this.fs.delete(CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + _.lowerFirst(fieldType) + '.json');
+                            this.removeEnumI18n(language, _.lowerFirst(fieldType));
                         }, this);
                     }
 
