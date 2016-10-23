@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('SocialService', SocialService);
 
-    SocialService.$inject = ['$document', '$http', '$cookies'];
+    SocialService.$inject = ['$http', '$cookies'];
 
-    function SocialService ($document, $http, $cookies) {
+    function SocialService ($http, $cookies) {
         var socialService = {
             getProviderSetting: getProviderSetting,
             getProviderURL: getProviderURL,
