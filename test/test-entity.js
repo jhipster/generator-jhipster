@@ -11,6 +11,7 @@ const constants = require('../generators/generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 const expectedFiles = {
@@ -152,8 +153,7 @@ describe('JHipster generator entity', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java',
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/FooMapper.java'
             ]);
         });
     });
@@ -278,4 +278,53 @@ describe('JHipster generator entity', function () {
             assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');
         });
     });
+
+
+    describe('create and remove with dto, serviceClass, no pagination', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
+                    fse.outputJsonSync('.jhipster/Foo.json', {
+                            "fluentMethods": true,
+                            "relationships": [],
+                            "fields": [],
+                            "changelogDate": "20161023200209",
+                            "dto": "mapstruct",
+                            "service": "serviceImpl",
+                            "entityTableName": "foo",
+                            "pagination": "no"
+                        }
+                    );
+                    expectedFiles.server.forEach(function (serverFile) {
+                        fse.ensureFileSync(path.join(dir, serverFile));
+                    });
+                    expectedFiles.client.forEach(function (clientFile) {
+                        fse.ensureFileSync(path.join(dir, clientFile));
+                    });
+                    fse.ensureFileSync(path.join(dir, SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/FooDTO.java'));
+                    fse.ensureFileSync(path.join(dir, SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/FooMapper.java'));
+                    fse.ensureFileSync(path.join(dir, SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/FooDTO.java'));
+                    fse.ensureFileSync(path.join(dir, SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/FooMapper.java'));
+                    fse.ensureFileSync(path.join(dir, SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml'));
+                    fse.ensureFileSync(path.join(dir, SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20161023200209_added_entity_Foo.xml'));
+                    fse.ensureFileSync(path.join(dir, SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20161023200209_added_entity_constraints_Foo.xml'));
+
+                })
+                .withArguments(['foo','--remove'])
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.noFile(expectedFiles.server);
+            assert.noFile(expectedFiles.client);
+            assert.noFile([
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/FooDTO.java',
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/FooMapper.java',
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/dto/FooDTO.java',
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/FooMapper.java'
+            ]);
+        });
+    });
+
 });

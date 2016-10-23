@@ -20,11 +20,6 @@ function writeFiles(){
     return {
         deleteRemoteEntityPath: function () {
             if(!this.remove) return;
-
-            if (_.isUndefined(this.microservicePath)) {
-                return;
-            }
-
             this.fs.delete(this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
         },
 
