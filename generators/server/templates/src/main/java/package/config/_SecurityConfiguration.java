@@ -107,7 +107,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .sessionRegistry(sessionRegistry)
             .and().and()<% } %><% if (authenticationType == 'session') { %>
             .csrf()
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())<% if (websocket == 'spring-websocket') { %>
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())<% if (websocket == 'spring-websocket' && authenticationType != 'session') { %>
             .ignoringAntMatchers("/websocket/**")<% } %>
         .and()<% } %>
             .exceptionHandling()
