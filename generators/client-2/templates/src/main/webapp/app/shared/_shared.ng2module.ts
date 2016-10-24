@@ -49,7 +49,6 @@ import { <%=jhiPrefixCapitalized%>SocialComponent } from './social/social.compon
         StateStorageService,
         Principal,
         CSRFService,
-        AuthService,
         <%_ if (authenticationType === 'oauth2') { _%>
         Base64,
         <%_ } _%>
@@ -60,6 +59,7 @@ import { <%=jhiPrefixCapitalized%>SocialComponent } from './social/social.compon
 <% if (enableSocialSignIn) { %>
         SocialService,
 <% } %>
+        AuthService
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
