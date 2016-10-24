@@ -95,7 +95,7 @@
         <%_ if (messageBroker === 'kafka') { _%>
         <spring-cloud-stream.version>Brooklyn.RELEASE</spring-cloud-stream.version>
         <%_ } _%>
-        <spring-security.version>4.1.1.RELEASE</spring-security.version>
+        <spring-security.version>4.1.3.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
