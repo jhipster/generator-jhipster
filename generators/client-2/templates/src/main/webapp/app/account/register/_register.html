@@ -1,25 +1,25 @@
 <div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h1 translate="register.title">Registration</h1>
+            <h1 data-translate="register.title">Registration</h1>
 
-            <div class="alert alert-success" *ngIf="success" translate="register.messages.success">
+            <div class="alert alert-success" *ngIf="success" data-translate="register.messages.success">
                 <strong>Registration saved!</strong> Please check your email for confirmation.
             </div>
 
-            <div class="alert alert-danger" *ngIf="error" translate="register.messages.error.fail">
+            <div class="alert alert-danger" *ngIf="error" data-translate="register.messages.error.fail">
                 <strong>Registration failed!</strong> Please try again later.
             </div>
 
-            <div class="alert alert-danger" *ngIf="errorUserExists" translate="register.messages.error.userexists">
+            <div class="alert alert-danger" *ngIf="errorUserExists" data-translate="register.messages.error.userexists">
                 <strong>Login name already registered!</strong> Please choose another one.
             </div>
 
-            <div class="alert alert-danger" *ngIf="errorEmailExists" translate="register.messages.error.emailexists">
+            <div class="alert alert-danger" *ngIf="errorEmailExists" data-translate="register.messages.error.emailexists">
                 <strong>E-mail is already in use!</strong> Please choose another one.
             </div>
 
-            <div class="alert alert-danger" *ngIf="doNotMatch" translate="global.messages.error.dontmatch">
+            <div class="alert alert-danger" *ngIf="doNotMatch" data-translate="global.messages.error.dontmatch">
                 The password and its confirmation do not match!
             </div>
         </div>
@@ -30,94 +30,94 @@
         <%_ } _%>
             <form name="form" role="form" (ngSubmit)="register()" #registerForm="ngForm">
                 <div class="form-group">
-                    <label class="control-label" for="login" translate="global.form.username">Username</label>
+                    <label class="control-label" for="login" data-translate="global.form.username">Username</label>
                     <input type="text" class="form-control" [(ngModel)]="registerAccount.login" id="login" name="login" #login="ngModel" placeholder="{{'global.form.login.placeholder' | translate}}"
                             required minlength="1" maxlength="50" pattern="^[_'.@A-Za-z0-9-]*$">
                     <div *ngIf="login.dirty && login.invalid">
-                        <p class="help-block" *ngIf="login.errors.required" translate="register.messages.validate.login.required">
+                        <p class="help-block" *ngIf="login.errors.required" data-translate="register.messages.validate.login.required">
                             Your username is required.
                         </p>
                         <p class="help-block" *ngIf="login.errors.minlength"
-                                translate="register.messages.validate.login.minlength">
+                                data-translate="register.messages.validate.login.minlength">
                             Your username is required to be at least 1 character.
                         </p>
                         <p class="help-block" *ngIf="login.errors.maxlength"
-                                translate="register.messages.validate.login.maxlength">
+                                data-translate="register.messages.validate.login.maxlength">
                             Your username cannot be longer than 50 characters.
                         </p>
                         <p class="help-block" *ngIf="login.errors.pattern"
-                               translate="register.messages.validate.login.pattern">
+                               data-translate="register.messages.validate.login.pattern">
                             Your username can only contain lower-case letters and digits.
                         </p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="email" translate="global.form.email">E-mail</label>
+                    <label class="control-label" for="email" data-translate="global.form.email">E-mail</label>
                     <input type="email" class="form-control" id="email" name="email" #email="ngModel" placeholder="{{'global.form.email.placeholder' | translate}}"
                             [(ngModel)]="registerAccount.email" minlength=5 maxlength=100 required>
                     <div *ngIf="email.dirty && email.invalid">
                         <p class="help-block" *ngIf="email.errors.required"
-                                translate="global.messages.validate.email.required">
+                                data-translate="global.messages.validate.email.required">
                             Your e-mail is required.
                         </p>
                         <p class="help-block" *ngIf="email.errors.invalid"
-                               translate="global.messages.validate.email.invalid">
+                               data-translate="global.messages.validate.email.invalid">
                             Your e-mail is invalid.
                         </p>
                         <p class="help-block" *ngIf="email.errors.minlength"
-                               translate="global.messages.validate.email.minlength">
+                               data-translate="global.messages.validate.email.minlength">
                             Your e-mail is required to be at least 5 characters.
                         </p>
                         <p class="help-block" *ngIf="email.errors.maxlength"
-                               translate="global.messages.validate.email.maxlength">
+                               data-translate="global.messages.validate.email.maxlength">
                             Your e-mail cannot be longer than 100 characters.
                         </p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="password" translate="global.form.newpassword">New password</label>
+                    <label class="control-label" for="password" data-translate="global.form.newpassword">New password</label>
                     <input type="password" class="form-control" id="password" name="password" #password="ngModel" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
                             [(ngModel)]="registerAccount.password" minlength=4 maxlength=50 required>
                     <div *ngIf="password.dirty && password.invalid">
                         <p class="help-block" *ngIf="password.errors.required"
-                                translate="global.messages.validate.newpassword.required">
+                                data-translate="global.messages.validate.newpassword.required">
                             Your password is required.
                         </p>
                         <p class="help-block" *ngIf="password.errors.minlength"
-                                translate="global.messages.validate.newpassword.minlength">
+                                data-translate="global.messages.validate.newpassword.minlength">
                             Your password is required to be at least 4 characters.
                         </p>
                         <p class="help-block" *ngIf="password.errors.maxlength"
-                                translate="global.messages.validate.newpassword.maxlength">
+                                data-translate="global.messages.validate.newpassword.maxlength">
                             Your password cannot be longer than 50 characters.
                         </p>
                     </div>
                     <password-strength-bar password-to-check="registerAccount.password"></password-strength-bar>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
+                    <label class="control-label" for="confirmPassword" data-translate="global.form.confirmpassword">New password confirmation</label>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" #confirmPasswordInput="ngModel" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
                             [(ngModel)]="confirmPassword" minlength=4 maxlength=50 required>
                     <div *ngIf="confirmPasswordInput.dirty && confirmPasswordInput.invalid">
                         <p class="help-block" *ngIf="confirmPasswordInput.errors.required"
-                               translate="global.messages.validate.confirmpassword.required">
+                               data-translate="global.messages.validate.confirmpassword.required">
                             Your confirmation password is required.
                         </p>
                         <p class="help-block" *ngIf="confirmPasswordInput.errors.minlength"
-                              translate="global.messages.validate.confirmpassword.minlength">
+                              data-translate="global.messages.validate.confirmpassword.minlength">
                             Your confirmation password is required to be at least 4 characters.
                         </p>
                         <p class="help-block" *ngIf="confirmPasswordInput.errors.maxlength"
-                               translate="global.messages.validate.confirmpassword.maxlength">
+                               data-translate="global.messages.validate.confirmpassword.maxlength">
                             Your confirmation password cannot be longer than 50 characters.
                         </p>
                     </div>
                 </div>
 
-                <button type="submit" [disabled]="registerForm.form.invalid" class="btn btn-primary" translate="register.form.button">Register</button>
+                <button type="submit" [disabled]="registerForm.form.invalid" class="btn btn-primary" data-translate="register.form.button">Register</button>
             </form>
             <p></p>
-            <div class="alert alert-warning" translate="global.messages.info.authenticated" translate-compile>
+            <div class="alert alert-warning" data-translate="global.messages.info.authenticated" translate-compile>
                 If you want to <a class="alert-link" (click)="openLogin()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
             </div>
         </div>

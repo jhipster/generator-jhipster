@@ -1,9 +1,9 @@
 <div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h2 translate="settings.title" translate-values="{username: '{{settingsAccount.login}}'}" *ngIf="settingsAccount">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
+            <h2 data-translate="settings.title" translate-values="{username: '{{settingsAccount.login}}'}" *ngIf="settingsAccount">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
 
-            <div class="alert alert-success" *ngIf="success" translate="settings.messages.success">
+            <div class="alert alert-success" *ngIf="success" data-translate="settings.messages.success">
                 <strong>Settings saved!</strong>
             </div>
 
@@ -12,75 +12,75 @@
             <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate show-validation>
 
                 <div class="form-group">
-                    <label class="control-label" for="firstName" translate="settings.form.firstname">First Name</label>
+                    <label class="control-label" for="firstName" data-translate="settings.form.firstname">First Name</label>
                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{'settings.form.firstname.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.firstName" minlength=1 maxlength=50 #firstNameInput="ngModel" required>
                     <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
                         <p class="help-block"
-                           *ngIf="firstNameInput.errors.required" translate="settings.messages.validate.firstname.required">
+                           *ngIf="firstNameInput.errors.required" data-translate="settings.messages.validate.firstname.required">
                             Your first name is required.
                         </p>
                         <p class="help-block"
-                           *ngIf="firstNameInput.errors.minlength" translate="settings.messages.validate.firstname.minlength">
+                           *ngIf="firstNameInput.errors.minlength" data-translate="settings.messages.validate.firstname.minlength">
                             Your first name is required to be at least 1 character.
                         </p>
                         <p class="help-block"
-                           *ngIf="firstNameInput.errors.maxlength" translate="settings.messages.validate.firstname.maxlength">
+                           *ngIf="firstNameInput.errors.maxlength" data-translate="settings.messages.validate.firstname.maxlength">
                             Your first name cannot be longer than 50 characters.
                         </p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="lastName" translate="settings.form.lastname">Last Name</label>
+                    <label class="control-label" for="lastName" data-translate="settings.form.lastname">Last Name</label>
                     <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{'settings.form.lastname.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.lastName" minlength=1 maxlength=50 #lastNameInput="ngModel" required>
                     <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
                         <p class="help-block"
-                           *ngIf="lastNameInput.errors.required" translate="settings.messages.validate.lastname.required">
+                           *ngIf="lastNameInput.errors.required" data-translate="settings.messages.validate.lastname.required">
                             Your last name is required.
                         </p>
                         <p class="help-block"
-                           *ngIf="lastNameInput.errors.minlength" translate="settings.messages.validate.lastname.minlength">
+                           *ngIf="lastNameInput.errors.minlength" data-translate="settings.messages.validate.lastname.minlength">
                             Your last name is required to be at least 1 character.
                         </p>
                         <p class="help-block"
-                           *ngIf="lastNameInput.errors.maxlength" translate="settings.messages.validate.lastname.maxlength">
+                           *ngIf="lastNameInput.errors.maxlength" data-translate="settings.messages.validate.lastname.maxlength">
                             Your last name cannot be longer than 50 characters.
                         </p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="email" translate="global.form.email">E-mail</label>
+                    <label class="control-label" for="email" data-translate="global.form.email">E-mail</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.email" minlength=5 maxlength=100 #emailInput="ngModel" required>
                     <div *ngIf="emailInput.dirty && emailInput.invalid">
                         <p class="help-block"
-                           *ngIf="emailInput.errors.required" translate="global.messages.validate.email.required">
+                           *ngIf="emailInput.errors.required" data-translate="global.messages.validate.email.required">
                             Your e-mail is required.
                         </p>
                         <p class="help-block"
-                           *ngIf="emailInput.errors.email" translate="global.messages.validate.email.invalid">
+                           *ngIf="emailInput.errors.email" data-translate="global.messages.validate.email.invalid">
                             Your e-mail is invalid.
                         </p>
                         <p class="help-block"
-                           *ngIf="emailInput.errors.minlength" translate="global.messages.validate.email.minlength">
+                           *ngIf="emailInput.errors.minlength" data-translate="global.messages.validate.email.minlength">
                             Your e-mail is required to be at least 5 characters.
                         </p>
                         <p class="help-block"
-                           *ngIf="emailInput.errors.maxlength" translate="global.messages.validate.email.maxlength">
+                           *ngIf="emailInput.errors.maxlength" data-translate="global.messages.validate.email.maxlength">
                             Your e-mail cannot be longer than 100 characters.
                         </p>
                     </div>
                 </div>
                 <%_ if (enableTranslation){ _%>
                 <div class="form-group" *ngIf="languages && languages.length > 0">
-                    <label for="langKey" translate="settings.form.language">Language</label>
+                    <label for="langKey" data-translate="settings.form.language">Language</label>
                     <select class="form-control" id="langKey" name="langKey" [(ngModel)]="settingsAccount.langKey">
                         <option *ngFor="let language of languages" [value]="language">{{language | findLanguageFromKey}}</option>
                     </select>
                 </div>
                 <%_ } _%>
-                <button type="submit" [disabled]="settingsForm.form.invalid" class="btn btn-primary" translate="settings.form.button">Save</button>
+                <button type="submit" [disabled]="settingsForm.form.invalid" class="btn btn-primary" data-translate="settings.form.button">Save</button>
             </form>
         </div>
     </div>

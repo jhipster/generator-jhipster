@@ -1,5 +1,7 @@
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
+<% if (enableTranslation) { %>
 import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+<% } %>
 
 export const healthState = {
     name: '<%=jhiPrefix%>-health',
@@ -11,10 +13,10 @@ export const healthState = {
     },
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>HealthCheckComponent }
-    },
+    }<% if (enableTranslation) { %>,
     resolve: [{
         token: 'translate',
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['health'])
-    }]
+    }]<% } %>
 }

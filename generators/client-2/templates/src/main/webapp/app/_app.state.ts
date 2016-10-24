@@ -1,5 +1,5 @@
 import { NavbarComponent } from './layouts';
-import { AuthService, <%=jhiPrefixCapitalized%>LanguageService } from './shared';
+import { AuthService, <% if (enableTranslation) { %><%=jhiPrefixCapitalized%>LanguageService<% } %> } from './shared';
 
 export const appState = {
     name: 'app',
@@ -12,11 +12,11 @@ export const appState = {
             token: 'authorize',
             deps: [AuthService],
             resolveFn: (auth) => auth.authorize()
-        },
+        }<% if (enableTranslation) { %>,
         {
             token: 'translate',
             deps: [<%=jhiPrefixCapitalized%>LanguageService],
             resolveFn: (languageService) => languageService.setLocations([])
-        }
+        }<% } %>
     ]
 };

@@ -1,5 +1,7 @@
 import { SettingsComponent } from './settings.component';
+<% if (enableTranslation) { %>
 import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+<% } %>
 
 export const settingsState = {
     name: 'settings',
@@ -13,10 +15,10 @@ export const settingsState = {
         'content@': {
             component: SettingsComponent
         }
-    },
+    }<% if (enableTranslation) { %>,
     resolve: [{
         token: 'translate',
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['settings'])
-    }]
+    }]<% } %>
 };
