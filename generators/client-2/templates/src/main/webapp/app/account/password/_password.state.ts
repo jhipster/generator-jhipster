@@ -1,5 +1,7 @@
 import { PasswordComponent } from './password.component';
+<% if (enableTranslation) { %>
 import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+<% } %>
 
 export const passwordState = {
     name: 'password',
@@ -11,10 +13,10 @@ export const passwordState = {
     },
     views: {
         'content@': { component: PasswordComponent }
-    },
+    }<% if (enableTranslation) { %>,
     resolve: [{
         token: 'translate',
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['password'])
-    }]
+    }]<% } %>
 };
