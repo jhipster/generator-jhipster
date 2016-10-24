@@ -286,15 +286,15 @@ describe('JHipster generator entity', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                     fse.outputJsonSync('.jhipster/Foo.json', {
-                            "fluentMethods": true,
-                            "relationships": [],
-                            "fields": [],
-                            "changelogDate": "20161023200209",
-                            "dto": "mapstruct",
-                            "service": "serviceImpl",
-                            "entityTableName": "foo",
-                            "pagination": "no"
-                        }
+                        'fluentMethods': true,
+                        'relationships': [],
+                        'fields': [],
+                        'changelogDate': '20161023200209',
+                        'dto': 'mapstruct',
+                        'service': 'serviceImpl',
+                        'entityTableName': 'foo',
+                        'pagination': 'no'
+                    }
                     );
                     expectedFiles.server.forEach(function (serverFile) {
                         fse.ensureFileSync(path.join(dir, serverFile));
