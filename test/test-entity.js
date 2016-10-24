@@ -153,7 +153,8 @@ describe('JHipster generator entity', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/FooMapper.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java',
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
             ]);
         });
     });
