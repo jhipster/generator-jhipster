@@ -32,8 +32,10 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
         private stateStorageService: StateStorageService,
         private elementRef: ElementRef,
         private renderer: Renderer,
-        private activeModal: NgbActiveModal,
-        private socialService: SocialService
+        <% if (enableSocialSignIn) { %>
+        private socialService: SocialService,
+        <%_ } _%>
+        private activeModal: NgbActiveModal
     ) {
         this.credentials = {};
     }

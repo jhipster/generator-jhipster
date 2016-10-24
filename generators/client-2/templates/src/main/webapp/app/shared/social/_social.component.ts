@@ -15,10 +15,12 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
     csrf: string;
 
         constructor (
-                    <% if (enableTranslation){ %> private languageService: JhiLanguageService, <% } %>
+                        <% if (enableTranslation){ %>
+                        private languageService: JhiLanguageService,
+                        <% } %>
                         private CSRFService: CSRFService,
-                        private SocialService: SocialService)
-        {}
+                        private SocialService: SocialService
+        ) {}
 
         ngOnInit() {
             <% if (enableTranslation){ %> this.languageService.addLocation('social'); <% } %>

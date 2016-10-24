@@ -18,13 +18,13 @@ import {
     PasswordComponent,
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
-    SettingsComponent,
 <% if (enableSocialSignIn) { %>
 <% if (authenticationType == 'jwt') { %>
     SocialAuthComponent,
 <% } %>
-    SocialRegisterComponent
+    SocialRegisterComponent,
 <% } %>
+    SettingsComponent
 } from './';
 
 angular
@@ -52,4 +52,4 @@ angular
     <%_ if (authenticationType === 'session') { _%>
     .directive('sessions', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SessionsComponent))
     <%_ } _%>
-    .directive('settings', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SettingsComponent))
+    .directive('settings', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SettingsComponent));
