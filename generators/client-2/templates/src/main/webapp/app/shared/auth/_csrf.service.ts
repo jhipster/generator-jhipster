@@ -6,7 +6,7 @@ export class CSRFService {
     constructor(private $document: Document) {}
 
     getCSRF(name?: string) {
-        name = `${name ? name : 'CSRF-TOKEN'}=`;
+        name = `${name ? name : 'XSRF-TOKEN'}=`;
         let doc = this.$document;
         if (doc) {
             let ca = doc.cookie.split(';');

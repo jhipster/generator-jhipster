@@ -82,7 +82,7 @@
 
                 function addApiKeyAuthorization(){
                 <% if (authenticationType === 'session') { %>
-                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-CSRF-TOKEN", getCSRF(), "header");
+                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
                 <% if (authenticationType === 'oauth2') { %>
@@ -104,7 +104,7 @@
                 }
 
                 function getCSRF() {
-                    var name = "CSRF-TOKEN=";
+                    var name = "XSRF-TOKEN=";
                     var ca = document.cookie.split(';');
                     for(var i=0; i<ca.length; i++) {
                         var c = ca[i];
