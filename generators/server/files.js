@@ -22,6 +22,7 @@ var javaDir;
 function writeFiles() {
     return {
         cleanupOldServerFiles: function() {
+            javaDir = this.javaDir = constants.SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
         },
 
