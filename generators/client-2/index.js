@@ -481,7 +481,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'shared/_index.ts', ANGULAR_DIR + 'shared/index.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/_shared.ng2module.ts', ANGULAR_DIR + 'shared/shared.ng2module.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/_shared-libs.ng2module.ts', ANGULAR_DIR + 'shared/shared-libs.ng2module.ts', this, {});
-            this.template(ANGULAR_DIR + 'shared/_XSRF-strategy.provider.ts', ANGULAR_DIR + 'shared/XSRF-strategy.provider.ts', this, {});
             this.template(ANGULAR_DIR + 'shared/constants/_pagination.constants.ts', ANGULAR_DIR + 'shared/constants/pagination.constants.ts', this, {});
 
             this.template(ANGULAR_DIR + 'shared/model/_account.model.ts', ANGULAR_DIR + 'shared/model/account.model.ts', this, {});
