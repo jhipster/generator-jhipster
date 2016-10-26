@@ -59,7 +59,6 @@ public class <%= entityClass %> implements Serializable {
 <%_ for (idx in fields) {
     if (typeof fields[idx].javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(fields[idx].javadoc) %>
-    @ApiModelProperty(value = "<%- fields[idx].javadoc %>")
     <%_ }
     var required = false;
     var fieldValidate = fields[idx].fieldValidate;
@@ -74,6 +73,9 @@ public class <%= entityClass %> implements Serializable {
             required = true;
         } _%>
     <%- include ../common/field_validators -%>
+    <%_ } _%>
+    <%_ if (typeof fields[idx].javadoc != 'undefined') { _%>
+    @ApiModelProperty(value = "<%- fields[idx].javadoc %>"<% if (required) { %>, required = true<% } %>)
     <%_ } _%>
     <%_ if (databaseType == 'sql') {
         if (fields[idx].fieldIsEnum) { _%>
