@@ -269,6 +269,7 @@ dependencies {
     compile("io.springfox:springfox-swagger2:${springfox_version}"){
         exclude module: 'mapstruct'
     }
+    compile "io.springfox:springfox-bean-validators:${springfox_version}"
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
     compile "mysql:mysql-connector-java"
     <%_ } _%>

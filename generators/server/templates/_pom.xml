@@ -280,6 +280,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
         <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>com.mattbertolini</groupId>
