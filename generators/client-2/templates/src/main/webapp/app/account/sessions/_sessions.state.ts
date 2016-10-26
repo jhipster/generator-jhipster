@@ -1,5 +1,7 @@
 import { SessionsComponent } from './sessions.component';
+<% if (enableTranslation) { %>
 import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+<% } %>
 
 export const sessionsState = {
     name: 'sessions',
@@ -11,10 +13,10 @@ export const sessionsState = {
     },
     views: {
         'content@': { component: SessionsComponent }
-    },
+    }<% if (enableTranslation) { %>,
     resolve: [{
         token: 'translate',
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['sessions'])
-    }]
+    }]<% } %>
 };
