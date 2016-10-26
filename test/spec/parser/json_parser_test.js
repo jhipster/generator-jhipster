@@ -127,6 +127,26 @@ describe('::parse', function () {
       var content = Parser.parseEntities(entities);
       expect(content.relationships.relationships.ManyToMany).has.property('ManyToMany_Job{task(title)}_Task{job}');
     });
+    it('parses comments in relationships for owner', function () {
+      var entities = {
+        'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
+        'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
+      };
+      entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = "A relationship";
+      var content = Parser.parseEntities(entities);
+      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom).not.to.be.undefined;
+      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo).to.be.undefined;
+    });
+    it('parses comments in relationships for owned', function () {
+      var entities = {
+        'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
+        'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
+      };
+      entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = "Another side of the same relationship";
+      var content = Parser.parseEntities(entities);
+      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom).to.be.undefined;
+      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo).not.to.be.undefined;
+    });
     it('parses required relationships in owner', function () {
       var entities = {
         'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
