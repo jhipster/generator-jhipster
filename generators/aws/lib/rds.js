@@ -88,7 +88,7 @@ function authorizeSecurityGroupIngress(params, callback) {
 
     var securityGroupParams = {
         GroupId: params.rdsSecurityGroupId,
-        IpProtocol: 'TCP',
+        IpProtocol: 'tcp',
         FromPort: 0,
         ToPort: 65535,
         CidrIp: '0.0.0.0/0'
