@@ -1,7 +1,5 @@
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
-<% if (enableTranslation) { %>
 import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
-<% } %>
 
 export const configState = {
     name: '<%=jhiPrefix%>-configuration',
@@ -13,10 +11,10 @@ export const configState = {
     },
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>ConfigurationComponent }
-    }<% if (enableTranslation) { %>,
+    },
     resolve: [{
         token: 'translate',
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['configuration'])
-    }]<% } %>
+    }]
 }
