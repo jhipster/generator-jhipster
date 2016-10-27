@@ -5,9 +5,7 @@ var util = require('util'),
     _ = require('lodash'),
     scriptBase = require('../generator-base');
 
-const constants = require('../generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const constants = require('../generator-constants');
 
 var LanguagesGenerator = generators.Base.extend({});
 
@@ -74,10 +72,10 @@ module.exports = LanguagesGenerator.extend({
             this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.capitalizedBaseName = _.upperFirst(this.baseName);
-            this.websocket = this.config.get('websocket');
+            this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
-            this.searchEngine = this.config.get('searchEngine');
-            this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
+            this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
+            this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
             this.enableTranslation = this.config.get('enableTranslation');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.currentLanguages = this.config.get('languages');
@@ -121,13 +119,13 @@ module.exports = LanguagesGenerator.extend({
             if (configOptions.baseName) {
                 this.baseName = configOptions.baseName;
             }
-            if (configOptions.websocket) {
+            if (configOptions.websocket !== undefined) {
                 this.websocket = configOptions.websocket;
             }
             if (configOptions.databaseType) {
                 this.databaseType = configOptions.databaseType;
             }
-            if (configOptions.searchEngine) {
+            if (configOptions.searchEngine !== undefined) {
                 this.searchEngine = configOptions.searchEngine;
             }
             if (configOptions.enableTranslation) {
@@ -161,10 +159,10 @@ module.exports = LanguagesGenerator.extend({
         var insight = this.insight();
         this.languagesToApply && this.languagesToApply.forEach(function (language) {
             if (!this.skipClient) {
-                this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
+                this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
             }
             if (!this.skipServer) {
-                this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
+                this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
             }
             insight.track('languages/language', language);
         }, this);

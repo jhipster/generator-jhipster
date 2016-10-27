@@ -75,8 +75,7 @@
             "objects": "Obiekty",
             "hits": "Odsłon",
             "misses": "Nietrafionych",
-            "evictioncount": "Liczba wyeksmitowanych",
-            "mean": "Średni czas pobierania (ms)"
+            "evictioncount": "Liczba wyeksmitowanych"
         },
         "datasource": {
         	"usage": "Użycie",

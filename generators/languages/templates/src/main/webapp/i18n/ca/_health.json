@@ -4,10 +4,10 @@
         "refresh.button": "Actualitzar",
         "stacktrace": "Traça d'error",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
+            "details": "Detalls",
+            "properties": "Propietats",
+            "name": "Nom",
+            "value": "Valor",
             "error": "Error"
         },
         "indicator": {
@@ -28,8 +28,8 @@
             "status": "Estat"
         },
         "status": {
-            "UP": "FINS",
-            "DOWN": "BAIX"
+            "UP": "ACTIU",
+            "DOWN": "INACTIU"
         }
     }
 }

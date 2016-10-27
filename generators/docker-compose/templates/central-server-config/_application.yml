@@ -1,7 +1,7 @@
 #common configuration shared between all applications
 configserver:
     name: Docker JHipster Registry
-    status: Connected to the JHipster Registry running in Docker
+    status: Connected to <% if (serviceDiscoveryType == 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType == 'consul') { %>Consul<% } %> running in Docker
 
 jhipster:
     security:
@@ -19,7 +19,9 @@ jhipster:
             reportFrequency: 60 # in seconds
 <%_ } _%>
 
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
 eureka:
     client:
         serviceUrl:
             defaultZone: http://admin:<%= adminPassword %>@registry:8761/eureka/
+<%_ } _%>

@@ -11,23 +11,25 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
 eureka:
     instance:
         appname: <%= baseName %>
         instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
-
+        statusPageUrlPath: ${management.context-path}/info
+        healthCheckUrlPath: ${management.context-path}/health
 ribbon:
     eureka:
         enabled: true
-
 <%_ } _%>
 <%_ if (applicationType == 'gateway') { _%>
 zuul:
     host:
         connect-timeout-millis: 5000
         socket-timeout-millis: 10000
-
+    <%_ if (serviceDiscoveryType == 'consul') { _%>
+    ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
+    <%_ } _%>
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
@@ -44,15 +46,27 @@ management:
     health:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
-
+<%_ if (messageBroker == 'kafka') { _%>
+        binders:
+            enabled: true
+<%_ } _%>
 spring:
     application:
         name: <%= baseName %>
+    <%_ if (serviceDiscoveryType == 'consul') { _%>
+    cloud:
+        consul:
+            discovery:
+                healthCheckPath: /management/health
+                instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    <%_ } _%>
+    <%_ if (applicationType === 'monolith') { _%>
     profiles:
         # The commented value for `active` can be replaced with valid spring profiles to load.
         # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
         # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
         active: #spring.profiles.active#
+    <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
     <%_ if (databaseType == 'sql') { _%>
@@ -93,6 +107,11 @@ spring:
 security:
     basic:
         enabled: false
+
+server:
+    session:
+        cookie:
+            http-only: true
 
 # ===================================================================
 # JHipster specific properties

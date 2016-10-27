@@ -34,13 +34,23 @@ services:
         <%_ if (searchEngine == 'elasticsearch') { _%>
             - <%= baseName.toLowerCase() %>-elasticsearch:elasticsearch
         <%_ } _%>
-        <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+        <%_ if (messageBroker == 'kafka') { _%>
+            - kafka:kafka
+            - zookeeper:zookeeper
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType == 'eureka' && (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa')) { _%>
             - jhipster-registry:registry
         <%_ } _%>
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
             <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+                  <%_ if (serviceDiscoveryType == 'consul') { _%>
+            - SPRING_CLOUD_CONSUL_HOST=consul
+            - SPRING_CLOUD_CONSUL_PORT=8500
+                  <%_ } _%>
+                  <%_ if (serviceDiscoveryType == 'eureka') { _%>
             - SPRING_CLOUD_CONFIG_URI=http://admin:admin@registry:8761/config
+                  <%_ } _%>
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mysql') { _%>
             - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
@@ -63,6 +73,10 @@ services:
             <%_ } _%>
             <%_ if (searchEngine == 'elasticsearch') { _%>
             - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
+            <%_ } _%>
+            <%_ if (messageBroker == 'kafka') { _%>
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=zookeeper
             <%_ } _%>
         <%_ if (applicationType == 'monolith' || applicationType == 'gateway') { _%>
         ports:
@@ -131,11 +145,47 @@ services:
             file: elasticsearch.yml
             service: <%= baseName.toLowerCase() %>-elasticsearch
     <%_ } _%>
+    <%_ if (messageBroker == 'kafka') { _%>
+    kafka:
+        extends:
+            file: kafka.yml
+            service: kafka
+        environment:
+            - KAFKA_ADVERTISED_HOST_NAME=kafka
+    zookeeper:
+        extends:
+            file: kafka.yml
+            service: zookeeper
+    <%_ } _%>
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+      <%_ if (serviceDiscoveryType == 'eureka') { _%>
     jhipster-registry:
         extends:
             file: jhipster-registry.yml
             service: jhipster-registry
         environment:
             - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./central-config/docker-config/
+      <%_ } _%>
+      <%_ if (serviceDiscoveryType == 'consul') { _%>
+    consul:
+        image: <%= DOCKER_CONSUL %>
+        command: consul agent -dev -ui -client 0.0.0.0
+        ports:
+            - 8300:8300
+            - 8500:8500
+            - 8600:8600
+
+    consul-config-loader:
+        image: pbesson/consul-config-loader
+        volumes:
+            - ./central-server-config:/config
+        environment:
+            - INIT_SLEEP_SECONDS=5
+            - CONSUL_URL=consul
+            - CONSUL_PORT=8500
+        # Uncomment to load configuration into Consul from a git repository
+        # as configured in central-server-config/git2consul.json
+        # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
+        #    - CONFIG_MODE=git
+      <%_ } _%>
     <%_ } _%>

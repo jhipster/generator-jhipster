@@ -3,16 +3,14 @@ package <%=packageName%>.config;
 <%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.*;
 <%_ } _%>
-<%_ if (authenticationType == 'session') { _%>
-import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;
-<%_ } _%>
 <%_ if (authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.jwt.*;
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
 import <%=packageName%>.config.JHipsterProperties;
-
 <%_ } _%>
+
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
@@ -31,7 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 <%_ if (authenticationType == 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 <%_ } _%>
 
 import javax.inject.Inject;
@@ -74,10 +72,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     }
 
     @Inject
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
+        try {
+            auth
+                .userDetailsService(userDetailsService)
+                    .passwordEncoder(passwordEncoder());
+        } catch (Exception e) {
+            throw new BeanInitializationException("Security configuration failed", e);
+        }
     }
 
     @Override
@@ -104,12 +106,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .maximumSessions(32) // maximum number of concurrent sessions for one user
             .sessionRegistry(sessionRegistry)
             .and().and()<% } %><% if (authenticationType == 'session') { %>
-            .csrf()<% if (websocket == 'spring-websocket') { %>
+            .csrf()
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())<% if (websocket == 'spring-websocket' && authenticationType != 'session') { %>
             .ignoringAntMatchers("/websocket/**")<% } %>
-        .and()
-            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
-            .exceptionHandling()<% if (authenticationType == 'session') { %>
-            .accessDeniedHandler(new CustomAccessDeniedHandler())<% } %>
+        .and()<% } %>
+            .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
         .and()
             .rememberMe()
@@ -127,8 +128,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
         .and()
             .logout()
             .logoutUrl("/api/logout")
-            .logoutSuccessHandler(ajaxLogoutSuccessHandler)
-            .deleteCookies("JSESSIONID", "CSRF-TOKEN"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
+            .logoutSuccessHandler(ajaxLogoutSuccessHandler)<% if (clusteredHttpSession == 'hazelcast') { %>
+            .deleteCookies("hazelcast.sessionId")<% } %>
             .permitAll()<% } %>
         .and()<% if (authenticationType == 'jwt') { %>
             .csrf()
@@ -150,6 +151,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()<% } %>
+            <%_ if (serviceDiscoveryType == 'consul') { _%>
+            .antMatchers("/management/health").permitAll()
+            <%_ } _%>
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/v2/api-docs/**").permitAll()
             .antMatchers("/swagger-resources/configuration/ui").permitAll()

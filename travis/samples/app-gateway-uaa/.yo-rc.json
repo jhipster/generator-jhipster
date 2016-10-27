@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "baseName": "travisDefault",
+    "packageName": "io.github.jhipster.travis",
+    "packageFolder": "io/github/jhipster/travis",
+    "serverPort": "8080",
+    "authenticationType": "uaa",
+    "uaaBaseName": "travisUaa",
+    "hibernateCache": "hazelcast",
+    "clusteredHttpSession": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSocialSignIn": false,
+    "useSass": false,
+    "applicationType": "gateway",
+    "testFrameworks": [
+      "gatling"
+    ],
+    "jhiPrefix": "jhi",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en"
+    ],
+  "travis": true
+  }
+}

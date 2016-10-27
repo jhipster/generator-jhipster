@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.4.0.RELEASE</version>
+        <version>1.4.1.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -29,9 +29,7 @@
     </prerequisites>
 
     <properties>
-        <%_ if (databaseType === 'sql') { _%>
-        <hikaricp.version>2.4.6</hikaricp.version>
-        <%_ } _%>
+        <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj-core.version>3.5.2</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
@@ -46,14 +44,17 @@
         <frontend-maven-plugin.version>1.0</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
-        <gatling.version>2.1.7</gatling.version>
-        <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
+        <gatling.version>2.2.0</gatling.version>
+        <gatling-maven-plugin.version>2.2.0</gatling-maven-plugin.version>
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
-        <hazelcast.version>3.6.1</hazelcast.version>
+        <hazelcast.version>3.6.5</hazelcast.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate.version>4.3.11.Final</hibernate.version>
+        <%_ } _%>
+        <%_ if (databaseType === 'sql') { _%>
+        <hikaricp.version>2.4.6</hikaricp.version>
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <datastax-driver.version>3.0.1</datastax-driver.version>
@@ -91,7 +92,10 @@
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <spring-cloud.version>Brixton.SR5</spring-cloud.version>
         <%_ } _%>
-        <spring-security.version>4.1.0.RELEASE</spring-security.version>
+        <%_ if (messageBroker === 'kafka') { _%>
+        <spring-cloud-stream.version>Brooklyn.RELEASE</spring-cloud-stream.version>
+        <%_ } _%>
+        <spring-security.version>4.1.3.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
@@ -106,7 +110,7 @@
         <%_ } _%>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
-        <sonar-maven-plugin.version>3.0.2</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
         <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
@@ -124,9 +128,10 @@
         <profile.swagger></profile.swagger>
     </properties>
 
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
     <dependencyManagement>
         <dependencies>
+            <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -134,9 +139,19 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <%_ } _%>
+            <%_ if (messageBroker === 'kafka') { _%>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-dependencies</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <%_ } _%>
         </dependencies>
     </dependencyManagement>
-    <%_ } _%>
+<%_ } _%>
 
     <dependencies>
         <dependency>
@@ -265,6 +280,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
         <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>com.mattbertolini</groupId>
@@ -302,13 +322,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
-        -->
         <%_ } %>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <dependency>
@@ -341,6 +354,14 @@
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
+        <%_ if (databaseType === 'cassandra') { _%>
+        <!-- include netty handler explicitly to overcome dependency mismatch when using cassandra -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>4.0.36.Final</version>
+        </dependency>
+        <%_ } _%>
         <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
@@ -493,6 +514,22 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <%_ } _%>
+        <%_ if (messageBroker === 'kafka') { _%>
+        <!-- Kafka support -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-test-support</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
@@ -613,10 +650,26 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <%_ if (serviceDiscoveryType == 'eureka') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType == 'consul') { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-config</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-hystrix</artifactId>
@@ -624,10 +677,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-spectator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -666,16 +715,8 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-cloudfoundry-connector</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-spring-service-connector</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-localconfig-connector</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cloud-connectors</artifactId>
         </dependency>
         <!-- security -->
         <dependency>
@@ -781,6 +822,9 @@
                     <resultsFolder>target/gatling/results</resultsFolder>
                     <bodiesFolder><%= TEST_DIR %>gatling/bodies</bodiesFolder>
                     <simulationsFolder><%= TEST_DIR %>gatling/simulations</simulationsFolder>
+                    <!-- This will run multiple simulations one by one. Useful when doing gatling tests in CI
+                         You must remove the simulationClass property in order to run multiple simulations -->
+                    <!--<runMultipleSimulations>true</runMultipleSimulations>-->
                     <!-- This will force Gatling to ask which simulation to run
                       This is useful when you have multiple simulations -->
                     <simulationClass>*</simulationClass>
@@ -887,7 +931,6 @@
                 </executions>
                 <%_ } _%>
                 <configuration>
-                    <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
@@ -905,8 +948,6 @@
                         <configuration>
                             <!-- Sets the path to the file which contains the execution data. -->
                             <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
-                            <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
-                            <propertyName>surefireArgLine</propertyName>
                         </configuration>
                     </execution>
                     <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
@@ -1005,6 +1046,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <executable>true</executable>
+                    <fork>true</fork>
                     <!--
                     Enable the line below to have remote debugging of your application on port 5005
                     <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
@@ -1087,7 +1129,6 @@
              </plugins>
         </pluginManagement>
     </build>
-
     <profiles>
         <profile>
             <id>no-liquibase</id>
@@ -1100,6 +1141,15 @@
             <properties>
                 <profile.swagger>,swagger</profile.swagger>
             </properties>
+        </profile>
+        <profile>
+            <id>shell</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-remote-shell</artifactId>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <id>dev</id>
@@ -1132,7 +1182,7 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev,swagger${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1156,8 +1206,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v4.5.0</nodeVersion>
-                                    <npmVersion>3.10.6</npmVersion>
+                                    <nodeVersion>v4.6.0</nodeVersion>
+                                    <npmVersion>3.10.8</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1248,6 +1298,116 @@
                 <!-- default Spring profiles -->
                 <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
             </properties>
+        </profile>
+        <profile>
+            <!--
+                Profile for doing "continuous compilation" with the Scala Maven plugin.
+                It allows automatic compilation of Java classes as soon as they are saved.
+                To use it, run in 3 terminals:
+                - './mvnw -Pcc scala:cc' for continous compilation of your classes
+                - './mvnw -Pcc' for hot reload of Spring boot
+                - 'gulp' for hot reload of the HTML/JavaScript assets
+                Everything should hot reload automatically!
+            -->
+            <id>cc</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <optional>true</optional>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <warSourceDirectory>src/main/webapp/</warSourceDirectory>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <executable>true</executable>
+                            <fork>true</fork>
+                            <addResources>true</addResources>
+                            <!--
+                            Enable the line below to have remote debugging of your application on port 5005
+                            <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
+                            -->
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-compile</id>
+                                <phase>none</phase>
+                            </execution>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>net.alchim31.maven</groupId>
+                        <artifactId>scala-maven-plugin</artifactId>
+                        <version>3.2.2</version>
+                        <executions>
+                            <execution>
+                                <id>compile</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>test-compile</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                    <goal>testCompile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <recompileMode>incremental</recompileMode>
+                            <verbose>true</verbose>
+                            <scalaVersion>2.11.7</scalaVersion>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <!-- log configuration -->
+                <logback.loglevel>DEBUG</logback.loglevel>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>dev,swagger</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <!--
+                Profile for applying IDE-specific configuration.
+                At the moment it only configures MapStruct, which you need when working
+                with DTOs.
+            -->
+            <id>IDE</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.mapstruct</groupId>
+                    <artifactId>mapstruct-processor</artifactId>
+                    <version>${mapstruct.version}</version>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 </project>

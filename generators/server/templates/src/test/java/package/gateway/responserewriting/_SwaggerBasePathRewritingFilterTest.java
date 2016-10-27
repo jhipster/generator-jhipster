@@ -7,6 +7,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.*;
 import static springfox.documentation.swagger2.web.Swagger2Controller.DEFAULT_URL;
@@ -59,7 +60,7 @@ public class SwaggerBasePathRewritingFilterTest {
         context.setResponseGZipped(false);
         context.setResponse(response);
 
-        InputStream in = IOUtils.toInputStream("{\"basePath\":\"/\"}");
+        InputStream in = IOUtils.toInputStream("{\"basePath\":\"/\"}", StandardCharsets.UTF_8);
         context.setResponseDataStream(in);
 
         filter.run();

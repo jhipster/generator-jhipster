@@ -21,23 +21,27 @@ var generators = require('yeoman-generator'),
     _ = require('lodash'),
     util = require('util'),
     prompts = require('./prompts'),
+    writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
 
 var KubernetesGenerator = generators.Base.extend({});
 util.inherits(KubernetesGenerator, scriptBase);
 
 /* Constants used throughout */
-const constants = require('../generator-constants'),
-    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
-    DOCKER_MYSQL = constants.DOCKER_MYSQL,
-    DOCKER_MARIADB = constants.DOCKER_MARIADB,
-    DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL,
-    DOCKER_MONGODB = constants.DOCKER_MONGODB,
-    DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+const constants = require('../generator-constants');
 
 module.exports = KubernetesGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
+
+        // This adds support for a `--[no-]check-install` flag
+        this.option('check-install', {
+            desc: 'Check the status of the required tools',
+            type: Boolean,
+            defaults: true
+        });
+
+        this.checkInstall = this.options['check-install'];
     },
 
     initializing: {
@@ -47,6 +51,7 @@ module.exports = KubernetesGenerator.extend({
         },
 
         checkDocker: function() {
+            if (!this.checkInstall) return;
             var done = this.async();
 
             shelljs.exec('docker -v', {silent:true},function(code, stdout, stderr) {
@@ -68,6 +73,7 @@ module.exports = KubernetesGenerator.extend({
         },
 
         checkKubernetes: function() {
+            if (!this.checkInstall) return;
             var done = this.async();
 
             shelljs.exec('kubectl version', {silent:true}, function(code, stdout, stderr) {
@@ -89,12 +95,12 @@ module.exports = KubernetesGenerator.extend({
             this.dockerPushCommand = this.config.get('dockerPushCommand');
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
 
-            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
-            this.DOCKER_MYSQL = DOCKER_MYSQL;
-            this.DOCKER_MARIADB = DOCKER_MARIADB;
-            this.DOCKER_POSTGRESQL = DOCKER_POSTGRESQL;
-            this.DOCKER_MONGODB = DOCKER_MONGODB;
-            this.DOCKER_ELASTICSEARCH = DOCKER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
+            this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
+            this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
+            this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+            this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
 
             if (this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
@@ -134,6 +140,8 @@ module.exports = KubernetesGenerator.extend({
 
         // cluster for mongodb: it can be done later
         // askForClustersMode: prompts.askForClustersMode,
+
+        askForServiceDiscovery: prompts.askForServiceDiscovery,
 
         askForAdminPassword: prompts.askForAdminPassword,
 
@@ -206,25 +214,8 @@ module.exports = KubernetesGenerator.extend({
         }
     },
 
-    writing: {
-        writeDeployments: function() {
-            for (var i = 0; i < this.appConfigs.length; i++) {
-                var appName = this.appConfigs[i].baseName.toLowerCase();
-                this.app = this.appConfigs[i];
-                this.template('_deployment.yml', appName + '/' + appName + '-deployment.yml');
-                this.template('_service.yml', appName + '/' + appName + '-service.yml');
+    writing: writeFiles(),
 
-                if (this.app.prodDatabaseType) {
-                    this.template('db/_' + this.app.prodDatabaseType + '.yml', appName + '/' + appName + '-' + this.app.prodDatabaseType + '.yml');
-                }
-            }
-        },
-
-        writeRegistryFiles: function() {
-            if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
-            this.template('_jhipster-registry.yml', 'registry/jhipster-registry.yml');
-        }
-    },
     end: function() {
         if (this.warning) {
             this.log('\n' + chalk.yellow.bold('WARNING!') + ' Kubernetes configuration generated with missing images!');

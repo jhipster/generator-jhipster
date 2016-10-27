@@ -75,8 +75,7 @@
             "objects": "Objects",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Eviction count",
-            "mean": "Mean get time (ms)"
+            "evictioncount": "Eviction count"
         },
         "datasource": {
         	"usage": "Usage",

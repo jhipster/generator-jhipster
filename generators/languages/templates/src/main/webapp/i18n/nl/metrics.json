@@ -75,8 +75,7 @@
             "objects": "Objecten",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Uitzetting aantal",
-            "mean": "Gemiddelde get tijd (ms)"
+            "evictioncount": "Uitzetting aantal"
         },
         "datasource": {
             "usage": "Gebruik",

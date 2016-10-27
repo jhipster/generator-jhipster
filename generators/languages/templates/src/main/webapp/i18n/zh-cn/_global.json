@@ -21,7 +21,7 @@
             "admin": {
                 "main": "管理",
                 <%_ if (applicationType == 'gateway') { _%>
-                "gateway": "Gateway",
+                "gateway": "网关",
                 <%_ } _%>
                 "userManagement": "用户管理",
                 "tracker": "追踪使用者",
@@ -52,7 +52,7 @@
                 "register": "您还没有账号？<a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">注册一个新账号</a>"
             },
             "error": {
-                "dontmatch" : "您输入的密码和确认确认密码不匹配!"
+                "dontmatch" : "您输入的密码和确认密码不匹配!"
             },
             "validate": {
                 "newpassword": {
@@ -98,7 +98,7 @@
             "value": "值"
         },
         "delete": {
-            "title": "确认删除操作"
+            "title": "确认删除"
         },
         "validation": {
             "required": "本字段不能为空.",
@@ -114,13 +114,13 @@
         }
     },
     "error": {
-        "server.not.reachable": "服务器不可达",
+        "server.not.reachable": "服务器无法访问",
         "url.not.found": "Not found",
         "NotNull": "域 {{fieldName}} 不能为空!",
         "Size": "域 {{fieldName}} 不满足最大/最小值限制!",
         "userexists": "该用户名已存在!",
         "emailexists": "该邮箱已被使用!",
-        "idexists": "新建的 {{entityName}} 的ID已经存在"
+        "idexists": "新建的 {{entityName}} 不能包含ID"
     },
     "footer": "这里是页脚"
 }

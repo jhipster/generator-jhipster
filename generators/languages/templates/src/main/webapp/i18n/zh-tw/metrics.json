@@ -75,8 +75,7 @@
             "objects": "物件",
             "hits": "快取命中計數",
             "misses": "快取遺漏計數",
-            "evictioncount": "收回計數",
-            "mean": "平均讀取時間 (毫秒)"
+            "evictioncount": "收回計數"
         },
         "datasource": {
         	"usage": "Usage",

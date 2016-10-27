@@ -14,10 +14,10 @@
         },
         "table": {
             "header": {
-                "principal": "使用者",
+                "principal": "用户",
                 "date": "日期",
                 "status": "状态",
-                "data": "其它资料"
+                "data": "其它"
             },
             "data": {
                 "remoteAddress": "远程地址:"

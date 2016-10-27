@@ -75,8 +75,7 @@
             "objects": "Objetos",
             "hits": "Accesos",
             "misses": "Fallos",
-            "evictioncount": "Contador desalojo",
-            "mean": "Tiempo medio de respuesta (ms)"
+            "evictioncount": "Contador desalojo"
         },
         "datasource": {
         	"usage": "Uso",

@@ -38,7 +38,7 @@ elif [ "$JHIPSTER" == "app-cassandra" ]; then
   moveEntity CassTestServiceClassEntity
   moveEntity CassTestServiceImplEntity
 
-elif [ "$JHIPSTER" == "app-microservice" ]; then
+elif [[ ("$JHIPSTER" == "app-microservice-eureka") || ("$JHIPSTER" == "app-microservice-consul") ]]; then
   moveEntity MicroserviceBankAccount
   moveEntity MicroserviceOperation
   moveEntity MicroserviceLabel
@@ -75,6 +75,7 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity TestManyToMany
   moveEntity TestOneToOne
   moveEntity TestCustomTableName
+  moveEntity TestTwoRelationshipsSameEntity
 
   moveEntity EntityWithDTO
   moveEntity EntityWithPagination
@@ -87,6 +88,15 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity EntityWithServiceImplAndDTO
   moveEntity EntityWithServiceImplAndPagination
   moveEntity EntityWithServiceImplPaginationAndDTO
+
+elif [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
 
 else
   moveEntity BankAccount
@@ -153,6 +163,7 @@ generateEntity TestManyToOne
 generateEntity TestManyToMany
 generateEntity TestOneToOne
 generateEntity TestCustomTableName
+generateEntity TestTwoRelationshipsSameEntity
 
 generateEntity EntityWithDTO
 generateEntity EntityWithPagination

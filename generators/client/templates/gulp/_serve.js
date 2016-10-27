@@ -15,7 +15,15 @@ module.exports = function () {
     // redirect. This is required for some endpoints for proxy-middleware
     // to correctly handle them.
     var proxyRoutes = [
+    <%_ if (applicationType === 'monolith') { _%>
+        '/api',
+        '/management',
+        '/swagger-resources',
+        '/v2/api-docs',
+        '/h2-console'
+    <%_ } else { _%>
         '/'
+    <%_ } _%>
     ];
 
     var requireTrailingSlash = proxyRoutes.filter(function (r) {

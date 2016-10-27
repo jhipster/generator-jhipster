@@ -75,8 +75,7 @@
             "objects": "Objects",
             "hits": "हिट्स कूल",
             "misses": "मिस",
-            "evictioncount": "बेदखली गणना",
-            "mean": "Mean get time (ms)"
+            "evictioncount": "बेदखली गणना"
         },
         "datasource": {
         	"usage": "उपयोग",

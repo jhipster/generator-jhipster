@@ -8,17 +8,14 @@ var generators = require('yeoman-generator'),
     pathjs = require('path'),
     util = require('util'),
     prompts = require('./prompts'),
+    writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
 
 var DockerComposeGenerator = generators.Base.extend({});
 
 util.inherits(DockerComposeGenerator, scriptBase);
 
-const constants = require('../generator-constants'),
-    DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY,
-    DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE,
-    DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH,
-    DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+const constants = require('../generator-constants');
 
 module.exports = DockerComposeGenerator.extend({
     constructor: function () {
@@ -33,10 +30,14 @@ module.exports = DockerComposeGenerator.extend({
 
         setupServerVars: function () {
             // Make constants available in templates
-            this.DOCKER_JHIPSTER_REGISTRY = DOCKER_JHIPSTER_REGISTRY;
-            this.DOCKER_JHIPSTER_CONSOLE = DOCKER_JHIPSTER_CONSOLE;
-            this.DOCKER_JHIPSTER_ELASTICSEARCH = DOCKER_JHIPSTER_ELASTICSEARCH;
-            this.DOCKER_JHIPSTER_LOGSTASH = DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
+            this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
+            this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
+            this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
+            this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
+            this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+            this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
         },
 
         checkDocker: function() {
@@ -87,6 +88,11 @@ module.exports = DockerComposeGenerator.extend({
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.useElk = this.config.get('useElk');
+            this.useKafka = false;
+            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            if (this.serviceDiscoveryType === undefined) {
+                this.serviceDiscoveryType = 'eureka';
+            }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
 
@@ -97,6 +103,8 @@ module.exports = DockerComposeGenerator.extend({
     },
 
     prompting: {
+        askForApplicationType: prompts.askForApplicationType,
+
         askForPath: prompts.askForPath,
 
         askForApps: prompts.askForApps,
@@ -104,6 +112,8 @@ module.exports = DockerComposeGenerator.extend({
         askForClustersMode: prompts.askForClustersMode,
 
         askForElk: prompts.askForElk,
+
+        askForServiceDiscovery: prompts.askForServiceDiscovery,
 
         askForAdminPassword: prompts.askForAdminPassword
     },
@@ -181,18 +191,25 @@ module.exports = DockerComposeGenerator.extend({
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
                 }
 
-                // Re-configure the JHipster Registry if it is already configured
-                var spring_cloud_config_uri_configured = false;
-                yamlConfig.environment.forEach(function (env, index, envArr) {
+                if (this.serviceDiscoveryType === 'eureka') {
+                    // Re-configure the JHipster Registry if it is already configured
+                    var spring_cloud_config_uri_configured = false;
+                    yamlConfig.environment.forEach(function (env, index, envArr) {
 
-                    if (env.startsWith('SPRING_CLOUD_CONFIG_URI')) {
-                        envArr[index] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
-                            this.adminPassword + '@registry:8761/config';
-                        spring_cloud_config_uri_configured = true;
+                        if (env.startsWith('SPRING_CLOUD_CONFIG_URI')) {
+                            envArr[index] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
+                                this.adminPassword + '@registry:8761/config';
+                            spring_cloud_config_uri_configured = true;
+                        }
+                    }, this);
+                    // Configure the JHipster Registry if it is not already configured
+                    if (!spring_cloud_config_uri_configured) {
+                        yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
+                            this.adminPassword + '@registry:8761/config');
                     }
-                }, this);
+                }
                 // Configure the JHipster Registry if it is not already configured
-                if (!spring_cloud_config_uri_configured) {
+                if (!spring_cloud_config_uri_configured && appConfig.applicationType !== 'monolith') {
                     yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
                         this.adminPassword + '@registry:8761/config');
                 }
@@ -251,6 +268,11 @@ module.exports = DockerComposeGenerator.extend({
                     delete searchEngineConfig.ports;
                     parentConfiguration[lowercaseBaseName + '-' + searchEngine] = searchEngineConfig;
                 }
+                // Add message broker support
+                var messageBroker = appConfig.messageBroker;
+                if (messageBroker === 'kafka') {
+                    this.useKafka = true;
+                }
                 // Dump the file
                 var yamlString = jsyaml.dump(parentConfiguration, {indent: 4});
 
@@ -272,31 +294,14 @@ module.exports = DockerComposeGenerator.extend({
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
             this.config.set('useElk', this.useElk);
+            this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('adminPassword', this.adminPassword);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
         }
     },
 
-    writing: {
-        writeDockerCompose: function() {
-            this.template('_docker-compose.yml', 'docker-compose.yml');
-        },
+    writing: writeFiles(),
 
-        writeRegistryFiles: function() {
-            if(this.gatewayNb === 0 && this.microserviceNb === 0) return;
-
-            this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
-            this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
-        },
-
-        writeElkFiles: function() {
-            if(!this.useElk) return;
-
-            this.copy('jhipster-console.yml', 'jhipster-console.yml');
-            this.copy('log-conf/logstash.conf', 'log-conf/logstash.conf');
-            this.copy('log-data/gitignore', 'log-data/.gitignore');
-        }
-    },
     end: function() {
         if (this.warning) {
             this.log('\n');

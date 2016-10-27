@@ -75,8 +75,7 @@
             "objects": "Obxetos",
             "hits": "Accesos",
             "misses": "Fallos",
-            "evictioncount": "Reconto desaloxo",
-            "mean": "tempo medio de resposta (ms)"
+            "evictioncount": "Reconto desaloxo"
         },
         "datasource": {
             "usage": "Uso",

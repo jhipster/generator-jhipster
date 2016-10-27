@@ -1,13 +1,11 @@
 'use strict';
 var util = require('util'),
     generators = require('yeoman-generator'),
+    _ = require('lodash'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base');
 
-const constants = require('../generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const constants = require('../generator-constants');
 
 var ModulesGenerator = generators.Base.extend({});
 
@@ -56,14 +54,15 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.enableSocialSignIn = this.config.get('enableSocialSignIn');
         jhipsterVar.testFrameworks = this.config.get('testFrameworks');
         jhipsterVar.jhiPrefix = this.config.get('jhiPrefix');
+        jhipsterVar.jhiPrefixCapitalized = _.upperFirst(jhipsterVar.jhiPrefix);
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');
         jhipsterVar.serverPort = this.config.get('serverPort');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
-        jhipsterVar.javaDir = SERVER_MAIN_SRC_DIR + packageFolder + '/';
-        jhipsterVar.resourceDir = SERVER_MAIN_RES_DIR;
-        jhipsterVar.webappDir = CLIENT_MAIN_SRC_DIR;
+        jhipsterVar.javaDir = constants.SERVER_MAIN_SRC_DIR + packageFolder + '/';
+        jhipsterVar.resourceDir = constants.SERVER_MAIN_RES_DIR;
+        jhipsterVar.webappDir = constants.CLIENT_MAIN_SRC_DIR;
         jhipsterVar.CONSTANTS = constants;
 
         // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules
@@ -98,6 +97,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.isSupportedLanguage = this.isSupportedLanguage;
         jhipsterFunc.getAllInstalledLanguages = this.getAllInstalledLanguages;
         jhipsterFunc.addEntityTranslationKey = this.addEntityTranslationKey;
+        jhipsterFunc.addEntityToEhcache = this.addEntityToEhcache;
+        jhipsterFunc.addEntryToEhcache = this.addEntryToEhcache;
         jhipsterFunc.addChangelogToLiquibase = this.addChangelogToLiquibase;
         jhipsterFunc.addConstraintsChangelogToLiquibase = this.addConstraintsChangelogToLiquibase;
         jhipsterFunc.addLiquibaseChangelogToMaster = this.addLiquibaseChangelogToMaster;

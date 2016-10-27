@@ -37,8 +37,11 @@
            timeToLiveSeconds="3600">
     </cache>
     <% if (enableSocialSignIn) { %>
+
     <cache name="<%=packageName%>.social.SocialUserConnection"
            timeToLiveSeconds="3600">
     </cache>
     <%_ } _%>
+
+    <!-- jhipster-needle-ehcache-add-entry -->
 </ehcache>

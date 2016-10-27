@@ -75,8 +75,7 @@
             "objects": "Objectes",
             "hits": "Accessos",
             "misses": "Fallos",
-            "evictioncount": "Contador d'expulcions",
-            "mean": "Temps d'obtenció mig (ms)"
+            "evictioncount": "Contador d'expulcions"
         },
         "datasource": {
         	"usage": "Utilització",

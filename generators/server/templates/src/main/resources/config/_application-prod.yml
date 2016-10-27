@@ -10,7 +10,7 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-<%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
 eureka:
     instance:
         prefer-ip-address: true
@@ -34,6 +34,26 @@ spring:
             enabled: false
         livereload:
             enabled: false
+    <%_ if (messageBroker == 'kafka' || serviceDiscoveryType == 'consul') { _%>
+    cloud:
+        <%_ if (serviceDiscoveryType == 'consul') { _%>
+        consul:
+            discovery:
+               prefer-ip-address: true
+            host: localhost
+            port: 8500
+        <%_ } _%>
+        <%_ if (messageBroker == 'kafka') { _%>
+        stream:
+            kafka:
+                binder:
+                    brokers: localhost
+                    zk-nodes: localhost
+            bindings:
+                output:
+                    destination: topic-jhipster
+        <%_ } _%>
+    <%_ } _%>
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
@@ -157,9 +177,9 @@ jhipster:
             timeToLiveInDays: 1461
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
-        timeToLiveSeconds: 3600
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         hazelcast:
+            timeToLiveSeconds: 3600
             backupCount: 1
         <%_ } _%>
         <%_ if (hibernateCache == 'ehcache') { _%>

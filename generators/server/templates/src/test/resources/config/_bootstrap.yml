@@ -1,0 +1,16 @@
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
+spring:
+    cloud:
+        config:
+            enabled: false
+<%_ } _%>
+<%_ if (serviceDiscoveryType == 'consul') { _%>
+spring:
+    cloud:
+        consul:
+            discovery:
+                enabled: false
+                instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+            config:
+                enabled: false
+<%_ } _%>

@@ -8,14 +8,13 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.0.1"
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.6"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"<% if(!skipClient) {%>
-        classpath "com.moowork.gradle:gradle-node-plugin:0.12"
-        classpath "com.moowork.gradle:gradle-gulp-plugin:0.12"<% } %>
-        classpath "se.transmode.gradle:gradle-docker:1.2"
-        classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
+        classpath "com.moowork.gradle:gradle-node-plugin:0.13"
+        classpath "com.moowork.gradle:gradle-gulp-plugin:0.13"<% } %>
+        classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -32,10 +31,15 @@ apply plugin: 'io.spring.dependency-management'
 /* downgrade Hibernate to 4.3 */
 ext['hibernate.version'] = '${hibernate_entitymanager_version}'
 <%_ } _%>
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
 dependencyManagement {
   imports {
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:'+ spring_cloud_version
+    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
+    <%_ } _%>
+    <%_ if (messageBroker === 'kafka') { _%>
+    mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:' + spring_cloud_stream_version
+    <%_ } _%>
   }
 }
 <%_ } _%>
@@ -102,6 +106,12 @@ if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_dev.gradle'
 }
 
+if (project.hasProperty('shell')) {
+    dependencies {
+        compile "org.springframework.boot:spring-boot-starter-remote-shell"
+    }
+}
+
 group = '<%= packageName %>'
 version = '0.0.1-SNAPSHOT'
 
@@ -161,7 +171,7 @@ dependencies {
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
-    compile("com.zaxxer:HikariCP:${HikariCP_version}") {
+    compile("com.zaxxer:HikariCP") {
         exclude(module: 'tools')
     }
     <%_ } _%>
@@ -195,6 +205,10 @@ dependencies {
     // https://github.com/elastic/elasticsearch/issues/13245
     compile "net.java.dev.jna:jna:${jna_version}"<% } %><% if (databaseType == 'mongodb') { %>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"<% } %>
+    <%_ if (messageBroker === 'kafka') { _%>
+    compile "org.springframework.cloud:spring-cloud-stream"
+    compile "org.springframework.cloud:spring-cloud-stream-binder-kafka"
+    <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-security"
     compile ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
@@ -213,10 +227,16 @@ dependencies {
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-ribbon"
+    <%_ if (serviceDiscoveryType == 'eureka') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    compile "org.springframework.cloud:spring-cloud-starter-config"
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType == 'consul') { _%>
+    compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
+    compile "org.springframework.cloud:spring-cloud-starter-consul-config"
+    <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-starter-hystrix"
     compile "org.springframework.cloud:spring-cloud-starter-spectator"
-    compile "org.springframework.cloud:spring-cloud-starter-config"
     compile "org.springframework.retry:spring-retry"
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
@@ -225,9 +245,7 @@ dependencies {
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-feign"
     <%_ } _%>
-    compile "org.springframework.cloud:spring-cloud-cloudfoundry-connector"
-    compile "org.springframework.cloud:spring-cloud-spring-service-connector"
-    compile "org.springframework.cloud:spring-cloud-localconfig-connector"
+    compile "org.springframework.boot:spring-boot-starter-cloud-connectors"
     compile ("org.springframework:spring-context-support") {
         exclude(module: 'quartz')
     }
@@ -251,6 +269,7 @@ dependencies {
     compile("io.springfox:springfox-swagger2:${springfox_version}"){
         exclude module: 'mapstruct'
     }
+    compile "io.springfox:springfox-bean-validators:${springfox_version}"
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
     compile "mysql:mysql-connector-java"
     <%_ } _%>
@@ -286,10 +305,15 @@ dependencies {
     testCompile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %><% if (databaseType == 'mongodb') { %>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"<% } %>
     testCompile "org.hamcrest:hamcrest-library"
-    <% if (testFrameworks.indexOf('gatling') != -1) { %>
-    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"<% } %>
+    <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+    testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
+    <%_ if (databaseType === 'cassandra') { _%>
+    compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
     <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
     testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    <%_ if (messageBroker === 'kafka') { _%>
+    testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
+    <%_ } _%>
     runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
     runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
     optional "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
@@ -305,7 +329,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.0'
+    gradleVersion = '3.1'
 }
 
 task stage(dependsOn: 'bootRepackage') {

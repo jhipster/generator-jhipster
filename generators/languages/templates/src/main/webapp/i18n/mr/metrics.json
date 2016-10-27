@@ -75,8 +75,7 @@
             "objects": "ऑब्जेक्ट्स",
             "hits": "हिट्स",
             "misses": "Misses",
-            "evictioncount": "जमा मोजणी",
-            "mean": "मध्य प्राप्त वेळ (ms)"
+            "evictioncount": "जमा मोजणी"
         },
         "datasource": {
         	"usage": "वापर",
