@@ -19,6 +19,9 @@ function writeFiles() {
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template('db/_elasticsearch.yml', appName + '/' + appName + '-' + 'elasticsearch.yml');
                 }
+                if (this.app.messageBroker === 'kafka') {
+                    this.template('db/_kafka.yml', appName + '/' + appName + '-' + 'kafka.yml');
+                }
             }
         },
 
