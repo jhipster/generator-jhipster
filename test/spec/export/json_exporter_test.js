@@ -47,6 +47,7 @@ describe('::exportToJSON', function () {
           },
           {
             "relationshipType": "one-to-many",
+            "javadoc": "A relationship",
             "relationshipName": "employee",
             "otherEntityName": "employee",
             "otherEntityRelationshipName": "department"

@@ -3,6 +3,7 @@
         {
             "relationshipName": "department",
             "otherEntityName": "department",
+            "javadoc": "Another side of the same relationship",
             "relationshipType": "many-to-one",
             "otherEntityField": "foo"
         },
