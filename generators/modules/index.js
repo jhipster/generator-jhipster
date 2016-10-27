@@ -1,6 +1,7 @@
 'use strict';
 var util = require('util'),
     generators = require('yeoman-generator'),
+    _ = require('lodash'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base');
 
@@ -53,6 +54,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.enableSocialSignIn = this.config.get('enableSocialSignIn');
         jhipsterVar.testFrameworks = this.config.get('testFrameworks');
         jhipsterVar.jhiPrefix = this.config.get('jhiPrefix');
+        jhipsterVar.jhiPrefixCapitalized = _.upperFirst(jhipsterVar.jhiPrefix);
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');
         jhipsterVar.serverPort = this.config.get('serverPort');
 

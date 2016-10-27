@@ -125,7 +125,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/mapper/UserMapper.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CachingHttpHeadersFilter.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CsrfCookieGeneratorFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/vm/LoggerVM.java',
@@ -405,7 +404,6 @@ const expectedFiles = {
 
     mongodb: [
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/dbmigrations/InitialSetupMigration.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/CloudMongoDbConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateConverters.java',
         DOCKER_DIR + 'mongodb.yml',
         DOCKER_DIR + 'mongodb-cluster.yml',

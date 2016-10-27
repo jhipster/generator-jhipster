@@ -32,5 +32,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('3.8.1')) {
         generator.removeFile(javaDir + 'config/JacksonConfiguration.java');
     }
-
+    if (generator.isJhipsterVersionLessThan('3.10.0')) {
+        generator.removeFile(javaDir + 'config/CloudMongoDbConfiguration.java');
+        generator.removeFile(javaDir + 'security/CustomAccessDeniedHandler.java');
+        generator.removeFile(javaDir + 'web/filter/CsrfCookieGeneratorFilter.java');
+    }
 }

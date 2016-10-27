@@ -59,7 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see <%= entityClass %>Resource
  */
 @RunWith(SpringRunner.class)
-<%_ if (authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, SecurityBeanOverrideConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)

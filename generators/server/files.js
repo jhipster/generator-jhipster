@@ -254,9 +254,13 @@ function writeFiles() {
             }
 
             if (this.authenticationType === 'session') {
+<<<<<<< HEAD
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomAccessDeniedHandler.java', javaDir + 'security/CustomAccessDeniedHandler.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
+=======
+                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
+>>>>>>> b59dd1bc64454ae06a41b07ed679880331e097a7
             }
 
             if (this.enableSocialSignIn) {
@@ -337,10 +341,16 @@ function writeFiles() {
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
 
             if (this.databaseType === 'mongodb') {
+<<<<<<< HEAD
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             }
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+=======
+                this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
+            }
+            if (this.databaseType === 'sql'|| this.databaseType === 'mongodb') {
+>>>>>>> b59dd1bc64454ae06a41b07ed679880331e097a7
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});

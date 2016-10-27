@@ -1,13 +1,21 @@
 package <%=packageName%>.config;
-<% if (databaseType == 'sql') { %>
+<%_ if (databaseType == 'sql') { _%>
+
 import <%=packageName%>.config.liquibase.AsyncSpringLiquibase;
 
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
+import liquibase.integration.spring.SpringLiquibase;
+<%_ } _%>
+<%_ if (databaseType == 'mongodb' && authenticationType == 'oauth2') { _%>
+
+import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
+<%_ } _%>
+<%_ if (databaseType == 'mongodb') { _%>
+
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
 import com.mongodb.Mongo;
-import com.github.mongobee.Mongobee;<% } %>
+import com.github.mongobee.Mongobee;
+<%_ } _%>
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 import org.h2.tools.Server;
 <%_ } _%>
@@ -21,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb') { %>
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;

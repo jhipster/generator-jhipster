@@ -76,7 +76,7 @@ services:
             <%_ } _%>
             <%_ if (messageBroker == 'kafka') { _%>
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
-            - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK-NODES=zookeeper
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=zookeeper
             <%_ } _%>
         <%_ if (applicationType == 'monolith' || applicationType == 'gateway') { _%>
         ports:
@@ -150,6 +150,8 @@ services:
         extends:
             file: kafka.yml
             service: kafka
+        environment:
+            - KAFKA_ADVERTISED_HOST_NAME=kafka
     zookeeper:
         extends:
             file: kafka.yml
