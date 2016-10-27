@@ -101,7 +101,7 @@ relationship OneToMany {
   /**
    * Another side of the same relationship
    */
-  Employee
+  Employee{department}
 }
 
 relationship ManyToOne {
@@ -109,7 +109,7 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-  Employee{job} to Job
+  Employee{job} to Job{employee}
 }
 
 relationship OneToOne {

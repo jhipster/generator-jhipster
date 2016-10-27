@@ -53,10 +53,12 @@ describe('::convert', function () {
           expect(content[entities[i]].fluentMethods).to.eq(true);
         }
         expect(content.Department.relationships.length).to.eq(2);
+        expect(content.Department.relationships[1].javadoc).to.eq('A relationship');
         expect(content.Department.fields.length).to.eq(2);
         expect(content.Department.entityTableName).to.eq('department');
         expect(content.Employee.javadoc).to.eq('The Employee entity.');
         expect(content.Employee.pagination).to.eq('infinite-scroll');
+        expect(content.Employee.relationships[3].javadoc).to.eq('Another side of the same relationship');
         expect(content.Job.relationships[0].otherEntityRelationshipName).to.eq('job');
         expect(content.Task.relationships[0].otherEntityRelationshipName).to.eq('chore');
       });
