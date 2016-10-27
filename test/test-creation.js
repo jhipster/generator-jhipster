@@ -5,6 +5,7 @@ var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fse = require('fs-extra');
+var getFilesForOptions = require('./test-utils').getFilesForOptions;
 
 const constants = require('../generators/generator-constants'),
     TEST_DIR = constants.TEST_DIR,
@@ -150,21 +151,7 @@ const expectedFiles = {
         '.editorconfig'
     ],
 
-    client: [
-        'bower.json',
-        'package.json',
-        '.bowerrc',
-        '.eslintrc.json',
-        '.eslintignore',
-        'gulpfile.js',
-        'gulp/build.js',
-        'gulp/config.js',
-        'gulp/serve.js',
-        'gulp/utils.js',
-        'gulp/handle-errors.js',
-        CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
-        CLIENT_MAIN_SRC_DIR + 'favicon.ico',
-        CLIENT_MAIN_SRC_DIR + 'robots.txt',
+    i18nJson: [
         CLIENT_MAIN_SRC_DIR + 'i18n/en/activate.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/audits.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/configuration.json',
@@ -198,7 +185,24 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/sessions.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/settings.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/reset.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json',
+        CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json'
+    ],
+
+    client: [
+        'bower.json',
+        'package.json',
+        '.bowerrc',
+        '.eslintrc.json',
+        '.eslintignore',
+        'gulpfile.js',
+        'gulp/build.js',
+        'gulp/config.js',
+        'gulp/serve.js',
+        'gulp/utils.js',
+        'gulp/handle-errors.js',
+        CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
+        CLIENT_MAIN_SRC_DIR + 'favicon.ico',
+        CLIENT_MAIN_SRC_DIR + 'robots.txt',
         CLIENT_MAIN_SRC_DIR + 'app/app.module.js',
         CLIENT_MAIN_SRC_DIR + 'app/app.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/app.constants.js',
@@ -313,195 +317,6 @@ const expectedFiles = {
         CLIENT_TEST_SRC_DIR + 'spec/app/account/reset/request/reset.request.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/services/auth/auth.services.spec.js',
         CLIENT_MAIN_SRC_DIR + 'content/css/documentation.css',
-        CLIENT_MAIN_SRC_DIR + 'content/images/hipster.png',
-        CLIENT_MAIN_SRC_DIR + 'content/images/hipster2x.png'
-    ],
-
-    client_2: [
-        'bower.json',
-        'package.json',
-        'tsconfig.json',
-        '.bowerrc',
-        '.eslintrc.json',
-        '.eslintignore',
-        'gulpfile.js',
-        'gulp/build.js',
-        'gulp/config.js',
-        'gulp/serve.js',
-        'gulp/utils.js',
-        'gulp/handle-errors.js',
-        CLIENT_MAIN_SRC_DIR + 'favicon.ico',
-        CLIENT_MAIN_SRC_DIR + 'robots.txt',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/activate.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/audits.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/configuration.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/error.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/gateway.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/global.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/health.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/login.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/logs.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/home.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/metrics.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/password.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/register.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/sessions.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/settings.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/reset.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/en/user-management.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/activate.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/audits.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/configuration.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/error.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/global.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/gateway.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/health.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/login.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/logs.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/home.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/metrics.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/password.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/register.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/sessions.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/settings.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/reset.json',
-        CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json',
-        CLIENT_MAIN_SRC_DIR + 'app/upgrade_adapter.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/app.main.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/app.module.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/app.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/app.constants.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/http.config.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/localstorage.config.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation-storage.provider.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/compile.config.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/uib-pager.config.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/uib-pagination.config.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/state.handler.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/auth-expired.interceptor.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.ts',
-
-        CLIENT_MAIN_SRC_DIR + 'app/shared/model/account.model.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/filter.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/order-by.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/truncate-characters.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/pipe/truncate-words.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/directive/show-validation.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/directive/sort.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/directive/sort-by.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/service/parse-links.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/service/date-util.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/service/data-util.service.ts',
-
-        CLIENT_MAIN_SRC_DIR + 'app/shared/auth/principal.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/auth/has-authority.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/auth/has-any-authority.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/auth/auth-session.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/auth/account.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/auth/auth.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/language/language.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/language/language.pipe.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/language/language.constants.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/login/login.html',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/login/login.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/login/login.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/shared/alert/alert.provider.ts',
-
-        CLIENT_MAIN_SRC_DIR + 'app/admin/admin.module.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/index.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/user-management/user.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/admin.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audit-data.model.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audit.model.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/log.model.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.component.ts',
-
-        CLIENT_MAIN_SRC_DIR + 'app/account/index.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/account.module.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/account.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.service.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/init/password-reset-init.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password-reset/finish/password-reset-finish.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/session.model.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.component.ts',
-
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-menu.directive.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.html',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.state.ts',
-
-        CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/entities/entity.state.ts',
-
-        CLIENT_MAIN_SRC_DIR + 'app/home/home.html',
-        CLIENT_MAIN_SRC_DIR + 'app/home/home.state.ts',
-        CLIENT_MAIN_SRC_DIR + 'app/home/home.component.ts',
-
-        CLIENT_TEST_SRC_DIR + 'karma.conf.js',
-        CLIENT_TEST_SRC_DIR + 'spec/helpers/httpBackend.js',
-        CLIENT_TEST_SRC_DIR + 'spec/helpers/module.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/admin/health/health.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/components/login/login.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/password/password.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/password/password-strength-bar.directive.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/sessions/sessions.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/settings/settings.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/activate/activate.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/register/register.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/reset/finish/reset-finish.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/reset/request/reset-request.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/services/auth/auth.services.spec.js',
-
-        CLIENT_MAIN_SRC_DIR + 'content/css/documentation.css',
-        CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster.png',
         CLIENT_MAIN_SRC_DIR + 'content/images/hipster2x.png'
     ],
@@ -630,6 +445,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
         });
@@ -668,6 +484,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
         });
@@ -703,6 +520,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
             assert.file(['gradle/yeoman.gradle']);
@@ -1101,6 +919,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
+            assert.noFile(expectedFiles.i18nJson);
             assert.noFile(['gulpfile.js']);
         });
     });
@@ -1134,6 +953,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.noFile(expectedFiles.client);
+            assert.noFile(expectedFiles.i18nJson);
             assert.noFile(['gulpfile.js']);
             assert.noFile(['gradle/yeoman.gradle']);
         });
@@ -1358,6 +1178,7 @@ describe('JHipster server generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
+            assert.noFile(expectedFiles.i18nJson);
             assert.noFile(['gulpfile.js']);
         });
     });
@@ -1382,6 +1203,7 @@ describe('JHipster client generator', function () {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.i18nJson);
             assert.file(['gulpfile.js']);
         });
     });
@@ -1405,8 +1227,13 @@ describe('JHipster client-2 generator', function () {
         it('creates expected files for default configuration for client-2 generator', function () {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
-            assert.file(expectedFiles.client_2);
-            assert.file(['gulpfile.js']);
+            assert.file(expectedFiles.i18nJson);
+            assert.file(getFilesForOptions(require('../generators/client-2/files').files, {
+                useSass: true,
+                enableTranslation: true,
+                authenticationType: 'session',
+                testFrameworks: []
+            }));
         });
     });
 });
