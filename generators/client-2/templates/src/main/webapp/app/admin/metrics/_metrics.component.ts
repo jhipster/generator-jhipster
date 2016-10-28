@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics-modal.component';
 import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
 @Component({
@@ -11,7 +12,6 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     cachesStats: any = {};
     servicesStats: any = {};
     updatingMetrics: boolean = true;
-    threadDump: any;
 
     constructor(private modalService: NgbModal, private metricsService:<%=jhiPrefixCapitalized%>MetricsService) {}
 
@@ -47,10 +47,11 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
         });
     }
 
-    refreshThreadDumpData (metricsModal: TemplateRef<any>) {
+    refreshThreadDumpData () {
         this.metricsService.threadDump().subscribe((data) => {
-            this.threadDump = data;
-            this.modalService.open(metricsModal, { size: 'lg'}).result.then((result) => {
+            const modalRef  = this.modalService.open(JhiMetricsMonitoringModalComponent, { size: 'lg'});
+            modalRef.componentInstance.threadDump = data;
+            modalRef.result.then((result) => {
                 console.log(`Closed with: ${result}`);
             }, (reason) => {
                 console.log(`Dismissed ${reason}`);

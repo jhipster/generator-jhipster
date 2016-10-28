@@ -23,7 +23,11 @@ import {
     JhiItemCountComponent,
     alertServiceProvider,
     JhiAlertComponent,
-    JhiAlertErrorComponent
+    JhiAlertErrorComponent,
+    PaginationUtil,
+    ParseLinks,
+    DataUtils,
+    DateUtils
 } from './';
 
 @NgModule({
@@ -53,7 +57,11 @@ import {
         <%=jhiPrefixCapitalized%>LanguageService,
         { provide: MissingTranslationHandler, useClass: <%=jhiPrefixCapitalized%>MissingTranslationHandler },
         <%_ } _%>
-        alertServiceProvider()
+        alertServiceProvider(),
+        PaginationUtil,
+        ParseLinks,
+        DataUtils,
+        DateUtils
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,

@@ -22,7 +22,7 @@
             </ngb-progressbar>
         </div>
         <div class="col-md-4">
-            <b translate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" (click)="refreshThreadDumpData(metricsModal)" data-toggle="modal" data-target="#threadDump"><i class="glyphicon glyphicon-eye-open"></i></a>
+            <b translate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" (click)="refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><i class="glyphicon glyphicon-eye-open"></i></a>
             <p><span translate="metrics.jvm.threads.runnable">Runnable</span> {{metrics.gauges['jvm.threads.runnable.count'].value}}</p>
             <ngb-progressbar [value]="metrics.gauges['jvm.threads.runnable.count'].value" [max]="metrics.gauges['jvm.threads.count'].value" [striped]="true" [animated]="true" type="success">
                 <span>{{metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value  | number:'1.0-0'}}%</span>
@@ -237,7 +237,3 @@
         </table>
     </div>
 </div>
-<!-- this is a workaround untill ng-bootstrap supports components as modal content https://github.com/ng-bootstrap/ng-bootstrap/issues/680 -->
-<template #metricsModal let-dismiss="dismiss">
-    <jhi-metrics-modal [threadDump]="threadDump" [dismiss]="dismiss"></jhi-metrics-modal>
-</template>

@@ -30,6 +30,15 @@ export * from './metrics/metrics.component';
 export * from './metrics/metrics-modal.component';
 export * from './metrics/metrics.service';
 export * from './metrics/metrics.state';
+<%_ if (!skipUserManagement) { _%>
+export * from './user-management/user-management-dialog.component';
+export * from './user-management/user-management-delete-dialog.component';
+export * from './user-management/user-management-detail.component';
+export * from './user-management/user-management.component';
+export * from './user-management/user-management.state';
+export * from './user-management/user.service';
+export * from './user-management/user.model';
+<%_ } _%>
 export * from './admin.module';
 export * from './admin.ng2module';
 export * from './admin.state';

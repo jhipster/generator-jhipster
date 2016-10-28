@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: '<%=jhiPrefix%>-metrics-modal',
-    templateUrl: 'app/admin/metrics/metrics-modal.html',
-    inputs: ['threadDump', 'dismiss']
+    templateUrl: 'app/admin/metrics/metrics-modal.html'
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements OnInit {
 
@@ -14,6 +13,8 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements
     threadDumpRunnable: number = 0;
     threadDumpTimedWaiting: number = 0;
     threadDumpWaiting: number = 0;
+
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
         this.threadDump.forEach((value) => {

@@ -16,7 +16,7 @@
     "@angular/platform-browser": "2.0.1",
     "@angular/platform-browser-dynamic": "2.0.1",
     "@angular/upgrade": "2.0.1",
-    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.7",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.10",
     "angular-ui-router": "1.0.0-beta.3",
     "core-js": "2.4.1",
     "jquery": "3.1.0",

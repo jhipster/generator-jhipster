@@ -5,6 +5,12 @@ import { <%=angular2AppName%>SharedModule, ParseLinks } from '../shared';
 
 import {
     AuditsComponent,
+    <%_ if (!skipUserManagement) { _%>
+    UserMgmtComponent,
+    UserMgmtDetailComponent,
+    UserMgmtDialogComponent,
+    UserMgmtDeleteDialogComponent,
+    <%_ } _%>
     LogsComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
@@ -13,6 +19,7 @@ import {
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
     AuditsService,
+    UserService,
     <%=jhiPrefixCapitalized%>ConfigurationService,
     <%=jhiPrefixCapitalized%>HealthService,
     <%=jhiPrefixCapitalized%>MetricsService,
@@ -32,6 +39,13 @@ import {
     docsState,
     healthState,
     logsState,
+    <%_ if (!skipUserManagement) { _%>
+    userMgmtState,
+    userMgmtDetailState,
+    userMgmtNewState,
+    userMgmtEditState,
+    userMgmtDeleteState,
+    <%_ } _%>
     metricsState
 } from './';
 
@@ -48,6 +62,13 @@ let ADMIN_STATES = [
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerState,
     <%_ } _%>
+    <%_ if (!skipUserManagement) { _%>
+    userMgmtState,
+    userMgmtDetailState,
+    userMgmtNewState,
+    userMgmtEditState,
+    userMgmtDeleteState,
+    <%_ } _%>
     metricsState
 ];
 
@@ -58,6 +79,12 @@ let ADMIN_STATES = [
     ],
     declarations: [
         AuditsComponent,
+        <%_ if (!skipUserManagement) { _%>
+        UserMgmtComponent,
+        UserMgmtDetailComponent,
+        UserMgmtDialogComponent,
+        UserMgmtDeleteDialogComponent,
+        <%_ } _%>
         LogsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
@@ -72,8 +99,17 @@ let ADMIN_STATES = [
         <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
     ],
+    entryComponents: [
+        <%_ if (!skipUserManagement) { _%>
+        UserMgmtDialogComponent,
+        UserMgmtDeleteDialogComponent,
+        <%_ } _%>
+        <%=jhiPrefixCapitalized%>HealthModalComponent,
+        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
+    ],
     providers: [
         AuditsService,
+        UserService,
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         <%=jhiPrefixCapitalized%>MetricsService,

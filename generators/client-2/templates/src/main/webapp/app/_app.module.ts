@@ -5,6 +5,7 @@ import './admin/admin.module';
 import './entities/entity.module';
 
 import { upgradeAdapter } from './upgrade_adapter';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTranslation) { %>
 
@@ -69,6 +70,7 @@ angular
     .factory('TrackerService', upgradeAdapter.downgradeNg2Provider(<%=jhiPrefixCapitalized%>TrackerService))
     <%_ } _%>
     .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))
+    .factory('NgbModal', upgradeAdapter.downgradeNg2Provider(NgbModal))
     .run(run);
 
 run.$inject = ['StateHandler'];

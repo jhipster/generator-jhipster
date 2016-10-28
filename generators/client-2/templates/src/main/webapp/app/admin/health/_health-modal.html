@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="dismiss('closed')"><span aria-hidden="true">&times;</span>
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="activeModal.dismiss('closed')"><span aria-hidden="true">&times;</span>
     </button>
     <h4 class="modal-title" id="showHealthLabel"><% if (enableTranslation) { %>
 		{{'health.indicator.' + baseName(currentHealth.name) | translate}}<% } else { %><span class="text-capitalize">{{ baseName(currentHealth.name) }}</span><% } %>
@@ -30,5 +30,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button data-dismiss="modal" class="btn btn-default pull-left" type="button" (click)="dismiss('closed')">Done</button>
+    <button data-dismiss="modal" class="btn btn-default pull-left" type="button" (click)="activeModal.dismiss('closed')">Done</button>
 </div>
