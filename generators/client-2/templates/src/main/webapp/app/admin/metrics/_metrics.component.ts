@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics-modal.component';
 import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
 @Component({

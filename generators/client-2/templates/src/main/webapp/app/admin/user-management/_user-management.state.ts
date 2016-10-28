@@ -1,3 +1,4 @@
+import { Transition } from 'ui-router-ng2';
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
