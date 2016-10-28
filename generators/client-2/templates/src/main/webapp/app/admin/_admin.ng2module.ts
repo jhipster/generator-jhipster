@@ -99,6 +99,10 @@ let ADMIN_STATES = [
         <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
     ],
+    entryComponents: [
+        <%=jhiPrefixCapitalized%>HealthModalComponent,
+        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
+    ],
     providers: [
         AuditsService,
         UserService,

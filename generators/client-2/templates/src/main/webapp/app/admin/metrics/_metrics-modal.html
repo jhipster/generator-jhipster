@@ -1,6 +1,6 @@
 <!-- Modal used to display the threads dump -->
 <div class="modal-header">
-    <button type="button" class="close" (click)="dismiss('closed')">&times;</button>
+    <button type="button" class="close" (click)="activeModal.dismiss('closed')">&times;</button>
     <h4 class="modal-title" translate="metrics.jvm.threads.dump.title">Threads dump</h4>
 </div>
 <div class="modal-body pad">
@@ -49,5 +49,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default  pull-left" data-dismiss="modal" (click)="dismiss('closed')">Done</button>
+    <button type="button" class="btn btn-default  pull-left" data-dismiss="modal" (click)="activeModal.dismiss('closed')">Done</button>
 </div>

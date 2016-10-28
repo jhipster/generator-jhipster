@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, TemplateRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
+import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health-modal.component';
 
 @Component({
     selector: '<%=jhiPrefix%>-health',
@@ -8,7 +9,6 @@ import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 })
 export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData:any;
-    currentHealth:any;
     updatingHealth:boolean;
 
     constructor(private modalService: NgbModal, private healthService:<%=jhiPrefixCapitalized%>HealthService) {}
@@ -38,9 +38,10 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         });
     }
 
-    showHealth(healthModal: TemplateRef<any>, health: any) {
-        this.currentHealth = health;
-        this.modalService.open(healthModal).result.then((result) => {
+    showHealth(health: any) {
+        const modalRef  = this.modalService.open(JhiHealthModalComponent);
+        modalRef.componentInstance.currentHealth = health;
+        modalRef.result.then((result) => {
             console.log(`Closed with: ${result}`);
         }, (reason) => {
             console.log(`Dismissed ${reason}`);

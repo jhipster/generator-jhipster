@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 
 @Component({
@@ -11,7 +11,7 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
 
     currentHealth: any;
 
-    constructor(private healthService:<%=jhiPrefixCapitalized%>HealthService) {}
+    constructor(private healthService:JhiHealthService, public activeModal: NgbActiveModal) {}
 
     baseName(name) {
         return this.healthService.getBaseName(name);
