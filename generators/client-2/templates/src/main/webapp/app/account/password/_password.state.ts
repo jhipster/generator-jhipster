@@ -1,5 +1,5 @@
 import { PasswordComponent } from './password.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const passwordState = {
     name: 'password',

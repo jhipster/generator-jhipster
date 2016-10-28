@@ -1,6 +1,6 @@
 import { Transition } from 'ui-router-ng2';
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const trackerState = {
     name: '<%=jhiPrefix%>-tracker',

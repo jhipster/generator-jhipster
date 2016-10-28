@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const healthState = {
     name: '<%=jhiPrefix%>-health',

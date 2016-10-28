@@ -1,5 +1,5 @@
 import { SettingsComponent } from './settings.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const settingsState = {
     name: 'settings',

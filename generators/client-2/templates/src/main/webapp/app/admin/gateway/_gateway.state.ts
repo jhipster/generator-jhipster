@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const gatewayState = {
     name: 'gateway',

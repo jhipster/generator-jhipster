@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const configState = {
     name: '<%=jhiPrefix%>-configuration',

@@ -1,5 +1,5 @@
 import { AuditsComponent } from './audits.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const auditState = {
     name: 'audits',

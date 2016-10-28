@@ -129,7 +129,7 @@ const files = {
             templates: [
                 // entities
                 'entities/_entity.module.ts',
-                { file: 'entities/_entity.state.ts', method: 'copyJs' },
+                'entities/_entity.state.ts',
                 // home module
                 'home/_index.ts',
                 'home/_home.component.ts',
@@ -218,7 +218,7 @@ const files = {
             condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/_social-auth.controller.ts', method: 'copyJs' }
+                'account/social/_social-auth.controller.ts'
             ]
         }
     ],
@@ -243,7 +243,7 @@ const files = {
                 'admin/configuration/_configuration.service.ts',
                 'admin/docs/_docs.component.ts',
                 'admin/docs/_docs.html',
-                { file: 'admin/docs/_docs.state.ts', method: 'copyJs' },
+                'admin/docs/_docs.state.ts',
                 'admin/health/_health.component.ts',
                 'admin/health/_health-modal.component.ts',
                 'admin/health/_health.service.ts',

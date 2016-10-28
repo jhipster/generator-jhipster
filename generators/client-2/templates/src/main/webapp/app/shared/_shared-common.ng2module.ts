@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
+<%_ if (enableTranslation) { _%>
 import { MissingTranslationHandler } from 'ng2-translate/ng2-translate';
+<%_ } _%>
 
 import {
     <%=angular2AppName%>SharedLibsModule,

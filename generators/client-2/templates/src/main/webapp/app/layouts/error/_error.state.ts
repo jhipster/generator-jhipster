@@ -1,5 +1,5 @@
 import { ErrorComponent } from './error.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const errorState = {
     name: 'error',

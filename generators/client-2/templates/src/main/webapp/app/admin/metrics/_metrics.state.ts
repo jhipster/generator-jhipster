@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const metricsState = {
     name: '<%=jhiPrefix%>-metrics',

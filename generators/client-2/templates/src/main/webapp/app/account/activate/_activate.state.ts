@@ -1,5 +1,5 @@
 import { ActivateComponent } from './activate.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const activateState = {
     name: 'activate',

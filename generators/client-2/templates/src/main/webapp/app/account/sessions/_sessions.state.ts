@@ -1,5 +1,5 @@
 import { SessionsComponent } from './sessions.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from "../../shared";
+import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 export const sessionsState = {
     name: 'sessions',
