@@ -103,6 +103,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+            this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
 
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packagejs = packagejs;
