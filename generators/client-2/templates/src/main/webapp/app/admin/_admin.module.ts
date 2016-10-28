@@ -20,7 +20,8 @@ import {
     <%=jhiPrefixCapitalized%>GatewayComponent,
     GatewayRoutesService,
     <%_ } _%>
-    <%=jhiPrefixCapitalized%>ConfigurationComponent
+    <%=jhiPrefixCapitalized%>ConfigurationComponent,
+    UserService
 } from './';
 
 angular
@@ -49,4 +50,4 @@ angular
     <%_ if (applicationType === 'gateway') { _%>
     .directive('<%=jhiPrefix%>Gateway', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>GatewayComponent))
     <%_ } _%>
-    ;
+    .factory('UserService', upgradeAdapter.downgradeNg2Provider(UserService));

@@ -19,8 +19,8 @@ export class UserMgmtDetailComponent implements OnInit {
     }
 
     load (login) {
-        this.userService.find(login).subscribe((user) => {
-            this.user = user.json();
+        this.userService.find(login).subscribe(user => {
+            this.user = user;
         });
     }
 

@@ -100,8 +100,12 @@ let ADMIN_STATES = [
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
     ],
     entryComponents: [
+        <%_ if (!skipUserManagement) { _%>
+        UserMgmtDialogComponent,
+        UserMgmtDeleteDialogComponent,
+        <%_ } _%>
         <%=jhiPrefixCapitalized%>HealthModalComponent,
-        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
+        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     ],
     providers: [
         AuditsService,

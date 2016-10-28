@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: '<%=jhiPrefix%>-metrics-modal',
-    templateUrl: 'app/admin/metrics/metrics-modal.html',
-    inputs: ['threadDump', 'dismiss']
+    templateUrl: 'app/admin/metrics/metrics-modal.html'
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements OnInit {
 

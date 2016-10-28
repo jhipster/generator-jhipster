@@ -2,6 +2,9 @@ import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
+import { User } from './user.model';
+import { UserService } from './user.service';
+import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>PaginationUtil } from '../../shared';
 
 export const userMgmtState = {
     name: 'user-management',
@@ -26,31 +29,31 @@ export const userMgmtState = {
         }
     },
     resolve: [
-        // {
-        //     token: 'pagingParams',
-        //     deps: ['PaginationUtil', 'StateParams'],
-        //     resolveFn: (paginationUtil, stateParams) => {
-        //         return {
-        //             page: paginationUtil.parsePage(stateParams['page']),
-        //             sort: stateParams['sort'],
-        //             predicate: paginationUtil.parsePredicate(stateParams['sort']),
-        //             ascending: paginationUtil.parseAscending(stateParams['sort'])
-        //         };
-        //     }
-        // }<%_ if (enableTranslation){ _%>,
         {
-            token: 'translatePartialLoader',
-            deps: ['$translatePartialLoader'],
-            resolveFn: (translatePartialLoader) => translatePartialLoader.addPart('user-management')
-        }
-        <%_ } _%>
+            token: 'pagingParams',
+            deps: [PaginationUtil, '$stateParams'],
+            resolveFn: (paginationUtil, stateParams) => {
+                return {
+                    page: paginationUtil.parsePage(stateParams['page']),
+                    sort: stateParams['sort'],
+                    predicate: paginationUtil.parsePredicate(stateParams['sort']),
+                    ascending: paginationUtil.parseAscending(stateParams['sort'])
+                };
+            }
+        }<% if (enableTranslation){ %>,
+        {
+            token: 'translate',
+            deps: [<%=jhiPrefixCapitalized%>LanguageService],
+            resolveFn: (languageService) => languageService.setLocations(['user-management'])
+        }<% } %>
 
-    ]<%_ } else { _%>
+    ]
+    <%_ } else { _%>
     resolve: [
         {
-            token: 'translatePartialLoader',
-            deps: ['$translatePartialLoader'],
-            resolveFn: (translatePartialLoader) => translatePartialLoader.addPart('user-management')
+            token: 'translate',
+            deps: [<%=jhiPrefixCapitalized%>LanguageService],
+            resolveFn: (languageService) => languageService.setLocations(['user-management'])
         }
     ]
     <%_ } _%>
@@ -67,12 +70,11 @@ export const userMgmtDetailState = {
     views: {
         'content@': { component: UserMgmtDetailComponent }
     },
-    resolve: {
-        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-            $translatePartialLoader.addPart('user-management');
-            return $translate.refresh();
-        }]
-    }
+    resolve: [{
+        token: 'translate',
+        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['user-management'])
+    }]
 };
 export const userMgmtNewState = {
     name: 'user-management.new',
@@ -80,29 +82,19 @@ export const userMgmtNewState = {
     data: {
         authorities: ['ROLE_ADMIN']
     },
-    // onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-    //     $uibModal.open({
-    //         templateUrl: 'app/admin/user-management/user-management-dialog.html',
-    //         controller: 'UserManagementDialogController',
-    //         controllerAs: 'vm',
-    //         backdrop: 'static',
-    //         size: 'lg',
-    //         resolve: {
-    //             entity: function () {
-    //                 return {
-    //                     id: null, login: null, firstName: null, lastName: null, email: null,
-    //                     activated: true, langKey: null, createdBy: null, createdDate: null,
-    //                     lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
-    //                     resetKey: null, authorities: null
-    //                 };
-    //             }
-    //         }
-    //     }).result.then(function() {
-    //         $state.go('user-management', null, { reload: true });
-    //     }, function() {
-    //         $state.go('user-management');
-    //     });
-    // }]
+    onEnter: ['$transition$', (trans: Transition) => {
+        let $state = trans.injector().get('$state');
+        let modalService = trans.injector().get('NgbModal');
+        const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
+        modalRef.componentInstance.user = new User(null, null, null, null, null, true, null, null, null, null, null, null, null);
+        modalRef.result.then((result) => {
+            console.log(`Closed with: ${result}`);
+            $state.go('user-management', null, { reload: true });
+        }, (reason) => {
+            console.log(`Dismissed ${reason}`);
+            $state.go('user-management');
+        });
+    }]
 };
 
 
@@ -112,24 +104,23 @@ export const userMgmtEditState = {
     data: {
         authorities: ['ROLE_ADMIN']
     },
-    // onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-    //     $uibModal.open({
-    //         templateUrl: 'app/admin/user-management/user-management-dialog.html',
-    //         controller: 'UserManagementDialogController',
-    //         controllerAs: 'vm',
-    //         backdrop: 'static',
-    //         size: 'lg',
-    //         resolve: {
-    //             entity: ['User', function(User) {
-    //                 return User.get({login : $stateParams.login});
-    //             }]
-    //         }
-    //     }).result.then(function() {
-    //         $state.go('user-management', null, { reload: true });
-    //     }, function() {
-    //         $state.go('^');
-    //     });
-    // }]
+    onEnter: ['$transition$', (trans: Transition) => {
+        let $stateParams = trans.injector().get('$stateParams');
+        let $state = trans.injector().get('$state');
+        let modalService = trans.injector().get('NgbModal');
+        let userService: UserService = trans.injector().get('UserService');
+        userService.find($stateParams.login).subscribe(user => {
+            const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
+            modalRef.componentInstance.user = user;
+            modalRef.result.then((result) => {
+                console.log(`Closed with: ${result}`);
+                $state.go('user-management', null, { reload: true });
+            }, (reason) => {
+                console.log(`Dismissed ${reason}`);
+                $state.go('user-management');
+            });
+        });
+    }]
 };
 
 
@@ -139,21 +130,21 @@ export const userMgmtDeleteState = {
     data: {
         authorities: ['ROLE_ADMIN']
     },
-    // onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-    //     $uibModal.open({
-    //         templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
-    //         controller: 'UserManagementDeleteController',
-    //         controllerAs: 'vm',
-    //         size: 'md',
-    //         resolve: {
-    //             entity: ['User', function(User) {
-    //                 return User.get({login : $stateParams.login});
-    //             }]
-    //         }
-    //     }).result.then(function() {
-    //         $state.go('user-management', null, { reload: true });
-    //     }, function() {
-    //         $state.go('^');
-    //     });
-    // }]
+    onEnter: ['$transition$', (trans: Transition) => {
+        let $stateParams = trans.injector().get('$stateParams');
+        let $state = trans.injector().get('$state');
+        let modalService = trans.injector().get('NgbModal');
+        let userService: UserService = trans.injector().get('UserService');
+        userService.find($stateParams.login).subscribe(user => {
+            const modalRef  = modalService.open(UserMgmtDeleteDialogComponent, { size: 'md'});
+            modalRef.componentInstance.user = user;
+            modalRef.result.then((result) => {
+                console.log(`Closed with: ${result}`);
+                $state.go('user-management', null, { reload: true });
+            }, (reason) => {
+                console.log(`Dismissed ${reason}`);
+                $state.go('user-management');
+            });
+        });
+    }]
 };

@@ -1,34 +1,26 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Component, Inject } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
 
 @Component({
     selector: 'user-mgmt-delete-dialog',
-    templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
-    inputs: ['modalRef', 'dismiss']
+    templateUrl: 'app/admin/user-management/user-management-delete-dialog.html'
 })
-export class UserMgmtDeleteDialogComponent implements OnInit {
+export class UserMgmtDeleteDialogComponent {
 
     user: User;
-    modalRef: NgbModalRef;
 
-    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams) {
-
-    }
-
-    ngOnInit() {
-        this.userService.find(this.$stateParams.login).subscribe(response => this.user = response.json());
-    }
+    constructor(private userService: UserService, public activeModal: NgbActiveModal) {}
 
     clear () {
-        this.modalRef.dismiss('cancel');
+        this.activeModal.dismiss('cancel');
     }
 
     confirmDelete (login) {
-        this.userService.delete(login).subscribe((response) => {
-            this.modalRef.dismiss(true);
+        this.userService.delete(login).subscribe(response => {
+            this.activeModal.dismiss(true);
         });
     }
 

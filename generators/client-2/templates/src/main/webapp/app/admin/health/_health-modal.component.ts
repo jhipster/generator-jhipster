@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-health-modal',
-    templateUrl: 'app/admin/health/health-modal.html',
-    inputs: ['currentHealth', 'dismiss']
+    templateUrl: 'app/admin/health/health-modal.html'
 })
 export class <%=jhiPrefixCapitalized%>HealthModalComponent {
 
