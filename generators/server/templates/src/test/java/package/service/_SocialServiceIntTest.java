@@ -5,6 +5,9 @@ import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.repository.search.UserSearchRepository;
+<%_ } _%>
 import <%=packageName%>.service.MailService;
 
 import org.junit.Before;
@@ -16,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.*;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;<% if (databaseType == 'sql') { %>
+import org.springframework.test.util.ReflectionTestUtils;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -28,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType == 'sql') { %>
+@SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class SocialServiceIntTest {
 
@@ -41,6 +44,11 @@ public class SocialServiceIntTest {
     @Inject
     private UserRepository userRepository;
 
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    @Inject
+    private UserSearchRepository userSearchRepository;
+
+    <%_ } _%>
     @Mock
     private MailService mockMailService;
 
@@ -64,6 +72,9 @@ public class SocialServiceIntTest {
         ReflectionTestUtils.setField(socialService, "passwordEncoder", passwordEncoder);
         ReflectionTestUtils.setField(socialService, "mailService", mockMailService);
         ReflectionTestUtils.setField(socialService, "userRepository", userRepository);
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        ReflectionTestUtils.setField(socialService, "userSearchRepository", userSearchRepository);
+        <%_ } _%>
         ReflectionTestUtils.setField(socialService, "usersConnectionRepository", mockUsersConnectionRepository);
     }
 
@@ -373,6 +384,6 @@ public class SocialServiceIntTest {
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        return userRepository.<% if (databaseType == 'sql') { %>saveAndFlush<% } else if (databaseType == 'mongodb') { %>save<% } %>(user);
+        return userRepository.<% if (databaseType === 'sql') { %>saveAndFlush<% } else if (databaseType === 'mongodb') { %>save<% } %>(user);
     }
 }
