@@ -176,7 +176,7 @@ services:
             - 8600:8600
 
     consul-config-loader:
-        image: pbesson/consul-config-loader
+        image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
         volumes:
             - ./central-server-config:/config
         environment:
