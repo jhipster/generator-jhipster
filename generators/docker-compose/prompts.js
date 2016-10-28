@@ -122,11 +122,11 @@ function askForApps() {
             var fileData = this.fs.readJSON(path);
             var config = fileData['generator-jhipster'];
 
-            if(config.applicationType === 'monolith') {
+            if (config.applicationType === 'monolith') {
                 this.monolithicNb++;
-            } else if(config.applicationType === 'gateway') {
+            } else if (config.applicationType === 'gateway') {
                 this.gatewayNb++;
-            } else if(config.applicationType === 'microservice') {
+            } else if (config.applicationType === 'microservice') {
                 this.microserviceNb++;
             }
 
@@ -287,7 +287,8 @@ function getAppFolders(input, applicationType) {
                     if ((fileData['generator-jhipster'].baseName !== undefined)
                         && ((applicationType === undefined)
                             || (applicationType === fileData['generator-jhipster'].applicationType)
-                            || ((applicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType)))) {
+                            || ((applicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType))
+                            || ((applicationType === 'microservice') && ('uaa' === fileData['generator-jhipster'].applicationType)))) {
                         appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                     }
                 } catch(err) {
