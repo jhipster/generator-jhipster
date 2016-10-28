@@ -1,0 +1,6 @@
+Description:
+    Removes an entity
+
+Example:
+
+    yo jhipster:remove-entity Foo

@@ -2,12 +2,16 @@
 var path = require('path'),
     html = require('html-wiring'),
     shelljs = require('shelljs'),
+    chalk = require('chalk'),
+    semver = require('semver'),
     engine = require('ejs').render,
     _ = require('lodash');
 
 const constants = require('./generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    LANGUAGES_MAIN_SRC_DIR = '../../languages/templates/' + constants.CLIENT_MAIN_SRC_DIR;
+    LANGUAGES_MAIN_SRC_DIR = '../../languages/templates/' + constants.CLIENT_MAIN_SRC_DIR,
+    GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0',
+    GENERATOR_JHIPSTER = 'generator-jhipster';
 
 module.exports = {
     rewrite: rewrite,
@@ -16,7 +20,14 @@ module.exports = {
     classify: classify,
     rewriteJSONFile: rewriteJSONFile,
     copyWebResource: copyWebResource,
-    wordwrap: wordwrap
+    wordwrap: wordwrap,
+    initGitRepoIfNeeded: initGitRepoIfNeeded,
+    assertNoLocalChangesInRepository: assertNoLocalChangesInRepository,
+    gitCheckoutBranch: gitCheckoutBranch,
+    getCurrentBranchName: getCurrentBranchName,
+    createBranchAndGenerateApp: createBranchAndGenerateApp,
+    cleanUpDirBeforeAppGeneration: cleanUpDirBeforeAppGeneration,
+    regenerateJHipsterApp: regenerateJHipsterApp
 };
 
 function rewriteFile(args, _this) {
@@ -208,4 +219,196 @@ function wordwrap (text, width, separator, keepLF) {
         wrappedText = wrappedText + separator + _.padEnd(row,width) + separator;
     }
     return wrappedText;
+}
+
+function initGitRepoIfNeeded (_this, callback) {
+    var gitInit = function() {
+        _this.gitExec('init', function(code, msg, err) {
+            if (code !== 0) _this.error('Unable to initialize a new git repository:\n' + msg + ' ' + err);
+            _this.log('Initialized a new git repository');
+            gitCommitAll('Initial', _this, function() {
+                callback();
+            });
+        }.bind(_this));
+    }.bind(_this);
+    _this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], function(code, msg, err) {
+        if (code !== 0) gitInit();
+        else {
+            _this.log('Git repository detected');
+            callback();
+        }
+    }.bind(_this));
+}
+
+function assertNoLocalChangesInRepository (_this, callback) {
+    _this.gitExec(['status', '--porcelain'], function(code, msg, err) {
+        if (code !== 0) _this.error('Unable to check for local changes:\n' + msg + ' ' + err);
+        if (msg != null && msg !== '') {
+            _this.warning(' local changes found.\n' +
+                '\tPlease commit/stash them before proceeding');
+            _this.error('Exiting process');
+        }
+        callback();
+    }.bind(_this));
+}
+
+function getCurrentBranchName (_this, callback) {
+    _this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], function(code, msg, err) {
+        if (code !== 0) _this.error('Unable to detect current git branch:\n' + msg + ' ' + err);
+        callback(msg.replace('\n',''));
+    }.bind(_this));
+}
+
+function getGitVersion (_this, callback) {
+    _this.gitExec(['--version'], function(code, msg) {
+        callback(String(msg.match(/([0-9]+\.[0-9]+\.[0-9]+)/g)));
+    }.bind(_this));
+}
+
+/*function recordCodeHasBeenGenerated (branch, _this, callback) {
+    getGitVersion(_this, function(gitVersion) {
+        var args;
+        if (semver.lt(gitVersion, GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES)) {
+            args = ['merge', '--strategy=ours', '-q', '--no-edit', branch];
+        } else {
+            args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', branch];
+        }
+        _this.gitExec(args, function(code, msg, err) {
+            if (code !== 0) _this.error('Unable to record current code has been generated with version ' +
+                _this.currentVersion + ':\n' + msg + ' ' + err);
+            _this.log('Current code recorded as generated with version ' + _this.currentVersion);
+            callback();
+        }.bind(_this));
+    });
+}
+
+function installJhipsterLocally (version, _this, callback) {
+    shelljs.exec('npm ll -p --depth=0 ' + GENERATOR_JHIPSTER, { silent: true }, function (code, msg, err) {
+        if (code !== 0 || msg.split('@')[1].split(':')[0] !== _this.currentVersion) {
+            _this.log('Installing JHipster ' + version + ' locally');
+            shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, { silent: true }, function (code, msg, err) {
+                if (code === 0) _this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
+                else _this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
+                callback();
+            }.bind(_this));
+        } else {
+            _this.log('Using already installed JHipster ' + version);
+            callback();
+        }
+    }.bind(_this));
+}*/
+
+function createBranchAndGenerateApp (branch, sourceBranch, failIfBranchAlreadyExists, currentVersion, commitMsg, _this, callback) {
+    var recordCodeHasBeenGenerated = function() {
+        getGitVersion(_this, function(gitVersion) {
+            var args;
+            if (semver.lt(gitVersion, GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES)) {
+                args = ['merge', '--strategy=ours', '-q', '--no-edit', branch];
+            } else {
+                args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', branch];
+            }
+            _this.gitExec(args, function(code, msg, err) {
+                if (code !== 0) _this.error('Unable to record current code has been generated with version ' +
+                    currentVersion + ':\n' + msg + ' ' + err);
+                _this.log('Current code recorded as generated with version ' + currentVersion);
+                callback();
+            }.bind(_this));
+        }.bind(_this));
+    }.bind(_this);
+
+    var installJhipsterLocally = function (version, callback) {
+        shelljs.exec('npm ll -p --depth=0 ' + GENERATOR_JHIPSTER, { silent: true }, function (code, msg, err) {
+            if (code !== 0 || msg.split('@')[1].split(':')[0] !== currentVersion) {
+                _this.log('Installing JHipster ' + version + ' locally');
+                shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, { silent: true }, function (code, msg, err) {
+                    if (code === 0) _this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
+                    else _this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
+                    callback();
+                }.bind(_this));
+            } else {
+                _this.log('Using already installed JHipster ' + version);
+                callback();
+            }
+        }.bind(_this));
+    }.bind(_this);
+
+    var regenerate = function() {
+        cleanUpDirBeforeAppGeneration(_this);
+        installJhipsterLocally(currentVersion, function() {
+            regenerateJHipsterApp(currentVersion, commitMsg, _this, function() {
+                gitCheckoutBranch(sourceBranch, _this, function() {
+                    // consider code up-to-date
+                    recordCodeHasBeenGenerated();
+                });
+            }.bind(_this));
+        }.bind(_this));
+    }.bind(_this);
+
+    var createUpgradeBranch = function() {
+        _this.gitExec(['checkout', '--orphan', branch], function(code, msg, err) {
+            if (code !== 0) _this.error('Unable to create ' + branch + ' branch:\n' + msg + ' ' + err);
+            _this.log('Created branch ' + branch);
+            regenerate();
+        }.bind(_this));
+    }.bind(_this);
+
+    _this.gitExec(['rev-parse', '-q', '--verify', branch], function(code, msg, err) {
+        if (code !== 0) {
+            createUpgradeBranch();
+        } else {
+            if (failIfBranchAlreadyExists) {
+                _this.error('Branch ' + branch + ' already exists. Aborting...');
+            } else {
+                callback();
+            }
+        }
+    }.bind(_this));
+}
+
+function gitCheckoutBranch (branch, _this, callback) {
+    _this.gitExec(['checkout', '-q', branch], function(code, msg, err) {
+        if (code !== 0) _this.error('Unable to checkout branch ' + branch + ':\n' + err);
+        _this.log('Checked out branch \"' + branch + '\"');
+        callback();
+    }.bind(_this));
+}
+
+function cleanUpDirBeforeAppGeneration (_this) {
+    shelljs.ls('-A').forEach( file => {
+        if(['.yo-rc.json', '.jhipster', 'node_modules', '.git'].indexOf(file) === -1) {
+            shelljs.rm('-rf', file);
+        }
+    });
+    _this.log('Cleaned up directory');
+}
+
+function generateJhipsterApp (version, _this, callback) {
+    _this.log('Regenerating app with jhipster ' + version + '...');
+    shelljs.exec('yo jhipster --with-entities --force --skip-install', {silent:false}, function (code, msg, err) {
+        if (code === 0) _this.log(chalk.green('Successfully regenerated app with jhipster ' + version));
+        else _this.error('Something went wrong while generating project! '+ err);
+        callback();
+    }.bind(_this));
+}
+
+function gitCommitAll (commitMsg, _this, callback) {
+    var commit = function() {
+        _this.gitExec(['commit', '-q', '-m', '\"' + commitMsg + '\"', '-a', '--allow-empty'], function(code, msg, err) {
+            if (code !== 0) _this.error('Unable to commit in git:\n' + err);
+            _this.log('Committed with message \"' + commitMsg + '\"');
+            callback();
+        }.bind(_this));
+    }.bind(_this);
+    _this.gitExec(['add', '-A'], {maxBuffer: 1024 * 500}, function(code, msg, err) {
+        if (code !== 0) _this.error('Unable to add resources in git:\n' + err);
+        commit();
+    }.bind(_this));
+}
+
+function regenerateJHipsterApp (version, commitMsg, _this, callback) {
+    generateJhipsterApp(version, _this, function() {
+        gitCommitAll(commitMsg, _this, function() {
+            callback();
+        }.bind(_this));
+    }.bind(_this));
 }
