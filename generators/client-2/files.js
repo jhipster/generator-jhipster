@@ -309,7 +309,6 @@ const files = {
                 'shared/_shared.ng2module.ts',
                 'shared/_shared-libs.ng2module.ts',
                 'shared/_shared-common.ng2module.ts',
-                'shared/_XSRF-strategy.provider.ts',
                 'shared/constants/_pagination.constants.ts',
                 //models
                 'shared/model/_account.model.ts',

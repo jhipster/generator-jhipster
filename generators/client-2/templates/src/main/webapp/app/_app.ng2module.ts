@@ -4,7 +4,7 @@ import { UIRouterModule } from 'ui-router-ng2';
 import { Ng1ToNg2Module } from 'ui-router-ng1-to-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
-import { <%=angular2AppName%>SharedModule, XSRFStrategyProvider } from './shared';
+import { <%=angular2AppName%>SharedModule } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module'; //TODO these couldnt be used from barrels due to an error
 import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
@@ -56,7 +56,6 @@ let routerConfig = {
     ],
     providers: [
         ProfileService,
-        XSRFStrategyProvider,
         { provide: Window, useValue: window },
         { provide: Document, useValue: document }
     ],
