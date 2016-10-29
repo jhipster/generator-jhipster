@@ -278,8 +278,8 @@ function askForTableName() {
 }
 
 function askForDTO() {
-    // don't prompt if data is imported from a file
-    if (this.useConfigurationFile) {
+    // don't prompt if data is imported from a file or server is skipped
+    if (this.useConfigurationFile || this.skipServer) {
         return;
     }
     var done = this.async();
@@ -308,8 +308,8 @@ function askForDTO() {
 }
 
 function askForService() {
-    // don't prompt if data are imported from a file
-    if (this.useConfigurationFile) {
+    // don't prompt if data is imported from a file or server is skipped
+    if (this.useConfigurationFile || this.skipServer) {
         return;
     }
     var done = this.async();
@@ -388,6 +388,7 @@ function askForPagination() {
  */
 function askForField(done) {
     this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
+    var skipServer = this.skipServer;
     var prodDatabaseType = this.prodDatabaseType;
     var databaseType = this.databaseType;
     var fieldNamesUnderscored = this.fieldNamesUnderscored;
@@ -413,7 +414,7 @@ function askForField(done) {
                     return 'Your field name cannot start with a upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
-                } else if (jhiCore.isReservedFieldName(input, prodDatabaseType)) {
+                } else if (!skipServer && jhiCore.isReservedFieldName(input, prodDatabaseType)) {
                     return `Your field name cannot contain a Java or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
@@ -424,7 +425,7 @@ function askForField(done) {
         },
         {
             when: function (response) {
-                return response.fieldAdd === true && (databaseType === 'sql' || databaseType === 'mongodb');
+                return response.fieldAdd === true && (skipServer || databaseType === 'sql' || databaseType === 'mongodb');
             },
             type: 'list',
             name: 'fieldType',
