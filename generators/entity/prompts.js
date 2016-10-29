@@ -196,7 +196,7 @@ function askForRelationsToRemove() {
     if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
         return;
     }
-    if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
+    if (this.relNameChoices.length === 0 || this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
         return;
     }
 
