@@ -122,11 +122,11 @@ function askForApps() {
             var fileData = this.fs.readJSON(path);
             var config = fileData['generator-jhipster'];
 
-            if(config.applicationType === 'monolith') {
+            if (config.applicationType === 'monolith') {
                 this.monolithicNb++;
-            } else if(config.applicationType === 'gateway') {
+            } else if (config.applicationType === 'gateway') {
                 this.gatewayNb++;
-            } else if(config.applicationType === 'microservice') {
+            } else if (config.applicationType === 'microservice') {
                 this.microserviceNb++;
             }
 
@@ -274,7 +274,7 @@ function askForAdminPassword() {
     }.bind(this));
 }
 
-function getAppFolders(input, applicationType) {
+function getAppFolders(input, composeApplicationType) {
     var files = shelljs.ls('-l', this.destinationPath(input));
     var appsFolders = [];
 
@@ -285,9 +285,10 @@ function getAppFolders(input, applicationType) {
                 try {
                     var fileData = this.fs.readJSON(input + file.name + '/.yo-rc.json');
                     if ((fileData['generator-jhipster'].baseName !== undefined)
-                        && ((applicationType === undefined)
-                            || (applicationType === fileData['generator-jhipster'].applicationType)
-                            || ((applicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType)))) {
+                        && ((composeApplicationType === undefined)
+                            || (composeApplicationType === fileData['generator-jhipster'].applicationType)
+                            || ((composeApplicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType))
+                            || ((composeApplicationType === 'microservice') && ('uaa' === fileData['generator-jhipster'].applicationType)))) {
                         appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                     }
                 } catch(err) {
