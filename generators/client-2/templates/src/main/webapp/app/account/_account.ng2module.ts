@@ -27,6 +27,14 @@ import {
     finishResetState,
     requestResetState,
     registerState,
+    <%_ if (enableSocialSignIn) { _%>
+    SocialRegisterComponent,
+    socialRegisterState,
+    <%_ if (authenticationType == 'jwt') { _%>
+    SocialAuthComponent,
+    socialAuthState,
+    <%_ } _%>
+    <%_ } _%>
     accountState
 } from './';
 
@@ -40,7 +48,13 @@ let ACCOUNT_STATES = [
     <%_ if (authenticationType === 'session') { _%>
     sessionsState,
     <%_ } _%>
-    settingsState,
+    <%_ if (enableSocialSignIn) { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
+    socialAuthState,
+    <%_ } _%>
+    socialRegisterState,
+    <%_ } _%>
+    settingsState
 ];
 
 @NgModule({
@@ -49,6 +63,12 @@ let ACCOUNT_STATES = [
         UIRouterModule.forChild({ states: ACCOUNT_STATES })
     ],
     declarations: [
+        <%_ if (enableSocialSignIn) { _%>
+        SocialRegisterComponent,
+        <%_ if (authenticationType == 'jwt') { _%>
+        SocialAuthComponent,
+        <%_ } _%>
+        <%_ } _%>
         ActivateComponent,
         RegisterComponent,
         PasswordComponent,

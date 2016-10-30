@@ -7,6 +7,9 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.s
 <%_ } _%>
 import { LoginService } from '../login/login.service';
 import { StateStorageService } from '../auth/state-storage.service';
+<%_ if (enableSocialSignIn) { _%>
+import { SocialService } from '../social/social.service';
+<%_ } _%>
 
 @Component({
     selector: '<%=jhiPrefix%>-login-modal',
@@ -29,6 +32,9 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
         private stateStorageService: StateStorageService,
         private elementRef: ElementRef,
         private renderer: Renderer,
+        <%_ if (enableSocialSignIn) { _%>
+        private socialService: SocialService,
+        <%_ } _%>
         private activeModal: NgbActiveModal
     ) {
         this.credentials = {};

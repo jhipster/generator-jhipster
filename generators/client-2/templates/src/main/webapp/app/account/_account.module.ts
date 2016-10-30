@@ -18,6 +18,12 @@ import {
     PasswordComponent,
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
+    <%_ if (enableSocialSignIn) { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
+    SocialAuthComponent,
+    <%_ } _%>
+    SocialRegisterComponent,
+    <%_ } _%>
     SettingsComponent
 } from './';
 
@@ -31,6 +37,12 @@ angular
         'ui.bootstrap',
         'ui.router'
     ])
+    <%_ if (enableSocialSignIn) { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
+    .directive('socialAuthComponent', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SocialAuthComponent))
+    <%_ } _%>
+    .directive('socialRegisterComponent', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SocialRegisterComponent))
+    <%_ } _%>
     .directive('passwordStrengthBar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordStrengthBarComponent))
     .directive('jhiRegister', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(RegisterComponent))
     .directive('activate', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(ActivateComponent))
