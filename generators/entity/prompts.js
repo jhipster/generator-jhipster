@@ -136,7 +136,7 @@ function askForFields() {
 
 function askForFieldsToRemove() {
     // prompt only if data is imported from a file
-    if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
+    if (!this.useConfigurationFile || this.updateEntity !== 'remove' || this.fieldNameChoices.length === 0) {
         return;
     }
     var done = this.async();
@@ -146,12 +146,11 @@ function askForFieldsToRemove() {
             type: 'checkbox',
             name: 'fieldsToRemove',
             message: 'Please choose the fields you want to remove',
-            choices: this.fieldNameChoices,
-            default: 'none'
+            choices: this.fieldNameChoices
         },
         {
             when: function (response) {
-                return response.fieldsToRemove !== 'none';
+                return response.fieldsToRemove.length !== 0;
             },
             type: 'confirm',
             name: 'confirmRemove',
@@ -193,7 +192,7 @@ function askForRelationships() {
 
 function askForRelationsToRemove() {
     // prompt only if data is imported from a file
-    if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
+    if (!this.useConfigurationFile || this.updateEntity !== 'remove' || this.relNameChoices.length === 0) {
         return;
     }
     if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
@@ -207,12 +206,11 @@ function askForRelationsToRemove() {
             type: 'checkbox',
             name: 'relsToRemove',
             message: 'Please choose the relationships you want to remove',
-            choices: this.relNameChoices,
-            default: 'none'
+            choices: this.relNameChoices
         },
         {
             when: function (response) {
-                return response.relsToRemove !== 'none';
+                return response.relsToRemove.length !== 0;
             },
             type: 'confirm',
             name: 'confirmRemove',
