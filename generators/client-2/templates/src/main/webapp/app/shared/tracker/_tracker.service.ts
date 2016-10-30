@@ -56,7 +56,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         var stateChangeStart;
         var headers = {};
         <%_ if (authenticationType === 'session') { _%>
-        headers['X-CSRF-TOKEN'] = this.csrfService.getCSRF('CSRF-TOKEN');
+        headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
         <%_ } _%>
         this.stompClient.connect(headers, () => {
             this.connectedPromise('success');
