@@ -132,9 +132,9 @@ describe('::parse', function () {
         'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
         'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
-      entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = "A relationship";
+      entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
       var content = Parser.parseEntities(entities);
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom).not.to.be.undefined;
+      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom).to.eq('A relationship');
       expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo).to.be.undefined;
     });
     it('parses comments in relationships for owned', function () {
@@ -142,10 +142,10 @@ describe('::parse', function () {
         'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
         'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
-      entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = "Another side of the same relationship";
+      entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
       var content = Parser.parseEntities(entities);
       expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom).to.be.undefined;
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo).not.to.be.undefined;
+      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo).to.eq('Another side of the same relationship');
     });
     it('parses required relationships in owner', function () {
       var entities = {
@@ -173,6 +173,51 @@ describe('::parse', function () {
       var content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
       expect(content.options.filter( o => o.name === UnaryOptions.SKIP_CLIENT && o.entityNames.has('*')).length).eq(1);
       expect(content.options.filter( o => o.name === UnaryOptions.SKIP_SERVER && o.entityNames.has('*')).length).eq(1);
+    });
+  });
+
+  describe('when parsing entities with relationships to User', function () {
+    describe('when skipUserManagement flag is not set', function () {
+      describe('when there is no User.json entity', function () {
+        it('parses relationships to the JHipster managed User entity', function () {
+          var entities = {
+            Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json')
+          };
+          var content = Parser.parseEntities(entities);
+          expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{user}_User');
+        });
+      });
+      describe('when there is a User.json entity', function () {
+        it('throws an error ', function () {
+          try {
+            var entities = {
+              Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json'),
+              User: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Region.json')
+            };
+            Parser.parseEntities(entities);
+            fail();
+          } catch (error) {
+            expect(error.name).to.eq('IllegalNameException')
+          }
+        });
+      });
+    });
+    describe('when skipUserManagement flag is set', function () {
+      it('parses the User.json entity if skipUserManagement flag is set', function () {
+        var entities = {
+          Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json'),
+          User: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Region.json')
+        };
+        entities.User.relationships[0].otherEntityRelationshipName = 'user';
+        var yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
+        yoRcJson['generator-jhipster'].skipUserManagement = true;
+        var content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
+        Parser.parseEntities(entities, content);
+        expect(content.entities.Country).not.to.be.undefined;
+        expect(content.entities.User).not.to.be.undefined;
+        expect(content.entities.User.fields.regionId).not.to.be.undefined;
+        expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{user}_User{country}');
+      });
     });
   });
 
