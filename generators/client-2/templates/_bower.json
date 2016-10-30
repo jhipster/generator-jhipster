@@ -16,12 +16,6 @@
     "angular-loading-bar": "0.9.0",
     "angular-resource": "1.5.5",
     "angular-sanitize": "1.5.5",
-    <%_ if (enableTranslation) { _%>
-    "angular-translate": "2.11.0",
-    "angular-translate-interpolation-messageformat": "2.11.0",
-    "angular-translate-loader-partial": "2.11.0",
-    "angular-translate-storage-cookie": "2.11.0",
-    <%_ } _%>
     <%_ if (useSass) { _%>
     "bootstrap-sass": "3.3.6",
     <%_ } else { _%>

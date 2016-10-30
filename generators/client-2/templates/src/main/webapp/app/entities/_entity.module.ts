@@ -1,7 +1,6 @@
 angular
     .module('<%=angularAppName%>.entity', [<% if (enableTranslation) { %>
-        'tmh.dynamicLocale',
-        'pascalprecht.translate', <% } %>
+        'tmh.dynamicLocale',<% } %>
         'ngResource',
         'ngFileUpload',
         'ui.bootstrap',

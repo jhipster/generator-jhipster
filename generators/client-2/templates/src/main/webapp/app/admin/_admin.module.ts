@@ -28,7 +28,6 @@ angular
     .module('<%=angularAppName%>.admin', [
         <%_ if (enableTranslation) { _%>
         'tmh.dynamicLocale',
-        'pascalprecht.translate',
         <%_ } _%>
         'ngResource',
         'ui.bootstrap',

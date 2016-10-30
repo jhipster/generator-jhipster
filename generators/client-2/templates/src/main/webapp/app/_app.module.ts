@@ -32,8 +32,7 @@ import { <%=jhiPrefixCapitalized%>LoginModalComponent<% if (websocket === 'sprin
 
 angular
     .module('<%=angularAppName%>.app', [<% if (enableTranslation) { %>
-        'tmh.dynamicLocale',
-        'pascalprecht.translate',<% } %>
+        'tmh.dynamicLocale',<% } %>
         'ngResource',
         'ngCookies',
         'ngAria',

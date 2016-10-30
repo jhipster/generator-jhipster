@@ -31,7 +31,6 @@ angular
     .module('<%=angularAppName%>.account', [
         <%_ if (enableTranslation) { _%>
         'tmh.dynamicLocale',
-        'pascalprecht.translate',
         <%_ } _%>
         'ngResource',
         'ui.bootstrap',
