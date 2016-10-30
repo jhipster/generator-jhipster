@@ -1689,11 +1689,11 @@ Generator.prototype.getOptionFromArray = function (array, option) {
  * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
  */
 Generator.prototype.hibernateSnakeCase = function (value) {
-    let res = '';
+    var res = '';
     if (value) {
         value = value.replace('.', '_');
         res = value[0];
-        for (var i = 1, len = value.length - 1; i < len; i++) {
+        for (let i = 1, len = value.length - 1; i < len; i++) {
             if (value[i-1] !== value[i-1].toUpperCase() &&
                 value[i] !== value[i].toLowerCase() &&
                 value[i+1] !== value[i+1].toUpperCase()
