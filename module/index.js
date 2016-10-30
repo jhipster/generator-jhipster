@@ -27,6 +27,7 @@ const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
     readEntityJSON = require('../lib/reader/json_file_reader').readEntityJSON,
     ReservedKeywords = require('../lib/core/jhipster/reserved_keywords'),
     ObjectUtils = require('../lib/utils/object_utils'),
+    StringUtils = require('../lib/utils/string_utils'),
     Set = require('../lib/utils/objects/set');
 
 module.exports = {
@@ -74,5 +75,7 @@ module.exports = {
   readEntityJSON: readEntityJSON,
   toFilePath: toFilePath,
   /* Objects */
-  Set: Set
+  Set: Set,
+  /* Utils */
+  camelCase: StringUtils.camelCase
 };
