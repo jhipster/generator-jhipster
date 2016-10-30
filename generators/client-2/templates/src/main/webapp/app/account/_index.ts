@@ -25,3 +25,10 @@ export * from './settings/settings.state';
 export * from './account.module';
 export * from './account.ng2module';
 export * from './account.state';
+<%_ if (enableSocialSignIn) { _%>
+	<%_ if (authenticationType == 'jwt') { _%>
+export * from './social/social-auth.component';
+	<%_ } _%>
+export * from './social/social-register.component';
+export * from './social/social.state';
+<%_ } _%>

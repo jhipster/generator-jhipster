@@ -19,6 +19,10 @@ import {
     <%_ } _%>
     HasAuthorityDirective,
     HasAnyAuthorityDirective,
+<% if (enableSocialSignIn) { %>
+    <%=jhiPrefixCapitalized%>SocialComponent,
+    SocialService,
+<%_ } _%>
     <%=jhiPrefixCapitalized%>LoginModalComponent
 } from './';
 
@@ -28,6 +32,9 @@ import {
         <%=angular2AppName%>SharedCommonModule
     ],
     declarations: [
+        <%_ if (enableSocialSignIn) { _%>
+        <%=jhiPrefixCapitalized%>SocialComponent,
+        <%_ } _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective
@@ -39,18 +46,24 @@ import {
         StateStorageService,
         Principal,
         CSRFService,
-        AuthService,
         <%_ if (authenticationType === 'oauth2') { _%>
         Base64,
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        AuthServerProvider
+        AuthServerProvider,
+        <%_ if (enableSocialSignIn) { _%>
+        SocialService,
+        <%_ } _%>
+        AuthService
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
         <%=angular2AppName%>SharedCommonModule,
+        <%_ if (enableSocialSignIn) { _%>
+        <%=jhiPrefixCapitalized%>SocialComponent,
+        <%_ } _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective

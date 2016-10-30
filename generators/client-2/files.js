@@ -206,11 +206,11 @@ const files = {
             condition: generator => generator.enableSocialSignIn,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/directive/_social.html', method: 'copyHtml' },
+                { file: 'account/social/_social.html', method: 'copyHtml' },
                 { file: 'account/social/_social-register.html', method: 'copyHtml' },
-                'account/social/directive/_social.directive.ts',
-                'account/social/_social-register.controller.ts',
-                'account/social/_social.service.ts',
+                'account/social/_social-register.component.ts',
+                'shared/social/_social.component.ts',
+                'shared/social/_social.service.ts',
                 { file: 'account/social/_social.state.ts', method: 'copyJs' }
             ]
         },
@@ -218,7 +218,7 @@ const files = {
             condition: generator => generator.enableSocialSignIn && generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
             templates: [
-                'account/social/_social-auth.controller.ts'
+                'account/social/_social-auth.component.ts'
             ]
         }
     ],
