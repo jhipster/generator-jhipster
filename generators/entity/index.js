@@ -144,7 +144,7 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
                 this.error(chalk.red('The entity name cannot end with \'Detail\''));
-            } else if (jhiCore.isReservedClassName(this.name)) {
+            } else if (!this.skipServer && jhiCore.isReservedClassName(this.name)) {
                 this.error(chalk.red('The entity name cannot contain a Java or JHipster reserved keyword'));
             }
         },
@@ -155,7 +155,7 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The table name cannot contain special characters'));
             } else if (this.entityTableName === '') {
                 this.error(chalk.red('The table name cannot be empty'));
-            } else if (jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
+            } else if (!this.skipServer && jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
                 this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
             } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
                 this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
@@ -329,7 +329,7 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.changelogDate)
                 && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 var currentDate = this.dateFormatForLiquibase();
-                this.warning(`hangelogDate is missing in .jhipster/${ this.name }.json, using ${ currentDate } as fallback`);
+                this.warning(`changelogDate is missing in .jhipster/${ this.name }.json, using ${ currentDate } as fallback`);
                 this.changelogDate = currentDate;
             }
             if (_.isUndefined(this.dto)) {
