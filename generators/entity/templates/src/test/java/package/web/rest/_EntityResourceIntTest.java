@@ -173,8 +173,8 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";
     <%_ } else if (fieldTypeBlobContent == 'text') { _%>
 
-    private static final String <%=defaultValueName %> = "";
-    private static final String <%=updatedValueName %> = "";
+    private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
+    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
     <%_ } else if (isEnum) { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;

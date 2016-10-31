@@ -654,7 +654,8 @@ function askForField(done) {
             when: function (response) {
                 return response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldType === 'String';
+                    (response.fieldType === 'String' ||
+                    response.fieldTypeBlobContent === 'text');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -687,8 +688,7 @@ function askForField(done) {
                     response.fieldType === 'Long' ||
                     response.fieldType === 'Float' ||
                     response.fieldType === 'Double' ||
-                    response.fieldType === 'BigDecimal' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'BigDecimal');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
