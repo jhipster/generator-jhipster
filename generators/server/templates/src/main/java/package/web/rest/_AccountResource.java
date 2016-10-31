@@ -26,8 +26,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+<%_ if (authenticationType == 'session') { _%>
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+<%_ } _%>
 import java.util.*;
 
 /**
