@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {  Http, Request, RequestOptionsArgs, RequestOptions, XHRBackend } from '@angular/http';
 import { UIRouterModule } from 'ui-router-ng2';
 import { Ng1ToNg2Module } from 'ui-router-ng1-to-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
@@ -23,6 +24,8 @@ import {
     accessdeniedState
 } from './layouts';
 import { localStorageConfig } from './blocks/config/localstorage.config';
+import { CustomHttp } from './blocks/interceptor/http.interceptor';
+
 
 localStorageConfig();
 
@@ -57,7 +60,12 @@ let routerConfig = {
     providers: [
         ProfileService,
         { provide: Window, useValue: window },
-        { provide: Document, useValue: document }
+        { provide: Document, useValue: document },
+        {
+            provide: Http,
+            useFactory: (backend: XHRBackend, defaultOptions: RequestOptions) => new CustomHttp(backend, defaultOptions),
+            deps: [XHRBackend, RequestOptions]
+        }
     ],
     bootstrap: [ HomeComponent ]
 })

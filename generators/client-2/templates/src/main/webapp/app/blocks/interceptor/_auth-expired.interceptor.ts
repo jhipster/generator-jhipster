@@ -23,7 +23,7 @@ export function AuthExpiredInterceptor($rootScope, $q, $injector/*, $localStorag
         return $q.reject(response);
     }
 }
-<%_ } if (authenticationType === 'session') { _%>
+<%_ } if (authenticationType === 'session') { _%> 
 AuthExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document'];
 
 export function AuthExpiredInterceptor($rootScope, $q, $injector, $document) {
