@@ -1,4 +1,4 @@
-<% if (authenticationType == 'uaa') { %>import java.nio.charset.StandardCharsets
+<% if (authenticationType == 'uaa' || authenticationType == 'oauth2') { %>import java.nio.charset.StandardCharsets
 import java.util.Base64
 
 <% } %>import _root_.io.gatling.core.scenario.Simulation
@@ -41,7 +41,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         "X-XSRF-TOKEN" -> "${xsrf_token}"
     )
 <%_ } _%>
-<%_ if (authenticationType == 'uaa') { _%>
+<%_ if (authenticationType == 'uaa' || authenticationType == 'oauth2') { _%>
 
     val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:my-secret-token-to-change-in-production".getBytes(StandardCharsets.UTF_8))
 
@@ -85,7 +85,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("remember-me", "true")
         .formParam("submit", "Login")
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed
-<%_ } else if (authenticationType == 'uaa') { _%>
+<%_ } else if (authenticationType == 'uaa' || authenticationType == 'oauth2') { _%>
         .post("/oauth/token")
         .headers(headers_http_authentication)
         .formParam("username", "admin")
