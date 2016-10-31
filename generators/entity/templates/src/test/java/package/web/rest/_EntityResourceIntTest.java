@@ -116,7 +116,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         if (fields[idx].fieldValidateRulesMaxlength < sampleTextLength) {
             sampleTextLength = fields[idx].fieldValidateRulesMaxlength;
         }
-        for( var i = 0; i < sampleTextLength; i++ ) {
+        for (var i = 0; i < sampleTextLength; i++ ) {
             sampleTextString += "A";
             updatedTextString += "B";
         }_%>
