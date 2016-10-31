@@ -17,6 +17,7 @@
         'ui-router-ng1-to-ng2': 'vendor/ui-router-ng1-to-ng2/ng1-to-ng2.js',
         'ui-router-visualizer': 'vendor/ui-router-visualizer/release/visualizer.min.js',
         'jquery' : 'vendor/jquery/dist',
+        'ng2-cookies': 'vendor/ng2-cookies',
         'ng2-webstorage': 'vendor/ng2-webstorage',
         <%_ if (enableTranslation){ _%>
         'ng2-translate': 'vendor/ng2-translate/bundles',
@@ -36,6 +37,7 @@
         '@ng-bootstrap/ng-bootstrap': { main: '/bundles/ng-bootstrap', defaultExtension: 'js' },
         'ui-router-ng2': {},
         'jquery': { main: 'jquery.min', defaultExtension: 'js' },
+        'ng2-cookies': {main: 'index', defaultExtension: 'js'},
         'ng2-webstorage': { main: 'bundles/core.umd.js', defaultExtension: 'js' },
         <%_ if (enableTranslation){ _%>
         'ng2-translate': {main: 'ng2-translate', defaultExtension: 'js'},
