@@ -793,8 +793,7 @@ function askForField(done) {
                     response.fieldValidate === true &&
                     response.fieldValidateRules.indexOf('min') !== -1 &&
                     (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'Long');
             },
             type: 'input',
             name: 'fieldValidateRulesMin',
@@ -811,8 +810,7 @@ function askForField(done) {
                     response.fieldValidate === true &&
                     response.fieldValidateRules.indexOf('max') !== -1 &&
                     (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'Long');
             },
             type: 'input',
             name: 'fieldValidateRulesMax',
