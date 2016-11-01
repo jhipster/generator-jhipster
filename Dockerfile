@@ -25,7 +25,7 @@ RUN \
      build-essential && \
 
   # install node.js
-  curl -sL https://deb.nodesource.com/setup_4.x | bash && \
+  curl -sL https://deb.nodesource.com/setup_6.x | bash && \
   apt-get install -y nodejs && \
 
   # upgrade npm

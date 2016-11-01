@@ -1206,8 +1206,8 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v4.6.0</nodeVersion>
-                                    <npmVersion>3.10.8</npmVersion>
+                                    <nodeVersion>v6.9.1</nodeVersion>
+                                    <npmVersion>3.10.9</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
