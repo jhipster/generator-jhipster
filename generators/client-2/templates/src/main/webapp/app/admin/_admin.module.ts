@@ -30,8 +30,7 @@ angular
         'tmh.dynamicLocale',
         <%_ } _%>
         'ngResource',
-        'ui.bootstrap',
-        'ui.router'
+        'ui.bootstrap'
     ])
     <%_ if (!skipUserManagement) { _%>
     .directive('userMgmt', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtComponent))
