@@ -109,6 +109,33 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     }
 };
 
+
+/**
+ * Remove an old entity in the "entities" menu.
+ *
+ * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ */
+Generator.prototype.removeEntityFromMenu = function (routerName, enableTranslation) {
+    try {
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        jhipsterUtils.replaceContent({
+            file: fullPath,
+            pattern: `<li ui-sref-active="active">
+                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                                <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                            </a>
+                        </li>`,
+            content: '',
+            regex: false
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required reference to ') + routerName + ' ' + chalk.yellow('not removed from menu.\n'));
+    }
+};
+
+
 /**
  * A a new element in the "global.json" translations.
  *
@@ -165,13 +192,33 @@ Generator.prototype.addEntityTranslationKey = function (key, value, language) {
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-menu-add-entry',
-            splicable: [
-                `"${key}": "${_.startCase(value)}",`
-            ]
+            pattern: `"${key}": "${_.startCase(value)}",`,
+            content: '',
+            regex: false
         }, this);
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+    }
+};
+
+/**
+ * A a old entity in the "global.json" translations.
+ *
+ * @param {string} key - Key for the entity name
+ * @param {string} value - Default translated value
+ * @param {string} language - The language to which this translation should be added
+ */
+Generator.prototype.removeEntityTranslationKey = function (key, value, language) {
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+    try {
+        jhipsterUtils.replaceContent({
+            file: fullPath,
+            pattern: `"${key}": "${_.startCase(value)}",`,
+            content: '',
+            regex: false
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required reference to ') + language + chalk.yellow(' not removed as an old entity in the menu.\n'));
     }
 };
 
@@ -461,6 +508,47 @@ Generator.prototype.addEntryToEhcache = function (entry) {
 };
 
 /**
+ * remove entity from the Ehcache, for the 2nd level cache of an entity and its relationships.
+ *
+ * @param {string} name - the entity to remove.
+ * @parma {array} relationships - the relationships of this entity
+ */
+Generator.prototype.removeEntityFromEhcache = function (entityClass, relationships) {
+    // Add the entity to ehcache
+    this.removeEntryFromEhcache(`${this.packageName}.domain.${entityClass}`);
+    // Add the collections linked to that entity to ehcache
+    for (var idx in relationships) {
+        var relationshipType = relationships[idx].relationshipType;
+        if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+            this.removeEntryFromEhcache(`${this.packageName}.domain.${entityClass}.${relationships[idx].relationshipFieldNamePlural}`);
+        }
+    }
+};
+
+/**
+ * Remove an entry from the ehcache.xml file
+ *
+ * @param {string} name - the entry (including package name) to remove from cache.
+ */
+Generator.prototype.removeEntryFromEhcache = function (entry) {
+    try {
+        var fullPath = SERVER_MAIN_RES_DIR + 'ehcache.xml';
+        jhipsterUtils.replaceContent({
+            file: fullPath,
+            pattern: `<cache name="${entry}"
+        timeToLiveSeconds="3600">
+    </cache>
+`,
+            content: '',
+            regex: false
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to remove ' + entry + ' from ehcache.xml file.\n'));
+    }
+};
+
+
+/**
  * Add a new changelog to the Liquibase master.xml file.
  *
  * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
@@ -470,12 +558,30 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 };
 
 /**
+ * Remove an old changelog from the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.removeChangelogFromLiquibase = function (changelogName) {
+    this.removeLiquibaseChangelogFromMaster(changelogName);
+};
+
+/**
  * Add a new constraints changelog to the Liquibase master.xml file.
  *
  * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
  */
 Generator.prototype.addConstraintsChangelogToLiquibase = function (changelogName) {
     this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-constraints-changelog');
+};
+
+/**
+ * Remove an old constraints changelog from the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.removeConstraintsChangelogFromLiquibase = function (changelogName) {
+    this.removeLiquibaseChangelogFromMaster(changelogName);
 };
 
 /**
@@ -496,6 +602,25 @@ Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, nee
         }, this);
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+    }
+};
+
+/**
+ * Remove an old changelog from the Liquibase master.xml file.
+ *
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.removeLiquibaseChangelogFromMaster = function (changelogName) {
+    var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
+    try {
+        jhipsterUtils.replaceContent({
+            file: fullPath,
+            pattern: `<include file="classpath:config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`,
+            content: '',
+            regex: false
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing reference to ') + changelogName + '.xml ' + chalk.yellow('not removed.\n'));
     }
 };
 
@@ -1552,9 +1677,29 @@ Generator.prototype.copyI18n = function (language) {
     }
 };
 
+
+Generator.prototype.deleteI18n = function (language) {
+    try {
+        this.fs.delete(CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + this.entityInstance + '.json');
+        this.removeEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
+    } catch (e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
 Generator.prototype.copyEnumI18n = function (language, enumInfo) {
     try {
         this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_enum_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
+    } catch (e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
+Generator.prototype.removeEnumI18n = function (language, enumInstance) {
+    try {
+        this.fs.delete(CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInstance + '.json');
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing

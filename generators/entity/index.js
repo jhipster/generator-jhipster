@@ -69,6 +69,14 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
+
+        // This method adds support for a `--[no-]remove` flag
+        this.option('remove', {
+            desc: 'Remove the entity',
+            type: Boolean,
+            defaults: false
+        });
+
         // remove extention if feeding json files
         if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');
@@ -80,6 +88,8 @@ module.exports = EntityGenerator.extend({
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
+        this.remove = this.options['remove'];
+
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
@@ -176,6 +186,10 @@ module.exports = EntityGenerator.extend({
                 this.validation = false;
                 this.dto = 'no';
                 this.service = 'no';
+            } else if(this.remove) {
+                //existing entity reading values from file
+                this.log(`\nThe entity ${ this.name } is being removed.\n`);
+                this._loadJson();
             } else {
                 //existing entity reading values from file
                 this.log(`\nThe entity ${ this.name } is being updated.\n`);
