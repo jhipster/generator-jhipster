@@ -42,6 +42,12 @@ const expectedFiles = {
         'samplemysql/samplemysql-service.yml',
         'samplemysql/samplemysql-elasticsearch.yml'
     ],
+    kafka : [
+        'samplekafka/samplekafka-deployment.yml',
+        'samplekafka/samplekafka-mysql.yml',
+        'samplekafka/samplekafka-service.yml',
+        'samplekafka/samplekafka-kafka.yml'
+    ],
 };
 
 describe('JHipster Kubernetes Sub Generator', function () {
@@ -208,11 +214,39 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 })
                 .on('end', done);
         });
-        it('creates expected registry files', function () {
+        it('doesn\'t creates registry files', function () {
             assert.noFile(expectedFiles.registry);
         });
         it('creates expected default files', function () {
             assert.file(expectedFiles.monolith);
+        });
+    });
+
+    describe('kafka application', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/kubernetes'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({checkInstall: false})
+                .withPrompts({
+                    composeApplicationType: 'monolith',
+                    directoryPath: './',
+                    chosenApps: [
+                        '09-kafka'
+                    ],
+                    dockerRepositoryName: 'jhipster',
+                    dockerPushCommand: 'docker push',
+                    kubernetesNamespace: 'default'
+                })
+                .on('end', done);
+        });
+        it('doesn\'t creates registry files', function () {
+            assert.noFile(expectedFiles.registry);
+        });
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.kafka);
         });
     });
 
