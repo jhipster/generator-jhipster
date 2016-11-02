@@ -105,7 +105,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         }
     }
 
-    if (fieldType == 'String') {
+    if (fieldType == 'String' || fieldTypeBlobContent == 'text') {
         // Generate Strings, using the min and max string length if they are configured
         var sampleTextString = "";
         var updatedTextString = "";
@@ -171,10 +171,6 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     <%_ } _%>
     private static final String <%=defaultValueName %>_CONTENT_TYPE = "image/jpg";
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";
-    <%_ } else if (fieldTypeBlobContent == 'text') { _%>
-
-    private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
     <%_ } else if (isEnum) { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
