@@ -63,9 +63,9 @@ spec:
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-          value: <%= app.baseName.toLowerCase() %>-kafka
+          value: <%= app.baseName.toLowerCase() %>-kafka.<%= kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
-          value: <%= app.baseName.toLowerCase() %>-zookeeper
+          value: <%= app.baseName.toLowerCase() %>-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local
         <%_ } _%>
         ports:
         - containerPort: <%= app.serverPort %>
