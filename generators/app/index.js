@@ -158,7 +158,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkYarn: function () {
-            if (!this.checkInstall || this.skipClient || !this.yarn) return;
+            if (!this.checkInstall || this.skipClient || !this.yarnInstall) return;
             var done = this.async();
             exec('yarn --version', function (err) {
                 if (err) {
