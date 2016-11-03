@@ -92,6 +92,13 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm install',
+            type: Boolean,
+            defaults: false
+        });
+
         this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
@@ -110,6 +117,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
+        this.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'];
     },
 
     initializing: {
@@ -296,9 +304,15 @@ module.exports = JhipsterClientGenerator.extend({
             }
         };
         if (!this.options['skip-install']) {
-            this.installDependencies({
-                callback: injectDependenciesAndConstants.bind(this)
-            });
+            if (!this.yarnInstall) {
+                this.installDependencies({
+                    callback: injectDependenciesAndConstants.bind(this)
+                });
+            } else {
+                this.spawnCommandSync('yarn');
+                this.spawnCommandSync('bower', ['install']);
+                injectDependenciesAndConstants.call(this);
+            }
         } else {
             injectDependenciesAndConstants.call(this);
         }
