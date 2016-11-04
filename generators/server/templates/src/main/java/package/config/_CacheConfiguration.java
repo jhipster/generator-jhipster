@@ -1,7 +1,6 @@
 package <%=packageName%>.config;
-<% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.ehcache.InstrumentedEhcache;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+
+<% if (hibernateCache == 'hazelcast') { %>
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
@@ -15,7 +14,9 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 <%_ } _%>
+<%_ if (hibernateCache == 'hazelcast' || hibernateCache == 'no') { _%>
 import org.springframework.cache.CacheManager;
+<%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
 <%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 import org.springframework.cloud.client.ServiceInstance;
@@ -23,17 +24,15 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 <%_ } _%>
 import org.springframework.context.annotation.*;<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'no') { %>
-import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
-import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;<% } %>
 
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
-<%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
-import java.util.SortedSet;
-import java.util.stream.Stream;
+<%_ if (hibernateCache == 'ehcache') { _%>
+import javax.cache.CacheManager;
 <%_ } _%>
+import javax.inject.Inject;
 
 @Configuration
 @EnableCaching
@@ -58,53 +57,32 @@ public class CacheConfiguration {
     <%_ if (hibernateCache == 'ehcache') { _%>
 
     @Inject
-    private MetricRegistry metricRegistry;
-
-    private net.sf.ehcache.CacheManager cacheManager;
-    <%_ } else { _%>
-
     private CacheManager cacheManager;
-    <%_ } _%>
 
+    <%_ } else { _%>
+    <%_ } _%>
     @PreDestroy
-    public void destroy() {<% if (hibernateCache == 'ehcache') { %>
-        log.info("Remove Cache Manager metrics");
-        SortedSet<String> names = metricRegistry.getNames();
-        names.forEach(metricRegistry::remove);<% } %>
+    public void destroy() {
         log.info("Closing Cache Manager");<% if (hibernateCache == 'ehcache') { %>
-        cacheManager.shutdown();<% } %><% if (hibernateCache == 'hazelcast') { %>
+        cacheManager.close();<% } %><% if (hibernateCache == 'hazelcast') { %>
         Hazelcast.shutdownAll();<% } %>
     }
 
+    <%_ if (hibernateCache == 'hazelcast') { _%>
     @Bean
-    <%_ if (hibernateCache == 'ehcache') { _%>
-    public CacheManager cacheManager(JHipsterProperties jHipsterProperties) {
-        log.debug("Starting Ehcache");
-        cacheManager = net.sf.ehcache.CacheManager.create();
-        cacheManager.getConfiguration().setMaxBytesLocalHeap(jHipsterProperties.getCache().getEhcache().getMaxBytesLocalHeap());
-        log.debug("Registering Ehcache Metrics gauges");
-        <%_ if (databaseType == 'sql') { _%>
-        Stream.of(cacheManager.getCacheNames()).forEach(name -> {
-            net.sf.ehcache.Cache cache = cacheManager.getCache(name);
-            cacheManager.replaceCacheWithDecoratedCache(cache, InstrumentedEhcache.instrument(metricRegistry, cache));
-        });
-        <%_ } _%>
-        EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
-        ehCacheManager.setCacheManager(cacheManager);
-        return ehCacheManager;
-    <%_ } else if (hibernateCache == 'hazelcast') { _%>
     public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
         log.debug("Starting HazelcastCacheManager");
         cacheManager = new com.hazelcast.spring.cache.HazelcastCacheManager(hazelcastInstance);
         return cacheManager;
-    <%_ } else { _%>
+    }
+    <%_ } else if (hibernateCache == 'no'){ _%>
+    @Bean
     public CacheManager cacheManager() {
         log.debug("No cache");
         cacheManager = new NoOpCacheManager();
         return cacheManager;
-    <%_ } _%>
     }
-    <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast' ) { _%>
+    <%_ } _%>
 
     @Bean
     public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {

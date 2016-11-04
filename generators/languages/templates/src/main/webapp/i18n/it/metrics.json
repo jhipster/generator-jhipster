@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Statistiche Ehcache",
+        "cache": {
+            "title": "Statistiche cache",
             "cachename": "Nome Cache",
-            "objects": "Oggetti",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Eviction count"
+            "evictions": "Evictions"
         },
         "datasource": {
             "usage": "Utilizzo",

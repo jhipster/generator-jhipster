@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Estadístiques Ehcache",
+        "cache": {
+            "title": "Estadístiques cache",
             "cachename": "Cau",
-            "objects": "Objectes",
             "hits": "Accessos",
             "misses": "Fallos",
-            "evictioncount": "Contador d'expulcions"
+            "evictions": "Expulcions"
         },
         "datasource": {
             "usage": "Utilització",

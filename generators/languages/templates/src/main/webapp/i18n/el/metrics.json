@@ -70,12 +70,11 @@
             }
         },
         "ehcache": {
-            "title": "Ehcache statistics",
+            "title": "Cache statistics",
             "cachename": "Όνομα cache",
-            "objects": "Αντικείμενα",
             "hits": "Κτυπήματα",
             "misses": "Αποφυγές",
-            "evictioncount": "Αριθμός εξώσεων"
+            "evictions": "Αριθμός εξώσεων"
         },
         "datasource": {
             "usage": "Χρήση",

@@ -29,10 +29,6 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
 apply plugin: 'io.spring.dependency-management'
-<%_ if (databaseType == 'sql') { _%>
-/* downgrade Hibernate to 4.3 */
-ext['hibernate.version'] = '${hibernate_entitymanager_version}'
-<%_ } _%>
 <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
 dependencyManagement {
   imports {
@@ -169,9 +165,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.dropwizard.metrics:metrics-core"<% if (hibernateCache == 'ehcache') { %>
-    compile "io.dropwizard.metrics:metrics-annotation:${dropwizard_metrics_version}"
-    compile "io.dropwizard.metrics:metrics-ehcache:${dropwizard_metrics_version}"<% } %>
+    compile "io.dropwizard.metrics:metrics-core"
     compile "io.dropwizard.metrics:metrics-graphite:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-healthchecks:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
@@ -186,7 +180,7 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"<% if (databaseType == 'sql') { %>
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"<% } %>
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"<% } %>
     compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
@@ -194,12 +188,12 @@ dependencies {
         exclude(module: 'metrics-healthchecks')
     } <% if (hibernateCache == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"
-    compile "com.hazelcast:hazelcast-hibernate4:${hazelcast_version}"
-    compile "com.hazelcast:hazelcast-spring:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
+    compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_version}"
+    compile "com.hazelcast:hazelcast-spring:${hazelcast_hibernate_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
-    compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
+    compile "org.hibernate:hibernate-core:${hibernate_version}"
     compile("com.zaxxer:HikariCP") {
         exclude(module: 'tools')
     }
@@ -214,9 +208,9 @@ dependencies {
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
     <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-    compile ("org.hibernate:hibernate-ehcache") {
-        exclude(module: 'ehcache-core')
-    }<% } %><% if (databaseType == 'sql') { %>
+    compile ("org.ehcache:ehcache")
+    compile ("org.hibernate:hibernate-jcache:${hibernate_version}")
+    <% } %><% if (databaseType == 'sql') { %>
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {

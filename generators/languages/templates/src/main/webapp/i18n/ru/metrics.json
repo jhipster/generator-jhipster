@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache статистика",
+        "cache": {
+            "title": "статистика",
             "cachename": "Название кеша",
-            "objects": "Объектов",
             "hits": "Попаданий",
             "misses": "Промахов",
-            "evictioncount": "Количество очисток"
+            "evictions": "Количество очисток"
         },
         "datasource": {
             "usage": "Usage",

@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
+        "cache": {
             "title": "Ehcache 統計資料",
             "cachename": "快取名稱",
-            "objects": "物件",
             "hits": "快取命中計數",
             "misses": "快取遺漏計數",
-            "evictioncount": "收回計數"
+            "evictions": "收回計數"
         },
         "datasource": {
             "usage": "Usage",

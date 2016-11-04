@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache štatistiky",
+        "cache": {
+            "title": "Cache štatistiky",
             "cachename": "Meno cache",
-            "objects": "Objekty",
             "hits": "Zásahy",
             "misses": "Minutia",
-            "evictioncount": "Počet eviction"
+            "evictions": "Počet eviction"
         },
         "datasource": {
             "usage": "Používanie",

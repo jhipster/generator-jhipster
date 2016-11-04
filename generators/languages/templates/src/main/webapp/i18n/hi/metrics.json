@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache सांख्यिकी",
+        "cache": {
+            "title": "Cache सांख्यिकी",
             "cachename": "Cache का नाम",
-            "objects": "Objects",
             "hits": "हिट्स कूल",
             "misses": "मिस",
-            "evictioncount": "बेदखली गणना"
+            "evictions": "बेदखली गणना"
         },
         "datasource": {
             "usage": "उपयोग",

@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache 统计",
+        "cache": {
+            "title": "Cache 统计",
             "cachename": "缓存名称",
-            "objects": "对象",
             "hits": "缓存命中计数",
             "misses": "缓存遗漏计数",
-            "evictioncount": "收回计数"
+            "evictions": "收回计数"
         },
         "datasource": {
             "usage": "用法",

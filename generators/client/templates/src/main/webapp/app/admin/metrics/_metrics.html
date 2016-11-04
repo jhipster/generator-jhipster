@@ -170,31 +170,43 @@
             </tbody>
         </table>
     </div>
-    <%_ if (hibernateCache == 'ehcache') { _%>
-    <h3 data-translate="metrics.ehcache.title">Ehcache statistics</h3>
+    <h3 data-translate="metrics.cache.title">Cache statistics</h3>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
-                <th data-translate="metrics.ehcache.cachename">Cache name</th>
-                <th class="text-right" data-translate="metrics.ehcache.objects">Objects</th>
-                <th class="text-right" data-translate="metrics.ehcache.hits">Hits</th>
-                <th class="text-right" data-translate="metrics.ehcache.misses">Misses</th>
-                <th class="text-right" data-translate="metrics.ehcache.evictioncount">Eviction count</th>
+                <th data-translate="metrics.cache.cachename">Cache name</th>
+                <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
+                <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
+                <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
+                <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
+                <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
+                <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
+                <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
+                <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+                <th class="text-right" data-translate="metrics.cache.averageGetTime">Average get time (µs)</th>
+                <th class="text-right" data-translate="metrics.cache.averagePutTime">Average put time (µs)</th>
+                <th class="text-right" data-translate="metrics.cache.averageRemoveTime">Average remove time (µs)</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="(k, v) in vm.cachesStats" ng-once>
                 <td>{{v.name}}</td>
-                <td class="text-right">{{vm.metrics.gauges[k + '.objects'].value}}</td>
-                <td class="text-right">{{vm.metrics.gauges[k + '.hits'].value}}</td>
-                <td class="text-right">{{vm.metrics.gauges[k + '.misses'].value}}</td>
-                <td class="text-right">{{vm.metrics.gauges[k + '.eviction-count'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-hits'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-misses'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-gets'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-puts'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-removals'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-evictions'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-hit-percentage'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.cache-miss-percentage'].value}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.average-get-time'].value | number:2}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.average-put-time'].value | number:2}}</td>
+                <td class="text-right">{{vm.metrics.gauges[k + '.average-remove-time'].value | number:2}}</td>
             </tr>
             </tbody>
         </table>
     </div>
-    <%_ } _%>
     <h3 data-translate="metrics.datasource.title" ng-show="vm.metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
     <div class="table-responsive" ng-show="vm.metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
         <table class="table table-striped">

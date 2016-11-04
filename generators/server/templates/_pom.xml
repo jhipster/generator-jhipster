@@ -49,9 +49,10 @@
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
         <hazelcast.version>3.7</hazelcast.version>
+        <hazelcast-hibernate.version>1.1</hazelcast-hibernate.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate.version>4.3.11.Final</hibernate.version>
+        <hibernate.version>5.2.4.Final</hibernate.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hikaricp.version>2.4.6</hikaricp.version>
@@ -62,6 +63,9 @@
         <java.version>1.<%= javaVersion %></java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
+        <jcache.version>1.0.0</jcache.version>
+        <%_ } _%>
         <javax.inject.version>1</javax.inject.version>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <jna.version>4.2.2</jna.version>
@@ -70,9 +74,9 @@
         <mariadb.version>1.4.4</mariadb.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <liquibase.version>3.4.2</liquibase.version>
+        <liquibase.version>3.5.3</liquibase.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
-        <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
+        <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <lz4.version>1.3.0</lz4.version>
@@ -151,8 +155,8 @@
             <%_ } _%>
         </dependencies>
     </dependencyManagement>
-<%_ } _%>
 
+<%_ } _%>
     <dependencies>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
@@ -163,13 +167,6 @@
             <artifactId>metrics-annotation</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
-        <%_ if (hibernateCache === 'ehcache') { _%>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-ehcache</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <%_ } _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-graphite</artifactId>
@@ -207,7 +204,7 @@
         <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -241,8 +238,8 @@
         <%_ if (hibernateCache === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate4</artifactId>
-            <version>${hazelcast.version}</version>
+            <artifactId>hazelcast-hibernate52</artifactId>
+            <version>${hazelcast-hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
@@ -368,6 +365,13 @@
         </dependency>
         <%_ } _%>
         <%_ } _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>${jcache.version}</version>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -422,15 +426,13 @@
         <%_ } _%>
         <%_ if (hibernateCache === 'ehcache' && databaseType === 'sql') { _%>
         <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
+            <artifactId>hibernate-jcache</artifactId>
             <version>${hibernate.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.sf.ehcache</groupId>
-                    <artifactId>ehcache-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
@@ -995,7 +997,7 @@
                     <defaultSchemaName><% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %></defaultSchemaName>
                     <username><% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } %></username>
                     <password></password>
-                    <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle10gDialect<% } %>&amp;hibernate.ejb.naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy</referenceUrl>
+                    <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle10gDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>
                     <%_ if (authenticationType === 'oauth2') { _%>
@@ -1010,8 +1012,8 @@
                     </dependency>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
-                        <artifactId>liquibase-hibernate4</artifactId>
-                        <version>${liquibase-hibernate4.version}</version>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>${liquibase-hibernate5.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.springframework.boot</groupId>

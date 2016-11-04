@@ -26,14 +26,16 @@
                 if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
                     vm.servicesStats[key] = value;
                 }
-                if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
+            });
+            angular.forEach(newValue.gauges, function (value, key) {
+                if (key.indexOf('jcache.statistics') !== -1) {
                     // remove gets or puts
                     var index = key.lastIndexOf('.');
                     var newKey = key.substr(0, index);
 
                     // Keep the name of the domain
                     vm.cachesStats[newKey] = {
-                        'name': newKey,
+                        'name': newKey.substr(18),
                         'value': value
                     };
                 }
