@@ -21,7 +21,7 @@
     "core-js": "2.4.1",
     "jquery": "3.1.0",
     <%_ if (enableTranslation){ _%>
-    "ng2-translate": "4.0.0",
+    "ng2-translate": "3.1.1",
     <%_ } _%>
     "ng2-webstorage": "1.3.0",
     "reflect-metadata": "0.1.3",
