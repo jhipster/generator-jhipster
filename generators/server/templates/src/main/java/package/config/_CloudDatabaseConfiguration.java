@@ -73,10 +73,6 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
         <%_ } _%>
         converterList.add(DateToZonedDateTimeConverter.INSTANCE);
         converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
-        converterList.add(DateToLocalDateConverter.INSTANCE);
-        converterList.add(LocalDateToDateConverter.INSTANCE);
-        converterList.add(DateToLocalDateTimeConverter.INSTANCE);
-        converterList.add(LocalDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converterList);
     }
 
