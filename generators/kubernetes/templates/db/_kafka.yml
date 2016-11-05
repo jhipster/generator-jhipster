@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-kafka
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-kafka
+    spec:
+      containers:
+      - name: kafka
+        image: <%= DOCKER_KAFKA %>
+        env:
+        - name: KAFKA_ADVERTISED_HOST_NAME
+          value: <%= app.baseName.toLowerCase() %>-kafka.<%= kubernetesNamespace %>.svc.cluster.local
+        - name: KAFKA_ADVERTISED_PORT
+          value: '9092'
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: <%= app.baseName.toLowerCase() %>-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local:2181
+        - name: KAFKA_CREATE_TOPICS
+          value: 'topic-jhipster:1:1'
+        ports:
+        - containerPort: 9092
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-kafka
+spec:
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-kafka
+  ports:
+  - port: 9092
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-zookeeper
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-zookeeper
+    spec:
+      containers:
+      - name: zookeeper
+        image: <%= DOCKER_ZOOKEEPER %>
+        ports:
+        - containerPort: 2181
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-zookeeper
+spec:
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-zookeeper
+  ports:
+  - port: 2181

@@ -101,6 +101,8 @@ module.exports = KubernetesGenerator.extend({
             this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
             this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
             this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
+            this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
+            this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
 
             if (this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
