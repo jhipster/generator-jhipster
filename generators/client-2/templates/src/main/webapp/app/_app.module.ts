@@ -11,7 +11,6 @@ import { StateHandler } from './blocks/handlers/state.handler';<% if (enableTran
 
 import { TranslationConfig } from './blocks/config/translation.config';
 import { TranslationStorageProvider } from './blocks/config/translation-storage.provider';<% } %>
-import { UIRouterDeferInterceptConfig } from './blocks/config/ui-router-defer-intercept.config';
 
 import { CompileServiceConfig } from './blocks/config/compile.config';
 import { HttpConfig } from './blocks/config/http.config';
@@ -19,7 +18,7 @@ import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
 import { HomeComponent } from './home';
-import { NavbarComponent, FooterComponent, PageRibbonComponent } from './layouts';
+import { JHipsterMainComponent, NavbarComponent, FooterComponent, PageRibbonComponent } from './layouts';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -39,7 +38,6 @@ angular
         'ngCacheBuster',
         'ngFileUpload',
         'ui.bootstrap',
-        'ui.router.upgrade',
         'infinite-scroll',
         'angular-loading-bar',
         // jhipster-needle-angularjs-add-module JHipster will add new module here
@@ -51,11 +49,11 @@ angular
     .config(HttpConfig)
     .config(PagerConfig)
     .config(PaginationConfig)
-    .config(UIRouterDeferInterceptConfig)
     .directive('<%=jhiPrefix%>LoginModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>LoginModalComponent))
     .directive('home', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(HomeComponent))
     .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
     .directive('footer', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(FooterComponent))
+    .directive('jhipsterMain', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(JHipsterMainComponent))
     .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
     <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     .factory('AuthInterceptor', AuthInterceptor)

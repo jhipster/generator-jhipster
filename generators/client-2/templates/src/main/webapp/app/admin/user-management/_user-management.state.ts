@@ -1,4 +1,5 @@
 import { Transition } from 'ui-router-ng2';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
@@ -83,9 +84,9 @@ export const userMgmtNewState = {
     data: {
         authorities: ['ROLE_ADMIN']
     },
-    onEnter: ['$transition$', (trans: Transition) => {
-        let $state = trans.injector().get('$state');
-        let modalService = trans.injector().get('NgbModal');
+    onEnter: (trans: Transition) => {
+        let $state = trans.router.stateService;
+        let modalService = trans.injector().get(NgbModal);
         const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.user = new User(null, null, null, null, null, true, null, null, null, null, null, null, null);
         modalRef.result.then((result) => {
@@ -95,7 +96,7 @@ export const userMgmtNewState = {
             console.log(`Dismissed ${reason}`);
             $state.go('user-management');
         });
-    }]
+    }
 };
 
 
@@ -105,12 +106,12 @@ export const userMgmtEditState = {
     data: {
         authorities: ['ROLE_ADMIN']
     },
-    onEnter: ['$transition$', (trans: Transition) => {
-        let $stateParams = trans.injector().get('$stateParams');
-        let $state = trans.injector().get('$state');
-        let modalService = trans.injector().get('NgbModal');
+    onEnter: (trans: Transition) => {
+        let $state = trans.router.stateService;
+        let modalService = trans.injector().get(NgbModal);
         let userService: UserService = trans.injector().get('UserService');
-        userService.find($stateParams.login).subscribe(user => {
+        var login = trans.params()['login'];
+        userService.find(login).subscribe(user => {
             const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
             modalRef.componentInstance.user = user;
             modalRef.result.then((result) => {
@@ -121,7 +122,7 @@ export const userMgmtEditState = {
                 $state.go('user-management');
             });
         });
-    }]
+    }
 };
 
 
@@ -131,12 +132,12 @@ export const userMgmtDeleteState = {
     data: {
         authorities: ['ROLE_ADMIN']
     },
-    onEnter: ['$transition$', (trans: Transition) => {
-        let $stateParams = trans.injector().get('$stateParams');
-        let $state = trans.injector().get('$state');
-        let modalService = trans.injector().get('NgbModal');
+    onEnter: (trans: Transition) => {
+        let $state = trans.router.stateService;
+        let modalService = trans.injector().get(NgbModal);
         let userService: UserService = trans.injector().get('UserService');
-        userService.find($stateParams.login).subscribe(user => {
+        var login = trans.params()['login'];
+        userService.find(login).subscribe(user => {
             const modalRef  = modalService.open(UserMgmtDeleteDialogComponent, { size: 'md'});
             modalRef.componentInstance.user = user;
             modalRef.result.then((result) => {
@@ -147,5 +148,5 @@ export const userMgmtDeleteState = {
                 $state.go('user-management');
             });
         });
-    }]
+    }
 };

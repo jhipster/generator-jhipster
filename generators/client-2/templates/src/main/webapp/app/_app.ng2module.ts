@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { UIRouterModule } from 'ui-router-ng2';
-import { Ng1ToNg2Module } from 'ui-router-ng1-to-ng2';
+import { UIRouterModule, RootModule } from 'ui-router-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule } from './shared';
@@ -10,7 +9,9 @@ import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
+import { JHipsterRouterConfig } from "./router.config";
 import {
+    JHipsterMainComponent,
     NavbarComponent,
     FooterComponent,
     ProfileService,
@@ -27,6 +28,7 @@ import { localStorageConfig } from './blocks/config/localstorage.config';
 localStorageConfig();
 
 let routerConfig = {
+    configClass: JHipsterRouterConfig,
     otherwise: '/',
     states: [
         appState,
@@ -39,14 +41,14 @@ let routerConfig = {
 @NgModule({
     imports: [
         BrowserModule,
+        UIRouterModule.forRoot(routerConfig),
         Ng2Webstorage,
-        Ng1ToNg2Module,
-        UIRouterModule.forChild(routerConfig),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>AccountModule
     ],
     declarations: [
+        JHipsterMainComponent,
         HomeComponent,
         NavbarComponent,
         ErrorComponent,
@@ -59,6 +61,6 @@ let routerConfig = {
         { provide: Window, useValue: window },
         { provide: Document, useValue: document }
     ],
-    bootstrap: [ HomeComponent ]
+    bootstrap: [ JHipsterMainComponent ]
 })
 export class <%=angular2AppName%>AppModule {}
