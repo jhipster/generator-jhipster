@@ -22,9 +22,6 @@ import { HomeComponent } from './home';
 import { NavbarComponent, FooterComponent, PageRibbonComponent } from './layouts';
 
 import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_ } _%>
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
@@ -57,9 +54,6 @@ angular
     .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
     .directive('footer', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(FooterComponent))
     .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
-    <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    .factory('AuthInterceptor', AuthInterceptor)
-    <%_ } _%>
     .factory('ErrorHandlerInterceptor', ErrorHandlerInterceptor)
     .factory('NotificationInterceptor', NotificationInterceptor)
     .factory('StateHandler',StateHandler)<% if (enableTranslation) { %>
