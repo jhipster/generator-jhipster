@@ -26,12 +26,11 @@
     <!--[if lt IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <page-ribbon></page-ribbon>
-    <jhipster-main></jhipster-main>
+    <<%=jhiPrefix%>-main></<%=jhiPrefix%>-main>
+    <!-- inject:troubleshoot -->
+    <!-- This content is for troubleshooting purpose and will be removed by `gulp install` task -->
     <div class="container">
         <div class="well">
-            <!-- inject:troubleshoot -->
-            <!-- This content is for troubleshooting purpose and will be removed by `gulp install` task -->
             <h1>An error has occured :-(</h1>
             <i>There was an error when generating this application with <a href="http://jhipster.github.io/">JHipster</a></i>
             <p>If you are seeing this, it means something went wrong during the initial setup of the application.</p>
@@ -73,10 +72,9 @@
             <p>
                 Join our chat room on <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank">Gitter.im</a>. Please note that this is a public chat room, and that we expect you to respect other people and write in a correct English language!
             </p>
-            <!-- endinject -->
         </div>
     </div>
-
+    <!-- endinject -->
     <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
     <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

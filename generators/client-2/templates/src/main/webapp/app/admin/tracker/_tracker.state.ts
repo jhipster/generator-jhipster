@@ -1,6 +1,6 @@
 import { Transition } from 'ui-router-ng2';
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %><%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
 export const trackerState = {
     name: '<%=jhiPrefix%>-tracker',
@@ -18,10 +18,10 @@ export const trackerState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['tracker'])
     }],
-    onEnter: ['$transition$', (trans: Transition) => {
-        trans.injector().get('TrackerService').subscribe();
-    }],
-    onExit: ['$transition$', (trans: Transition) => {
-        trans.injector().get('TrackerService').unsubscribe();
-    }]
+    onEnter: (trans: Transition) => {
+        trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).subscribe();
+    },
+    onExit: (trans: Transition) => {
+        trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).unsubscribe();
+    }
 }

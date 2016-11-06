@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { UIRouter, trace, Category, Transition } from "ui-router-ng2";
-import { DEBUG_INFO_ENABLED } from "./app.constants";
-import { registerTransitionHooks } from "./blocks/handlers/state.handler";
+import { DEBUG_INFO_ENABLED } from "../../app.constants";
+import { registerTransitionHooks } from "./register-transition-hooks";
 declare var SystemJS;
 
 @Injectable()
-export class JHipsterRouterConfig {
+export class <%=jhiPrefixCapitalized%>RouterConfig {
     constructor(router: UIRouter) {
 
         if (DEBUG_INFO_ENABLED) {

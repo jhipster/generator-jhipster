@@ -1,17 +1,5 @@
-import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 import { TransitionService, Transition } from 'ui-router-ng2';
-
-StateHandler.$inject = ['$rootScope'];
-export function StateHandler($rootScope) {
-
-    return {
-        initialize: initialize
-    };
-
-    function initialize() {
-        $rootScope.VERSION = VERSION;
-    }
-}
+import { Principal, AuthService<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../shared';
 
 export function registerTransitionHooks($transitions: TransitionService) {
     $transitions.onStart({}, (transition: Transition) => {
@@ -19,17 +7,18 @@ export function registerTransitionHooks($transitions: TransitionService) {
         $rootScope.toState = transition.to();
         $rootScope.toParams = transition.params();
         $rootScope.fromState = transition.from();
-
-        /*if (Principal.isIdentityResolved()) { //TODO needs to fixed after migration
-         Auth.authorize();
-         }*/
+        let principal = transition.injector().get(Principal);
+        let auth = transition.injector().get(AuthService);
+        if (principal.isIdentityResolved()) {
+            auth.authorize();
+        }
 
         <% if (enableTranslation) { %>
-            // Update the language //TODO needs to fixed after migration
-            // let $translate = transition.injector().get('$translate');
-            /*<%=jhiPrefixCapitalized%>LanguageService.getCurrent().then(function (language) {
-             $translate.use(language);
-             });*/
+        // Update the language //FIXME not sure if this is required, its causing some weird error as well
+        /*let languageService = transition.injector().get(<%=jhiPrefixCapitalized%>LanguageService);
+        languageService.getCurrent().then(current => {
+            languageService.changeLanguage(current);
+        });*/
         <% } %>
     });
 
@@ -47,6 +36,11 @@ export function registerTransitionHooks($transitions: TransitionService) {
         if (toState.data.pageTitle) {
             titleKey = toState.data.pageTitle;
         }
-        <% if (enableTranslation) { %>transition.injector().get('TranslationHandler').updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
+        <%_ if (enableTranslation) { _%>
+        let languageService = transition.injector().get(<%=jhiPrefixCapitalized%>LanguageService);
+        languageService.updateTitle(titleKey);
+        <%_ } else { _%>
+        window.document.title = titleKey;
+        <%_ } _%>
     });
 }

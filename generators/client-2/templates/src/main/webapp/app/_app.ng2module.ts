@@ -9,9 +9,9 @@ import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
-import { JHipsterRouterConfig } from "./router.config";
+import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
 import {
-    JHipsterMainComponent,
+    <%=jhiPrefixCapitalized%>MainComponent,
     NavbarComponent,
     FooterComponent,
     ProfileService,
@@ -28,7 +28,7 @@ import { localStorageConfig } from './blocks/config/localstorage.config';
 localStorageConfig();
 
 let routerConfig = {
-    configClass: JHipsterRouterConfig,
+    configClass: <%=jhiPrefixCapitalized%>RouterConfig,
     otherwise: '/',
     states: [
         appState,
@@ -48,19 +48,21 @@ let routerConfig = {
         <%=angular2AppName%>AccountModule
     ],
     declarations: [
-        JHipsterMainComponent,
+        <%=jhiPrefixCapitalized%>MainComponent,
         HomeComponent,
         NavbarComponent,
         ErrorComponent,
         PageRibbonComponent,
-        FooterComponent<% if (enableTranslation){ %>,
-        ActiveMenuDirective<% } %>
+        <%_ if (enableTranslation){ _%>
+        ActiveMenuDirective,
+        <%_ } _%>
+        FooterComponent
     ],
     providers: [
         ProfileService,
         { provide: Window, useValue: window },
         { provide: Document, useValue: document }
     ],
-    bootstrap: [ JHipsterMainComponent ]
+    bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
 export class <%=angular2AppName%>AppModule {}
