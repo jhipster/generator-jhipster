@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
 
@@ -17,11 +17,11 @@ export class AuthServerProvider {
 
     login (credentials): Observable<any> {
 <%_ if(authenticationType === 'uaa') { _%>
-        let data = {
-            username: credentials.username,
-            password: credentials.password,
-            grant_type: "password"
-        };
+        let data = new URLSearchParams();
+        data.append('grant_type', 'password');
+        data.append('username', credentials.username);
+        data.append('password', credentials.password);
+
         let headers = new Headers ({
             'Content-Type': 'application/x-www-form-urlencoded',
             "Authorization" : "Basic d2ViX2FwcDo="
@@ -29,14 +29,6 @@ export class AuthServerProvider {
 
         return this.http.post('<%= uaaBaseName.toLowerCase() %>/oauth/token', data, {
             headers: headers
-            //TODO this needs to be handled
-            /*transformRequest: function(obj) {
-                var str = [];
-                for (var p in obj) {
-                    str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-                }
-                return str.join('&');
-            }*/
         }).map((resp) => {
             let accessToken = resp.json().data["access_token"];
             if (accessToken) {
