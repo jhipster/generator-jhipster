@@ -34,7 +34,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databas
 import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob == true) { %>
 import org.springframework.util.Base64Utils;<% } %>
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;<% if (databaseType == 'sql') { %>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
@@ -204,7 +203,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     private <%= entityClass %> <%= entityInstance %>;
 
-    @PostConstruct
+    @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
