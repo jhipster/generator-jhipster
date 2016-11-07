@@ -1,4 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import {
     <%=angular2AppName%>SharedLibsModule,
@@ -40,6 +41,7 @@ import {
         HasAnyAuthorityDirective
     ],
     providers: [
+        CookieService,
         LoginService,
         LoginModalService,
         AccountService,
