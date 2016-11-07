@@ -22,13 +22,7 @@ const files = {
                 '_tslint.json',
                 '_.eslintrc.json',
                 '_.eslintignore',
-                '_gulpfile.js',
-                'gulp/_utils.js',
-                'gulp/_serve.js',
-                'gulp/_config.js',
-                'gulp/_build.js',
-                'gulp/_copy.js',
-                'gulp/_inject.js'
+                '_webpack.config.js',
             ]
         }
     ],
@@ -79,8 +73,7 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
                 { file: '_404.html', method: 'copy' },
-                { file: '_index.html', method: 'copyHtml' },
-                { file: '_system.config.js', method: 'copy' }
+                { file: '_index.html', method: 'copyHtml' }
             ]
         }
     ],
@@ -443,7 +436,6 @@ module.exports = {
 function writeFiles() {
     return {
         writeSepcial: function () {
-            this.fs.copy(this.templatePath('gulp/_handle-errors.js'), this.destinationPath('gulp/handle-errors.js')); // to avoid interpolate errors
             mkdirp(MAIN_SRC_DIR);
         },
 
