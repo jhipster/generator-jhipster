@@ -1,25 +1,29 @@
-AuthInterceptor.$inject = ['$rootScope', '$q', '$location'/*, '$localStorage', '$sessionStorage'*/];
+import { Observable } from 'rxjs/Observable';
+import { RequestOptionsArgs, Response } from '@angular/http';
+import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+import { HttpInterceptable } from './http.interceptable';
 
-export function AuthInterceptor ($rootScope, $q, $location/*, $localStorage, $sessionStorage*/) {
-    var service = {
-        request: request
-    };
+export class AuthInterceptor extends HttpInterceptable {
 
-    return service;
-
-    function request (config) {
-        /*jshint camelcase: false */
-        config.headers = config.headers || {};
-        var token /*= $localStorage.authenticationToken || $sessionStorage.authenticationToken*/;
-        <% if (authenticationType === 'oauth2') { %>
-        if (token && token.expires_at && token.expires_at > new Date().getTime()) {
-            config.headers.Authorization = 'Bearer ' + token.access_token;
-        }
-        <% } %><% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>
-        if (token) {
-            config.headers.Authorization = 'Bearer ' + token;
-        }
-        <% } %>
-        return config;
+    constructor(
+        private localStorage : LocalStorageService,
+        private sessionStorage : SessionStorageService
+    ) {
+        super();
     }
+
+    requestIntercept(options? : RequestOptionsArgs) : RequestOptionsArgs {
+        let jwtToken = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
+
+        if(!!jwtToken) {
+            options.headers.append('Authorization', 'Bearer ' + jwtToken);
+        }
+
+        return options;
+    }
+
+    responseIntercept(observable : Observable<Response>) : Observable<Response> {
+        return observable; //by pass
+    }
+
 }
