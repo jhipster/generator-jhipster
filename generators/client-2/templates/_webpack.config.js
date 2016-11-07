@@ -11,15 +11,16 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.ts$/,
-            loader: 'awesome-typescript-loader',
+            loaders: [
+                'angular2-template-loader',
+                'awesome-typescript-loader'
+            ]
         }],
         rules: [
             {
                 test: /\.ts$/,
                 exclude: [/\.(spec|e2e)\.ts$/],
                 loaders: [
-                    //'awesome-typescript-loader',
-                    //'angular2-template-loader',
                     '@angular',
                     'rxjs',
                     '@ng-bootstrap',
