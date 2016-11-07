@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { AuthService, LoginService } from '../../shared';
-import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { CookieService } from 'angular2-cookie/core';
 
 @Component({
     selector: '<%=jhiPrefix%>-auth',
@@ -12,14 +12,15 @@ export class SocialAuthComponent implements OnInit {
     constructor (
         private $state: StateService,
         private Auth: AuthService,
-        private loginService: LoginService
+        private loginService: LoginService,
+        private cookieService: CookieService
     ) {}
 
     ngOnInit() {
-        let token = Cookie.get('social-authentication')
+        let token = this.cookieService.get('social-authentication')
         if (token.length) {
             this.loginService.loginWithToken(token, false).then(() => {
-                    Cookie.delete('social-authentication');
+                    this.cookieService.remove('social-authentication');
                     this.Auth.authorize(true);
                  }, () => {
                     this.$state.go('social-register', {'success': 'false'});

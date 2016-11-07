@@ -17,7 +17,7 @@
         'ui-router-ng1-to-ng2': 'vendor/ui-router-ng1-to-ng2/ng1-to-ng2.js',
         'ui-router-visualizer': 'vendor/ui-router-visualizer/release/visualizer.min.js',
         'jquery' : 'vendor/jquery/dist',
-        'ng2-cookies': 'vendor/ng2-cookies',
+        'angular2-cookie': 'vendor/angular2-cookie',
         'ng2-webstorage': 'vendor/ng2-webstorage',
         <%_ if (enableTranslation){ _%>
         'ng2-translate': 'vendor/ng2-translate/bundles',
@@ -30,14 +30,14 @@
         'layouts' : 'app/layouts',
         'shared' : 'app/shared'
     };
-    // packages tells the System loader how to load when no filename and/or no extension
+        // packages tells the System loader how to load when no filename and/or no extension
     var packages = {
         'app': { main: 'app.main' },
         'rxjs': {},
         '@ng-bootstrap/ng-bootstrap': { main: '/bundles/ng-bootstrap', defaultExtension: 'js' },
         'ui-router-ng2': {},
         'jquery': { main: 'jquery.min', defaultExtension: 'js' },
-        'ng2-cookies': {main: 'index', defaultExtension: 'js'},
+        'angular2-cookie': {main: 'index', defaultExtension: 'js'},
         'ng2-webstorage': { main: 'bundles/core.umd.js', defaultExtension: 'js' },
         <%_ if (enableTranslation){ _%>
         'ng2-translate': {main: 'ng2-translate', defaultExtension: 'js'},

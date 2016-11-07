@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UIRouterModule, RootModule } from 'ui-router-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { <%=angular2AppName%>SharedModule } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module'; //TODO these couldnt be used from barrels due to an error
