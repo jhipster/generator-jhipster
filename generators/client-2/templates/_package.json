@@ -17,6 +17,7 @@
     "@angular/platform-browser-dynamic": "2.0.1",
     "@angular/upgrade": "2.0.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.10",
+    "angular2-template-loader": "0.6.0",
     "awesome-typescript-loader": "2.2.4",
     "core-js": "2.4.1",
     "jquery": "3.1.0",
