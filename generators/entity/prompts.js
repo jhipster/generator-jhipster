@@ -95,11 +95,11 @@ function askForUpdate() {
                 },
                 {
                     value: 'add',
-                    name: '[BETA] Yes, add more fields and relationships'
+                    name: 'Yes, add more fields and relationships'
                 },
                 {
                     value: 'remove',
-                    name: '[BETA] Yes, remove fields and relationships'
+                    name: 'Yes, remove fields and relationships'
                 },
                 {
                     value: 'none',
