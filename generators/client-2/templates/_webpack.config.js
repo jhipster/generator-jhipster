@@ -1,7 +1,7 @@
 module.exports = {
     entry: './src/main/webapp/app/app.main',
     resolve: {
-        extensions: ['', '.ts', '.js', '.json'],
+        extensions: ['.ts', '.js', '.json'],
         modules: ['./', 'node_modules']
     },
     output: {
@@ -9,7 +9,7 @@ module.exports = {
         filename: 'app.bundle.js'
     },
     module: {
-        loaders: [{
+        rules: [{
             test: /\.ts$/,
             loaders: [
                 'angular2-template-loader',
@@ -20,7 +20,7 @@ module.exports = {
         {
             test: /\.html$/,
             loader: 'raw-loader',
-            exlude: ['./src/main/webapp/index.html']
+            exclude: ['./src/main/webapp/index.html']
         }]
     }
  };

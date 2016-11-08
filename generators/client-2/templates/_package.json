@@ -8,14 +8,14 @@
     "<%= MAIN_SRC_DIR %>bower_components"
   ],
   "dependencies": {
-    "@angular/common": "2.0.1",
-    "@angular/compiler": "2.0.1",
-    "@angular/core": "2.0.1",
-    "@angular/forms": "2.0.1",
-    "@angular/http": "2.0.1",
-    "@angular/platform-browser": "2.0.1",
-    "@angular/platform-browser-dynamic": "2.0.1",
-    "@angular/upgrade": "2.0.1",
+    "@angular/common": "2.1.1",
+    "@angular/compiler": "2.1.1",
+    "@angular/core": "2.1.1",
+    "@angular/forms": "2.1.1",
+    "@angular/http": "2.1.1",
+    "@angular/platform-browser": "2.1.1",
+    "@angular/platform-browser-dynamic": "2.1.1",
+    "@angular/upgrade": "2.1.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.10",
     "angular2-template-loader": "0.6.0",
     "awesome-typescript-loader": "2.2.4",
@@ -31,7 +31,7 @@
     "rxjs": "5.0.0-beta.12",
     "ui-router-ng2": "1.0.0-beta.3",
     "ui-router-visualizer": "2.0.11",
-    "webpack": "1.13.3",
+    "webpack": "2.1.0-beta.25",
     "zone.js": "0.6.23"
   },
   "devDependencies": {
@@ -69,7 +69,7 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.2.2",
-    "typescript": "^2.0.3",
+    "typescript": "^2.0.6",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
     <%_ } _%>
