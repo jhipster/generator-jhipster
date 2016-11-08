@@ -9,9 +9,7 @@
                 "info": "Introduceți adresa de email folosită la înregistrare",
                 "success": "Verificați-vă emailul pentru instrucțiunile de schimbare a parolei.",
                 "notfound": "<strong>Adresa de email nu a fost înregistrata</strong> Vă rugăm verificați și încercați din nou."
-
             }
-
         },
         "finish" : {
             "title": "Resetează parola",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "Alegeți o nouă parolă",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>Parola dumneavoastra a fost resetata.</strong> Vă rugăm să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>Parola dumneavoastra a fost resetata.</strong> Vă rugăm să vă ",
+                <%_ } _%>
                 "keymissing": "Cheia de resetare lipsește.",
                 "error": "Parola dumneavoastră nu a fost resetată. Vă reamintim că o cerere de resetare este valabilă doar 24 de ore."
             }
         }
     }
-
 }

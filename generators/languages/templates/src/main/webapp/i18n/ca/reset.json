@@ -9,9 +9,7 @@
                 "info": "Introdueixi l'adreca de correu que va fer servir per registrar-se",
                 "success": "Comprovi el seu correu, li hem enviat instruccions per reinicialitzar la seva contrasenya.",
                 "notfound": "<strong>L'adreca de correu no existeix!</strong> Si us plau, corregeixi i torni-ho a intentar"
-
             }
-
         },
         "finish" : {
             "title": "Reinicialitzar la seva contrasenya",
@@ -20,15 +18,14 @@
             },
             "messages": {
                 "info": "Trii la seva nova contrasenya",
-                    <%_ if (angularVersion === 'angular1') { _%>
-                    "success": "<strong>La contrasenya ha estat canviada.</strong> Si us plau, <a href=\"#/login\">inicii sessió</a>.",
-                    <%_ } else if (angularVersion === 'angular2') { _%>
-                    "success": "<strong>La contrasenya ha estat canviada.</strong> Si us plau, ",
-                    <%_ } _%>
+                <%_ if (angularVersion === 'angular1') { _%>
+                "success": "<strong>La contrasenya ha estat canviada.</strong> Si us plau, <a href=\"#/login\">inicii sessió</a>.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>La contrasenya ha estat canviada.</strong> Si us plau, ",
+                <%_ } _%>
                 "keymissing": "Falta especificar la clau de reinicialització.",
                 "error": "La seva contrasenya no ha pogut ser reinicialitzada. Recordi que les peticions de canvi de contrasenya només son valides durant 24 hores."
             }
         }
     }
-
 }

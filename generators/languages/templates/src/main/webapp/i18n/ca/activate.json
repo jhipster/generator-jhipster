@@ -5,7 +5,7 @@
             <%_ if (angularVersion === 'angular1') { _%>
             "success": "<strong>S'ha activat el seu usuari.</strong> Si us plau <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">accedeix-hi</a>.",
             <%_ } else if (angularVersion === 'angular2') { _%>
-                "success": "<strong>S'ha activat el seu usuari.</strong> Si us plau ",
+            "success": "<strong>S'ha activat el seu usuari.</strong> Si us plau ",
             <%_ } _%>
             "error": "<strong>No s'ha pogut activar el seu usuari.</strong> Si us plau utilitzi el formulari de registre per obtenir un compte."
         }

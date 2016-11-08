@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administrator",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "User management",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "Indien u wilt <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">aanmelden</a>, dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\").",
                 "register": "U heeft nog geen gebruiker? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registreer een nieuwe gebruiker</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "Indien u wilt ",
+                    "link": "aanmelden",
+                    "suffix": ", dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\")."
+                },
+                "register": {
+                    "noaccount": "U heeft nog geen gebruiker?",
+                    "link": "Registreer een nieuwe gebruiker"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "Het wachtwoord en zijn bevestiging komen niet overeen!"

@@ -9,9 +9,7 @@
                 "info": "请输入您注册时使用的邮件地址",
                 "success": "已将重置密码的操作说明发送到您的邮箱，请检查邮件.",
                 "notfound": "<strong>没有与该邮件地址关联的账号.</strong> 请使用其他邮件地址"
-
             }
-
         },
         "finish" : {
             "title": "重置密码",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "请设置新密码",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>您的密码已被重置.</strong> 请 <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登录</a>.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>您的密码已被重置.</strong> 请 ",
+                <%_ } _%>
                 "keymissing": "无效的重置密码请求.",
                 "error": "无法重置密码. 您必须在请求重置密码后24小时内完成重置."
             }
         }
     }
-
 }
