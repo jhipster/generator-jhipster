@@ -7,7 +7,7 @@ import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, 
 
 @Component({
     selector: 'navbar',
-    templateUrl: 'app/layouts/navbar/navbar.component.html'
+    templateUrl: './navbar.component.html'
 })
 export class NavbarComponent implements OnInit {
 

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 
 @Component({
     selector: 'error',
-    templateUrl: 'app/layouts/error/error.component.html'
+    templateUrl: './error.component.html'
 })
 export class ErrorComponent implements OnInit {
     errorMessage: string;

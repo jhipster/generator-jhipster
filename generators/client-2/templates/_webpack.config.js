@@ -14,23 +14,13 @@ module.exports = {
             loaders: [
                 'angular2-template-loader',
                 'awesome-typescript-loader'
-            ]
-        }],
-        rules: [
-            {
-                test: /\.ts$/,
-                exclude: [/\.(spec|e2e)\.ts$/],
-                loaders: [
-                    '@angular',
-                    'rxjs',
-                    '@ng-bootstrap',
-                    'ui-router-ng2',
-                    'ui-router-visualizer',
-                    'jquery',
-                    'ng2-webstorage',
-                    'ng2-translate'
-                ]
-            }
-        ]
+            ],
+            exclude: ['node_modules/generator-jhipster']
+        },
+        {
+            test: /\.html$/,
+            loader: 'raw-loader',
+            exlude: ['./src/main/webapp/index.html']
+        }]
     }
  };
