@@ -3,8 +3,11 @@
         <div class="col-md-8 col-md-offset-2">
             <h1 translate="activate.title">Activation</h1>
 
-            <div class="alert alert-success" *ngIf="success" translate="activate.messages.success" translate-compile>
-                <strong>Your user has been activated.</strong> Please <a class="alert-link" (click)="login()">sign in</a>.
+            <div class="alert alert-success" *ngIf="success">
+                <span jhi-translate="activate.messages.success">
+                    <strong>Your user has been activated.</strong> Please
+                    <a class="alert-link" (click)="login()" jhi-translate="global.messages.info.authenticated.link">sign in</a>.
+                </span>
             </div>
 
             <div class="alert alert-danger" *ngIf="error" translate="activate.messages.error">

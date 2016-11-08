@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administration",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "User management",
@@ -48,10 +48,10 @@
         },
         "messages": {
             "info": {
-                <%_ if (angularVersion == 'angular1') { _%>
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "If you want to <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
                 "register": "You don't have an account yet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Register a new account</a>"
-                <%_ } else if (angularVersion == 'angular2') { _%>
+                <%_ } else if (angularVersion === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "If you want to ",
                     "link": "sign in",
