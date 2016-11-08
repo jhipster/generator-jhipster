@@ -31,11 +31,12 @@ RUN \
   # upgrade npm
   npm install -g npm && \
 
-  # install yeoman bower gulp
+  # install yeoman bower gulp yarn
   npm install -g \
     yo \
     bower \
-    gulp-cli && \
+    gulp-cli \
+    yarn && \
 
   # cleanup
   apt-get clean && \
