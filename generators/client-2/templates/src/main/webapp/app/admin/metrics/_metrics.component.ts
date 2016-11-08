@@ -5,7 +5,7 @@ import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-metrics',
-    templateUrl: 'app/admin/metrics/metrics.html',
+    templateUrl: './metrics.html',
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnInit {
     metrics: any = {};

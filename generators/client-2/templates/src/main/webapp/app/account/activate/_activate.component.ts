@@ -6,7 +6,7 @@ import { LoginModalService } from "../../shared";
 
 @Component({
     selector: 'activate',
-    templateUrl: 'app/account/activate/activate.html'
+    templateUrl: './activate.html'
 })
 export class ActivateComponent implements OnInit {
     error: string;

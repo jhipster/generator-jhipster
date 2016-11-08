@@ -6,7 +6,7 @@ import { LoginModalService } from "../../../shared";
 
 @Component({
     selector: 'password-reset-finish',
-    templateUrl: 'app/account/password-reset/finish/password-reset-finish.html'
+    templateUrl: './password-reset-finish.html'
 })
 export class PasswordResetFinishComponent implements OnInit {
     confirmPassword: string;

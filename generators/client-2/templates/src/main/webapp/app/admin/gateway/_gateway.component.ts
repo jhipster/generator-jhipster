@@ -5,7 +5,7 @@ import { GatewayRoute } from './gateway-route.model';
 
 @Component({
     selector: '<%=jhiPrefix%>-gateway',
-    templateUrl: 'app/admin/gateway/gateway.html',
+    templateUrl: './gateway.html',
     providers: [ GatewayRoutesService ]
 })
 export class <%=jhiPrefixCapitalized%>GatewayComponent implements OnInit {

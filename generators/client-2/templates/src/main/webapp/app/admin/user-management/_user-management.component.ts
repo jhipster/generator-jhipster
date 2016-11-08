@@ -8,7 +8,7 @@ import { StateService } from "ui-router-ng2";
 
 @Component({
     selector: 'user-mgmt',
-    templateUrl: 'app/admin/user-management/user-management.html'
+    templateUrl: './user-management.html'
 })
 export class UserMgmtComponent implements OnInit {
 

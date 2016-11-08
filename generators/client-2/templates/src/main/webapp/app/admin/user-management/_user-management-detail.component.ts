@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 
 @Component({
     selector: 'user-mgmt-detail',
-    templateUrl: 'app/admin/user-management/user-management-detail.html'
+    templateUrl: './user-management-detail.html'
 })
 export class UserMgmtDetailComponent implements OnInit {
 

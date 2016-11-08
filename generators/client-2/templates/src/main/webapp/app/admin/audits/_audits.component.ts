@@ -7,7 +7,7 @@ import { ParseLinks } from '../../shared';
 
 @Component({
   selector: '<%=jhiPrefix%>-audit',
-  templateUrl: 'app/admin/audits/audits.component.html'
+  templateUrl: './audits.component.html'
 })
 export class AuditsComponent implements OnInit {
     audits: Audit[];

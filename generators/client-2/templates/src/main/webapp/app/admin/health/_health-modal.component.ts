@@ -4,7 +4,7 @@ import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-health-modal',
-    templateUrl: 'app/admin/health/health-modal.html'
+    templateUrl: './health-modal.html'
 })
 export class <%=jhiPrefixCapitalized%>HealthModalComponent {
 
