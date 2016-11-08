@@ -119,7 +119,7 @@
             <p></p>
             <div class="alert alert-warning">
                 <span jhi-translate="global.messages.info.authenticated.prefix">If you want to </span>
-                <a class="alert-link" (click)="openLogin()">sign in</a><span jhi-translate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
+                <a class="alert-link" (click)="openLogin()" jhi-translate="global.messages.info.authenticated.link">sign in</a><span jhi-translate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
             </div>
         </div>
         <%_ if (enableSocialSignIn) { _%>
