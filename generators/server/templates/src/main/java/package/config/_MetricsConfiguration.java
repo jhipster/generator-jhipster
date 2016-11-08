@@ -23,7 +23,6 @@ import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import com.zaxxer.hikari.HikariDataSource;
 <%_ } _%>
 
-import fr.ippon.spark.metrics.SparkReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 <%_ if (databaseType == 'sql') { _%>
@@ -131,33 +130,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                     .prefixedWith(graphitePrefix)
                     .build(graphite);
                 graphiteReporter.start(1, TimeUnit.MINUTES);
-            }
-        }
-    }
-
-    @Configuration
-    @ConditionalOnClass(SparkReporter.class)
-    public static class SparkRegistry {
-
-        private final Logger log = LoggerFactory.getLogger(SparkRegistry.class);
-
-        @Inject
-        private MetricRegistry metricRegistry;
-
-        @Inject
-        private JHipsterProperties jHipsterProperties;
-
-        @PostConstruct
-        private void init() {
-            if (jHipsterProperties.getMetrics().getSpark().isEnabled()) {
-                log.info("Initializing Metrics Spark reporting");
-                String sparkHost = jHipsterProperties.getMetrics().getSpark().getHost();
-                Integer sparkPort = jHipsterProperties.getMetrics().getSpark().getPort();
-                SparkReporter sparkReporter = SparkReporter.forRegistry(metricRegistry)
-                    .convertRatesTo(TimeUnit.SECONDS)
-                    .convertDurationsTo(TimeUnit.MILLISECONDS)
-                    .build(sparkHost, sparkPort);
-                sparkReporter.start(1, TimeUnit.MINUTES);
             }
         }
     }
