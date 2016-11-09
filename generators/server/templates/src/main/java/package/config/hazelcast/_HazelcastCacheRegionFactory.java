@@ -2,6 +2,7 @@ package <%=packageName%>.config.hazelcast;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.hibernate.HazelcastTimestamper;
+import com.hazelcast.hibernate.distributed.IMapRegionCache;
 import com.hazelcast.hibernate.local.CleanupService;
 import com.hazelcast.hibernate.local.LocalRegionCache;
 import com.hazelcast.hibernate.local.TimestampsRegionCache;
@@ -42,10 +43,10 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
         return new HazelcastQueryResultsRegion(hazelcastInstance, regionName, properties);
     }
 
-    public NaturalIdRegion buildNaturalIdRegion(String regionName, Properties properties, CacheDataDescription metadata)
-            throws CacheException {
-
-        return new HazelcastNaturalIdRegion(hazelcastInstance, regionName, properties, metadata);
+    public NaturalIdRegion buildNaturalIdRegion(final String regionName, final Properties properties,
+        final CacheDataDescription metadata) throws CacheException {
+        return new HazelcastNaturalIdRegion<>(hazelcastInstance, regionName, properties, metadata,
+            new IMapRegionCache(regionName, hazelcastInstance, properties, metadata));
     }
 
     public CollectionRegion buildCollectionRegion(String regionName, Properties properties,

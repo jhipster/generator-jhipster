@@ -193,14 +193,6 @@ public class CacheConfiguration {
          */
         mapConfig.setMaxSizeConfig(new MaxSizeConfig(0, MaxSizeConfig.MaxSizePolicy.USED_HEAP_SIZE));
 
-        /*
-            When max. size is reached, specified percentage of
-            the map will be evicted. Any integer between 0 and 100.
-            If 25 is set for example, 25% of the entries will
-            get evicted.
-         */
-        mapConfig.setEvictionPercentage(25);
-
         return mapConfig;
     }
 
