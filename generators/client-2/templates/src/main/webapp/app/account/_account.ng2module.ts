@@ -1,6 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UIRouterModule } from 'ui-router-ng2';
-import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
 
@@ -81,7 +80,6 @@ let ACCOUNT_STATES = [
         SettingsComponent
     ],
     providers: [
-        CookieService,
         <%_ if (authenticationType === 'session') { _%>
         SessionsService,
         <%_ } _%>
