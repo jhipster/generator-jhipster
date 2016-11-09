@@ -198,6 +198,7 @@ module.exports = EntityGenerator.extend({
         this.service = this.fileData.service;
         this.fluentMethods = this.fileData.fluentMethods;
         this.pagination = this.fileData.pagination;
+        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
         if (_.isUndefined(this.entityTableName)) {
@@ -221,7 +222,6 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
             }
             this.skipServer = true;
-            this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
     },
     /* end of Helper methods */
