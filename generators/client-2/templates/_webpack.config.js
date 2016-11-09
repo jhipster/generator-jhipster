@@ -1,12 +1,16 @@
 module.exports = {
-    entry: './src/main/webapp/app/app.main',
+    entry: {
+        'main': './src/main/webapp/app/app.main',
+        'polyfills': './src/main/webapp/app/polyfills.ts'
+    },
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         modules: ['./', 'node_modules']
     },
     output: {
         path: './src/main/webapp/bin',
-        filename: 'app.bundle.js'
+        filename: '[name].bundle.js',
+        chunkFilename: '[id].chunk.js'
     },
     module: {
         rules: [{
