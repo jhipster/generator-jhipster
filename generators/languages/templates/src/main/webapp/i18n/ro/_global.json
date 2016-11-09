@@ -23,7 +23,7 @@
             },
             "admin": {
                 "main": "Administrare",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "User management",
@@ -57,8 +57,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
                 "register": "Înca nu aveți un cont? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Înregistrați un nou cont</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "Dacă doriți să vă ",
+                    "link": "autentificați",
+                    "suffix": ", puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Înca nu aveți un cont?",
+                    "link": "Înregistrați un nou cont"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "Parola si confirmarea ei nu corespund!"

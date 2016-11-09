@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administracja",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "User management",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "Jeśli chcesz się <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
                 "register": "Nie masz jeszcze konta? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Zarejestruj się</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "Jeśli chcesz się ",
+                    "link": "zalogować",
+                    "suffix": ", możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Nie masz jeszcze konta?",
+                    "link": "Zarejestruj się"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Hasło i potwierdzenie nie zgadzają się!"
