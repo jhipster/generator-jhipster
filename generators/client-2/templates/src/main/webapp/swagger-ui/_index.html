@@ -36,12 +36,12 @@
                     return urlMatches[1];
                 },
                 "securityConfig": function(cb) {
-                    $.getJSON(this.baseUrl() + "/configuration/security", function(data) {
+                    $.getJSON(this.baseUrl() + "/swagger-resources/configuration/security", function(data) {
                         cb(data);
                     });
                 },
                 "uiConfig": function(cb) {
-                    $.getJSON(this.baseUrl() + "/configuration/ui", function(data) {
+                    $.getJSON(this.baseUrl() + "/swagger-resources/configuration/ui", function(data) {
                         cb(data);
                     });
                 }

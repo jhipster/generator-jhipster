@@ -3,10 +3,8 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Http, Request, RequestOptionsArgs, RequestOptions, XHRBackend } from '@angular/http';
-import { UIRouterModule } from 'ui-router-ng2';
-import { Ng1ToNg2Module } from 'ui-router-ng1-to-ng2';
-import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+import { UIRouterModule, RootModule } from 'ui-router-ng2';
+import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module'; //TODO these couldnt be used from barrels due to an error
@@ -14,7 +12,9 @@ import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
+import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
 import {
+    <%=jhiPrefixCapitalized%>MainComponent,
     NavbarComponent,
     FooterComponent,
     ProfileService,
@@ -33,6 +33,7 @@ import { HttpInterceptor } from './blocks/interceptor/http.interceptor';
 localStorageConfig();
 
 let routerConfig = {
+    configClass: <%=jhiPrefixCapitalized%>RouterConfig,
     otherwise: '/',
     states: [
         appState,
@@ -45,20 +46,22 @@ let routerConfig = {
 @NgModule({
     imports: [
         BrowserModule,
+        UIRouterModule.forRoot(routerConfig),
         Ng2Webstorage,
-        Ng1ToNg2Module,
-        UIRouterModule.forChild(routerConfig),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>AccountModule
     ],
     declarations: [
+        <%=jhiPrefixCapitalized%>MainComponent,
         HomeComponent,
         NavbarComponent,
         ErrorComponent,
         PageRibbonComponent,
-        FooterComponent<% if (enableTranslation){ %>,
-        ActiveMenuDirective<% } %>
+        <%_ if (enableTranslation){ _%>
+        ActiveMenuDirective,
+        <%_ } _%>
+        FooterComponent
     ],
     providers: [
         ProfileService,
@@ -93,6 +96,6 @@ let routerConfig = {
             ]
         }
     ],
-    bootstrap: [ HomeComponent ]
+    bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
 export class <%=angular2AppName%>AppModule {}
