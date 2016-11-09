@@ -87,6 +87,7 @@ const files = {
                 '_app.ng2module.ts',
                 '_app.state.ts',
                 '_app.constants.ts',
+                '_polyfills.ts',
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
                 'blocks/config/_http.config.ts',
