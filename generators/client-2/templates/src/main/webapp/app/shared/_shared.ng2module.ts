@@ -21,12 +21,13 @@ import {
     HasAuthorityDirective,
     HasAnyAuthorityDirective,
 <% if (enableSocialSignIn) { %>
-    <%=jhiPrefixCapitalized%>SocialComponent,
     SocialService,
 <%_ } _%>
     <%=jhiPrefixCapitalized%>LoginModalComponent
 } from './';
-
+<% if (enableSocialSignIn) { %>
+import { <%=jhiPrefixCapitalized%>SocialComponent } from './social/social.component';
+<%_ } _%>
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedLibsModule,
