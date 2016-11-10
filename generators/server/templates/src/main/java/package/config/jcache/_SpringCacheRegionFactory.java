@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Special hibernate region factory that will convert a Spring URI (e.g. classpath:ehcache.xml) to a real URI (e.g. file://ehcache.xml)
+ * Special Hibernate region factory that will convert a Spring URI (e.g. classpath:ehcache.xml) to a real URI (e.g. file://ehcache.xml).
  */
 public class SpringCacheRegionFactory extends JCacheRegionFactory {
 

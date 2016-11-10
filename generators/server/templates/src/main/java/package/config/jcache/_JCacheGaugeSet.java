@@ -24,7 +24,7 @@ import javax.management.ObjectName;
 import static com.codahale.metrics.MetricRegistry.*;
 
 /**
- * MetricSet retriving JCache specific JMX metrics for every configured caches
+ * MetricSet retrieving JCache specific JMX metrics for every configured caches.
  */
 public class JCacheGaugeSet implements MetricSet {
 
