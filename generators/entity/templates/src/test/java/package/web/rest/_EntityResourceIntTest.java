@@ -39,6 +39,7 @@ import javax.persistence.EntityManager;<% } %><% if (fieldsContainLocalDate == t
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;<% } %><% if (fieldsContainLocalDate == true || fieldsContainZonedDateTime == true) { %>
 import java.time.ZoneId;<% } %><% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob == true && databaseType === 'cassandra') { %>
@@ -152,9 +153,9 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
     <%_ } else if (fieldType == 'ZonedDateTime') { _%>
 
-    private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneId.systemDefault());
+    private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime <%=updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final String <%=defaultValueName %>_STR = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(<%= defaultValueName %>);
+    private static final String <%=defaultValueName %>_STR = DateTimeFormatter.ISO_INSTANT.format(<%= defaultValueName %>);
     <%_ } else if (fieldType == 'Boolean') { _%>
 
     private static final Boolean <%=defaultValueName %> = false;
