@@ -1369,20 +1369,5 @@
                 <spring.profiles.active>dev,swagger</spring.profiles.active>
             </properties>
         </profile>
-        <profile>
-            <!--
-                Profile for applying IDE-specific configuration.
-                At the moment it only configures MapStruct, which you need when working
-                with DTOs.
-            -->
-            <id>IDE</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.mapstruct</groupId>
-                    <artifactId>mapstruct-processor</artifactId>
-                    <version>${mapstruct.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
     </profiles>
 </project>
