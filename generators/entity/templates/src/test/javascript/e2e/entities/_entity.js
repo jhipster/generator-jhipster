@@ -46,6 +46,36 @@ describe('<%= entityClass %> e2e test', function () {
         });
     });
 
+	it('should create and save <%= entityClass %>', function () {
+        element(by.css('[ui-sref="<%= entityStateName %>.new"]')).click().then(function() {
+            <%_ if (enableTranslation) { _%>
+            element(by.css('h4.modal-title')).getAttribute('data-translate').then(function (value) {
+                expect(value).toMatch(/<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel/);
+            });
+            <%_ } else { _%>
+            expect(element(by.css('h4.modal-title')).getText()).toMatch(/Create or edit a <%= entityClassHumanized %>/);
+            <%_ } _%>
+            var <%= entityInstance %>Page = new <%= entityClass %>Page();
+			<%_ for (idx in fields) {
+					var fieldName = fields[idx].fieldName;
+					var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+			_%>
+            <%= entityInstance %>Page.set<%= fieldNameCapitalized%>('<%= fieldName %> 1');
+            expect(<%= entityInstance %>Page.get<%= fieldNameCapitalized%>()).toBe('<%= fieldName %> 1');
+			<%_ } _%>
+			<%_ for (idx in relationships) {
+				    var relationshipFieldName = relationships[idx].relationshipFieldName;
+				    var relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+			_%>
+			<%= entityInstance %>Page.set<%= relationshipNameCapitalized %>('<%= relationshipFieldName %> 1');
+            expect(<%= entityInstance %>Page.get<%= relationshipNameCapitalized %>()).toBe('<%= relationshipFieldName %> 1');
+			<%_ } _%> 
+            <%= entityInstance %>Page.save();
+            expect(<%= entityInstance %>Page.getSaveButton().isPresent()).toBe(false);
+            
+        });
+	});
+
 	var  <%= entityClass %>Page = function() {
 		<%_ for (idx in fields) {
             var fieldName = fields[idx].fieldName;
