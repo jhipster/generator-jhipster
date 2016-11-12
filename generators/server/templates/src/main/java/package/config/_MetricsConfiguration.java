@@ -24,17 +24,22 @@ import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 <%_ if (databaseType == 'sql') { _%>
 import com.zaxxer.hikari.HikariDataSource;
 <%_ } _%>
-
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
+import io.prometheus.client.exporter.MetricsServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 <%_ if (databaseType == 'sql') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import java.lang.management.ManagementFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -137,6 +142,32 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                     .prefixedWith(graphitePrefix)
                     .build(graphite);
                 graphiteReporter.start(1, TimeUnit.MINUTES);
+            }
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass(CollectorRegistry.class)
+    public static class PrometheusRegistry implements ServletContextInitializer{
+
+        private final Logger log = LoggerFactory.getLogger(PrometheusRegistry.class);
+
+        @Inject
+        private MetricRegistry metricRegistry;
+
+        @Inject
+        private JHipsterProperties jHipsterProperties;
+
+        @Override
+        public void onStartup(ServletContext servletContext) throws ServletException {
+            if(jHipsterProperties.getMetrics().getPrometheus().isEnabled()) {
+                String endpoint = jHipsterProperties.getMetrics().getPrometheus().getEndpoint();
+                log.info("Initializing Metrics Prometheus endpoint at {}", endpoint);
+                CollectorRegistry collectorRegistry = new CollectorRegistry();
+                collectorRegistry.register(new DropwizardExports(metricRegistry));
+                servletContext
+                    .addServlet("prometheusMetrics", new MetricsServlet(collectorRegistry))
+                    .addMapping(endpoint);
             }
         }
     }
