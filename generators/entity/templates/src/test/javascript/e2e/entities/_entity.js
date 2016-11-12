@@ -46,6 +46,58 @@ describe('<%= entityClass %> e2e test', function () {
         });
     });
 
+	var  <%= entityClass %>Page = function() {
+		<%_ for (idx in fields) {
+            var fieldName = fields[idx].fieldName;
+            var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+		_%>
+		var <%= fieldName%> = element(by.model('vm.<%= entityInstance %>.<%= fieldName %>'));
+		<%_ } _%>
+		<%_ for (idx in relationships) {
+            var relationshipFieldName = relationships[idx].relationshipFieldName;
+            var relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+		_%>
+		var <%= relationshipFieldName %> = element(by.model('vm.<%= entityInstance %>.<%=relationshipFieldName %>'));
+		<%_ } _%>
+		<%_ for (idx in fields) {
+            var fieldName = fields[idx].fieldName;
+            var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+		_%>
+		var saveButton = element(by.buttonText('Save'));
+		var cancleButton = element(by.buttonText('Cancel'));
+
+		this.set<%= fieldNameCapitalized%> = function(text) {
+			<%= fieldName%>.sendKeys(text);
+		};
+		this.get<%= fieldNameCapitalized%> = function() {
+			return <%= fieldName%>.getAttribute('value');
+		};
+		<%_ } _%>
+		<%_ for (idx in relationships) {
+            var relationshipFieldName = relationships[idx].relationshipFieldName;
+            var relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+		_%>
+		this.set<%= relationshipNameCapitalized %> = function(text) {
+			<%= relationshipFieldName %>.sendKeys(text, protractor.Key.ENTER);
+		};
+		this.get<%= relationshipNameCapitalized %> = function() {
+			return <%= relationshipFieldName %>.element(by.css('option:checked')).getText();
+		};
+		<%_ } _%>
+		this.getSaveButton = function() {
+			return saveButton;
+		};
+		this.save = function() {
+			saveButton.click();
+		};
+		this.getCancleButton = function() {
+			return cancleButton;
+		};
+		this.cancle = function() {
+			cancleButton.click();
+		};
+	};
+
     afterAll(function () {
         accountMenu.click();
         logout.click();
