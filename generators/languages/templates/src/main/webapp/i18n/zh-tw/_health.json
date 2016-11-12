@@ -11,10 +11,14 @@
             "error": "錯誤"
         },
         "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Message broker",
+            <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "configServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "硬碟空間",
             "mail": "電子郵件"<% if (searchEngine === 'elasticsearch') { %>,

@@ -11,10 +11,14 @@
             "error": "Chyba"
         },
         "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Message broker",
+            <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice obnovovací rozsah",
             "configServer": "Microservice konfiguračný server",
+            "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "Diskový priestor",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
