@@ -17,11 +17,11 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
     csrf: string;
 
     constructor (
-        <% if (enableTranslation){ %>
+        <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
-        <% } %>
-        private CSRFService: CSRFService,
-        private SocialService: SocialService
+        <%_ } _%>
+        private csrfService: CSRFService,
+        private socialService: SocialService
     ) {}
 
     ngOnInit() {
@@ -29,9 +29,9 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
         this.languageService.addLocation('social');
         <%_ } _%>
         this.label = this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
-        this.providerSetting = this.SocialService.getProviderSetting(this.provider);
-        this.providerURL = this.SocialService.getProviderURL(this.provider);
-        this.csrf = this.CSRFService.getCSRF();
+        this.providerSetting = this.socialService.getProviderSetting(this.provider);
+        this.providerURL = this.socialService.getProviderURL(this.provider);
+        this.csrf = this.csrfService.getCSRF();
     }
 
 }

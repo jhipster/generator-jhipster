@@ -20,7 +20,7 @@ import {
     <%_ } _%>
     HasAuthorityDirective,
     HasAnyAuthorityDirective,
-<% if (enableSocialSignIn) { %>
+<%_ if (enableSocialSignIn) { _%>
     <%=jhiPrefixCapitalized%>SocialComponent,
     SocialService,
 <%_ } _%>
