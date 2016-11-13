@@ -13,13 +13,14 @@
                         translate-values="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
                 </div>
 
-                <div class="alert alert-warning" *ngSwitchCase="false" jhi-translate="global.messages.info.authenticated" translate-compile>
-                    If you want to <a class="alert-link" href="" (click)="login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+                <div class="alert alert-warning" *ngSwitchCase="false">
+                    <span jhi-translate="global.messages.info.authenticated.prefix">If you want to </span>
+                    <a class="alert-link" (click)="login()" jhi-translate="global.messages.info.authenticated.link">sign in</a><span jhi-translate="global.messages.info.authenticated.suffix"></span>
                 </div>
 
-
-                <div class="alert alert-warning" *ngSwitchCase="false" jhi-translate="global.messages.info.register" translate-compile>
-                    You don't have an account yet? <a class="alert-link" uiSref="register">Register a new account</a>
+                <div class="alert alert-warning" *ngSwitchCase="false">
+                    <span jhi-translate="global.messages.info.register.noaccount">You don't have an account yet?</span>
+                    <a class="alert-link" uiSref="register" jhi-translate="global.messages.info.register.link">Register a new account</a>
                 </div>
             </div>
 
@@ -36,7 +37,7 @@
             </ul>
 
             <p>
-             <span jhi-translate="home.like">If you like JHipster, don't forget to give us a star on </span>&nbsp;<a href="https://github.com/jhipster/generator-jhipster" target="_blank" jhi-translate="home.github">Github</a>!
+             <span jhi-translate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" jhi-translate="home.github">Github</a>!
             </p>
         </div>
     </div>

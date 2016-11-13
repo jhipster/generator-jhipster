@@ -28,10 +28,6 @@ export class HomeComponent implements OnInit {
         return this.principal.isAuthenticated();
     }
 
-    register() {
-        this.$state.go('register');
-    }
-
     login() {
         this.modalRef = this.loginModalService.open();
     }
