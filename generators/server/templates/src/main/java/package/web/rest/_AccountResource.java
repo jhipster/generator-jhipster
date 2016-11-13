@@ -1,10 +1,15 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-<% if (authenticationType == 'session') { %>
-import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
-import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
+
+import <%=packageName%>.config.JHipsterProperties;
+<%_ if (authenticationType == 'session') { _%>
+import <%=packageName%>.domain.PersistentToken;
+<%_ } _%>
+import <%=packageName%>.domain.User;
+<%_ if (authenticationType == 'session') { _%>
+import <%=packageName%>.repository.PersistentTokenRepository;
+<%_ } _%>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
@@ -42,6 +47,9 @@ public class AccountResource {
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     @Inject
+    private JHipsterProperties jHipsterProperties;
+
+    @Inject
     private UserRepository userRepository;
 
     @Inject
@@ -73,15 +81,21 @@ public class AccountResource {
             .orElseGet(() -> userRepository.findOneByEmail(managedUserVM.getEmail())
                 .map(user -> new ResponseEntity<>("e-mail address already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
                 .orElseGet(() -> {
-                    User user = userService.createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
-                    managedUserVM.getFirstName(), managedUserVM.getLastName(), managedUserVM.getEmail().toLowerCase(),
-                    managedUserVM.getLangKey());
-                    String baseUrl = request.getScheme() + // "http"
-                    "://" +                                // "://"
-                    request.getServerName() +              // "myhost"
-                    ":" +                                  // ":"
-                    request.getServerPort() +              // "80"
-                    request.getContextPath();              // "/myContextPath" or "" if deployed in root context
+                    User user = userService
+                        .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
+                            managedUserVM.getFirstName(), managedUserVM.getLastName(),
+                            managedUserVM.getEmail().toLowerCase(), managedUserVM.getLangKey());
+
+
+                    String baseUrl = jHipsterProperties.getMail().getBaseUrl();
+                    if (baseUrl.equals("")) {
+                        baseUrl = request.getScheme() + // "http"
+                        "://" +                         // "://"
+                        request.getServerName() +       // "myhost"
+                        ":" +                           // ":"
+                        request.getServerPort() +       // "80"
+                        request.getContextPath();       // "/myContextPath" or "" if deployed in root context
+                    }
 
                     mailService.sendActivationEmail(user, baseUrl);
                     return new ResponseEntity<>(HttpStatus.CREATED);
