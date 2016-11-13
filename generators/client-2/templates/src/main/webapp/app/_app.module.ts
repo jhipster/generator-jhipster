@@ -20,7 +20,6 @@ import { PaginationConfig } from './blocks/config/uib-pagination.config';
 import { HomeComponent } from './home';
 import { <%=jhiPrefixCapitalized%>MainComponent, NavbarComponent, FooterComponent, PageRibbonComponent } from './layouts';
 
-import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
 import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 
@@ -51,7 +50,6 @@ angular
     .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
     .directive('footer', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(FooterComponent))
     .directive('<%=jhiPrefix%>Main', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MainComponent))
-    .factory('AuthExpiredInterceptor', AuthExpiredInterceptor)
     .factory('ErrorHandlerInterceptor', ErrorHandlerInterceptor)
     .factory('NotificationInterceptor', NotificationInterceptor)<% if (enableTranslation) { %>
     .factory('TranslationStorageProvider', TranslationStorageProvider)
