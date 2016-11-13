@@ -206,8 +206,8 @@ function getLatestSolutionStackName(callback) {
     });
 
     function filterSolutionStackNames(data, callback) {
-        var filtredArray = data.SolutionStacks.filter(filterCriteria);
-        callback(null, {solutionStackName: filtredArray[0]});
+        var filteredArray = data.SolutionStacks.filter(filterCriteria);
+        callback(null, {solutionStackName: filteredArray[0]});
     }
 
     function filterCriteria(element) {

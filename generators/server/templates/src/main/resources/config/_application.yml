@@ -150,5 +150,5 @@ jhipster:
         <%_ } _%>
 <%_ } _%>
     ribbon:
-        # comma seperated list of profiles to show a ribbon on the GUI
+        # comma separated list of profiles to show a ribbon on the GUI
         displayOnActiveProfiles: dev

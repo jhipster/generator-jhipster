@@ -26,7 +26,7 @@
                 <div ng-show="{{route.serviceInstances.length == 0}}" class="label label-danger" data-translate="gateway.routes.error">
                     Warning: no server available!
                 </div>
-                <table class="tabletable-responsive">
+                <table class="table table-responsive">
                     <tr ng-repeat="instance in route.serviceInstances">
                         <td>{{instance.host}}:{{instance.port}}</td>
                         <td ng-show="{{instance.instanceInfo.status == 'UP'}}"><div class="label label-success">{{instance.instanceInfo.status}}</div></td>
