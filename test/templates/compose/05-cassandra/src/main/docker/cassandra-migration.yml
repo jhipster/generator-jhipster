@@ -5,7 +5,7 @@ services:
         environment:
             - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
             - USER=docker-cassandra-migration
-            # - DEBUG_LOG=1 # uncomment to show debug logs durinq the migration process
+            # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
         build:
             context: .
             dockerfile: cassandra/Cassandra-Migration.Dockerfile

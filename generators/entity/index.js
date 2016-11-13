@@ -10,7 +10,7 @@ const util = require('util'),
     writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
 
-/* constants used througout */
+/* constants used throughout */
 const constants = require('../generator-constants'),
     SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
@@ -69,7 +69,7 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
-        // remove extention if feeding json files
+        // remove extension if feeding json files
         if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');
         }
@@ -354,7 +354,7 @@ module.exports = EntityGenerator.extend({
             if (this.useConfigurationFile && this.updateEntity === 'regenerate') {
                 return; //do not update if regenerating entity
             }
-            // store informations in a file for further use.
+            // store information in a file for further use.
             if (!this.useConfigurationFile && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 this.changelogDate = this.dateFormatForLiquibase();
             }

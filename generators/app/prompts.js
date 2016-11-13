@@ -97,7 +97,7 @@ function askForTestOpts() {
     var choices = [];
     var defaultChoice = [];
     if (!this.skipServer) {
-        // all server side test frameworks should be addded here
+        // all server side test frameworks should be added here
         choices.push(
             {name: 'Gatling', value: 'gatling'},
             {name: 'Cucumber', value: 'cucumber'}
@@ -105,7 +105,7 @@ function askForTestOpts() {
         defaultChoice = ['gatling'];
     }
     if (!this.skipClient) {
-        // all client side test frameworks should be addded here
+        // all client side test frameworks should be added here
         choices.push(
             {name: 'Protractor', value: 'protractor'}
         );

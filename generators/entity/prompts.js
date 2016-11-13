@@ -529,7 +529,7 @@ function askForField(done) {
                         return 'Enum value "' + enums[i] + '" cannot start with a number';
                     }
                     if (enums[i] === '') {
-                        return 'Enum value cannot be empty (did you accidently type "," twice in a row?)';
+                        return 'Enum value cannot be empty (did you accidentally type "," twice in a row?)';
                     }
                 }
 

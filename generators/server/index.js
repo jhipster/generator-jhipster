@@ -200,7 +200,7 @@ module.exports = JhipsterServerGenerator.extend({
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
 
-                // Generate JWT secert key if key does not already exist in config
+                // Generate JWT secret key if key does not already exist in config
                 if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
