@@ -1,7 +1,8 @@
 'use strict';
 
 const constants = require('./generator-constants'),
-    ANGULAR_DIR = constants.ANGULAR_DIR;
+    ANGULAR_DIR = constants.ANGULAR_DIR,
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = {
     cleanupOldFiles: cleanupOldFiles,
@@ -36,5 +37,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(javaDir + 'config/CloudMongoDbConfiguration.java');
         generator.removeFile(javaDir + 'security/CustomAccessDeniedHandler.java');
         generator.removeFile(javaDir + 'web/filter/CsrfCookieGeneratorFilter.java');
+    }
+    if (generator.isJhipsterVersionLessThan('3.11.0')) {
+        generator.removeFile(CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-link.directive.js');
     }
 }
