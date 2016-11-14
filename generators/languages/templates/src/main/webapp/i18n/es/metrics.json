@@ -78,7 +78,7 @@
             "evictioncount": "Contador desalojo"
         },
         "datasource": {
-        	"usage": "Uso",
+            "usage": "Uso",
             "title": "Estadísticas de la fuente de datos (tiempo en milisegundos)",
             "name": "Uso del pool",
             "count": "Recuento",

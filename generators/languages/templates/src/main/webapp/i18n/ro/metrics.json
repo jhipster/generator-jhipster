@@ -78,7 +78,7 @@
             "evictioncount": "Eviction count"
         },
         "datasource": {
-        	"usage": "Folosire",
+            "usage": "Folosire",
             "title": "Statistici sursă date(timpi in milisecunde)",
             "name": "Folosire pool",
             "count": "Număr",

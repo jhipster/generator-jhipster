@@ -36,7 +36,7 @@
     <cache name="<%=packageName%>.domain.User.persistentTokens"
            timeToLiveSeconds="3600">
     </cache>
-    <% if (enableSocialSignIn) { %>
+    <%_ if (enableSocialSignIn) { _%>
 
     <cache name="<%=packageName%>.social.SocialUserConnection"
            timeToLiveSeconds="3600">

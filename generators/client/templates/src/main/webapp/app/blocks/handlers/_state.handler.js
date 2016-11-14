@@ -32,12 +32,12 @@
                     Auth.authorize();
                 }
 
-                <% if (enableTranslation) { %>
+                <%_ if (enableTranslation) { _%>
                 // Update the language
                 <%=jhiPrefixCapitalized%>LanguageService.getCurrent().then(function (language) {
                     $translate.use(language);
                 });
-                <% } %>
+                <%_ } _%>
             });
 
             var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {

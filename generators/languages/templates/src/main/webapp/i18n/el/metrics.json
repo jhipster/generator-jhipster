@@ -78,7 +78,7 @@
             "evictioncount": "Αριθμός εξώσεων"
         },
         "datasource": {
-        	"usage": "Χρήση",
+            "usage": "Χρήση",
             "title": "Στατιστικά του DataSource(φορά σε χιλιοστά του δευτερολέπτου)",
             "name": "Χρήση Pool",
             "count": "Αριθμός",

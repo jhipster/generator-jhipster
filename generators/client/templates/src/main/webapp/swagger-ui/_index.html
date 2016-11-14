@@ -83,26 +83,26 @@
                 });
 
                 function addApiKeyAuthorization(){
-                <% if (authenticationType === 'session') { %>
+                <%_ if (authenticationType === 'session') { _%>
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <% } %>
-                <% if (authenticationType === 'oauth2') { %>
+                <%_ } _%>
+                <%_ if (authenticationType === 'oauth2') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken")).access_token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <% } %>
-                <% if (authenticationType === 'xauth') { %>
+                <%_ } _%>
+                <%_ if (authenticationType === 'xauth') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken")).token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-Auth-Token", authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <% } %>
-                <% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>
+                <%_ } _%>
+                <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken") || sessionStorage.getItem("jhi-authenticationToken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
-                <% } %>
+                <%_ } _%>
                 }
 
                 function getCSRF() {

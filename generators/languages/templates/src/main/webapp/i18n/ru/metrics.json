@@ -78,7 +78,7 @@
             "evictioncount": "Количество очисток"
         },
         "datasource": {
-        	"usage": "Usage",
+            "usage": "Usage",
             "title": "Статистика DataSource (время в миллисекундах)",
             "name": "Pool usage",
             "count": "Count",

@@ -78,7 +78,7 @@
             "evictioncount": "Contador d'expulcions"
         },
         "datasource": {
-        	"usage": "Utilització",
+            "usage": "Utilització",
             "title": "Estadístiques de l'origen de dades (en milisegons)",
             "name": "Utilització de la bateria de connexions",
             "count": "Total",

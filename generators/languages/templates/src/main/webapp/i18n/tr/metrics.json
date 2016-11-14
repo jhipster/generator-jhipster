@@ -78,7 +78,7 @@
             "evictioncount": "Eviction count"
         },
         "datasource": {
-        	"usage": "Kullanım",
+            "usage": "Kullanım",
             "title": "Veri kaynağı istatistikleri (milisaniye cinsinden)",
             "name": "Havuz kullanımı",
             "count": "Sayaç",

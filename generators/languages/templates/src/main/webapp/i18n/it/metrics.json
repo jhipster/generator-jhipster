@@ -78,7 +78,7 @@
             "evictioncount": "Eviction count"
         },
         "datasource": {
-        	"usage": "Utilizzo",
+            "usage": "Utilizzo",
             "title": "Statistiche DataSource (in millisecondi)",
             "name": "Pool usage",
             "count": "Count",

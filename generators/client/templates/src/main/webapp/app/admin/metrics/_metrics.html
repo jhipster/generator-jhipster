@@ -170,7 +170,7 @@
             </tbody>
         </table>
     </div>
-    <% if (hibernateCache == 'ehcache') { %>
+    <%_ if (hibernateCache == 'ehcache') { _%>
     <h3 data-translate="metrics.ehcache.title">Ehcache statistics</h3>
     <div class="table-responsive">
         <table class="table table-striped">
@@ -194,7 +194,7 @@
             </tbody>
         </table>
     </div>
-    <% } %>
+    <%_ } _%>
     <h3 data-translate="metrics.datasource.title" ng-show="vm.metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
     <div class="table-responsive" ng-show="vm.metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
         <table class="table table-striped">

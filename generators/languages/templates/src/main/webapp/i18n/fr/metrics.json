@@ -78,7 +78,7 @@
             "evictioncount": "Nombre de suppressions"
         },
         "datasource": {
-        	"usage": "Usage",
+            "usage": "Usage",
             "title": "Statistiques du pool de connexions (Temps en milliseconde)",
             "name": "Utilisation du pool",
             "count": "Total",

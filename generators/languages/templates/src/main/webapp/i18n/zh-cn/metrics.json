@@ -78,7 +78,7 @@
             "evictioncount": "收回计数"
         },
         "datasource": {
-        	"usage": "用法",
+            "usage": "用法",
             "title": "数据源统计 (时间单位为毫秒)",
             "name": "池使用情况",
             "count": "计数",

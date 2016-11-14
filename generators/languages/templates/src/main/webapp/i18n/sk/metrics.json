@@ -78,7 +78,7 @@
             "evictioncount": "Počet eviction"
         },
         "datasource": {
-        	"usage": "Používanie",
+            "usage": "Používanie",
             "title": "DataSource štatistiky (čas v milisekundách)",
             "name": "Využitie poolu",
             "count": "Počet",

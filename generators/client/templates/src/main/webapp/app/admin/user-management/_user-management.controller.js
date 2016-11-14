@@ -27,10 +27,11 @@
         vm.transition = transition;<% } %>
 
         vm.loadAll();
-        <% if (enableTranslation) { %>
+        <%_ if (enableTranslation) { _%>
         <%=jhiPrefixCapitalized%>LanguageService.getAll().then(function (languages) {
             vm.languages = languages;
-        });<% } %>
+        });
+        <%_ } _%>
         Principal.identity().then(function(account) {
             vm.currentAccount = account;
         });
