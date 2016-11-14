@@ -19,7 +19,7 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-        <% if (!skipUserManagement) { %>
+<%_ if (!skipUserManagement) { _%>
         <createTable tableName="jhi_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -51,7 +51,7 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
-        <% if(prodDatabaseType != 'oracle') {%>
+    <%_ if (prodDatabaseType != 'oracle') { _%>
         <createIndex indexName="idx_user_login"
             tableName="jhi_user"
             unique="true">
@@ -63,7 +63,7 @@
             unique="true">
             <column name="email" type="varchar(100)"/>
         </createIndex>
-        <% } %>
+    <%_ } _%>
         <createTable tableName="jhi_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -79,7 +79,8 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/><% if (authenticationType == 'session') { %>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
+    <%_ if (authenticationType == 'session') { _%>
 
         <createTable tableName="jhi_persistent_token">
             <!-- Maximum line length of Base64 output is 76 -->
@@ -93,7 +94,8 @@
             <column name="token_date" type="date"/>
             <column name="ip_address" type="varchar(39)"/>
             <column name="user_agent" type="varchar(255)"/>
-        </createTable><% } %>
+        </createTable>
+    <%_ } _%>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
                                  baseTableName="jhi_user_authority"
@@ -105,13 +107,15 @@
                                  baseTableName="jhi_user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/><% if (authenticationType == 'session') { %>
+                                 referencedTableName="jhi_user"/>
+    <%_ if (authenticationType == 'session') { _%>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="jhi_persistent_token"
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/><% } %>
+                                 referencedTableName="jhi_user"/>
+    <%_ } _%>
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -130,7 +134,7 @@
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
                   tableName="jhi_user_authority"/>
-        <% } %>
+<%_ } _%>
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -171,7 +175,8 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
-    <% if (enableSocialSignIn) { %>
+    <%_ if (enableSocialSignIn) { _%>
+
         <!-- Social -->
         <createTable tableName="jhi_social_user_connection">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
@@ -203,9 +208,10 @@
         <addUniqueConstraint tableName="jhi_social_user_connection" columnNames="user_id, provider_id, provider_user_id"/>
 
         <addUniqueConstraint tableName="jhi_social_user_connection" columnNames="user_id, provider_id, rank"/>
-    <% } %>
+    <%_ } _%>
     </changeSet>
-    <% if (authenticationType == 'oauth2') { %>
+
+    <%_ if (authenticationType == 'oauth2') { _%>
     <!-- Manage the OAuth authentication -->
     <changeSet id="00000000000002" author="jhipster">
         <createTable tableName="oauth_client_details">
@@ -280,5 +286,6 @@
                   file="config/liquibase/oauth_client_details.csv"
                   separator=";"
                   tableName="oauth_client_details"/>
-    </changeSet><% } %>
+    </changeSet>
+    <%_ } _%>
 </databaseChangeLog>
