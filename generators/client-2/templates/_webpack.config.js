@@ -1,3 +1,4 @@
+var BowerWebpackPlugin = require("bower-webpack-plugin");
 module.exports = {
     entry: {
         'main': './src/main/webapp/app/app.main',
@@ -27,5 +28,14 @@ module.exports = {
             loader: 'raw-loader',
             exclude: ['./src/main/webapp/index.html']
         }]
-    }
+    },
+    plugins: [
+        new BowerWebpackPlugin({
+            modulesDirectories: ['./src/main/webapp/bower_components'],
+            manifestFiles:      'bower.json',
+            includes:           /.*/,
+            excludes:           [],
+            searchResolveModulesDirectories: true
+        })
+    ]
  };
