@@ -41,6 +41,12 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByLogin(String login);
     <%_ if (databaseType == 'sql') { _%>
 
+    @Query("select user from User user left join fetch user.authorities where user.id = ?1")
+    User findOneWithAuthorities(<%= pkType %> id);
+
+    @Query("select user from User user left join fetch user.authorities where user.login = ?1")
+    Optional<User> findOneWithAuthoritiesByLogin(String login);
+
     @Query(value = "select distinct user from User user left join fetch user.authorities",
         countQuery = "select count(user) from User user")
     Page<User> findAllWithAuthorities(Pageable pageable);

@@ -266,10 +266,7 @@ public class UserService {
     <%_ } _%>
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         <%_ if (databaseType == 'sql') { _%>
-        return userRepository.findOneByLogin(login).map(user -> {
-            user.getAuthorities().size();
-            return user;
-        });
+        return userRepository.findOneWithAuthoritiesByLogin(login);
         <%_ } else { // MongoDB and Cassandra _%>
         return userRepository.findOneByLogin(login);
         <%_ } _%>
@@ -279,26 +276,22 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public User getUserWithAuthorities(<%= pkType %> id) {
-        User user = userRepository.findOne(id);
         <%_ if (databaseType == 'sql') { _%>
-        user.getAuthorities().size(); // eagerly load the association
+        return userRepository.findOneWithAuthorities(id);
+        <%_ } else { // MongoDB and Cassandra _%>
+        return userRepository.findOne(id);
         <%_ } _%>
-        return user;
     }
 
     <%_ if (databaseType == 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
     public User getUserWithAuthorities() {
-        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        User user = null;
-        if (optionalUser.isPresent()) {
-          user = optionalUser.get();
-          <%_ if (databaseType == 'sql') { _%>
-            user.getAuthorities().size(); // eagerly load the association
-          <%_ } _%>
-         }
-         return user;
+        <%_ if (databaseType == 'sql') { _%>
+        return userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
+        <%_ } else { // MongoDB and Cassandra _%>
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
+        <%_ } _%>
     }
     <%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
 
