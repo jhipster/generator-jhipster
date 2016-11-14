@@ -1,7 +1,8 @@
 module.exports = {
     entry: {
         'main': './src/main/webapp/app/app.main',
-        'polyfills': './src/main/webapp/app/polyfills.ts'
+        'polyfills': './src/main/webapp/app/polyfills.ts',
+        'vendor': './src/main/webapp/app/vendor.ts'
     },
     resolve: {
         extensions: ['.ts', '.js', '.json'],
