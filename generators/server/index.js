@@ -123,7 +123,7 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.searchEngine === undefined) {
                 this.searchEngine = false;
             }
-            this.messageBroker = this.config.get('messageBroker');
+            this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
             if (this.messageBroker === undefined) {
                 this.messageBroker = false;
             }

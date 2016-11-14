@@ -107,6 +107,7 @@ module.exports = EntityGenerator.extend({
             this.databaseType = this.config.get('databaseType');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
             this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
+            this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');

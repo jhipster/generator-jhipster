@@ -232,6 +232,9 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.prodDatabaseType) {
                 this.prodDatabaseType = this.configOptions.prodDatabaseType;
             }
+            if (this.configOptions.messageBroker !== undefined) {
+                this.messageBroker = this.configOptions.messageBroker;
+            }
             if (this.configOptions.searchEngine !== undefined) {
                 this.searchEngine = this.configOptions.searchEngine;
             }
