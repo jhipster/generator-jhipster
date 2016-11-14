@@ -1,8 +1,5 @@
 package <%=packageName%>.config.jcache;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.codahale.metrics.JmxAttributeGauge;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricSet;
@@ -21,30 +18,20 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectInstance;
 import javax.management.ObjectName;
 
-import static com.codahale.metrics.MetricRegistry.*;
+import static com.codahale.metrics.MetricRegistry.name;
 
 /**
  * MetricSet retrieving JCache specific JMX metrics for every configured caches.
  */
 public class JCacheGaugeSet implements MetricSet {
 
-    private final Logger log = LoggerFactory.getLogger(JCacheGaugeSet.class);
-
     private static final String M_BEAN_COORDINATES = "javax.cache:type=CacheStatistics,CacheManager=*,Cache=*";
-
-    private Set<ObjectInstance> objectInstances;
-
-    public JCacheGaugeSet() {
-        try {
-            this.objectInstances = ManagementFactory.getPlatformMBeanServer().queryMBeans(ObjectName.getInstance(M_BEAN_COORDINATES), null);
-        } catch (MalformedObjectNameException e) {
-            log.error("Failed to retrieve JCache statistics", e);
-        }
-    }
 
     @Override
     public Map<String, Metric> getMetrics() {
-        final Map<String, Metric> gauges = new HashMap<String, Metric>();
+        Set<ObjectInstance> objectInstances = getCacheMBeans();
+
+        Map<String, Metric> gauges = new HashMap<String, Metric>();
 
         List<String> availableStatsNames = retrieveStatsNames();
 
@@ -61,6 +48,14 @@ public class JCacheGaugeSet implements MetricSet {
         return Collections.unmodifiableMap(gauges);
     }
 
+    private Set<ObjectInstance> getCacheMBeans() {
+        try {
+            return ManagementFactory.getPlatformMBeanServer().queryMBeans(ObjectName.getInstance(M_BEAN_COORDINATES), null);
+        } catch (MalformedObjectNameException e) {
+            throw new InternalError("Shouldn't happen since the query is hardcoded", e);
+        }
+    }
+
     private List<String> retrieveStatsNames() {
         Class<?> c = CacheStatisticsMXBean.class;
         return Arrays.stream(c.getMethods())
@@ -69,8 +64,7 @@ public class JCacheGaugeSet implements MetricSet {
             .collect(Collectors.toList());
     }
 
-    private String toDashCase(String camelCase) {
+    private static String toDashCase(String camelCase) {
         return camelCase.replaceAll("(.)(\\p{Upper})", "$1-$2").toLowerCase();
     }
-
 }
