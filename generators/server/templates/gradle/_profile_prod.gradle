@@ -1,5 +1,5 @@
 import org.apache.tools.ant.taskdefs.condition.Os
-apply plugin: 'spring-boot'<% if(!skipClient) { %>
+apply plugin: 'org.springframework.boot'<% if(!skipClient) { %>
 apply plugin: 'com.moowork.node'
 apply plugin: 'com.moowork.gulp'
 <% } %>
