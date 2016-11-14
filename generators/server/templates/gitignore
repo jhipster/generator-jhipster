@@ -105,10 +105,9 @@ Desktop.ini
 ######################
 # Directories
 ######################
-build/
-bin/
-spring_loaded/
-deploy/
+/build/
+/bin/
+/deploy/
 
 ######################
 # Logs
