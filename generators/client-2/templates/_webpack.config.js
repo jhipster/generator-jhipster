@@ -6,8 +6,8 @@ module.exports = {
         'vendor': './src/main/webapp/app/vendor.ts'
     },
     resolve: {
-        extensions: ['.ts', '.js', '.json'],
-        modules: ['./', 'node_modules']
+        extensions: ['.ts', '.js'],
+        modules: ['node_modules']
     },
     output: {
         path: './src/main/webapp/bin',
