@@ -16,6 +16,10 @@ module.exports = {
     },
     module: {
         rules: [{
+            test: /[\/]angular\.js$/,
+            loader: "exports?angular"
+        },
+        {
             test: /\.ts$/,
             loaders: [
                 'angular2-template-loader',

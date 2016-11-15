@@ -23,6 +23,7 @@
     "core-js": "2.4.1",
     "jquery": "3.1.0",
     "angular2-cookie": "1.2.5",
+    "exports-loader": "0.6.3",
     <%_ if (enableTranslation){ _%>
     "ng2-translate": "3.1.1",
     <%_ } _%>
