@@ -33,7 +33,11 @@ public class UserDetailsService implements org.springframework.security.core.use
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
+        <%_ if (databaseType == 'sql') { _%>
+        Optional<User> userFromDatabase = userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin);
+        <%_ } else { // MongoDB and Cassandra _%>
         Optional<User> userFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
+        <%_ } _%>
         return userFromDatabase.map(user -> {
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
