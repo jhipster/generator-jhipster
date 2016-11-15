@@ -16,9 +16,7 @@ const files = {
         {
             templates: [
                 '_package.json',
-                '_bower.json',
                 '_tsconfig.json',
-                '_.bowerrc',
                 '_tslint.json',
                 '_.eslintrc.json',
                 '_.eslintignore',

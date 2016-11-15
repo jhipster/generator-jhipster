@@ -824,15 +824,6 @@
                         </configuration>
                     </execution><% } %>
                     <execution>
-                        <id>bower install</id>
-                        <goals>
-                            <goal>bower</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>install --no-color</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>webpack build</id>
                         <goals>
                             <goal>webpack</goal>
