@@ -21,6 +21,7 @@ const files = {
                 '_.eslintrc.json',
                 '_.eslintignore',
                 '_webpack.config.js',
+                '_webpack-dev',
             ]
         }
     ],
