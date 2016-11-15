@@ -1060,6 +1060,30 @@ Generator.prototype.getModuleHooks = function () {
 };
 
 /**
+ * Call all the module hooks with the given options.
+ * @param {string} hookFor : "app" or "entity"
+ * @param {string} hookType : "pre" or "post"
+ * @param options : the options to pass to the hooks
+ */
+Generator.prototype.callHooks = function(hookFor, hookType, options) {
+    var modules = this.getModuleHooks();
+    // run through all module hooks, which matches the hookFor and hookType
+    modules.forEach(function (module) {
+        if (module.hookFor === hookFor && module.hookType === hookType) {
+            // compose with the modules callback generator
+            try {
+                this.composeWith(module.generatorCallback, {
+                    options: options
+                });
+            } catch (err) {
+                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+            }
+        }
+    }, this);
+};
+
+/**
  * get a property of an entity from the configuration file
  * @param {string} file - configuration file name for the entity
  * @param {string} key - key to read
