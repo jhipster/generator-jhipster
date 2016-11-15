@@ -4,8 +4,7 @@
   "description": "Description for <%= baseName %>",
   "private": true,
   "cacheDirectories": [
-    "node_modules",
-    "<%= MAIN_SRC_DIR %>bower_components"
+    "node_modules"
   ],
   "dependencies": {
     "@angular/common": "2.1.1",
@@ -18,8 +17,14 @@
     "@angular/upgrade": "2.1.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.10",
     "angular2-template-loader": "0.6.0",
+    "angular-aria": "1.5.8",
+    "angular-bootstrap-npm": "0.14.3",
+    "angular-cache-buster": "0.4.3",
+    "angular-cookies": "1.5.8",
+    "angular-dynamic-locale": "0.1.32",
+    "angular-loading-bar": "0.9.0",
+    "angular-resource": "1.5.8",
     "awesome-typescript-loader": "2.2.4",
-    "bower-webpack-plugin": "0.1.9",
     "core-js": "2.4.1",
     "jquery": "3.1.0",
     "angular2-cookie": "1.2.5",
@@ -28,6 +33,8 @@
     "ng2-translate": "3.1.1",
     <%_ } _%>
     "ng2-webstorage": "1.3.0",
+    "ng-file-upload": "12.2.13",
+    "ng-infinite-scroll": "1.3.0",
     "raw-loader": "0.5.1",
     "reflect-metadata": "0.1.8",
     "rxjs": "5.0.0-beta.12",
@@ -42,7 +49,6 @@
     "@types/angular-mocks": "1.5.5",
     "@types/jasmine": "2.2.34",
     "angular": "1.5.8",
-    "bower": "1.7.9",
     "browser-sync": "2.15.0",
     "del": "2.2.2",
     "eslint-config-angular": "0.5.0",
@@ -62,7 +68,6 @@
     "karma-script-launcher": "1.0.0",
     "lazypipe": "1.0.1",
     "lodash": "4.15.0",
-    "main-bower-files": "2.13.1",
     "map-stream": "0.0.6",
     "phantomjs-prebuilt": "2.1.12",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
