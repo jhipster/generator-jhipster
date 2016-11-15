@@ -219,6 +219,9 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.websocket) {
                 this.websocket = this.configOptions.websocket;
             }
+            if (this.configOptions.angularVersion) {
+                this.angularVersion = this.configOptions.angularVersion;
+            }
             if (this.configOptions.databaseType) {
                 this.databaseType = this.configOptions.databaseType;
             }
