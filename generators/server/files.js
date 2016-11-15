@@ -372,11 +372,6 @@ function writeFiles() {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/cassandra/_package-info.java', javaDir + 'config/cassandra/package-info.java', this, {});
             }
 
-            if (this.hibernateCache === 'hazelcast') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java', this, {});
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
-            }
-
             if (this.databaseType === 'sql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});

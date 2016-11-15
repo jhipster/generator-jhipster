@@ -703,13 +703,7 @@ describe('JHipster generator', function () {
                 })
                 .on('end', done);
         });
-
-        it('creates expected files with hibernateCache "hazelcast"', function () {
-            assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/hazelcast/HazelcastCacheRegionFactory.java',
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/hazelcast/package-info.java'
-            ]);
-        });
+        
     });
 
     describe('postgresql and elasticsearch', function () {
