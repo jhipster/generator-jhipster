@@ -8,6 +8,7 @@ import <%=packageName%>.domain.User;
 import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
@@ -41,10 +42,10 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByLogin(String login);
     <%_ if (databaseType == 'sql') { _%>
 
-    @Query("select user from User user left join fetch user.authorities where user.id = ?1")
-    User findOneWithAuthorities(<%= pkType %> id);
+    @EntityGraph(attributePaths = {"authorities"})
+    User findOneWithAuthoritiesById(<%= pkType %> id);
 
-    @Query("select user from User user left join fetch user.authorities where user.login = ?1")
+    @EntityGraph(attributePaths = {"authorities"})
     Optional<User> findOneWithAuthoritiesByLogin(String login);
 
     @Query(value = "select distinct user from User user left join fetch user.authorities",

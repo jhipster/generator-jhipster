@@ -277,7 +277,7 @@ public class UserService {
     <%_ } _%>
     public User getUserWithAuthorities(<%= pkType %> id) {
         <%_ if (databaseType == 'sql') { _%>
-        return userRepository.findOneWithAuthorities(id);
+        return userRepository.findOneWithAuthoritiesById(id);
         <%_ } else { // MongoDB and Cassandra _%>
         return userRepository.findOne(id);
         <%_ } _%>
