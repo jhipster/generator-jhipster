@@ -14,7 +14,7 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
     currentLang = '<%= nativeLanguage %>';
     locations: string[] = [];
 
-    constructor (private translateService: TranslateService, private $state: StateService, private $window: Window){
+    constructor (private translateService: TranslateService, private $state: StateService){
         this.init();
     }
 
@@ -77,7 +77,7 @@ export class <%=jhiPrefixCapitalized%>LanguageService {
             titleKey = this.$state.current.data.pageTitle;
         }
         this.translateService.get(titleKey || 'global.title').subscribe(title => {
-            this.$window.document.title = title;
+            window.document.title = title;
         });
     }
 }
