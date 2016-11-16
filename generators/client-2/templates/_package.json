@@ -16,6 +16,7 @@
     "@angular/platform-browser-dynamic": "2.1.1",
     "@angular/upgrade": "2.1.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.10",
+    "angular2-cookie": "1.2.5",
     "angular2-template-loader": "0.6.0",
     "angular-aria": "1.5.8",
     "angular-bootstrap-npm": "0.14.3",
@@ -26,9 +27,8 @@
     "angular-resource": "1.5.8",
     "awesome-typescript-loader": "2.2.4",
     "core-js": "2.4.1",
-    "jquery": "3.1.0",
-    "angular2-cookie": "1.2.5",
     "exports-loader": "0.6.3",
+    "jquery": "3.1.0",
     <%_ if (enableTranslation){ _%>
     "ng2-translate": "3.1.1",
     <%_ } _%>
