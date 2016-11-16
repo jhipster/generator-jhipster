@@ -643,22 +643,10 @@ module.exports = EntityGenerator.extend({
                         entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
-                    modules.forEach(function (module) {
-                        if (module.hookFor === 'entity' && module.hookType === 'post') {
-                            // compose with the modules callback generator
-                            try {
-                                this.composeWith(module.generatorCallback, {
-                                    options: {
-                                        entityConfig: entityConfig,
-                                        force: this.options['force']
-                                    }
-                                });
-                            } catch (err) {
-                                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
-                            }
-                        }
-                    }, this);
+                    this.callHooks('entity', 'post', {
+                        entityConfig: entityConfig,
+                        force: this.options['force']
+                    });
                 }
             } catch (err) {
                 this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.'));
