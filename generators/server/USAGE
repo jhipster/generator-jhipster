@@ -4,4 +4,4 @@ Description:
 Example:
     yo jhipster:server
 
-    This will create a spring boot server side app
+    This will create a Spring Boot server side app

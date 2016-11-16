@@ -20,7 +20,7 @@ public final class DefaultProfileUtil {
     /**
      * Set a default to use when no profile is configured.
      *
-     * @param app the spring application
+     * @param app the Spring application
      */
     public static void addDefaultProfile(SpringApplication app) {
         Map<String, Object> defProperties =  new HashMap<>();

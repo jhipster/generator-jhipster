@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 /**
- * Resource to return information about the currently running spring profiles.
- *
+ * Resource to return information about the currently running Spring profiles.
  */
 @RestController
 @RequestMapping("/api")

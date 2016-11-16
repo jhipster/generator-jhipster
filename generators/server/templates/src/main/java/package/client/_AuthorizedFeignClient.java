@@ -39,7 +39,7 @@ public @interface AuthorizedFeignClient {
 
     /**
      * Fallback class for the specified Feign client interface. The fallback class must
-     * implement the interface annotated by this annotation and be a valid spring bean.
+     * implement the interface annotated by this annotation and be a valid Spring bean.
      */
     Class<?> fallback() default void.class;
 
