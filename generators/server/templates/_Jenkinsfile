@@ -31,7 +31,7 @@ node {
         } catch(err) {
             throw err
         } finally {
-          step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+            step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
         }
     }
 
@@ -46,7 +46,7 @@ node {
         } catch(err) {
             throw err
         } finally {
-            step([$class: 'JUnitResultArchiver', testResults: '**/target/test-results/karma/TESTS-*.xml'])
+            step([$class: 'JUnitResultArchiver', testResults: '**/build/**/TEST-*.xml'])
         }
     }
 
@@ -58,7 +58,11 @@ node {
         } catch(err) {
             throw err
         } finally {
+            <%_ if (buildTool === 'maven') { _%>
             step([$class: 'JUnitResultArchiver', testResults: '**/target/test-results/karma/TESTS-*.xml'])
+            <%_ } else if (buildTool === 'gradle') { _%>
+            step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/karma/TESTS-*.xml'])
+            <%_ } _%>
         }
     }
 
