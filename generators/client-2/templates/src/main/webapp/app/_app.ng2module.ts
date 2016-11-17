@@ -1,12 +1,14 @@
 <%_ if(authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Http, Request, RequestOptionsArgs, RequestOptions, XHRBackend } from '@angular/http';
-import { UIRouterModule } from 'ui-router-ng2';
-import { Ng1ToNg2Module } from 'ui-router-ng1-to-ng2';
+import { UIRouterModule, RootModule } from 'ui-router-ng2';
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+<%_ } if(authenticationType === 'session') { _%>
+import { Ng2Webstorage } from 'ng2-webstorage';
+<% } %>
 
 import { <%=angular2AppName%>SharedModule } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.ng2module'; //TODO these couldnt be used from barrels due to an error
@@ -14,7 +16,9 @@ import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
+import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
 import {
+    <%=jhiPrefixCapitalized%>MainComponent,
     NavbarComponent,
     FooterComponent,
     ProfileService,
@@ -28,11 +32,19 @@ import {
 } from './layouts';
 import { localStorageConfig } from './blocks/config/localstorage.config';
 import { HttpInterceptor } from './blocks/interceptor/http.interceptor';
+import {AuthExpiredInterceptor} from "./blocks/interceptor/auth-expired.interceptor";
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+import {Http, XHRBackend, RequestOptions} from "@angular/http";
+<%_ } if(authenticationType === 'session') { _%>
+import { StateStorageService } from "./shared/auth/state-storage.service";
+<% } %>
+
 
 
 localStorageConfig();
 
 let routerConfig = {
+    configClass: <%=jhiPrefixCapitalized%>RouterConfig,
     otherwise: '/',
     states: [
         appState,
@@ -45,20 +57,22 @@ let routerConfig = {
 @NgModule({
     imports: [
         BrowserModule,
+        UIRouterModule.forRoot(routerConfig),
         Ng2Webstorage,
-        Ng1ToNg2Module,
-        UIRouterModule.forChild(routerConfig),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>AccountModule
     ],
     declarations: [
+        <%=jhiPrefixCapitalized%>MainComponent,
         HomeComponent,
         NavbarComponent,
         ErrorComponent,
         PageRibbonComponent,
-        FooterComponent<% if (enableTranslation){ %>,
-        ActiveMenuDirective<% } %>
+        <%_ if (enableTranslation){ _%>
+        ActiveMenuDirective,
+        <%_ } _%>
+        FooterComponent
     ],
     providers: [
         ProfileService,
@@ -69,16 +83,22 @@ let routerConfig = {
             useFactory: (
                 backend: XHRBackend,
                 defaultOptions: RequestOptions,
-                <%_ if(authenticationType === 'uaa') { _%>
+                <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
                 localStorage : LocalStorageService,
-                sessionStorage : SessionStorageService
+                sessionStorage : SessionStorageService,
+                injector
+                <%_ } if (authenticationType === 'session') { _%>
+                injector
                 <%_ } _%>
             ) => new HttpInterceptor(
                 backend,
                 defaultOptions,
                 [
-                <%_ if(authenticationType === 'uaa') { _%>
-                    new AuthInterceptor(localStorage, sessionStorage)
+                <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+                    new AuthInterceptor(localStorage, sessionStorage),
+                    new AuthExpiredInterceptor(injector)
+                <%_ } if (authenticationType === 'session') { _%>
+                    new AuthExpiredInterceptor(injector, injector.get("$rootScope"), stateStorageService)
                 <%_ } _%>
                     //other intecetpors can be added here
                 ]
@@ -86,13 +106,16 @@ let routerConfig = {
             deps: [
                 XHRBackend,
                 RequestOptions,
-                <%_ if(authenticationType === 'uaa') { _%>
+                Injector,
+                <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
                 LocalStorageService,
                 SessionStorageService
+                <%_ } if (authenticationType === 'session') { _%>
+                StateStorageService
                 <%_ } _%>
             ]
         }
     ],
-    bootstrap: [ HomeComponent ]
+    bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
 export class <%=angular2AppName%>AppModule {}

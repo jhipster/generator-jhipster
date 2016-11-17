@@ -4,6 +4,5 @@ angular
         'ngResource',
         'ngFileUpload',
         'ui.bootstrap',
-        'ui.router',
         'infinite-scroll'
     ]);

@@ -9,9 +9,7 @@
                 "info": "Geben Sie die E-Mail Adresse ein, welche Sie bei der Registrierung verwendet haben.",
                 "success": "Eine E-Mail mit weiteren Instruktionen für das Zurücksetzen des Passworts wurde gesendet.",
                 "notfound": "<strong>Diese E-Mail Adresse existiert nicht!</strong> Überprüfen Sie Ihre E-Mail Adresse und versuchen Sie es nochmal."
-
             }
-
         },
         "finish" : {
             "title": "Passwort zurücksetzen",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "Wählen Sie ein neues Passwort",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>Ihr Passwort wurde zurückgesetzt.</strong> Bitte <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">melden</a> Sie sich erneut an.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>Ihr Passwort wurde zurückgesetzt.</strong> Bitte ",
+                <%_ } _%>
                 "keymissing": "Der Reset Schlüssel fehlt.",
                 "error": "Ihr Passwort konnte nicht zurückgesetzt werden. Zur Erinnerung Ihre Anfrage ist nur 24 Stunden gültig."
             }
         }
     }
-
 }

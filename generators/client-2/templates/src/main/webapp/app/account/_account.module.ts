@@ -33,8 +33,7 @@ angular
         'tmh.dynamicLocale',
         <%_ } _%>
         'ngResource',
-        'ui.bootstrap',
-        'ui.router'
+        'ui.bootstrap'
     ])
     <%_ if (enableSocialSignIn) { _%>
     <%_ if (authenticationType == 'jwt') { _%>

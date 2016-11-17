@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administració",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "Administració d'usuaris",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "Si vol <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
                 "register": "No disposa d'un compte encara? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registri un nou compte</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "Si vol ",
+                    "link": "autenticar-se",
+                    "suffix": ", pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\")."
+                },
+                "register": {
+                    "noaccount": "No disposa d'un compte encara?",
+                    "link": "Registri un nou compte"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "La contrasenya i la confirmació no coincideixen!"

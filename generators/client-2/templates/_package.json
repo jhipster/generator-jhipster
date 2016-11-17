@@ -17,9 +17,9 @@
     "@angular/platform-browser-dynamic": "2.0.1",
     "@angular/upgrade": "2.0.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.10",
-    "angular-ui-router": "1.0.0-beta.3",
     "core-js": "2.4.1",
     "jquery": "3.1.0",
+    "angular2-cookie": "1.2.5",
     <%_ if (enableTranslation){ _%>
     "ng2-translate": "3.1.1",
     <%_ } _%>
@@ -27,7 +27,6 @@
     "reflect-metadata": "0.1.3",
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.27",
-    "ui-router-ng1-to-ng2": "1.0.15",
     "ui-router-ng2": "1.0.0-beta.3",
     "ui-router-visualizer": "2.0.11",
     "zone.js": "0.6.23"
