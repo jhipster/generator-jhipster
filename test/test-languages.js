@@ -36,7 +36,8 @@ describe('JHipster generator languages', function () {
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
-        {name: 'Tamil', value: 'ta'}
+        {name: 'Tamil', value: 'ta'},
+        {name: 'Vietnamese', value: 'vi'}
     ];
 
     languages.forEach( function(language) {

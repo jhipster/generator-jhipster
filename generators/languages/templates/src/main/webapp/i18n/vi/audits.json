@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Kiểm duyệt",
+        "filter": {
+            "title": "Lọc theo ngày",
+            "from": "từ",
+            "to": "đến",
+            "button": {
+                "weeks": "Tuần",
+                "today": "hôm nay",
+                "clear": "xóa",
+                "close": "đóng"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Người dùng",
+                "date": "Ngày",
+                "status": "Trạng thái",
+                "data": "Thông tin thêm"
+            },
+            "data": {
+                "remoteAddress": "Địa chỉ máy khách:"
+            }
+        }
+    }
+}

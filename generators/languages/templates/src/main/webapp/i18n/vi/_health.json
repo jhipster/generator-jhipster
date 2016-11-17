@@ -1,0 +1,39 @@
+{
+    "health": {
+        "title": "Tình trạng hệ thống",
+        "refresh.button": "Làm mới",
+        "stacktrace": "Theo dõi",
+        "details": {
+            "details": "Chi tiết",
+            "properties": "Các thuộc tính",
+            "name": "Tên",
+            "value": "Giá trị",
+            "error": "Lỗi"
+        },
+        "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Truyền tải tin nhắn",
+            <%_ } _%>
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Thành phần tìm kiếm dịch vụ",
+            "refreshScope": "Phạm vị làm mới Microservice",
+            "configServer": "Trung tâm cấu hình Microservice",
+            "hystrix": "Hystrix",
+            <%_ } _%>
+            "diskSpace": "Dung lượng trống",
+            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "Cơ sở dữ liệu"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Tên dịch vụ",
+            "status": "Trạng thái"
+        },
+        "status": {
+            "UP": "Đang hoạt động",
+            "DOWN": "Đã tắt"
+        }
+    }
+}
