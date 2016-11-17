@@ -1,4 +1,8 @@
 node {
+    stage('checkout') {
+        checkout scm
+    }
+
 <%_ if (applicationType !== 'microservice') { _%>
     // uncomment these 2 lines and edit the name 'node-4.6.0' according to what you choose in configuration
     // def nodeHome = tool name: 'node-4.6.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
@@ -9,10 +13,6 @@ node {
         sh "npm -v"
         sh "bower -v"
         sh "gulp -v"
-    }
-
-    stage('checkout') {
-        checkout scm
     }
 
     stage('npm install') {
