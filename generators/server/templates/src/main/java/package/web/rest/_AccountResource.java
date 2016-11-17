@@ -221,8 +221,9 @@ public class AccountResource {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
             persistentTokenRepository.findByUser(u).stream()
-                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
-                .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
+                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries));<% } else { %>
+                .findAny().ifPresent(persistentToken -> persistentTokenRepository.delete(persistentToken));<% } %>
         });
     }<% } %>
 
