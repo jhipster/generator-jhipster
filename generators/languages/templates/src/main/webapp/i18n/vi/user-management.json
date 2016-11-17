@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Tài khoản",
+            "createLabel": "Tạo tài khoản mới",
+            "createOrEditLabel": "Tạo hoặc sửa tài khoản"
+        },
+        "created": "Một tài khoản mới đã được tạo với định danh {{ param }}",
+        "updated": "Một tài khoản đã được cập nhật với định danh {{ param }}",
+        "deleted": "Một tài khoản đã bị xóa với định danh {{ param }}",
+        "delete": {
+            "question": "Bạn có chắc chắn muốn xóa tài khoản {{ login }}?"
+        },
+        "detail": {
+            "title": "Tài khoản"
+        },
+        "login": "Tên đăng nhập",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "email": "Email",
+        "activated": "Kích hoạt",
+        "deactivated": "Khóa",
+        "profiles": "Các quyền",
+        "langKey": "Ngôn ngữ",
+        "createdBy": "Người tạo",
+        "createdDate": "Ngày tạo",
+        "lastModifiedBy": "Người sửa",
+        "lastModifiedDate": "Ngày sửa"
+    }
+}
