@@ -27,9 +27,9 @@ public class TokenProvider {
 
     private String secretKey;
 
-    private long tokenValidityInSeconds;
+    private long tokenValidityInMilliseconds;
 
-    private long tokenValidityInSecondsForRememberMe;
+    private long tokenValidityInMillisecondsForRememberMe;
 
     @Inject
     private JHipsterProperties jHipsterProperties;
@@ -39,9 +39,9 @@ public class TokenProvider {
         this.secretKey =
             jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
 
-        this.tokenValidityInSeconds =
+        this.tokenValidityInMilliseconds =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
-        this.tokenValidityInSecondsForRememberMe =
+        this.tokenValidityInMillisecondsForRememberMe =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();
     }
 
@@ -53,9 +53,9 @@ public class TokenProvider {
         long now = (new Date()).getTime();
         Date validity;
         if (rememberMe) {
-            validity = new Date(now + this.tokenValidityInSecondsForRememberMe);
+            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
         } else {
-            validity = new Date(now + this.tokenValidityInSeconds);
+            validity = new Date(now + this.tokenValidityInMilliseconds);
         }
 
         return Jwts.builder()
