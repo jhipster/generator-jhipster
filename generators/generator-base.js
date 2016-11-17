@@ -1003,18 +1003,13 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
             hookType: hookType,
             generatorCallback: generatorCallback
         };
-        if (shelljs.test('-f', MODULES_HOOK_FILE)) {
-            // file is present append to it
-            try {
-                modules = this.fs.readJSON(MODULES_HOOK_FILE);
-                duplicate = _.findIndex(modules, moduleConfig) !== -1;
-            } catch (err) {
-                error = true;
-                this.log(chalk.red('The Jhipster module configuration file could not be read!'));
-            }
-        } else {
-            // file not present create it and add config to it
-            modules = [];
+        try {
+            // if file is not present, we got an empty list, no exception
+            modules = this.fs.readJSON(MODULES_HOOK_FILE, []);
+            duplicate = _.findIndex(modules, moduleConfig) !== -1;
+        } catch (err) {
+            error = true;
+            this.log(chalk.red('The Jhipster module configuration file could not be read!'));
         }
         if (!error && !duplicate) {
             modules.push(moduleConfig);
