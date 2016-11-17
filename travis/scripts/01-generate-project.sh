@@ -11,7 +11,7 @@ mv "$JHIPSTER_TRAVIS"/configstore/*.json "$HOME"/.config/configstore/
 #-------------------------------------------------------------------------------
 if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
     mkdir -p "$HOME"/uaa
-    mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/uaa/.yo-rc.json "$HOME"/uaa/
+    mv -f "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$HOME"/uaa/
     cd "$HOME"/uaa
     yo jhipster --force --no-insight
     ls -al "$HOME"/uaa
