@@ -142,7 +142,7 @@ function writeFiles() {
             }
 
             // Thymeleaf templates
-            this.copy(SERVER_MAIN_RES_DIR + 'templates/error.html', SERVER_MAIN_RES_DIR + 'templates/error.html');
+            this.copy(SERVER_MAIN_RES_DIR + 'templates/error.component.html', SERVER_MAIN_RES_DIR + 'templates/error.component.html');
 
             this.template(SERVER_MAIN_RES_DIR + '_logback-spring.xml', SERVER_MAIN_RES_DIR + 'logback-spring.xml', this, {'interpolate': INTERPOLATE_REGEX});
 

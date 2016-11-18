@@ -7,7 +7,7 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.s
 
 @Component({
     selector: 'jh-social',
-    templateUrl: 'app/account/social/social.html'
+    templateUrl: 'app/account/social/social.component.html'
 })
 export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
     @Input() provider: string;

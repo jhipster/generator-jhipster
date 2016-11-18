@@ -3,7 +3,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-tracker',
-    templateUrl: 'app/admin/tracker/tracker.html'
+    templateUrl: 'app/admin/tracker/tracker.component.html'
 })
 export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
 

@@ -41,7 +41,7 @@ util.inherits(Generator, yeoman.Base);
  */
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-menu',
@@ -67,7 +67,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  */
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
@@ -92,7 +92,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  */
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-entity-to-menu',
@@ -529,8 +529,8 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  */
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
     var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
-    var loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
-    var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
+    var loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.component.html';
+    var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.html';
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
         var serviceCode = `case '${socialName}': return '${socialParameter}';`;
