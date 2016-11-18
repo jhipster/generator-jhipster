@@ -16,11 +16,13 @@ function usage() {
     exit 2
 }
 
+mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 if [ "$1" = "build" ]; then
 
-    for dir in $(ls -1 travis/samples); do
+    for dir in $(ls -1 "$mydir/samples"); do
         echo "*********************** Building $dir"
-        pushd "travis/samples/$dir"
+        pushd "$mydir/samples/$dir"
         npm link generator-jhipster
         yo jhipster --force
         if [ -f pom.xml ]; then
@@ -33,9 +35,9 @@ if [ "$1" = "build" ]; then
 
 elif [ "$1" = "clean" ]; then
 
-    for dir in $(ls -1 travis/samples); do
+    for dir in $(ls -1 "$mydir/samples"); do
         echo "*********************** Cleaning $dir"
-        pushd "travis/samples/$dir"
+        pushd "$mydir/samples/$dir"
         ls -a | grep -v .yo-rc.json | xargs rm -rf | true
         popd
     done
