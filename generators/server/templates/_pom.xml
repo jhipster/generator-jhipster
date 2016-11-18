@@ -354,6 +354,11 @@
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jzlib</artifactId>
+            <version>1.1.2</version>
+        </dependency>
         <%_ if (databaseType === 'cassandra') { _%>
         <!-- include netty handler explicitly to overcome dependency mismatch when using cassandra -->
         <dependency>
