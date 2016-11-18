@@ -134,21 +134,21 @@ const files = {
                 'home/_index.ts',
                 'home/_home.component.ts',
                 { file: 'home/_home.state.ts', method: 'copyJs' },
-                { file: 'home/_home.html', method: 'copyHtml' },
+                { file: 'home/_home.component.html', method: 'copyHtml' },
                 // layouts
                 'layouts/_index.ts',
                 'layouts/profiles/_profile.service.ts',
                 'layouts/profiles/_profile-info.model.ts',
                 'layouts/profiles/_page-ribbon.component.ts',
                 'layouts/main/_main.component.ts',
-                'layouts/main/_main.html',
+                'layouts/main/_main.component.html',
                 'layouts/navbar/_navbar.component.ts',
-                { file: 'layouts/navbar/_navbar.html', method: 'copyHtml' },
+                { file: 'layouts/navbar/_navbar.component.html', method: 'copyHtml' },
                 'layouts/footer/_footer.component.ts',
-                { file: 'layouts/footer/_footer.html', method: 'copyHtml' },
+                { file: 'layouts/footer/_footer.component.html', method: 'copyHtml' },
                 'layouts/error/_error.component.ts',
                 { file: 'layouts/error/_error.state.ts', method: 'copyJs' },
-                { file: 'layouts/error/_error.html', method: 'copyHtml' }
+                { file: 'layouts/error/_error.component.html', method: 'copyHtml' }
             ]
         },
         {
@@ -169,27 +169,27 @@ const files = {
                 'account/_account.state.ts',
                 'account/activate/_activate.component.ts',
                 'account/activate/_activate.service.ts',
-                { file: 'account/activate/_activate.html', method: 'copyHtml' },
+                { file: 'account/activate/_activate.component.html', method: 'copyHtml' },
                 { file: 'account/activate/_activate.state.ts', method: 'copyJs' },
                 'account/password/_password.component.ts',
                 'account/password/_password.service.ts',
-                { file: 'account/password/_password.html', method: 'copyHtml' },
+                { file: 'account/password/_password.component.html', method: 'copyHtml' },
                 { file: 'account/password/_password.state.ts', method: 'copyJs' },
                 'account/password/_password-strength-bar.component.ts',
                 'account/register/_register.component.ts',
                 'account/register/_register.service.ts',
                 { file: 'account/register/_register.state.ts', method: 'copyJs' },
-                { file: 'account/register/_register.html', method: 'copyHtml' },
+                { file: 'account/register/_register.component.html', method: 'copyHtml' },
                 { file: 'account/password-reset/init/_password-reset-init.state.ts', method: 'copyJs' },
                 'account/password-reset/init/_password-reset-init.component.ts',
-                { file: 'account/password-reset/init/_password-reset-init.html', method: 'copyHtml' },
+                { file: 'account/password-reset/init/_password-reset-init.component.html', method: 'copyHtml' },
                 'account/password-reset/init/_password-reset-init.service.ts',
                 { file: 'account/password-reset/finish/_password-reset-finish.state.ts', method: 'copyJs' },
                 'account/password-reset/finish/_password-reset-finish.component.ts',
-                { file: 'account/password-reset/finish/_password-reset-finish.html', method: 'copyHtml' },
+                { file: 'account/password-reset/finish/_password-reset-finish.component.html', method: 'copyHtml' },
                 'account/password-reset/finish/_password-reset-finish.service.ts',
                 'account/settings/_settings.component.ts',
-                { file: 'account/settings/_settings.html', method: 'copyHtml' },
+                { file: 'account/settings/_settings.component.html', method: 'copyHtml' },
                 { file: 'account/settings/_settings.state.ts', method: 'copyJs' }
             ]
         },
@@ -198,7 +198,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'account/sessions/_sessions.state.ts', method: 'copyJs' },
-                { file: 'account/sessions/_sessions.html', method: 'copyHtml' },
+                { file: 'account/sessions/_sessions.component.html', method: 'copyHtml' },
                 'account/sessions/_sessions.component.ts',
                 'account/sessions/_sessions.service.ts',
                 'account/sessions/_session.model.ts'
@@ -208,8 +208,8 @@ const files = {
             condition: generator => generator.enableSocialSignIn,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/_social.html', method: 'copyHtml' },
-                { file: 'account/social/_social-register.html', method: 'copyHtml' },
+                { file: 'account/social/_social.component.html', method: 'copyHtml' },
+                { file: 'account/social/_social-register.component.html', method: 'copyHtml' },
                 'account/social/_social-register.component.ts',
                 'shared/social/_social.component.ts',
                 'shared/social/_social.service.ts',
@@ -240,27 +240,27 @@ const files = {
                 { file: 'admin/audits/_audits.state.ts', method: 'copyJs' },
                 'admin/audits/_audits.service.ts',
                 'admin/configuration/_configuration.component.ts',
-                { file: 'admin/configuration/_configuration.html', method: 'copyHtml' },
+                { file: 'admin/configuration/_configuration.component.html', method: 'copyHtml' },
                 { file: 'admin/configuration/_configuration.state.ts', method: 'copyJs' },
                 'admin/configuration/_configuration.service.ts',
                 'admin/docs/_docs.component.ts',
-                'admin/docs/_docs.html',
+                'admin/docs/_docs.component.html',
                 'admin/docs/_docs.state.ts',
                 'admin/health/_health.component.ts',
                 'admin/health/_health-modal.component.ts',
                 'admin/health/_health.service.ts',
-                { file: 'admin/health/_health.html', method: 'copyHtml' },
+                { file: 'admin/health/_health.component.html', method: 'copyHtml' },
                 { file: 'admin/health/_health-modal.html', method: 'copyHtml' },
                 { file: 'admin/health/_health.state.ts', method: 'copyJs' },
                 'admin/logs/_logs.component.ts',
                 'admin/logs/_log.model.ts',
                 'admin/logs/_logs.service.ts',
-                { file: 'admin/logs/_logs.html', method: 'copyHtml' },
+                { file: 'admin/logs/_logs.component.html', method: 'copyHtml' },
                 { file: 'admin/logs/_logs.state.ts', method: 'copyJs' },
                 'admin/metrics/_metrics.component.ts',
                 'admin/metrics/_metrics-modal.component.ts',
                 'admin/metrics/_metrics.service.ts',
-                { file: 'admin/metrics/_metrics.html', method: 'copyHtml', template: true },
+                { file: 'admin/metrics/_metrics.component.html', method: 'copyHtml', template: true },
                 { file: 'admin/metrics/_metrics-modal.html', method: 'copyHtml', template: true },
                 { file: 'admin/metrics/_metrics.state.ts', method: 'copyJs' }
             ]
@@ -270,7 +270,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/tracker/_tracker.state.ts', method: 'copyJs' },
-                { file: 'admin/tracker/_tracker.html', method: 'copyHtml' },
+                { file: 'admin/tracker/_tracker.component.html', method: 'copyHtml' },
                 'admin/tracker/_tracker.component.ts',
                 'shared/tracker/_tracker.service.ts'
             ]
@@ -286,10 +286,10 @@ const files = {
                 'admin/user-management/_user.model.ts',
                 'admin/user-management/_user.service.ts',
                 { file: 'admin/user-management/_user-management.state.ts', method: 'copyJs' },
-                { file: 'admin/user-management/user-management.html', method: 'copyHtml' },
-                { file: 'admin/user-management/_user-management-detail.html', method: 'copyHtml' },
-                { file: 'admin/user-management/_user-management-dialog.html', method: 'copyHtml' },
-                { file: 'admin/user-management/_user-management-delete-dialog.html', method: 'copyHtml' }
+                { file: 'admin/user-management/user-management.component.html', method: 'copyHtml' },
+                { file: 'admin/user-management/_user-management-detail.component.html', method: 'copyHtml' },
+                { file: 'admin/user-management/_user-management-dialog.component.html', method: 'copyHtml' },
+                { file: 'admin/user-management/_user-management-delete-dialog.component.html', method: 'copyHtml' }
             ]
         },
         {
@@ -300,7 +300,7 @@ const files = {
                 'admin/gateway/_gateway-routes.service.ts',
                 'admin/gateway/_gateway-route.model.ts',
                 { file: 'admin/gateway/_gateway.state.ts', method: 'copyJs' },
-                { file: 'admin/gateway/_gateway.html', method: 'copyHtml' }
+                { file: 'admin/gateway/_gateway.component.html', method: 'copyHtml' }
             ]
         }
     ],
@@ -337,7 +337,7 @@ const files = {
                 //components
                 'shared/component/_jhi-item-count.component.ts',
                 //login
-                { file: 'shared/login/_login.html', method: 'copyHtml' },
+                { file: 'shared/login/_login.component.html', method: 'copyHtml' },
                 'shared/login/_login.service.ts',
                 'shared/login/_login-modal.service.ts',
                 'shared/login/_login.component.ts',

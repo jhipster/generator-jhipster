@@ -9,7 +9,7 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 
 @Component({
     selector: 'user-mgmt-dialog',
-    templateUrl: 'app/admin/user-management/user-management-dialog.html'
+    templateUrl: 'app/admin/user-management/user-management-dialog.component.html'
 })
 export class UserMgmtDialogComponent implements OnInit {
 
