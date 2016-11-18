@@ -28,7 +28,7 @@ task gatlingRun(dependsOn:'manifestJar') << {
         gatlingSimulationClass = project.property('gatlingSimulationClass')
     }
 
-    createGatlingRunTask(gatlingSimulationClassName).dependsOn('manifestJar').execute()
+    createGatlingRunTask(gatlingSimulationClass).dependsOn('manifestJar').execute()
 }
 
 task gatlingRunAll(dependsOn: 'manifestJar') << {
