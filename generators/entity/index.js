@@ -123,6 +123,7 @@ module.exports = EntityGenerator.extend({
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
+            this.microserviceAppName = '';
 
             this.filename = this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
             if (shelljs.test('-f', this.filename)) {
@@ -222,8 +223,12 @@ module.exports = EntityGenerator.extend({
             if (!this.microserviceName) {
                 this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
             }
+            this.microserviceAppName = this._getMicroserviceAppName();
             this.skipServer = true;
         }
+    },
+    _getMicroserviceAppName: function () {
+        return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
     },
     /* end of Helper methods */
 
