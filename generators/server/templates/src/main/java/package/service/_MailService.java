@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 /**
@@ -70,36 +69,36 @@ public class MailService {
     }
 
     @Async
-    public void sendActivationEmail(User user, HttpServletRequest request) {
+    public void sendActivationEmail(User user) {
         log.debug("Sending activation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, generateBaseUrl(request));
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("activationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 
     @Async
-    public void sendCreationEmail(User user, HttpServletRequest request) {
+    public void sendCreationEmail(User user) {
         log.debug("Sending creation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, generateBaseUrl(request));
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("creationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 
     @Async
-    public void sendPasswordResetMail(User user, HttpServletRequest request) {
+    public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, generateBaseUrl(request));
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("passwordResetEmail", context);
         String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -118,23 +117,4 @@ public class MailService {
         sendEmail(user.getEmail(), subject, content, false, true);
     }
     <%_ } _%>
-
-    /**
-     * Generate the URL used in the e-mails.
-     *
-     * This URL can be configured using the Spring Boot application-*.yml files,
-     * otherwise it is generated using the HttpServletRequest.
-     */
-    private String generateBaseUrl(HttpServletRequest request) {
-        String baseUrl = jHipsterProperties.getMail().getBaseUrl();
-        if (baseUrl.equals("")) {
-            baseUrl = request.getScheme() + // "http"
-                "://" +                         // "://"
-                request.getServerName() +       // "myhost"
-                ":" +                           // ":"
-                request.getServerPort() +       // "80"
-                request.getContextPath();       // "/myContextPath" or "" if deployed in root context
-        }
-        return baseUrl;
-    }
 }

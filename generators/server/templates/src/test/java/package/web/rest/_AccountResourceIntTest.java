@@ -66,7 +66,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        doNothing().when(mockMailService).sendActivationEmail((User) anyObject(), anyObject());
+        doNothing().when(mockMailService).sendActivationEmail((User) anyObject());
 
         AccountResource accountResource = new AccountResource();
         ReflectionTestUtils.setField(accountResource, "userRepository", userRepository);
