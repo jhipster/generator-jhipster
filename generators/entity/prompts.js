@@ -580,7 +580,7 @@ function askForField(done) {
                 },
                 {
                     value: 'LocalDate',
-                    name: 'LocalDate (Warning: only compatible with cassandra v3)'
+                    name: 'LocalDate (Warning: only compatible with Cassandra v3)'
                 },
                 {
                     value: 'ZonedDateTime',

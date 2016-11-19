@@ -31,7 +31,7 @@ module.exports = ModulesGenerator.extend({
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
             this.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
         }
-        // add required Jhipster variables
+        // add required JHipster variables
         jhipsterVar.baseName = this.baseName = baseName;
         jhipsterVar.packageName = packageName;
         jhipsterVar.packageFolder = packageFolder;

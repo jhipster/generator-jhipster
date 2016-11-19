@@ -210,7 +210,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
     });
 
-    describe('gateway and 1 microservice, with cassandra cluster', function () {
+    describe('gateway and 1 microservice, with Cassandra cluster', function () {
         beforeEach(function (done) {
             helpers
                 .run(require.resolve('../generators/docker-compose'))

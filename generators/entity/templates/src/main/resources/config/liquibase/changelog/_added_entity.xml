@@ -86,7 +86,7 @@
             <column name="<%=getColumnName(relationshipName) %>_id" type="bigint">
                 <constraints unique="true" nullable="<%= nullable_relation %>" />
             </column><% } %><% } %>
-            <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <%_ for (idx in fields) {
             if (fields[idx].fieldType == 'ZonedDateTime') { _%>

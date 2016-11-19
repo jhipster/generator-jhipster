@@ -14,23 +14,23 @@ function logDebug {
 }
 
 function waitForClusterConnection() {
-    log "waiting for cassandra connection..."
+    log "Waiting for Cassandra connection..."
     retryCount=0
     maxRetry=20
     cqlsh -e "Describe KEYSPACES;" $CASSANDRA_CONTACT_POINT &>/dev/null
     while [ $? -ne 0 ] && [ "$retryCount" -ne "$maxRetry" ]; do
-        logDebug 'cassandra not reachable yet. sleep and retry. retryCount =' $retryCount
+        logDebug 'Cassandra not reachable yet. sleep and retry. retryCount =' $retryCount
         sleep 5
         ((retryCount+=1))
         cqlsh -e "Describe KEYSPACES;" $CASSANDRA_CONTACT_POINT &>/dev/null
     done
 
     if [ $? -ne 0 ]; then
-      log "not connected after " $retryCount " retry. Abort the migration."
+      log "Not connected after " $retryCount " retry. Abort the migration."
       exit 1
     fi
 
-    log "connected to cassandra cluster"
+    log "Connected to Cassandra cluster"
 }
 
 function executeScripts() {
@@ -43,7 +43,7 @@ function executeScripts() {
 
 # parse arguments
 if [ "$#" -gt 0 ]; then
-    log "override for local usage"
+    log "Override for local usage"
     CQL_FILES_PATH=$1
     CREATE_KEYSPACE_SCRIPT="create-keyspace.cql" # default create-keyspace script
     if [ "$#" -eq 2 ]; then
@@ -58,10 +58,10 @@ else
     CREATE_KEYSPACE_SCRIPT_FOLDER="/cql"
 fi
 
-log "start cassandra migration tool"
+log "Start Cassandra migration tool"
 waitForClusterConnection
-log "use $CREATE_KEYSPACE_SCRIPT_FOLDER/$CREATE_KEYSPACE_SCRIPT script to create the keyspace if necessary"
+log "Use $CREATE_KEYSPACE_SCRIPT_FOLDER/$CREATE_KEYSPACE_SCRIPT script to create the keyspace if necessary"
 cqlsh -f $CREATE_KEYSPACE_SCRIPT_FOLDER'/'$CREATE_KEYSPACE_SCRIPT $CASSANDRA_CONTACT_POINT
-log "execute all non already executed scripts from $CQL_FILES_PATH"
+log "Execute all non already executed scripts from $CQL_FILES_PATH"
 executeScripts "$CQL_FILES_PATH*.cql"
-log "migration done"
+log "Migration done"

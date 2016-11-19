@@ -983,7 +983,7 @@ Generator.prototype.replaceContent = function (filePath, pattern, content, regex
  * Register a module configuration to .jhipster/modules/jhi-hooks.json
  *
  * @param {string} npmPackageName - npm package name of the generator
- * @param {string} hookFor - from which Jhipster generator this should be hooked ( 'entity' or 'app')
+ * @param {string} hookFor - from which JHipster generator this should be hooked ( 'entity' or 'app')
  * @param {string} hookType - where to hook this at the generator stage ( 'pre' or 'post')
  * @param {string} callbackSubGenerator[optional] - sub generator to invoke, if this is not given the module's main generator will be called, i.e app
  * @param {string} description[optional] - description of the generator
@@ -1009,7 +1009,7 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
             duplicate = _.findIndex(modules, moduleConfig) !== -1;
         } catch (err) {
             error = true;
-            this.log(chalk.red('The Jhipster module configuration file could not be read!'));
+            this.log(chalk.red('The JHipster module configuration file could not be read!'));
         }
         if (!error && !duplicate) {
             modules.push(moduleConfig);
@@ -1034,7 +1034,7 @@ Generator.prototype.updateEntityConfig = function (file, key, value) {
         entityJson[key] = value;
         this.fs.writeJSON(file, entityJson, null, 4);
     } catch (err) {
-        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+        this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
     }
 
 };
@@ -1091,7 +1091,7 @@ Generator.prototype.getEntityProperty = function (file, key) {
         var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
         property = entityJson[key];
     } catch (err) {
-        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+        this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
     }
 
     return property;

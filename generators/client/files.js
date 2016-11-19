@@ -53,7 +53,7 @@ function writeFiles() {
         },
 
         writeSwaggerFiles: function () {
-            // Swagger-ui for Jhipster
+            // Swagger-ui for JHipster
             this.template(MAIN_SRC_DIR + 'swagger-ui/_index.html', MAIN_SRC_DIR + 'swagger-ui/index.html', this, {});
             this.copy(MAIN_SRC_DIR + 'swagger-ui/images/_throbber.gif', MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif');
         },
