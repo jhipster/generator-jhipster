@@ -39,6 +39,9 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
+            this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+            this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
+            this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         },
 
         checkDocker: function() {
