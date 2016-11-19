@@ -9,6 +9,7 @@ describe('StringUtils', () => {
   describe('::camelCase', () => {
     describe('when passing a valid string', () => {
       it('camel-cases it', () => {
+        expect(camelCase('e')).to.eq('e');
         expect(camelCase('entity')).to.eq('entity');
         expect(camelCase('Entity')).to.eq('entity');
         expect(camelCase('EntityA')).to.eq('entityA');
