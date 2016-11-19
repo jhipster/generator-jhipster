@@ -153,7 +153,7 @@ public class CustomPersistentRememberMeServices extends
             } catch (InvalidCookieException ice) {
                 log.info("Invalid cookie, no persistent token could be deleted", ice);
             } catch (RememberMeAuthenticationException rmae) {
-                log.debug("No persistent token found, so no token could be deleted", rmae);
+                log.debug("No persistent token found, so no token could be deleted");
             }
         }
         super.logout(request, response, authentication);
