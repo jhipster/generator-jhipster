@@ -61,7 +61,6 @@ public class AccountResource {
      * POST  /register : register the user.
      *
      * @param managedUserVM the managed user View Model
-     * @param request the HTTP request
      * @return the ResponseEntity with status 201 (Created) if the user is registered or 400 (Bad Request) if the login or e-mail is already in use
      */
     @PostMapping(path = "/register",
