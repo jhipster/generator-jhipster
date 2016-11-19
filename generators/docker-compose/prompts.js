@@ -8,7 +8,7 @@ module.exports = {
     askForPath,
     askForApps,
     askForClustersMode,
-    askForElk,
+    askForMonitoring,
     askForServiceDiscovery,
     askForAdminPassword
 };
@@ -171,20 +171,34 @@ function askForClustersMode() {
     }.bind(this));
 }
 
-function askForElk() {
+function askForMonitoring() {
     if (this.regenerate) return;
 
     var done = this.async();
 
     var prompts = [{
-        type: 'confirm',
-        name: 'elk',
-        message: 'Do you want the JHipster Console (based on ELK) to monitor your applications?',
-        default: this.useElk && true
+        type: 'list',
+        name: 'monitoring',
+        message: 'Do you want to setup monitoring for your applications ?',
+        choices: [
+            {
+                value: 'no',
+                name: 'No'
+            },
+            {
+                value: 'elk',
+                name: 'Yes, for logs and metrics with the JHipster Console (based on ELK)'
+            },
+            {
+                value: 'prometheus',
+                name: 'Yes, for metrics only with Prometheus'
+            }
+        ],
+        default: 'no'
     }];
 
     this.prompt(prompts).then(function(props) {
-        this.useElk = props.elk;
+        this.monitoring = props.monitoring;
         done();
     }.bind(this));
 }

@@ -7,6 +7,7 @@ var generators = require('yeoman-generator'),
     jsyaml = require('js-yaml'),
     pathjs = require('path'),
     util = require('util'),
+    uuid = require('uuid'),
     prompts = require('./prompts'),
     writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
@@ -87,7 +88,7 @@ module.exports = DockerComposeGenerator.extend({
             this.defaultAppsFolders = this.config.get('appsFolders');
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
-            this.useElk = this.config.get('useElk');
+            this.monitoring = this.config.get('monitoring');
             this.useKafka = false;
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
@@ -95,6 +96,7 @@ module.exports = DockerComposeGenerator.extend({
             }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
+            this.uuid = this.config.get('uuid');
 
             if(this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
@@ -111,7 +113,7 @@ module.exports = DockerComposeGenerator.extend({
 
         askForClustersMode: prompts.askForClustersMode,
 
-        askForElk: prompts.askForElk,
+        askForMonitoring: prompts.askForMonitoring,
 
         askForServiceDiscovery: prompts.askForServiceDiscovery,
 
@@ -154,6 +156,13 @@ module.exports = DockerComposeGenerator.extend({
             }
         },
 
+        // Generate a UUID to setup an alerting webhook on webhook.site
+        generateUuid: function() {
+            if (this.uuid === undefined && this.monitoring !== 'no') {
+                this.uuid = uuid();
+            }
+        },
+
         setAppsFolderPaths: function() {
             this.appsFolderPaths = [];
             this.appsFolders.forEach(function (appsFolder) {
@@ -184,11 +193,16 @@ module.exports = DockerComposeGenerator.extend({
                 }
 
                 // Add monitoring configuration for monolith directly in the docker-compose file as they can't get them from the config server
-                if (appConfig.applicationType === 'monolith' && this.useElk) {
+                if (appConfig.applicationType === 'monolith' && this.monitoring === 'elk') {
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
                     yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
+                }
+
+                if (this.monitoring === 'prometheus') {
+                    yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENABLED=true');
+                    yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics');
                 }
 
                 if (this.serviceDiscoveryType === 'eureka') {
@@ -293,10 +307,11 @@ module.exports = DockerComposeGenerator.extend({
             this.config.set('appsFolders', this.appsFolders);
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
-            this.config.set('useElk', this.useElk);
+            this.config.set('monitoring', this.monitoring);
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('adminPassword', this.adminPassword);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
+            this.config.set('uuid', this.uuid);
         }
     },
 

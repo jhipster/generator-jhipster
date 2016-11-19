@@ -32,7 +32,7 @@ services:
     <%_ } _%>
 <%_ } _%>
 
-<%_ if (useElk) { _%>
+<%_ if (monitoring === 'elk') { _%>
     jhipster-elasticsearch:
         extends:
             file: jhipster-console.yml
@@ -45,4 +45,26 @@ services:
         extends:
             file: jhipster-console.yml
             service: jhipster-console
+<%_ } _%>
+
+<%_ if (monitoring === 'prometheus') { _%>
+    prometheus:
+        extends:
+            file: prometheus.yml
+            service: prometheus
+
+    alertmanager:
+        extends:
+            file: prometheus.yml
+            service: alertmanager
+
+    grafana:
+        extends:
+            file: prometheus.yml
+            service: grafana
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
 <%_ } _%>
