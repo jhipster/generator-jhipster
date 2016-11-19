@@ -103,13 +103,7 @@ public class UserResource {
                 .body(null);
         } else {
             User newUser = userService.createUser(managedUserVM);
-            String baseUrl = request.getScheme() + // "http"
-            "://" +                                // "://"
-            request.getServerName() +              // "myhost"
-            ":" +                                  // ":"
-            request.getServerPort() +              // "80"
-            request.getContextPath();              // "/myContextPath" or "" if deployed in root context
-            mailService.sendCreationEmail(newUser, baseUrl);
+            mailService.sendCreationEmail(newUser, request);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
                 .body(newUser);

@@ -2,7 +2,6 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 
-import <%=packageName%>.config.JHipsterProperties;
 <%_ if (authenticationType == 'session') { _%>
 import <%=packageName%>.domain.PersistentToken;
 <%_ } _%>
@@ -47,9 +46,6 @@ public class AccountResource {
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     @Inject
-    private JHipsterProperties jHipsterProperties;
-
-    @Inject
     private UserRepository userRepository;
 
     @Inject
@@ -86,18 +82,7 @@ public class AccountResource {
                             managedUserVM.getFirstName(), managedUserVM.getLastName(),
                             managedUserVM.getEmail().toLowerCase(), managedUserVM.getLangKey());
 
-
-                    String baseUrl = jHipsterProperties.getMail().getBaseUrl();
-                    if (baseUrl.equals("")) {
-                        baseUrl = request.getScheme() + // "http"
-                        "://" +                         // "://"
-                        request.getServerName() +       // "myhost"
-                        ":" +                           // ":"
-                        request.getServerPort() +       // "80"
-                        request.getContextPath();       // "/myContextPath" or "" if deployed in root context
-                    }
-
-                    mailService.sendActivationEmail(user, baseUrl);
+                    mailService.sendActivationEmail(user, request);
                     return new ResponseEntity<>(HttpStatus.CREATED);
                 })
         );
@@ -239,13 +224,7 @@ public class AccountResource {
     public ResponseEntity<?> requestPasswordReset(@RequestBody String mail, HttpServletRequest request) {
         return userService.requestPasswordReset(mail)
             .map(user -> {
-                String baseUrl = request.getScheme() +
-                    "://" +
-                    request.getServerName() +
-                    ":" +
-                    request.getServerPort() +
-                    request.getContextPath();
-                mailService.sendPasswordResetMail(user, baseUrl);
+                mailService.sendPasswordResetMail(user, request);
                 return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
             }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
     }

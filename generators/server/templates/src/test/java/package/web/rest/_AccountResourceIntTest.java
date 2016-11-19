@@ -1,8 +1,7 @@
 package <%=packageName%>.web.rest;
 <% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
-import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.config.JHipsterProperties;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.<%= mainClass %>;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% } %>
@@ -30,7 +29,6 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,9 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
-
-    @Inject
-    private JHipsterProperties jHipsterProperties;
 
     @Inject
     private UserRepository userRepository;
@@ -71,10 +66,9 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        doNothing().when(mockMailService).sendActivationEmail((User) anyObject(), anyString());
+        doNothing().when(mockMailService).sendActivationEmail((User) anyObject(), anyObject());
 
         AccountResource accountResource = new AccountResource();
-        ReflectionTestUtils.setField(accountResource, "jHipsterProperties", jHipsterProperties);
         ReflectionTestUtils.setField(accountResource, "userRepository", userRepository);
         ReflectionTestUtils.setField(accountResource, "userService", userService);
         ReflectionTestUtils.setField(accountResource, "mailService", mockMailService);
