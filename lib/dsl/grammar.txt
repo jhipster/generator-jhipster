@@ -46,6 +46,15 @@
     });
   }
 
+  const application = {
+    baseName: 'jhipster',
+    packageName: '',
+    packageFolder: '',
+    authenticationType: '',
+    hibernateCache: 'no',
+    clusteredHttpSession: false,
+    websocket: false
+  };
   var entities = [];
   var relationships = [];
   var enums = [];
@@ -63,7 +72,8 @@
 start = p:prog { return p; }
 
 prog
-  = space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
+  = space* applicationDecl:applicationDecl space* p:prog {return {application, "entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
+  / space* ed:entityDecl space* p:prog {return {"entities" : concat([ed],p.entities) , "relationships" : p.relationships, "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
   / space* rd:relationDecl space* p:prog {return {"entities" : p.entities, "relationships" : flattenArray(concat([rd],p.relationships)), "enums" : p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
   / space* end:enumDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": concat([end], p.enums), "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
   / space* dto:dtoDecl space* p:prog {return {"entities": p.entities, "relationships": p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
@@ -78,6 +88,36 @@ prog
   / space* angularSuffix:angularSuffixDecl space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
   / space* noFluentMethod:noFluentMethod space* p:prog {return {"entities" : p.entities, "relationships" : p.relationships, "enums": p.enums, "dto": p.dto, "pagination": p.pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
   / "" {return {"entities" : entities,"relationships": relationships, "enums": enums, "dto": dto, "pagination": pagination, "service": service, "microservice": microservice, "searchEngine": searchEngine, "noClient": noClient, "noServer": noServer, "angularSuffix": angularSuffix, "noFluentMethod": noFluentMethod};}
+
+// Application Declaration
+applicationDecl
+  = 'application' space* '{' space* applicationContent:applicationContentDecl space* '}'
+
+applicationContentDecl
+  = 'baseName' space* baseName:[A-z]+ space* applicationContentDecl:applicationContentDecl {
+    application.baseName = baseName.join('')
+  }
+  / 'packageName' space* packageName:(([a-z]+'.')*[a-z]+) space* applicationContentDecl:applicationContentDecl {
+    application.packageName = packageName.join('').replace(/,/g, '')
+    application.packageFolder = application.packageName.replace(/[.]/g, '/')
+  }
+  / 'authenticationType' space* authenticationType:[A-z]+ space* applicationContentDecl:applicationContentDecl {
+    application.authenticationType = authenticationType.join('')
+  }
+  / 'hibernateCache' space* hibernateCache:[A-z]+ space* applicationContentDecl:applicationContentDecl {
+    application.hibernateCache = hibernateCache.join('')
+  }
+  / 'clusteredHttpSession' space* clusteredHttpSession:booleanChoice space* applicationContentDecl:applicationContentDecl {
+    application.clusteredHttpSession = clusteredHttpSession
+  }
+  / 'websocket' space* websocket:booleanChoice space* applicationContentDecl:applicationContentDecl {
+    application.websocket = websocket
+  }
+  / ''
+
+booleanChoice
+  = 'true' {return true}
+  / 'false' {return false}
 
 //Entities
 entityDecl
