@@ -1,5 +1,6 @@
 package <%=packageName%>.security;
-
+<% if (databaseType == 'cassandra') { %>
+import com.datastax.driver.core.exceptions.DriverException;<%}%>
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
@@ -92,15 +93,15 @@ public class CustomPersistentRememberMeServices extends
         token.setTokenDate(new Date());<%}%>
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
-        token.setUserAgent(request.getHeader("User-Agent"));<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        token.setUserAgent(request.getHeader("User-Agent"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);
-        } catch (DataAccessException e) {
+            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
+            addCookie(token, request, response);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        } catch (DataAccessException e) {<% } else { %>
+        } catch (DriverException e) {<% } %>
             log.error("Failed to update token: ", e);
             throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
-        }<% } else { %>
-        addCookie(token, request, response);<% } %>
+        }
         return getUserDetailsService().loadUserByUsername(login);
     }
 
@@ -124,14 +125,14 @@ public class CustomPersistentRememberMeServices extends
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
-        }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);
-        } catch (DataAccessException e) {
+            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>persistentTokenRepository.save(token);<% } %>
+            addCookie(token, request, response);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        } catch (DataAccessException e) {<% } else { %>
+        } catch (DriverException e) {<% } %>
             log.error("Failed to save persistent token ", e);
-        }<% } else { %>
-        addCookie(token, request, response);<% } %>
+        }
     }
 
     /**

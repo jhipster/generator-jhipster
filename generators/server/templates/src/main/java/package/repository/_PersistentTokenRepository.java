@@ -46,6 +46,8 @@ public class PersistentTokenRepository {
 
     private PreparedStatement insertPersistentTokenStmt;
 
+    private PreparedStatement deletePersistentTokenSeriesByUserIdStmt;
+
     @PostConstruct
     public void init() {
         mapper = new MappingManager(session).mapper(PersistentToken.class);
@@ -64,6 +66,10 @@ public class PersistentTokenRepository {
             "INSERT INTO persistent_token (series, token_date, user_agent, token_value, login, user_id, ip_address) " +
                 "VALUES (:series, :token_date, :user_agent, :token_value, :login, :user_id, :ip_address) " +
                 "USING TTL 2592000"); // 30 days
+
+        deletePersistentTokenSeriesByUserIdStmt = session.prepare(
+            "DELETE FROM persistent_token_by_user WHERE user_id = :user_id AND persistent_token_series = :persistent_token_series"
+        );
     }
 
     public PersistentToken findOne(String presentedSeries) {
@@ -101,9 +107,8 @@ public class PersistentTokenRepository {
 
     public void delete(PersistentToken token) {
         mapper.delete(token);
-    }
-
-    public void delete(String decodedSeries) {
-        mapper.delete(decodedSeries);
+        session.execute(deletePersistentTokenSeriesByUserIdStmt.bind()
+            .setString("user_id", token.getUserId())
+            .setString("persistent_token_series", token.getSeries()));
     }
 }<% } %>
