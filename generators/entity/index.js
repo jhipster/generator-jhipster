@@ -150,22 +150,6 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        validateTableName: function () {
-            var prodDatabaseType = this.prodDatabaseType;
-            if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
-                this.error(chalk.red('The table name cannot contain special characters'));
-            } else if (this.entityTableName === '') {
-                this.error(chalk.red('The table name cannot be empty'));
-            } else if (!this.skipServer && jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
-                this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
-            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
-                this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
-            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
-                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
-            }
-
-        },
-
         setupVars: function () {
             // Specific Entity sub-generator variables
             if (!this.useConfigurationFile) {
@@ -182,6 +166,22 @@ module.exports = EntityGenerator.extend({
                 this.log(`\nThe entity ${ this.name } is being updated.\n`);
                 this._loadJson();
             }
+        },
+
+        validateTableName: function () {
+            var prodDatabaseType = this.prodDatabaseType;
+            if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
+                this.error(chalk.red('The table name cannot contain special characters'));
+            } else if (this.entityTableName === '') {
+                this.error(chalk.red('The table name cannot be empty'));
+            } else if (!this.skipServer && jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
+                this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
+                this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
+                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
+            }
+
         }
     },
 
