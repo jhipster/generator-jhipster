@@ -37,7 +37,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '01-gateway'
                     ],
                     clusteredDbApps: [],
-                    elk: false
+                    monitoring: 'no'
                 })
                 .on('end', done);
         });
@@ -60,7 +60,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
-                    elk: false
+                    monitoring: 'no'
                 })
                 .on('end', done);
         });
@@ -84,7 +84,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
-                    elk: false
+                    monitoring: 'no'
                 })
                 .on('end', done);
         });
@@ -108,7 +108,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -137,7 +137,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '06-uaa'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -167,7 +167,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '07-mariadb'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -198,7 +198,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     clusteredDbApps: [
                         '04-mongo'
                     ],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -225,7 +225,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '05-cassandra'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -251,7 +251,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '08-monolith'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
