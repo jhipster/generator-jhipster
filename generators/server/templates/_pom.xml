@@ -1192,27 +1192,19 @@
                                     <yarnVersion>v0.17.6</yarnVersion>
                                 </configuration>
                             </execution>
-                            <%_ if (useSass) { _%>
-                            <execution>
-                                <id>yarn rebuild node-sass</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>install --force</arguments>
-                                </configuration>
-                            </execution>
-                            <%_ } else { _%>
                             <execution>
                                 <id>yarn install</id>
                                 <goals>
                                     <goal>yarn</goal>
                                 </goals>
                                 <configuration>
+                                    <%_ if (useSass) { _%>
+                                    <arguments>install --force</arguments>
+                                    <%_ } else { _%>
                                     <arguments>install</arguments>
+                                    <%_ } _%>
                                 </configuration>
                             </execution>
-                            <%_ } _%>
                         <%_ } else { _%>
                             <execution>
                                 <id>install node and npm</id>
