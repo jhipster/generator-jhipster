@@ -191,7 +191,7 @@ function askForMonitoring() {
             },
             {
                 value: 'prometheus',
-                name: 'Yes, for metrics only with Prometheus'
+                name: 'Yes, for metrics only with Prometheus (only compatible with JHipster >= v3.12)'
             }
         ],
         default: 'no'
