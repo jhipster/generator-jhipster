@@ -41,7 +41,7 @@
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
         <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.0</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.2</frontend-maven-plugin.version>
         <%_ } _%>
         <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <gatling.version>2.2.0</gatling.version>
@@ -1085,15 +1085,16 @@
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>com.github.eirslett</groupId>
-                                        <artifactId>
-                                            frontend-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            ${frontend-maven-plugin.version}
-                                        </versionRange>
+                                        <artifactId>frontend-maven-plugin</artifactId>
+                                        <versionRange>${frontend-maven-plugin.version}</versionRange>
                                         <goals>
+                                        <%_ if (yarnInstall) { _%>
+                                            <goal>install-node-and-yarn</goal>
+                                            <goal>yarn</goal>
+                                        <%_ } else { _%>
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
+                                        <%_ } _%>
                                             <goal>bower</goal>
                                             <goal>gulp</goal>
                                         </goals>
@@ -1178,8 +1179,33 @@
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
-                        <version>1.0</version>
+                        <version>${frontend-maven-plugin.version}</version>
                         <executions>
+                        <%_ if (yarnInstall) { _%>
+                            <execution>
+                                <id>install node and yarn</id>
+                                <goals>
+                                    <goal>install-node-and-yarn</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>v6.9.1</nodeVersion>
+                                    <yarnVersion>v0.17.6</yarnVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>yarn install</id>
+                                <goals>
+                                    <goal>yarn</goal>
+                                </goals>
+                                <configuration>
+                                    <%_ if (useSass) { _%>
+                                    <arguments>install --force</arguments>
+                                    <%_ } else { _%>
+                                    <arguments>install</arguments>
+                                    <%_ } _%>
+                                </configuration>
+                            </execution>
+                        <%_ } else { _%>
                             <execution>
                                 <id>install node and npm</id>
                                 <goals>
@@ -1198,7 +1224,8 @@
                                 <configuration>
                                     <arguments>install</arguments>
                                 </configuration>
-                            </execution><% if(useSass) {%>
+                            </execution>
+                            <%_ if (useSass) { _%>
                             <execution>
                                 <id>npm rebuild node-sass</id>
                                 <goals>
@@ -1207,7 +1234,9 @@
                                 <configuration>
                                     <arguments>rebuild node-sass</arguments>
                                 </configuration>
-                            </execution><% } %>
+                            </execution>
+                            <%_ } _%>
+                        <%_ } _%>
                             <execution>
                                 <id>bower install</id>
                                 <goals>

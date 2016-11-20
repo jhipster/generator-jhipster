@@ -84,7 +84,7 @@ module.exports = JhipsterGenerator.extend({
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.checkInstall = this.options['check-install'];
-        this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'];
+        this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
     },
 
     initializing: {
@@ -303,6 +303,7 @@ module.exports = JhipsterGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
+            this.yarnInstall && this.config.set('yarn', true);
         }
     },
 

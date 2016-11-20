@@ -117,7 +117,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
-        this.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'];
+        this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
     },
 
     initializing: {
@@ -211,6 +211,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
+            this.yarnInstall && this.config.set('yarn', true);
         }
     },
 

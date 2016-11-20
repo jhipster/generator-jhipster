@@ -482,10 +482,48 @@ describe('JHipster generator', function () {
         });
     });
 
+    describe('default configuration using yarn flag', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false, yarn: true})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Memory',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'skipClient': false,
+                    'skipUserManagement': false,
+                    'serverSideOptions' : []
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
+            assert.file(expectedFiles.client);
+            assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.mysql);
+        });
+        it('contains install-node-and-yarn in pom.xml', function () {
+            assert.fileContent('pom.xml', /install-node-and-yarn/);
+        });
+    });
+
     describe('mariadb configuration', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',

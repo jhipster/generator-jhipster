@@ -69,6 +69,7 @@ module.exports = JhipsterServerGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.logo = this.configOptions.logo;
         this.baseName = this.configOptions.baseName;
+        this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
     },
     initializing: {
         displayLogo: function () {
