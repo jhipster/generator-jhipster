@@ -73,7 +73,7 @@ spring:
     <%_ if (applicationType == 'gateway' || databaseType == 'cassandra') { _%>
         cassandra:
             contactPoints: localhost
-            port: 9142
+            port: 0
             protocolVersion: V4
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
