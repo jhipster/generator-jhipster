@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry: {
@@ -34,14 +35,23 @@ module.exports = {
             exclude: ['./src/main/webapp/index.html']
         },
             { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
-            { test: /\.css$/, loader: 'raw-loader' }
+            { test: /\.css$/, loader: "style-loader!css-loader" },
+            { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&minetype=application/font-woff" },
+            { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,   loader: "url?limit=10000&minetype=application/font-woff2" },
+            { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=application/octet-stream" },
+            { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
+            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=image/svg+xml" }
         ]
     },
     plugins: [
         new CopyWebpackPlugin([
             { from: './src/main/webapp/index.html'},
-            { from: './src/main/webapp/content', to:'content'},
-            { from: './src/main/webapp/i18n', to:'i18n'}
-        ])
+            { from: './src/main/webapp/content', to: 'content'},
+            { from: './src/main/webapp/i18n', to: 'i18n'}
+        ]),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        })
     ]
  };
