@@ -41,4 +41,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('3.11.0')) {
         generator.removeFile(CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/active-link.directive.js');
     }
+    if (generator.isJhipsterVersionLessThan('3.12.0')) {
+        generator.removeFile(javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java');
+        generator.removeFile(javaDir + 'config/hazelcast/package-info.java');
+    }
 }
