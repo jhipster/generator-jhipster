@@ -1,12 +1,11 @@
 package <%=packageName%>.config;
 <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.ehcache.InstrumentedEhcache;<% } %><% if (hibernateCache == 'hazelcast') { %>
+import com.codahale.metrics.ehcache.InstrumentedEhcache;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.instance.HazelcastInstanceFactory;
-import com.hazelcast.config.MapConfig;<% } %><% if (hibernateCache == 'hazelcast') { %>
+import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.MaxSizeConfig;<% } %>
 import org.slf4j.Logger;
@@ -22,7 +21,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 <%_ } _%>
-import org.springframework.context.annotation.*;<% if (hibernateCache == 'hazelcast') { %>
+import org.springframework.context.annotation.*;<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'no') { %>
 import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
 import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
@@ -32,13 +31,10 @@ import org.springframework.security.core.session.SessionRegistryImpl;<% } %>
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.SortedSet;
 import java.util.stream.Stream;
 <%_ } _%>
 
-@SuppressWarnings("unused")
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(value = { MetricsConfiguration.class })
@@ -46,25 +42,29 @@ import java.util.stream.Stream;
 public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
-    <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-    @PersistenceContext
-    private EntityManager entityManager;<% } %><% if (hibernateCache == 'hazelcast') { %>
+    <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
 
     @Inject
-    private Environment env;<% } %><% if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { %>
+    private Environment env;
+    <%_ } _%>
+    <%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 
     @Inject
     private DiscoveryClient discoveryClient;
 
     @Inject
-    private ServerProperties serverProperties;<% } %><% if (hibernateCache == 'ehcache') { %>
+    private ServerProperties serverProperties;
+    <%_ } _%>
+    <%_ if (hibernateCache == 'ehcache') { _%>
 
     @Inject
     private MetricRegistry metricRegistry;
 
-    private net.sf.ehcache.CacheManager cacheManager;<% } else { %>
+    private net.sf.ehcache.CacheManager cacheManager;
+    <%_ } else { _%>
 
-    private CacheManager cacheManager;<% } %>
+    private CacheManager cacheManager;
+    <%_ } _%>
 
     @PreDestroy
     public void destroy() {<% if (hibernateCache == 'ehcache') { %>
@@ -104,7 +104,7 @@ public class CacheConfiguration {
         return cacheManager;
     <%_ } _%>
     }
-    <%_ if (hibernateCache == 'hazelcast') { _%>
+    <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast' ) { _%>
 
     @Bean
     public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {
@@ -199,7 +199,6 @@ public class CacheConfiguration {
         mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
-
     <%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
     private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {

@@ -42,9 +42,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private JHipsterProperties jHipsterProperties;
 
     @Autowired(required = false)
-    private MetricRegistry metricRegistry;<% if (hibernateCache == 'hazelcast') { %>
+    private MetricRegistry metricRegistry;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 
-    // Hazelcast instance is injected to force its initialization before the Servlet filter uses it.
     @Inject
     private HazelcastInstance hazelcastInstance;<% } %>
 
