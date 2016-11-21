@@ -4,7 +4,7 @@ services:
   - docker
 language: java
 node_js:
-  - "4.5.0"
+  - "6.9.1"
 jdk:
   - oraclejdk8
 sudo: false
@@ -21,7 +21,7 @@ cache:
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
 env:
-  - NODE_VERSION=4.5.0
+  - NODE_VERSION=6.9.1
 before_install:
   - nvm install $NODE_VERSION
   - npm install -g npm
