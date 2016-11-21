@@ -30,10 +30,12 @@ export class AuthServerProvider {
         return this.http.post('<%= uaaBaseName.toLowerCase() %>/oauth/token', data, {
             headers: headers
         }).map((resp) => {
-            let accessToken = resp.json().data["access_token"];
+            let accessToken = resp.json()["access_token"];
             if (accessToken) {
                 this.storeAuthenticationToken(accessToken, credentials.rememberMe);
             }
+
+            return accessToken;
         });
 <% } else { %>
         var data = {
