@@ -12,6 +12,7 @@ import com.hazelcast.config.MaxSizeConfig;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 <%_ } _%>
@@ -40,13 +41,12 @@ import java.util.stream.Stream;
 @SuppressWarnings("unused")
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = { MetricsConfiguration.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
+@AutoConfigureAfter(value = { MetricsConfiguration.class })
+@AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
 public class CacheConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast') { %>
-
-    private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-
+    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     @PersistenceContext
     private EntityManager entityManager;<% } %><% if (hibernateCache == 'hazelcast') { %>
 
@@ -161,9 +161,7 @@ public class CacheConfiguration {
         config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(jHipsterProperties));
         <%_ } _%>
 
-        hazelcastInstance = HazelcastInstanceFactory.newHazelcastInstance(config);
-
-        return hazelcastInstance;
+        return Hazelcast.newHazelcastInstance(config);
     }
 
     private MapConfig initializeDefaultMapConfig() {
@@ -202,12 +200,6 @@ public class CacheConfiguration {
         return mapConfig;
     }
 
-    /**
-    * @return the unique instance.
-    */
-    public static HazelcastInstance getHazelcastInstance() {
-        return hazelcastInstance;
-    }
     <%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
     private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {
