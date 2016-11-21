@@ -27,7 +27,9 @@
     "angular-resource": "1.5.8",
     "awesome-typescript-loader": "2.2.4",
     "core-js": "2.4.1",
+    "copy-webpack-plugin": "4.0.1",
     "exports-loader": "0.6.3",
+    //"html-webpack-plugin": "2.24.1",
     "jquery": "3.1.0",
     <%_ if (enableTranslation){ _%>
     "ng2-translate": "3.1.1",
