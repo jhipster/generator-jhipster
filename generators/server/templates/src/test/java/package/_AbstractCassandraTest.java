@@ -7,8 +7,8 @@ import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,27 +21,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import <%=packageName%>.config.Constants;
+
+import static org.cassandraunit.utils.EmbeddedCassandraServerHelper.getNativeTransportPort;
 
 /**
  * Base class for starting/stopping Cassandra during tests.
  */
+@ActiveProfiles(Constants.SPRING_PROFILE_TEST)
 public class AbstractCassandraTest {
 
     public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";
-
-    public static final long CASSANDRA_TIMEOUT = 30000L;
+    private static final String CASSANDRA_UNIT_RDMPORT_YAML = "cassandra-rdmport.yml";
+    private static final long CASSANDRA_TIMEOUT = 30000L;
+    private static boolean started = false;
 
     @BeforeClass
     public static void startServer() throws InterruptedException, TTransportException, ConfigurationException, IOException, URISyntaxException  {
-        EmbeddedCassandraServerHelper.startEmbeddedCassandra(CASSANDRA_TIMEOUT);
-        Cluster cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(9142).build();
-        Session session = cluster.connect();
-        String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
-        session.execute(createQuery);
-        String useKeyspaceQuery = "USE " + CASSANDRA_UNIT_KEYSPACE;
-        session.execute(useKeyspaceQuery);
-        CQLDataLoader dataLoader = new CQLDataLoader(session);
-        applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
+        if (! started) {
+            EmbeddedCassandraServerHelper.startEmbeddedCassandra(CASSANDRA_UNIT_RDMPORT_YAML, CASSANDRA_TIMEOUT);
+            Cluster cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(getNativeTransportPort()).build();
+            Session session = cluster.connect();
+            String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
+            session.execute(createQuery);
+            String useKeyspaceQuery = "USE " + CASSANDRA_UNIT_KEYSPACE;
+            session.execute(useKeyspaceQuery);
+            CQLDataLoader dataLoader = new CQLDataLoader(session);
+            applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
+            started = true;
+        }
     }
 
     private static void applyScripts(CQLDataLoader dataLoader, String cqlDir, String pattern) throws IOException, URISyntaxException {
@@ -61,10 +69,5 @@ public class AbstractCassandraTest {
         for (String fileName : scripts) {
             dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
         }
-    }
-
-    @AfterClass
-    public static void cleanupServer() {
-        EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
     }
 }
