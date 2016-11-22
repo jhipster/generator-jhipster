@@ -823,16 +823,6 @@
                             <arguments>rebuild node-sass</arguments>
                         </configuration>
                     </execution><% } %>
-                    <execution>
-                        <id>webpack build</id>
-                        <goals>
-                            <goal>webpack</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>-p</arguments>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin><%_ } _%>
             <plugin>
@@ -1220,7 +1210,24 @@
                         <configuration><% if (!skipClient) { %>
                             <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory><% } %>
                         </configuration>
-                    </plugin>
+                    </plugin><% if (!skipClient) { %>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>${frontend-maven-plugin.version}</version>
+                     <executions>
+                         <execution>
+                                <id>webpack build</id>
+                             <goals>
+                                    <goal>webpack</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                             <configuration>
+                                 <arguments>--config config/webpack.dev.js</arguments>
+                             </configuration>
+                           </execution>
+                     </executions>
+                    </plugin><% } %>
                 </plugins>
             </build>
             <properties>
@@ -1271,7 +1278,24 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin><% if (!skipClient) { %>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>${frontend-maven-plugin.version}</version>
+                     <executions>
+                         <execution>
+                                <id>webpack build</id>
+                             <goals>
+                                    <goal>webpack</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                             <configuration>
+                                 <arguments>-p --config config/webpack.prod.js</arguments>
+                             </configuration>
+                           </execution>
+                     </executions>
+                    </plugin><% } %>
                 </plugins>
             </build>
             <properties>

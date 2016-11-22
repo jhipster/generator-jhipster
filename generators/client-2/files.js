@@ -22,6 +22,9 @@ const files = {
                 '_.eslintignore',
                 '_webpack.config.js',
                 '_webpack-dev',
+                'config/_webpack.common.js',
+                'config/_webpack.dev.js',
+                'config/_webpack.prod.js'
             ]
         }
     ],

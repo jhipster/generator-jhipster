@@ -123,32 +123,6 @@ module.exports = JhipsterGenerator.extend({
             }.bind(this));
         },
 
-        checkBower: function () {
-            if (!this.checkInstall || this.skipClient) return;
-            var done = this.async();
-            exec('bower --version', function (err) {
-                if (err) {
-                    this.warning('bower is not found on your computer.\n',
-                        ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
-                    );
-                }
-                done();
-            }.bind(this));
-        },
-
-        checkGulp: function () {
-            if (!this.checkInstall || this.skipClient) return;
-            var done = this.async();
-            exec('gulp --version', function (err) {
-                if (err) {
-                    this.warning('gulp is not found on your computer.\n',
-                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
-                    );
-                }
-                done();
-            }.bind(this));
-        },
-
         validate: function () {
             if (this.skipServer && this.skipClient) {
                 this.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));

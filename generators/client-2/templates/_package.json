@@ -32,6 +32,7 @@
     "css-loader": "0.26.0",
     "exports-loader": "0.6.3",
     "file-loader": "0.9.0",
+    "html-webpack-plugin": "2.24.1",
     "jquery": "2.2.2",
     <%_ if (enableTranslation){ _%>
     "ng2-translate": "3.1.1",
@@ -43,11 +44,14 @@
     "reflect-metadata": "0.1.8",
     "rxjs": "5.0.0-beta.12",
     "style-loader": "0.13.1",
+    "tslint": "3.15.1",
+    "tslint-loader": "2.1.5",
     "ui-router-ng2": "1.0.0-beta.3",
     "ui-router-visualizer": "2.0.11",
     "url-loader": "0.5.7",
     "webpack": "2.1.0-beta.25",
     "webpack-dev-server": "1.16.2",
+    "webpack-merge": "0.17.0",
     "zone.js": "0.6.23"
   },
   "devDependencies": {
