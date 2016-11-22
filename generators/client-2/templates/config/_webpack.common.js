@@ -56,8 +56,8 @@ module.exports = function (options) {
             name: ['polyfills', 'vendor'].reverse()
         }),
         new CopyWebpackPlugin([
-            { from: './src/main/webapp/content', to: 'content'},
-            { from: './src/main/webapp/i18n', to: 'i18n'}
+            { from: './src/main/webapp/content', to: 'content'}<% if (enableTranslation) { %>,
+            { from: './src/main/webapp/i18n', to: 'i18n'}<% } %>
         ]),
         new webpack.ProvidePlugin({
             $: "jquery",
