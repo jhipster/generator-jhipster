@@ -59,12 +59,12 @@
             }
         }
 
-        function loadPage (page) {
+        function loadPage(page) {
             vm.page = page;
             vm.transition();
         }
 
-        function transition () {
+        function transition() {
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
@@ -73,7 +73,7 @@
         }
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        function search (searchQuery) {
+        function search(searchQuery) {
             if (!searchQuery){
                 return vm.clear();
             }
@@ -85,7 +85,7 @@
             vm.transition();
         }
 
-        function clear () {
+        function clear() {
             vm.links = null;
             vm.page = 1;
             vm.predicate = 'id';
