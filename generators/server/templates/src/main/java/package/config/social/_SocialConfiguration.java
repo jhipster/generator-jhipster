@@ -40,6 +40,18 @@ public class SocialConfiguration implements SocialConfigurer {
     @Inject
     private SocialUserConnectionRepository socialUserConnectionRepository;
 
+    @Inject
+    Environment environment;
+
+    @Bean
+    public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator,
+            ConnectionRepository connectionRepository) {
+
+        ConnectController controller = new ConnectController(connectionFactoryLocator, connectionRepository);
+        controller.setApplicationUrl(environment.getProperty("application.url"));
+        return controller;
+    }
+
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
         // Google configuration
@@ -109,6 +121,7 @@ public class SocialConfiguration implements SocialConfigurer {
     public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository, SignInAdapter signInAdapter) throws Exception {
         ProviderSignInController providerSignInController = new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository, signInAdapter);
         providerSignInController.setSignUpUrl("/social/signup");
+        providerSignInController.setApplicationUrl(environment.getProperty("spring.application.url"));
         return providerSignInController;
     }
 
