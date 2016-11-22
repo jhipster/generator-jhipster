@@ -9,10 +9,12 @@
     "yeoman-generator",
     "Java",
     "Spring",
+    "Spring Boot",
     "Spring Security",
     "JPA",
     "Hibernate",
     "AngularJS",
+    "Angular",
     "Twitter Bootstrap"
   ],
   "homepage": "http://jhipster.github.io/",
