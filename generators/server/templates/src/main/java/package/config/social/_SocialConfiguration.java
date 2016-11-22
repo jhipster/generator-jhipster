@@ -48,7 +48,7 @@ public class SocialConfiguration implements SocialConfigurer {
             ConnectionRepository connectionRepository) {
 
         ConnectController controller = new ConnectController(connectionFactoryLocator, connectionRepository);
-        controller.setApplicationUrl(environment.getProperty("application.url"));
+        controller.setApplicationUrl(environment.getProperty("spring.application.url"));
         return controller;
     }
 
