@@ -469,7 +469,7 @@ function writeFiles() {
                 this.template(SERVER_TEST_SRC_DIR + 'package/_CassandraKeyspaceUnitTest.java', testDir + 'CassandraKeyspaceUnitTest.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/config/_CassandraTestConfiguration.java', testDir + 'config/CassandraTestConfiguration.java', this, {});
-                this.template(SERVER_TEST_RES_DIR + '_cassandra-rdmport.yml', SERVER_TEST_RES_DIR + 'cassandra-rdmport.yml', this, {});
+                this.template(SERVER_TEST_RES_DIR + '_cassandra-random-port.yml', SERVER_TEST_RES_DIR + 'cassandra-random-port.yml', this, {});
             }
 
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
