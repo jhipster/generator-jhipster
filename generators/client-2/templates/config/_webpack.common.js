@@ -72,9 +72,8 @@ module.exports = function (options) {
             jQuery: "jquery"
         }),
         new HtmlWebpackPlugin({
-            template: '!!handlebars!./src/main/webapp/index.hbs',
+            template: './src/main/webapp/index.html',
             chunksSortMode: 'dependency',
-            metadata: {isDev: options.env === 'dev'},
             inject: 'body'
         })
     ]};
