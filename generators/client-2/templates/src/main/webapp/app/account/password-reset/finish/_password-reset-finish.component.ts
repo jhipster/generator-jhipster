@@ -4,6 +4,8 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PasswordResetFinish } from './password-reset-finish.service';
 import { LoginModalService } from "../../../shared";
 
+import { Transition } from 'ui-router-ng2';
+
 @Component({
     selector: 'password-reset-finish',
     templateUrl: './password-reset-finish.component.html'
@@ -19,13 +21,13 @@ export class PasswordResetFinishComponent implements OnInit {
 
     constructor(private passwordResetFinish: PasswordResetFinish,
         private loginModalService : LoginModalService,
-        @Inject('$stateParams') private $stateParams,
+        private trans: Transition,
         private elementRef: ElementRef, private renderer: Renderer
     ) {}
 
     ngOnInit() {
         this.resetAccount = {};
-        this.keyMissing = !this.$stateParams || !this.$stateParams.key;
+        this.keyMissing = !this.trans.params() || !this.trans.params()['key'];
     }
 
     ngAfterViewInit() {
@@ -40,7 +42,7 @@ export class PasswordResetFinishComponent implements OnInit {
         if (this.resetAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.passwordResetFinish.save({key: this.$stateParams.key, newPassword: this.resetAccount.password}).subscribe(() => {
+            this.passwordResetFinish.save({key: this.trans.params()['key'], newPassword: this.resetAccount.password}).subscribe(() => {
                 this.success = 'OK';
             }, () => {
                 this.success = null;

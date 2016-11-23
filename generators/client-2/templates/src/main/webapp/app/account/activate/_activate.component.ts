@@ -4,6 +4,8 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Activate } from './activate.service';
 import { LoginModalService } from "../../shared";
 
+import { Transition } from 'ui-router-ng2';
+
 @Component({
     selector: 'activate',
     templateUrl: './activate.component.html'
@@ -16,11 +18,11 @@ export class ActivateComponent implements OnInit {
     constructor(
         private activate: Activate,
         private loginModalService : LoginModalService,
-        @Inject('$stateParams') private $stateParams
+        private trans: Transition
     ) {}
 
     ngOnInit () {
-        this.activate.get(this.$stateParams.key).subscribe(() => {
+        this.activate.get(this.trans.params()['key']).subscribe(() => {
             this.error = null;
             this.success = 'OK';
         }, () => {
