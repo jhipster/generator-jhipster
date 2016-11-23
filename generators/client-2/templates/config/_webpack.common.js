@@ -3,9 +3,6 @@ const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const METADATA = {
-    title: 'Angular2 Webpack Starter by @gdi2290 from @AngularClass',
-    //baseUrl: '/',
-    //isDevServer: helpers.isWebpackDevServer()
     isDev: true
 };
 module.exports = function (options) {
@@ -23,6 +20,20 @@ module.exports = function (options) {
         path: './target/www',
         filename: '[name].bundle.js',
         chunkFilename: '[id].chunk.js'
+    },
+    devServer: {
+        proxy: [{
+            context: [<% if (authenticationType == 'oauth2') { %>
+                '/oauth',<% } %>
+                '/api',
+                '/management',
+                '/swagger-resources',
+                '/v2/api-docs',
+                '/h2-console'
+            ],
+            target: 'http://127.0.0.1:8080',
+            secure: false
+        }]
     },
     module: {
         rules: [{
@@ -65,7 +76,6 @@ module.exports = function (options) {
         }),
         new HtmlWebpackPlugin({
             template: './src/main/webapp/index.html',
-//            title: METADATA.title,
             chunksSortMode: 'dependency',
             metadata: METADATA,
             inject: 'body'
