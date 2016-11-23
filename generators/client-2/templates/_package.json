@@ -101,6 +101,8 @@
     "postinstall": "webdriver-manager update",
     <%_ } _%>
     "tsc": "tsc",
-    "tsc:w": "tsc -w"
+    "tsc:w": "tsc -w",
+    "webpack-dev": "webpack --watch --config config/webpack.dev.js",
+    "webpack-prod": "webpack --config config/webpack.prod.js"
   }
 }
