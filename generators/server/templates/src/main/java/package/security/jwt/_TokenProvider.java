@@ -47,7 +47,7 @@ public class TokenProvider {
 
     public String createToken(Authentication authentication, Boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream()
-            .map(authority -> authority.getAuthority())
+            .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
@@ -73,12 +73,11 @@ public class TokenProvider {
             .getBody();
 
         Collection<? extends GrantedAuthority> authorities =
-            Arrays.asList(claims.get(AUTHORITIES_KEY).toString().split(",")).stream()
-                .map(authority -> new SimpleGrantedAuthority(authority))
+            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "",
-            authorities);
+        User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
