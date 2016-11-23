@@ -2,9 +2,6 @@ const webpack = require('webpack');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const METADATA = {
-    isDev: true
-};
 module.exports = function (options) {
     return {
     entry: {
@@ -31,7 +28,7 @@ module.exports = function (options) {
                 '/v2/api-docs',
                 '/h2-console'
             ],
-            target: 'http://127.0.0.1:8080',
+            target: 'http://127.0.0.1:<%= serverPort %>',
             secure: false
         }]
     },
@@ -75,9 +72,9 @@ module.exports = function (options) {
             jQuery: "jquery"
         }),
         new HtmlWebpackPlugin({
-            template: './src/main/webapp/index.html',
+            template: '!!handlebars!./src/main/webapp/index.hbs',
             chunksSortMode: 'dependency',
-            metadata: METADATA,
+            metadata: {isDev: options.env === 'dev'},
             inject: 'body'
         })
     ]};
