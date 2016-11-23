@@ -14,7 +14,9 @@ import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurer;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
+import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.connect.web.SignInAdapter;
@@ -39,6 +41,18 @@ public class SocialConfiguration implements SocialConfigurer {
 
     @Inject
     private SocialUserConnectionRepository socialUserConnectionRepository;
+
+    @Inject
+    Environment environment;
+
+    @Bean
+    public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator,
+            ConnectionRepository connectionRepository) {
+
+        ConnectController controller = new ConnectController(connectionFactoryLocator, connectionRepository);
+        controller.setApplicationUrl(environment.getProperty("spring.application.url"));
+        return controller;
+    }
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
@@ -109,6 +123,7 @@ public class SocialConfiguration implements SocialConfigurer {
     public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator, UsersConnectionRepository usersConnectionRepository, SignInAdapter signInAdapter) throws Exception {
         ProviderSignInController providerSignInController = new ProviderSignInController(connectionFactoryLocator, usersConnectionRepository, signInAdapter);
         providerSignInController.setSignUpUrl("/social/signup");
+        providerSignInController.setApplicationUrl(environment.getProperty("spring.application.url"));
         return providerSignInController;
     }
 
