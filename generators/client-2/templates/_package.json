@@ -32,6 +32,7 @@
     "css-loader": "0.26.0",
     "exports-loader": "0.6.3",
     "file-loader": "0.9.0",
+    "handlebars-loader": "1.4.0",
     "html-webpack-plugin": "2.24.1",
     "jquery": "2.2.2",
     <%_ if (enableTranslation){ _%>
