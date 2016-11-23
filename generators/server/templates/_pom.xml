@@ -1020,6 +1020,11 @@
                         <artifactId>spring-boot-starter-data-jpa</artifactId>
                         <version>${project.parent.version}</version>
                     </dependency>
+                    <dependency>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                        <version>1.1.0.Final</version>
+                    </dependency>
                 </dependencies>
             </plugin>
             <%_ } _%>
