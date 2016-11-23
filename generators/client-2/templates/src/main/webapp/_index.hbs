@@ -31,7 +31,9 @@
     </script>-->
 
     <script src="//unpkg.com/ui-router-visualizer@2"></script>
+    {{#if htmlWebpackPlugin.options.metadata.isDev}}
     <script src="/webpack-dev-server.js"></script>
+    {{/if}}
 
 </body>
 </html>
