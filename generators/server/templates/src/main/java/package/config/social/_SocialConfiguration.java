@@ -26,7 +26,6 @@ import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 // jhipster-needle-add-social-connection-factory-import-package
 
-
 import javax.inject.Inject;
 
 /**
