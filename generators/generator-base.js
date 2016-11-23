@@ -450,9 +450,7 @@ Generator.prototype.addEntryToEhcache = function (entry) {
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`<cache name="${entry}"
-        timeToLiveSeconds="3600">
-    </cache>
+            splicable: [`<cache alias="${entry}" uses-template="simple"/>
 `
             ]
         }, this);

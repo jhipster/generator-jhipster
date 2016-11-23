@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache आकडेवारी",
+        "cache": {
+            "title": "Cache आकडेवारी",
             "cachename": "कॅशे नाव",
-            "objects": "ऑब्जेक्ट्स",
             "hits": "हिट्स",
             "misses": "Misses",
-            "evictioncount": "जमा मोजणी"
+            "evictions": "जमा मोजणी"
         },
         "datasource": {
             "usage": "वापर",

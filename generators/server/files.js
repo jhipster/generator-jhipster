@@ -137,6 +137,10 @@ function writeFiles() {
 
             if (this.hibernateCache === 'ehcache') {
                 this.template(SERVER_MAIN_RES_DIR + '_ehcache.xml', SERVER_MAIN_RES_DIR + 'ehcache.xml', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/jcache/_SpringCacheRegionFactory.java', javaDir + 'config/jcache/SpringCacheRegionFactory.java', this, {});
+            }
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/jcache/_JCacheGaugeSet.java', javaDir + 'config/jcache/JCacheGaugeSet.java', this, {});
             }
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
@@ -390,7 +394,6 @@ function writeFiles() {
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             if (this.databaseType === 'sql') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
                 if (this.prodDatabaseType === 'postgresql') {
                     this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});

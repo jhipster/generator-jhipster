@@ -97,7 +97,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/PersistentToken.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/User.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310DateConverters.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/util/JSR310PersistenceConverters.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/AuthorityRepository.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/CustomAuditEventRepository.java',

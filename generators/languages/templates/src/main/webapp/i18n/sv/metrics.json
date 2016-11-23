@@ -69,13 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache statistik",
+        "cache": {
+            "title": "Cache statistik",
             "cachename": "Cache namn",
-            "objects": "Objekt",
             "hits": "Träffar",
             "misses": "Missar",
-            "evictioncount": "Utkastade"
+            "evictions": "Utkastade"
         },
         "datasource": {
             "usage": "Usage",
