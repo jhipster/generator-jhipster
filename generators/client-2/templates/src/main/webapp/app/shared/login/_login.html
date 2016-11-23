@@ -39,10 +39,11 @@
             </form>
             <p></p>
             <div class="alert alert-warning">
-                <a class="alert-link" href="" (click)="requestResetPassword()" translate="login.password.forgot">Did you forget your password?</a>
+                <a class="alert-link" (click)="requestResetPassword()" translate="login.password.forgot">Did you forget your password?</a>
             </div>
-            <div class="alert alert-warning" translate="global.messages.info.register" translate-compile>
-                You don't have an account yet? <a class="alert-link" href="" (click)="register()">Register a new account</a>
+            <div class="alert alert-warning">
+            	<span translate="global.messages.info.register.noaccount">You don't have an account yet?</span>
+                <a class="alert-link" (click)="register()" translate="global.messages.info.register.link">Register a new account</a>
             </div>
         </div>
         <%_ if (enableSocialSignIn) { _%>
