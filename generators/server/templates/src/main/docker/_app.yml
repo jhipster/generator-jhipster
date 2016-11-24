@@ -9,7 +9,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
-        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
         external_links:
         <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
