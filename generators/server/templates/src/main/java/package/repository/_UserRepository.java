@@ -42,10 +42,10 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByLogin(String login);
     <%_ if (databaseType == 'sql') { _%>
 
-    @EntityGraph(attributePaths = {"authorities"})
+    @EntityGraph(attributePaths = "authorities")
     User findOneWithAuthoritiesById(<%= pkType %> id);
 
-    @EntityGraph(attributePaths = {"authorities"})
+    @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByLogin(String login);
 
     @Query(value = "select distinct user from User user left join fetch user.authorities",
