@@ -6,7 +6,7 @@ import { Account, LoginModalService, Principal } from "../shared";
 
 @Component({
     selector: 'home',
-    templateUrl: 'app/home/home.html'
+    templateUrl: './home.html'
 })
 export class HomeComponent implements OnInit {
     account: Account;

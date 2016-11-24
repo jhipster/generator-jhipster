@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 
 @Component({
     selector: 'user-mgmt-delete-dialog',
-    templateUrl: 'app/admin/user-management/user-management-delete-dialog.html'
+    templateUrl: './user-management-delete-dialog.html'
 })
 export class UserMgmtDeleteDialogComponent {
 

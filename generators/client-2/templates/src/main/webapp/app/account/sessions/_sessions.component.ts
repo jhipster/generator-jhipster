@@ -6,7 +6,7 @@ import { Principal } from '../../shared';
 
 @Component({
     selector: 'sessions',
-    templateUrl: 'app/account/sessions/sessions.html'
+    templateUrl: './sessions.html'
 })
 export class SessionsComponent implements OnInit {
 

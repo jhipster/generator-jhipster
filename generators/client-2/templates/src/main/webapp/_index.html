@@ -10,71 +10,16 @@
     <%_ } _%>
     <meta name="viewport" content="width=device-width">
     <base href="/"/>
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css content/css/vendor.css -->
-    <!-- bower:css -->
-    <!-- endinject -->
     <%_ if(useSass) { _%>
     <link rel="stylesheet" href="content/css/vendor.css">
     <%_ } _%>
-    <!-- endbuild -->
-    <!-- build:css content/css/main.css -->
     <link rel="stylesheet" href="content/css/main.css">
-    <!-- endbuild -->
 </head>
 <body>
     <!--[if lt IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <<%=jhiPrefix%>-main></<%=jhiPrefix%>-main>
-    <!-- inject:troubleshoot -->
-    <!-- This content is for troubleshooting purpose and will be removed by `gulp install` task -->
-    <div class="container">
-        <div class="well">
-            <h1>An error has occured :-(</h1>
-            <i>There was an error when generating this application with <a href="http://jhipster.github.io/">JHipster</a></i>
-            <p>If you are seeing this, it means something went wrong during the initial setup of the application.</p>
-            <h2>Usual error causes</h2>
-            <ol>
-                <li>You had a network error while running <code style="color:red">npm install</code> or <code style="color:red">bower install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the JHipster error logs, you will probably have the cause of the error.</li>
-                <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
-            </ol>
-            <h2>Running JHipster again</h2>
-            <p>If you want to go fast, run <code style="color:red">yo jhipster --force</code> to regenerate application and run everything again.</p>
-            <p>If you want to have more control on what you generate, so you can debug your issue more easily, you should follow the following steps:</p>
-            <ol>
-                <li>Install npm dependencies with the command <code style="color:red">npm install</code></li>
-                <li>Install bower dependencies with the command <code style="color:red">bower install</code></li>
-                <li>Run the initial setup using gulp with the command <code style="color:red">gulp install</code></li>
-            </ol>
-            <p><i>Note:</i> if you are re-generating an existing JHipster application with some existing entities, use <code style="color:red">yo jhipster --force --with-entities</code> to regenerate your applications with its entities.</p>
-
-            <h2>Getting more help</h2>
-
-            <p>
-              <i>Please note that we all do this in the spirit of Open Source.</i> All discussions are public, so that everyone can participate and help each other.
-            </p>
-
-            <h3>If you have a question on how to use JHipster</h3>
-            <p>
-                Go to Stack Overflow with the <a href="http://stackoverflow.com/tags/jhipster" target="_blank">"jhipster"</a> tag.
-            </p>
-
-            <h3>If you have a bug or a feature request</h3>
-            <p>
-                First read our <a href="https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md" target="_blank">contributing guidelines</a>.
-            </p>
-            <p>
-            Then, fill a ticket on our <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank">bug tracker</a>, we'll be happy to resolve your issue!
-            </p>
-
-            <h3>If you want to chat with contributors and other users</h3>
-            <p>
-                Join our chat room on <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank">Gitter.im</a>. Please note that this is a public chat room, and that we expect you to respect other people and write in a correct English language!
-            </p>
-        </div>
-    </div>
-    <!-- endinject -->
     <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
     <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
@@ -84,20 +29,8 @@
         r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
         ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>-->
-    <script src="vendor/jquery/dist/jquery.js"></script>
-    <!-- build:js app/vendor.js -->
-    <!-- bower:js -->
-    <!-- endinject -->
-    <!-- endbuild -->
 
-    <script src="vendor/core-js/client/shim.min.js"></script>
-    <script src="vendor/zone.js/dist/zone.js"></script>
-    <script src="vendor/reflect-metadata/Reflect.js"></script>
-    <script src="vendor/systemjs/dist/system.js"></script>
-    <script src="system.config.js"></script>
-    <script>
-        System.import('app').catch(function(err){ console.error(err); });
-    </script>
+    <script src="//unpkg.com/ui-router-visualizer@2"></script>
 
 </body>
 </html>

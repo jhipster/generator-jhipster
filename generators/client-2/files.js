@@ -16,19 +16,15 @@ const files = {
         {
             templates: [
                 '_package.json',
-                '_bower.json',
                 '_tsconfig.json',
-                '_.bowerrc',
                 '_tslint.json',
                 '_.eslintrc.json',
                 '_.eslintignore',
-                '_gulpfile.js',
-                'gulp/_utils.js',
-                'gulp/_serve.js',
-                'gulp/_config.js',
-                'gulp/_build.js',
-                'gulp/_copy.js',
-                'gulp/_inject.js'
+                '_webpack.config.js',
+                '_webpack-dev',
+                'config/_webpack.common.js',
+                'config/_webpack.dev.js',
+                'config/_webpack.prod.js'
             ]
         }
     ],
@@ -79,8 +75,7 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
                 { file: '_404.html', method: 'copy' },
-                { file: '_index.html', method: 'copyHtml' },
-                { file: '_system.config.js', method: 'copy' }
+                { file: '_index.html', method: 'copy' }
             ]
         }
     ],
@@ -94,6 +89,8 @@ const files = {
                 '_app.ng2module.ts',
                 '_app.state.ts',
                 '_app.constants.ts',
+                '_polyfills.ts',
+                '_vendor.ts',
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
                 'blocks/config/_http.config.ts',
@@ -445,7 +442,6 @@ module.exports = {
 function writeFiles() {
     return {
         writeSepcial: function () {
-            this.fs.copy(this.templatePath('gulp/_handle-errors.js'), this.destinationPath('gulp/handle-errors.js')); // to avoid interpolate errors
             mkdirp(MAIN_SRC_DIR);
         },
 
