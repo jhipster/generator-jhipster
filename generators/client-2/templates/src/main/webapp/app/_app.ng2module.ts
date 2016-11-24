@@ -34,6 +34,7 @@ import { localStorageConfig } from './blocks/config/localstorage.config';
 import { HttpInterceptor } from './blocks/interceptor/http.interceptor';
 import {AuthExpiredInterceptor} from "./blocks/interceptor/auth-expired.interceptor";
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+import { AuthInterceptor } from "./blocks/interceptor/auth.interceptor";
 import {Http, XHRBackend, RequestOptions} from "@angular/http";
 <%_ } if(authenticationType === 'session') { _%>
 import { StateStorageService } from "./shared/auth/state-storage.service";
@@ -106,11 +107,12 @@ let routerConfig = {
             deps: [
                 XHRBackend,
                 RequestOptions,
-                Injector,
                 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
                 LocalStorageService,
-                SessionStorageService
+                SessionStorageService,
+                Injector
                 <%_ } if (authenticationType === 'session') { _%>
+                Injector,
                 StateStorageService
                 <%_ } _%>
             ]
