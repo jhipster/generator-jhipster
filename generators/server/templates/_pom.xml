@@ -443,6 +443,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+            <version>5.3.3.Final</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
