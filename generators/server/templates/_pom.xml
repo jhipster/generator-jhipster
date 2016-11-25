@@ -52,7 +52,7 @@
         <hazelcast-hibernate.version>1.1.1</hazelcast-hibernate.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate.version>5.2.4.Final</hibernate.version>
+        <hibernate.version>5.2.5.Final</hibernate.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hikaricp.version>2.4.6</hikaricp.version>
