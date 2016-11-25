@@ -8,7 +8,7 @@ jhipster:
         authentication:
             jwt:
                 secret: <%= jwtSecretKey %>
-<%_ if (useElk) { _%>
+<%_ if (monitoring === 'elk') { _%>
     logging:
         logstash: # forward logs to ELK
             enabled: true

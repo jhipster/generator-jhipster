@@ -1,0 +1,8 @@
+# Sample alerting rules
+
+ALERT first_registration
+  IF com_mycompany_myapp_web_rest_AccountResource_registerAccount_count == 1
+  ANNOTATIONS {
+    summary = "Your first user has registered his account. Congrats !",
+    description = "Current AccountResource_registerAccount_count value: {{ $value }}"
+  }
