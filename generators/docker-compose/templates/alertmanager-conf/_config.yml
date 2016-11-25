@@ -1,0 +1,13 @@
+route:
+    receiver: 'webhook'
+    group_by: ['alertname']
+    group_wait:      10s
+    group_interval:  1m
+    repeat_interval: 2h
+
+receivers:
+- name: 'webhook'
+  webhook_configs:
+  # Open http://webhook.site/#/<%= uuid %> in a browser to view webhooks received in real time
+  - url: 'http://webhook.site/<%= uuid %>'
+    send_resolved: true

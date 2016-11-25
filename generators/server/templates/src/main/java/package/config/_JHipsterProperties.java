@@ -472,6 +472,8 @@ public class JHipsterProperties {
 
         private final Graphite graphite = new Graphite();
 
+        private final Prometheus prometheus = new Prometheus();
+
         private final Logs logs = new Logs();
 
         public Jmx getJmx() {
@@ -480,6 +482,10 @@ public class JHipsterProperties {
 
         public Graphite getGraphite() {
             return graphite;
+        }
+
+        public Prometheus getPrometheus() {
+            return prometheus;
         }
 
         public Logs getLogs() {
@@ -542,7 +548,30 @@ public class JHipsterProperties {
             }
         }
 
-        public static  class Logs {
+        public static class Prometheus {
+
+            private boolean enabled = false;
+
+            private String endpoint = "/prometheusMetrics";
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getEndpoint() {
+                return endpoint;
+            }
+
+            public void setEndpoint(String endpoint) {
+                this.endpoint = endpoint;
+            }
+        }
+
+        public static class Logs {
 
             private boolean enabled = false;
 

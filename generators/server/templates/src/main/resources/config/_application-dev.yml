@@ -249,6 +249,9 @@ jhipster:
             host: localhost
             port: 2003
             prefix: <%= baseName %>
+        prometheus:
+            enabled: false
+            endpoint: /prometheusMetrics
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             reportFrequency: 60 # in seconds
