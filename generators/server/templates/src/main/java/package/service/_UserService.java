@@ -10,6 +10,9 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
+<%_ if (databaseType == 'sql') { _%>
+import org.hibernate.Hibernate;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -233,7 +236,7 @@ public class UserService {
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         <%_ if (databaseType == 'sql') { _%>
         return userRepository.findOneByLogin(login).map(u -> {
-            u.getAuthorities().size();
+            Hibernate.initialize(u.getAuthorities()); // eagerly load the association
             return u;
         });
         <%_ } else { // MongoDB and Cassandra _%>
@@ -247,7 +250,7 @@ public class UserService {
     public User getUserWithAuthorities(<%= pkType %> id) {
         User user = userRepository.findOne(id);
         <%_ if (databaseType == 'sql') { _%>
-        user.getAuthorities().size(); // eagerly load the association
+        Hibernate.initialize(user.getAuthorities()); // eagerly load the association
         <%_ } _%>
         return user;
     }
@@ -259,11 +262,11 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
         User user = null;
         if (optionalUser.isPresent()) {
-          user = optionalUser.get();
-          <%_ if (databaseType == 'sql') { _%>
-            user.getAuthorities().size(); // eagerly load the association
-          <%_ } _%>
-         }
+            user = optionalUser.get();
+            <%_ if (databaseType == 'sql') { _%>
+            Hibernate.initialize(user.getAuthorities()); // eagerly load the association
+            <%_ } _%>
+        }
          return user;
     }
     <%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
