@@ -3,6 +3,7 @@ import { upgradeAdapter } from './upgrade_adapter';
 import { UrlRouter } from 'ui-router-ng2';
 
 import '../vendor/bootstrap/dist/css/bootstrap.css!';
+import '../vendor/font-awesome/css/font-awesome.min.css!';
 
 import './app.module';
 
