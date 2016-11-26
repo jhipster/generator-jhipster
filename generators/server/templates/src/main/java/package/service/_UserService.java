@@ -154,7 +154,7 @@ public class UserService {
         }<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         if (managedUserVM.getAuthorities() != null) {
             Set<Authority> authorities = new HashSet<>();
-            managedUserVM.getAuthorities().stream().forEach(
+            managedUserVM.getAuthorities().forEach(
                 authority -> authorities.add(authorityRepository.findOne(authority))
             );
             user.setAuthorities(authorities);
@@ -202,7 +202,7 @@ public class UserService {
                 <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
-                authorities.stream().forEach(
+                authorities.forEach(
                     authority -> managedAuthorities.add(authorityRepository.findOne(authority))
                 );
                 <%_ } else { // Cassandra _%>

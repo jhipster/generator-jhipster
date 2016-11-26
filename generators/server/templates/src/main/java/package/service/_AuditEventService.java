@@ -37,12 +37,12 @@ public class AuditEventService {
 
     public Page<AuditEvent> findAll(Pageable pageable) {
         return persistenceAuditEventRepository.findAll(pageable)
-            .map(persistentAuditEvents -> auditEventConverter.convertToAuditEvent(persistentAuditEvents));
+            .map(auditEventConverter::convertToAuditEvent);
     }
 
     public Page<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable) {
         return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
-            .map(persistentAuditEvents -> auditEventConverter.convertToAuditEvent(persistentAuditEvents));
+            .map(auditEventConverter::convertToAuditEvent);
     }
 
     public Optional<AuditEvent> find(<% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
