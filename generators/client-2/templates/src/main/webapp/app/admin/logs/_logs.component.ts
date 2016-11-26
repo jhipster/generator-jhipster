@@ -5,7 +5,7 @@ import { LogsService } from './logs.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-logs',
-    templateUrl: 'app/admin/logs/logs.html',
+    templateUrl: 'app/admin/logs/logs.component.html',
 })
 export class LogsComponent implements OnInit {
 

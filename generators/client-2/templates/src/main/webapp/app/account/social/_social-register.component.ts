@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
-    templateUrl: 'app/account/social/social-register.html'
+    templateUrl: 'app/account/social/social-register.component.html'
 })
 export class SocialRegisterComponent implements OnInit  {
     success: boolean;

@@ -13,7 +13,7 @@ import { SocialService } from '../social/social.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-login-modal',
-    templateUrl: 'app/shared/login/login.html'
+    templateUrl: 'app/shared/login/login.component.html'
 })
 export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     authenticationError: boolean;

@@ -6,7 +6,7 @@ import { LoginModalService<% if (enableTranslation) { %>, <%=jhiPrefixCapitalize
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
-    templateUrl: 'app/account/register/register.html'
+    templateUrl: 'app/account/register/register.component.html'
 })
 export class RegisterComponent implements OnInit {
 
