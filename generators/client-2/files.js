@@ -252,7 +252,7 @@ const files = {
                 'admin/health/_health-modal.component.ts',
                 'admin/health/_health.service.ts',
                 { file: 'admin/health/_health.component.html', method: 'copyHtml' },
-                { file: 'admin/health/_health-modal.html', method: 'copyHtml' },
+                { file: 'admin/health/_health-modal.component.html', method: 'copyHtml' },
                 { file: 'admin/health/_health.state.ts', method: 'copyJs' },
                 'admin/logs/_logs.component.ts',
                 'admin/logs/_log.model.ts',
@@ -263,7 +263,7 @@ const files = {
                 'admin/metrics/_metrics-modal.component.ts',
                 'admin/metrics/_metrics.service.ts',
                 { file: 'admin/metrics/_metrics.component.html', method: 'copyHtml', template: true },
-                { file: 'admin/metrics/_metrics-modal.html', method: 'copyHtml', template: true },
+                { file: 'admin/metrics/_metrics-modal.component.html', method: 'copyHtml', template: true },
                 { file: 'admin/metrics/_metrics.state.ts', method: 'copyJs' }
             ]
         },

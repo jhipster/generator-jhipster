@@ -44,14 +44,6 @@ const expectedFiles = {
         '.mvn/wrapper/maven-wrapper.properties'
     ],
 
-    serverNG1 : [
-        SERVER_MAIN_RES_DIR + 'templates/error.html'
-    ],
-
-    serverNG2 : [
-        SERVER_MAIN_RES_DIR + 'templates/error.component.html'
-    ],
-
     server: [
         'README.md',
         '.gitignore',
@@ -61,6 +53,7 @@ const expectedFiles = {
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'ehcache.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
+        SERVER_MAIN_RES_DIR + 'templates/error.html',
         SERVER_MAIN_RES_DIR + 'logback-spring.xml',
         SERVER_MAIN_RES_DIR + 'config/application.yml',
         SERVER_MAIN_RES_DIR + 'config/application-dev.yml',
@@ -194,40 +187,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json'
     ],
 
-    clientNG1 : [
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.html',
-        CLIENT_MAIN_SRC_DIR + 'app/components/login/login.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.html',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.html',
-        CLIENT_MAIN_SRC_DIR + 'app/home/home.html'
-    ],
-
-    clientNG2 : [
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/components/login/login.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.component.html',
-        CLIENT_MAIN_SRC_DIR + 'app/home/home.component.html'
-    ],
-
     client: [
         'bower.json',
         'package.json',
@@ -281,6 +240,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js',
+        CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/services/user/user.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/base64.service.js',
@@ -291,13 +251,17 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/util/sort.directive.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/sort-by.directive.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/account.state.js',
+        CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/activate/activate.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/components/login/login.html',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/login/login.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.directive.js',
+        CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/reset/request/reset.request.html',
@@ -306,26 +270,35 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/reset/finish/reset.finish.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/reset/finish/reset.finish.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/reset/finish/reset.finish.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/sessions/sessions.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/settings/settings.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/admin.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/docs/docs.state.js',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/health/health.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/metrics/metrics.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/accessdenied.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/entity.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/error/error.state.js',
+        CLIENT_MAIN_SRC_DIR + 'app/home/home.html',
         CLIENT_MAIN_SRC_DIR + 'app/home/home.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/home/home.controller.js',
         CLIENT_TEST_SRC_DIR + 'karma.conf.js',
@@ -390,14 +363,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/UaaWebSecurityConfiguration.java'
     ],
 
-    gatewayNG1: [
-        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html'
-    ],
-
-    gatewayNG2: [
-        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.component.html'
-    ],
-
     gateway: [
         SERVER_MAIN_RES_DIR + 'config/bootstrap.yml',
         SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml',
@@ -410,6 +375,7 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/GatewayResource.java',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.state.js',
+        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js'
     ],
 
@@ -512,18 +478,8 @@ describe('JHipster generator', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.serverNG1);
-            } else {
-                assert.file(expectedFiles.serverNG2);
-            }
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.clientNG1);
-            } else {
-                assert.file(expectedFiles.clientNG2);
-            }
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
         });
@@ -557,18 +513,8 @@ describe('JHipster generator', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.serverNG1);
-            } else {
-                assert.file(expectedFiles.serverNG2);
-            }
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.clientNG1);
-            } else {
-                assert.file(expectedFiles.clientNG2);
-            }
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mariadb);
         });
@@ -600,18 +546,8 @@ describe('JHipster generator', function () {
 
         it('creates expected default files for gradle', function () {
             assert.file(expectedFiles.server);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.serverNG1);
-            } else {
-                assert.file(expectedFiles.serverNG2);
-            }
             assert.file(expectedFiles.gradle);
             assert.file(expectedFiles.client);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.clientNG1);
-            } else {
-                assert.file(expectedFiles.clientNG2);
-            }
             assert.file(['gradle/yeoman.gradle']);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
@@ -1064,11 +1000,6 @@ describe('JHipster generator', function () {
 
         it('creates expected files with Kafka message broker enabled', function () {
             assert.file(expectedFiles.server);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.serverNG1);
-            } else {
-                assert.file(expectedFiles.serverNG2);
-            }
             assert.file(expectedFiles.messageBroker);
         });
     });
@@ -1098,15 +1029,8 @@ describe('JHipster generator', function () {
 
         it('creates expected files for default configuration with skip client option enabled', function () {
             assert.file(expectedFiles.server);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.serverNG1);
-            } else {
-                assert.file(expectedFiles.serverNG2);
-            }
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
-            assert.noFile(expectedFiles.clientNG1);
-            assert.noFile(expectedFiles.clientNG2);
         });
     });
 
@@ -1135,15 +1059,8 @@ describe('JHipster generator', function () {
 
         it('creates expected files for default configuration with skip client option enabled', function () {
             assert.file(expectedFiles.server);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.serverNG1);
-            } else {
-                assert.file(expectedFiles.serverNG2);
-            }
             assert.file(expectedFiles.gradle);
             assert.noFile(expectedFiles.client);
-            assert.noFile(expectedFiles.clientNG1);
-            assert.noFile(expectedFiles.clientNG2);
             assert.noFile(['gradle/yeoman.gradle']);
         });
     });
@@ -1177,11 +1094,6 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.gatewayNG1);
-            } else {
-                assert.file(expectedFiles.gatewayNG2);
-            }
             assert.file(expectedFiles.eureka);
             assert.noFile(expectedFiles.consul);
         });
@@ -1251,11 +1163,6 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.gatewayNG1);
-            } else {
-                assert.file(expectedFiles.gatewayNG2);
-            }
             assert.noFile(expectedFiles.eureka);
             assert.file(expectedFiles.consul);
         });
@@ -1401,11 +1308,6 @@ describe('JHipster generator', function () {
         it('creates expected files for UAA auth with the Gateway application type', function () {
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.gateway);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.gatewayNG1);
-            } else {
-                assert.file(expectedFiles.gatewayNG2);
-            }
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.eureka);
         });
@@ -1438,15 +1340,8 @@ describe('JHipster server generator', function () {
 
         it('creates expected files for default configuration with gatling enabled for server generator', function () {
             assert.file(expectedFiles.server);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.serverNG1);
-            } else {
-                assert.file(expectedFiles.serverNG2);
-            }
             assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
-            assert.noFile(expectedFiles.clientNG1);
-            assert.noFile(expectedFiles.clientNG2);
         });
     });
 });
@@ -1468,15 +1363,8 @@ describe('JHipster client generator', function () {
 
         it('creates expected files for default configuration for client generator', function () {
             assert.noFile(expectedFiles.server);
-            assert.noFile(expectedFiles.serverNG1);
-            assert.noFile(expectedFiles.serverNG2);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.client);
-            if (this.angularVersion === 'angular1') {
-                assert.file(expectedFiles.clientNG1);
-            } else {
-                assert.file(expectedFiles.clientNG2);
-            }
         });
     });
 });
@@ -1498,8 +1386,6 @@ describe('JHipster client-2 generator', function () {
 
         it('creates expected files for default configuration for client-2 generator', function () {
             assert.noFile(expectedFiles.server);
-            assert.noFile(expectedFiles.serverNG1);
-            assert.noFile(expectedFiles.serverNG2);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
             assert.file(getFilesForOptions(require('../generators/client-2/files').files, {
