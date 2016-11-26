@@ -18,7 +18,6 @@ if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
     ls -al "$HOME"/uaa
 fi
 
-rm -Rf "$HOME"/app
 mkdir -p "$HOME"/app
 mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$HOME"/app/
 cd "$HOME"/app

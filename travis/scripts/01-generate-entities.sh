@@ -11,6 +11,7 @@ moveEntity() {
 #-------------------------------------------------------------------------------
 # Copy entities json
 #-------------------------------------------------------------------------------
+rm -Rf "$HOME"/app
 mkdir -p "$HOME"/app/.jhipster/
 if [ "$JHIPSTER" == "app-mongodb" ]; then
     moveEntity MongoBankAccount
