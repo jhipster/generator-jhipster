@@ -5,7 +5,7 @@ import { CookieService } from 'angular2-cookie/core';
 
 @Component({
     selector: '<%=jhiPrefix%>-auth',
-    templateUrl: 'app/shared/login/login.html'
+    templateUrl: 'app/shared/login/login.component.html'
 })
 export class SocialAuthComponent implements OnInit {
 
