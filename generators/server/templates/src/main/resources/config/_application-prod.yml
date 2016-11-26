@@ -63,13 +63,15 @@ spring:
         url: jdbc:mariadb://localhost:3306/<%= baseName %>
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
         url: jdbc:postgresql://localhost:5432/<%= baseName %>
+        <%_ } else if (devDatabaseType === 'mssql') { _%>
+        url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } _%>
         name:
-        username: <% if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
-        password:
-        <%_ if (prodDatabaseType == 'mysql') { _%>
+        username: <% if (prodDatabaseType === 'mysql' || prodDatabaseType == 'mariadb') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>
+        password: <% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>
+        <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb' || devDatabaseType === 'mssql') { _%>
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -78,14 +80,14 @@ spring:
                 useServerPrepStmts: true
         <%_ } _%>
     jpa:
-        <%_ if (prodDatabaseType == 'mysql') { _%>
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        <%_ } else if (prodDatabaseType == 'mariadb') { _%>
+        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
         database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle10gDialect
+        <%_ } else if (devDatabaseType === 'mssql') { _%>
+        database-platform: org.hibernate.dialect.SQLServerDialect
         <%_ } else { _%>
         database-platform: org.hibernate.dialect.HSQLDialect
         <%_ } _%>
@@ -95,6 +97,8 @@ spring:
         database: POSTGRESQL
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         database: ORACLE
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        database: SQL_SERVER
         <%_ } else { _%>
         database: HSQL
         <%_ } _%>

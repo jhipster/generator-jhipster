@@ -8,6 +8,7 @@ const DOCKER_MARIADB = 'mariadb:10.1.17';
 const DOCKER_POSTGRESQL = 'postgres:9.5.4';
 const DOCKER_MONGODB = 'mongo:3.2.10';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
+const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:2.4.1';
 const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.0.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
@@ -68,6 +69,7 @@ const constants = {
     DOCKER_POSTGRESQL: DOCKER_POSTGRESQL,
     DOCKER_MONGODB: DOCKER_MONGODB,
     DOCKER_CASSANDRA: DOCKER_CASSANDRA,
+    DOCKER_MSSQL: DOCKER_MSSQL,
     DOCKER_ELASTICSEARCH: DOCKER_ELASTICSEARCH,
     DOCKER_KAFKA: DOCKER_KAFKA,
     DOCKER_ZOOKEEPER: DOCKER_ZOOKEEPER,

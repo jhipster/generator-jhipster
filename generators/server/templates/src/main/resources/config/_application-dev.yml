@@ -70,15 +70,17 @@ spring:
         url: jdbc:postgresql://localhost:5432/<%= baseName %>
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
+        <%_ } else if (devDatabaseType === 'mssql') { _%>
+        url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
         <%_ } else if (devDatabaseType == 'h2Disk') { _%>
         url: jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         <%_ } else if (devDatabaseType == 'h2Memory') { _%>
         url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         <%_ } _%>
         name:
-        username: <% if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb') { %>root<% } else if (devDatabaseType == 'postgresql' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %><%= baseName %><% } %>
-        password:
-        <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb') { _%>
+        username: <% if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb') { %>root<% } else if (devDatabaseType == 'postgresql' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>
+        password: <% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>
+        <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb' || devDatabaseType === 'mssql') { _%>
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -92,14 +94,14 @@ spring:
             enabled: false
     <%_ } _%>
     jpa:
-        <%_ if (devDatabaseType == 'mysql') { _%>
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        <%_ } else if (devDatabaseType == 'mariadb') { _%>
+        <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
         database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle10gDialect
+        <%_ } else if (devDatabaseType === 'mssql') { _%>
+        database-platform: org.hibernate.dialect.SQLServerDialect
         <%_ } else { _%>
         database-platform: <%=packageName%>.domain.util.FixedH2Dialect
         <%_ } _%>
@@ -109,6 +111,8 @@ spring:
         database: POSTGRESQL
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         database: ORACLE
+        <%_ } else if (devDatabaseType === 'mssql') { _%>
+        database: SQL_SERVER
         <%_ } else { _%>
         database: H2
         <%_ } _%>
