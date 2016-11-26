@@ -14,9 +14,6 @@ cache:
     - $HOME/.gradle
     - $HOME/.yarn-cache
     - node_modules
-    - $HOME/app/
-before_cache:
-  - rm -rf $HOME/app/*.war $HOME/app/target/ $HOME/app/target $HOME/app/build $HOME/app/node_modules/generator-jhipster
 env:
   global:
     - PROFILE=dev
