@@ -74,7 +74,10 @@
     "run-sequence": "1.2.2",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
-    <%_ } _%>
+    <%_ }
+      otherModules.forEach(function(module) { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_ }); %>
     "yargs": "5.0.0"
   },
   "engines": {

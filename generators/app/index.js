@@ -201,7 +201,9 @@ module.exports = JhipsterGenerator.extend({
 
         askForApplicationType: prompts.askForApplicationType,
 
-        askForModuleName: prompts.askForModuleName
+        askForModuleName: prompts.askForModuleName,
+
+        askForMoreModules: prompts.askForMoreModules,
     },
 
     configuring: {
@@ -209,6 +211,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.skipI18nQuestion = true;
             this.configOptions.baseName = this.baseName;
             this.configOptions.logo = false;
+            this.configOptions.otherModules = this.otherModules;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
                 this.skipClient = true;
@@ -282,6 +285,7 @@ module.exports = JhipsterGenerator.extend({
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
             insight.track('app/testFrameworks', this.testFrameworks);
+            insight.track('app/otherModules', this.otherModules);
         },
 
         composeLanguages: function () {
@@ -295,6 +299,7 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);
+            this.config.set('otherModules', this.otherModules);
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);

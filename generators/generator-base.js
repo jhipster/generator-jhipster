@@ -12,6 +12,7 @@ var path = require('path'),
     semver = require('semver'),
     exec = require('child_process').exec,
     os = require('os'),
+    http = require('http'),
     pluralize = require('pluralize');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
@@ -1728,3 +1729,22 @@ Generator.prototype.hibernateSnakeCase = function (value) {
 };
 
 Generator.prototype.contains = _.includes;
+
+/**
+ * Function to issue a http get request, and process the result
+ *
+ *  @param {string} url - the url to fetch
+ *  @param onSuccess - function, which gets called when the request succeeds, with the body of the response
+ *  @param onFail - callback when the get failed.
+ */
+Generator.prototype.httpGet = function(url, onSuccess, onFail) {
+    http.get(url, function(res) {
+        var body = '';
+        res.on('data', function(chunk) {
+            body += chunk;
+        });
+        res.on('end', function() {
+            onSuccess(body);
+        });
+    }).on('error', onFail);
+};
