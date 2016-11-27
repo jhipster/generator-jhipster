@@ -23,7 +23,7 @@
     "angular-translate-storage-cookie": "2.11.0",
     <%_ } _%>
     <%_ if (useSass) { _%>
-    "bootstrap-sass": "3.3.6",
+    "bootstrap-sass": "bootstrap#v4.0.0-alpha.4",
     <%_ } else { _%>
     "bootstrap": "3.3.6",
     <%_ } _%>
@@ -52,11 +52,11 @@
       "dependencies": {
         "angular": "1.5.5"
       }
-    },
+    }
     <%_ } if (useSass) { _%>
-    "bootstrap-sass": {
+    , "bootstrap-sass": {
       "main": [
-        "assets/stylesheets/_bootstrap.scss"
+        "scss/bootstrap.scss"
       ]
     }
     <%_ } _%>

@@ -855,21 +855,21 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
     var _opt = opt || {};
     var regex;
     switch (action) {
-    case 'stripHtml' :
-        regex = /( data-translate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
-        //looks for something like data-translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
-        jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
-        break;
-    case 'stripJs' :
-        regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
-        //looks for something like mainTranslatePartialLoader: [*]
-        jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
-        break;
-    case 'copy' :
-        _this.copy(source, dest);
-        break;
-    default:
-        _this.template(source, dest, _this, _opt);
+        case 'stripHtml' :
+            regex = /( data-translate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
+            //looks for something like data-translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
+            break;
+        case 'stripJs' :
+            regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
+            //looks for something like mainTranslatePartialLoader: [*]
+            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
+            break;
+        case 'copy' :
+            _this.copy(source, dest);
+            break;
+        default:
+            _this.template(source, dest, _this, _opt);
     }
 };
 
@@ -1244,13 +1244,13 @@ Generator.prototype.generateKeyStore = function() {
             '-keypass password ' +
             '-keysize 2048 ' +
             '-dname "CN=Java Hipster, OU=Development, O=' + this.packageName + ', L=, ST=, C="'
-        , function(code) {
-            if (code !== 0) {
-                parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
-            } else {
-                parent.log(chalk.green('\nKeyStore \'' + keyStoreFile + '\' generated successfully.\n'));
-            }
-        });
+            , function(code) {
+                if (code !== 0) {
+                    parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
+                } else {
+                    parent.log(chalk.green('\nKeyStore \'' + keyStoreFile + '\' generated successfully.\n'));
+                }
+            });
     }
 };
 
