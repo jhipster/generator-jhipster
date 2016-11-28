@@ -35,7 +35,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
  */
 <% } else { -%>
 <%- formatAsClassJavadoc(javadoc) %>
-@ApiModel(description = "<%- javadoc %>")
+@ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
 <% } -%>
 <% if (databaseType == 'sql') { -%>
 @Entity
@@ -75,7 +75,7 @@ public class <%= entityClass %> implements Serializable {
     <%- include ../common/field_validators -%>
     <%_ } _%>
     <%_ if (typeof fields[idx].javadoc != 'undefined') { _%>
-    @ApiModelProperty(value = "<%- fields[idx].javadoc %>"<% if (required) { %>, required = true<% } %>)
+    @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
     <%_ } _%>
     <%_ if (databaseType == 'sql') {
         if (fields[idx].fieldIsEnum) { _%>
@@ -132,7 +132,7 @@ public class <%= entityClass %> implements Serializable {
         }
         if (typeof relationships[idx].javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(relationships[idx].javadoc) %>
-    @ApiModelProperty(value = "<%- relationships[idx].javadoc %>")
+    @ApiModelProperty(value = "<%- formatAsApiDescription(relationships[idx].javadoc) %>")
     <%_ }
         if (relationshipType == 'one-to-many') {
     _%>

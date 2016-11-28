@@ -16,7 +16,6 @@ var path = require('path'),
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
-const WORD_WRAP_WIDTH = 80;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const constants = require('./generator-constants'),
@@ -1640,11 +1639,28 @@ Generator.prototype.getDefaultAppName = function () {
 };
 
 Generator.prototype.formatAsClassJavadoc = function (text) {
-    return '/**' + jhipsterUtils.wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
+    return jhipsterUtils.getJavadoc(text, 0);
 };
 
 Generator.prototype.formatAsFieldJavadoc = function (text) {
-    return '    /**' + jhipsterUtils.wordwrap(text, WORD_WRAP_WIDTH - 8, '\n     * ', false) + '\n     */';
+    return jhipsterUtils.getJavadoc(text, 4);
+};
+
+Generator.prototype.formatAsApiDescription = function (text) {
+    var rows = text.split('\n');
+    var description = rows[0];
+    for (var i = 1; i < rows.length; i++) {
+        // discard empty rows
+        if (rows[i] === '') {
+            continue;
+        }
+        // if simple text then put space between row strings
+        if (!description.endsWith('>') && !rows[i].startsWith('<')) {
+            description = description + ' ';
+        }
+        description = description + rows[i];
+    }
+    return description;
 };
 
 Generator.prototype.isNumber = function (input) {
