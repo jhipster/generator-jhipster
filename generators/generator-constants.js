@@ -36,8 +36,8 @@ const JHIPSTER_DOCUMENTATION_URL = 'https://jhipster.github.io';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
 const constants = {
-    QUESTIONS: 13, // maximum possible number of questions
-    CLIENT_QUESTIONS: 3,
+    QUESTIONS: 14, // maximum possible number of questions
+    CLIENT_QUESTIONS: 4,
     SERVER_QUESTIONS: 10,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: MAIN_DIR + 'docker/',
