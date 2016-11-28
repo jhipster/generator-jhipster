@@ -14,7 +14,6 @@ export class AuthService {
         private $state: StateService,
         private stateStorageService: StateStorageService,
         private loginModalService : LoginModalService,
-        @Inject('$rootScope') private $rootScope
     ){}
 
     authorize (force) {
@@ -24,20 +23,22 @@ export class AuthService {
 
         function authThen () {
             var isAuthenticated = this.principal.isAuthenticated();
+            var toStateInfo = this.stateStorageService.getDestinationState().destination;
 
             // an authenticated user can't access to login and register pages
-            if (isAuthenticated && this.$rootScope.toState.parent === 'account' && (this.$rootScope.toState.name === 'login' || this.$rootScope.toState.name === 'register'<% if (authenticationType == 'jwt') { %> || this.$rootScope.toState.name === 'social-auth'<% } %>)) {
+            if (isAuthenticated && toStateInfo.parent === 'account' && (toStateInfo.name === 'login' || toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
                 this.$state.go('home');
             }
 
             // recover and clear previousState after external login redirect (e.g. oauth2)
+            var fromStateInfo = this.stateStorageService.getDestinationState().from;
             var previousState = this.stateStorageService.getPreviousState();
-            if (isAuthenticated && !this.$rootScope.fromState.name && previousState) {
+            if (isAuthenticated && !fromStateInfo.name && previousState) {
                 this.stateStorageService.resetPreviousState();
                 this.$state.go(previousState.name, previousState.params);
             }
 
-            if (this.$rootScope.toState.data.authorities && this.$rootScope.toState.data.authorities.length > 0 && !this.principal.hasAnyAuthority(this.$rootScope.toState.data.authorities)) {
+            if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0 && !this.principal.hasAnyAuthority(toStateInfo.data.authorities)) {
                 if (isAuthenticated) {
                     // user is signed in but not authorized for desired state
                     this.$state.go('accessdenied');
@@ -45,8 +46,8 @@ export class AuthService {
                 else {
                     // user is not authenticated. stow the state they wanted before you
                     // send them to the login service, so you can return them when you're done
-                    this.stateStorageService.storePreviousState(this.$rootScope.toState.name, this.$rootScope.toStateParams);
-
+                    var toStateParamsInfo = this.stateStorageService.getDestinationState().params;
+                    this.stateStorageService.storePreviousState(toStateInfo.name, toStateParamsInfo);
                     // now, send them to the signin state so they can log in
                     this.$state.go('accessdenied').then(() => {
                         this.loginModalService.open();
