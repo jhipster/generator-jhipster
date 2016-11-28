@@ -77,6 +77,12 @@ Logo styles
     display: inline-block;
 }
 
+.logo-img {
+    background: url("../images/logo-jhipster.png") no-repeat center center;
+    background-size: contain;
+    width: 100%;
+}
+
 /* ==========================================================================
 Main page styles
 ========================================================================== */

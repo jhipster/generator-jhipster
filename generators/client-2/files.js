@@ -20,7 +20,6 @@ const files = {
                 '_tslint.json',
                 '_.eslintrc.json',
                 '_.eslintignore',
-                '_webpack.config.js',
                 '_webpack-dev',
                 'config/_webpack.common.js',
                 'config/_webpack.dev.js',
