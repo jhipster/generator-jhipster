@@ -8,6 +8,5 @@ import 'angular-loading-bar';
 import 'angular-resource';
 import 'ng-file-upload';
 import 'ng-infinite-scroll';
-import 'bootstrap/dist/js/bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'angular-bootstrap';

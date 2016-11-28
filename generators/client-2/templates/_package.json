@@ -34,6 +34,7 @@
     "exports-loader": "0.6.3",
     "file-loader": "0.9.0",
     "html-webpack-plugin": "2.24.1",
+    "image-webpack-loader": "3.0.0",
     "jquery": "2.2.2",
     <%_ if (enableTranslation){ _%>
     "ng2-translate": "3.1.1",
@@ -49,7 +50,6 @@
     "tslint-loader": "2.1.5",
     "ui-router-ng2": "1.0.0-beta.3",
     "ui-router-visualizer": "2.0.11",
-    "url-loader": "0.5.7",
     "webpack": "2.1.0-beta.25",
     "webpack-merge": "0.17.0",
     "zone.js": "0.6.23"
