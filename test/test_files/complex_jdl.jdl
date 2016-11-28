@@ -30,6 +30,7 @@ entity Job {
 
 /**
  * The Employee entity.
+ * Second line in javadoc.
  */
 entity Employee {
   employeeId Long,
