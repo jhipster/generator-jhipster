@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = function (options) {
     return {
     entry: {
@@ -52,7 +53,10 @@ module.exports = function (options) {
             exclude: ['./src/main/webapp/index.html']
         },
         { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
-        { test: /\.css$/, loader: "style-loader!css-loader" },
+        { test: /\.css$/, loader: ExtractTextPlugin.extract({
+            fallbackLoader: "style-loader",
+            loader: "css-loader"
+        })},
         {
             test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
             loaders: [
@@ -66,7 +70,6 @@ module.exports = function (options) {
             name: ['polyfills', 'vendor'].reverse()
         }),
         new CopyWebpackPlugin([
-            { from: './src/main/webapp/content', to: 'content'},
             { from: './node_modules/swagger-ui/dist', to: 'swagger-lib/dist'},
             { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui'}<% if (enableTranslation) { %>,
             { from: './src/main/webapp/i18n', to: 'i18n'}<% } %>

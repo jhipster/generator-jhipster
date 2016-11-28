@@ -1,6 +1,7 @@
 const commonConfig = require('./webpack.common.js');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const ENV = 'dev';
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
@@ -18,6 +19,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
             host: 'localhost',
             port: 9000,
             proxy: 'http://localhost:<%= serverPort %>'
-        })
+        }),
+        new ExtractTextPlugin('styles.css')
     ]
 });
