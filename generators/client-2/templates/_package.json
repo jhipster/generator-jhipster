@@ -105,6 +105,6 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "webpack-dev": "webpack --watch --config config/webpack.dev.js",
-    "webpack-prod": "webpack --config config/webpack.prod.js"
+    "webpack-prod": "webpack -p --config config/webpack.prod.js"
   }
 }
