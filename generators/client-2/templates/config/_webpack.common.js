@@ -2,8 +2,13 @@ const webpack = require('webpack');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
 module.exports = function (options) {
+    const DATAS = {
+        VERSION: '"1.0.0"',
+        DEBUG_INFO_ENABLED: options.env === 'dev'
+    };
     return {
     entry: {
         'polyfills': './src/main/webapp/app/polyfills',
@@ -63,6 +68,17 @@ module.exports = function (options) {
                 'file?hash=sha512&digest=hex&name=[hash].[ext]',
                 'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
             ]
+        },
+        {
+            test: /app.constants.ts$/,
+            loader: StringReplacePlugin.replace({
+                replacements: [{
+                    pattern: /<!-- @toreplace (\w*?) -->/ig,
+                    replacement: function (match, p1, offset, string) {
+                        return DATAS[p1];
+                    }
+                }
+            ]})
         }]
     },
     plugins: [
@@ -79,9 +95,11 @@ module.exports = function (options) {
             jQuery: "jquery"
         }),
         new HtmlWebpackPlugin({
-            template: './src/main/webapp/index.html',
+            template: 'handlebars!./src/main/webapp/index.hbs',
             chunksSortMode: 'dependency',
-            inject: 'body'
-        })
+            inject: 'body',
+            data: DATAS
+        }),
+        new StringReplacePlugin()
     ]};
 };
