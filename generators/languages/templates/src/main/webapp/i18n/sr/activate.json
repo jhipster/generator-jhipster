@@ -1,0 +1,9 @@
+{
+    "activate": {
+        "title": "Aktivacija",
+        "messages": {
+            "success": "<strong>Vaš nalog je aktiviran.</strong> Molimo Vas <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prijavite se</a>.",
+            "error": "<strong>Vaš nalog ne može biti aktiviran.</strong> Molimo vas popunite registracioni formular kako biste se prijavili."
+        }
+    }
+}
