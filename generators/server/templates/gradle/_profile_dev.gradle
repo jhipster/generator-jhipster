@@ -13,9 +13,6 @@ if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
 
-bootRun {
-    args = []
-}
 <% if (!skipClient) { %>
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
