@@ -45,8 +45,12 @@
     <logger name="org.bson" level="WARN"/><% if (searchEngine == 'elasticsearch') { %>
     <logger name="org.elasticsearch" level="WARN"/><% } %>
     <logger name="org.hibernate.validator" level="WARN"/>
+    <%_ if (databaseType == 'sql') { _%>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <%_ } else if (databaseType == 'mongodb') { _%>
+    <logger name="org.mongodb.driver" level="WARN"/>
+    <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
