@@ -9,7 +9,7 @@
             </button>
             <a class="navbar-brand logo" href="/" (click)="collapseNavbar()">
                 <span class="logo-img"></span>
-                <span translate="global.title" class="navbar-title"><%= capitalizedBaseName %></span> <span class="navbar-version">v{{VERSION}}</span>
+                <span translate="global.title" class="navbar-title"><%= capitalizedBaseName %></span> <span class="navbar-version">{{version}}</span>
             </a>
         </div>
         <div class="navbar-collapse" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">

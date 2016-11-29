@@ -5,6 +5,8 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
 import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
+import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
+
 @Component({
     selector: 'navbar',
     templateUrl: './navbar.component.html'
@@ -16,6 +18,7 @@ export class NavbarComponent implements OnInit {
     languages: any[];
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
+    version: string;
 
     constructor(
         private $state: StateService,
@@ -26,7 +29,9 @@ export class NavbarComponent implements OnInit {
         private principal: Principal,
         private loginModalService: LoginModalService,
         private profileService: ProfileService
-    ) { }
+    ) {
+        this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
+    }
 
     ngOnInit() {
         <%_ if (enableTranslation){ _%>
