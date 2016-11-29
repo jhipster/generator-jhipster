@@ -1,4 +1,4 @@
-{
+git {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.0",
   "description": "Description for <%= baseName %>",
