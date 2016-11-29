@@ -20,7 +20,7 @@ module.exports = function (options) {
         modules: ['node_modules']
     },
     output: {
-        path: './target/www',
+        path: <% if (buildTool === 'gradle') { %>'./build/www'<% } else { %>'./target/www'<% } %>,
         filename: '[name].bundle.js',
         chunkFilename: '[id].chunk.js'
     },
