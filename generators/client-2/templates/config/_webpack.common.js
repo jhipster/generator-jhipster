@@ -86,7 +86,7 @@ module.exports = function (options) {
             name: ['polyfills', 'vendor'].reverse()
         }),
         new CopyWebpackPlugin([
-            { from: './node_modules/swagger-ui/dist', to: 'swagger-lib/dist'},
+            { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist'},
             { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui'}<% if (enableTranslation) { %>,
             { from: './src/main/webapp/i18n', to: 'i18n'}<% } %>
         ]),
