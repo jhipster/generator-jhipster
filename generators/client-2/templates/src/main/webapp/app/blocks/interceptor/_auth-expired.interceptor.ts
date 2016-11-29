@@ -1,13 +1,13 @@
-import {HttpInterceptable} from "./http.interceptable";
-import {RequestOptionsArgs, Response} from "@angular/http";
-import {Observable} from "rxjs/Observable";
-import {Injector} from "@angular/core";
+import { HttpInterceptable } from './http.interceptable';
+import { RequestOptionsArgs, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { Injector } from '@angular/core';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import {AuthService} from "../../shared/auth/auth.service";
-import {Principal} from "../../shared/auth/principal.service";
+import { AuthService } from '../../shared/auth/auth.service';
+import { Principal } from '../../shared/auth/principal.service';
 <%_ } if (authenticationType === 'session') { _%>
-import {AuthServerProvider} from "../../shared/auth/auth-jwt.service";
-import {StateStorageService} from "../../shared/auth/state-storage.service";
+import { AuthServerProvider } from '../../shared/auth/auth-session.service';
+import { StateStorageService } from '../../shared/auth/state-storage.service';
 <% } %>
 
 
@@ -50,7 +50,7 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
 
         return <Observable<Response>> observable.catch((error) => {
             //todo: this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach..... but I don't know how to do this bow
-            if(error.status === 401 && !!error.data.path && error.data.path.indexOf("/api/account") === -1) {
+            if(error.status === 401 && !!error.data.path && error.data.path.indexOf('/api/account') === -1) {
                 let authServerProvider = self.injector.get(AuthServerProvider);
                 let to = self.$rootScope.toState;
                 let toParams = self.$rootScope.toStateParams;
@@ -67,4 +67,3 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
 <% } %>
 
 }
-

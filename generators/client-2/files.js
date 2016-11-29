@@ -102,7 +102,8 @@ const files = {
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
                 'blocks/interceptor/_http.interceptor.ts',
-                'blocks/interceptor/_http.interceptable.ts'
+                'blocks/interceptor/_http.interceptable.ts',
+                'blocks/interceptor/_http.provider.ts'
             ]
         },
         {
