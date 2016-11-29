@@ -46,6 +46,7 @@ export * from './pipe/truncate-characters.pipe';
 export * from './pipe/truncate-words.pipe';
 export * from './service/data-util.service';
 export * from './service/date-util.service';
+export * from './service/event-manager.service';
 export * from './service/pagination-util.service';
 export * from './service/parse-links.service';
 <%_ if (enableSocialSignIn) { _%>
