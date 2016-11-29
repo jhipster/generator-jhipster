@@ -1,7 +1,6 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'spring-boot'<% if(!skipClient) { %>
 apply plugin: 'com.moowork.node'
-//apply plugin: 'com.moowork.gulp'
 <% } %>
 
 ext {
@@ -21,9 +20,6 @@ if (project.hasProperty('swagger')) {
     profiles += ',swagger'
 }
 
-bootRun {
-    args = []
-}
 <% if (!skipClient) { %>
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     script = project.file('node_modules/.bin/webpack')
@@ -53,7 +49,4 @@ processResources {
 }
 
 <% if (!skipClient) { %>
-webpack.dependsOn 'npmInstall'
-//gulpBuildWithOpts.dependsOn 'bower'
-processResources.dependsOn webpack
-<% } %>
+processResources.dependsOn webpack<% } %>

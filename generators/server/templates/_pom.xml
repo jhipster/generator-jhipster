@@ -1307,15 +1307,34 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>${frontend-maven-plugin.version}</version>
                      <executions>
-                         <execution>
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>v4.6.0</nodeVersion>
+                                    <npmVersion>3.10.8</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>webpack build</id>
-                             <goals>
+                                <goals>
                                     <goal>webpack</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
-                             <configuration>
-                                 <arguments>-p --config config/webpack.prod.js</arguments>
-                             </configuration>
+                                <configuration>
+                                    <arguments>-p --config config/webpack.prod.js</arguments>
+                                </configuration>
                            </execution>
                      </executions>
                     </plugin><% } %>

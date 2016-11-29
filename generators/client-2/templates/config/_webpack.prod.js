@@ -6,7 +6,6 @@ const ENV = 'prod';
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
     output: {
-        path: './target/www',
         filename: '[hash].[name].bundle.js',
         chunkFilename: '[hash].[id].chunk.js'
     },
