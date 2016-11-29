@@ -61,7 +61,7 @@ public class MongoDBTokenStore implements TokenStore {
     @Override
     public void removeAccessToken(OAuth2AccessToken token) {
         OAuth2AuthenticationAccessToken accessToken = oAuth2AccessTokenRepository.findByTokenId(token.getValue());
-        if(accessToken != null) {
+        if (accessToken != null) {
             oAuth2AccessTokenRepository.delete(accessToken);
         }
     }
@@ -91,7 +91,10 @@ public class MongoDBTokenStore implements TokenStore {
 
     @Override
     public void removeAccessTokenUsingRefreshToken(OAuth2RefreshToken refreshToken) {
-        oAuth2AccessTokenRepository.delete(oAuth2AccessTokenRepository.findByRefreshToken(refreshToken.getValue()));
+        OAuth2AuthenticationAccessToken accessToken = oAuth2AccessTokenRepository.findByRefreshToken(refreshToken.getValue());
+        if(accessToken != null) {
+            oAuth2AccessTokenRepository.delete(accessToken);
+        }
     }
 
     @Override
