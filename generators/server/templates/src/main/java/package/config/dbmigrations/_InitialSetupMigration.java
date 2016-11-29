@@ -14,9 +14,9 @@ import java.util.*;
 @ChangeLog(order = "001")
 public class InitialSetupMigration {
 
-    private Map<String, String>[] authoritiesUser = new Map[]{new HashMap<>()};
+    private Map<String, String>[] authoritiesUser = new Map[] { new HashMap<>() };
 
-    private Map<String, String>[] authoritiesAdminAndUser = new Map[]{new HashMap<>(), new HashMap<>()};
+    private Map<String, String>[] authoritiesAdminAndUser = new Map[] { new HashMap<>(), new HashMap<>() };
 
     {
         authoritiesUser[0].put("_id", "ROLE_USER");
@@ -25,7 +25,7 @@ public class InitialSetupMigration {
     }
 
 <%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
-    private Map<String, String>[] grantAuthorities = new Map[]{new HashMap<>(), new HashMap<>()};
+    private Map<String, String>[] grantAuthorities = new Map[] { new HashMap<>(), new HashMap<>() };
 
     {
         grantAuthorities[0].put("role", "ROLE_ADMIN");
