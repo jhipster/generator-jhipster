@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: '<%=jhiPrefix%>-metrics-modal',
-    templateUrl: 'app/admin/metrics/metrics-modal.html'
+    templateUrl: 'app/admin/metrics/metrics-modal.component.html'
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements OnInit {
 
