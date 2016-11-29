@@ -119,7 +119,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.serverPort = '8080';
             }
             this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
-            this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
             if (this.searchEngine === undefined) {
                 this.searchEngine = false;
@@ -152,6 +151,13 @@ module.exports = JhipsterServerGenerator.extend({
                 this.devDatabaseType = this.config.get('devDatabaseType');
                 this.prodDatabaseType = this.config.get('prodDatabaseType');
                 this.hibernateCache = this.config.get('hibernateCache');
+            }
+            if (this.hibernateCache === undefined) {
+                this.hibernateCache = 'no';
+            }
+            this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
+            if (this.hibernateCache === 'ehcache') {
+                this.clusteredHttpSession = false; // cannot use HazelCast clusering AND ehcache
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');

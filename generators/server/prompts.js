@@ -490,12 +490,17 @@ function askForOptionalItems() {
             }
         );
     }
-    if (applicationType === 'monolith' || applicationType === 'gateway') {
+    if ((applicationType === 'monolith' || applicationType === 'gateway') &&
+            (this.hibernateCache === 'no' || this.hibernateCache === 'hazelcast')) {
         choices.push(
             {
                 name: 'Clustered HTTP sessions using Hazelcast',
                 value: 'clusteredHttpSession:hazelcast'
-            },
+            }
+        );
+    }
+    if (applicationType === 'monolith' || applicationType === 'gateway') {
+        choices.push(
             {
                 name: 'WebSockets using Spring Websocket',
                 value: 'websocket:spring-websocket'
