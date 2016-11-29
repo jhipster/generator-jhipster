@@ -69,5 +69,12 @@ exports.config = {
         jasmine.getEnv().addReporter(new HtmlScreenshotReporter({
             dest: "<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e/screenshots"
         }));
-    }
+    },
+
+    /**
+     * Angular2 configuration
+     *
+     * tells Protractor to wait for any angular2
+     */
+    useAllAngular2AppRoots: true
 };
