@@ -41,14 +41,15 @@ util.inherits(Generator, yeoman.Base);
  */
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
+        var navbarPath;
         if (this.angularVersion === 'angular1') {
-            var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+            navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
-            var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+            navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
         }
 
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: navbarPath,
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [`<li ui-sref-active="active">
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
@@ -59,7 +60,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -72,13 +73,14 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  */
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
+        var navbarAdminPath;
         if (this.angularVersion === 'angular1') {
-            var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+            navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
-            var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+            navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
         }
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: navbarAdminPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [`<li ui-sref-active="active" >
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
@@ -89,7 +91,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to admin menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to admin menu.\n'));
     }
 };
 
@@ -101,13 +103,14 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  */
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
+        var entityMenuPath;
         if (this.angularVersion === 'angular1') {
-            var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+            entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
-            var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+            entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
         }
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: entityMenuPath,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [`<li ui-sref-active="active">
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
@@ -118,7 +121,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -542,12 +545,13 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  */
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
     var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
+    var loginfullPath, registerfullPath;
     if (this.angularVersion === 'angular1') {
-        var loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
-        var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
+        loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
+        registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
     } else {
-        var loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.component.html';
-        var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.html';
+        loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.component.html';
+        registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.html';
     }
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
