@@ -27,7 +27,8 @@ import {
     PaginationUtil,
     ParseLinks,
     DataUtils,
-    DateUtils
+    DateUtils,
+    EventManager
 } from './';
 
 @NgModule({
@@ -61,7 +62,8 @@ import {
         PaginationUtil,
         ParseLinks,
         DataUtils,
-        DateUtils
+        DateUtils,
+	EventManager
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,

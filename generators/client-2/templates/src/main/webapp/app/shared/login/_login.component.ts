@@ -1,12 +1,12 @@
 import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateService } from "ui-router-ng2";
-
 <%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.service';
 <%_ } _%>
 import { LoginService } from '../login/login.service';
 import { StateStorageService } from '../auth/state-storage.service';
+import { EventManager } from '../service/event-manager.service';
 <%_ if (enableSocialSignIn) { _%>
 import { SocialService } from '../social/social.service';
 <%_ } _%>
@@ -23,7 +23,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     credentials: any;
 
     constructor(
-        @Inject('$rootScope') private $rootScope,
+	private $eventManager: EventManager,
         private $state: StateService,
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
@@ -73,7 +73,12 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
                 this.$state.go('home');
             }
 
-            this.$rootScope.$broadcast('authenticationSuccess');
+            this.$eventManager.$broadcast(
+		{ 
+		  name: 'authenticationSuccess',
+	          content: 'Sending Authentication Success' 
+		}
+            );
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
             // since login is succesful, go to stored previousState and clear previousState

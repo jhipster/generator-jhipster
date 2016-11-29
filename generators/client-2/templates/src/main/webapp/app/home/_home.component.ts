@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { Account, LoginModalService, Principal } from "../shared";
+import { Account, LoginModalService, Principal, EventManager } from "../shared";
 
 @Component({
     selector: 'home',
@@ -15,13 +15,25 @@ export class HomeComponent implements OnInit {
     constructor(
         private principal: Principal,
         private $state: StateService,
-        private loginModalService: LoginModalService
+        private loginModalService: LoginModalService,
+	private $eventManager: EventManager
     ) {}
 
     ngOnInit() {
         this.principal.identity().then((account) => {
             this.account = account;
         });
+	this.registerAuthenticationSuccess();
+    }
+
+    registerAuthenticationSuccess(){
+	this.$eventManager.on('authenticationSuccess', (message) => 
+		{
+			console.log("J'ai bien reussi a catch");
+			this.principal.identity().then((account) => {
+		            this.account = account;
+		        });
+		}
     }
 
     isAuthenticated() {
