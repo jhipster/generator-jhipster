@@ -63,7 +63,7 @@ import {
         ParseLinks,
         DataUtils,
         DateUtils,
-	EventManager
+        EventManager
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,

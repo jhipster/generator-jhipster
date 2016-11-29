@@ -16,24 +16,22 @@ export class HomeComponent implements OnInit {
         private principal: Principal,
         private $state: StateService,
         private loginModalService: LoginModalService,
-	private $eventManager: EventManager
+        private $eventManager: EventManager
     ) {}
 
     ngOnInit() {
         this.principal.identity().then((account) => {
             this.account = account;
         });
-	this.registerAuthenticationSuccess();
+        this.registerAuthenticationSuccess();
     }
 
     registerAuthenticationSuccess(){
-	this.$eventManager.on('authenticationSuccess', (message) => 
-		{
-			console.log("J'ai bien reussi a catch");
-			this.principal.identity().then((account) => {
-		            this.account = account;
-		        });
-		}
+        this.$eventManager.on('authenticationSuccess', (message) => {
+            this.principal.identity().then((account) => {
+                this.account = account;
+            });
+        });
     }
 
     isAuthenticated() {

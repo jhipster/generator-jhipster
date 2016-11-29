@@ -23,7 +23,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     credentials: any;
 
     constructor(
-	private $eventManager: EventManager,
+        private $eventManager: EventManager,
         private $state: StateService,
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
@@ -73,11 +73,11 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
                 this.$state.go('home');
             }
 
-            this.$eventManager.$broadcast(
-		{ 
-		  name: 'authenticationSuccess',
-	          content: 'Sending Authentication Success' 
-		}
+            this.$eventManager.broadcast(
+                { 
+                    name: 'authenticationSuccess',
+                    content: 'Sending Authentication Success' 
+                }
             );
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
