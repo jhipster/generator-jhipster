@@ -130,7 +130,7 @@ public class InitialSetupMigration {
         DBCollection usersCollection = db.getCollection("OAUTH_AUTHENTICATION_CLIENT_DETAILS");
         usersCollection.insert(BasicDBObjectBuilder.start()
             .add("_id", "client-1")
-            .add("clientId", "mongooauthapp")
+            .add("clientId", "<%= baseName %>app")
             .add("clientSecret", "my-secret-token-to-change-in-production")
             .add("resourceIds", Collections.singletonList("res_<%= baseName %>"))
             .add("scope", Arrays.asList("read", "write"))
