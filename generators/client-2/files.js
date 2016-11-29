@@ -332,6 +332,7 @@ const files = {
                 'shared/service/_data-util.service.ts',
                 'shared/service/_pagination-util.service.ts',
                 'shared/service/_parse-links.service.ts',
+                'shared/service/_event-manager.service.ts',
                 //components
                 'shared/component/_jhi-item-count.component.ts',
                 //login
