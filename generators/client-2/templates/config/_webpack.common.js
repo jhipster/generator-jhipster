@@ -6,7 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
 module.exports = function (options) {
     const DATAS = {
-        VERSION: '"1.0.0"',
+        VERSION: JSON.stringify(require("../package.json").version),
         DEBUG_INFO_ENABLED: options.env === 'dev'
     };
     return {
