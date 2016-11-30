@@ -7,7 +7,6 @@ var generators = require('yeoman-generator'),
     jsyaml = require('js-yaml'),
     pathjs = require('path'),
     util = require('util'),
-    uuid = require('uuid'),
     prompts = require('./prompts'),
     writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
@@ -99,7 +98,6 @@ module.exports = DockerComposeGenerator.extend({
             }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
-            this.uuid = this.config.get('uuid');
 
             if(this.defaultAppsFolders !== undefined) {
                 this.log('\nFound .yo-rc.json config file...');
@@ -156,13 +154,6 @@ module.exports = DockerComposeGenerator.extend({
         generateJwtSecret: function() {
             if(this.jwtSecretKey === undefined) {
                 this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
-            }
-        },
-
-        // Generate a UUID to setup an alerting webhook on webhook.site
-        generateUuid: function() {
-            if (this.uuid === undefined && this.monitoring !== 'no') {
-                this.uuid = uuid();
             }
         },
 
@@ -314,7 +305,6 @@ module.exports = DockerComposeGenerator.extend({
             this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('adminPassword', this.adminPassword);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
-            this.config.set('uuid', this.uuid);
         }
     },
 
