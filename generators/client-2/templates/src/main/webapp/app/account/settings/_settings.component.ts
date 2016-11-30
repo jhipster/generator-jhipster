@@ -4,7 +4,7 @@ import { Principal, AccountService<% if (enableTranslation){ %>, <%=jhiPrefixCap
 
 @Component({
     selector: 'settings',
-    templateUrl: 'app/account/settings/settings.component.html'
+    templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
     error: string;

@@ -279,37 +279,22 @@ module.exports = JhipsterClientGenerator.extend({
     writing: writeFiles(),
 
     install: function () {
-        var injectDependenciesAndConstants = function () {
+        var injectDependenciesAndConstants = () => {
             if (this.options['skip-install']) {
                 this.log(
-                    'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
+                    'After running ' + chalk.yellow.bold('npm install') + ' ...' +
                     '\n' +
-                    '\nInject your front end dependencies into your source code:' +
-                    '\n ' + chalk.yellow.bold('gulp inject') +
-                    '\n' +
-                    '\nGenerate the Angular constants:' +
-                    '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
-                    '\n' +
-                    '\nCompile your Typescript files:' +
-                    '\n ' + chalk.yellow.bold('gulp tscompile') +
-                    (this.useSass ? '\n' +
-                    '\nCompile your Sass style sheets:' +
-                    '\n ' + chalk.yellow.bold('gulp sass') : '') +
-                    '\n' +
-                    '\nOr do all of the above:' +
-                    '\n ' + chalk.yellow.bold('gulp install') +
+                    '\nStart webpack dev serer with:' + chalk.yellow.bold('npm run webpack-dev') +
                     '\n'
                 );
-            } else {
-                this.spawnCommand('gulp', ['install']);
             }
         };
         if (!this.options['skip-install']) {
-            this.installDependencies({
-                callback: injectDependenciesAndConstants.bind(this)
+            this.npmInstall({
+                callback: injectDependenciesAndConstants
             });
         } else {
-            injectDependenciesAndConstants.call(this);
+            injectDependenciesAndConstants();
         }
     },
 

@@ -13,16 +13,14 @@ if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
 
-bootRun {
-    args = []
-}
 <% if (!skipClient) { %>
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
 }
 
-task gulpConstantDev(type: GulpTask) {
-    args = ["ngconstant:dev", "--no-notification"]
+task webpack(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/.bin/webpack')
+    args = ["--config", "config/webpack.dev.js"]
 }<% } %>
 
 processResources {
@@ -44,4 +42,4 @@ processResources {
 }
 
 <% if (!skipClient) { %>
-processResources.dependsOn gulpConstantDev<% } %>
+processResources.dependsOn webpack<% } %>

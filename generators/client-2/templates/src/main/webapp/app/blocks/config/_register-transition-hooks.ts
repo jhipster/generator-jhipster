@@ -1,12 +1,10 @@
 import { TransitionService, Transition } from 'ui-router-ng2';
-import { Principal, AuthService<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../shared';
+import { Principal, StateStorageService, AuthService<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../shared';
 
 export function registerTransitionHooks($transitions: TransitionService) {
     $transitions.onStart({}, (transition: Transition) => {
-        let $rootScope = transition.injector().get('$rootScope');
-        $rootScope.toState = transition.to();
-        $rootScope.toParams = transition.params();
-        $rootScope.fromState = transition.from();
+        let $storageService= transition.injector().get(StateStorageService);
+        $storageService.storeDestinationState(transition.to(),transition.params(),transition.from());
         let principal = transition.injector().get(Principal);
         let auth = transition.injector().get(AuthService);
         if (principal.isIdentityResolved()) {

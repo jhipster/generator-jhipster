@@ -5,7 +5,7 @@ import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health-modal.co
 
 @Component({
     selector: '<%=jhiPrefix%>-health',
-    templateUrl: 'app/admin/health/health.component.html',
+    templateUrl: './health.component.html',
 })
 export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData:any;

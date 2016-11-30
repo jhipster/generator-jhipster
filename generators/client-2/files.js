@@ -16,19 +16,14 @@ const files = {
         {
             templates: [
                 '_package.json',
-                '_bower.json',
                 '_tsconfig.json',
-                '_.bowerrc',
                 '_tslint.json',
                 '_.eslintrc.json',
                 '_.eslintignore',
-                '_gulpfile.js',
-                'gulp/_utils.js',
-                'gulp/_serve.js',
-                'gulp/_config.js',
-                'gulp/_build.js',
-                'gulp/_copy.js',
-                'gulp/_inject.js'
+                '_webpack-dev',
+                'config/_webpack.common.js',
+                'config/_webpack.dev.js',
+                'config/_webpack.prod.js'
             ]
         }
     ],
@@ -79,8 +74,7 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
                 { file: '_404.html', method: 'copy' },
-                { file: '_index.html', method: 'copyHtml' },
-                { file: '_system.config.js', method: 'copy' }
+                { file: '_index.hbs', method: 'copy' }
             ]
         }
     ],
@@ -94,6 +88,8 @@ const files = {
                 '_app.ng2module.ts',
                 '_app.state.ts',
                 '_app.constants.ts',
+                '_polyfills.ts',
+                '_vendor.ts',
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
                 'blocks/config/_http.config.ts',
@@ -106,7 +102,8 @@ const files = {
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
                 'blocks/interceptor/_http.interceptor.ts',
-                'blocks/interceptor/_http.interceptable.ts'
+                'blocks/interceptor/_http.interceptable.ts',
+                'blocks/interceptor/_http.provider.ts'
             ]
         },
         {
@@ -336,6 +333,7 @@ const files = {
                 'shared/service/_data-util.service.ts',
                 'shared/service/_pagination-util.service.ts',
                 'shared/service/_parse-links.service.ts',
+                'shared/service/_event-manager.service.ts',
                 //components
                 'shared/component/_jhi-item-count.component.ts',
                 //login
@@ -445,7 +443,6 @@ module.exports = {
 function writeFiles() {
     return {
         writeSepcial: function () {
-            this.fs.copy(this.templatePath('gulp/_handle-errors.js'), this.destinationPath('gulp/handle-errors.js')); // to avoid interpolate errors
             mkdirp(MAIN_SRC_DIR);
         },
 

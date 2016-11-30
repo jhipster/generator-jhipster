@@ -17,6 +17,9 @@ import { <%=angular2AppName%>AccountModule } from './account/account.ng2module';
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
 import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
+import { localStorageConfig } from './blocks/config/localstorage.config';
+import { customHttpProvider } from './blocks/interceptor/http.provider';
+
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
     NavbarComponent,
@@ -30,21 +33,13 @@ import {
     errorState,
     accessdeniedState
 } from './layouts';
-import { localStorageConfig } from './blocks/config/localstorage.config';
-import { HttpInterceptor } from './blocks/interceptor/http.interceptor';
-import { AuthExpiredInterceptor } from "./blocks/interceptor/auth-expired.interceptor";
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthInterceptor } from "./blocks/interceptor/auth.interceptor";
-<%_ } if(authenticationType === 'session') { _%>
-import { StateStorageService } from "./shared/auth/state-storage.service";
-<% } %>
-import { Http, XHRBackend, RequestOptions } from '@angular/http';
+
 
 localStorageConfig();
 
 let routerConfig = {
     configClass: <%=jhiPrefixCapitalized%>RouterConfig,
-    otherwise: '/',
+    useHash: true,
     states: [
         appState,
         homeState,
@@ -77,45 +72,7 @@ let routerConfig = {
         ProfileService,
         { provide: Window, useValue: window },
         { provide: Document, useValue: document },
-        {
-            provide: Http,
-            useFactory: (
-                backend: XHRBackend,
-                defaultOptions: RequestOptions,
-                <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-                localStorage : LocalStorageService,
-                sessionStorage : SessionStorageService,
-                injector
-                <%_ } if (authenticationType === 'session') { _%>
-                injector,
-                stateStorageService: StateStorageService
-                <%_ } _%>
-            ) => new HttpInterceptor(
-                backend,
-                defaultOptions,
-                [
-                <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-                    new AuthInterceptor(localStorage, sessionStorage),
-                    new AuthExpiredInterceptor(injector)
-                <%_ } if (authenticationType === 'session') { _%>
-                    new AuthExpiredInterceptor(injector, injector.get("$rootScope"), stateStorageService)
-                <%_ } _%>
-                    //other interceptors can be added here
-                ]
-            ),
-            deps: [
-                XHRBackend,
-                RequestOptions,
-                <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-                LocalStorageService,
-                SessionStorageService,
-                Injector
-                <%_ } if (authenticationType === 'session') { _%>
-                Injector,
-                StateStorageService
-                <%_ } _%>
-            ]
-        }
+        customHttpProvider()
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })

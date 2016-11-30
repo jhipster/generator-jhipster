@@ -4,18 +4,20 @@ import { Response } from '@angular/http';
 import { User } from './user.model';
 import { UserService } from './user.service';
 
+import { Transition } from 'ui-router-ng2';
+
 @Component({
     selector: 'user-mgmt-detail',
-    templateUrl: 'app/admin/user-management/user-management-detail.component.html'
+    templateUrl: './user-management-detail.component.html'
 })
 export class UserMgmtDetailComponent implements OnInit {
 
     user: User;
 
-    constructor(private userService: UserService, @Inject('$stateParams') private $stateParams) { }
+    constructor(private userService: UserService, private trans: Transition) { }
 
     ngOnInit() {
-        this.load(this.$stateParams.login);
+        this.load(this.trans.params()['login']);
     }
 
     load (login) {
