@@ -612,7 +612,7 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.6.0</version>
+            <version>0.7.0</version>
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'uaa') { _%>
