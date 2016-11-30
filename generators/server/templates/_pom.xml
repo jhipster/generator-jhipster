@@ -1239,7 +1239,7 @@
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>--config config/webpack.dev.js</arguments>
+                                    <arguments>--config webpack/webpack.dev.js</arguments>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1333,7 +1333,7 @@
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>-p --config config/webpack.prod.js</arguments>
+                                    <arguments>-p --config webpack/webpack.prod.js</arguments>
                                 </configuration>
                            </execution>
                      </executions>
