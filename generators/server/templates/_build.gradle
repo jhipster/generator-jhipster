@@ -191,10 +191,11 @@ dependencies {
         exclude(module: 'metrics-healthchecks')
     } <% if (hibernateCache == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"
-    compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_version}"
-    compile "com.hazelcast:hazelcast-spring:${hazelcast_hibernate_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
+    compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate_version}"
+    compile "com.hazelcast:hazelcast-spring:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
-    compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
+    compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %><% if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { %>
+    compile "javax.cache:cache-api:${jcache_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_version}"
     compile("com.zaxxer:HikariCP") {
