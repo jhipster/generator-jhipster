@@ -1,0 +1,30 @@
+{
+    "reset": {
+        "request": {
+            "title": "Promena lozinke",
+            "form": {
+                "button": "Promeni lozinku"
+            },
+            "messages": {
+                "info": "Unesite e-mail adresu koju ste koristili prilikom registracije",
+                "success": "Proverite Vašu e-mail adresu kako biste videli uputstva za promenu lozinke.",
+                "notfound": "<strong>E-mail adresa nije registrovana!</strong> Molimo Vas pokušajte ponovo"
+
+            }
+
+        },
+        "finish" : {
+            "title": "Promena lozinke",
+            "form": {
+                "button": "Potvrdi lozinku"
+            },
+            "messages": {
+                "info": "Unesi novu lozinku",
+                "success": "<strong>Vaša lozinka je uspešno promenjena.</strong> Molimo Vas <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prijavite se</a> ponovo.",
+                "keymissing": "Nedostaje kljuc za promenu.",
+                "error": "Vaša lozinka nije promenjena. Ne zaboravite da zahtev za promenu lozinke važi samo 24 sata."
+            }
+        }
+    }
+
+}
