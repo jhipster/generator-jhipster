@@ -165,6 +165,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
             this.uaaBaseName = this.config.get('uaaBaseName');
+            this.angularVersion = this.config.get('angularVersion');
             var testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
