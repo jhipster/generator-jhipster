@@ -119,7 +119,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
     <%_ } _%>
-        <ext:loadData encoding="UTF-8"
+        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
@@ -128,10 +128,10 @@
                   tableName="jhi_user">
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
-        </ext:loadData>
+        </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="datetime"/>
 
-        <ext:loadData encoding="UTF-8"
+        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"
                   separator=";"
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
@@ -139,7 +139,7 @@
                   <%_ } _%>
                   tableName="jhi_authority"/>
 
-        <ext:loadData encoding="UTF-8"
+        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
@@ -294,7 +294,7 @@
             <column name="lastModifiedAt" type="timestamp"/>
         </createTable>
 
-        <ext:loadData encoding="UTF-8"
+        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/oauth_client_details.csv"
                   separator=";"
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>

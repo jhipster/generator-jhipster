@@ -79,7 +79,7 @@ spring:
         <%_ } _%>
         name:
         username: <% if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb') { %>root<% } else if (devDatabaseType == 'postgresql' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>
-        password: <% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>
+        password:<% if (devDatabaseType === 'mssql') { %> yourStrong(!)Password<% } %>
         <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb' || devDatabaseType === 'mssql') { _%>
         hikari:
             data-source-properties:
@@ -101,7 +101,7 @@ spring:
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle10gDialect
         <%_ } else if (devDatabaseType === 'mssql') { _%>
-        database-platform: org.hibernate.dialect.SQLServerDialect
+        database-platform: org.hibernate.dialect.SQLServer2012Dialect
         <%_ } else { _%>
         database-platform: <%=packageName%>.domain.util.FixedH2Dialect
         <%_ } _%>
