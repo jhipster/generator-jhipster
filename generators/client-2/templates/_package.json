@@ -30,7 +30,7 @@
     <%_ if (enableTranslation){ _%>
     "ng2-translate": "4.0.1",
     <%_ } _%>
-    "ng2-webstorage": "1.4.1",
+    "ng2-webstorage": "1.3.0",
     "ng-file-upload": "12.2.13",
     "ng-infinite-scroll": "1.3.0",
     "reflect-metadata": "0.1.8",
