@@ -20,7 +20,7 @@ war {
 
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     script = project.file('node_modules/.bin/webpack')
-    args = ["--config", "config/webpack.dev.js"]
+    args = ["--config", "webpack/webpack.dev.js"]
 }<% } %>
 
 processResources {

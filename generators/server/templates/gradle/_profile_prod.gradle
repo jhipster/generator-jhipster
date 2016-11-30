@@ -23,7 +23,7 @@ if (project.hasProperty('swagger')) {
 <% if (!skipClient) { %>
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     script = project.file('node_modules/.bin/webpack')
-    args = ["-p", "--config", "config/webpack.prod.js"]
+    args = ["-p", "--config", "webpack/webpack.prod.js"]
 }
 
 war {
