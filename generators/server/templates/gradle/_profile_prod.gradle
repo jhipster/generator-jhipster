@@ -52,7 +52,11 @@ processResources {
 }
 
 <% if (!skipClient) { %>
+<%_ if (yarnInstall) { _%>
+gulpBuildWithOpts.dependsOn 'yarn_install'
+<%_ } else { _%>
 gulpBuildWithOpts.dependsOn 'npmInstall'
+<%_ } _%>
 gulpBuildWithOpts.dependsOn 'bower'
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
