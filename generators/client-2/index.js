@@ -290,7 +290,9 @@ module.exports = JhipsterClientGenerator.extend({
             }
         };
         if (!this.options['skip-install']) {
-            this.npmInstall({
+            this.installDependencies({
+                bower: false,
+                npm: true,
                 callback: injectDependenciesAndConstants
             });
         } else {
