@@ -66,6 +66,7 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
 
                 return Observable.throw(error);
             }
+            return Observable;
         });
     }
 <% } %>
