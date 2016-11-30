@@ -5,11 +5,15 @@ import { Injector } from '@angular/core';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthService } from '../../shared/auth/auth.service';
 import { Principal } from '../../shared/auth/principal.service';
+    <%_ if (authenticationType === 'oauth2') { _%>
+import { AuthServerProvider } from '../../shared/auth/auth-oauth2.service';
+    <%_ } else { _%>
+import {AuthServerProvider} from '../../shared/auth/auth-jwt.service';
+    <% } %>
 <%_ } if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <% } %>
-
 
 export class AuthExpiredInterceptor extends HttpInterceptable {
 
