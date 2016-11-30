@@ -1,0 +1,126 @@
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Koristite <strong>zastareli</strong> pretraživač. Molimo vas <a href=\"http://browsehappy.com/?locale=en\">nadogradite pretraživač</a> kako biste poboljšali Vaše iskustvo.",
+        "menu": {
+            "home": "Početna stranica",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entiteti",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Profil",
+                "settings": "Podešavanja",
+                "password": "Lozinka",
+                "sessions": "Sesije",
+                "login": "Prijava me",
+                "logout": "Odjavi me",
+                "register": "Registruj me"
+            },
+            "admin": {
+                "main": "Administracija",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Korisnički manadžment",
+                "tracker": "Praćenje korisnika",
+                "metrics": "Metrika",
+                "health": "Ispravnost sistema",
+                "configuration": "Konfiguracija",
+                "logs": "Logovi",
+                "audits": "Revizije",
+                "apidocs": "API",
+                "database": "Baza podataka",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Jezik"
+        },
+        "form": {
+            "username": "Korisničko ime",
+            "username.placeholder": "Vaše korisničko ime",
+            "newpassword": "Nova lozinka",
+            "newpassword.placeholder": "Vaša nova lozinka",
+            "confirmpassword": "Potvrdite lozinku",
+            "confirmpassword.placeholder": "Potvrdite vašu lozinku",
+            "email": "E-mail",
+            "email.placeholder": "Vaš e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Ako želite da se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prijavite</a>, možete probati sa univerzanlnim korisničkim nalozima:<br/>- Administrator (korisničko ime=\"admin\" i lozinka=\"admin\") <br/>- User (korisničko ime=\"user\" i lozinka=\"user\").",
+                "register": "Još uvek nemate profil? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registrujte svoj profil</a>"
+            },
+            "error": {
+                "dontmatch": "Lozinke se ne poklapaju!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Lozinka je obavezna.",
+                    "minlength": "Korisničko ime mora imati najmanje 4 karaktera.",
+                    "maxlength": "Lozinka ne može biti duže od 50 karaktera.",
+                    "strength": "Jačina lozinke:"
+                },
+                "confirmpassword": {
+                    "required": "Potvrda lozinke je obavezna.",
+                    "minlength": "Potvrda lozinke mora imati najmanje 4 karaktera.",
+                    "maxlength": "Potvrda lozinke ne može biti duža od 50 karaktera."
+                },
+                "email": {
+                    "required": "Vaš e-mail je obavezan.",
+                    "invalid": "Vaš e-mail is neispravan.",
+                    "minlength": "Vaš e-mail mora imati najmanje 5 karaktera.",
+                    "maxlength": "Vaš e-mail ne može biti duži od 50 karaktera."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev":"Razvojno okruženje"
+        }
+    },
+    "entity": {
+        "action": {
+            "addblob": "Dodaj blob",
+            "addimage": "Dodaj sliku",
+            "back": "Nazad",
+            "cancel": "Otkaži",
+            "delete": "Obriši",
+            "edit": "Izmeni",
+            "open": "Otvori",
+            "save": "Sačuvaj",
+            "view": "Pregled"
+        },
+        "detail": {
+            "field": "Polje",
+            "value": "Vrednost"
+        },
+        "delete": {
+            "title": "Potvrdi brisanje"
+        },
+        "validation": {
+            "required": "Polje je obavezno.",
+            "minlength": "Polje mora biti veće od {{ min }} karaktera.",
+            "maxlength": "Polje ne može biti duže od {{ max }} karaktera.",
+            "min": "Polje mora biti veče od {{ min }}.",
+            "max": "Polje ne sme biti veće od {{ max }}.",
+            "minbytes": "Polje mora biti veće od {{ min }} bajtova.",
+            "maxbytes": "Polje ne može biti veće od {{ max }} bajtova.",
+            "pattern": "Polje mora da sledi obrazac {{ pattern }}.",
+            "number": "Polje mora biti broj.",
+            "datetimelocal": "Polje mora biti datum i vreme."
+        }
+    },
+    "error": {
+        "server.not.reachable": "Server nije dostupan",
+        "url.not.found": "Stranica nije pronađena",
+        "NotNull": "Polje {{ fieldName }} ne može biti prazno!",
+        "Size": "Polje {{ fieldName }} ne zadovoljava minimalna i maksimalna ograničenja!",
+        "userexists": "Korisiničko ime već postoji!",
+        "emailexists": "E-mail je već upotrebljen!",
+        "idexists": "Novi {{ entityName }} ne može sadržati ID"
+    },
+    "footer": "Ovo je vaše podnožje"
+}

@@ -32,6 +32,7 @@
                 'ro': 'Română',
                 'ru': 'Русский',
                 'sk': 'Slovenský',
+                'sr': 'Srpski',
                 'sv': 'Svenska',
                 'ta': 'தமிழ்',
                 'tr': 'Türkçe',

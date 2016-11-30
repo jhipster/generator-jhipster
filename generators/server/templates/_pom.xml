@@ -95,7 +95,7 @@
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-        <spring-cloud.version>Brixton.SR5</spring-cloud.version>
+        <spring-cloud.version>Brixton.SR7</spring-cloud.version>
         <%_ } _%>
         <%_ if (messageBroker === 'kafka') { _%>
         <spring-cloud-stream.version>Brooklyn.RELEASE</spring-cloud-stream.version>

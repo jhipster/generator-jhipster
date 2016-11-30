@@ -33,6 +33,7 @@ describe('JHipster generator languages', function () {
         {name: 'Romanian', value: 'ro'},
         {name: 'Russian', value: 'ru'},
         {name: 'Slovak', value: 'sk'},
+        {name: 'Serbian', value: 'sr'},
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
