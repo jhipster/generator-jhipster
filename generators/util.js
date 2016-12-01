@@ -175,7 +175,8 @@ function geti18nJson(key, _this, template) {
         file = JSON.parse(file);
         return file;
     } catch (err) {
-        _this.log('error' + err);
+        _this.log(err);
+        _this.log("Error in file: " + filename);
         // 'Error reading translation file!'
         return undefined;
     }

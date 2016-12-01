@@ -1566,7 +1566,6 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles) 
 /*========================================================================*/
 
 Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDir, lang) {
-    this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
@@ -1592,6 +1591,7 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     }
 
     // Templates
+    _this.template(webappDir + 'i18n/' + lang + '/_activate.json', webappDir + 'i18n/' + lang + '/activate.json', this, {});
     _this.template(webappDir + 'i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
     _this.template(webappDir + 'i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
 
