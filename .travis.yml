@@ -48,6 +48,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   # Repo for Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH=$HOME/.yarn/bin:$PATH
   - yarn global add yo bower gulp-cli
 install:
   - cd "$TRAVIS_BUILD_DIR"/
