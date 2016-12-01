@@ -6,6 +6,7 @@ var util = require('util'),
     cleanup = require('../cleanup'),
     prompts = require('./prompts'),
     packagejs = require('../../package.json'),
+    shelljs = require('shelljs'),
     exec = require('child_process').exec;
 
 var JhipsterGenerator = generators.Base.extend({});
@@ -132,7 +133,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkYarn: function () {
-            if (this.skipChecks || this.skipClient || !this.yarnInstall) return;
+            if (this.skipChecks || !this.yarnInstall) return;
             var done = this.async();
             exec('yarn --version', function (err) {
                 if (err) {
@@ -335,6 +336,29 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: {
+        localInstall: function() {
+            if (this.skipClient === true) {
+                // Generate a package.json file containing the current version of the generator as dependency
+                this.template('_skipClientApp.package.json', 'package.json', this, {});
+
+                var done = this.async();
+                var errorLocalJhipsterInstall = function (err) {
+                    if (err) {
+                        this.warning('Could not install generator-jhipster locally.');
+                    }
+                    done();
+                };
+                if(this.yarnInstall) {
+                    this.log(chalk.bold('\nInstalling generator-jhipster locally using yarn'));
+                    shelljs.exec('yarn install', errorLocalJhipsterInstall);
+                }
+                else {
+                    this.log(chalk.bold('\nInstalling generator-jhipster locally using npm'));
+                    shelljs.exec('npm install', errorLocalJhipsterInstall);
+                }
+            }
+        },
+
         afterRunHook: function () {
             try {
                 var modules = this.getModuleHooks();
