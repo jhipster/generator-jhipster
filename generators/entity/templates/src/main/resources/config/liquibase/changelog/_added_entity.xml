@@ -50,7 +50,7 @@
             } else if (fieldType == 'ZonedDateTime') {
                 columnType="timestamp";
             } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
-                if (prodDatabaseType === 'mysql') {
+                if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql') {
                     columnType="longblob";
                 } else {
                     columnType="blob";
@@ -58,7 +58,11 @@
             } else if (fieldTypeBlobContent == 'text') {
                 columnType="clob";
             } else if (fieldType == 'Boolean') {
-                columnType="bit";
+                if (prodDatabaseType === 'postgresql') {
+                    columnType="boolean";
+                } else {
+                    columnType="bit";
+                }
             }
             %>
             <column name="<%=columnName %>" type="<%=columnType %>">
