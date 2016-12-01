@@ -19,7 +19,7 @@
             <tbody>
                 <tr ng-repeat="(k,v) in vm.currentHealth.details">
                     <td class="col-md-6 text-left">{{k}}</td>
-                    <td class="col-md-6 text-left">{{v}}</td>
+                    <td class="col-md-6 text-left">{{vm.getProperValue(v)}}</td>
                 </tr>
             </tbody>
         </table>
