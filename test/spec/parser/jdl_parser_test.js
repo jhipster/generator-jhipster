@@ -265,6 +265,26 @@ describe('JDLParser', function () {
           ]);
         });
       })
+      describe('when having following comments', function() {
+        var input = parseFromFiles(['./test/test_files/following_comments.jdl']);
+        var content = JDLParser.parse(input, 'sql');
+        it('accepts them', function() {
+          expect(content.entities.A.fields.name.comment).to.eq('abc');
+          expect(content.entities.A.fields.thing.comment).to.eq('def');
+          expect(content.entities.A.fields.another.comment).to.eq('ghi');
+        });
+        describe('when having both forms of comments', function() {
+          it('only accepts the one defined first', function() {
+            expect(content.entities.B.fields.name.comment).to.eq('xyz');
+          });
+        });
+        describe('when using commas', function() {
+          it('assigns the comment to the next field', function() {
+            expect(content.entities.C.fields.name.comment).to.be.undefined;
+            expect(content.entities.C.fields.thing.comment).to.eq('abc');
+          });
+        });
+      });
     });
   });
 });

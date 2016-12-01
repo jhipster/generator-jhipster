@@ -92,7 +92,7 @@ entityBody
   / "" {return [];}
 
 fieldDeclList
-  = JDLComment? space* com:Comment? space* JDLComment? space* f:FIELDNAME space t:type space* vl:validationList? space* ","? space* JDLComment? space* fdl:fieldDeclList {return concat([{"name" : f, "type" : t, "validations" : vl, "javadoc": com}], fdl );}
+  = JDLComment? space* com:Comment? space* JDLComment? space* f:FIELDNAME space t:type space* vl:validationList? space* com2:Comment? space* ","? space* JDLComment? space* fdl:fieldDeclList {return concat([{"name" : f, "type" : t, "validations" : vl, "javadoc": com||com2}], fdl );}
   / com:Comment? space* f:FIELDNAME space t:type space* vl:validationList {return [{"name" : f, "type" : t, "validations" : vl, "javadoc": com}];}
   / "" {return [];}
 
