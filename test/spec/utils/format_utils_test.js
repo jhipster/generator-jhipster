@@ -47,9 +47,9 @@ describe('FormatUtils', function() {
       var multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
       var multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
       var multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
-      var expectedResult1 = '<p>first line of comment</p><br/><p>second line</p>';
-      var expectedResult2 = '<p>first line of comment</p><br/>*<p>second line</p>';
-      var expectedResult3 = 'abcdefghijnothing';
+      var expectedResult1 = '<p>first line of comment</p><br/>\n<p>second line</p>';
+      var expectedResult2 = '<p>first line of comment</p><br/>\n*<p>second line</p>';
+      var expectedResult3 = 'abcde\nfghij\nnothing';
 
       describe(buildTestTitle(multiLineComment1), function() {
         it('returns ' + buildTestTitle(expectedResult1), function() {
