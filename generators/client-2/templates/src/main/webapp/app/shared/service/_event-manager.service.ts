@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable,Observer} from 'rxjs/Rx';
+import { Observable,Observer, Subscription} from 'rxjs/Rx';
 
 @Injectable()
 export class EventManager {
@@ -18,8 +18,13 @@ export class EventManager {
     }
 
     on(eventName, callback) {
-        this.observable.filter((event) => {
+        let subscriber: Subscription = this.observable.filter((event) => {
             return event.name === eventName;
         }).subscribe(callback);
+        return subscriber;
+    }
+
+    destroy(subscriber: Subscription){
+        subscriber.unsubscribe();
     }
 }

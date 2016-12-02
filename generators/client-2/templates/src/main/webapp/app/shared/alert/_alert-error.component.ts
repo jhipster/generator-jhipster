@@ -4,11 +4,13 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 <%_ } _%>
 
 import { AlertService } from './alert.service';
+import { EventManager } from "../service/event-manager.service";
+import { Subscription } from "rxjs/Rx";
 
 @Component({
     selector: 'jhi-alert-error',
     template: `
-        <div class="alerts" ng-cloak="">
+        <div class="alerts">
             <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
                 <ngb-alert type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></ngb-alert>
             </div>
@@ -17,14 +19,14 @@ import { AlertService } from './alert.service';
 export class JhiAlertErrorComponent implements OnDestroy {
 
     alerts: any[];
-    cleanHttpErrorListener: Function;
+    cleanHttpErrorListener: Subscription;
 
-    constructor(private alertService: AlertService, @Inject('$rootScope') private $rootScope<% if (enableTranslation){ %>, private translateService: TranslateService<% } %>) {
+    constructor(private alertService: AlertService, private $eventManager: EventManager<% if (enableTranslation){ %>, private translateService: TranslateService<% } %>) {
         this.alerts = [];
 
-        this.cleanHttpErrorListener = $rootScope.$on('<%=angularAppName%>.httpError', (event, httpResponse) => {
-            var i;
-            event.stopPropagation();
+        this.cleanHttpErrorListener = $eventManager.on('<%=angularAppName%>.httpError', (response) => {
+            let i;
+            let httpResponse = response.content;
             switch (httpResponse.status) {
                 // connection refused, server not reachable
                 case 0:
@@ -32,26 +34,31 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     break;
 
                 case 400:
-                    var headers = Object.keys(httpResponse.headers()).filter(function (header) {
-                        return header.endsWith('app-error') || header.endsWith('app-params')
-                    }).sort();
+                    let arr = Array.from(httpResponse.headers._headers);
+                    let headers = [];
+                    for(i = 0; i < arr.length; i++){
+                        if(arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params'))
+                            headers.push(arr[i][0]);
+                    }
+                    headers.sort();
                     var errorHeader = httpResponse.headers(headers[0]);
                     var entityKey = httpResponse.headers(headers[1]);
                     if (errorHeader) {
                         var entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
-                    } else if (httpResponse.data && httpResponse.data.fieldErrors) {
-                        for (i = 0; i < httpResponse.data.fieldErrors.length; i++) {
-                            var fieldError = httpResponse.data.fieldErrors[i];
+                    } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().fieldErrors) {
+                        let fieldErrors = httpResponse.json().fieldErrors;
+                        for (i = 0; i < fieldErrors.length; i++) {
+                            var fieldError = fieldErrors[i];
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
                             var convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
                             var fieldName = <% if (enableTranslation) { %>translateService.instant('<%=angularAppName%>.' + fieldError.objectName + '.' + convertedField)<% }else{ %>convertedField.charAt(0).toUpperCase() + convertedField.slice(1)<% } %>;
                             this.addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                         }
-                    } else if (httpResponse.data && httpResponse.data.message) {
-                        this.addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);
+                    } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
+                        this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json());
                     } else {
-                        this.addErrorAlert(httpResponse.data);
+                        this.addErrorAlert(httpResponse.text());
                     }
                     break;
 
@@ -60,10 +67,10 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     break;
 
                 default:
-                    if (httpResponse.data && httpResponse.data.message) {
-                        this.addErrorAlert(httpResponse.data.message);
+                    if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
+                        this.addErrorAlert(httpResponse.json().message);
                     } else {
-                        this.addErrorAlert(JSON.parse(httpResponse));
+                        this.addErrorAlert(JSON.stringify(httpResponse)); //Fixme find a way to parse httpResponse
                     }
             }
         });
@@ -71,7 +78,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
 
     ngOnDestroy() {
         if(this.cleanHttpErrorListener != undefined && this.cleanHttpErrorListener !== null){
-            this.cleanHttpErrorListener();
+            this.$eventManager.destroy(this.cleanHttpErrorListener);
             this.alerts = [];
         }
     }
