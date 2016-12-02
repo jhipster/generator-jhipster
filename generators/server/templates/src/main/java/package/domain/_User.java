@@ -10,8 +10,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
 <% if (searchEngine == 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
