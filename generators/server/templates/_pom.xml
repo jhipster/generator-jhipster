@@ -1216,8 +1216,8 @@
                                     <goal>install-node-and-yarn</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v6.9.1</nodeVersion>
-                                    <yarnVersion>v0.17.6</yarnVersion>
+                                    <nodeVersion>v6.9.2</nodeVersion>
+                                    <yarnVersion>v0.17.10</yarnVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1240,7 +1240,7 @@
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v6.9.1</nodeVersion>
+                                    <nodeVersion>v6.9.2</nodeVersion>
                                     <npmVersion>3.10.9</npmVersion>
                                 </configuration>
                             </execution>
