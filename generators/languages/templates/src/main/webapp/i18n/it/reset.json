@@ -1,7 +1,7 @@
 {
     "reset": {
         "request": {
-            "title": "Cambia la password",
+            "title": "Reimposta Password",
             "form": {
                 "button": "Reimposta Password"
             },
@@ -14,7 +14,7 @@
 
         },
         "finish" : {
-            "title": "Reimposta Password",
+            "title": "Cambia Password",
             "form": {
                 "button": "Convalida la nuova password"
             },
