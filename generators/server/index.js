@@ -90,11 +90,12 @@ module.exports = JhipsterServerGenerator.extend({
             this.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
             this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-            this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE,
+            this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
             this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
             this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
             this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
             this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+            this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
             this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
             this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;

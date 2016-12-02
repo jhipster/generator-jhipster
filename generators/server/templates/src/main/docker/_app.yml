@@ -9,7 +9,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
-        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || prodDatabaseType == 'mssql' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
         external_links:
         <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
@@ -23,6 +23,9 @@ services:
         <%_ } _%>
         <%_ if (prodDatabaseType == 'mongodb') { _%>
             - <%= baseName.toLowerCase() %>-mongodb:mongodb
+        <%_ } _%>
+        <%_ if (prodDatabaseType == 'mssql') { _%>
+            - <%= baseName.toLowerCase() %>-mssql:mssql
         <%_ } _%>
         <%_ if (prodDatabaseType == 'cassandra') { _%>
             - <%= baseName.toLowerCase() %>-cassandra:cassandra
@@ -60,6 +63,9 @@ services:
             <%_ } _%>
             <%_ if (prodDatabaseType == 'postgresql') { _%>
             - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/<%= baseName %>
+            <%_ } _%>
+            <%_ if (prodDatabaseType == 'mssql') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssql:1433;database=jhitest
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mongodb') { _%>
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017
@@ -109,6 +115,12 @@ services:
         extends:
             file: mongodb.yml
             service: <%= baseName.toLowerCase() %>-mongodb
+    <%_ } _%>
+    <%_ if (prodDatabaseType == 'mssql') { _%>
+    <%= baseName.toLowerCase() %>-mssql:
+        extends:
+            file: mssql.yml
+            service: <%= baseName.toLowerCase() %>-mssql
     <%_ } _%>
     <%_ if (prodDatabaseType == 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:

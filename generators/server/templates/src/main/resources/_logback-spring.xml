@@ -61,6 +61,9 @@
     <logger name="kafka" level="WARN"/>
     <logger name="org.I0Itec" level="WARN"/>
     <%_ } _%>
+    <%_ if (devDatabaseType === 'mssql') { _%>
+    <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
+    <%_ } _%>
     <logger name="springfox" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/><% if (databaseType == 'sql') { %>
     <logger name="liquibase" level="WARN"/>
