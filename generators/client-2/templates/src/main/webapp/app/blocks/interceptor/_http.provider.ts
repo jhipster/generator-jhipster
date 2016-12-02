@@ -8,6 +8,8 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
 import { AuthExpiredInterceptor } from './auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
+import { NotificationInterceptor } from './notification.interceptor';
+
 import { EventManager } from "../../shared/service/event-manager.service";
 
 export const customHttpProvider = () => ({
@@ -35,7 +37,8 @@ export const customHttpProvider = () => ({
             new AuthExpiredInterceptor(injector, stateStorageService),
         <%_ } _%>
             //other interceptors can be added here
-            new ErrorHandlerInterceptor($eventManager)
+            new ErrorHandlerInterceptor($eventManager),
+            new NotificationInterceptor()
 
         ]
     ),

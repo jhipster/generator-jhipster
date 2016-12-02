@@ -4,6 +4,5 @@ export function HttpConfig($httpProvider, httpRequestInterceptorCacheBusterProvi
     //Cache everything except rest api requests
     httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
 
-    $httpProvider.interceptors.push('NotificationInterceptor');
     // jhipster-needle-angularjs-add-interceptor JHipster will add new application http interceptor here
 }

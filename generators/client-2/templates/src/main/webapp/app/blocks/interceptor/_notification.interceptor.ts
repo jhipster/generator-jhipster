@@ -1,22 +1,31 @@
-import * as angular from 'angular';
+import { HttpInterceptable } from './http.interceptable';
+import { RequestOptionsArgs, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
-NotificationInterceptor.$inject = ['$q'];
+export class NotificationInterceptor extends HttpInterceptable {
 
-export function NotificationInterceptor ($q) {
-    var service = {
-        response: response
-    };
+    constructor() {
+        super();
+    }
 
-    return service;
+    requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+        return options;
+    }
 
-    function response (response) {
-        var headers = Object.keys(response.headers()).filter(function (header) {
-            return header.endsWith('app-alert') || header.endsWith('app-params')
-        }).sort();
-        var alertKey = response.headers(headers[0]);
-        if (angular.isString(alertKey)) {
-            //AlertService.success(alertKey, { param : response.headers(headers[1])});
-        }
-        return response;
+    responseIntercept(observable: Observable<Response>): Observable<Response> {
+        return <Observable<Response>> observable.catch((error) => {
+            let arr = Array.from(error.headers._headers);
+            let headers = [];
+            let i;
+            for(i = 0; i < arr.length; i++){
+                if(arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params'))
+                    headers.push(arr[i][0]);
+            }
+            let alertKey = error.headers.get(headers[0]);
+            if(typeof alertKey === 'string'){
+                //AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
+            }
+            return Observable.throw(error);
+        });
     }
 }
