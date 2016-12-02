@@ -18,7 +18,7 @@ export const customHttpProvider = () => ({
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         localStorage : LocalStorageService,
         sessionStorage : SessionStorageService,
-        injector: Injector
+        injector: Injector,
         <%_ } if (authenticationType === 'session') { _%>
         injector: Injector,
         stateStorageService: StateStorageService,
@@ -42,14 +42,15 @@ export const customHttpProvider = () => ({
     deps: [
         XHRBackend,
         RequestOptions,
-        EventManager,
+
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         LocalStorageService,
         SessionStorageService,
-        Injector
+        Injector,
         <%_ } if (authenticationType === 'session') { _%>
         Injector,
-        StateStorageService
+        StateStorageService,
         <%_ } _%>
+        EventManager
     ]
 });

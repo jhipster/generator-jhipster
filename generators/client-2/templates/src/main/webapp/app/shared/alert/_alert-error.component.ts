@@ -41,8 +41,8 @@ export class JhiAlertErrorComponent implements OnDestroy {
                             headers.push(arr[i][0]);
                     }
                     headers.sort();
-                    var errorHeader = httpResponse.headers(headers[0]);
-                    var entityKey = httpResponse.headers(headers[1]);
+                    var errorHeader = httpResponse.headers.get(headers[0]);
+                    var entityKey = httpResponse.headers.get(headers[1]);
                     if (errorHeader) {
                         var entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
