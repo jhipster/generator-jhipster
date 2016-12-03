@@ -10,7 +10,7 @@
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test -- -t 5000",
-    "peg-parse": "./node_modules/pegjs/bin/pegjs lib/dsl/grammar.txt lib/dsl/pegjs_parser.js"
+    "peg-parse": "./node_modules/pegjs/bin/pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt"
   },
   "homepage": "https://github.com/jhipster/jhipster-core#readme",
   "repository": {
