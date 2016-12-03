@@ -39,52 +39,76 @@
     }
   }
 
-  const entities = [];
-  const relationships = [];
-  const enums = [];
-  const dto = {};
-  const pagination = {};
-  const service = {};
-  const microservice = {};
-  const searchEngine = {};
-  const noClient = { list: [], excluded: [] };
-  const noServer = { list: [], excluded: [] };
-  const angularSuffix = {};
-  const noFluentMethod = { list: [], excluded: [] };
+  const parsed = {
+    entities: [],
+    relationships: [],
+    enums: [],
+    dto: [],
+    pagination: {},
+    service: {},
+    microservice: {},
+    searchEngine: {},
+    noClient: { list: [], excluded: [] },
+    noServer: { list: [], excluded: [] },
+    angularSuffix: {},
+    noFluentMethod: { list: [], excluded: [] }
+  };
 }
 
 start = p:prog { return p; }
 
 prog
-  = SPACE* ed:entityDecl SPACE* p:prog {return {entities: addUniqueElements([ed],p.entities) , relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* rd:relationDecl SPACE* p:prog {return {entities: p.entities, relationships: flattenArray(addUniqueElements([rd],p.relationships)), enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* end:enumDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: addUniqueElements([end], p.enums), dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* dto:dtoDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* pagination:pagiDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* service:serviceDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* comment SPACE* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* JDLComment SPACE* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* microservice:microserviceDecl1 SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* searchEngine:searchEngineDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* noClient:noClientDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* noServer:noServerDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* angularSuffix:angularSuffixDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* noFluentMethod:noFluentMethod SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / '' {
-    return {
-      entities: entities,
-      relationships: relationships,
-      enums: enums,
-      dto: dto,
-      pagination: pagination,
-      service: service,
-      microservice: microservice,
-      searchEngine: searchEngine,
-      noClient: noClient,
-      noServer: noServer,
-      angularSuffix: angularSuffix,
-      noFluentMethod: noFluentMethod};
-    }
+  = SPACE* ed:entityDecl SPACE* p:prog {
+    parsed.entities = addUniqueElements([ed], parsed.entities);
+    return parsed;
+  }
+  / SPACE* rd:relationDecl SPACE* p:prog {
+    parsed.relationships = flattenArray(addUniqueElements([rd], parsed.relationships));
+    return parsed;
+  }
+  / SPACE* end:enumDecl SPACE* p:prog {
+    parsed.enums = addUniqueElements([end], parsed.enums);
+    return parsed;
+  }
+  / SPACE* dto:dtoDecl SPACE* p:prog {
+    parsed.dto = dto;
+    return parsed;
+  }
+  / SPACE* pagination:pagiDecl SPACE* p:prog {
+    parsed.pagination = pagination;
+    return parsed;
+  }
+  / SPACE* service:serviceDecl SPACE* p:prog {
+    parsed.service = service;
+    return parsed;
+  }
+  / SPACE* comment SPACE* p:prog { return parsed; }
+  / SPACE* JDLComment SPACE* p:prog { return parsed; }
+  / SPACE* microservice:microserviceDecl1 SPACE* p:prog {
+    parsed.microservice = microservice;
+    return parsed;
+  }
+  / SPACE* searchEngine:searchEngineDecl SPACE* p:prog {
+    parsed.searchEngine = searchEngine;
+    return parsed;
+  }
+  / SPACE* noClient:noClientDecl SPACE* p:prog {
+    parsed.noClient = noClient;
+    return parsed;
+  }
+  / SPACE* noServer:noServerDecl SPACE* p:prog {
+    parsed.noServer = noServer;
+    return parsed;
+  }
+  / SPACE* angularSuffix:angularSuffixDecl SPACE* p:prog {
+    parsed.angularSuffix = angularSuffix;
+    return parsed;
+  }
+  / SPACE* noFluentMethod:noFluentMethod SPACE* p:prog {
+    parsed.noFluentMethod = noFluentMethod;
+    return parsed;
+  }
+  / '' { return parsed; }
 
 //Entities
 entityDecl
@@ -159,10 +183,11 @@ exclusionSub
 // noFluentMethod
 noFluentMethod
   = NO_FLUENT_METHOD SPACE FOR SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE* JDLComment? {
-    addUniqueElements(noFluentMethod.list, decl);
+    addUniqueElements(parsed.noFluentMethod.list, decl);
     if (ex) {
-        addUniqueElements(noFluentMethod.excluded, ex);
+        addUniqueElements(parsed.noFluentMethod.excluded, ex);
     }
+    return parsed.noFluentMethod;
   }
 
 subNoFluentMethod
@@ -174,60 +199,70 @@ subNoFluentMethod
 // DTO
 dtoDecl
   = DTO SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
-    dto[decl[decl.length - 1]] = dto[decl[decl.length - 1]] || { list: [], excluded: [] };
-    addUniqueElements(dto[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+    parsed.dto[decl[decl.length - 1]] = parsed.dto[decl[decl.length - 1]] || { list: [], excluded: [] };
+    addUniqueElements(parsed.dto[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-    	addUniqueElements(dto[decl[decl.length - 1]].excluded, ex);
+    	addUniqueElements(parsed.dto[decl[decl.length - 1]].excluded, ex);
     }
+    return parsed.dto;
   }
 
 // Pagination
 pagiDecl
   = PAGINATE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
-  	pagination[decl[decl.length - 1]] = pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
-    addUniqueElements(pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+  	parsed.pagination[decl[decl.length - 1]] =
+      parsed.pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
+    addUniqueElements(parsed.pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-    	addUniqueElements(pagination[decl[decl.length - 1]].excluded, ex);
+    	addUniqueElements(parsed.pagination[decl[decl.length - 1]].excluded, ex);
     }
+    return parsed.pagination;
   }
 
 // Service
 serviceDecl
   = SERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
-  	service[decl[decl.length - 1]] = service[decl[decl.length - 1]] || { list: [], excluded: [] };
-    addUniqueElements(service[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+  	parsed.service[decl[decl.length - 1]] =
+      parsed.service[decl[decl.length - 1]] || { list: [], excluded: [] };
+    addUniqueElements(parsed.service[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-    	addUniqueElements(service[decl[decl.length - 1]].excluded, ex);
+    	addUniqueElements(parsed.service[decl[decl.length - 1]].excluded, ex);
     }
+    return parsed.service;
   }
 
 // first way of declaring microservices
 microserviceDecl1
   = MICROSERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
-    microservice[decl[decl.length - 1]] = microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
-    addUniqueElements(microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+    parsed.microservice[decl[decl.length - 1]] =
+      parsed.microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
+    addUniqueElements(parsed.microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-        addUniqueElements(microservice[decl[decl.length - 1]].excluded, ex);
+        addUniqueElements(parsed.microservice[decl[decl.length - 1]].excluded, ex);
     }
+    return parsed.microservice;
   }
 
 // searchEngine
 searchEngineDecl
   = SEARCH SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
-    searchEngine[decl[decl.length - 1]] = searchEngine[decl[decl.length - 1]] || { list: [], excluded: [] };
-    addUniqueElements(searchEngine[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+    parsed.searchEngine[decl[decl.length - 1]] =
+      parsed.searchEngine[decl[decl.length - 1]] || { list: [], excluded: [] };
+    addUniqueElements(parsed.searchEngine[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-        addUniqueElements(searchEngine[decl[decl.length - 1]].excluded, ex);
+        addUniqueElements(parsed.searchEngine[decl[decl.length - 1]].excluded, ex);
     }
+    return parsed.searchEngine;
   }
 
 // skipClient option
 noClientDecl
   = SKIP_CLIENT SPACE FOR SPACE* decl:subNoClientDecl SPACE* ex:exclusion? SPACE* JDLComment? {
-    addUniqueElements(noClient.list, decl);
+    addUniqueElements(parsed.noClient.list, decl);
     if (ex) {
-        addUniqueElements(noClient.excluded, ex);
+        addUniqueElements(parsed.noClient.excluded, ex);
     }
+    return parsed.noClient;
   }
 
 subNoClientDecl
@@ -240,10 +275,11 @@ subNoClientDecl
 // skipServer option
 noServerDecl
   = SKIP_SERVER SPACE FOR SPACE* decl:subNoServerDecl SPACE* ex:exclusion? SPACE* JDLComment? {
-    addUniqueElements(noServer.list, decl);
+    addUniqueElements(parsed.noServer.list, decl);
     if (ex) {
-        addUniqueElements(noServer.excluded, ex);
+        addUniqueElements(parsed.noServer.excluded, ex);
     }
+    return parsed.noServer;
   }
 
 subNoServerDecl
@@ -256,11 +292,13 @@ subNoServerDecl
 // angularSuffix option
 angularSuffixDecl
   = ANGULAR_SUFFIX SPACE* decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
-    angularSuffix[decl[decl.length - 1]] = angularSuffix[decl[decl.length - 1]] || { list: [], excluded: [] };
-    addUniqueElements(angularSuffix[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
+    parsed.angularSuffix[decl[decl.length - 1]] =
+      parsed.angularSuffix[decl[decl.length - 1]] || { list: [], excluded: [] };
+    addUniqueElements(parsed.angularSuffix[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-      addUniqueElements(angularSuffix[decl[decl.length - 1]].excluded, ex);
+      addUniqueElements(parsed.angularSuffix[decl[decl.length - 1]].excluded, ex);
     }
+    return parsed.angularSuffix;
   }
 
 // common way to declare an entity list
