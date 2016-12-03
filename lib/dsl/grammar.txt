@@ -56,8 +56,7 @@
 start = p:prog { return p; }
 
 prog
-  = space* ed:entityDecl space* p:prog {
-    return {entities: addUniqueElements([ed],p.entities) , relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  = space* ed:entityDecl space* p:prog {return {entities: addUniqueElements([ed],p.entities) , relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / space* rd:relationDecl space* p:prog {return {entities: p.entities, relationships: flattenArray(addUniqueElements([rd],p.relationships)), enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / space* end:enumDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: addUniqueElements([end], p.enums), dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / space* dto:dtoDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
@@ -79,7 +78,7 @@ entityDecl
   / 'entity' space* e:ENTITYNAME space* eb:entityBody? {return {'name': e, 'body':eb, 'javadoc':''};}
 
 entityTableNameDecl
-  = '(' space* name:[A-z0..9_-]+ space* ')' {return name.join('');}
+  = '(' space* name:[A-z0-9_-]+ space* ')' {return name.join('');}
 
 entityBody
   = '{' space* JDLComment? space* fdl:fieldDeclList space* JDLComment? space* '}' {return fdl;}
@@ -246,7 +245,7 @@ entityList
 
 relationshipType = 'OneToOne' {return 'one-to-one';} / 'OneToMany' {return 'one-to-many';} / 'ManyToOne' {return 'many-to-one';} / 'ManyToMany' {return 'many-to-many';}
 
-type 'a type' = head:[A-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
+type 'a type' = head:[A-Z]tail:[A-z0-9]* {return `${head}${tail.join('')}`;}
 
 validation
   = 'required' {return {key:'required', value:''};}
@@ -259,14 +258,14 @@ validation
   / 'pattern' space* '('  apostrophe regex:REGEX  apostrophe space* ')' {return {key:'pattern' , value:regex};}
 
 REGEX = word:[A-z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* { return word.join('') }
-ENUMNAME = head:[A-Z]tail:[A-z0-9]* { return head + tail.join(''); }
+ENUMNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 ENUMPROP = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {
-    return underscore.join('') + head + tail.join('');
+    return `${underscore.join('')}${head}${tail.join('')}`;
   }
-INTEGER = negative:'-'?int:[0-9]+ { return parseInt((negative ? negative: '') + int.join(''), 10); }
-INJECTEDFIELDNAME = head:[a-zA-Z]tail:[a-zA-Z0-9()]* {return head + tail.join('');}
-ENTITYNAME = head:[A-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
-FIELDNAME = head:[a-zA-Z]tail:[a-zA-Z0-9]* {return head + tail.join('');}
+INTEGER = negative:'-'?int:[0-9]+ {return parseInt(`${(negative ? negative : '') + int.join('')}`, 10);}
+INJECTEDFIELDNAME = head:[a-zA-Z]tail:[A-z0-9()]* {return `${head}${tail.join('')}`;}
+ENTITYNAME = head:[A-Z]tail:[A-z0-9]* {return `${head}${tail.join('')}`;}
+FIELDNAME = head:[a-zA-Z]tail:[A-z0-9]* {return `${head}${tail.join('')}`;}
 space = space:['\n'|'\t'|'\r'|' '|\u2028|\u2029]+
 apostrophe = a:["|']
 
