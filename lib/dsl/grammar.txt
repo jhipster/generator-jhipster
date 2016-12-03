@@ -5,7 +5,7 @@
  */
 
 {
-  function addUniqueElements(array1, array2){
+  function addUniqueElements(array1, array2) {
     if (array2) {
       for (let i = 0; i < array2.length; i++) {
         if (array1.indexOf(array2[i]) === -1) {
@@ -62,7 +62,7 @@ prog
   / SPACE* dto:dtoDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / SPACE* pagination:pagiDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / SPACE* service:serviceDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / SPACE* Comment SPACE* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* comment SPACE* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / SPACE* JDLComment SPACE* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / SPACE* microservice:microserviceDecl1 SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / SPACE* searchEngine:searchEngineDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
@@ -74,8 +74,8 @@ prog
 
 //Entities
 entityDecl
-  = jd:Comment? SPACE* JDLComment? SPACE* ENTITY SPACE* e:ENTITYNAME SPACE* tableName:entityTableNameDecl? SPACE* eb:entityBody? SPACE* JDLComment? {return {'name': e, tableName: tableName ? tableName: e, 'body':eb, 'javadoc':jd};}
-  / ENTITY SPACE* e:ENTITYNAME SPACE* eb:entityBody? {return {'name': e, 'body':eb, 'javadoc':''};}
+  = jd:comment? SPACE* JDLComment? SPACE* ENTITY SPACE* e:ENTITY_NAME SPACE* tableName:entityTableNameDecl? SPACE* eb:entityBody? SPACE* JDLComment? {return {'name': e, tableName: tableName ? tableName: e, 'body':eb, 'javadoc':jd};}
+  / ENTITY SPACE* e:ENTITY_NAME SPACE* eb:entityBody? {return {'name': e, 'body':eb, 'javadoc':''};}
 
 entityTableNameDecl
   = '(' SPACE* name:[A-z0-9_-]+ SPACE* ')' {return name.join('');}
@@ -85,8 +85,8 @@ entityBody
   / '' {return [];}
 
 fieldDeclList
-  = JDLComment? SPACE* com:Comment? SPACE* JDLComment? SPACE* f:FIELDNAME SPACE t:type SPACE* vl:validationList? SPACE* com2:Comment? SPACE* ','? SPACE* JDLComment? SPACE* fdl:fieldDeclList {return addUniqueElements([{'name': f, 'type': t, 'validations': vl, 'javadoc': com||com2}], fdl );}
-  / com:Comment? SPACE* f:FIELDNAME SPACE t:type SPACE* vl:validationList {return [{'name': f, 'type': t, 'validations': vl, 'javadoc': com}];}
+  = JDLComment? SPACE* com:comment? SPACE* JDLComment? SPACE* f:FIELD_NAME SPACE t:type SPACE* vl:validationList? SPACE* com2:comment? SPACE* ','? SPACE* JDLComment? SPACE* fdl:fieldDeclList {return addUniqueElements([{'name': f, 'type': t, 'validations': vl, 'javadoc': com||com2}], fdl );}
+  / com:comment? SPACE* f:FIELD_NAME SPACE t:type SPACE* vl:validationList {return [{'name': f, 'type': t, 'validations': vl, 'javadoc': com}];}
   / '' {return [];}
 
 validationList
@@ -108,9 +108,9 @@ relationshipBody
   = from:relationshipSide SPACE* JDLComment? SPACE* 'to' SPACE* JDLComment? SPACE* to:relationshipSide SPACE* JDLComment? {return {'from': from , 'to': to};}
 
 relationshipSide
-  = jd:Comment? SPACE* e:ENTITYNAME SPACE* '{' SPACE* i:INJECTEDFIELDNAME SPACE* required:'required'? '}' SPACE* {return {'name' :e, 'injectedfield': i, 'javadoc': jd, 'required': required ? true: false};}
-  / jd:Comment? SPACE* e:ENTITYNAME SPACE* ('{' SPACE* '}')? SPACE* {return {'name' :e, 'injectedfield': null, 'javadoc': jd};}
-  / e:ENTITYNAME SPACE {return {'name' :e, 'injectedfield': null, 'javadoc': ''};}
+  = jd:comment? SPACE* e:ENTITY_NAME SPACE* '{' SPACE* i:INJECTED_FIELD_NAME SPACE* required:'required'? '}' SPACE* {return {'name' :e, 'injectedfield': i, 'javadoc': jd, 'required': required ? true: false};}
+  / jd:comment? SPACE* e:ENTITY_NAME SPACE* ('{' SPACE* '}')? SPACE* {return {'name' :e, 'injectedfield': null, 'javadoc': jd};}
+  / e:ENTITY_NAME SPACE {return {'name' :e, 'injectedfield': null, 'javadoc': ''};}
 
 
 //Enum
@@ -125,8 +125,8 @@ exclusion
   = EXCEPT SPACE+ sub:exclusionSub {return sub;}
 
 exclusionSub
-  = e:ENTITYNAME SPACE* ',' SPACE* sub:exclusionSub {return addUniqueElements([e], sub);}
-  / e:ENTITYNAME {return [e];}
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:exclusionSub {return addUniqueElements([e], sub);}
+  / e:ENTITY_NAME {return [e];}
 
 // noFluentMethod
 noFluentMethod
@@ -138,10 +138,10 @@ noFluentMethod
   }
 
 subNoFluentMethod
-  = e:ENTITYNAME SPACE* ',' SPACE* sub:subNoFluentMethod { return concat([e], sub); }
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoFluentMethod { return concat([e], sub); }
   / STAR { return ['*']; }
   / ALL { return ['*']; }
-  / e:ENTITYNAME { return [e]; }
+  / e:ENTITY_NAME { return [e]; }
 
 // DTO
 dtoDecl
@@ -203,10 +203,10 @@ noClientDecl
   }
 
 subNoClientDecl
-  = e:ENTITYNAME SPACE* ',' SPACE* sub:subNoClientDecl { return concat([e], sub); }
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoClientDecl { return concat([e], sub); }
   / STAR { return ['*']; }
   / ALL { return ['*']; }
-  / e:ENTITYNAME { return [e]; }
+  / e:ENTITY_NAME { return [e]; }
 
 
 // skipServer option
@@ -219,10 +219,10 @@ noServerDecl
   }
 
 subNoServerDecl
-  = e:ENTITYNAME SPACE* ',' SPACE* sub:subNoServerDecl { return concat([e], sub); }
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoServerDecl { return concat([e], sub); }
   / STAR { return ['*']; }
   / ALL { return ['*']; }
-  / e:ENTITYNAME { return [e]; }
+  / e:ENTITY_NAME { return [e]; }
 
 
 // angularSuffix option
@@ -237,10 +237,10 @@ angularSuffixDecl
 
 // common way to declare an entity list
 entityList
-  = e:ENTITYNAME SPACE* ',' SPACE* sub:entityList { return addUniqueElements([e], sub); }
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:entityList { return addUniqueElements([e], sub); }
   / STAR SPACE* WITH SPACE* method:([A-z0-9-]+) { return ['*', method.toString().replace(/,/g,'')]; }
   / ALL SPACE* WITH SPACE* method:([A-z0-9-]+) { return ['*', method.toString().replace(/,/g,'')]; }
-  / e:ENTITYNAME SPACE* WITH SPACE* method:([A-z0-9-]+) { return [e, method.toString().replace(/,/g,'')]; }
+  / e:ENTITY_NAME SPACE* WITH SPACE* method:([A-z0-9-]+) { return [e, method.toString().replace(/,/g,'')]; }
 
 
 relationshipType 
@@ -260,6 +260,14 @@ validation
   / MAX SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'max', value: int };}
   / MIN SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'min', value: int };}
   / PATTERN SPACE* '('  APOSTROPHE regex:REGEX APOSTROPHE SPACE* ')' { return { key: 'pattern', value: regex }; }
+
+// Comments
+comment = commentStart notAComment:notAComment* commentStop { return notAComment.join(''); }
+commentStart = '/*' [*]*
+commentStop = [*]+ '/'
+// a completely ignored comment, will not be a Javadoc comment
+JDLComment = '//' [^\n\r]*
+notAComment = !commentStop !commentStart char:. { return char; }
 
 // Constants
 ENTITY = 'entity'
@@ -300,17 +308,9 @@ ENUMPROP = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {
     return `${underscore.join('')}${head}${tail.join('')}`;
   }
 INTEGER = negative:'-'?int:[0-9]+ { return parseInt(`${(negative ? negative : '') + int.join('')}`, 10); }
-INJECTEDFIELDNAME = head:[a-zA-Z]tail:[A-z0-9()]* { return `${head}${tail.join('')}`; }
-ENTITYNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
-FIELDNAME = head:[a-zA-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
-SPACE = ['\n'|'\t'|'\r'|' '|\u2028|\u2029]+
+INJECTED_FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9()]* { return `${head}${tail.join('')}`; }
+ENTITY_NAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
+FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
+SPACE = ['\n'|'\t'|'\r'|' '|\u2028|\u2029]
 REGEX = word:[A-z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* { return word.join('') }
 APOSTROPHE = ["|']
-
-// Comments
-Comment = commentStart notAComment:notAComment* commentStop { return notAComment.join(''); }
-commentStart = '/*' [*]*
-commentStop = [*]+ '/'
-// a completely ignored comment, will not be a Javadoc comment
-JDLComment = '//' [^\n\r]*
-notAComment = !commentStop !commentStart char:. { return char; }
