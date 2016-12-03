@@ -39,98 +39,98 @@
     }
   }
 
-  var entities = [];
-  var relationships = [];
-  var enums = [];
-  var dto = {};
-  var pagination = {};
-  var service = {};
-  var microservice = {};
-  var searchEngine = {};
-  var noClient = { list: [], excluded: [] };
-  var noServer = { list: [], excluded: [] };
-  var angularSuffix = {};
-  var noFluentMethod = { list: [], excluded: [] };
+  const entities = [];
+  const relationships = [];
+  const enums = [];
+  const dto = {};
+  const pagination = {};
+  const service = {};
+  const microservice = {};
+  const searchEngine = {};
+  const noClient = { list: [], excluded: [] };
+  const noServer = { list: [], excluded: [] };
+  const angularSuffix = {};
+  const noFluentMethod = { list: [], excluded: [] };
 }
 
 start = p:prog { return p; }
 
 prog
-  = space* ed:entityDecl space* p:prog {return {entities: addUniqueElements([ed],p.entities) , relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* rd:relationDecl space* p:prog {return {entities: p.entities, relationships: flattenArray(addUniqueElements([rd],p.relationships)), enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* end:enumDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: addUniqueElements([end], p.enums), dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* dto:dtoDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* pagination:pagiDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* service:serviceDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* Comment space* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* JDLComment space* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* microservice:microserviceDecl1 space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* searchEngine:searchEngineDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* noClient:noClientDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* noServer:noServerDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* angularSuffix:angularSuffixDecl space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
-  / space* noFluentMethod:noFluentMethod space* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  = SPACE* ed:entityDecl SPACE* p:prog {return {entities: addUniqueElements([ed],p.entities) , relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* rd:relationDecl SPACE* p:prog {return {entities: p.entities, relationships: flattenArray(addUniqueElements([rd],p.relationships)), enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* end:enumDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: addUniqueElements([end], p.enums), dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* dto:dtoDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* pagination:pagiDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* service:serviceDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* Comment SPACE* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* JDLComment SPACE* p:prog {return {entities: p.entities,relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* microservice:microserviceDecl1 SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* searchEngine:searchEngineDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* noClient:noClientDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* noServer:noServerDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* angularSuffix:angularSuffixDecl SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
+  / SPACE* noFluentMethod:noFluentMethod SPACE* p:prog {return {entities: p.entities, relationships: p.relationships, enums: p.enums, dto: p.dto, pagination: p.pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
   / '' {return {entities: entities,relationships: relationships, enums: enums, dto: dto, pagination: pagination, service: service, microservice: microservice, searchEngine: searchEngine, noClient: noClient, noServer: noServer, angularSuffix: angularSuffix, noFluentMethod: noFluentMethod};}
 
 //Entities
 entityDecl
-  = jd:Comment? space* JDLComment? space* 'entity' space* e:ENTITYNAME space* tableName:entityTableNameDecl? space* eb:entityBody? space* JDLComment? {return {'name': e, tableName: tableName ? tableName: e, 'body':eb, 'javadoc':jd};}
-  / 'entity' space* e:ENTITYNAME space* eb:entityBody? {return {'name': e, 'body':eb, 'javadoc':''};}
+  = jd:Comment? SPACE* JDLComment? SPACE* ENTITY SPACE* e:ENTITYNAME SPACE* tableName:entityTableNameDecl? SPACE* eb:entityBody? SPACE* JDLComment? {return {'name': e, tableName: tableName ? tableName: e, 'body':eb, 'javadoc':jd};}
+  / ENTITY SPACE* e:ENTITYNAME SPACE* eb:entityBody? {return {'name': e, 'body':eb, 'javadoc':''};}
 
 entityTableNameDecl
-  = '(' space* name:[A-z0-9_-]+ space* ')' {return name.join('');}
+  = '(' SPACE* name:[A-z0-9_-]+ SPACE* ')' {return name.join('');}
 
 entityBody
-  = '{' space* JDLComment? space* fdl:fieldDeclList space* JDLComment? space* '}' {return fdl;}
+  = '{' SPACE* JDLComment? SPACE* fdl:fieldDeclList SPACE* JDLComment? SPACE* '}' {return fdl;}
   / '' {return [];}
 
 fieldDeclList
-  = JDLComment? space* com:Comment? space* JDLComment? space* f:FIELDNAME space t:type space* vl:validationList? space* com2:Comment? space* ','? space* JDLComment? space* fdl:fieldDeclList {return addUniqueElements([{'name': f, 'type': t, 'validations': vl, 'javadoc': com||com2}], fdl );}
-  / com:Comment? space* f:FIELDNAME space t:type space* vl:validationList {return [{'name': f, 'type': t, 'validations': vl, 'javadoc': com}];}
+  = JDLComment? SPACE* com:Comment? SPACE* JDLComment? SPACE* f:FIELDNAME SPACE t:type SPACE* vl:validationList? SPACE* com2:Comment? SPACE* ','? SPACE* JDLComment? SPACE* fdl:fieldDeclList {return addUniqueElements([{'name': f, 'type': t, 'validations': vl, 'javadoc': com||com2}], fdl );}
+  / com:Comment? SPACE* f:FIELDNAME SPACE t:type SPACE* vl:validationList {return [{'name': f, 'type': t, 'validations': vl, 'javadoc': com}];}
   / '' {return [];}
 
 validationList
-  = v:validation space* vl:validationList {return addUniqueElements([v], vl);}
+  = v:validation SPACE* vl:validationList {return addUniqueElements([v], vl);}
   / '' {return [];}
 
 //Relationship
 relationDecl
-  = 'relationship' space rt:relationshipType space* '{' space* JDLComment? space* bodies:relationshipBodies space* JDLComment? space* '}' {
+  = RELATIONSHIP SPACE rt:relationshipType SPACE* '{' SPACE* JDLComment? SPACE* bodies:relationshipBodies SPACE* JDLComment? SPACE* '}' {
         addCardinalityToRelationships(rt, bodies);
         return addUniqueElements([], bodies);
     }
 
 relationshipBodies
-  = rb:relationshipBody space* ',' space* morerb:relationshipBodies { return addUniqueElements([rb], morerb); }
+  = rb:relationshipBody SPACE* ',' SPACE* morerb:relationshipBodies { return addUniqueElements([rb], morerb); }
   / rb:relationshipBody { return [rb]; }
 
 relationshipBody
-  = from:relationshipSide space* JDLComment? space* 'to' space* JDLComment? space* to:relationshipSide space* JDLComment? {return {'from': from , 'to': to};}
+  = from:relationshipSide SPACE* JDLComment? SPACE* 'to' SPACE* JDLComment? SPACE* to:relationshipSide SPACE* JDLComment? {return {'from': from , 'to': to};}
 
 relationshipSide
-  = jd:Comment? space* e:ENTITYNAME space* '{' space* i:INJECTEDFIELDNAME space* required:'required'? '}' space* {return {'name' :e, 'injectedfield': i, 'javadoc': jd, 'required': required ? true: false};}
-  / jd:Comment? space* e:ENTITYNAME space* ('{' space* '}')? space* {return {'name' :e, 'injectedfield': null, 'javadoc': jd};}
-  / e:ENTITYNAME space {return {'name' :e, 'injectedfield': null, 'javadoc': ''};}
+  = jd:Comment? SPACE* e:ENTITYNAME SPACE* '{' SPACE* i:INJECTEDFIELDNAME SPACE* required:'required'? '}' SPACE* {return {'name' :e, 'injectedfield': i, 'javadoc': jd, 'required': required ? true: false};}
+  / jd:Comment? SPACE* e:ENTITYNAME SPACE* ('{' SPACE* '}')? SPACE* {return {'name' :e, 'injectedfield': null, 'javadoc': jd};}
+  / e:ENTITYNAME SPACE {return {'name' :e, 'injectedfield': null, 'javadoc': ''};}
 
 
 //Enum
 enumDecl
-  = 'enum' space e:ENUMNAME space* '{' space* JDLComment? space* el:enumPropList space* JDLComment? space* '}' {return {'name':e, 'values': el };}
+  = ENUM SPACE e:ENUMNAME SPACE* '{' SPACE* JDLComment? SPACE* el:enumPropList SPACE* JDLComment? SPACE* '}' {return {'name':e, 'values': el };}
 
 enumPropList
-  = e:ENUMPROP space* ',' space* JDLComment? space* el:enumPropList {return addUniqueElements([e],el);}
+  = e:ENUMPROP SPACE* ',' SPACE* JDLComment? SPACE* el:enumPropList {return addUniqueElements([e],el);}
   / e:ENUMPROP {return [e];}
 
 exclusion
-  = 'except' space+ sub:exclusionSub {return sub;}
+  = EXCEPT SPACE+ sub:exclusionSub {return sub;}
 
 exclusionSub
-  = e:ENTITYNAME space* ',' space* sub:exclusionSub {return addUniqueElements([e], sub);}
+  = e:ENTITYNAME SPACE* ',' SPACE* sub:exclusionSub {return addUniqueElements([e], sub);}
   / e:ENTITYNAME {return [e];}
 
 // noFluentMethod
 noFluentMethod
-  = 'noFluentMethod for' space+ decl:subNoFluentMethod space* ex:exclusion? space* JDLComment? {
+  = NO_FLUENT_METHOD SPACE FOR SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE* JDLComment? {
     addUniqueElements(noFluentMethod.list, decl);
     if (ex) {
         addUniqueElements(noFluentMethod.excluded, ex);
@@ -138,14 +138,14 @@ noFluentMethod
   }
 
 subNoFluentMethod
-  = e:ENTITYNAME space* ',' space* sub:subNoFluentMethod {return concat([e], sub);}
-  / '*' {return ['*'];}
-  / 'all'{return ['*'];}
-  / e:ENTITYNAME {return [e];}
+  = e:ENTITYNAME SPACE* ',' SPACE* sub:subNoFluentMethod { return concat([e], sub); }
+  / STAR { return ['*']; }
+  / ALL { return ['*']; }
+  / e:ENTITYNAME { return [e]; }
 
 // DTO
 dtoDecl
-  = 'dto' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
+  = DTO SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
     dto[decl[decl.length - 1]] = dto[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(dto[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -155,7 +155,7 @@ dtoDecl
 
 // Pagination
 pagiDecl
-  = 'paginate' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
+  = PAGINATE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
   	pagination[decl[decl.length - 1]] = pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -165,7 +165,7 @@ pagiDecl
 
 // Service
 serviceDecl
-  = 'service' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
+  = SERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
   	service[decl[decl.length - 1]] = service[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(service[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -175,7 +175,7 @@ serviceDecl
 
 // first way of declaring microservices
 microserviceDecl1
-  = 'microservice' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
+  = MICROSERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
     microservice[decl[decl.length - 1]] = microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -185,7 +185,7 @@ microserviceDecl1
 
 // searchEngine
 searchEngineDecl
-  = 'search' space+ decl:entityList space* ex:exclusion? space* JDLComment? {
+  = SEARCH SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
     searchEngine[decl[decl.length - 1]] = searchEngine[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(searchEngine[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -195,7 +195,7 @@ searchEngineDecl
 
 // skipClient option
 noClientDecl
-  = 'skipClient for' space* decl:subNoClientDecl space* ex:exclusion? space* JDLComment? {
+  = SKIP_CLIENT SPACE FOR SPACE* decl:subNoClientDecl SPACE* ex:exclusion? SPACE* JDLComment? {
     addUniqueElements(noClient.list, decl);
     if (ex) {
         addUniqueElements(noClient.excluded, ex);
@@ -203,15 +203,15 @@ noClientDecl
   }
 
 subNoClientDecl
-  = e:ENTITYNAME space* ',' space* sub:subNoClientDecl {return concat([e], sub);}
-  / '*' {return ['*'];}
-  / 'all'{return ['*'];}
-  / e:ENTITYNAME {return [e];}
+  = e:ENTITYNAME SPACE* ',' SPACE* sub:subNoClientDecl { return concat([e], sub); }
+  / STAR { return ['*']; }
+  / ALL { return ['*']; }
+  / e:ENTITYNAME { return [e]; }
 
 
 // skipServer option
 noServerDecl
-  = 'skipServer for' space* decl:subNoServerDecl space* ex:exclusion? space* JDLComment? {
+  = SKIP_SERVER SPACE FOR SPACE* decl:subNoServerDecl SPACE* ex:exclusion? SPACE* JDLComment? {
     addUniqueElements(noServer.list, decl);
     if (ex) {
         addUniqueElements(noServer.excluded, ex);
@@ -219,60 +219,98 @@ noServerDecl
   }
 
 subNoServerDecl
-  = e:ENTITYNAME space* ',' space* sub:subNoServerDecl {return concat([e], sub);}
-  / '*' {return ['*'];}
-  / 'all'{return ['*'];}
-  / e:ENTITYNAME {return [e];}
+  = e:ENTITYNAME SPACE* ',' SPACE* sub:subNoServerDecl { return concat([e], sub); }
+  / STAR { return ['*']; }
+  / ALL { return ['*']; }
+  / e:ENTITYNAME { return [e]; }
 
 
 // angularSuffix option
 angularSuffixDecl
-  = 'angularSuffix' space* decl:entityList space* ex:exclusion? space* JDLComment? {
+  = ANGULAR_SUFFIX SPACE* decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
     angularSuffix[decl[decl.length - 1]] = angularSuffix[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(angularSuffix[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-        addUniqueElements(angularSuffix[decl[decl.length - 1]].excluded, ex);
+      addUniqueElements(angularSuffix[decl[decl.length - 1]].excluded, ex);
     }
   }
 
 // common way to declare an entity list
 entityList
-  = e:ENTITYNAME space* ',' space* sub:entityList {return addUniqueElements([e], sub);}
-  / '*' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / 'all' space* 'with' space* method:([A-z0-9-]+) {return ['*', method.toString().replace(/,/g,'')];}
-  / e:ENTITYNAME space* 'with' space* method:([A-z0-9-]+) {return [e, method.toString().replace(/,/g,'')];}
+  = e:ENTITYNAME SPACE* ',' SPACE* sub:entityList { return addUniqueElements([e], sub); }
+  / STAR SPACE* WITH SPACE* method:([A-z0-9-]+) { return ['*', method.toString().replace(/,/g,'')]; }
+  / ALL SPACE* WITH SPACE* method:([A-z0-9-]+) { return ['*', method.toString().replace(/,/g,'')]; }
+  / e:ENTITYNAME SPACE* WITH SPACE* method:([A-z0-9-]+) { return [e, method.toString().replace(/,/g,'')]; }
 
 
-relationshipType = 'OneToOne' {return 'one-to-one';} / 'OneToMany' {return 'one-to-many';} / 'ManyToOne' {return 'many-to-one';} / 'ManyToMany' {return 'many-to-many';}
+relationshipType 
+= ONE_TO_ONE { return 'one-to-one'; }
+/ ONE_TO_MANY { return 'one-to-many'; }
+/ MANY_TO_ONE { return 'many-to-one'; }
+/ MANY_TO_MANY { return 'many-to-many'; }
 
-type 'a type' = head:[A-Z]tail:[A-z0-9]* {return `${head}${tail.join('')}`;}
+type = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 
 validation
-  = 'required' {return {key:'required', value:''};}
-  / 'minlength' space* '(' space* int:INTEGER space* ')' {return {key:'minlength', value:int};}
-  / 'maxlength' space* '(' space* int:INTEGER space* ')' {return {key:'maxlength', value:int};}
-  / 'minbytes' space* '(' space* int:INTEGER space* ')' {return {key:'minbytes', value:int};}
-  / 'maxbytes' space* '(' space* int:INTEGER space* ')' {return {key:'maxbytes', value:int};}
-  / 'max' space* '(' space* int:INTEGER space* ')' {return {key:'max', value:int};}
-  / 'min' space* '(' space* int:INTEGER space* ')' {return {key:'min', value:int};}
-  / 'pattern' space* '('  apostrophe regex:REGEX  apostrophe space* ')' {return {key:'pattern' , value:regex};}
+  = REQUIRED { return { key: 'required', value: '' }; }
+  / MINLENGTH SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'minlength', value: int }; }
+  / MAXLENGTH SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'maxlength', value: int }; }
+  / MINBYTES SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'minbytes', value: int }; }
+  / MAXBYTES SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'maxbytes', value: int }; }
+  / MAX SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'max', value: int };}
+  / MIN SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'min', value: int };}
+  / PATTERN SPACE* '('  APOSTROPHE regex:REGEX APOSTROPHE SPACE* ')' { return { key: 'pattern', value: regex }; }
 
-REGEX = word:[A-z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* { return word.join('') }
+// Constants
+ENTITY = 'entity'
+RELATIONSHIP = 'relationship'
+ENUM = 'enum'
+// Relationship types
+ONE_TO_ONE = 'OneToOne'
+ONE_TO_MANY = 'OneToMany'
+MANY_TO_ONE = 'ManyToOne'
+MANY_TO_MANY = 'ManyToMany'
+// Options
+ALL = 'all'
+STAR = '*'
+FOR = 'for'
+WITH = 'with'
+EXCEPT = 'except'
+NO_FLUENT_METHOD = 'noFluentMethod'
+DTO = 'dto'
+PAGINATE = 'paginate'
+SERVICE = 'service'
+MICROSERVICE = 'microservice'
+SEARCH = 'search'
+SKIP_CLIENT = 'skipClient'
+SKIP_SERVER = 'skipServer'
+ANGULAR_SUFFIX = 'angularSuffix'
+// validations
+REQUIRED = 'required'
+MINLENGTH = 'minlength'
+MAXLENGTH = 'maxlength'
+MINBYTES = 'minbytes'
+MAXBYTES = 'maxbytes'
+MAX = 'max'
+MIN = 'min'
+PATTERN = 'pattern'
+
 ENUMNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 ENUMPROP = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {
     return `${underscore.join('')}${head}${tail.join('')}`;
   }
-INTEGER = negative:'-'?int:[0-9]+ {return parseInt(`${(negative ? negative : '') + int.join('')}`, 10);}
-INJECTEDFIELDNAME = head:[a-zA-Z]tail:[A-z0-9()]* {return `${head}${tail.join('')}`;}
-ENTITYNAME = head:[A-Z]tail:[A-z0-9]* {return `${head}${tail.join('')}`;}
-FIELDNAME = head:[a-zA-Z]tail:[A-z0-9]* {return `${head}${tail.join('')}`;}
-space = space:['\n'|'\t'|'\r'|' '|\u2028|\u2029]+
-apostrophe = a:["|']
+INTEGER = negative:'-'?int:[0-9]+ { return parseInt(`${(negative ? negative : '') + int.join('')}`, 10); }
+INJECTEDFIELDNAME = head:[a-zA-Z]tail:[A-z0-9()]* { return `${head}${tail.join('')}`; }
+ENTITYNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
+FIELDNAME = head:[a-zA-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
+SPACE = ['\n'|'\t'|'\r'|' '|\u2028|\u2029]+
+REGEX = word:[A-z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* { return word.join('') }
+APOSTROPHE = ["|']
 
 // Comments
-Comment = ComStart nc:Not_Com* ComStop {return nc.join('');}
-ComStart = '/*' [*]*
-ComStop = [*]+ '/'
+Comment = commentStart notAComment:notAComment* commentStop { return notAComment.join(''); }
+commentStart = '/*' [*]*
+commentStop = [*]+ '/'
 // a completely ignored comment, will not be a Javadoc comment
 JDLComment = '//' [^\n\r]*
-Not_Com = !ComStop !ComStart char:. {return char;}
+notAComment = !commentStop !commentStart char:. { return char; }
