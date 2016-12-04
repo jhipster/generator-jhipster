@@ -81,10 +81,8 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                '_upgrade_adapter.ts',
                 '_app.main.ts',
                 '_app.module.ts',
-                '_app.ng1module.ts',
                 '_app.state.ts',
                 '_app.constants.ts',
                 '_polyfills.ts',
@@ -92,7 +90,7 @@ const files = {
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
                 'blocks/config/_localstorage.config.ts',
-                'blocks/config/_compile.config.ts',
+                'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pager.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
                 //interceptors

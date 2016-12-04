@@ -1,6 +1,7 @@
-import { UpgradeAdapterRef } from '@angular/upgrade';
-import { upgradeAdapter } from './upgrade_adapter';
-import { UrlRouter } from 'ui-router-ng2';
-import './app.ng1module';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { ProdConfig } from './blocks/config/prod.config';
+import { <%=angular2AppName%>AppModule } from './app.module';
 
-upgradeAdapter.bootstrap(document.body, ['<%=angularAppName%>.app'], {strictDi: true});
+ProdConfig();
+
+platformBrowserDynamic().bootstrapModule(<%=angular2AppName%>AppModule);
