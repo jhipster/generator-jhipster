@@ -3,10 +3,4 @@ import { upgradeAdapter } from './upgrade_adapter';
 import { UrlRouter } from 'ui-router-ng2';
 import './app.ng1module';
 
-function readyFn(ref: UpgradeAdapterRef) {
-    let $urlRouter = ref.ng2Injector.get(UrlRouter);
-    $urlRouter.listen();
-    $urlRouter.sync();
-}
-
-upgradeAdapter.bootstrap(document.body, ['<%=angularAppName%>.app'], {strictDi: true}).ready(readyFn);
+upgradeAdapter.bootstrap(document.body, ['<%=angularAppName%>.app'], {strictDi: true});
