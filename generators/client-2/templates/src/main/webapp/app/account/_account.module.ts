@@ -1,6 +1,7 @@
-import * as angular from 'angular';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { UIRouterModule } from 'ui-router-ng2';
 
-import { upgradeAdapter } from '../upgrade_adapter';
+import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import {
     Register,
@@ -11,6 +12,7 @@ import {
     <%_ if (authenticationType === 'session') { _%>
     SessionsService,
     SessionsComponent,
+    sessionsState,
     <%_ } _%>
     PasswordStrengthBarComponent,
     RegisterComponent,
@@ -18,36 +20,75 @@ import {
     PasswordComponent,
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
+    SettingsComponent,
+    settingsState,
+    activateState,
+    passwordState,
+    finishResetState,
+    requestResetState,
+    registerState,
     <%_ if (enableSocialSignIn) { _%>
+    SocialRegisterComponent,
+    socialRegisterState,
     <%_ if (authenticationType == 'jwt') { _%>
     SocialAuthComponent,
+    socialAuthState,
     <%_ } _%>
-    SocialRegisterComponent,
     <%_ } _%>
-    SettingsComponent
+    accountState
 } from './';
 
-angular
-    .module('<%=angularAppName%>.account', [
-        <%_ if (enableTranslation) { _%>
-        'tmh.dynamicLocale',
-        <%_ } _%>
-        'ngResource',
-        'ui.bootstrap'
-    ])
+let ACCOUNT_STATES = [
+    accountState,
+    activateState,
+    passwordState,
+    finishResetState,
+    requestResetState,
+    registerState,
+    <%_ if (authenticationType === 'session') { _%>
+    sessionsState,
+    <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
     <%_ if (authenticationType == 'jwt') { _%>
-    .directive('socialAuthComponent', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SocialAuthComponent))
+    socialAuthState,
     <%_ } _%>
-    .directive('socialRegisterComponent', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SocialRegisterComponent))
+    socialRegisterState,
     <%_ } _%>
-    .directive('passwordStrengthBar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordStrengthBarComponent))
-    .directive('jhiRegister', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(RegisterComponent))
-    .directive('activate', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(ActivateComponent))
-    .directive('password', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordComponent))
-    .directive('passwordResetInit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordResetInitComponent))
-    .directive('passwordResetFinish', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PasswordResetFinishComponent))
-    <%_ if (authenticationType === 'session') { _%>
-    .directive('sessions', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SessionsComponent))
-    <%_ } _%>
-    .directive('settings', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(SettingsComponent));
+    settingsState
+];
+
+@NgModule({
+    imports: [
+        <%=angular2AppName%>SharedModule,
+        UIRouterModule.forChild({ states: ACCOUNT_STATES })
+    ],
+    declarations: [
+        <%_ if (enableSocialSignIn) { _%>
+        SocialRegisterComponent,
+        <%_ if (authenticationType == 'jwt') { _%>
+        SocialAuthComponent,
+        <%_ } _%>
+        <%_ } _%>
+        ActivateComponent,
+        RegisterComponent,
+        PasswordComponent,
+        PasswordResetInitComponent,
+        PasswordResetFinishComponent,
+        <%_ if (authenticationType === 'session') { _%>
+        SessionsComponent,
+        <%_ } _%>
+        SettingsComponent
+    ],
+    providers: [
+        <%_ if (authenticationType === 'session') { _%>
+        SessionsService,
+        <%_ } _%>
+        Register,
+        Activate,
+        Password,
+        PasswordResetInit,
+        PasswordResetFinish
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+export class <%=angular2AppName%>AccountModule {}

@@ -29,5 +29,4 @@ export * from './social/social-auth.component';
 export * from './social/social-register.component';
 export * from './social/social.state';
 <%_ } _%>
-export * from './account.ng2module';
 export * from './account.state';
