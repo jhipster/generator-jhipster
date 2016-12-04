@@ -1,62 +1,79 @@
-import * as angular from 'angular';
+<%_ if(authenticationType === 'uaa') { _%>
+import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
+<%_ } %>
+import { NgModule, Injector } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { UIRouterModule, RootModule } from 'ui-router-ng2';
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ng2-webstorage';
+<%_ } if(authenticationType === 'session') { _%>
+import { Ng2Webstorage } from 'ng2-webstorage';
+<% } %>
 
-import './account/account.module';
-import './admin/admin.module';
-import './entities/entity.module';
+import { <%=angular2AppName%>SharedModule } from './shared';
+import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; //TODO these couldnt be used from barrels due to an error
+import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
-import { upgradeAdapter } from './upgrade_adapter';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { appState } from './app.state';
+import { HomeComponent, homeState } from './home';
+import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
+import { localStorageConfig } from './blocks/config/localstorage.config';
+import { customHttpProvider } from './blocks/interceptor/http.provider';
 
-import { VERSION } from "./app.constants";<% if (enableTranslation) { %>
+import {
+    <%=jhiPrefixCapitalized%>MainComponent,
+    NavbarComponent,
+    FooterComponent,
+    ProfileService,
+    PageRibbonComponent,
+    <%_ if (enableTranslation){ _%>
+    ActiveMenuDirective,
+    <%_ } _%>
+    ErrorComponent,
+    errorState,
+    accessdeniedState
+} from './layouts';
 
-import { TranslationConfig } from './blocks/config/translation.config';
-import { TranslationStorageProvider } from './blocks/config/translation-storage.provider';<% } %>
 
-import { CompileServiceConfig } from './blocks/config/compile.config';
-import { PagerConfig } from './blocks/config/uib-pager.config';
-import { PaginationConfig } from './blocks/config/uib-pagination.config';
+localStorageConfig();
 
-import { HomeComponent } from './home';
-import { <%=jhiPrefixCapitalized%>MainComponent, NavbarComponent, FooterComponent, PageRibbonComponent } from './layouts';
+let routerConfig = {
+    configClass: <%=jhiPrefixCapitalized%>RouterConfig,
+    useHash: true,
+    states: [
+        appState,
+        homeState,
+        errorState,
+        accessdeniedState
+    ]
+};
 
-import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
-import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
-
-import { <%=jhiPrefixCapitalized%>LoginModalComponent<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %> } from "./shared";
-
-angular
-    .module('<%=angularAppName%>.app', [<% if (enableTranslation) { %>
-        'tmh.dynamicLocale',<% } %>
-        'ngResource',
-        'ngCookies',
-        'ngAria',
-        'ngCacheBuster',
-        'ngFileUpload',
-        'ui.bootstrap',
-        'infinite-scroll',
-        'angular-loading-bar',
-        // jhipster-needle-angularjs-add-module JHipster will add new module here
-        '<%=angularAppName%>.account',
-        '<%=angularAppName%>.admin',
-        '<%=angularAppName%>.entity'
-    ])
-    .config(CompileServiceConfig)
-    .config(PagerConfig)
-    .config(PaginationConfig)
-    .directive('<%=jhiPrefix%>LoginModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>LoginModalComponent))
-    .directive('home', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(HomeComponent))
-    .directive('navbar', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(NavbarComponent))
-    .directive('footer', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(FooterComponent))
-    .directive('<%=jhiPrefix%>Main', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MainComponent))
-    .factory('ErrorHandlerInterceptor', ErrorHandlerInterceptor)
-    .factory('NotificationInterceptor', NotificationInterceptor)<% if (enableTranslation) { %>
-    .factory('TranslationStorageProvider', TranslationStorageProvider)
-    .config(TranslationConfig)<% } %>
-    .directive('pageRibbon',  <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(PageRibbonComponent))
-    .run(run);
-
-run.$inject = ['$rootScope'];
-
-function run($rootScope) {
-    $rootScope.VERSION = VERSION;
-}
+@NgModule({
+    imports: [
+        BrowserModule,
+        UIRouterModule.forRoot(routerConfig),
+        Ng2Webstorage,
+        <%=angular2AppName%>SharedModule,
+        <%=angular2AppName%>AdminModule,
+        <%=angular2AppName%>AccountModule
+    ],
+    declarations: [
+        <%=jhiPrefixCapitalized%>MainComponent,
+        HomeComponent,
+        NavbarComponent,
+        ErrorComponent,
+        PageRibbonComponent,
+        <%_ if (enableTranslation){ _%>
+        ActiveMenuDirective,
+        <%_ } _%>
+        FooterComponent
+    ],
+    providers: [
+        ProfileService,
+        { provide: Window, useValue: window },
+        { provide: Document, useValue: document },
+        customHttpProvider()
+    ],
+    bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
+})
+export class <%=angular2AppName%>AppModule {}
