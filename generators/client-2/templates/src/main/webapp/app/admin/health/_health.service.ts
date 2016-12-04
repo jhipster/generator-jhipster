@@ -1,5 +1,3 @@
-import * as angular from 'angular';
-
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
@@ -45,7 +43,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
 
         let status:any;
         let error:any;
-        let healthData = {
+        let healthData: any = {
             'name': name,
             'error': error,
             'status': status
@@ -66,9 +64,9 @@ export class <%=jhiPrefixCapitalized%>HealthService {
             }
         }
 
-        // Add the of the details
+        // Add the details
         if (hasDetails) {
-            angular.extend(healthData, { 'details': details});
+            healthData.details = details;
         }
 
         // Only add nodes if they provide additional information
