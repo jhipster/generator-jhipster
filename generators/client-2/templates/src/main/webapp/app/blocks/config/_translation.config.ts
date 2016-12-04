@@ -1,6 +1,6 @@
-TranslationConfig.$inject = ['tmhDynamicLocaleProvider'];
+// TranslationConfig.$inject = ['tmhDynamicLocaleProvider'];
 
-export function TranslationConfig(tmhDynamicLocaleProvider) {
+export function TranslationConfig(/*tmhDynamicLocaleProvider*/) {
     // TODO need to see if this is requied with ng2-translate
     // Initialize angular-translate
     /*$translateProvider.useLoader('$translatePartialLoader', {
@@ -12,7 +12,7 @@ export function TranslationConfig(tmhDynamicLocaleProvider) {
     $translateProvider.useSanitizeValueStrategy('escaped');
     $translateProvider.addInterpolation('$translateMessageFormatInterpolation');*/
 
-    tmhDynamicLocaleProvider.localeLocationPattern('i18n/angular-locale_{{locale}}.js');
-    tmhDynamicLocaleProvider.useCookieStorage();
-    tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
+    // tmhDynamicLocaleProvider.localeLocationPattern('i18n/angular-locale_{{locale}}.js');
+    // tmhDynamicLocaleProvider.useCookieStorage();
+    // tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
 }

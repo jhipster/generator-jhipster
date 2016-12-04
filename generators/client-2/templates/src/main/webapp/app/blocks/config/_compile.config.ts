@@ -1,10 +1,10 @@
 import { DEBUG_INFO_ENABLED } from '../../app.constants';
 
-CompileServiceConfig.$inject = ['$compileProvider'];
+//CompileServiceConfig.$inject = ['$compileProvider'];
 
-export function CompileServiceConfig($compileProvider) {
+export function CompileServiceConfig(/*$compileProvider*/) {
     // disable debug data on prod profile to improve performance
-    $compileProvider.debugInfoEnabled(DEBUG_INFO_ENABLED);
+    // $compileProvider.debugInfoEnabled(DEBUG_INFO_ENABLED);
 
     /*
     If you wish to debug an application with this information
