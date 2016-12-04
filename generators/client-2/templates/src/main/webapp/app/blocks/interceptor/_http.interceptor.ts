@@ -35,19 +35,19 @@ export class HttpInterceptor extends Http {
     }
 
     get(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.intercept(super.get(url,this.getRequestOptionArgs(options)));
+        return super.get(url,this.getRequestOptionArgs(options));
     }
 
     post(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.intercept(super.post(url, body, this.getRequestOptionArgs(options)));
+        return super.post(url, body, this.getRequestOptionArgs(options));
     }
 
     put(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.intercept(super.put(url, body, this.getRequestOptionArgs(options)));
+        return super.put(url, body, this.getRequestOptionArgs(options));
     }
 
     delete(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        return this.intercept(super.delete(url, this.getRequestOptionArgs(options)));
+        return super.delete(url, this.getRequestOptionArgs(options));
     }
 
     getRequestOptionArgs(options?: RequestOptionsArgs) : RequestOptionsArgs {

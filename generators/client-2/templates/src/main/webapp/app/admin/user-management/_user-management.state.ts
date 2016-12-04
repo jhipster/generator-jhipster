@@ -14,7 +14,7 @@ export const userMgmtState = {
     url: '/user-management<%_ if (databaseType !== 'cassandra') { _%>?page&sort<%_ } _%>',
     data: {
         authorities: ['ROLE_ADMIN'],
-        pageTitle: 'user-management.home.title'
+        pageTitle: 'userManagement.home.title'
     },
     views: {
         'content@': { component: UserMgmtComponent }
@@ -67,7 +67,7 @@ export const userMgmtDetailState = {
     url: '/user/:login',
     data: {
         authorities: ['ROLE_ADMIN'],
-        pageTitle: 'user-management.detail.title'
+        pageTitle: 'userManagement.detail.title'
     },
     views: {
         'content@': { component: UserMgmtDetailComponent }

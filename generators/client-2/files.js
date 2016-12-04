@@ -91,7 +91,6 @@ const files = {
                 '_vendor.ts',
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
-                'blocks/config/_http.config.ts',
                 'blocks/config/_localstorage.config.ts',
                 'blocks/config/_compile.config.ts',
                 'blocks/config/_uib-pager.config.ts',

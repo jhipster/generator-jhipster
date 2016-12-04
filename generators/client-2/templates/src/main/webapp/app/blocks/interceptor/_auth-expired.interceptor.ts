@@ -13,6 +13,7 @@ import {AuthServerProvider} from '../../shared/auth/auth-jwt.service';
 <%_ } if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
+import { LoginModalService } from '../../shared/login/login-modal.service';
 <% } %>
 
 export class AuthExpiredInterceptor extends HttpInterceptable {
@@ -22,7 +23,7 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
         super();
     }
 <%_ } if (authenticationType === 'session') { _%>
-    constructor(private injector : Injector, private $rootScope, private stateStorageService : StateStorageService) {
+    constructor(private injector : Injector, private stateStorageService : StateStorageService) {
         super();
     }
 <% } %>
@@ -54,19 +55,22 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
 
         return <Observable<Response>> observable.catch((error) => {
             //todo: this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach..... but I don't know how to do this bow
-            if(error.status === 401 && !!error.data.path && error.data.path.indexOf('/api/account') === -1) {
+            if(error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
                 let authServerProvider = self.injector.get(AuthServerProvider);
-                let to = self.$rootScope.toState;
-                let toParams = self.$rootScope.toStateParams;
+                let destination = this.stateStorageService.getDestinationState();
+                let to = destination.destination;
+                let toParams = destination.params;
                 authServerProvider.logout();
 
                 if(to.name === 'accessdenied') {
                     self.stateStorageService.storePreviousState(to.name, toParams);
                 }
 
-                return Observable.throw(error);
+                let loginServiceModal = self.injector.get(LoginModalService);
+                loginServiceModal.open();
+
             }
-            return Observable;
+            return Observable.throw(error);
         });
     }
 <% } %>

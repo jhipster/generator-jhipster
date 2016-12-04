@@ -7,6 +7,10 @@ import { AuthInterceptor } from './auth.interceptor';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
 import { AuthExpiredInterceptor } from './auth-expired.interceptor';
+import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
+import { NotificationInterceptor } from './notification.interceptor';
+
+import { EventManager } from "../../shared/service/event-manager.service";
 
 export const customHttpProvider = () => ({
     provide: Http,
@@ -16,34 +20,40 @@ export const customHttpProvider = () => ({
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         localStorage : LocalStorageService,
         sessionStorage : SessionStorageService,
-        injector: Injector
+        injector: Injector,
         <%_ } if (authenticationType === 'session') { _%>
         injector: Injector,
-        stateStorageService: StateStorageService
+        stateStorageService: StateStorageService,
         <%_ } _%>
+        $eventManager: EventManager
     ) => new HttpInterceptor(
         backend,
         defaultOptions,
         [
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
             new AuthInterceptor(localStorage, sessionStorage),
-            new AuthExpiredInterceptor(injector)
+            new AuthExpiredInterceptor(injector),
         <%_ } if (authenticationType === 'session') { _%>
-            new AuthExpiredInterceptor(injector, injector.get("$rootScope"), stateStorageService)
+            new AuthExpiredInterceptor(injector, stateStorageService),
         <%_ } _%>
             //other interceptors can be added here
+            new ErrorHandlerInterceptor($eventManager),
+            new NotificationInterceptor()
+
         ]
     ),
     deps: [
         XHRBackend,
         RequestOptions,
+
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         LocalStorageService,
         SessionStorageService,
-        Injector
+        Injector,
         <%_ } if (authenticationType === 'session') { _%>
         Injector,
-        StateStorageService
+        StateStorageService,
         <%_ } _%>
+        EventManager
     ]
 });

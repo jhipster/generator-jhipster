@@ -13,7 +13,6 @@ import { TranslationConfig } from './blocks/config/translation.config';
 import { TranslationStorageProvider } from './blocks/config/translation-storage.provider';<% } %>
 
 import { CompileServiceConfig } from './blocks/config/compile.config';
-import { HttpConfig } from './blocks/config/http.config';
 import { PagerConfig } from './blocks/config/uib-pager.config';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
@@ -42,7 +41,6 @@ angular
         '<%=angularAppName%>.entity'
     ])
     .config(CompileServiceConfig)
-    .config(HttpConfig)
     .config(PagerConfig)
     .config(PaginationConfig)
     .directive('<%=jhiPrefix%>LoginModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>LoginModalComponent))
