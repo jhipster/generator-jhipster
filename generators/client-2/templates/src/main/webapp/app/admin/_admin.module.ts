@@ -1,7 +1,7 @@
-import * as angular from 'angular';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { UIRouterModule } from 'ui-router-ng2';
 
-import { upgradeAdapter } from '../upgrade_adapter';
-
+import { <%=angular2AppName%>SharedModule, ParseLinks } from '../shared';
 
 import {
     AuditsComponent,
@@ -16,35 +16,109 @@ import {
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
     <%=jhiPrefixCapitalized%>HealthModalComponent,
     <%=jhiPrefixCapitalized%>HealthCheckComponent,
-    <%_ if (applicationType === 'gateway') { _%>
-    <%=jhiPrefixCapitalized%>GatewayComponent,
-    GatewayRoutesService,
-    <%_ } _%>
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
-    UserService
+    <%=jhiPrefixCapitalized%>DocsComponent,
+    AuditsService,
+    UserService,
+    <%=jhiPrefixCapitalized%>ConfigurationService,
+    <%=jhiPrefixCapitalized%>HealthService,
+    <%=jhiPrefixCapitalized%>MetricsService,
+    <%_ if (applicationType === 'gateway') { _%>
+    GatewayRoutesService,
+    <%=jhiPrefixCapitalized%>GatewayComponent,
+    gatewayState,
+    <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
+    <%=jhiPrefixCapitalized%>TrackerComponent,
+    trackerState,
+    <%_ } _%>
+    LogsService,
+    adminState,
+    auditState,
+    configState,
+    docsState,
+    healthState,
+    logsState,
+    <%_ if (!skipUserManagement) { _%>
+    userMgmtState,
+    userMgmtDetailState,
+    userMgmtNewState,
+    userMgmtEditState,
+    userMgmtDeleteState,
+    <%_ } _%>
+    metricsState
 } from './';
 
-angular
-    .module('<%=angularAppName%>.admin', [
-        <%_ if (enableTranslation) { _%>
-        'tmh.dynamicLocale',
-        <%_ } _%>
-        'ngResource',
-        'ui.bootstrap'
-    ])
-    <%_ if (!skipUserManagement) { _%>
-    .directive('userMgmt', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtComponent))
-    .directive('userMgmtDetail', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtDetailComponent))
-    .directive('userMgmtDialog', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtDialogComponent))
-    .directive('userMgmtDeleteDialog', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(UserMgmtDeleteDialogComponent))
-    <%_ } _%>
-    .directive('<%=jhiPrefix%>Metrics', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent))
-    .directive('<%=jhiPrefix%>MetricsModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent))
-    .directive('<%=jhiPrefix%>Health', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthCheckComponent))
-    .directive('<%=jhiPrefix%>HealthModal', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>HealthModalComponent))
-    .directive('<%=jhiPrefix%>Audit', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(AuditsComponent))
-    .directive('<%=jhiPrefix%>Logs', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(LogsComponent))
+let ADMIN_STATES = [
+    adminState,
+    auditState,
+    configState,
+    docsState,
+    healthState,
+    logsState,
     <%_ if (applicationType === 'gateway') { _%>
-    .directive('<%=jhiPrefix%>Gateway', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>GatewayComponent))
+    gatewayState,
     <%_ } _%>
-    .directive('<%=jhiPrefix%>Configuration', <angular.IDirectiveFactory> upgradeAdapter.downgradeNg2Component(<%=jhiPrefixCapitalized%>ConfigurationComponent));
+    <%_ if (websocket === 'spring-websocket') { _%>
+    trackerState,
+    <%_ } _%>
+    <%_ if (!skipUserManagement) { _%>
+    userMgmtState,
+    userMgmtDetailState,
+    userMgmtNewState,
+    userMgmtEditState,
+    userMgmtDeleteState,
+    <%_ } _%>
+    metricsState
+];
+
+@NgModule({
+    imports: [
+        <%=angular2AppName%>SharedModule,
+        UIRouterModule.forChild({ states: ADMIN_STATES })
+    ],
+    declarations: [
+        AuditsComponent,
+        <%_ if (!skipUserManagement) { _%>
+        UserMgmtComponent,
+        UserMgmtDetailComponent,
+        UserMgmtDialogComponent,
+        UserMgmtDeleteDialogComponent,
+        <%_ } _%>
+        LogsComponent,
+        <%=jhiPrefixCapitalized%>ConfigurationComponent,
+        <%=jhiPrefixCapitalized%>HealthCheckComponent,
+        <%=jhiPrefixCapitalized%>HealthModalComponent,
+        <%=jhiPrefixCapitalized%>DocsComponent,
+        <%_ if (applicationType === 'gateway') { _%>
+        <%=jhiPrefixCapitalized%>GatewayComponent,
+        <%_ } _%>
+        <%_ if (websocket === 'spring-websocket') { _%>
+        <%=jhiPrefixCapitalized%>TrackerComponent,
+        <%_ } _%>
+        <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
+        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
+    ],
+    entryComponents: [
+        <%_ if (!skipUserManagement) { _%>
+        UserMgmtDialogComponent,
+        UserMgmtDeleteDialogComponent,
+        <%_ } _%>
+        <%=jhiPrefixCapitalized%>HealthModalComponent,
+        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
+    ],
+    providers: [
+        AuditsService,
+        UserService,
+        <%=jhiPrefixCapitalized%>ConfigurationService,
+        <%=jhiPrefixCapitalized%>HealthService,
+        <%=jhiPrefixCapitalized%>MetricsService,
+        <%_ if (applicationType === 'gateway') { _%>
+        GatewayRoutesService,
+        <%_ } _%>
+        LogsService,
+        ParseLinks
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+})
+export class <%=angular2AppName%>AdminModule {}

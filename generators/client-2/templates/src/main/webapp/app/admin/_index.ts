@@ -39,5 +39,4 @@ export * from './user-management/user-management.state';
 export * from './user-management/user.service';
 export * from './user-management/user.model';
 <%_ } _%>
-export * from './admin.ng2module';
 export * from './admin.state';
