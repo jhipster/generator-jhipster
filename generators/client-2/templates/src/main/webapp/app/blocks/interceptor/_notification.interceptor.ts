@@ -21,7 +21,8 @@ export class NotificationInterceptor extends HttpInterceptable {
                 if(arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params'))
                     headers.push(arr[i][0]);
             }
-            let alertKey = error.headers.get(headers[0]);
+            if(headers.length >= 1)
+                let alertKey = error.headers.get(headers[0]);
             if(typeof alertKey === 'string'){
                 //AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
             }

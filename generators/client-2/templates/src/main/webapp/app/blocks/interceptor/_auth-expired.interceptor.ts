@@ -14,7 +14,7 @@ import {AuthServerProvider} from '../../shared/auth/auth-jwt.service';
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
-    <% } %>
+<% } %>
 
 export class AuthExpiredInterceptor extends HttpInterceptable {
 
