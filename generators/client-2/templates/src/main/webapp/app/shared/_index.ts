@@ -53,6 +53,6 @@ export * from './service/parse-links.service';
 export * from './social/social.service';
 export * from './social/social.component';
 <%_ } _%>
-export * from './shared-libs.ng2module';
-export * from './shared-common.ng2module';
-export * from './shared.ng2module';
+export * from './shared-libs.module';
+export * from './shared-common.module';
+export * from './shared.module';

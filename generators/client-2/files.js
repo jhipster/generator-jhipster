@@ -84,7 +84,7 @@ const files = {
                 '_upgrade_adapter.ts',
                 '_app.main.ts',
                 '_app.module.ts',
-                '_app.ng2module.ts',
+                '_app.ng1module.ts',
                 '_app.state.ts',
                 '_app.constants.ts',
                 '_polyfills.ts',
@@ -162,7 +162,6 @@ const files = {
             templates: [
                 'account/_index.ts',
                 'account/_account.module.ts',
-                'account/_account.ng2module.ts',
                 'account/_account.state.ts',
                 'account/activate/_activate.component.ts',
                 'account/activate/_activate.service.ts',
@@ -227,7 +226,6 @@ const files = {
             templates: [
                 'admin/_index.ts',
                 'admin/_admin.module.ts',
-                'admin/_admin.ng2module.ts',
                 'admin/_admin.state.ts',
                 // admin modules
                 'admin/audits/_audit-data.model.ts',
@@ -306,9 +304,9 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'shared/_index.ts',
-                'shared/_shared.ng2module.ts',
-                'shared/_shared-libs.ng2module.ts',
-                'shared/_shared-common.ng2module.ts',
+                'shared/_shared.module.ts',
+                'shared/_shared-libs.module.ts',
+                'shared/_shared-common.module.ts',
                 'shared/constants/_pagination.constants.ts',
                 //models
                 'shared/model/_account.model.ts',
