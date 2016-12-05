@@ -17,6 +17,7 @@
                 'el': 'Ελληνικά',
                 'en': 'English',
                 'es': 'Español',
+                'et': 'Eesti',
                 'fr': 'Français',
                 'gl': 'Galego',
                 'hu': 'Magyar',

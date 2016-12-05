@@ -1,0 +1,30 @@
+{
+    "reset": {
+        "request": {
+            "title": "Muuda oma salasõna",
+            "form": {
+                "button": "Muuda salasõna"
+            },
+            "messages": {
+                "info": "Sisestage registreerimisel kasutatud e-posti aadress",
+                "success": "Kontrollige oma e-posti, et saada infot, kuidas salasõna ära muuta.",
+                "notfound": "<strong>E-posti aadress pole registreeritud!</strong> Palun kontrollige üle ja proovige uuesti"
+
+            }
+
+        },
+        "finish" : {
+            "title": "Muuda salasõna",
+            "form": {
+                "button": "Kinnita uus salasõna"
+            },
+            "messages": {
+                "info": "Valige uus salasõna",
+                "success": "<strong>Teie salasõna on muudetud.</strong> Palun <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logige sisse</a>.",
+                "keymissing": "Muutmise võti puudub.",
+                "error": "Teie salasõna ei saanud ära muuta. Pidage meeles, et salasõna muutmise tellimus kehtib ainult 24 tundi."
+            }
+        }
+    }
+
+}
