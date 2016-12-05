@@ -41,39 +41,39 @@
                     <ul class="dropdown-menu" ngbDropdownMenu>
                         <li uiSrefActive="active" *ngSwitchCase="true">
                             <a class="dropdown-item" uiSref="settings" (click)="collapseNavbar()">
-                                <i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.account.settings">Settings</span>
                             </a>
                         </li>
                         <li uiSrefActive="active" *ngSwitchCase="true">
                             <a class="dropdown-item" uiSref="password" (click)="collapseNavbar()">
-                                <i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-clock-o" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.account.password">Password</span>
                             </a>
                         </li>
                         <%_ if (authenticationType == 'session') { _%>
                         <li uiSrefActive="active" *ngSwitchCase="true">
                             <a class="dropdown-item" uiSref="sessions" (click)="collapseNavbar()">
-                                <i class="fa fa-cloud" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-cloud" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.account.sessions">Sessions</span>
                             </a>
                         </li>
                         <%_ } _%>
                         <li *ngSwitchCase="true">
                             <a class="dropdown-item" (click)="logout()" id="logout">
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.account.logout">Sign out</span>
                             </a>
                         </li>
                         <li *ngSwitchCase="false">
                             <a class="dropdown-item" (click)="login()" id="login">
-                                <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-sign-in" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.account.login">Sign in</span>
                             </a>
                         </li>
                         <li uiSrefActive="active" *ngSwitchCase="false">
                             <a class="dropdown-item" uiSref="register" (click)="collapseNavbar()">
-                                <i class="fa fa-registered" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-registered" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.account.register">Register</span>
                             </a>
                         </li>
@@ -82,7 +82,7 @@
                 <li *ngSwitchCase="true" has-authority="ROLE_ADMIN" ngbDropdown class="nav-item dropdown pointer">
                     <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                         <span>
-                             <i class="fa fa-user-plus" aria-hidden="true"></i>
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
                             <span class="hidden-sm" jhi-translate="global.menu.admin.main">Administration</span>
                             <b class="caret"></b>
                         </span>
@@ -91,58 +91,58 @@
                         <%_ if (applicationType == 'gateway') { _%>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="gateway" (click)="collapseNavbar()">
-                                <i class="fa fa-road" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-road" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.gateway">Gateway</span>
                             </a>
                         </li>
                         <%_ } _%>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="user-management" (click)="collapseNavbar()">
-                                <i class="fa fa-user" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-user" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.userManagement">User management</span>
                             </a>
                         </li>
                         <%_ if (websocket == 'spring-websocket') { _%>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="<%=jhiPrefix%>-tracker" (click)="collapseNavbar()">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <i class="fa fa-fw fa-eye" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.tracker">User tracker</span>
                             </a>
                         </li>
                         <%_ } _%>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="<%=jhiPrefix%>-metrics" (click)="collapseNavbar()">
-                                <i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-tachometer" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.metrics">Metrics</span>
                             </a>
                         </li>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="<%=jhiPrefix%>-health" (click)="collapseNavbar()">
-                                <i class="fa fa-heart" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-heart" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.health">Health</span>
                             </a>
                         </li>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="<%=jhiPrefix%>-configuration" (click)="collapseNavbar()">
-                                <i class="fa fa-list" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-list" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.configuration">Configuration</span>
                             </a>
                         </li>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="audits" (click)="collapseNavbar()">
-                                <i class="fa fa-bell" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-bell" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.audits">Audits</span>
                             </a>
                         </li>
                         <li uiSrefActive="active">
                             <a class="dropdown-item" uiSref="logs" (click)="collapseNavbar()">
-                                <i class="fa fa-tasks" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-tasks" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.logs">Logs</span>
                             </a>
                         </li>
                         <li *ngIf="swaggerEnabled" uiSrefActive="active">
                             <a class="dropdown-item" uiSref="docs" (click)="collapseNavbar()">
-                                <i class="fa fa-book" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-book" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.apidocs">API</span>
                             </a>
                         </li>
@@ -150,7 +150,7 @@
                         <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
                         <li *ngIf="!inProduction">
                             <a class="dropdown-item" href='/h2-console' target="_tab" (click)="collapseNavbar()">
-                                <i class="fa fa-hdd-o" aria-hidden="true"></i>&nbsp;
+                                <i class="fa fa-fw fa-hdd-o" aria-hidden="true"></i>
                                 <span jhi-translate="global.menu.admin.database">Database</span>
                             </a>
                         </li>
