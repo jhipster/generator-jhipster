@@ -1,0 +1,96 @@
+#!/usr/bin/env groovy
+
+node {
+    stage('checkout') {
+        checkout scm
+    }
+
+    docker.image('atomfrede/gitlab-ci-jhipster-stack').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS=-Duser.home=./<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
+<%_ if (applicationType !== 'microservice') { _%>
+        stage('check tools') {
+            sh "node -v"
+            sh "npm -v"
+            sh "bower -v"
+            sh "gulp -v"
+            sh "java -version"
+        }
+
+        stage('npm install') {
+            sh "npm install"
+        }
+
+<%_ } _%>
+<%_ if (buildTool === 'maven') { _%>
+        stage('clean') {
+            sh "./mvnw clean"
+        }
+
+        stage('backend tests') {
+            try {
+                sh "./mvnw test"
+            } catch(err) {
+                throw err
+            } finally {
+                junit '**/target/surefire-reports/TEST-*.xml'
+            }
+        }
+
+<%_ } else if (buildTool === 'gradle') { _%>
+        stage('clean') {
+            sh "./gradlew clean"
+        }
+
+        stage('backend tests') {
+            try {
+                sh "./gradlew test"
+            } catch(err) {
+                throw err
+            } finally {
+                junit '**/build/**/TEST-*.xml'
+            }
+        }
+
+<%_ } _%>
+<%_ if (applicationType !== 'microservice') { _%>
+        stage('frontend tests') {
+            try {
+                sh "echo '{ \"allow_root\": true }' > /root/.bowerrc"
+                sh "gulp test"
+            } catch(err) {
+                throw err
+            } finally {
+                <%_ if (buildTool === 'maven') { _%>
+                junit '**/target/test-results/karma/TESTS-*.xml'
+                <%_ } else if (buildTool === 'gradle') { _%>
+                junit '**/build/test-results/karma/TESTS-*.xml'
+                <%_ } _%>
+            }
+        }
+
+<%_ } _%>
+        stage('package and deploy') {
+            sh "git remote add heroku https://git.heroku.com/<%= herokuAppName %>.git || true"
+<%_ if (buildTool === 'maven') { _%
+            // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
+            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod"
+<%_ } else if (buildTool === 'gradle' ) { _%>
+            sh "./gradlew bootRepackage -Pprod -x test"
+            // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
+            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./gradlew deployHeroku"
+<%_ } _%>
+            archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+        }
+
+        // Uncomment the following block to add Sonar analysis.
+        /*stage('quality analysis') {
+            withSonarQubeEnv('Sonar Server') {
+<%_ if (buildTool === 'maven') { _%>
+                sh "./mvnw sonar:sonar"
+<%_ } else if (buildTool === 'gradle' ) { _%>
+                sh "./gradlew sonarqube"
+<%_ } _%>
+            }
+        }*/
+
+    }
+}

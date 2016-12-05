@@ -1,0 +1,1 @@
+apply plugin: 'com.heroku.sdk.heroku-gradle'
