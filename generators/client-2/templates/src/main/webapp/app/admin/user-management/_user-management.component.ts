@@ -50,7 +50,7 @@ export class UserMgmtComponent implements OnInit {
         this.registerChangeInUsers();
     }
 
-    registerChangerInUsers(){
+    registerChangeInUsers() {
         this.$eventManager.on('userListModification', (response) => this.loadAll());
     }
     setActive (user, isActivated) {
