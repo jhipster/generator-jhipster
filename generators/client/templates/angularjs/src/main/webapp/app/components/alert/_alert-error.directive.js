@@ -64,7 +64,7 @@
 
             case 400:
                 var headers = Object.keys(httpResponse.headers()).filter(function (header) {
-                    return header.endsWith('app-error') || header.endsWith('app-params')
+                    return header.endsWith('app-error') || header.endsWith('app-params');
                 }).sort();
                 var errorHeader = httpResponse.headers(headers[0]);
                 var entityKey = httpResponse.headers(headers[1]);
