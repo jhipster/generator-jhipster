@@ -5,6 +5,7 @@ import { User } from './user.model';
 import { UserService } from './user.service';
 import { AlertService, ITEMS_PER_PAGE, ParseLinks, Principal } from '../../shared';
 import { StateService } from "ui-router-ng2";
+import { EventManager } from "../../shared/service/event-manager.service";
 
 @Component({
     selector: 'user-mgmt',
@@ -32,7 +33,8 @@ export class UserMgmtComponent implements OnInit {
                 <%_ if (databaseType !== 'cassandra') { _%>
                 private principal: Principal,
                 <%_ } _%>
-                private $state: StateService
+                private $state: StateService,
+                private $eventManager: EventManager
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
@@ -45,8 +47,12 @@ export class UserMgmtComponent implements OnInit {
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
+        this.registerChangeInUsers();
     }
 
+    registerChangeInUsers() {
+        this.$eventManager.on('userListModification', (response) => this.loadAll());
+    }
     setActive (user, isActivated) {
         user.activated = isActivated;
 
