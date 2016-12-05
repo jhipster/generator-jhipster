@@ -19,7 +19,12 @@ war {
 }
 
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
-    script = project.file('node_modules/.bin/webpack')
+    def osName = System.getProperty("os.name").toLowerCase();
+    if (osName.contains("windows")) {
+      script = project.file('node_modules/webpack/bin/webpack.js')
+    } else {
+      script = project.file('node_modules/.bin/webpack')
+    }
     args = ["--config", "webpack/webpack.dev.js"]
 }<% } %>
 
