@@ -30,6 +30,7 @@ spec:
       containers:
       - name: <%= app.baseName.toLowerCase() %>
         image: <%= app.targetImageName %>
+        imagePullPolicy: IfNotPresent
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
