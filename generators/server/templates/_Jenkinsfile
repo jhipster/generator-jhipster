@@ -5,13 +5,14 @@ node {
         checkout scm
     }
 
-    docker.image('atomfrede/gitlab-ci-jhipster-stack').inside('-u root') {
+    docker.image('atomfrede/gitlab-ci-jhipster-stack').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS=-Duser.home=./<% } %>') {
 <%_ if (applicationType !== 'microservice') { _%>
         stage('check tools') {
             sh "node -v"
             sh "npm -v"
             sh "bower -v"
             sh "gulp -v"
+            sh "java -version"
         }
 
         stage('npm install') {
@@ -21,17 +22,16 @@ node {
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
         stage('clean') {
-            writeFile file: 'settings.xml', text: "<settings><localRepository>${pwd()}/.m2repo</localRepository></settings>"
-            sh "./mvnw clean -s settings.xml"
+            sh "./mvnw clean"
         }
 
         stage('backend tests') {
             try {
-                sh "./mvnw test -s settings.xml"
+                sh "./mvnw test"
             } catch(err) {
                 throw err
             } finally {
-                step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+                junit '**/target/surefire-reports/TEST-*.xml'
             }
         }
 
@@ -46,7 +46,7 @@ node {
             } catch(err) {
                 throw err
             } finally {
-                step([$class: 'JUnitResultArchiver', testResults: '**/build/**/TEST-*.xml'])
+                junit '**/build/**/TEST-*.xml'
             }
         }
 
@@ -60,9 +60,9 @@ node {
                 throw err
             } finally {
                 <%_ if (buildTool === 'maven') { _%>
-                step([$class: 'JUnitResultArchiver', testResults: '**/target/test-results/karma/TESTS-*.xml'])
+                junit '**/target/test-results/karma/TESTS-*.xml'
                 <%_ } else if (buildTool === 'gradle') { _%>
-                step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/karma/TESTS-*.xml'])
+                junit '**/build/test-results/karma/TESTS-*.xml'
                 <%_ } _%>
             }
         }
@@ -70,18 +70,18 @@ node {
 <%_ } _%>
         stage('packaging') {
 <%_ if (buildTool === 'maven') { _%>
-            sh "./mvnw package -Pprod -DskipTests -s settings.xml"
+            sh "./mvnw package -Pprod -DskipTests"
 <%_ } else if (buildTool === 'gradle' ) { _%>
             sh "./gradlew bootRepackage -Pprod -x test -g .gradle"
 <%_ } _%>
-            step([$class: 'ArtifactArchiver', artifacts: '**/target/*.war', fingerprint: true])
+            archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
         }
 
         // Uncomment the following block to add Sonar analysis.
         /*stage('quality analysis') {
             withSonarQubeEnv('Sonar Server') {
 <%_ if (buildTool === 'maven') { _%>
-                sh "./mvnw sonar:sonar -s settings.xml"
+                sh "./mvnw sonar:sonar"
 <%_ } else if (buildTool === 'gradle' ) { _%>
                 sh "./gradlew sonarqube -g .gradle"
 <%_ } _%>
