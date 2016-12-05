@@ -1,10 +1,10 @@
 <div>
-    <h2 translate="userManagement.home.title">Users</h2>
+    <h2 jhi-translate="userManagement.home.title">Users</h2>
     <jhi-alert></jhi-alert>
     <div class="row">
         <div class="col-md-4">
             <button class="btn btn-primary" uiSref="user-management.new">
-                <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
+                <span class="glyphicon glyphicon-flash"></span> <span jhi-translate="userManagement.home.createLabel">Create a new User</span>
             </button>
         </div>
     </div>
@@ -12,18 +12,18 @@
         <table class="table table-striped">
             <thead>
             <tr<% if (databaseType !== 'cassandra') { %> [attr.jh-sort]="predicate" [attr.ascending]="reverse" [attr.callback]="transition"<% } %>>
-                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="id"<% } %>><span translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="glyphicon glyphicon-sort"></span><%_ } _%></th>
-                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="login"<% } %>><span translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
-                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="email"<% } %>><span translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="id"<% } %>><span jhi-translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="glyphicon glyphicon-sort"></span><%_ } _%></th>
+                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="login"<% } %>><span jhi-translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="email"<% } %>><span jhi-translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                 <th></th>
                 <%_ if (enableTranslation) { _%>
-                <th <% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="langKey"<% } %>> <span translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                <th <% if (databaseType !== 'cassandra') { %> [attr.jh-sort-by]="langKey"<% } %>> <span jhi-translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                 <%_ } _%>
-                <th><span translate="userManagement.profiles">Profiles</span></th>
+                <th><span jhi-translate="userManagement.profiles">Profiles</span></th>
                 <%_ if (databaseType !== 'cassandra') { _%>
-                <th [attr.jh-sort-by]="createdDate"><span translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th [attr.jh-sort-by]="lastModifiedBy"><span translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
-                <th [attr.jh-sort-by]="lastModifiedDate"><span translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th [attr.jh-sort-by]="createdDate"><span jhi-translate="userManagement.createdDate">Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th [attr.jh-sort-by]="lastModifiedBy"><span jhi-translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <th [attr.jh-sort-by]="lastModifiedDate"><span jhi-translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="glyphicon glyphicon-sort"></span></th>
                 <%_ } _%>
                 <th></th>
             </tr>
@@ -35,9 +35,9 @@
                 <td>{{user.email}}</td>
                 <td>
                     <span class="label label-danger" (click)="setActive(user, true)" *ngIf="!user.activated"
-                          translate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
+                          jhi-translate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
                     <span class="label label-success" (click)="setActive(user, false)" *ngIf="user.activated"
-                          translate="userManagement.activated" style="cursor: pointer;">Activated</span>
+                          jhi-translate="userManagement.activated" style="cursor: pointer;">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
@@ -55,21 +55,21 @@
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            <span class="hidden-xs hidden-sm" jhi-translate="entity.action.view"></span>
                         </button>
                         <button type="submit"
                                 uiSref="user-management.edit"
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            <span class="hidden-xs hidden-sm" jhi-translate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
                                 uiSref="user-management.delete"
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="glyphicon glyphicon-remove-circle"></span>
-                            <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            <span class="hidden-xs hidden-sm" jhi-translate="entity.action.delete"></span>
                         </button>
                     </div>
                 </td>

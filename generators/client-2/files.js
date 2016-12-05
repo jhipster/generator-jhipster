@@ -279,7 +279,7 @@ const files = {
                 'admin/user-management/_user.model.ts',
                 'admin/user-management/_user.service.ts',
                 { file: 'admin/user-management/_user-management.state.ts', method: 'copyJs' },
-                { file: 'admin/user-management/user-management.component.html', method: 'copyHtml' },
+                { file: 'admin/user-management/_user-management.component.html', method: 'copyHtml' },
                 { file: 'admin/user-management/_user-management-detail.component.html', method: 'copyHtml' },
                 { file: 'admin/user-management/_user-management-dialog.component.html', method: 'copyHtml' },
                 { file: 'admin/user-management/_user-management-delete-dialog.component.html', method: 'copyHtml' }

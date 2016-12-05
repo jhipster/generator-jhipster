@@ -1,29 +1,17 @@
 import { Component, Input } from '@angular/core';
 
+/**
+ * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ng2-translate is too verbose and buggy
+ */
 @Component({
-    selector: '[jhi-translate],[translate]',
-    template: '<span [innerHTML]="key | translate:args"></span>'
+    selector: '[jhi-translate]',
+    template: '<span [innerHTML]="jhiTranslate | translate:translateValues"></span>'
 })
-export class <%=jhiPrefixCapitalized%>Translate {
-    private key: string;
-    private _jhiTranslate: string;
-    private _translate: string;
+export class JhiTranslate {
 
-    @Input('translate-values') args: any;
+    @Input('jhi-translate') jhiTranslate: string;
 
-    @Input('jhi-translate')
-    set jhiTranslate(key: string) {
-        if (key) {
-            this.key = key;
-        }
-    }
-
-    @Input('translate')
-    set translate(key: string) {
-        if (key) {
-            this.key = key;
-        }
-    }
+    @Input('translate-values') translateValues: any;
 
     //FIXME add support to pass translate-compile/ directives in translated content doesnt work
 }

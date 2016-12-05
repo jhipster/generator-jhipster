@@ -1,18 +1,18 @@
 <div>
-    <h2 translate="gateway.title">Gateway</h2>
+    <h2 jhi-translate="gateway.title">Gateway</h2>
 
-    <h3 translate="gateway.routes.title">Current routes</h3>
+    <h3 jhi-translate="gateway.routes.title">Current routes</h3>
     <p>
         <button type="button" class="btn btn-primary" (click)="refresh()" (disabled)="updatingRoutes">
-            <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
+            <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span jhi-translate="gateway.refresh.button">Refresh</span>
         </button>
     </p>
     <table class="table table-striped table-responsive">
         <thead>
         <tr>
-            <th translate="gateway.routes.url">URL</th>
-            <th translate="gateway.routes.service">Service</th>
-            <th translate="gateway.routes.servers">Available servers</th>
+            <th jhi-translate="gateway.routes.url">URL</th>
+            <th jhi-translate="gateway.routes.service">Service</th>
+            <th jhi-translate="gateway.routes.servers">Available servers</th>
         </tr>
         </thead>
 
@@ -20,7 +20,7 @@
             <td>{{route.path}}</td>
             <td>{{route.serviceId}}</td>
             <td>
-                <div *ngIf="route.serviceInstances.length == 0" class="label label-danger" translate="gateway.routes.error">
+                <div *ngIf="route.serviceInstances.length == 0" class="label label-danger" jhi-translate="gateway.routes.error">
                     Warning: no server available!
                 </div>
                 <table class="table table-responsive" *ngIf="route !== null">
