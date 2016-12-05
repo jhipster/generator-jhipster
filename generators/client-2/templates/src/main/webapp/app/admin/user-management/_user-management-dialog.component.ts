@@ -6,6 +6,8 @@ import { UserService } from './user.service';
 <%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 <%_ }_%>
+import { EventManager } from '../../shared/service/event-manager.service';
+
 
 @Component({
     selector: 'user-mgmt-dialog',
@@ -23,7 +25,8 @@ export class UserMgmtDialogComponent implements OnInit {
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
-        private userService: UserService
+        private userService: UserService,
+        private $eventManager: EventManager
     ) {}
 
     ngOnInit() {
@@ -50,7 +53,8 @@ export class UserMgmtDialogComponent implements OnInit {
         }
     }
     private onSaveSuccess (result) {
-        this.isSaving = false;
+    this.$eventManager.broadcast({ name: 'userListModification', content:'OK'});
+    this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
