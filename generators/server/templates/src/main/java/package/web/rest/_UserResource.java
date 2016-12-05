@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;<% if (searchEngine == 'elasticsearch') { %>
 import java.util.stream.StreamSupport;

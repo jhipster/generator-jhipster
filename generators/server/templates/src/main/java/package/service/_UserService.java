@@ -11,8 +11,8 @@ import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.springframework.scheduling.annotation.Scheduled;<% } %>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
@@ -217,7 +217,7 @@ public class UserService {
 
     public void deleteUser(String login) {
         <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
-        jdbcTokenStore.findTokensByUserName(login).stream().forEach(token ->
+        jdbcTokenStore.findTokensByUserName(login).forEach(token ->
             jdbcTokenStore.removeAccessToken(token));
         <%_ } _%>
         userRepository.findOneByLogin(login).ifPresent(user -> {
@@ -294,7 +294,7 @@ public class UserService {
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeOldPersistentTokens() {
         LocalDate now = LocalDate.now();
-        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token -> {
+        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).forEach(token -> {
             log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
             User user = token.getUser();
             user.getPersistentTokens().remove(token);<% } %>
