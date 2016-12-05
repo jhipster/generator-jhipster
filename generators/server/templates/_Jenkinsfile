@@ -5,7 +5,7 @@ node {
         checkout scm
     }
 
-    docker.image('atomfrede/gitlab-ci-jhipster-stack').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS=-Duser.home=./<% } %>') {
+    docker.image('atomfrede/gitlab-ci-jhipster-stack').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS=-Duser.home=./<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
 <%_ if (applicationType !== 'microservice') { _%>
         stage('check tools') {
             sh "node -v"
@@ -37,12 +37,12 @@ node {
 
 <%_ } else if (buildTool === 'gradle') { _%>
         stage('clean') {
-            sh "./gradlew clean -g .gradle"
+            sh "./gradlew clean"
         }
 
         stage('backend tests') {
             try {
-                sh "./gradlew test -g .gradle"
+                sh "./gradlew test"
             } catch(err) {
                 throw err
             } finally {
@@ -72,7 +72,7 @@ node {
 <%_ if (buildTool === 'maven') { _%>
             sh "./mvnw package -Pprod -DskipTests"
 <%_ } else if (buildTool === 'gradle' ) { _%>
-            sh "./gradlew bootRepackage -Pprod -x test -g .gradle"
+            sh "./gradlew bootRepackage -Pprod -x test"
 <%_ } _%>
             archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
         }
@@ -83,7 +83,7 @@ node {
 <%_ if (buildTool === 'maven') { _%>
                 sh "./mvnw sonar:sonar"
 <%_ } else if (buildTool === 'gradle' ) { _%>
-                sh "./gradlew sonarqube -g .gradle"
+                sh "./gradlew sonarqube"
 <%_ } _%>
             }
         }*/
