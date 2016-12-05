@@ -17,7 +17,7 @@ export class EventManager {
         this.observer.next(event);
     }
 
-    on(eventName, callback) {
+    subscribe(eventName, callback) {
         let subscriber: Subscription = this.observable.filter((event) => {
             return event.name === eventName;
         }).subscribe(callback);

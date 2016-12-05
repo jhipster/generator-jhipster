@@ -25,7 +25,7 @@ export const customHttpProvider = () => ({
         injector: Injector,
         stateStorageService: StateStorageService,
         <%_ } _%>
-        $eventManager: EventManager
+        eventManager: EventManager
     ) => new HttpInterceptor(
         backend,
         defaultOptions,
@@ -37,7 +37,7 @@ export const customHttpProvider = () => ({
             new AuthExpiredInterceptor(injector, stateStorageService),
         <%_ } _%>
             //other interceptors can be added here
-            new ErrorHandlerInterceptor($eventManager),
+            new ErrorHandlerInterceptor(eventManager),
             new NotificationInterceptor()
 
         ]

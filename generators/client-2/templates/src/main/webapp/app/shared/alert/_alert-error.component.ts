@@ -21,10 +21,10 @@ export class JhiAlertErrorComponent implements OnDestroy {
     alerts: any[];
     cleanHttpErrorListener: Subscription;
 
-    constructor(private alertService: AlertService, private $eventManager: EventManager<% if (enableTranslation){ %>, private translateService: TranslateService<% } %>) {
+    constructor(private alertService: AlertService, private eventManager: EventManager<% if (enableTranslation){ %>, private translateService: TranslateService<% } %>) {
         this.alerts = [];
 
-        this.cleanHttpErrorListener = $eventManager.on('<%=angularAppName%>.httpError', (response) => {
+        this.cleanHttpErrorListener = eventManager.subscribe('<%=angularAppName%>.httpError', (response) => {
             let i;
             let httpResponse = response.content;
             switch (httpResponse.status) {
@@ -78,7 +78,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
 
     ngOnDestroy() {
         if(this.cleanHttpErrorListener != undefined && this.cleanHttpErrorListener !== null){
-            this.$eventManager.destroy(this.cleanHttpErrorListener);
+            this.eventManager.destroy(this.cleanHttpErrorListener);
             this.alerts = [];
         }
     }

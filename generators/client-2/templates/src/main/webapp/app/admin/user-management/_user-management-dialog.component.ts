@@ -26,7 +26,7 @@ export class UserMgmtDialogComponent implements OnInit {
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
         <%_ } _%>
         private userService: UserService,
-        private $eventManager: EventManager
+        private eventManager: EventManager
     ) {}
 
     ngOnInit() {
@@ -53,8 +53,8 @@ export class UserMgmtDialogComponent implements OnInit {
         }
     }
     private onSaveSuccess (result) {
-    this.$eventManager.broadcast({ name: 'userListModification', content:'OK'});
-    this.isSaving = false;
+        this.eventManager.broadcast({ name: 'userListModification', content:'OK'});
+        this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 

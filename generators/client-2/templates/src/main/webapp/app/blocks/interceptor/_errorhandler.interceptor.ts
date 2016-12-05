@@ -5,7 +5,7 @@ import { EventManager } from '../../shared/service/event-manager.service';
 
 export class ErrorHandlerInterceptor extends HttpInterceptable {
 
-    constructor(private $eventManager: EventManager) {
+    constructor(private eventManager: EventManager) {
         super();
     }
 
@@ -14,10 +14,9 @@ export class ErrorHandlerInterceptor extends HttpInterceptable {
     }
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
-        let self = this;
-        return <Observable<Response>> observable.catch((error) => {
+        return <Observable<Response>> observable.catch(error => {
             if (!(error.status === 401 && (error.text() === '' || (error.json().path && error.json().path.indexOf('/api/account') === 0 )))) {
-                self.$eventManager.broadcast( {name: '<%=angularAppName%>.httpError', content: error});
+                this.eventManager.broadcast( {name: '<%=angularAppName%>.httpError', content: error});
             }
             return Observable.throw(error);
         });

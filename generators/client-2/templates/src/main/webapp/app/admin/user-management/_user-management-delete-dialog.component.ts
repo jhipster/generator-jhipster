@@ -13,7 +13,7 @@ export class UserMgmtDeleteDialogComponent {
 
     user: User;
 
-    constructor(private userService: UserService, public activeModal: NgbActiveModal, private $eventManager: EventManager) {}
+    constructor(private userService: UserService, public activeModal: NgbActiveModal, private eventManager: EventManager) {}
 
     clear () {
         this.activeModal.dismiss('cancel');
@@ -21,7 +21,7 @@ export class UserMgmtDeleteDialogComponent {
 
     confirmDelete (login) {
         this.userService.delete(login).subscribe(response => {
-            this.$eventManager.broadcast({ name: 'userListModification', content:'Deleted an user'});
+            this.eventManager.broadcast({ name: 'userListModification', content:'Deleted an user'});
             this.activeModal.dismiss(true);
         });
     }

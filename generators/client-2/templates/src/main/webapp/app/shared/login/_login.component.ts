@@ -23,7 +23,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     credentials: any;
 
     constructor(
-        private $eventManager: EventManager,
+        private eventManager: EventManager,
         private $state: StateService,
         <%_ if (enableTranslation){ _%>
         private languageService: <%=jhiPrefixCapitalized%>LanguageService,
@@ -73,7 +73,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
                 this.$state.go('home');
             }
 
-            this.$eventManager.broadcast(
+            this.eventManager.broadcast(
                 { 
                     name: 'authenticationSuccess',
                     content: 'Sending Authentication Success' 

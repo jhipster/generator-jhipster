@@ -27,14 +27,15 @@ export class UserMgmtComponent implements OnInit {
     reverse: any;
     <%_ } _%>
 
-    constructor(private userService: UserService,
-                private parseLinks: ParseLinks,
-                private alertService: AlertService,
-                <%_ if (databaseType !== 'cassandra') { _%>
-                private principal: Principal,
-                <%_ } _%>
-                private $state: StateService,
-                private $eventManager: EventManager
+    constructor(
+        private userService: UserService,
+        private parseLinks: ParseLinks,
+        private alertService: AlertService,
+        <%_ if (databaseType !== 'cassandra') { _%>
+        private principal: Principal,
+        <%_ } _%>
+        private $state: StateService,
+        private eventManager: EventManager
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
@@ -51,7 +52,7 @@ export class UserMgmtComponent implements OnInit {
     }
 
     registerChangeInUsers() {
-        this.$eventManager.on('userListModification', (response) => this.loadAll());
+        this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
     setActive (user, isActivated) {
         user.activated = isActivated;
