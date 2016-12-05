@@ -41,6 +41,8 @@ env:
     - JHIPSTER=app-microservice-consul
 
 before_install:
+  - jdk_switcher use oraclejdk8
+  - java -version
   - export TZ=Australia/Canberra
   - date
   - sudo /etc/init.d/postgresql stop
