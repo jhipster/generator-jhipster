@@ -6,6 +6,9 @@ import { AuthInterceptor } from './auth.interceptor';
 <%_ } if(authenticationType === 'session') { _%>
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+import {LocalStorageService, SessionStorageService} from "ng2-webstorage/index";
+<%_ } _%>
 import { AuthExpiredInterceptor } from './auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
 import { NotificationInterceptor } from './notification.interceptor';
