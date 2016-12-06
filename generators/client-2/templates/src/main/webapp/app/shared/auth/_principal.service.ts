@@ -24,7 +24,7 @@ export class Principal {
             return false;
         }
 
-        for (var i = 0; i < authorities.length; i++) {
+        for (let i = 0; i < authorities.length; i++) {
             if (this._identity.authorities.indexOf(authorities[i]) !== -1) {
                 return true;
             }

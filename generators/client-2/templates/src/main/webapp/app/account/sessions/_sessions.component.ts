@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
