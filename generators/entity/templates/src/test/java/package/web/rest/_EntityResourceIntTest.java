@@ -314,16 +314,16 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
 
         // Create the <%= entityClass %> with an existing ID
-        <%= entityClass %> existing<%= entityInstance %> = new <%= entityClass %>();
-        existing<%= entityInstance %>.setId(<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>1L<% } %><% if (databaseType == 'cassandra') { %>UUID.randomUUID().toString()<% } %>);
+        <%= entityClass %> existing<%= entityClass %> = new <%= entityClass %>();
+        existing<%= entityClass %>.setId(<% if (databaseType == 'sql') { %>1L<% } else if (databaseType == 'mongodb') { %>"existing_id"<% } else if (databaseType == 'cassandra') { %>UUID.randomUUID()<% } %>);
         <%_ if (dto == 'mapstruct') { _%>
-        <%= entityClass %>DTO existing<%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(existing<%= entityInstance %>);
+        <%= entityClass %>DTO existing<%= entityClass %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(existing<%= entityClass %>);
         <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(existing<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
+            .content(TestUtil.convertObjectToJsonBytes(existing<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
