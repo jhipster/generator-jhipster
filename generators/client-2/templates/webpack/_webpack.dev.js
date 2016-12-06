@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const commonConfig = require('./webpack.common.js');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
@@ -11,7 +12,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
             loaders: [
                 'tslint'
             ],
-            exclude: ['node_modules/generator-jhipster']
+            exclude: ['node_modules']
         }]
     },
     plugins: [
@@ -20,6 +21,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
             port: 9000,
             proxy: 'http://localhost:<%= serverPort %>'
         }),
-        new ExtractTextPlugin('styles.css')
+        new ExtractTextPlugin('styles.css'),
+        new webpack.NoErrorsPlugin()
     ]
 });
