@@ -1,14 +1,10 @@
 <%_ if(authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
-import { NgModule, Injector } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { UIRouterModule, RootModule } from 'ui-router-ng2';
-<%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { Ng2Webstorage, LocalStorageService, SessionStorageService } from 'ng2-webstorage';
-<%_ } if(authenticationType === 'session') { _%>
+import { UIRouterModule } from 'ui-router-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
-<% } %>
 
 import { <%=angular2AppName%>SharedModule } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; //TODO these couldnt be used from barrels due to an error

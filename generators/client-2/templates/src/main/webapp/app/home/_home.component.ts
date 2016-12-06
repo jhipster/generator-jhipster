@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StateService } from "ui-router-ng2";
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 

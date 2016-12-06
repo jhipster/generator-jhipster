@@ -1,17 +1,18 @@
 import { HttpInterceptable } from './http.interceptable';
-import {Injectable} from '@angular/core';
-import {Http, ConnectionBackend, RequestOptions, RequestOptionsArgs, Request, Response, Headers} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, ConnectionBackend, RequestOptions, RequestOptionsArgs, Request, Response, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()
 export class HttpInterceptor extends Http {
-    private firstInterceptor : HttpInterceptable
- constructor(
-     backend: ConnectionBackend,
-     defaultOptions: RequestOptions,
-     interceptors : HttpInterceptable[]
-  ) {
+    private firstInterceptor : HttpInterceptable;
+
+    constructor(
+        backend: ConnectionBackend,
+        defaultOptions: RequestOptions,
+        interceptors : HttpInterceptable[]
+    ) {
         super(backend, defaultOptions);
 
         /**
@@ -23,7 +24,7 @@ export class HttpInterceptor extends Http {
         if(interceptors.length > 0) {
             interceptors.reduce((chain, current) => {
                 chain.successor = current;
-                return current
+                return current;
             });
 
             this.firstInterceptor = interceptors[0];

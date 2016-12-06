@@ -16,4 +16,4 @@ export const homeState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['home'])
     }]
-}
+};

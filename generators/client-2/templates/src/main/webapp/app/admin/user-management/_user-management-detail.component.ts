@@ -1,5 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
-import { Response } from '@angular/http';
+import { Component, OnInit } from '@angular/core';
 
 import { User } from './user.model';
 import { UserService } from './user.service';

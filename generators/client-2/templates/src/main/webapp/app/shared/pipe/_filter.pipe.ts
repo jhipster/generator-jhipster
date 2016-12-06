@@ -6,20 +6,20 @@ export class FilterPipe implements PipeTransform {
     private filterByStringAndField(filter, field) {
         return value => {
             return !filter || (value[field] && value[field].toLowerCase().indexOf(filter.toLowerCase()) !== -1);
-        }
+        };
     }
 
     // from https://github.com/VadimDez/ng2-filter-pipe
     private filterByString(filter) {
         return value => {
             return !filter || value.toLowerCase().indexOf(filter.toLowerCase()) !== -1;
-        }
+        };
     }
 
     private filterDefault(filter) {
         return value => {
             return !filter || filter == value;
-        }
+        };
     }
 
     private filterByObject(filter) {
@@ -46,7 +46,7 @@ export class FilterPipe implements PipeTransform {
             }
 
             return true;
-        }
+        };
     }
 
     transform(input: Array<any>, filter: string, field: string): any {

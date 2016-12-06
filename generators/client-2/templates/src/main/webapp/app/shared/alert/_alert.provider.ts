@@ -12,5 +12,5 @@ export function alertServiceProvider(toast?: boolean) {
         provide: AlertService,
         useFactory: (sanitizer: Sanitizer<% if (enableTranslation){ %>, translateService: TranslateService<% } %>) => new AlertService(sanitizer<% if (enableTranslation){ %>, translateService<% } %>, isToast),
         deps: [Sanitizer<% if (enableTranslation){ %>, TranslateService<% } %>]
-    }
+    };
 }

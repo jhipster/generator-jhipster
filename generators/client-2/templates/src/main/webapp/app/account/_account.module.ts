@@ -72,6 +72,7 @@ let ACCOUNT_STATES = [
         ActivateComponent,
         RegisterComponent,
         PasswordComponent,
+        PasswordStrengthBarComponent,
         PasswordResetInitComponent,
         PasswordResetFinishComponent,
         <%_ if (authenticationType === 'session') { _%>

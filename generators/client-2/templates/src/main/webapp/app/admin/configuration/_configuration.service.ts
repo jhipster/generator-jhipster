@@ -14,7 +14,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
             const propertiesObject = res.json();
 
-            for(var key in propertiesObject) {
+            for(let key in propertiesObject) {
                 properties.push(propertiesObject[key]);
             }
 
@@ -35,11 +35,11 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
             const propertiesObject = res.json();
 
-            for(var key in propertiesObject) {
+            for(let key in propertiesObject) {
                 let valsObject = propertiesObject[key];
                 let vals:any[] = [];
 
-                for(var valKey in valsObject) {
+                for(let valKey in valsObject) {
                     vals.push({key: valKey, val:valsObject[valKey]});
                 }
                 properties[key] = vals;

@@ -17,7 +17,7 @@ export const errorState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['error'])
     }]
-}
+};
 
 export const accessdeniedState = {
     name: 'accessdenied',
@@ -34,4 +34,4 @@ export const accessdeniedState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['error'])
     }]
-}
+};

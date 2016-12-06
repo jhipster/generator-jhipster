@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Principal, AccountService<% if (enableTranslation){ %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../shared';
 

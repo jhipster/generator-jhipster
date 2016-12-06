@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { PasswordResetInit } from './password-reset-init.service';
 
 @Component({

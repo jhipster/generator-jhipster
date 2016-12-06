@@ -22,16 +22,16 @@ export class PasswordStrengthBarComponent {
             colors: ['#F00', '#F90', '#FF0', '#9F0', '#0F0'],
             mesureStrength: (p) => {
 
-                var _force = 0;
-                var _regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
+                let _force = 0;
+                let _regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
 
-                var _lowerLetters = /[a-z]+/.test(p);
-                var _upperLetters = /[A-Z]+/.test(p);
-                var _numbers = /[0-9]+/.test(p);
-                var _symbols = _regex.test(p);
+                let _lowerLetters = /[a-z]+/.test(p);
+                let _upperLetters = /[A-Z]+/.test(p);
+                let _numbers = /[0-9]+/.test(p);
+                let _symbols = _regex.test(p);
 
-                var _flags = [_lowerLetters, _upperLetters, _numbers, _symbols];
-                var _passedMatches = $.grep(_flags, (el) => {
+                let _flags = [_lowerLetters, _upperLetters, _numbers, _symbols];
+                let _passedMatches = $.grep(_flags, (el) => {
                     return el === true;
                 }).length;
 
@@ -51,7 +51,7 @@ export class PasswordStrengthBarComponent {
             },
             getColor: function (s) {
 
-                var idx = 0;
+                let idx = 0;
                 if (s <= 10) {
                     idx = 0;
                 }
@@ -76,10 +76,10 @@ export class PasswordStrengthBarComponent {
     @Input()
     set passwordToCheck(password: string) {
         if (password) {
-            var c = this.strength.getColor(this.strength.mesureStrength(password));
+            let c = this.strength.getColor(this.strength.mesureStrength(password));
             this.el.nativeElement.className = "";
             let lis = this.el.nativeElement.getElementsByTagName("li");
-            for (var i = 0; i < lis.length; i++) {
+            for (let i = 0; i < lis.length; i++) {
                 if(i < c.idx) {
                     lis[i].style.backgroundColor = c.col;
                 } else {

@@ -17,4 +17,4 @@ export const auditState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['audits'])
     }]
-}
+};

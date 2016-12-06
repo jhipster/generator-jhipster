@@ -17,4 +17,4 @@ export const healthState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['health'])
     }]
-}
+};

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AccountService } from './account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';//Barrel doesnt work here. No idea why!

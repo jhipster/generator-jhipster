@@ -11,4 +11,4 @@ export const docsState = {
     views: {
         'content@': { component: <%=jhiPrefixCapitalized%>DocsComponent }
     }
-}
+};

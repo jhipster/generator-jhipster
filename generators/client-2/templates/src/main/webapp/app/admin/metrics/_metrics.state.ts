@@ -17,4 +17,4 @@ export const metricsState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['metrics'])
     }]
-}
+};

@@ -52,7 +52,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
         let details = {};
         let hasDetails = false;
 
-        for(var key in healthObject) {
+        for(let key in healthObject) {
             let value = healthObject[key];
             if (key === 'status' || key === 'error') {
                 healthData[key] = value;
@@ -77,7 +77,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     }
 
     private flattenHealthData (result, path, data): any {
-        for(var key in data) {
+        for(let key in data) {
             let value = data[key];
             if (this.isHealthObject(value)) {
                 if (this.hasSubSystem(value)) {
@@ -110,7 +110,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     private hasSubSystem (healthObject): boolean {
         let result = false;
 
-        for(var key in healthObject) {
+        for(let key in healthObject) {
             let value = healthObject[key];
             if (value && value.status) {
                 result = true;
@@ -123,7 +123,7 @@ export class <%=jhiPrefixCapitalized%>HealthService {
     private isHealthObject (healthObject): boolean {
         let result = false;
 
-        for(var key in healthObject) {
+        for(let key in healthObject) {
             if (key === 'status') {
                 result = true;
             }

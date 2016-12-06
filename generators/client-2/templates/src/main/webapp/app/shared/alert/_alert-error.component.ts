@@ -1,11 +1,11 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 <%_ if (enableTranslation){ _%>
 import { TranslateService } from 'ng2-translate/ng2-translate';
 <%_ } _%>
 
 import { AlertService } from './alert.service';
-import { EventManager } from "../service/event-manager.service";
-import { Subscription } from "rxjs/Rx";
+import { EventManager } from '../service/event-manager.service';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
     selector: 'jhi-alert-error',
@@ -41,18 +41,18 @@ export class JhiAlertErrorComponent implements OnDestroy {
                             headers.push(arr[i][0]);
                     }
                     headers.sort();
-                    var errorHeader = httpResponse.headers.get(headers[0]);
-                    var entityKey = httpResponse.headers.get(headers[1]);
+                    let errorHeader = httpResponse.headers.get(headers[0]);
+                    let entityKey = httpResponse.headers.get(headers[1]);
                     if (errorHeader) {
-                        var entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
+                        let entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().fieldErrors) {
                         let fieldErrors = httpResponse.json().fieldErrors;
                         for (i = 0; i < fieldErrors.length; i++) {
-                            var fieldError = fieldErrors[i];
+                            let fieldError = fieldErrors[i];
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-                            var convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            var fieldName = <% if (enableTranslation) { %>translateService.instant('<%=angularAppName%>.' + fieldError.objectName + '.' + convertedField)<% }else{ %>convertedField.charAt(0).toUpperCase() + convertedField.slice(1)<% } %>;
+                            let convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
+                            let fieldName = <% if (enableTranslation) { %>translateService.instant('<%=angularAppName%>.' + fieldError.objectName + '.' + convertedField)<% }else{ %>convertedField.charAt(0).toUpperCase() + convertedField.slice(1)<% } %>;
                             this.addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                         }
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {

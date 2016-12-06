@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 <%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.service';
@@ -30,7 +30,7 @@ export class LoginService {
     ) {}
 
     login (credentials, callback?) {
-        var cb = callback || function(){};
+        let cb = callback || function(){};
 
         return new Promise((resolve, reject) => {
             this.authServerProvider.login(credentials).subscribe(data => {

@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 
 import { User } from './user.model';
@@ -81,7 +81,7 @@ export class UserMgmtComponent implements OnInit {
     }
     private onSuccess (data, headers) {
         //hide anonymous user from user management: it's a required user for Spring Security
-        for (var i in data) {
+        for (let i in data) {
             if (data[i]['login'] === 'anonymoususer') {
                 data.splice(i, 1);
             }
@@ -99,7 +99,7 @@ export class UserMgmtComponent implements OnInit {
     }
     <%_ if (databaseType !== 'cassandra') { _%>
     sort () {
-        var result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
             result.push('id');
         }

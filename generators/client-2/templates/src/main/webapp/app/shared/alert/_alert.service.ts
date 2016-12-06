@@ -69,7 +69,7 @@ export class AlertService {
     }
 
     factory(alertOptions): any {
-        var alert = {
+        let alert = {
             type: alertOptions.type,
             msg: this.sanitizer.sanitize(SecurityContext.HTML, alertOptions.msg),
             id: alertOptions.alertId,
@@ -93,7 +93,7 @@ export class AlertService {
         if(alertOptions.msg !== undefined)
             alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
         <%_ } _%>
-        var alert = this.factory(alertOptions);
+        let alert = this.factory(alertOptions);
         if (alertOptions.timeout && alertOptions.timeout > 0) {
             setTimeout(() => {
                 this.closeAlert(alertOptions.alertId, extAlerts);
@@ -103,7 +103,7 @@ export class AlertService {
     }
 
     closeAlert(id, extAlerts): any {
-        var thisAlerts = extAlerts ? extAlerts : this.alerts;
+        let thisAlerts = extAlerts ? extAlerts : this.alerts;
         return this.closeAlertByIndex(thisAlerts.map(function (e) {
             return e.id;
         }).indexOf(id), thisAlerts);

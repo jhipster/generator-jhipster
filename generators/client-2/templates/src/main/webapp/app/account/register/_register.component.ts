@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Register } from './register.service';

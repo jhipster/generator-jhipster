@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { UIRouter, trace, Category, Transition } from "ui-router-ng2";
+import { UIRouter, trace, Category } from "ui-router-ng2";
 import { DEBUG_INFO_ENABLED } from "../../app.constants";
 import { registerTransitionHooks } from "./register-transition-hooks";
 
@@ -9,10 +9,10 @@ export class <%=jhiPrefixCapitalized%>RouterConfig {
 
         if (DEBUG_INFO_ENABLED) {
             trace.enable(Category.TRANSITION);
-            var vis = window['ui-router-visualizer'];
+            let vis = window['ui-router-visualizer'];
             vis.visualizer(router);
         }
-        
+
         router.urlRouterProvider.otherwise(function ($injector, $location) {
             router.stateService.go('home');
             return '/';

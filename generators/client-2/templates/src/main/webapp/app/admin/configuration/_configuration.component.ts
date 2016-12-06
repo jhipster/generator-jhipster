@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.service';
 
@@ -30,7 +30,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
         this.configurationService.get().subscribe((configuration) => {
             this.configuration = configuration;
 
-            for(var config of configuration) {
+            for(let config of configuration) {
                 this.configKeys.push(Object.keys(config.properties));
             }
         });

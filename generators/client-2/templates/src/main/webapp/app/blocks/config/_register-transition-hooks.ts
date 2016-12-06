@@ -28,7 +28,7 @@ export function registerTransitionHooks($transitions: TransitionService) {
 
     $transitions.onSuccess({}, (transition: Transition) => {
         let toState = transition.to();
-        var titleKey =<% if (enableTranslation) { %> 'global.title' <% }else { %> '<%= baseName %>' <% } %>;
+        let titleKey =<% if (enableTranslation) { %> 'global.title' <% }else { %> '<%= baseName %>' <% } %>;
 
         // Set the page title key to the one configured in state or use default one
         if (toState.data.pageTitle) {

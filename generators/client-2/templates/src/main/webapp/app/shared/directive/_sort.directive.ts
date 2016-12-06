@@ -1,4 +1,4 @@
-import { Directive, Host, Input, Output, OnInit, Renderer, EventEmitter, ElementRef } from '@angular/core';
+import { Directive, Input, Output, OnInit, Renderer, EventEmitter, ElementRef } from '@angular/core';
 
 @Directive({
     selector: '[jh-sort]'
@@ -39,7 +39,7 @@ export class JhSortDirective implements OnInit {
         }
 
         function resetClasses () {
-            var allThIcons = this.$element.find('span.glyphicon'),
+            let allThIcons = this.$element.find('span.glyphicon'),
                 sortIcon = 'glyphicon-sort',
                 sortAsc = 'glyphicon-sort-by-attributes',
                 sortDesc = 'glyphicon-sort-by-attributes-alt';

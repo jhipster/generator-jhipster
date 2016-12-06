@@ -17,4 +17,4 @@ export const configState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['configuration'])
     }]
-}
+};

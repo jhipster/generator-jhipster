@@ -1,5 +1,5 @@
 import { TranslateLoader } from 'ng2-translate/ng2-translate';
-import { Http, Response } from "@angular/http";
+import { Http } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 
 export class TranslatePartialLoader implements TranslateLoader {
@@ -13,9 +13,9 @@ export class TranslatePartialLoader implements TranslateLoader {
     }
 
     public getTranslation(lang: string): Observable<any> {
-        var combinedObject = new Object();
-        var oldObsevers;
-        var newObserver;
+        let combinedObject = new Object();
+        let oldObsevers;
+        let newObserver;
         this.locations.forEach((value) => {
             newObserver = this.getPartFile(value, combinedObject, lang);
             if (oldObsevers == null) {
@@ -48,5 +48,5 @@ export function createTranslatePartialLoader() {
         provide: TranslateLoader,
         useFactory: (http: Http) => new TranslatePartialLoader(http, 'i18n', '.json'),
         deps: [Http]
-    }
+    };
 }

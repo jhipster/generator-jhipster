@@ -17,4 +17,4 @@ export const logsState = {
         deps: [<%=jhiPrefixCapitalized%>LanguageService],
         resolveFn: (languageService) => languageService.setLocations(['logs'])
     }]
-}
+};

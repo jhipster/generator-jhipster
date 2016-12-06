@@ -43,7 +43,7 @@ export class HasAnyAuthorityDirective implements OnInit {
             this.setVisible();
         }
 
-        let result = this.principal.hasAnyAuthority(this.authority)
+        let result = this.principal.hasAnyAuthority(this.authority);
         if (result) {
             this.setVisible();
         } else {
