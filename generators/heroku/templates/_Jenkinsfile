@@ -5,7 +5,7 @@ node {
         checkout scm
     }
 
-    docker.image('atomfrede/gitlab-ci-jhipster-stack').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS=-Duser.home=./<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
+    docker.image('jhipster/jhipster-ci-stack').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
 <%_ if (applicationType !== 'microservice') { _%>
         stage('check tools') {
             sh "node -v"
@@ -54,7 +54,6 @@ node {
 <%_ if (applicationType !== 'microservice') { _%>
         stage('frontend tests') {
             try {
-                sh "echo '{ \"allow_root\": true }' > /root/.bowerrc"
                 sh "gulp test"
             } catch(err) {
                 throw err
@@ -69,10 +68,9 @@ node {
 
 <%_ } _%>
         stage('package and deploy') {
-            sh "git remote add heroku https://git.heroku.com/<%= herokuAppName %>.git || true"
-<%_ if (buildTool === 'maven') { _%
+<%_ if (buildTool === 'maven') { _%>
             // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
-            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod"
+            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
 <%_ } else if (buildTool === 'gradle' ) { _%>
             sh "./gradlew bootRepackage -Pprod -x test"
             // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
