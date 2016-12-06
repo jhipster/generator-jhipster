@@ -255,6 +255,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Danish', value: 'da'},
         {name: 'Dutch', value: 'nl'},
         {name: 'English', value: 'en'},
+        {name: 'Estonian', value: 'et'},
         {name: 'French', value: 'fr'},
         {name: 'Galician', value: 'gl'},
         {name: 'German', value: 'de'},

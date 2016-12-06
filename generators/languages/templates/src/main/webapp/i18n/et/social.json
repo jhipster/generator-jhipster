@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Logige sisse {{ label }} kaudu",
+        "register": {
+            "title": "Registreeruge {{ label }} kaudu",
+            "errorTitle": "Registreerumine välise kontoga",
+            "messages": {
+                "success": "<strong>Registreering salvestatud!</strong> Kinnituseks kontrollige palun oma e-posti.",
+                "error": {
+                    "fail": "<strong>Registreerimine ebaõnnestus!</strong> Tekkis probleem teie välise konto kontrollimisel, soovitame proovida mõne teise ühendusega."
+                }
+            }
+        }
+    }
+}

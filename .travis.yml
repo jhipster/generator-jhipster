@@ -1,3 +1,4 @@
+group: deprecated
 os:
   - linux
 services:
@@ -45,7 +46,8 @@ before_install:
   - java -version
   - export TZ=Australia/Canberra
   - date
-  - sudo /etc/init.d/mysql stop
+  # uncomment this line when using default group: stable
+  # - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
