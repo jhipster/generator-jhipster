@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Registreerimine",
+        "form": {
+            "button": "Registreeri"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Kasutajanimi on kohustuslik.",
+                    "minlength": "Kasutajanime pikkus peab olema vähemalt 1 sümbol.",
+                    "maxlength": "Kasutajanimi ei tohi olla pikem kui 50 sümbolit.",
+                    "pattern": "Kasutajanimi tohib sisaldada ainult väiketähti ja numbreid."
+                }
+            },
+            "success": "<strong>Registreering on salvestatud!</strong> Kinnituseks kontrollige oma e-posti.",
+            "error": {
+                "fail": "<strong>Registreerimine ebaõnnestus!</strong> Palun proovige hiljem uuesti.",
+                "userexists": "<strong>Kasutajanimi on juba kasutuses!</strong> Palun valige teine kasutajanimi.",
+                "emailexists": "<strong>E-posti aadress on juba kasutuses!</strong> Palun valige teine e-posti aadress."
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Logid",
+        "nbloggers": "Kokku on {{ total }} logijat.",
+        "filter": "Filter",
+        "table": {
+            "name": "Nimi",
+            "level": "Tase"
+        }
+    }
+}
