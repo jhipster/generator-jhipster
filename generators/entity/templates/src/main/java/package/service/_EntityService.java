@@ -10,8 +10,6 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
-<% if (dto == 'mapstruct') { %>
-import java.util.LinkedList;<% } %>
 import java.util.List;
 
 /**
