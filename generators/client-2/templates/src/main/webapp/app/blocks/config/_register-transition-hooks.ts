@@ -11,13 +11,13 @@ export function registerTransitionHooks($transitions: TransitionService) {
             auth.authorize();
         }
 
-        <% if (enableTranslation) { %>
+        <%_ if (enableTranslation) { _%>
         // Update the language //FIXME not sure if this is required, its causing some weird error as well
         /*let languageService = transition.injector().get(<%=jhiPrefixCapitalized%>LanguageService);
         languageService.getCurrent().then(current => {
             languageService.changeLanguage(current);
         });*/
-        <% } %>
+        <%_ } _%>
     });
 
     // Redirect to a state with an external URL (http://stackoverflow.com/a/30221248/1098564)

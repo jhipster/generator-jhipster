@@ -9,12 +9,12 @@ import { Principal } from '../../shared/auth/principal.service';
 import { AuthServerProvider } from '../../shared/auth/auth-oauth2.service';
     <%_ } else { _%>
 import {AuthServerProvider} from '../../shared/auth/auth-jwt.service';
-    <% } %>
+    <%_ } _%>
 <%_ } if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
-<% } %>
+<%_ } _%>
 
 export class AuthExpiredInterceptor extends HttpInterceptable {
 
@@ -26,11 +26,13 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
     constructor(private injector : Injector, private stateStorageService : StateStorageService) {
         super();
     }
-<% } %>
+<%_ } _%>
+
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
         return options;
     }
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         let self = this;
 
@@ -42,7 +44,6 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
                     let auth : AuthService = self.injector.get(AuthService);
                     auth.authorize(true);
                 }
-
             }
             return Observable.throw(error);
         });
@@ -71,6 +72,5 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
             return Observable.throw(error);
         });
     }
-<% } %>
-
+<%_ } _%>
 }

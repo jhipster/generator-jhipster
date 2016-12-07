@@ -30,7 +30,6 @@ import {
     accessdeniedState
 } from './layouts';
 
-
 localStorageConfig();
 
 let routerConfig = {
