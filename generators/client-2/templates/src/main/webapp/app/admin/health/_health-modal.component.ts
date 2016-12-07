@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 
 @Component({
@@ -22,15 +23,16 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
 
     readableValue(value : number)
     {
-        if (this.currentHealth.name !== "diskSpace")
+        if (this.currentHealth.name !== 'diskSpace') {
             return value.toString();
+        }
 
         // Should display storage space in an human readable unit
         let val = value / 1073741824;
         if (val > 1) { // Value
-            return val.toFixed(2) + " GB";
+            return val.toFixed(2) + ' GB';
         } else {
-            return (value / 1048576).toFixed(2) + " MB";
+            return (value / 1048576).toFixed(2) + ' MB';
         }
     }
 }

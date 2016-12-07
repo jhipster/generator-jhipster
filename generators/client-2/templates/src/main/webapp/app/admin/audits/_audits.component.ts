@@ -83,8 +83,6 @@ export class AuditsComponent implements OnInit {
             }
         });
 
-        if(this.reverse) audits.reverse();
-
-        return audits;
+        return this.reverse ? audits.reverse() : audits;
     }
 }

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { TranslateService, TranslationChangeEvent, LangChangeEvent } from 'ng2-translate/ng2-translate';
-import { StateService } from "ui-router-ng2";
+import { StateService } from 'ui-router-ng2';
 
 import { LANGUAGES } from './language.constants';
 import { TranslatePartialLoader } from './translate-partial-loader.provider';
-
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>LanguageService {

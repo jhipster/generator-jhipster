@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 
+import { StateService } from 'ui-router-ng2';
+
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { AlertService, ITEMS_PER_PAGE, ParseLinks, Principal } from '../../shared';
-import { StateService } from "ui-router-ng2";
-import { EventManager } from "../../shared/service/event-manager.service";
+import { EventManager } from '../../shared/service/event-manager.service';
 
 @Component({
     selector: 'user-mgmt',

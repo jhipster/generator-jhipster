@@ -26,4 +26,3 @@ export abstract class HttpInterceptable {
     abstract responseIntercept(observable : Observable<Response>) : Observable<Response>;
 
 }
-

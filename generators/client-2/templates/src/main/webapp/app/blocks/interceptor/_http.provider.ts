@@ -10,7 +10,7 @@ import { AuthExpiredInterceptor } from './auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
 import { NotificationInterceptor } from './notification.interceptor';
 
-import { EventManager } from "../../shared/service/event-manager.service";
+import { EventManager } from '../../shared/service/event-manager.service';
 
 export const customHttpProvider = () => ({
     provide: Http,

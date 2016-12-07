@@ -18,7 +18,7 @@ export class FilterPipe implements PipeTransform {
 
     private filterDefault(filter) {
         return value => {
-            return !filter || filter == value;
+            return !filter || filter === value;
         };
     }
 

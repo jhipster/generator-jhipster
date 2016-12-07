@@ -1,11 +1,11 @@
 import { TranslateLoader } from 'ng2-translate/ng2-translate';
-import { Http } from "@angular/http";
-import { Observable } from "rxjs/Observable";
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 export class TranslatePartialLoader implements TranslateLoader {
     private locations: string[];
 
-    constructor(private http: Http, private prefix: string = 'i18n', private suffix: string = ".json") {
+    constructor(private http: Http, private prefix = 'i18n', private suffix = '.json') {
     }
 
     public setLocations(locations: string[]) {

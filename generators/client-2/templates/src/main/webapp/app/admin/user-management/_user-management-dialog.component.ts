@@ -8,7 +8,6 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 <%_ }_%>
 import { EventManager } from '../../shared/service/event-manager.service';
 
-
 @Component({
     selector: 'user-mgmt-dialog',
     templateUrl: './user-management-dialog.component.html'
@@ -52,6 +51,7 @@ export class UserMgmtDialogComponent implements OnInit {
             this.userService.create(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
         }
     }
+    
     private onSaveSuccess (result) {
         this.eventManager.broadcast({ name: 'userListModification', content:'OK'});
         this.isSaving = false;

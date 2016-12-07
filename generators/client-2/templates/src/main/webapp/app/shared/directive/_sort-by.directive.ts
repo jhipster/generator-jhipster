@@ -11,7 +11,7 @@ export class JhSortByDirective {
     constructor(@Host() jhSort: JhSortDirective) {
         this.jhSort = jhSort;
     }
-    
+
     @HostListener('click') onClick() {
         this.jhSort.sort(this.jhSortBy);
     }
