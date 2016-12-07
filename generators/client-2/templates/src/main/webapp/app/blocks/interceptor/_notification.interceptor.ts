@@ -18,8 +18,9 @@ export class NotificationInterceptor extends HttpInterceptable {
             let headers = [];
             let i;
             for(i = 0; i < arr.length; i++){
-                if(arr[i][0].endsWith('app-alert') || arr[i][0].endsWith('app-params'))
+                if(arr[i][0].endsWith('app-alert') || arr[i][0].endsWith('app-params')) {
                     headers.push(arr[i][0]);
+                }
             }
             headers.sort();
             let alertKey = headers.length >= 1 ? error.headers.get(headers[0]) : null;

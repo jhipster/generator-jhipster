@@ -90,8 +90,9 @@ export class AlertService {
     addAlert(alertOptions, extAlerts): any {
         alertOptions.alertId = this.alertId++;
         <%_ if (enableTranslation){ _%>
-        if(alertOptions.msg !== undefined)
+        if(alertOptions.msg !== undefined){
             alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
+        }
         <%_ } _%>
         let alert = this.factory(alertOptions);
         if (alertOptions.timeout && alertOptions.timeout > 0) {

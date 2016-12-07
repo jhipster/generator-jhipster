@@ -13,8 +13,6 @@ export class OrderByPipe implements PipeTransform {
             }
         });
 
-        if(reverse) value.reverse();
-
-        return value;
+        return reverse ? value.reverse() : value;
     }
 }

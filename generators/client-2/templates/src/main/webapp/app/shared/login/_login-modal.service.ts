@@ -11,8 +11,9 @@ export class LoginModalService {
     ) {}
 
     open (): NgbModalRef {
-        if(this.isOpen)
+        if(this.isOpen) {
             return;
+        }
         this.isOpen = true;
         let modalRef = this.modalService.open(<%=jhiPrefixCapitalized%>LoginModalComponent);
         modalRef.result.then(result => {

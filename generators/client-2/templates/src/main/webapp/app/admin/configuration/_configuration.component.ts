@@ -21,7 +21,6 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
         this.reverse = false;
     }
 
-
     keys(dict) : Array<string> {
         return Object.keys(dict);
     }

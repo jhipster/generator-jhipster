@@ -1,6 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
-import { SessionStorageService } from 'ng2-webstorage';
 
 import { LoginModalService } from '../login/login-modal.service';
 import { Principal } from './principal.service';
@@ -46,7 +45,7 @@ export class AuthService {
                 else {
                     // user is not authenticated. stow the state they wanted before you
                     // send them to the login service, so you can return them when you're done
-                    var toStateParamsInfo = this.stateStorageService.getDestinationState().params;
+                    let toStateParamsInfo = this.stateStorageService.getDestinationState().params;
                     this.stateStorageService.storePreviousState(toStateInfo.name, toStateParamsInfo);
                     // now, send them to the signin state so they can log in
                     this.$state.go('accessdenied').then(() => {

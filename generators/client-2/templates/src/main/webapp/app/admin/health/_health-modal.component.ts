@@ -23,8 +23,9 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
 
     readableValue(value : number)
     {
-        if (this.currentHealth.name !== 'diskSpace')
+        if (this.currentHealth.name !== 'diskSpace') {
             return value.toString();
+        }
 
         // Should display storage space in an human readable unit
         let val = value / 1073741824;

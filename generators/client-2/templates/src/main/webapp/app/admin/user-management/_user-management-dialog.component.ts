@@ -8,7 +8,6 @@ import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
 <%_ }_%>
 import { EventManager } from '../../shared/service/event-manager.service';
 
-
 @Component({
     selector: 'user-mgmt-dialog',
     templateUrl: './user-management-dialog.component.html'

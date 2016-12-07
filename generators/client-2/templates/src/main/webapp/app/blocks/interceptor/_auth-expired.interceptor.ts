@@ -30,7 +30,6 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
         return options;
     }
-
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         let self = this;
@@ -48,7 +47,6 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
             return Observable.throw(error);
         });
     }
-
 <%_ } if (authenticationType === 'session') { _%>
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         let self = this;

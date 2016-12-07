@@ -77,7 +77,7 @@ export class PasswordStrengthBarComponent {
     set passwordToCheck(password: string) {
         if (password) {
             let c = this.strength.getColor(this.strength.mesureStrength(password));
-            this.el.nativeElement.className = "";
+            this.el.nativeElement.className = '';
             let lis = this.el.nativeElement.getElementsByTagName('li');
             for (let i = 0; i < lis.length; i++) {
                 if(i < c.idx) {

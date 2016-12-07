@@ -19,12 +19,8 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
             }
 
             return properties.sort((propertyA, propertyB) => {
-                if (propertyA.prefix === propertyB.prefix)
-                    return 0;
-                else if (propertyA.prefix < propertyB.prefix)
-                    return -1;
-                else if (propertyA.prefix > propertyB.prefix)
-                    return 1;
+                return (propertyA.prefix === propertyB.prefix) ? 0 :
+                       (propertyA.prefix < propertyB.prefix) ? -1 : 1;
             });
         });
     }

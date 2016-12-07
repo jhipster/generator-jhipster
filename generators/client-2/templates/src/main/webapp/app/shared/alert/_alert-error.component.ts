@@ -37,8 +37,9 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     let arr = Array.from(httpResponse.headers._headers);
                     let headers = [];
                     for(i = 0; i < arr.length; i++){
-                        if(arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params'))
+                        if(arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params')) {
                             headers.push(arr[i][0]);
+                        }
                     }
                     headers.sort();
                     let errorHeader = httpResponse.headers.get(headers[0]);
@@ -77,7 +78,7 @@ export class JhiAlertErrorComponent implements OnDestroy {
     }
 
     ngOnDestroy() {
-        if(this.cleanHttpErrorListener != undefined && this.cleanHttpErrorListener !== null){
+        if(this.cleanHttpErrorListener !== undefined && this.cleanHttpErrorListener !== null){
             this.eventManager.destroy(this.cleanHttpErrorListener);
             this.alerts = [];
         }
