@@ -199,12 +199,12 @@
         </table>
     </div>
     <% } %>
-    <h3 jhi-translate="metrics.datasource.title" *ngIf="metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
-    <div class="table-responsive" *ngIf="!updatingMetrics && metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
+    <h3 jhi-translate="metrics.datasource.title" *ngIf="metrics.gauges && metrics.gauges['HikariPool-2.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
+    <div class="table-responsive" *ngIf="!updatingMetrics && metrics.gauges && metrics.gauges['HikariPool-2.pool.TotalConnections'].value > 0">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><span jhi-translate="metrics.datasource.usage">Usage</span> ({{metrics.gauges['HikariPool-1.pool.ActiveConnections'].value}} / {{metrics.gauges['HikariPool-1.pool.TotalConnections'].value}})</th>
+                    <th><span jhi-translate="metrics.datasource.usage">Usage</span> ({{metrics.gauges['HikariPool-2.pool.ActiveConnections'].value}} / {{metrics.gauges['HikariPool-2.pool.TotalConnections'].value}})</th>
                     <th class="text-right" jhi-translate="metrics.datasource.count">Count</th>
                     <th class="text-right" jhi-translate="metrics.datasource.mean">Mean</th>
                     <th class="text-right" jhi-translate="metrics.datasource.min">Min</th>
@@ -219,19 +219,19 @@
                 <tr>
                     <td>
                         <div class="progress progress-striped">
-                            <ngb-progressbar [max]="metrics.gauges['HikariPool-1.pool.TotalConnections'].value" [value]="metrics.gauges['HikariPool-1.pool.ActiveConnections'].value" [striped]="true" [animated]="true" type="success">
-                                <span>{{metrics.gauges['HikariPool-1.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-1.pool.TotalConnections'].value  | number:'1.0-0'}}%</span>
+                            <ngb-progressbar [max]="metrics.gauges['HikariPool-2.pool.TotalConnections'].value" [value]="metrics.gauges['HikariPool-2.pool.ActiveConnections'].value" [striped]="true" [animated]="true" type="success">
+                                <span>{{metrics.gauges['HikariPool-2.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-2.pool.TotalConnections'].value  | number:'1.0-0'}}%</span>
                             </ngb-progressbar>
                         </div>
                     </td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].count}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].mean | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].min | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p50 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p75 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p95 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p99 | number:'1.0-2'}}</td>
-                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].max | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].count}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].mean | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].min | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].p50 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].p75 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].p95 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].p99 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-2.pool.Usage'].max | number:'1.0-2'}}</td>
                 </tr>
             </tbody>
         </table>
