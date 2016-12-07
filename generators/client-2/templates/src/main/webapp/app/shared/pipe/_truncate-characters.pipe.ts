@@ -29,4 +29,3 @@ export class TruncateCharactersPipe implements PipeTransform {
         return input;
     }
 }
-

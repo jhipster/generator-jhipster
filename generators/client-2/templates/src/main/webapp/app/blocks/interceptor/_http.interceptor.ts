@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Http, ConnectionBackend, RequestOptions, RequestOptionsArgs, Request, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-
 @Injectable()
 export class HttpInterceptor extends Http {
     private firstInterceptor : HttpInterceptable;

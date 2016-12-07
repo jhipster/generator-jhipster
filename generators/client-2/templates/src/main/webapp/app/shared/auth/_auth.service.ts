@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { SessionStorageService } from 'ng2-webstorage';
 
-import { LoginModalService } from "../login/login-modal.service";
+import { LoginModalService } from '../login/login-modal.service';
 import { Principal } from './principal.service';
 import { StateStorageService } from './state-storage.service';
 
@@ -17,13 +17,13 @@ export class AuthService {
     ){}
 
     authorize (force) {
-        var authReturn = this.principal.identity(force).then(authThen.bind(this));
+        let authReturn = this.principal.identity(force).then(authThen.bind(this));
 
         return authReturn;
 
         function authThen () {
-            var isAuthenticated = this.principal.isAuthenticated();
-            var toStateInfo = this.stateStorageService.getDestinationState().destination;
+            let isAuthenticated = this.principal.isAuthenticated();
+            let toStateInfo = this.stateStorageService.getDestinationState().destination;
 
             // an authenticated user can't access to login and register pages
             if (isAuthenticated && toStateInfo.parent === 'account' && (toStateInfo.name === 'login' || toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
@@ -31,8 +31,8 @@ export class AuthService {
             }
 
             // recover and clear previousState after external login redirect (e.g. oauth2)
-            var fromStateInfo = this.stateStorageService.getDestinationState().from;
-            var previousState = this.stateStorageService.getPreviousState();
+            let fromStateInfo = this.stateStorageService.getDestinationState().from;
+            let previousState = this.stateStorageService.getPreviousState();
             if (isAuthenticated && !fromStateInfo.name && previousState) {
                 this.stateStorageService.resetPreviousState();
                 this.$state.go(previousState.name, previousState.params);

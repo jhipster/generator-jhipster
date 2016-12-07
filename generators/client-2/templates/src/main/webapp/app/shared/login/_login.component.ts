@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { StateService } from "ui-router-ng2";
+import { StateService } from 'ui-router-ng2';
 <%_ if (enableTranslation){ _%>
 import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.service';
 <%_ } _%>

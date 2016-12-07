@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { LocalStorageService } from 'ng2-webstorage';
-
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
