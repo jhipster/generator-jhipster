@@ -11,6 +11,7 @@ import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import org.springframework.data.domain.Page;
@@ -147,7 +148,7 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    public ResponseEntity<List<ManagedUserVM>> getAllUsers(Pageable pageable)
+    public ResponseEntity<List<ManagedUserVM>> getAllUsers(@ApiParam Pageable pageable)
         throws URISyntaxException {
         <%_ if (databaseType == 'sql') { _%>
         Page<User> page = userRepository.findAllWithAuthorities(pageable);
