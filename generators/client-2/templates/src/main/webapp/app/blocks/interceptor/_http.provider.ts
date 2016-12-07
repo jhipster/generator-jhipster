@@ -3,6 +3,7 @@ import { Http, XHRBackend, RequestOptions } from '@angular/http';
 import { HttpInterceptor } from './http.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
+import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
 <%_ } if(authenticationType === 'session') { _%>
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
