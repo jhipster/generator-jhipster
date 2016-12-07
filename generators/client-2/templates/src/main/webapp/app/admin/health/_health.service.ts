@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
-
 @Injectable()
 export class <%=jhiPrefixCapitalized%>HealthService {
 
@@ -91,7 +90,6 @@ export class <%=jhiPrefixCapitalized%>HealthService {
 
         return result;
     }
-
 
     private getModuleName (path, name): string {
         let result;

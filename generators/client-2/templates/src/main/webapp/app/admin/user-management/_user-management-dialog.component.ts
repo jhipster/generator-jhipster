@@ -52,6 +52,7 @@ export class UserMgmtDialogComponent implements OnInit {
             this.userService.create(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
         }
     }
+    
     private onSaveSuccess (result) {
         this.eventManager.broadcast({ name: 'userListModification', content:'OK'});
         this.isSaving = false;

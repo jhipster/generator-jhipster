@@ -1,5 +1,6 @@
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
@@ -61,6 +62,7 @@ export const userMgmtState = {
     <%_ } _%>
 
 };
+
 export const userMgmtDetailState = {
     name: 'user-management-detail',
     parent: 'admin',
@@ -78,6 +80,7 @@ export const userMgmtDetailState = {
         resolveFn: (languageService) => languageService.setLocations(['user-management'])
     }]
 };
+
 export const userMgmtNewState = {
     name: 'user-management.new',
     url: '/new',
@@ -98,7 +101,6 @@ export const userMgmtNewState = {
         });
     }
 };
-
 
 export const userMgmtEditState = {
     name: 'user-management.edit',
@@ -124,7 +126,6 @@ export const userMgmtEditState = {
         });
     }
 };
-
 
 export const userMgmtDeleteState = {
     name: 'user-management.delete',
