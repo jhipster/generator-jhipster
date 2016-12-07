@@ -1,6 +1,6 @@
 import { TranslateLoader } from 'ng2-translate/ng2-translate';
-import { Http } from "@angular/http";
-import { Observable } from "rxjs/Observable";
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 export class TranslatePartialLoader implements TranslateLoader {
     private locations: string[];
