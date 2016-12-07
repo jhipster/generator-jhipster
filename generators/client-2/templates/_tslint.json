@@ -9,8 +9,8 @@
 		"triple-equals": [true, "allow-null-check"],
 		"quotemark": [true, "single", "avoid-escape"],
 		"max-classes-per-file": [true, 1],
-		"no-consecutive-blank-lines": true,
-		"no-console": true,
+		"no-consecutive-blank-lines": [true],
+		"no-console": [true],
 		"no-eval": true,
 		"no-trailing-whitespace": true,
 		"no-var-keyword": true

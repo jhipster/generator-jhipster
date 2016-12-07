@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Activate } from './activate.service';
-import { LoginModalService } from "../../shared";
+import { LoginModalService } from '../../shared';
 
 import { Transition } from 'ui-router-ng2';
 
