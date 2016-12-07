@@ -13,7 +13,6 @@
             parent: 'entity',
             url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
             data: {
-                authorities: ['ROLE_USER'],
                 pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
             },
             views: {
@@ -63,7 +62,6 @@
             parent: 'entity',
             url: '/<%= entityUrl %>/{id}',
             data: {
-                authorities: ['ROLE_USER'],
                 pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
             },
             views: {
@@ -122,9 +120,6 @@
         .state('<%= entityStateName %>.new', {
             parent: '<%= entityStateName %>',
             url: '/new',
-            data: {
-                authorities: ['ROLE_USER']
-            },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
@@ -159,9 +154,6 @@
         .state('<%= entityStateName %>.edit', {
             parent: '<%= entityStateName %>',
             url: '/{id}/edit',
-            data: {
-                authorities: ['ROLE_USER']
-            },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
@@ -184,9 +176,6 @@
         .state('<%= entityStateName %>.delete', {
             parent: '<%= entityStateName %>',
             url: '/{id}/delete',
-            data: {
-                authorities: ['ROLE_USER']
-            },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.html',

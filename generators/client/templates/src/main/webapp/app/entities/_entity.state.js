@@ -10,7 +10,10 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('entity', {
             abstract: true,
-            parent: 'app'
+            parent: 'app',
+            data: {
+                authorities: ['ROLE_USER']
+            }
         });
     }
 })();
