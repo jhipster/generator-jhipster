@@ -32,42 +32,13 @@ exports.config = {
     },
 
     onPrepare: function() {
-        // Disable animations so e2e tests run more quickly
-        var disableNgAnimate = function() {
-            angular
-                .module('disableNgAnimate', [])
-                .run(['$animate', function($animate) {
-                    $animate.enabled(false);
-                }]);
-        };
-
-        var disableCssAnimate = function() {
-            angular
-                .module('disableCssAnimate', [])
-                .run(function() {
-                    var style = document.createElement('style');
-                    style.type = 'text/css';
-                    style.innerHTML = 'body * {' +
-                        '-webkit-transition: none !important;' +
-                        '-moz-transition: none !important;' +
-                        '-o-transition: none !important;' +
-                        '-ms-transition: none !important;' +
-                        'transition: none !important;' +
-                        '}';
-                    document.getElementsByTagName('head')[0].appendChild(style);
-                });
-        };
-
-        browser.addMockModule('disableNgAnimate', disableNgAnimate);
-        browser.addMockModule('disableCssAnimate', disableCssAnimate);
-
         browser.driver.manage().window().setSize(1280, 1024);
         jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
-            savePath: '<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e',
+            savePath: prefix + "<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e",
             consolidateAll: false
         }));
         jasmine.getEnv().addReporter(new HtmlScreenshotReporter({
-            dest: "<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e/screenshots"
+            dest: prefix + "<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e/screenshots"
         }));
     },
 
