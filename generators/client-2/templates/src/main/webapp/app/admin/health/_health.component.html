@@ -2,7 +2,7 @@
     <h2 jhi-translate="health.title">Health Checks</h2>
 
     <p>
-        <button type="button" class="btn btn-primary" (click)="refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span jhi-translate="health.refresh.button">Refresh</span>
+        <button type="button" class="btn btn-primary" (click)="refresh()"><span class="fa fa-refresh"></span>&nbsp;<span jhi-translate="health.refresh.button">Refresh</span>
         </button>
     </p>
 
@@ -25,7 +25,7 @@
                 </td>
                 <td class="text-center">
                     <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
-                        <i class="glyphicon glyphicon-eye-open"></i>
+                        <i class="fa fa-eye"></i>
                     </a>
                 </td>
             </tr>
