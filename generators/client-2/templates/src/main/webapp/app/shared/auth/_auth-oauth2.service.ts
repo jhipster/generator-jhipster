@@ -36,9 +36,10 @@ export class AuthServerProvider {
 
         return this.http.post('oauth/token', data, {
             headers: headers
-        }).map(authSucess.bind(this));
+        }).map(authSuccess.bind(this));
 
-        function authSucess (response) {
+        function authSuccess (resp) {
+            let response = resp.json();
             let expiredAt = new Date();
             expiredAt.setSeconds(expiredAt.getSeconds() + response.expires_in);
             response.expires_at = expiredAt.getTime();
