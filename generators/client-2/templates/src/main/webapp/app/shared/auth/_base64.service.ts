@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class Base64 {
-    let keyStr: string = 'ABCDEFGHIJKLMNOP' +
+    private keyStr: string = 'ABCDEFGHIJKLMNOP' +
         'QRSTUVWXYZabcdef' +
         'ghijklmnopqrstuv' +
         'wxyz0123456789+/' +
@@ -37,10 +37,10 @@ export class Base64 {
             }
 
             output = output +
-                keyStr.charAt(enc1) +
-                keyStr.charAt(enc2) +
-                keyStr.charAt(enc3) +
-                keyStr.charAt(enc4);
+                this.keyStr.charAt(enc1) +
+                this.keyStr.charAt(enc2) +
+                this.keyStr.charAt(enc3) +
+                this.keyStr.charAt(enc4);
             chr1 = chr2 = chr3 = '';
             enc1 = enc2 = enc3 = enc4 = '';
         }
@@ -63,10 +63,10 @@ export class Base64 {
         input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
 
         while (i < input.length) {
-            enc1 = keyStr.indexOf(input.charAt(i++));
-            enc2 = keyStr.indexOf(input.charAt(i++));
-            enc3 = keyStr.indexOf(input.charAt(i++));
-            enc4 = keyStr.indexOf(input.charAt(i++));
+            enc1 = this.keyStr.indexOf(input.charAt(i++));
+            enc2 = this.keyStr.indexOf(input.charAt(i++));
+            enc3 = this.keyStr.indexOf(input.charAt(i++));
+            enc4 = this.keyStr.indexOf(input.charAt(i++));
 
             chr1 = (enc1 << 2) | (enc2 >> 4);
             chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
