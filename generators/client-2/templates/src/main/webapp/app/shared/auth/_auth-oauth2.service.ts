@@ -4,7 +4,9 @@ import { Observable } from 'rxjs/Rx';
 import { LocalStorageService } from 'ng2-webstorage';
 
 import { Base64 } from './base64.service';
+<%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+<%_ } _%>
 
 @Injectable()
 export class AuthServerProvider {
@@ -29,14 +31,15 @@ export class AuthServerProvider {
         let headers = new Headers ({
             'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json',
-            'Authorization': 'Basic ' + base64.encode('<%= baseName%>app' + ':' + 'my-secret-token-to-change-in-production')
+            'Authorization': 'Basic ' + this.base64.encode('<%= baseName%>app' + ':' + 'my-secret-token-to-change-in-production')
         });
 
         return this.http.post('oauth/token', data, {
             headers: headers
-        }).map(authSucess.bind(this));
+        }).map(authSuccess.bind(this));
 
-        function authSucess (response) {
+        function authSuccess (resp) {
+            let response = resp.json();
             let expiredAt = new Date();
             expiredAt.setSeconds(expiredAt.getSeconds() + response.expires_in);
             response.expires_at = expiredAt.getTime();
@@ -49,9 +52,9 @@ export class AuthServerProvider {
         <%_ if (websocket === 'spring-websocket') { _%>
         this.trackerService.disconnect();
         <%_ } _%>
-        this.http.post('api/logout', {}).map(resp => {
+        return this.http.post('api/logout', {}).map((response: Response) => {
             this.$localStorage.clear('authenticationToken');
-            return resp;
+            return response;
         });
     }
 }
