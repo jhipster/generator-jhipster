@@ -32,7 +32,7 @@ describe('account', function () {
         password.clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
 
-        expect(element(by.css('.alert-success')).getText()).toMatch(/You are logged in as user "admin"/);
+        expect($('.alert-success').getText()).toMatch(/You are logged in as user "admin"/);
     });
 
     it('should be able to update settings', function () {
