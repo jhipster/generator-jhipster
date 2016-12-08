@@ -26,7 +26,7 @@ describe('account', function () {
     });
 
     it('should login successfully with admin account', function () {
-        expect(element.all(by.css('h1')).first().getText()).toMatch(/Sign in/);
+        expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
 
         username.clear().sendKeys('admin');
         password.clear().sendKeys('admin');
@@ -37,7 +37,7 @@ describe('account', function () {
 
     it('should be able to update settings', function () {
         accountMenu.click();
-        element(by.css('[ui-sref="settings"]')).click();
+        element(by.css('[uisref="settings"]')).click();
 
         expect(element(by.css('h2')).getText()).toMatch(/User settings for \[admin\]/);
         element(by.css('button[type=submit]')).click();
@@ -48,7 +48,7 @@ describe('account', function () {
 
     it('should be able to update password', function () {
         accountMenu.click();
-        element(by.css('[ui-sref="password"]')).click();
+        element(by.css('[uisref="password"]')).click();
 
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Password for \[admin\]/);
         password.sendKeys('newpassword');
@@ -68,7 +68,7 @@ describe('account', function () {
         element(by.css('button[type=submit]')).click();
 
         accountMenu.click();
-        element(by.css('[ui-sref="password"]')).click();
+        element(by.css('[uisref="password"]')).click();
         // change back to default
         password.clear().sendKeys('admin');
         element(by.id('confirmPassword')).clear().sendKeys('admin');
