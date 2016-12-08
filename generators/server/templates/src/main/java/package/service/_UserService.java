@@ -205,32 +205,36 @@ public class UserService {
         });
     }
 
-    public void updateUser(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String firstName, String lastName, String email,
-        boolean activated, String langKey, Set<String> authorities) {
+    /**
+     * Method to update a user, and return the modified user object, if the update was successful.
+     */
+    public Optional<ManagedUserVM> updateUser(ManagedUserVM userUpdate) {
 
-        Optional.of(userRepository
-            .findOne(id))
-            .ifPresent(user -> {
-                user.setLogin(login);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setEmail(email);
-                user.setActivated(activated);
-                user.setLangKey(langKey);
+        return Optional.of(userRepository
+            .findOne(userUpdate.getId()))
+            .map(user -> {
+                user.setLogin(userUpdate.getLogin());
+                user.setFirstName(userUpdate.getFirstName());
+                user.setLastName(userUpdate.getLastName());
+                user.setEmail(userUpdate.getEmail());
+                user.setActivated(userUpdate.isActivated());
+                user.setLangKey(userUpdate.getLangKey());
                 <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
-                authorities.forEach(
-                    authority -> managedAuthorities.add(authorityRepository.findOne(authority))
-                );
+                userUpdate.getAuthorities().stream()
+                    .map(authorityRepository::findOne)
+                    .forEach(managedAuthorities::add);
                 <%_ } else { // Cassandra _%>
-                user.setAuthorities(authorities);
+                user.setAuthorities(userUpdate.getAuthorities());
                 <%_ } _%>
                 <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
-            });
+                return user;
+            })
+            .map(ManagedUserVM::new);
     }
 
     public void deleteUser(String login) {
