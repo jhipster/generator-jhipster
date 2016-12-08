@@ -115,9 +115,53 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         if (fields[idx].fieldValidateRulesMaxlength < sampleTextLength) {
             sampleTextLength = fields[idx].fieldValidateRulesMaxlength;
         }
-        for (var i = 0; i < sampleTextLength; i++ ) {
+        for (var i = 0; i < sampleTextLength; i++) {
             sampleTextString += "A";
             updatedTextString += "B";
+        }
+        if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
+            // Generate Strings, using pattern
+            try {
+                var sampleTextHigherLength = 100;
+                var sampleTextLengthLimit = 1000;
+                var patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
+                if (!patternRegExp.test(sampleTextString)) {
+                    var samplePatternTextString = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
+                    if (patternRegExp.test(samplePatternTextString.substr(0, sampleTextLength))) {
+                        samplePatternTextString = samplePatternTextString.substr(0, sampleTextLength);
+                    } else if (fields[idx].fieldValidateRulesMaxlength > sampleTextLength) {
+                        samplePatternTextString = samplePatternTextString.substr(0, fields[idx].fieldValidateRulesMaxlength);
+                    } else if (patternRegExp.test(samplePatternTextString.substr(0, sampleTextHigherLength))) {
+                        samplePatternTextString = samplePatternTextString.substr(0, sampleTextHigherLength);
+                    } else if (samplePatternTextString.length > sampleTextLengthLimit) {
+                        samplePatternTextString = samplePatternTextString.substr(0, sampleTextLengthLimit);
+                    }
+                    sampleTextString = samplePatternTextString.replace(/\\/g, '\\\\');
+                }
+                if (!patternRegExp.test(updatedTextString)) {
+                    var updatedPatternTextString = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
+                    if (patternRegExp.test(updatedPatternTextString.substr(0, sampleTextLength))) {
+                        updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextLength);
+                    } else if (fields[idx].fieldValidateRulesMaxlength > sampleTextLength) {
+                        updatedPatternTextString = updatedPatternTextString.substr(0, fields[idx].fieldValidateRulesMaxlength);
+                    } else if (patternRegExp.test(updatedPatternTextString.substr(0, sampleTextHigherLength))) {
+                        updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextHigherLength);
+                    } else if (updatedPatternTextString.length > sampleTextLengthLimit) {
+                        updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextLengthLimit);
+                    }
+                    updatedTextString = updatedPatternTextString.replace(/\\/g, '\\\\');
+                }
+            } catch (error) {
+                log(this.chalkRed('Error generating test value for entity "' + entityClass +
+                    '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
+                    '", generating default values for this field. Detailed error message: "' + error.message + '".'));
+            }
+            if (sampleTextString === updatedTextString) {
+                updatedTextString = updatedTextString + "B";
+                log(this.chalkRed('Randomly generated first and second test values for entity "' + entityClass +
+                    '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
+                    '" in file "' + entityClass + 'ResourceIntTest" where equal, added symbol "B" to second value.'));
+            }
         }_%>
 
     private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
