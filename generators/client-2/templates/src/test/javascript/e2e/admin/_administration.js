@@ -25,32 +25,32 @@ describe('administration', function () {
     });
 
     it('should load user management', function () {
-        element(by.css('[ui-sref="user-management"]')).click();
+        element(by.css('[uisref="user-management"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Users/);
     });
 
     it('should load metrics', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>-metrics"]')).click();
+        element(by.css('[uisref="<%=jhiPrefix%>-metrics"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Application Metrics/);
     });
 
     it('should load health', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>-health"]')).click();
+        element(by.css('[uisref="<%=jhiPrefix%>-health"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Health Checks/);
     });
 
     it('should load configuration', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>-configuration"]')).click();
+        element(by.css('[uisref="<%=jhiPrefix%>-configuration"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Configuration/);
     });
 
     it('should load audits', function () {
-        element(by.css('[ui-sref="audits"]')).click();
+        element(by.css('[uisref="audits"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Audits/);
     });
 
     it('should load logs', function () {
-        element(by.css('[ui-sref="logs"]')).click();
+        element(by.css('[uisref="logs"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Logs/);
     });
 
