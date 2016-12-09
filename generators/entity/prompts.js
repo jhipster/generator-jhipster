@@ -95,11 +95,11 @@ function askForUpdate() {
                 },
                 {
                     value: 'add',
-                    name: '[BETA] Yes, add more fields and relationships'
+                    name: 'Yes, add more fields and relationships'
                 },
                 {
                     value: 'remove',
-                    name: '[BETA] Yes, remove fields and relationships'
+                    name: 'Yes, remove fields and relationships'
                 },
                 {
                     value: 'none',
@@ -136,7 +136,7 @@ function askForFields() {
 
 function askForFieldsToRemove() {
     // prompt only if data is imported from a file
-    if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
+    if (!this.useConfigurationFile || this.updateEntity !== 'remove' || this.fieldNameChoices.length === 0) {
         return;
     }
     var done = this.async();
@@ -146,12 +146,11 @@ function askForFieldsToRemove() {
             type: 'checkbox',
             name: 'fieldsToRemove',
             message: 'Please choose the fields you want to remove',
-            choices: this.fieldNameChoices,
-            default: 'none'
+            choices: this.fieldNameChoices
         },
         {
             when: function (response) {
-                return response.fieldsToRemove !== 'none';
+                return response.fieldsToRemove.length !== 0;
             },
             type: 'confirm',
             name: 'confirmRemove',
@@ -193,7 +192,7 @@ function askForRelationships() {
 
 function askForRelationsToRemove() {
     // prompt only if data is imported from a file
-    if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
+    if (!this.useConfigurationFile || this.updateEntity !== 'remove' || this.relNameChoices.length === 0) {
         return;
     }
     if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
@@ -207,12 +206,11 @@ function askForRelationsToRemove() {
             type: 'checkbox',
             name: 'relsToRemove',
             message: 'Please choose the relationships you want to remove',
-            choices: this.relNameChoices,
-            default: 'none'
+            choices: this.relNameChoices
         },
         {
             when: function (response) {
-                return response.relsToRemove !== 'none';
+                return response.relsToRemove.length !== 0;
             },
             type: 'confirm',
             name: 'confirmRemove',
@@ -278,8 +276,8 @@ function askForTableName() {
 }
 
 function askForDTO() {
-    // don't prompt if data is imported from a file
-    if (this.useConfigurationFile) {
+    // don't prompt if data is imported from a file or server is skipped
+    if (this.useConfigurationFile || this.skipServer) {
         return;
     }
     var done = this.async();
@@ -308,8 +306,8 @@ function askForDTO() {
 }
 
 function askForService() {
-    // don't prompt if data are imported from a file
-    if (this.useConfigurationFile) {
+    // don't prompt if data is imported from a file or server is skipped
+    if (this.useConfigurationFile || this.skipServer) {
         return;
     }
     var done = this.async();
@@ -388,6 +386,7 @@ function askForPagination() {
  */
 function askForField(done) {
     this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
+    var skipServer = this.skipServer;
     var prodDatabaseType = this.prodDatabaseType;
     var databaseType = this.databaseType;
     var fieldNamesUnderscored = this.fieldNamesUnderscored;
@@ -413,8 +412,8 @@ function askForField(done) {
                     return 'Your field name cannot start with a upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
-                } else if (jhiCore.isReservedFieldName(input, prodDatabaseType)) {
-                    return `Your field name cannot contain a Java or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
+                } else if (!skipServer && jhiCore.isReservedFieldName(input, prodDatabaseType)) {
+                    return `Your field name cannot contain a Java, AngularJS or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
@@ -424,7 +423,7 @@ function askForField(done) {
         },
         {
             when: function (response) {
-                return response.fieldAdd === true && (databaseType === 'sql' || databaseType === 'mongodb');
+                return response.fieldAdd === true && (skipServer || databaseType === 'sql' || databaseType === 'mongodb');
             },
             type: 'list',
             name: 'fieldType',
@@ -530,7 +529,7 @@ function askForField(done) {
                         return 'Enum value "' + enums[i] + '" cannot start with a number';
                     }
                     if (enums[i] === '') {
-                        return 'Enum value cannot be empty (did you accidently type "," twice in a row?)';
+                        return 'Enum value cannot be empty (did you accidentally type "," twice in a row?)';
                     }
                 }
 
@@ -581,7 +580,7 @@ function askForField(done) {
                 },
                 {
                     value: 'LocalDate',
-                    name: 'LocalDate (Warning: only compatible with cassandra v3)'
+                    name: 'LocalDate (Warning: only compatible with Cassandra v3)'
                 },
                 {
                     value: 'ZonedDateTime',
@@ -655,7 +654,8 @@ function askForField(done) {
             when: function (response) {
                 return response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldType === 'String';
+                    (response.fieldType === 'String' ||
+                    response.fieldTypeBlobContent === 'text');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -688,8 +688,7 @@ function askForField(done) {
                     response.fieldType === 'Long' ||
                     response.fieldType === 'Float' ||
                     response.fieldType === 'Double' ||
-                    response.fieldType === 'BigDecimal' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'BigDecimal');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -794,8 +793,7 @@ function askForField(done) {
                     response.fieldValidate === true &&
                     response.fieldValidateRules.indexOf('min') !== -1 &&
                     (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'Long');
             },
             type: 'input',
             name: 'fieldValidateRulesMin',
@@ -812,8 +810,7 @@ function askForField(done) {
                     response.fieldValidate === true &&
                     response.fieldValidateRules.indexOf('max') !== -1 &&
                     (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'Long');
             },
             type: 'input',
             name: 'fieldValidateRulesMax',

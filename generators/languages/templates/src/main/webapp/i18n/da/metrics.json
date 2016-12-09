@@ -69,16 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache statistik",
+        "cache": {
+            "title": "Cache statistik",
             "cachename": "Cache navn",
-            "objects": "Objekter",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Antal udsættelser"
+            "evictions": "Antal udsættelser"
         },
         "datasource": {
-        	"usage": "Usage",
+            "usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",

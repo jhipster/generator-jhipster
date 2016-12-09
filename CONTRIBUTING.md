@@ -26,7 +26,7 @@ would like to implement a new feature then consider what kind of change it is:
 ### Submitting an Issue
 Before you submit your issue search the archive, maybe your question was already answered.
 
-If your issue appears to be a bug, and hasn't been reported, open a new issue.
+If your issue appears to be a bug, and has not been reported, open a new issue.
 Help us to maximize the effort we can spend fixing issues and adding new
 features, by not reporting duplicate issues.  Providing the following information will increase the
 chances of your issue being dealt with quickly:
@@ -45,7 +45,7 @@ chances of your issue being dealt with quickly:
 
 You can use `yo jhipster:info` to provide us the information we need.
 
-Click [here](https://github.com/jhipster/generator-jhipster/issues/new) to open a bug issue with a pre-filled template. For feature requests and quiries you can use [this template][feature-template].
+Click [here](https://github.com/jhipster/generator-jhipster/issues/new) to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
 
 You can run `yo jhipster:info` in your project folder to get most of the above required info.
 
@@ -208,7 +208,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 * All features or bug fixes **must be tested** by one or more tests.
 * All files must follow the [.editorconfig file](http://editorconfig.org/) located at the root of the JHipster generator project. Please note that generated projects use the same .editorconfig file, so that both the generator and the generated projects share the same configuration.
-* Java files **must be** formatted using [Intellij IDEA's code style](http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Style+and+Formatting). Please note that JHipster commiters have a free Intellij IDEA Ultimate Edition for developing the project.
+* Java files **must be** formatted using [Intellij IDEA's code style](http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Style+and+Formatting). Please note that JHipster committers have a free Intellij IDEA Ultimate Edition for developing the project.
 * Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
 * AngularJS files **must follow** [John Papa's Angular 1 style guide] (https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).

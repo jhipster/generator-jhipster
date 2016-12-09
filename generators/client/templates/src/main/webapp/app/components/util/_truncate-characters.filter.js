@@ -4,7 +4,7 @@
     angular
         .module('<%=angularAppName%>')
         .filter('characters', characters);
-        
+
     function characters () {
         return charactersFilter;
 

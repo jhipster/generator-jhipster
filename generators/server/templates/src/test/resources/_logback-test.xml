@@ -4,7 +4,12 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <logger name="<%=packageName%>" level="DEBUG"/>
+    <%_ if (databaseType == 'sql') { _%>
+    <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <%_ } else if (databaseType == 'mongodb') { _%>
+    <logger name="org.mongodb.driver" level="WARN"/>
+    <%_ } _%>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
 
     <root level="WARN">

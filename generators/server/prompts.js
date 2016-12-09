@@ -227,7 +227,7 @@ function askForServerSideOpts() {
             choices: [
                 {
                     value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
+                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
                 },
                 {
                     value: 'mongodb',
@@ -265,6 +265,10 @@ function askForServerSideOpts() {
                 {
                     value: 'oracle',
                     name: 'Oracle - Warning! The Oracle JDBC driver (ojdbc) is not bundled because it is not Open Source. Please follow our documentation to install it manually.'
+                },
+                {
+                    value: 'mssql',
+                    name: 'Microsoft SQL Server'
                 }
             ],
             default: 0
@@ -365,6 +369,31 @@ function askForServerSideOpts() {
                 {
                     value: 'oracle',
                     name: 'Oracle 12c'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return (response.databaseType === 'sql' && response.prodDatabaseType === 'mssql');
+            },
+            type: 'list',
+            name: 'devDatabaseType',
+            message: function (response) {
+                return getNumberedQuestion('Which *development* database would you like to use?', response.databaseType === 'sql' && response.prodDatabaseType === 'mssql');
+            },
+            choices: [
+                {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
+                },
+                {
+                    value: 'mssql',
+                    name: 'Microsoft SQL Server'
                 }
             ],
             default: 0
@@ -490,12 +519,17 @@ function askForOptionalItems() {
             }
         );
     }
-    if (applicationType === 'monolith' || applicationType === 'gateway') {
+    if ((applicationType === 'monolith' || applicationType === 'gateway') &&
+            (this.hibernateCache === 'no' || this.hibernateCache === 'hazelcast')) {
         choices.push(
             {
                 name: 'Clustered HTTP sessions using Hazelcast',
                 value: 'clusteredHttpSession:hazelcast'
-            },
+            }
+        );
+    }
+    if (applicationType === 'monolith' || applicationType === 'gateway') {
+        choices.push(
             {
                 name: 'WebSockets using Spring Websocket',
                 value: 'websocket:spring-websocket'

@@ -18,6 +18,7 @@ describe('JHipster generator languages', function () {
         {name: 'Czech', value: 'cs'},
         {name: 'Danish', value: 'da'},
         {name: 'Dutch', value: 'nl'},
+        {name: 'Estonian', value: 'et'},
         {name: 'Galician', value: 'gl'},
         {name: 'German', value: 'de'},
         {name: 'Greek', value: 'el'},
@@ -33,10 +34,12 @@ describe('JHipster generator languages', function () {
         {name: 'Romanian', value: 'ro'},
         {name: 'Russian', value: 'ru'},
         {name: 'Slovak', value: 'sk'},
+        {name: 'Serbian', value: 'sr'},
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
-        {name: 'Tamil', value: 'ta'}
+        {name: 'Tamil', value: 'ta'},
+        {name: 'Vietnamese', value: 'vi'}
     ];
 
     languages.forEach( function(language) {

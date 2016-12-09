@@ -10,23 +10,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Resource to return information about the currently running Spring profiles.
+ */
 @RestController
 @RequestMapping("/api")
 public class ProfileInfoResource {
 
     @Inject
-    Environment env;
+    private Environment env;
 
     @Inject
     private JHipsterProperties jHipsterProperties;
 
     @GetMapping("/profile-info")
     public ProfileInfoResponse getActiveProfiles() {
-        return new ProfileInfoResponse(DefaultProfileUtil.getActiveProfiles(env), getRibbonEnv());
+        String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
+        return new ProfileInfoResponse(activeProfiles, getRibbonEnv(activeProfiles));
     }
 
-    private String getRibbonEnv() {
-        String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
+    private String getRibbonEnv(String[] activeProfiles) {
         String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();
 
         if (displayOnActiveProfiles == null) {

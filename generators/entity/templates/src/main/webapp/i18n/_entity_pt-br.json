@@ -6,10 +6,10 @@
                 "createLabel": "Criar novo <%= entityClassHumanized %>",
                 "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>",
                 "search": "Pesquisar por <%= entityClassHumanized %>"
-            },
+            },<% if (!microserviceAppName) { %>
             "created": "Um novo <%= entityClassHumanized %> é criado com o identificador {{ param }}",
             "updated": "Um <%= entityClassHumanized %> é atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> é deletado com o identificador {{ param }}",
+            "deleted": "Um <%= entityClassHumanized %> é deletado com o identificador {{ param }}",<% } %>
             "delete": {
                 "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
             },
@@ -19,5 +19,12 @@
             "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
             "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
         }
-    }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Um novo <%= entityClassHumanized %> é criado com o identificador {{ param }}",
+            "updated": "Um <%= entityClassHumanized %> é atualizado com o identificador {{ param }}",
+            "deleted": "Um <%= entityClassHumanized %> é deletado com o identificador {{ param }}"
+        }
+    }<% } %>
 }

@@ -69,6 +69,7 @@ module.exports = JhipsterServerGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.logo = this.configOptions.logo;
         this.baseName = this.configOptions.baseName;
+        this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
     },
     initializing: {
         displayLogo: function () {
@@ -89,11 +90,12 @@ module.exports = JhipsterServerGenerator.extend({
             this.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
             this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-            this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE,
+            this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
             this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
             this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
             this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
             this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+            this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
             this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
             this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
@@ -103,6 +105,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
             this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+            this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
 
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packagejs = packagejs;
@@ -117,12 +120,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.serverPort = '8080';
             }
             this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
-            this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
             if (this.searchEngine === undefined) {
                 this.searchEngine = false;
             }
-            this.messageBroker = this.config.get('messageBroker');
+            this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
             if (this.messageBroker === undefined) {
                 this.messageBroker = false;
             }
@@ -150,6 +152,13 @@ module.exports = JhipsterServerGenerator.extend({
                 this.devDatabaseType = this.config.get('devDatabaseType');
                 this.prodDatabaseType = this.config.get('prodDatabaseType');
                 this.hibernateCache = this.config.get('hibernateCache');
+            }
+            if (this.hibernateCache === undefined) {
+                this.hibernateCache = 'no';
+            }
+            this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
+            if (this.hibernateCache === 'ehcache') {
+                this.clusteredHttpSession = false; // cannot use HazelCast clusering AND ehcache
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
@@ -200,7 +209,7 @@ module.exports = JhipsterServerGenerator.extend({
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 }
 
-                // Generate JWT secert key if key does not already exist in config
+                // Generate JWT secret key if key does not already exist in config
                 if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }

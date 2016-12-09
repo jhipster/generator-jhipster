@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .factory('authExpiredInterceptor', authExpiredInterceptor);
 
-    <% if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { %>
+    <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$localStorage', '$sessionStorage'];
 
     function authExpiredInterceptor($rootScope, $q, $injector, $localStorage, $sessionStorage) {
@@ -27,7 +27,9 @@
             }
             return $q.reject(response);
         }
-    }<% } %><% if (authenticationType === 'session') { %>
+    }
+    <%_ } _%>
+    <%_ if (authenticationType === 'session') { _%>
     authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector'];
 
     function authExpiredInterceptor($rootScope, $q, $injector) {
@@ -53,5 +55,6 @@
             }
             return $q.reject(response);
         }
-    }<% } %>
+    }
+    <%_ } _%>
 })();

@@ -47,10 +47,6 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
         countQuery = "select count(user) from User user")
     Page<User> findAllWithAuthorities(Pageable pageable);
     <%_ } _%>
-
-    @Override
-    void delete(User t);
-
 }<% } else if (databaseType == 'cassandra') { %>
 @Repository
 public class UserRepository {

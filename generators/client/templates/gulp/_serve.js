@@ -16,6 +16,9 @@ module.exports = function () {
     // to correctly handle them.
     var proxyRoutes = [
     <%_ if (applicationType === 'monolith') { _%>
+      <%_ if (authenticationType == 'oauth2') { _%>
+        '/oauth',
+      <%_ } _%>
         '/api',
         '/management',
         '/swagger-resources',

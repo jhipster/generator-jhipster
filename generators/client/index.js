@@ -92,6 +92,13 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm install',
+            type: Boolean,
+            defaults: false
+        });
+
         this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
@@ -102,6 +109,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
+        this.otherModules = this.configOptions.otherModules || [];
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         this.testFrameworks = [];
@@ -110,6 +118,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
+        this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
     },
 
     initializing: {
@@ -203,6 +212,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
+            this.yarnInstall && this.config.set('yarn', true);
         }
     },
 
@@ -223,6 +233,9 @@ module.exports = JhipsterClientGenerator.extend({
             }
             if (this.configOptions.prodDatabaseType) {
                 this.prodDatabaseType = this.configOptions.prodDatabaseType;
+            }
+            if (this.configOptions.messageBroker !== undefined) {
+                this.messageBroker = this.configOptions.messageBroker;
             }
             if (this.configOptions.searchEngine !== undefined) {
                 this.searchEngine = this.configOptions.searchEngine;
@@ -296,9 +309,15 @@ module.exports = JhipsterClientGenerator.extend({
             }
         };
         if (!this.options['skip-install']) {
-            this.installDependencies({
-                callback: injectDependenciesAndConstants.bind(this)
-            });
+            if (!this.yarnInstall) {
+                this.installDependencies({
+                    callback: injectDependenciesAndConstants.bind(this)
+                });
+            } else {
+                this.spawnCommandSync('yarn');
+                this.spawnCommandSync('bower', ['install']);
+                injectDependenciesAndConstants.call(this);
+            }
         } else {
             injectDependenciesAndConstants.call(this);
         }

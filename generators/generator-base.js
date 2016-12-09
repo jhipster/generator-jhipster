@@ -12,11 +12,11 @@ var path = require('path'),
     semver = require('semver'),
     exec = require('child_process').exec,
     os = require('os'),
+    http = require('http'),
     pluralize = require('pluralize');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
-const WORD_WRAP_WIDTH = 80;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const constants = require('./generator-constants'),
@@ -271,6 +271,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Danish', value: 'da'},
         {name: 'Dutch', value: 'nl'},
         {name: 'English', value: 'en'},
+        {name: 'Estonian', value: 'et'},
         {name: 'French', value: 'fr'},
         {name: 'Galician', value: 'gl'},
         {name: 'German', value: 'de'},
@@ -287,10 +288,12 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Romanian', value: 'ro'},
         {name: 'Russian', value: 'ru'},
         {name: 'Slovak', value: 'sk'},
+        {name: 'Serbian', value: 'sr'},
         {name: 'Spanish', value: 'es'},
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
-        {name: 'Tamil', value: 'ta'}
+        {name: 'Tamil', value: 'ta'},
+        {name: 'Vietnamese', value: 'vi'}
     ];
 };
 
@@ -465,9 +468,7 @@ Generator.prototype.addEntryToEhcache = function (entry) {
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`<cache name="${entry}"
-        timeToLiveSeconds="3600">
-    </cache>
+            splicable: [`<cache alias="${entry}" uses-template="simple"/>
 `
             ]
         }, this);
@@ -1004,7 +1005,7 @@ Generator.prototype.replaceContent = function (filePath, pattern, content, regex
  * Register a module configuration to .jhipster/modules/jhi-hooks.json
  *
  * @param {string} npmPackageName - npm package name of the generator
- * @param {string} hookFor - from which Jhipster generator this should be hooked ( 'entity' or 'app')
+ * @param {string} hookFor - from which JHipster generator this should be hooked ( 'entity' or 'app')
  * @param {string} hookType - where to hook this at the generator stage ( 'pre' or 'post')
  * @param {string} callbackSubGenerator[optional] - sub generator to invoke, if this is not given the module's main generator will be called, i.e app
  * @param {string} description[optional] - description of the generator
@@ -1024,18 +1025,13 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
             hookType: hookType,
             generatorCallback: generatorCallback
         };
-        if (shelljs.test('-f', MODULES_HOOK_FILE)) {
-            // file is present append to it
-            try {
-                modules = this.fs.readJSON(MODULES_HOOK_FILE);
-                duplicate = _.findIndex(modules, moduleConfig) !== -1;
-            } catch (err) {
-                error = true;
-                this.log(chalk.red('The Jhipster module configuration file could not be read!'));
-            }
-        } else {
-            // file not present create it and add config to it
-            modules = [];
+        try {
+            // if file is not present, we got an empty list, no exception
+            modules = this.fs.readJSON(MODULES_HOOK_FILE, []);
+            duplicate = _.findIndex(modules, moduleConfig) !== -1;
+        } catch (err) {
+            error = true;
+            this.log(chalk.red('The JHipster module configuration file could not be read!'));
         }
         if (!error && !duplicate) {
             modules.push(moduleConfig);
@@ -1060,7 +1056,7 @@ Generator.prototype.updateEntityConfig = function (file, key, value) {
         entityJson[key] = value;
         this.fs.writeJSON(file, entityJson, null, 4);
     } catch (err) {
-        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+        this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
     }
 
 };
@@ -1082,6 +1078,30 @@ Generator.prototype.getModuleHooks = function () {
 };
 
 /**
+ * Call all the module hooks with the given options.
+ * @param {string} hookFor : "app" or "entity"
+ * @param {string} hookType : "pre" or "post"
+ * @param options : the options to pass to the hooks
+ */
+Generator.prototype.callHooks = function(hookFor, hookType, options) {
+    var modules = this.getModuleHooks();
+    // run through all module hooks, which matches the hookFor and hookType
+    modules.forEach(function (module) {
+        if (module.hookFor === hookFor && module.hookType === hookType) {
+            // compose with the modules callback generator
+            try {
+                this.composeWith(module.generatorCallback, {
+                    options: options
+                });
+            } catch (err) {
+                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+            }
+        }
+    }, this);
+};
+
+/**
  * get a property of an entity from the configuration file
  * @param {string} file - configuration file name for the entity
  * @param {string} key - key to read
@@ -1093,7 +1113,7 @@ Generator.prototype.getEntityProperty = function (file, key) {
         var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
         property = entityJson[key];
     } catch (err) {
-        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+        this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
     }
 
     return property;
@@ -1685,11 +1705,28 @@ Generator.prototype.getDefaultAppName = function () {
 };
 
 Generator.prototype.formatAsClassJavadoc = function (text) {
-    return '/**' + jhipsterUtils.wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
+    return jhipsterUtils.getJavadoc(text, 0);
 };
 
 Generator.prototype.formatAsFieldJavadoc = function (text) {
-    return '    /**' + jhipsterUtils.wordwrap(text, WORD_WRAP_WIDTH - 8, '\n     * ', false) + '\n     */';
+    return jhipsterUtils.getJavadoc(text, 4);
+};
+
+Generator.prototype.formatAsApiDescription = function (text) {
+    var rows = text.split('\n');
+    var description = rows[0];
+    for (var i = 1; i < rows.length; i++) {
+        // discard empty rows
+        if (rows[i] === '') {
+            continue;
+        }
+        // if simple text then put space between row strings
+        if (!description.endsWith('>') && !rows[i].startsWith('<')) {
+            description = description + ' ';
+        }
+        description = description + rows[i];
+    }
+    return description;
 };
 
 Generator.prototype.isNumber = function (input) {
@@ -1752,11 +1789,11 @@ Generator.prototype.getOptionFromArray = function (array, option) {
  * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
  */
 Generator.prototype.hibernateSnakeCase = function (value) {
-    let res = '';
+    var res = '';
     if (value) {
         value = value.replace('.', '_');
         res = value[0];
-        for (var i = 1, len = value.length - 1; i < len; i++) {
+        for (let i = 1, len = value.length - 1; i < len; i++) {
             if (value[i-1] !== value[i-1].toUpperCase() &&
                 value[i] !== value[i].toLowerCase() &&
                 value[i+1] !== value[i+1].toUpperCase()
@@ -1773,3 +1810,22 @@ Generator.prototype.hibernateSnakeCase = function (value) {
 };
 
 Generator.prototype.contains = _.includes;
+
+/**
+ * Function to issue a http get request, and process the result
+ *
+ *  @param {string} url - the url to fetch
+ *  @param onSuccess - function, which gets called when the request succeeds, with the body of the response
+ *  @param onFail - callback when the get failed.
+ */
+Generator.prototype.httpGet = function(url, onSuccess, onFail) {
+    http.get(url, function(res) {
+        var body = '';
+        res.on('data', function(chunk) {
+            body += chunk;
+        });
+        res.on('end', function() {
+            onSuccess(body);
+        });
+    }).on('error', onFail);
+};

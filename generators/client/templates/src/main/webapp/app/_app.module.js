@@ -3,9 +3,9 @@
 
     angular
         .module('<%=angularAppName%>', [
-            'ngStorage', <% if (enableTranslation) { %>
+            'ngStorage',<% if (enableTranslation) { %>
             'tmh.dynamicLocale',
-            'pascalprecht.translate', <% } %>
+            'pascalprecht.translate',<% } %>
             'ngResource',
             'ngCookies',
             'ngAria',

@@ -9,7 +9,7 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
-        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || prodDatabaseType == 'mssql' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
         external_links:
         <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
@@ -23,6 +23,9 @@ services:
         <%_ } _%>
         <%_ if (prodDatabaseType == 'mongodb') { _%>
             - <%= baseName.toLowerCase() %>-mongodb:mongodb
+        <%_ } _%>
+        <%_ if (prodDatabaseType == 'mssql') { _%>
+            - <%= baseName.toLowerCase() %>-mssql:mssql
         <%_ } _%>
         <%_ if (prodDatabaseType == 'cassandra') { _%>
             - <%= baseName.toLowerCase() %>-cassandra:cassandra
@@ -61,13 +64,20 @@ services:
             <%_ if (prodDatabaseType == 'postgresql') { _%>
             - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/<%= baseName %>
             <%_ } _%>
+            <%_ if (prodDatabaseType == 'mssql') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssql:1433;database=jhitest
+            <%_ } _%>
             <%_ if (prodDatabaseType == 'mongodb') { _%>
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
             <%_ if (applicationType == 'gateway' || prodDatabaseType == 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
-            - JHIPSTER_SLEEP=30 # gives time for the cassandra cluster to start and execute the migration scripts
+                <%_ if (authenticationType === 'uaa') { _%>
+            - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
+                <%_ } else { _%>
+            - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
+                <%_ } _%>
             <%_ } else { _%>
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
             <%_ } _%>
@@ -105,6 +115,12 @@ services:
         extends:
             file: mongodb.yml
             service: <%= baseName.toLowerCase() %>-mongodb
+    <%_ } _%>
+    <%_ if (prodDatabaseType == 'mssql') { _%>
+    <%= baseName.toLowerCase() %>-mssql:
+        extends:
+            file: mssql.yml
+            service: <%= baseName.toLowerCase() %>-mssql
     <%_ } _%>
     <%_ if (prodDatabaseType == 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:
@@ -176,7 +192,7 @@ services:
             - 8600:8600
 
     consul-config-loader:
-        image: pbesson/consul-config-loader
+        image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
         volumes:
             - ./central-server-config:/config
         environment:

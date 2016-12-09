@@ -10,7 +10,9 @@
     function <%=jhiPrefixCapitalized%>MetricsMonitoringController ($scope, <%=jhiPrefixCapitalized%>MetricsService, $uibModal) {
         var vm = this;
 
+        <%_ if (hibernateCache == 'ehcache') { _%>
         vm.cachesStats = {};
+        <%_ } _%>
         vm.metrics = {};
         vm.refresh = refresh;
         vm.refreshThreadDumpData = refreshThreadDumpData;
@@ -21,23 +23,28 @@
 
         $scope.$watch('vm.metrics', function (newValue) {
             vm.servicesStats = {};
-            vm.cachesStats = {};
             angular.forEach(newValue.timers, function (value, key) {
                 if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
                     vm.servicesStats[key] = value;
                 }
-                if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
+            });
+
+            <%_ if (hibernateCache == 'ehcache') { _%>
+            vm.cachesStats = {};
+            angular.forEach(newValue.gauges, function (value, key) {
+                if (key.indexOf('jcache.statistics') !== -1) {
                     // remove gets or puts
                     var index = key.lastIndexOf('.');
                     var newKey = key.substr(0, index);
 
                     // Keep the name of the domain
                     vm.cachesStats[newKey] = {
-                        'name': newKey,
+                        'name': newKey.substr(18),
                         'value': value
                     };
                 }
             });
+            <%_ } _%>
         });
 
         function refresh () {

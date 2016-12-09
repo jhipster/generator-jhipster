@@ -27,9 +27,9 @@ public class TokenProvider {
 
     private String secretKey;
 
-    private long tokenValidityInSeconds;
+    private long tokenValidityInMilliseconds;
 
-    private long tokenValidityInSecondsForRememberMe;
+    private long tokenValidityInMillisecondsForRememberMe;
 
     @Inject
     private JHipsterProperties jHipsterProperties;
@@ -39,23 +39,23 @@ public class TokenProvider {
         this.secretKey =
             jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
 
-        this.tokenValidityInSeconds =
+        this.tokenValidityInMilliseconds =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
-        this.tokenValidityInSecondsForRememberMe =
+        this.tokenValidityInMillisecondsForRememberMe =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();
     }
 
     public String createToken(Authentication authentication, Boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream()
-            .map(authority -> authority.getAuthority())
+            .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
         Date validity;
         if (rememberMe) {
-            validity = new Date(now + this.tokenValidityInSecondsForRememberMe);
+            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
         } else {
-            validity = new Date(now + this.tokenValidityInSeconds);
+            validity = new Date(now + this.tokenValidityInMilliseconds);
         }
 
         return Jwts.builder()
@@ -73,12 +73,11 @@ public class TokenProvider {
             .getBody();
 
         Collection<? extends GrantedAuthority> authorities =
-            Arrays.asList(claims.get(AUTHORITIES_KEY).toString().split(",")).stream()
-                .map(authority -> new SimpleGrantedAuthority(authority))
+            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "",
-            authorities);
+        User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }

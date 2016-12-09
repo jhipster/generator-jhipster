@@ -14,7 +14,8 @@ import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 <%_ if (service == 'no') { _%>
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
-<%_ } } _%>
+<%_ } } _%><% if (pagination != 'no') { %>
+import io.swagger.annotations.ApiParam;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;

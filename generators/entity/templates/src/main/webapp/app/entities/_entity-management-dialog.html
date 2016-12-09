@@ -48,7 +48,7 @@
                 <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <div>
                     <%_ if (fieldTypeBlobContent == 'image') { _%>
-                <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + vm.<%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
+                <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + vm.<%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
                     <%_ } _%>
                 <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>" class="help-block clearfix">
                     <%_ if (fieldTypeBlobContent == 'any') { _%>

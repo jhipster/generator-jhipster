@@ -1,0 +1,40 @@
+version: '2'
+services:
+  prometheus:
+    image: <%= DOCKER_PROMETHEUS %>
+    container_name: prometheus
+    volumes:
+      - ./prometheus-conf/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '-config.file=/etc/prometheus/prometheus.yml'
+      - '-storage.local.path=/prometheus'
+      - '-alertmanager.url=http://alertmanager:9093'
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+
+  alertmanager:
+    image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+    ports:
+      - 9093:9093
+    volumes:
+      - ./alertmanager-conf/:/etc/alertmanager/
+    command:
+      - '-config.file=/etc/alertmanager/config.yml'
+      - '-storage.path=/alertmanager'
+
+  grafana:
+    image: <%= DOCKER_GRAFANA %>
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=jhipster
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}

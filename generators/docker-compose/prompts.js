@@ -8,7 +8,7 @@ module.exports = {
     askForPath,
     askForApps,
     askForClustersMode,
-    askForElk,
+    askForMonitoring,
     askForServiceDiscovery,
     askForAdminPassword
 };
@@ -122,11 +122,11 @@ function askForApps() {
             var fileData = this.fs.readJSON(path);
             var config = fileData['generator-jhipster'];
 
-            if(config.applicationType === 'monolith') {
+            if (config.applicationType === 'monolith') {
                 this.monolithicNb++;
-            } else if(config.applicationType === 'gateway') {
+            } else if (config.applicationType === 'gateway') {
                 this.gatewayNb++;
-            } else if(config.applicationType === 'microservice') {
+            } else if (config.applicationType === 'microservice') {
                 this.microserviceNb++;
             }
 
@@ -171,20 +171,34 @@ function askForClustersMode() {
     }.bind(this));
 }
 
-function askForElk() {
+function askForMonitoring() {
     if (this.regenerate) return;
 
     var done = this.async();
 
     var prompts = [{
-        type: 'confirm',
-        name: 'elk',
-        message: 'Do you want the JHipster Console (based on ELK) to monitor your applications?',
-        default: this.useElk && true
+        type: 'list',
+        name: 'monitoring',
+        message: 'Do you want to setup monitoring for your applications ?',
+        choices: [
+            {
+                value: 'no',
+                name: 'No'
+            },
+            {
+                value: 'elk',
+                name: 'Yes, for logs and metrics with the JHipster Console (based on ELK)'
+            },
+            {
+                value: 'prometheus',
+                name: 'Yes, for metrics only with Prometheus (only compatible with JHipster >= v3.12)'
+            }
+        ],
+        default: 'no'
     }];
 
     this.prompt(prompts).then(function(props) {
-        this.useElk = props.elk;
+        this.monitoring = props.monitoring;
         done();
     }.bind(this));
 }
@@ -274,7 +288,7 @@ function askForAdminPassword() {
     }.bind(this));
 }
 
-function getAppFolders(input, applicationType) {
+function getAppFolders(input, composeApplicationType) {
     var files = shelljs.ls('-l', this.destinationPath(input));
     var appsFolders = [];
 
@@ -285,9 +299,10 @@ function getAppFolders(input, applicationType) {
                 try {
                     var fileData = this.fs.readJSON(input + file.name + '/.yo-rc.json');
                     if ((fileData['generator-jhipster'].baseName !== undefined)
-                        && ((applicationType === undefined)
-                            || (applicationType === fileData['generator-jhipster'].applicationType)
-                            || ((applicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType)))) {
+                        && ((composeApplicationType === undefined)
+                            || (composeApplicationType === fileData['generator-jhipster'].applicationType)
+                            || ((composeApplicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType))
+                            || ((composeApplicationType === 'microservice') && ('uaa' === fileData['generator-jhipster'].applicationType)))) {
                         appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                     }
                 } catch(err) {

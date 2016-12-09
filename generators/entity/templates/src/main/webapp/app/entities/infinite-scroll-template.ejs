@@ -1,5 +1,6 @@
         vm.<%= entityInstancePlural %> = [];
         vm.loadPage = loadPage;
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.page = 0;
         vm.links = {
             last: 0
@@ -23,7 +24,7 @@
         <%_ if (searchEngine != 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: vm.page,
-                size: 20,
+                size: vm.itemsPerPage,
                 sort: sort()
             }, onSuccess, onError);
         <%_ } else { _%>
@@ -31,13 +32,13 @@
                 <%= entityClass %>Search.query({
                     query: vm.currentSearch,
                     page: vm.page,
-                    size: 20,
+                    size: vm.itemsPerPage,
                     sort: sort()
                 }, onSuccess, onError);
             } else {
                 <%= entityClass %>.query({
                     page: vm.page,
-                    size: 20,
+                    size: vm.itemsPerPage,
                     sort: sort()
                 }, onSuccess, onError);
             }

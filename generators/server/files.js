@@ -53,6 +53,9 @@ function writeFiles() {
                 this.copy(DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', DOCKER_DIR + 'mongodb/MongoDB.Dockerfile', this, {});
                 this.template(DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', DOCKER_DIR + 'mongodb/scripts/init_replicaset.js', this, {});
             }
+            if (this.prodDatabaseType === 'mssql') {
+                this.template(DOCKER_DIR + '_mssql.yml', DOCKER_DIR + 'mssql.yml', this, {});
+            }
             if (this.applicationType === 'gateway' || this.prodDatabaseType === 'cassandra') {
                 // docker-compose files
                 this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
@@ -136,6 +139,10 @@ function writeFiles() {
 
             if (this.hibernateCache === 'ehcache') {
                 this.template(SERVER_MAIN_RES_DIR + '_ehcache.xml', SERVER_MAIN_RES_DIR + 'ehcache.xml', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/jcache/_SpringCacheRegionFactory.java', javaDir + 'config/jcache/SpringCacheRegionFactory.java', this, {});
+            }
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/jcache/_JCacheGaugeSet.java', javaDir + 'config/jcache/JCacheGaugeSet.java', this, {});
             }
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
@@ -332,6 +339,7 @@ function writeFiles() {
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DateTimeFormatConfiguration.java', javaDir + 'config/DateTimeFormatConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
 
             if (this.databaseType === 'mongodb') {
@@ -370,11 +378,6 @@ function writeFiles() {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/cassandra/_package-info.java', javaDir + 'config/cassandra/package-info.java', this, {});
             }
 
-            if (this.hibernateCache === 'hazelcast') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java', this, {});
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
-            }
-
             if (this.databaseType === 'sql') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
@@ -393,7 +396,6 @@ function writeFiles() {
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             if (this.databaseType === 'sql') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
                 if (this.prodDatabaseType === 'postgresql') {
                     this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});
@@ -471,6 +473,8 @@ function writeFiles() {
             if (this.databaseType === 'cassandra') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/_CassandraKeyspaceUnitTest.java', testDir + 'CassandraKeyspaceUnitTest.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
+                this.template(SERVER_TEST_SRC_DIR + 'package/config/_CassandraTestConfiguration.java', testDir + 'config/CassandraTestConfiguration.java', this, {});
+                this.template(SERVER_TEST_RES_DIR + '_cassandra-random-port.yml', SERVER_TEST_RES_DIR + 'cassandra-random-port.yml', this, {});
             }
 
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});

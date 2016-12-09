@@ -3,12 +3,9 @@ package <%=packageName%>.config.apidoc;
 import <%=packageName%>.config.Constants;
 import <%=packageName%>.config.JHipsterProperties;
 
-import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import springfox.documentation.service.ApiInfo;
@@ -65,10 +62,6 @@ public class SwaggerConfiguration {
             .apiInfo(apiInfo)
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
-            .ignoredParameterTypes(java.sql.Date.class)
-            .directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
-            .directModelSubstitute(java.time.ZonedDateTime.class, Date.class)
-            .directModelSubstitute(java.time.LocalDateTime.class, Date.class)
             .select()
             .paths(regex(DEFAULT_INCLUDE_PATTERN))
             .build();

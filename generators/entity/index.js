@@ -10,7 +10,7 @@ const util = require('util'),
     writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
 
-/* constants used througout */
+/* constants used throughout */
 const constants = require('../generator-constants'),
     SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
@@ -69,7 +69,7 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
-        // remove extention if feeding json files
+        // remove extension if feeding json files
         if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');
         }
@@ -107,6 +107,7 @@ module.exports = EntityGenerator.extend({
             this.databaseType = this.config.get('databaseType');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
             this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
+            this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
@@ -122,6 +123,7 @@ module.exports = EntityGenerator.extend({
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
+            this.microserviceAppName = '';
 
             this.filename = this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
             if (shelljs.test('-f', this.filename)) {
@@ -144,25 +146,9 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
                 this.error(chalk.red('The entity name cannot end with \'Detail\''));
-            } else if (jhiCore.isReservedClassName(this.name)) {
+            } else if (!this.skipServer && jhiCore.isReservedClassName(this.name)) {
                 this.error(chalk.red('The entity name cannot contain a Java or JHipster reserved keyword'));
             }
-        },
-
-        validateTableName: function () {
-            var prodDatabaseType = this.prodDatabaseType;
-            if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
-                this.error(chalk.red('The table name cannot contain special characters'));
-            } else if (this.entityTableName === '') {
-                this.error(chalk.red('The table name cannot be empty'));
-            } else if (jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
-                this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
-            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
-                this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
-            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
-                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
-            }
-
         },
 
         setupVars: function () {
@@ -181,6 +167,22 @@ module.exports = EntityGenerator.extend({
                 this.log(`\nThe entity ${ this.name } is being updated.\n`);
                 this._loadJson();
             }
+        },
+
+        validateTableName: function () {
+            var prodDatabaseType = this.prodDatabaseType;
+            if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
+                this.error(chalk.red('The table name cannot contain special characters'));
+            } else if (this.entityTableName === '') {
+                this.error(chalk.red('The table name cannot be empty'));
+            } else if (!this.skipServer && jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
+                this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
+                this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
+                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
+            }
+
         }
     },
 
@@ -198,6 +200,7 @@ module.exports = EntityGenerator.extend({
         this.service = this.fileData.service;
         this.fluentMethods = this.fileData.fluentMethods;
         this.pagination = this.fileData.pagination;
+        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
         if (_.isUndefined(this.entityTableName)) {
@@ -220,9 +223,12 @@ module.exports = EntityGenerator.extend({
             if (!this.microserviceName) {
                 this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
             }
+            this.microserviceAppName = this._getMicroserviceAppName();
             this.skipServer = true;
-            this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
+    },
+    _getMicroserviceAppName: function () {
+        return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
     },
     /* end of Helper methods */
 
@@ -329,7 +335,7 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.changelogDate)
                 && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 var currentDate = this.dateFormatForLiquibase();
-                this.warning(`hangelogDate is missing in .jhipster/${ this.name }.json, using ${ currentDate } as fallback`);
+                this.warning(`changelogDate is missing in .jhipster/${ this.name }.json, using ${ currentDate } as fallback`);
                 this.changelogDate = currentDate;
             }
             if (_.isUndefined(this.dto)) {
@@ -354,7 +360,7 @@ module.exports = EntityGenerator.extend({
             if (this.useConfigurationFile && this.updateEntity === 'regenerate') {
                 return; //do not update if regenerating entity
             }
-            // store informations in a file for further use.
+            // store information in a file for further use.
             if (!this.useConfigurationFile && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 this.changelogDate = this.dateFormatForLiquibase();
             }
@@ -642,22 +648,10 @@ module.exports = EntityGenerator.extend({
                         entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
-                    modules.forEach(function (module) {
-                        if (module.hookFor === 'entity' && module.hookType === 'post') {
-                            // compose with the modules callback generator
-                            try {
-                                this.composeWith(module.generatorCallback, {
-                                    options: {
-                                        entityConfig: entityConfig,
-                                        force: this.options['force']
-                                    }
-                                });
-                            } catch (err) {
-                                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
-                            }
-                        }
-                    }, this);
+                    this.callHooks('entity', 'post', {
+                        entityConfig: entityConfig,
+                        force: this.options['force']
+                    });
                 }
             } catch (err) {
                 this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.'));

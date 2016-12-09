@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 buildscript {
     repositories {
         mavenLocal()
@@ -12,7 +14,8 @@ buildscript {
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"<% if(!skipClient) {%>
-        classpath "com.moowork.gradle:gradle-node-plugin:0.13"<% } %>
+        classpath "com.moowork.gradle:gradle-node-plugin:0.14" //TODO adjust for angular option
+        classpath "com.moowork.gradle:gradle-gulp-plugin:0.13"<% } %>
         classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
@@ -22,14 +25,10 @@ apply plugin: 'java'
 sourceCompatibility=1.<%= javaVersion %>
 targetCompatibility=1.<%= javaVersion %>
 apply plugin: 'maven'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
 apply plugin: 'io.spring.dependency-management'
-<%_ if (databaseType == 'sql') { _%>
-/* downgrade Hibernate to 4.3 */
-ext['hibernate.version'] = '${hibernate_entitymanager_version}'
-<%_ } _%>
 <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
 dependencyManagement {
   imports {
@@ -58,15 +57,40 @@ springBoot {
     buildInfo()
 }
 
-bootRun {
-    addResources = false
+if (OperatingSystem.current().isWindows()) {
+    task pathingJar(type: Jar) {
+        dependsOn configurations.runtime
+        appendix = 'pathing'
+
+        doFirst {
+            manifest {
+                attributes 'Class-Path': configurations.runtime.files.collect {
+                    it.toURL().toString().replaceFirst(/file:\/+/, '/')
+                }.join(' ')
+            }
+        }
+    }
+
+    bootRun {
+        addResources = false
+        dependsOn pathingJar
+        doFirst {
+            classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+        }
+    }
+} else {
+    bootRun {
+        addResources = false
+    }
 }
 
 test {
     include '**/*UnitTest*'
     include '**/*IntTest*'
 
-    ignoreFailures true
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
     reports.html.enabled = false
 }
 
@@ -74,7 +98,9 @@ test {
 task cucumberTest(type: Test) {
     include '**/CucumberTest*'
 
-    ignoreFailures true
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
     reports.html.enabled = false
 }
 
@@ -139,9 +165,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.dropwizard.metrics:metrics-core"<% if (hibernateCache == 'ehcache') { %>
-    compile "io.dropwizard.metrics:metrics-annotation:${dropwizard_metrics_version}"
-    compile "io.dropwizard.metrics:metrics-ehcache:${dropwizard_metrics_version}"<% } %>
+    compile "io.dropwizard.metrics:metrics-core"
     compile "io.dropwizard.metrics:metrics-graphite:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-healthchecks:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
@@ -150,13 +174,16 @@ dependencies {
     compile ("io.dropwizard.metrics:metrics-servlets:${dropwizard_metrics_version}") {
         exclude(module: 'metrics-healthchecks')
     }
+    compile "io.prometheus:simpleclient:${prometheus_simpleclient_version}"
+    compile "io.prometheus:simpleclient_servlet:${prometheus_simpleclient_version}"
+    compile "io.prometheus:simpleclient_dropwizard:${prometheus_simpleclient_version}"
     compile("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
         exclude(module: 'ch.qos.logback')
     }
     compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"<% if (databaseType == 'sql') { %>
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate4"<% } %>
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"<% } %>
     compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
     compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
@@ -164,12 +191,13 @@ dependencies {
         exclude(module: 'metrics-healthchecks')
     } <% if (hibernateCache == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"
-    compile "com.hazelcast:hazelcast-hibernate4:${hazelcast_version}"
+    compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate_version}"
     compile "com.hazelcast:hazelcast-spring:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
-    compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %>
+    compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"<% } %><% if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { %>
+    compile "javax.cache:cache-api:${jcache_version}"<% } %>
     <%_ if (databaseType == 'sql') { _%>
-    compile "org.hibernate:hibernate-core:${hibernate_entitymanager_version}"
+    compile "org.hibernate:hibernate-core:${hibernate_version}"
     compile("com.zaxxer:HikariCP") {
         exclude(module: 'tools')
     }
@@ -184,9 +212,9 @@ dependencies {
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
     <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-    compile ("org.hibernate:hibernate-ehcache") {
-        exclude(module: 'ehcache-core')
-    }<% } %><% if (databaseType == 'sql') { %>
+    compile ("org.ehcache:ehcache")
+    compile ("org.hibernate:hibernate-jcache:${hibernate_version}")
+    <% } %><% if (databaseType == 'sql') { %>
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
@@ -281,7 +309,6 @@ dependencies {
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     compile "com.h2database:h2"
     <%_ } _%>
-    compile "fr.ippon.spark.metrics:metrics-spark-reporter:${metrics_spark_reporter_version}"
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"<% if (enableSocialSignIn) { %>
     compile "org.apache.httpcomponents:httpclient"
     compile "org.springframework.social:spring-social-security"
@@ -328,7 +355,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '3.2.1'
 }
 
 task stage(dependsOn: 'bootRepackage') {

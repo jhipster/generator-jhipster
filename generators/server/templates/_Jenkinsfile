@@ -1,4 +1,8 @@
 node {
+    stage('checkout') {
+        checkout scm
+    }
+
 <%_ if (applicationType !== 'microservice') { _%>
     // uncomment these 2 lines and edit the name 'node-4.6.0' according to what you choose in configuration
     // def nodeHome = tool name: 'node-4.6.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
@@ -9,10 +13,6 @@ node {
         sh "npm -v"
         sh "bower -v"
         sh "gulp -v"
-    }
-
-    stage('checkout') {
-        checkout scm
     }
 
     stage('npm install') {
@@ -26,7 +26,13 @@ node {
     }
 
     stage('backend tests') {
-        sh "./mvnw test"
+        try {
+            sh "./mvnw test"
+        } catch(err) {
+            throw err
+        } finally {
+            step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+        }
     }
 
 <%_ } else if (buildTool === 'gradle') { _%>
@@ -35,13 +41,29 @@ node {
     }
 
     stage('backend tests') {
-        sh "./gradlew test"
+        try {
+            sh "./gradlew test"
+        } catch(err) {
+            throw err
+        } finally {
+            step([$class: 'JUnitResultArchiver', testResults: '**/build/**/TEST-*.xml'])
+        }
     }
 
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
     stage('frontend tests') {
-        sh "gulp test"
+        try {
+            sh "gulp test"
+        } catch(err) {
+            throw err
+        } finally {
+            <%_ if (buildTool === 'maven') { _%>
+            step([$class: 'JUnitResultArchiver', testResults: '**/target/test-results/karma/TESTS-*.xml'])
+            <%_ } else if (buildTool === 'gradle') { _%>
+            step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/karma/TESTS-*.xml'])
+            <%_ } _%>
+        }
     }
 
 <%_ } _%>

@@ -12,7 +12,7 @@ Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 }
 
 /* ==========================================================================
-Developement Ribbon
+Development Ribbon
 ========================================================================== */
 .ribbon {
     background-color: #a00;
@@ -278,7 +278,7 @@ entity tables helpers
 }
 
 .jh-table > tbody > tr > td {
-    /* Align text in td verifically (top aligned by Bootstrap) */
+    /* Align text in td vertically (top aligned by Bootstrap) */
     vertical-align: middle;
 }
 

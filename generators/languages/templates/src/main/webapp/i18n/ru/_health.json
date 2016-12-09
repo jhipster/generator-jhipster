@@ -11,10 +11,14 @@
             "error": "Ошибка"
         },
         "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Message broker",
+            <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "configServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "Место на диске",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,

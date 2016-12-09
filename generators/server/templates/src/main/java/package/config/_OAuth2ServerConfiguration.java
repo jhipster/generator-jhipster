@@ -40,7 +40,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
     private DataSource dataSource;
 
     @Bean
-    public TokenStore tokenStore() {
+    public JdbcTokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
     }<% } %><% if (databaseType == 'mongodb') { %>
 

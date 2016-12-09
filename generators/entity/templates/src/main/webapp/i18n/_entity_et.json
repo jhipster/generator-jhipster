@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Lisa uus <%= entityClassHumanized %>",
+                "createOrEditLabel": "Lisa või muuda <%= entityClassHumanized %>",
+                "search": "Otsi <%= entityClassHumanized %>"
+            },<% if (!microserviceAppName) { %>
+            "created": "Uus <%= entityClassHumanized %> on loodud identifikaatoriga {{ param }}",
+            "updated": "<%= entityClassHumanized %> identifikaatoriga {{ param }} on muudetud",
+            "deleted": "<%= entityClassHumanized %> identifikaatoriga {{ param }} on kustutatud",<% } %>
+            "delete": {
+                "question": "Kas olete kindel, et soovite kustutada <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Uus <%= entityClassHumanized %> on loodud identifikaatoriga {{ param }}",
+            "updated": "<%= entityClassHumanized %> identifikaatoriga {{ param }} on muudetud",
+            "deleted": "<%= entityClassHumanized %> identifikaatoriga {{ param }} on kustutatud"
+        }
+    }<% } %>
+}

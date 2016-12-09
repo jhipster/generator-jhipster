@@ -20,25 +20,31 @@ task manifestJar(dependsOn:'compileTestScala',type: Jar) {
     }
 }
 
-task gatlingRun(dependsOn:'manifestJar') << {
-    group = "gatling"
+task gatlingRun(dependsOn:'manifestJar') {
+    group = 'gatling'
+    description = 'Run a single gatling simulation. By default the simulation is *.'
 
-    def String gatlingSimulationClass = "*"
-    if (project.hasProperty('gatlingSimulationClass')) {
-        gatlingSimulationClass = project.property('gatlingSimulationClass')
+    doLast {
+        def String gatlingSimulationClass = "*"
+        if (project.hasProperty('gatlingSimulationClass')) {
+            gatlingSimulationClass = project.property('gatlingSimulationClass')
+        }
+
+        createGatlingRunTask(gatlingSimulationClass).dependsOn('manifestJar').execute()
     }
-
-    createGatlingRunTask(gatlingSimulationClassName).dependsOn('manifestJar').execute()
 }
 
-task gatlingRunAll(dependsOn: 'manifestJar') << {
-    group = "gatling"
+task gatlingRunAll(dependsOn: 'manifestJar') {
+    group = 'gatling'
+    description = 'Run all available gatling simulation.'
 
-    FileTree tree = fileTree(dir: './src/test/gatling/simulations')
-    tree.include '**/*.scala'
-    tree.each {File file ->
-        def simulationClassName = file.name.replaceFirst(".scala", "")
-        createGatlingRunTask(simulationClassName).dependsOn('manifestJar').execute();
+    doLast {
+        FileTree tree = fileTree(dir: './src/test/gatling/simulations')
+        tree.include '**/*.scala'
+        tree.each {File file ->
+            def simulationClassName = file.name.replaceFirst(".scala", "")
+            createGatlingRunTask(simulationClassName).dependsOn('manifestJar').execute();
+        }
     }
 }
 

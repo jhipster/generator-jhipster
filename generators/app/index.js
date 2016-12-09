@@ -69,6 +69,13 @@ module.exports = JhipsterGenerator.extend({
             defaults: 'jhi'
         });
 
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm install',
+            type: Boolean,
+            defaults: false
+        });
+
         this.currentQuestion = 0;
         this.totalQuestions = constants.QUESTIONS;
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
@@ -76,9 +83,10 @@ module.exports = JhipsterGenerator.extend({
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
-        this.checkInstall = !this.options['skip-checks'];
-
+        this.checkInstall = this.options['check-install']; //TODO change to skip-checks
+        this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
     },
+
     initializing: {
         displayLogo: function () {
             this.printJHipsterLogo();
@@ -122,6 +130,47 @@ module.exports = JhipsterGenerator.extend({
                 done();
             }.bind(this));
         },
+        //TODO : move checks to appropriate angular versions
+        checkBower: function () {
+            if (!this.checkInstall || this.skipClient) return;
+            var done = this.async();
+            exec('bower --version', function (err) {
+                if (err) {
+                    this.warning('bower is not found on your computer.\n',
+                        ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
+                    );
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkGulp: function () {
+            if (!this.checkInstall || this.skipClient) return;
+            var done = this.async();
+            exec('gulp --version', function (err) {
+                if (err) {
+                    this.warning('gulp is not found on your computer.\n',
+                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
+                    );
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkYarn: function () {
+            if (!this.checkInstall || this.skipClient || !this.yarnInstall) return;
+            var done = this.async();
+            exec('yarn --version', function (err) {
+                if (err) {
+                    this.warning('yarn is not found on your computer.\n',
+                        ' Using npm instead');
+                    this.yarnInstall = false;
+                } else {
+                    this.yarnInstall = true;
+                }
+                done();
+            }.bind(this));
+        },
 
         validate: function () {
             if (this.skipServer && this.skipClient) {
@@ -159,7 +208,9 @@ module.exports = JhipsterGenerator.extend({
 
         askForClient: prompts.askForClient,
 
-        askForModuleName: prompts.askForModuleName
+        askForModuleName: prompts.askForModuleName,
+
+        askForMoreModules: prompts.askForMoreModules,
     },
 
     configuring: {
@@ -168,6 +219,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.baseName = this.baseName;
             this.configOptions.logo = false;
             this.configOptions.angularVersion = this.angularVersion;
+            this.configOptions.otherModules = this.otherModules;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
                 this.skipClient = true;
@@ -255,6 +307,7 @@ module.exports = JhipsterGenerator.extend({
             insight.track('app/applicationType', this.applicationType);
             insight.track('app/angularVersion', this.angularVersion);
             insight.track('app/testFrameworks', this.testFrameworks);
+            insight.track('app/otherModules', this.otherModules);
         },
 
         composeLanguages: function () {
@@ -269,6 +322,7 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);
+            this.config.set('otherModules', this.otherModules);
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);
@@ -277,11 +331,11 @@ module.exports = JhipsterGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
+            this.yarnInstall && this.config.set('yarn', true);
         }
     },
 
     writing: {
-
         cleanup: function () {
             cleanup.cleanupOldFiles(this, this.javaDir, this.testDir);
         },
@@ -311,22 +365,10 @@ module.exports = JhipsterGenerator.extend({
                 if (modules.length > 0) {
                     this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // run through all post app creation module hooks
-                    modules.forEach(function (module) {
-                        if (module.hookFor === 'app' && module.hookType === 'post') {
-                            // compose with the modules callback generator
-                            try {
-                                this.composeWith(module.generatorCallback, {
-                                    options: {
-                                        appConfig: this.configOptions,
-                                        force: this.options['force']
-                                    }
-                                });
-                            } catch (err) {
-                                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
-                            }
-                        }
-                    }, this);
+                    this.callHooks('app', 'post', {
+                        appConfig: this.configOptions,
+                        force: this.options['force']
+                    });
                 }
             } catch (err) {
                 this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.'));

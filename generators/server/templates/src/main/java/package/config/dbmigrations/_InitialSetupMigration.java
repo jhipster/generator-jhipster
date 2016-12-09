@@ -14,9 +14,9 @@ import java.util.*;
 @ChangeLog(order = "001")
 public class InitialSetupMigration {
 
-    private Map<String, String>[] authoritiesUser = new Map[]{new HashMap<>()};
+    private Map<String, String>[] authoritiesUser = new Map[] { new HashMap<>() };
 
-    private Map<String, String>[] authoritiesAdminAndUser = new Map[]{new HashMap<>(), new HashMap<>()};
+    private Map<String, String>[] authoritiesAdminAndUser = new Map[] { new HashMap<>(), new HashMap<>() };
 
     {
         authoritiesUser[0].put("_id", "ROLE_USER");
@@ -25,7 +25,7 @@ public class InitialSetupMigration {
     }
 
 <%_ if (databaseType === 'mongodb' && authenticationType === 'oauth2') { _%>
-    private Map<String, String>[] grantAuthorities = new Map[]{new HashMap<>(), new HashMap<>()};
+    private Map<String, String>[] grantAuthorities = new Map[] { new HashMap<>(), new HashMap<>() };
 
     {
         grantAuthorities[0].put("role", "ROLE_ADMIN");
@@ -130,7 +130,7 @@ public class InitialSetupMigration {
         DBCollection usersCollection = db.getCollection("OAUTH_AUTHENTICATION_CLIENT_DETAILS");
         usersCollection.insert(BasicDBObjectBuilder.start()
             .add("_id", "client-1")
-            .add("clientId", "mongooauthapp")
+            .add("clientId", "<%= baseName %>app")
             .add("clientSecret", "my-secret-token-to-change-in-production")
             .add("resourceIds", Collections.singletonList("res_<%= baseName %>"))
             .add("scope", Arrays.asList("read", "write"))

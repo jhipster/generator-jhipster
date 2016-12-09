@@ -54,7 +54,8 @@ spring:
         hibernate:
             ddl-auto: none
             naming:
-                strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+                physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+                implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         properties:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
@@ -73,7 +74,7 @@ spring:
     <%_ if (applicationType == 'gateway' || databaseType == 'cassandra') { _%>
         cassandra:
             contactPoints: localhost
-            port: 9142
+            port: 0
             protocolVersion: V4
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
