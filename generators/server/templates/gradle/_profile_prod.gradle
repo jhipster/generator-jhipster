@@ -1,7 +1,6 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'org.springframework.boot'<% if(!skipClient) { %>
 apply plugin: 'com.moowork.node'
-apply plugin: 'com.moowork.gulp'
 <% } %>
 
 ext {
@@ -21,12 +20,15 @@ if (project.hasProperty('swagger')) {
     profiles += ',swagger'
 }
 
-bootRun {
-    args = []
-}
 <% if (!skipClient) { %>
-task gulpBuildWithOpts(type: GulpTask) {
-    args = ["build", "--no-notification"]
+task webpack(type: NodeTask, dependsOn: 'npmInstall') {
+    def osName = System.getProperty("os.name").toLowerCase();
+    if (osName.contains("windows")) {
+      script = project.file('node_modules/webpack/bin/webpack.js')
+    } else {
+      script = project.file('node_modules/.bin/webpack')
+    }
+    args = ["-p", "--config", "webpack/webpack.prod.js"]
 }
 
 war {
@@ -50,7 +52,7 @@ processResources {
         }
     }
 }
-
+//TODO check for angular version
 <% if (!skipClient) { %>
 <%_ if (yarnInstall) { _%>
 gulpBuildWithOpts.dependsOn 'yarn_install'

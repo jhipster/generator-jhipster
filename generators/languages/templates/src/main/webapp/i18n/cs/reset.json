@@ -9,9 +9,7 @@
                 "info": "Zadejte e-mailovou adresu, kterou jste použili při registraci",
                 "success": "Na Váš e-mail sme Vám poslali informace o tom jak si můžete obnovit Vaše heslo.",
                 "notfound": "<strong>E-mailová adresa nebyla registrována!</strong> Prosím zkontrolujte nebo zkuste zadat znovu."
-
             }
-
         },
         "finish" : {
             "title": "Obnovit heslo",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "Vyberte si nové heslo",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">přihlásit</a>.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se ",
+                <%_ } _%>
                 "keymissing": "Chybí klíč na obnovení hesla.",
                 "error": "Vaše heslo nemohlo být obnoveno. Požadavek na obnovení hesla je platný pouze 24 hodin."
             }
         }
     }
-
 }

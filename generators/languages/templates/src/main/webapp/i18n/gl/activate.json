@@ -1,9 +1,0 @@
-{
-    "activate": {
-        "title": "Activación",
-        "messages": {
-            "success": "<strong>A súa conta foi activada.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">inicie a sesión</a>.",
-            "error": "<strong>A súa conta non puido ser activada.</strong> Por favor utilice o formulario de inscrición para rexistrarse."
-        }
-    }
-}

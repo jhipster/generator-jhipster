@@ -80,6 +80,7 @@ module.exports = LanguagesGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.currentLanguages = this.config.get('languages');
+            this.angularVersion = this.config.get('angularVersion');
         }
     },
 
@@ -146,6 +147,9 @@ module.exports = LanguagesGenerator.extend({
             if (configOptions.skipServer) {
                 this.skipServer = configOptions.skipServer;
             }
+            if (configOptions.angularVersion) {
+                this.angularVersion = configOptions.angularVersion;
+            }
         },
 
         saveConfig: function () {
@@ -166,7 +170,7 @@ module.exports = LanguagesGenerator.extend({
             }
             insight.track('languages/language', language);
         }, this);
-        if (!this.skipClient) {
+        if (!this.skipClient && this.angularVersion === 'angular1') {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
         }
     }

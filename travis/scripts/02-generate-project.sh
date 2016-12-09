@@ -22,4 +22,5 @@ mkdir -p "$HOME"/app
 mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$HOME"/app/
 cd "$HOME"/app
 yarn link generator-jhipster
-yo jhipster --force --no-insight --yarn --with-entities
+yo jhipster --force --no-insight --skip-checks --yarn --with-entities
+ls -al "$HOME"/app

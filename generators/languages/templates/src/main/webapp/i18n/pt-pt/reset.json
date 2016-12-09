@@ -9,9 +9,7 @@
                 "info": "Introduza o endereço de e-mail utilizado para registar",
                 "success": "Verifique o seu e-mail para mais detalhes sobre como repor a palavra-passe.",
                 "notfound": "<strong>Endereço de e-mail não registado!</strong> Por favor verifique e tente de novo"
-
             }
-
         },
         "finish" : {
             "title": "Reposição da palavra-passe",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "Escolha uma nova palavra-passe",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentique-se</a>.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor ",
+                <%_ } _%>
                 "keymissing": "Chave de reposição em falta.",
                 "error": "A sua palavra-passe não pode ser reposta. O pedido de reposição da palavra-passe é válido apenas por 24 horas."
             }
         }
     }
-
 }

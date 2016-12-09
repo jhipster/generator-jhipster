@@ -41,9 +41,15 @@ util.inherits(Generator, yeoman.Base);
  */
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        var navbarPath;
+        if (this.angularVersion === 'angular1') {
+            navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        } else {
+            navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+        }
+
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: navbarPath,
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [`<li ui-sref-active="active">
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
@@ -54,7 +60,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -67,9 +73,14 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  */
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        var navbarAdminPath;
+        if (this.angularVersion === 'angular1') {
+            navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        } else {
+            navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+        }
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: navbarAdminPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [`<li ui-sref-active="active" >
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
@@ -80,7 +91,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to admin menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to admin menu.\n'));
     }
 };
 
@@ -92,9 +103,14 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  */
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        var entityMenuPath;
+        if (this.angularVersion === 'angular1') {
+            entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+        } else {
+            entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+        }
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: entityMenuPath,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [`<li ui-sref-active="active">
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
@@ -105,7 +121,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -530,8 +546,14 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  */
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
     var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
-    var loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
-    var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
+    var loginfullPath, registerfullPath;
+    if (this.angularVersion === 'angular1') {
+        loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
+        registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
+    } else {
+        loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.component.html';
+        registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.html';
+    }
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
         var serviceCode = `case '${socialName}': return '${socialParameter}';`;
@@ -899,8 +921,8 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
     case 'stripJs' :
-        regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
-        //looks for something like mainTranslatePartialLoader: [*]
+        regex = /(\,[\s]*(resolve)\:[\s]*[\[]?[\{][\s]*(translatePartialLoader|token: 'translate')[\[]?[\'a-zA-Z0-9\$\,\(\)\{\}\.\<\%\=\-\>\;\s\:\[\]]*(\;[\s]*\}\][\s]*\}|\)[\s]*\}\]))|(import\s\{\s?[a-zA-Z0-9\=\<\>\%]*LanguageService\s?\}\sfrom\s[\"\'\.\/]*shared[\"|\']\;)/g;
+        //looks for something like translatePartialLoader: [*] or token: 'translate'
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
     case 'copy' :
@@ -1518,12 +1540,52 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
     return child;
 };
 
+/**
+ * write the given files using provided config.
+ *
+ * @param {object} files - files to write
+ * @param {object} generator - the generator instance to use
+ */
+Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles) {
+    let _this = generator || this;
+    let filesOut = [];
+    // using the fastest method for iterations
+    for (let i = 0, blocks = Object.keys(files); i < blocks.length; i++) {
+        for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {
+            let blockTemplate = blockTemplates[j];
+            if (!blockTemplate.condition || blockTemplate.condition(_this)) {
+                let path = blockTemplate.path ? blockTemplate.path : '';
+                blockTemplate.templates.map(templateObj => {
+                    let templatePath;
+                    let method = 'template';
+                    let useTemplate = false;
+                    let interpolateRegex = {};
+                    if (typeof templateObj === 'string') {
+                        templatePath = path + templateObj;
+                    } else {
+                        templatePath = path + templateObj.file;
+                        method = templateObj.method ? templateObj.method : method;
+                        useTemplate = templateObj.template ? templateObj.template : useTemplate;
+                        interpolateRegex = templateObj.interpolate ? templateObj.interpolate : interpolateRegex;
+                    }
+                    let templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
+                    if (returnFiles) {
+                        filesOut.push(templatePathTo);
+                    } else {
+                        _this[method](templatePath, templatePathTo, _this, interpolateRegex, useTemplate);
+                    }
+                });
+            }
+        }
+    }
+    return filesOut;
+};
+
 /*========================================================================*/
 /* private methods use within generator (not exposed to modules)*/
 /*========================================================================*/
 
 Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDir, lang) {
-    this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
@@ -1549,6 +1611,7 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     }
 
     // Templates
+    _this.template(webappDir + 'i18n/' + lang + '/_activate.json', webappDir + 'i18n/' + lang + '/activate.json', this, {});
     _this.template(webappDir + 'i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
     _this.template(webappDir + 'i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
 

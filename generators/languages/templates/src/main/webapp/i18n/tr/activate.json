@@ -1,9 +1,0 @@
-{
-    "activate": {
-        "title": "Aktivasyon",
-        "messages": {
-            "success": "<strong>Kullanıcınızın aktivasyon işlemi tamamlandı.</strong> Lütfen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">giriş yapın</a>.",
-            "error": "<strong>Kullanıcınızın aktivasyon işlemi yapılamadı.</strong> Lütfen giriş sayfasından kaydolun."
-        }
-    }
-}

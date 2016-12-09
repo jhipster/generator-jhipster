@@ -1198,33 +1198,7 @@
                 </dependency>
             </dependencies>
             <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration><% if (!skipClient) { %>
-                            <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory><% } %>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <properties>
-                <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
-                <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-undertow</artifactId>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins><% if(!skipClient) {%>
+                <plugins><% if (!skipClient) { %>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
@@ -1285,7 +1259,7 @@
                                 </configuration>
                             </execution>
                             <%_ } _%>
-                        <%_ } _%>
+                            <%_ } if (angularVersion === 'angular1') { _%>
                             <execution>
                                 <id>bower install</id>
                                 <goals>
@@ -1314,8 +1288,47 @@
                                     <arguments>test --no-notification</arguments>
                                 </configuration>
                             </execution>
+                            <%_ } else if (angularVersion === 'angular2') { _%>
+                            <execution>
+                                <id>webpack build</id>
+                                <goals>
+                                    <goal>webpack</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <arguments>--config webpack/webpack.dev.js</arguments>
+                                </configuration>
+                            </execution>
+                            <%_ } _%>
                         </executions>
-                    </plugin><% } %>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory>
+                        </configuration>
+                    </plugin>
+                    <%_ } _%>
+                </plugins>
+            </build>
+            <properties>
+                <!-- log configuration -->
+                <logback.loglevel>DEBUG</logback.loglevel>
+                <!-- default Spring profiles -->
+                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <version>2.5</version>
@@ -1347,7 +1360,44 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin><% if (angularVersion === 'angular2' && !skipClient) { %>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>${frontend-maven-plugin.version}</version>
+                     <executions>
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>v4.6.0</nodeVersion>
+                                    <npmVersion>3.10.8</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>webpack build</id>
+                                <goals>
+                                    <goal>webpack</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <arguments>-p --config webpack/webpack.prod.js</arguments>
+                                </configuration>
+                           </execution>
+                     </executions>
                     </plugin>
+                    <%_ } _%>
                 </plugins>
             </build>
             <properties>

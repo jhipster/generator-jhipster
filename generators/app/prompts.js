@@ -9,6 +9,7 @@ module.exports = {
     askForModuleName,
     askFori18n,
     askForTestOpts,
+    askForClient,
     askForMoreModules
 };
 
@@ -128,6 +129,39 @@ function askForTestOpts() {
     }.bind(this));
 }
 
+function askForClient() {
+    if (this.existingProject) return;
+
+    var done = this.async();
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    var applicationType = this.applicationType;
+
+    this.prompt({
+        type: 'list',
+        name: 'angularVersion',
+        when: function (response) {
+            return (applicationType !== 'microservice');
+        },
+        message: function (response) {
+            return getNumberedQuestion('Which *Angular* version would you like to use for the client?', applicationType !== 'microservice');
+        },
+        choices: [
+            {
+                value: 'angular1',
+                name: 'Angular 1.x (stable)'
+            },
+            {
+                value: 'angular2',
+                name: '[BETA] Angular 2.x (stable)'
+            }
+        ],
+        default: 'angular1'
+    }).then(function (prompt) {
+        this.angularVersion = this.configOptions.angularVersion = prompt.angularVersion;
+        done();
+    }.bind(this));
+}
+
 function askModulesToBeInstalled(done, generator) {
     generator.httpGet('http://npmsearch.com/query?fields=name,description,author,version&q=keywords:jhipster-module&start=0&size=50',
         function(body) {
@@ -187,4 +221,3 @@ function askForMoreModules() {
         }
     }.bind(this));
 }
-

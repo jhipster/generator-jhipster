@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administration",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "Gestion des utilisateurs",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "Si vous voulez vous <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
                 "register": "Vous n'avez pas encore de compte ? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Créer un compte</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "Si vous voulez vous ",
+                    "link": "connecter",
+                    "suffix": ", vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\")."
+                },
+                "register": {
+                    "noaccount": "Vous n'avez pas encore de compte ?",
+                    "link": "Créer un compte"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux !"

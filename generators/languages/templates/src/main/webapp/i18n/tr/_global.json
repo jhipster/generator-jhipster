@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Yönetim",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "User management",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
                 "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Yeni hesap oluştur</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "",
+                    "link": "Giriş",
+                    "suffix": " yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\")."
+                },
+                "register": {
+                    "noaccount": "YHenüz bir hesabınız yok mu?",
+                    "link": "Yeni hesap oluştur"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "Şifreler eşleşmedi!"

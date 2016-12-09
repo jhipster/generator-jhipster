@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Amministratore",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "Gestione utenti",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Se vuoi <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\"> avviare una sessione</a>, puoi provare ad utilizzare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")",
+                <%_ if (angularVersion === 'angular1') { _%>
+                "authenticated": "Se vuoi <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">avviare una sessione</a>, puoi provare ad utilizzare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")",
                 "register": "Non hai ancora un account? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crea un account</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "Se vuoi ",
+                    "link": "avviare una sessione",
+                    "suffix": ", puoi provare ad utilizzare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")"
+                },
+                "register": {
+                    "noaccount": "Non hai ancora un account?",
+                    "link": "Crea un account"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "La password e la conferma non corrispondono!"

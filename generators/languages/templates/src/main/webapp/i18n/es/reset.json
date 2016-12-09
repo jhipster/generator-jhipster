@@ -9,9 +9,7 @@
                 "info": "Introduzca la dirección de correo electrónico que utilizó para registrarse",
                 "success": "Revise su correo electrónico para obtener más información sobre cómo restablecer su contraseña.",
                 "notfound": "<strong>¡Dirección de correo no registrada!</strong> Por favor, compruebe e inténtelo de nuevo"
-
             }
-
         },
         "finish" : {
             "title": "Restablecer la contraseña",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "Elija una contraseña nueva",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">inicie sesión</a>.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, ",
+                <%_ } _%>
                 "keymissing": "Falta la clave de reinicio.",
                 "error": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas."
             }
         }
     }
-
 }

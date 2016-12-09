@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "管理",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "User management",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">認証</a>を試したければ, デフォルトアカウント:<br/>- 管理者 (ユーザー名=\"admin\", パスワード=\"admin\") <br/>- ユーザー (login=\"user\", password=\"user\").",
                 "register": "アカウントをまだお持ちでないですか? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">アカウントを登録する</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "",
+                    "link": "認証",
+                    "suffix": "を試したければ, デフォルトアカウント:<br/>- 管理者 (ユーザー名=\"admin\", パスワード=\"admin\") <br/>- ユーザー (login=\"user\", password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "アカウントをまだお持ちでないですか?",
+                    "link": "アカウントを登録する"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "パスワードが一致しません!"

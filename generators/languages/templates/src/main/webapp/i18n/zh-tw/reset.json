@@ -9,9 +9,7 @@
                 "info": "輸入註冊電郵地址",
                 "success": "檢查您的電郵信箱，了解如何重設密碼。",
                 "notfound": "<strong>電郵地址未註冊!</strong> 請檢查並重試"
-
             }
-
         },
         "finish" : {
             "title": "重置密碼",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "請設置新密碼",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>您的密碼已重置。</strong> 請 <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>。",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>您的密碼已重置。</strong> 請 ",
+                <%_ } _%>
                 "keymissing": "沒有輸入重置鑰匙",
                 "error": "重置密碼失敗。記住密碼要求只於24小時內有效。"
             }
         }
     }
-
 }

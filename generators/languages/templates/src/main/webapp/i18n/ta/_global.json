@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "முக்கிய",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "பயனர் நிர்வாகம்",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "<a href=\"#/login\">அங்கீகரிக்க</a>, நீங்கள் இயல்புநிலை கணக்குகள் முயற்சி செய்யலாம்:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
                 "register": "உங்களுக்கு கணக்கு இல்லை? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">புதிய கணக்கு பதிவு செய்க!</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "",
+                    "link": "அங்கீகரிக்க",
+                    "suffix": ", நீங்கள் இயல்புநிலை கணக்குகள் முயற்சி செய்யலாம்:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "உங்களுக்கு கணக்கு இல்லை?",
+                    "link": "புதிய கணக்கு பதிவு செய்க!"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch" : "கடவுச்சொல் மற்றும் அதன் உறுதி பொருந்தவில்லை!"

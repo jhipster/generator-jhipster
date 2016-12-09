@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "प्रशासन",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "गेटवे",
                 <%_ } _%>
                 "userManagement": "उपयोगकर्ता प्रबंधन",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (angularVersion === 'angular1') { _%>
                 "authenticated": "आप <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन</a> करने के लिए चाहते हैं, तो आप डिफ़ॉल्ट खातों का प्रयास कर सकते हैं <br/>- व्यवस्थापक (लॉगिन = \"admin\" और पासवर्ड = \"admin\") <br/>- उपयोगकर्ता(लॉगिन \"user\" और पासवर्ड= \"user\")",
                 "register": "आपका खाता मौजूद नहीं है? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">एक नया खाता पंजीकृत करें</a>"
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "आप ",
+                    "link": "साइन इन",
+                    "suffix": " करने के लिए चाहते हैं, तो आप डिफ़ॉल्ट खातों का प्रयास कर सकते हैं <br/>- व्यवस्थापक (लॉगिन = \"admin\" और पासवर्ड = \"admin\") <br/>- उपयोगकर्ता(लॉगिन \"user\" और पासवर्ड= \"user\")"
+                },
+                "register": {
+                    "noaccount": "आपका खाता मौजूद नहीं है?",
+                    "link": "एक नया खाता पंजीकृत करें"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch": "पासवर्ड और इसकी पुष्टि से मेल नहीं खाती!"

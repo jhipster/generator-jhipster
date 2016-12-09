@@ -9,9 +9,7 @@
                 "info": "Ange mailadressen du använde för att registrera dig",
                 "success": "Kolla din mail för detaljer om hur du återställer ditt lösenord.",
                 "notfound": "<strong>Mailadressen är inte registrerad!</strong> Vänligen försök igen"
-
             }
-
         },
         "finish" : {
             "title": "Återställ lösenord",
@@ -20,11 +18,14 @@
             },
             "messages": {
                 "info": "Välj ett nytt lösenord",
+                <%_ if (angularVersion === 'angular1') { _%>
                 "success": "<strong>Ditt lösenord är återställt.</strong> Vänligen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logga in</a>.",
+                <%_ } else if (angularVersion === 'angular2') { _%>
+                "success": "<strong>Ditt lösenord är återställt.</strong> Vänligen ",
+                <%_ } _%>
                 "keymissing": "Återställningsnyckeln saknas.",
                 "error": "Ditt lösenord kunde inte återställas. Kom ihåg att en lösenordsåterställning endast är giltlig i 24 hours."
             }
         }
     }
-
 }

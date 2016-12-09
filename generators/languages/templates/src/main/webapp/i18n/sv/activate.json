@@ -1,9 +1,0 @@
-{
-    "activate": {
-        "title": "Aktivering",
-        "messages": {
-            "success": "<strong>Ditt användarnamn har blivit aktiverat.</strong>. Vänligen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logga in</a>.",
-            "error": "<strong>Ditt användarnamn kunde inte aktiveras.</strong> Använd gärna registreringsformuläret."
-        }
-    }
-}
