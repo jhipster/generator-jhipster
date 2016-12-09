@@ -492,7 +492,7 @@ describe('JHipster generator', function () {
     describe('default configuration using yarn flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false, yarn: true})
+                .withOptions({skipInstall: true, skipChecks: true, yarn: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',
@@ -753,7 +753,7 @@ describe('JHipster generator', function () {
     describe('postgresql and elasticsearch', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false})
+                .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',
@@ -787,7 +787,7 @@ describe('JHipster generator', function () {
     describe('mongodb', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false})
+                .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',
@@ -818,7 +818,7 @@ describe('JHipster generator', function () {
     describe('mssql', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false})
+                .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',
@@ -1032,7 +1032,7 @@ describe('JHipster generator', function () {
     describe('Messaging with Kafka configuration', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false})
+                .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',
@@ -1206,7 +1206,7 @@ describe('JHipster generator', function () {
     describe('gateway with consul', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false})
+                .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'applicationType': 'gateway',
                     'baseName': 'jhipster',
@@ -1240,7 +1240,7 @@ describe('JHipster generator', function () {
     describe('microservice with consul', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, checkInstall: false})
+                .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'applicationType': 'microservice',
                     'baseName': 'jhipster',

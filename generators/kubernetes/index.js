@@ -34,14 +34,14 @@ module.exports = KubernetesGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
 
-        // This adds support for a `--[no-]check-install` flag
-        this.option('check-install', {
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: true
+            defaults: false
         });
 
-        this.checkInstall = this.options['check-install'];
+        this.skipChecks = this.options['skip-checks'];
     },
 
     initializing: {
@@ -51,7 +51,7 @@ module.exports = KubernetesGenerator.extend({
         },
 
         checkDocker: function() {
-            if (!this.checkInstall) return;
+            if (this.skipChecks) return;
             var done = this.async();
 
             shelljs.exec('docker -v', {silent:true},function(code, stdout, stderr) {
@@ -73,7 +73,7 @@ module.exports = KubernetesGenerator.extend({
         },
 
         checkKubernetes: function() {
-            if (!this.checkInstall) return;
+            if (this.skipChecks) return;
             var done = this.async();
 
             shelljs.exec('kubectl version', {silent:true}, function(code, stdout, stderr) {

@@ -83,7 +83,7 @@ module.exports = JhipsterGenerator.extend({
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
-        this.checkInstall = this.options['check-install']; //TODO change to skip-checks
+        this.skipChecks = this.options['skip-checks'];
         this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
     },
 
@@ -93,7 +93,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkJava: function () {
-            if (!this.checkInstall || this.skipServer) return;
+            if (this.skipChecks || this.skipServer) return;
             var done = this.async();
             exec('java -version', function (err, stdout, stderr) {
                 if (err) {
@@ -109,7 +109,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGit: function () {
-            if (!this.checkInstall || this.skipClient) return;
+            if (this.skipChecks || this.skipClient) return;
             var done = this.async();
             this.isGitInstalled(function (code) {
                 this.gitInstalled = code === 0;
@@ -130,35 +130,9 @@ module.exports = JhipsterGenerator.extend({
                 done();
             }.bind(this));
         },
-        //TODO : move checks to appropriate angular versions
-        checkBower: function () {
-            if (!this.checkInstall || this.skipClient) return;
-            var done = this.async();
-            exec('bower --version', function (err) {
-                if (err) {
-                    this.warning('bower is not found on your computer.\n',
-                        ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
-                    );
-                }
-                done();
-            }.bind(this));
-        },
-
-        checkGulp: function () {
-            if (!this.checkInstall || this.skipClient) return;
-            var done = this.async();
-            exec('gulp --version', function (err) {
-                if (err) {
-                    this.warning('gulp is not found on your computer.\n',
-                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
-                    );
-                }
-                done();
-            }.bind(this));
-        },
 
         checkYarn: function () {
-            if (!this.checkInstall || this.skipClient || !this.yarnInstall) return;
+            if (this.skipChecks || this.skipClient || !this.yarnInstall) return;
             var done = this.async();
             exec('yarn --version', function (err) {
                 if (err) {

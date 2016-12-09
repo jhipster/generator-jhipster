@@ -58,7 +58,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({checkInstall: false})
+                .withOptions({skipChecks: true})
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -90,7 +90,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({checkInstall: false})
+                .withOptions({skipChecks: true})
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -122,7 +122,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({checkInstall: false})
+                .withOptions({skipChecks: true})
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -157,7 +157,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({checkInstall: false})
+                .withOptions({skipChecks: true})
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -201,7 +201,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({checkInstall: false})
+                .withOptions({skipChecks: true})
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
@@ -229,7 +229,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({checkInstall: false})
+                .withOptions({skipChecks: true})
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
