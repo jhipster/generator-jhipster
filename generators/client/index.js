@@ -150,6 +150,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
+            this.messageBroker = this.config.get('messageBroker');
             this.packagejs = packagejs;
             var baseName = this.config.get('baseName');
             if (baseName) {
