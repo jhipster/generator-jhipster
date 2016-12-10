@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Выберите новый пароль",
-                <%_ if (angularVersion === 'angular1') { _%>
+                <%_ if (clientFw === 'angular1') { _%>
                 "success": "<strong>Ваш пароль был сброшен.</strong> Пожалуйста <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">войдите</a>.",
-                <%_ } else if (angularVersion === 'angular2') { _%>
+                <%_ } else if (clientFw === 'angular2') { _%>
                 "success": "<strong>Ваш пароль был сброшен.</strong> Пожалуйста ",
                 <%_ } _%>
                 "keymissing": "Ключ сброса отсутствует.",

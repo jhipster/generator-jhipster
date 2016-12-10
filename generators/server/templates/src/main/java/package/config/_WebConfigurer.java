@@ -128,7 +128,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
         File root;
         String prefixPath = resolvePathPrefix();
-        <%_ if (angularVersion === 'angular2') { _%>
+        <%_ if (clientFw === 'angular2') { _%>
         root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
         <%_ } else { _%>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {

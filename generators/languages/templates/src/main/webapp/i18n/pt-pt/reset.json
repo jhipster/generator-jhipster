@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Escolha uma nova palavra-passe",
-                <%_ if (angularVersion === 'angular1') { _%>
+                <%_ if (clientFw === 'angular1') { _%>
                 "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentique-se</a>.",
-                <%_ } else if (angularVersion === 'angular2') { _%>
+                <%_ } else if (clientFw === 'angular2') { _%>
                 "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor ",
                 <%_ } _%>
                 "keymissing": "Chave de reposição em falta.",

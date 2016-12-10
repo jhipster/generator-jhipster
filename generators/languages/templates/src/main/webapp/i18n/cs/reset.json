@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Vyberte si nové heslo",
-                <%_ if (angularVersion === 'angular1') { _%>
+                <%_ if (clientFw === 'angular1') { _%>
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">přihlásit</a>.",
-                <%_ } else if (angularVersion === 'angular2') { _%>
+                <%_ } else if (clientFw === 'angular2') { _%>
                 "success": "<strong>Vaše heslo bylo obnoveno.</strong> Můžete se ",
                 <%_ } _%>
                 "keymissing": "Chybí klíč na obnovení hesla.",

@@ -138,26 +138,26 @@ function askForClient() {
 
     this.prompt({
         type: 'list',
-        name: 'angularVersion',
+        name: 'clientFw',
         when: function (response) {
             return (applicationType !== 'microservice');
         },
         message: function (response) {
-            return getNumberedQuestion('Which *Angular* version would you like to use for the client?', applicationType !== 'microservice');
+            return getNumberedQuestion('Which *Framework* would you like to use for the client?', applicationType !== 'microservice');
         },
         choices: [
             {
                 value: 'angular1',
-                name: 'Angular 1.x (stable)'
+                name: 'Angular 1.x'
             },
             {
                 value: 'angular2',
-                name: '[BETA] Angular 2.x (stable)'
+                name: '[BETA] Angular 2.x'
             }
         ],
         default: 'angular1'
     }).then(function (prompt) {
-        this.angularVersion = this.configOptions.angularVersion = prompt.angularVersion;
+        this.clientFw = this.configOptions.clientFw = prompt.clientFw;
         done();
     }.bind(this));
 }

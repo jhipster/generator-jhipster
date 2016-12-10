@@ -1259,7 +1259,7 @@
                                 </configuration>
                             </execution>
                             <%_ } _%>
-                            <%_ } if (angularVersion === 'angular1') { _%>
+                            <%_ } if (clientFw === 'angular1') { _%>
                             <execution>
                                 <id>bower install</id>
                                 <goals>
@@ -1288,7 +1288,7 @@
                                     <arguments>test --no-notification</arguments>
                                 </configuration>
                             </execution>
-                            <%_ } else if (angularVersion === 'angular2') { _%>
+                            <%_ } else if (clientFw === 'angular2') { _%>
                             <execution>
                                 <id>webpack build</id>
                                 <goals>
@@ -1360,7 +1360,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin><% if (angularVersion === 'angular2' && !skipClient) { %>
+                    </plugin><% if (clientFw === 'angular2' && !skipClient) { %>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>

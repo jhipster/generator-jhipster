@@ -174,7 +174,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
             this.uaaBaseName = this.config.get('uaaBaseName');
-            this.angularVersion = this.config.get('angularVersion');
+            this.clientFw = this.config.get('clientFw');
             var testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
@@ -372,8 +372,8 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }
-            if (this.configOptions.angularVersion) {
-                this.angularVersion = this.configOptions.angularVersion;
+            if (this.configOptions.clientFw) {
+                this.clientFw = this.configOptions.clientFw;
             }
         },
 

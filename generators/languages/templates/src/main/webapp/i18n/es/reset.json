@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Elija una contraseña nueva",
-                <%_ if (angularVersion === 'angular1') { _%>
+                <%_ if (clientFw === 'angular1') { _%>
                 "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">inicie sesión</a>.",
-                <%_ } else if (angularVersion === 'angular2') { _%>
+                <%_ } else if (clientFw === 'angular2') { _%>
                 "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, ",
                 <%_ } _%>
                 "keymissing": "Falta la clave de reinicio.",
