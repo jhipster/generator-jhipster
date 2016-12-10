@@ -234,28 +234,15 @@ module.exports = JhipsterGenerator.extend({
         composeClient: function () {
             if (this.skipClient) return;
 
-            if (this.clientFw === 'angular2') {
-                this.composeWith('jhipster:client-2', {
-                    options: {
-                        'skip-install': this.options['skip-install'],
-                        configOptions: this.configOptions,
-                        force: this.options['force']
-                    }
-                }, {
-                    local: require.resolve('../client-2')
-                });
-            } else {
-                this.composeWith('jhipster:client', {
-                    options: {
-                        'skip-install': this.options['skip-install'],
-                        configOptions: this.configOptions,
-                        force: this.options['force']
-                    }
-                }, {
-                    local: require.resolve('../client')
-                });
-            }
-
+            this.composeWith('jhipster:client', {
+                options: {
+                    'skip-install': this.options['skip-install'],
+                    configOptions: this.configOptions,
+                    force: this.options['force']
+                }
+            }, {
+                local: require.resolve('../client')
+            });
         },
 
         askFori18n: prompts.askFori18n

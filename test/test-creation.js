@@ -1416,10 +1416,10 @@ describe('JHipster server generator', function () {
 });
 
 describe('JHipster client generator', function () {
-    describe('generate client', function () {
+    describe('generate client with angularjs 1', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session'})
+                .withOptions({skipInstall: true, auth: 'session', client: 'angular1'})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
@@ -1436,13 +1436,11 @@ describe('JHipster client generator', function () {
             assert.file(expectedFiles.client);
         });
     });
-});
 
-describe('JHipster client-2 generator', function () {
-    describe('generate client-2', function () {
+    describe('generate client with angular 2', function () {
         beforeEach(function (done) {
-            helpers.run(path.join(__dirname, '../generators/client-2'))
-                .withOptions({skipInstall: true, auth: 'session'})
+            helpers.run(path.join(__dirname, '../generators/client'))
+                .withOptions({skipInstall: true, auth: 'session', client: 'angular2'})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
@@ -1457,7 +1455,7 @@ describe('JHipster client-2 generator', function () {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
-            assert.file(getFilesForOptions(require('../generators/client-2/files').files, {
+            assert.file(getFilesForOptions(require('../generators/client/files-angular').files, {
                 useSass: true,
                 enableTranslation: true,
                 authenticationType: 'session',

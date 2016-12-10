@@ -1546,7 +1546,7 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
  * @param {object} files - files to write
  * @param {object} generator - the generator instance to use
  */
-Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles) {
+Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, prefix) {
     let _this = generator || this;
     let filesOut = [];
     // using the fastest method for iterations
@@ -1556,22 +1556,25 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles) 
             if (!blockTemplate.condition || blockTemplate.condition(_this)) {
                 let path = blockTemplate.path ? blockTemplate.path : '';
                 blockTemplate.templates.map(templateObj => {
-                    let templatePath;
+                    let templatePath = prefix ? `${prefix}/` : '';
                     let method = 'template';
                     let useTemplate = false;
                     let interpolateRegex = {};
                     if (typeof templateObj === 'string') {
-                        templatePath = path + templateObj;
+                        templatePath += path + templateObj;
                     } else {
-                        templatePath = path + templateObj.file;
+                        templatePath += path + templateObj.file;
                         method = templateObj.method ? templateObj.method : method;
                         useTemplate = templateObj.template ? templateObj.template : useTemplate;
                         interpolateRegex = templateObj.interpolate ? templateObj.interpolate : interpolateRegex;
                     }
-                    let templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
+                    let templatePathTo = templatePath.replace(`${prefix}/`,'');
+                    templatePathTo = templatePathTo.replace(/([/])_|^_/, '$1');
                     if (returnFiles) {
                         filesOut.push(templatePathTo);
                     } else {
+                        this.log(templatePath);
+                        this.log(templatePathTo);
                         _this[method](templatePath, templatePathTo, _this, interpolateRegex, useTemplate);
                     }
                 });

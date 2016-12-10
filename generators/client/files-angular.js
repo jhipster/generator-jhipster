@@ -435,13 +435,7 @@ module.exports = {
 };
 
 function writeFiles() {
-    return {
-        writeSepcial: function () {
-            mkdirp(MAIN_SRC_DIR);
-        },
-
-        writeAllFiles: function () {
-            this.writeFilesToDisk(files);
-        }
-    };
+    mkdirp(MAIN_SRC_DIR);
+    // write angular 2.x and above files
+    this.writeFilesToDisk(files, this, false, 'angular');
 }
