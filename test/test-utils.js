@@ -6,7 +6,7 @@ module.exports = {
     getFilesForOptions: getFilesForOptions
 };
 
-function getFilesForOptions(files, options) {
+function getFilesForOptions(files, options, prefix) {
     let generator = options;
-    return Generator.prototype.writeFilesToDisk(files, generator, true);
+    return Generator.prototype.writeFilesToDisk(files, generator, true, prefix);
 }
