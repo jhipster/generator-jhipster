@@ -162,6 +162,30 @@ function askForClient() {
     }.bind(this));
 }
 
+
+function askForMoreModules() {
+    if (this.existingProject) {
+        return;
+    }
+
+    var done = this.async();
+    var generator = this;
+    this.prompt({
+        type: 'confirm',
+        name: 'installModules',
+        message: function(response) {
+            return generator.getNumberedQuestion('Would you like to install other generators from the JHipster Market Place?', true);
+        },
+        default: false
+    }).then(function (prompt) {
+        if (prompt.installModules) {
+            askModulesToBeInstalled(done, generator);
+        } else {
+            done();
+        }
+    }.bind(this));
+}
+
 function askModulesToBeInstalled(done, generator) {
     generator.httpGet('http://npmsearch.com/query?fields=name,description,author,version&q=keywords:jhipster-module&start=0&size=50',
         function(body) {
@@ -170,7 +194,7 @@ function askModulesToBeInstalled(done, generator) {
             moduleResponse.results.forEach(function (modDef) {
                 choices.push({
                     value: { name:modDef.name, version:modDef.version},
-                    name: '(' + modDef.name + '-' + modDef.version + ') '+ modDef.description + ' [' + modDef.author + ']'
+                    name: `(${modDef.name}-${modDef.version}) ${modDef.description} [${modDef.author}]`
                 });
             });
             if (choices.length > 0) {
@@ -194,30 +218,7 @@ function askModulesToBeInstalled(done, generator) {
             }
         },
         function (error) {
-            generator.warning(`Unable to contact server to fetch additional modules: ${ error.message }'`);
+            generator.warning(`Unable to contact server to fetch additional modules: ${ error.message }`);
             done();
         });
-}
-
-function askForMoreModules() {
-    if (this.existingProject) {
-        return;
-    }
-
-    var done = this.async();
-    var generator = this;
-    this.prompt({
-        type: 'confirm',
-        name: 'installModules',
-        message: function(response) {
-            return generator.getNumberedQuestion('Would you like to install other generators from the JHipster Market Place?', true);
-        },
-        default: false
-    }).then(function (prompt) {
-        if (prompt.installModules) {
-            askModulesToBeInstalled(done, generator);
-        } else {
-            done();
-        }
-    }.bind(this));
 }
