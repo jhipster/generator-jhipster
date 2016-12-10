@@ -18,7 +18,7 @@
     "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
     "useSass": false,
     "applicationType": "monolith",
-    "angularVersion": "angular2",
+    "clientFw": "angular2",
     "testFrameworks": [
       "gatling"
     ],
