@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administreerimine",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "Kasutajate haldus",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (clientFw === 'angular1') { _%>
                 "authenticated": "Kui te soovite <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sisse logida</a>, siis võite kasutada vaikekontosid:<br/>- Administraator (kasutajanimi=\"admin\" ja salasõna=\"admin\") <br/>- Kasutaja (kasutajanimi=\"user\" ja salasõna=\"user\").",
                 "register": "Teil pole veel kontot? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registreerige uus konto</a>"
+                <%_ } else if (clientFw === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "Kui te soovite ",
+                    "link": "sisse logida",
+                    "suffix": ", siis võite kasutada vaikekontosid:<br/>- Administraator (kasutajanimi=\"admin\" ja salasõna=\"admin\") <br/>- Kasutaja (kasutajanimi=\"user\" ja salasõna=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Teil pole veel kontot?",
+                    "link": "Registreerige uus konto"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch": "Salasõna ja selle kordus erinevad!"
