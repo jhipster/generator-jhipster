@@ -202,7 +202,7 @@ const files = {
             condition: generator => generator.enableSocialSignIn,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/_social.component.html', method: 'copyHtml' },
+                { file: 'shared/social/_social.component.html', method: 'copyHtml' },
                 { file: 'account/social/_social-register.component.html', method: 'copyHtml' },
                 'account/social/_social-register.component.ts',
                 'shared/social/_social.component.ts',

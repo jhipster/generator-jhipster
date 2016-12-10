@@ -1,4 +1,4 @@
-import { Inject, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SocialService } from './social.service';
 import { CSRFService } from '../auth/csrf.service';
 <%_ if (enableTranslation){ _%>
