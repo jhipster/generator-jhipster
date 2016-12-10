@@ -3,7 +3,8 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.MailService;
 <% if (databaseType == 'sql') { %>
@@ -43,7 +44,10 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
     private MailService mailService;
 
     @Autowired
-    private UserService userService;
+    private UserService userService;<% if (searchEngine == 'elasticsearch') { %>
+
+    @Autowired
+    private UserSearchRepository userSearchRepository;<% } %>
 
     private MockMvc restUserMockMvc;
 <%_ if (databaseType == 'sql') { _%>
@@ -71,7 +75,7 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
 
     @Before
     public void setup() {
-        UserResource userResource = new UserResource(userRepository, mailService, userService);
+        UserResource userResource = new UserResource(userRepository, mailService, userService<% if (searchEngine == 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
     }
 

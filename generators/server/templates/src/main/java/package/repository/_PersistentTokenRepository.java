@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 <% } %><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;<% } %>
 import java.util.List;
 
@@ -48,10 +47,6 @@ public class PersistentTokenRepository {
 
     public PersistentTokenRepository(Session session) {
         this.session = session;
-    }
-
-    @PostConstruct
-    public void init() {
         mapper = new MappingManager(session).mapper(PersistentToken.class);
 
         findPersistentTokenSeriesByUserIdStmt = session.prepare(

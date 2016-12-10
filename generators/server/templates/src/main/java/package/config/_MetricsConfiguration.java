@@ -137,11 +137,8 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         public GraphiteRegistry(MetricRegistry metricRegistry, JHipsterProperties jHipsterProperties) {
             this.metricRegistry = metricRegistry;
             this.jHipsterProperties = jHipsterProperties;
-        }
-
-        @PostConstruct
-        private void init() {
-            if (jHipsterProperties.getMetrics().getGraphite().isEnabled()) {
+            if (this.
+            jHipsterProperties.getMetrics().getGraphite().isEnabled()) {
                 log.info("Initializing Metrics Graphite reporting");
                 String graphiteHost = jHipsterProperties.getMetrics().getGraphite().getHost();
                 Integer graphitePort = jHipsterProperties.getMetrics().getGraphite().getPort();

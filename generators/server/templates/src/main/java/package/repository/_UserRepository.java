@@ -17,7 +17,6 @@ import java.util.Optional;<% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;<%}%>
@@ -82,10 +81,6 @@ public class UserRepository {
 
     public UserRepository(Session session) {
         this.session = session;
-    }
-
-    @PostConstruct
-    public void init() {
         mapper = new MappingManager(session).mapper(User.class);
 
         findAllStmt = session.prepare("SELECT * FROM user");
