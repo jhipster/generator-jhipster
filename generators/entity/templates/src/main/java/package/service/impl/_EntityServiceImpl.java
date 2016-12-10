@@ -110,7 +110,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
+        Page<<%= entityClass %>> result = <%= entityInstance %>SearchRepository.search(wrapperQuery(query), pageable);
             <%_ if (dto == 'mapstruct') { _%>
         return result.map(<%= entityInstance %> -> <%= entityToDto %>(<%= entityInstance%>));
             <%_ } else { _%>
