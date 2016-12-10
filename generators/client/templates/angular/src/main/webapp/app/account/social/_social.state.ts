@@ -25,7 +25,6 @@ export const socialRegisterState = {
         resolveFn: (languageService) => languageService.setLocations(['social'])
     }]
 };
-
 <%_ if (authenticationType == 'jwt') { _%>
 export const socialAuthState = {
     name: 'social-auth',
