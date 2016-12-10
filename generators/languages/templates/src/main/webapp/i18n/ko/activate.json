@@ -1,9 +1,0 @@
-{
-    "activate": {
-        "title": "계정 활성화",
-        "messages": {
-            "success": "<strong>당신의 계정이 활성화되었습니다.</strong> <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">인증</a>하기.",
-            "error": "<strong>당신의 계정이 활성화될 수 없습니다.</strong> 회원가입을 위해 등록 폼을 이용해 주세요."
-        }
-    }
-}

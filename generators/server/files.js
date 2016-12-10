@@ -22,7 +22,6 @@ var javaDir;
 function writeFiles() {
     return {
         cleanupOldServerFiles: function() {
-            javaDir = this.javaDir = constants.SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
         },
 
@@ -102,7 +101,7 @@ function writeFiles() {
                 this.template('_build.gradle', 'build.gradle', this, {});
                 this.template('_settings.gradle', 'settings.gradle', this, {});
                 this.template('_gradle.properties', 'gradle.properties', this, {});
-                if (!this.skipClient) {
+                if (!this.skipClient && this.clientFw === 'angular1') {
                     this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                 }
                 this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});

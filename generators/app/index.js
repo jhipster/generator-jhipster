@@ -55,11 +55,11 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
-        // This adds support for a `--[no-]check-install` flag
-        this.option('check-install', {
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: true
+            defaults: false
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -83,7 +83,7 @@ module.exports = JhipsterGenerator.extend({
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
-        this.checkInstall = this.options['check-install'];
+        this.skipChecks = this.options['skip-checks'];
         this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
     },
 
@@ -93,7 +93,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkJava: function () {
-            if (!this.checkInstall || this.skipServer) return;
+            if (this.skipChecks || this.skipServer) return;
             var done = this.async();
             exec('java -version', function (err, stdout, stderr) {
                 if (err) {
@@ -109,7 +109,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGit: function () {
-            if (!this.checkInstall || this.skipClient) return;
+            if (this.skipChecks || this.skipClient) return;
             var done = this.async();
             this.isGitInstalled(function (code) {
                 this.gitInstalled = code === 0;
@@ -131,34 +131,8 @@ module.exports = JhipsterGenerator.extend({
             }.bind(this));
         },
 
-        checkBower: function () {
-            if (!this.checkInstall || this.skipClient) return;
-            var done = this.async();
-            exec('bower --version', function (err) {
-                if (err) {
-                    this.warning('bower is not found on your computer.\n',
-                        ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
-                    );
-                }
-                done();
-            }.bind(this));
-        },
-
-        checkGulp: function () {
-            if (!this.checkInstall || this.skipClient) return;
-            var done = this.async();
-            exec('gulp --version', function (err) {
-                if (err) {
-                    this.warning('gulp is not found on your computer.\n',
-                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
-                    );
-                }
-                done();
-            }.bind(this));
-        },
-
         checkYarn: function () {
-            if (!this.checkInstall || this.skipClient || !this.yarnInstall) return;
+            if (this.skipChecks || this.skipClient || !this.yarnInstall) return;
             var done = this.async();
             exec('yarn --version', function (err) {
                 if (err) {
@@ -185,6 +159,11 @@ module.exports = JhipsterGenerator.extend({
             }
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.clientFw = this.config.get('clientFw');
+            if (!this.clientFw) {
+                /* for backward compatibility */
+                this.clientFw = 'angular1';
+            }
             this.testFrameworks = this.config.get('testFrameworks');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
@@ -201,6 +180,8 @@ module.exports = JhipsterGenerator.extend({
 
         askForApplicationType: prompts.askForApplicationType,
 
+        askForClient: prompts.askForClient,
+
         askForModuleName: prompts.askForModuleName,
 
         askForMoreModules: prompts.askForMoreModules,
@@ -211,6 +192,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.skipI18nQuestion = true;
             this.configOptions.baseName = this.baseName;
             this.configOptions.logo = false;
+            this.configOptions.clientFw = this.clientFw;
             this.configOptions.otherModules = this.otherModules;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
@@ -261,7 +243,6 @@ module.exports = JhipsterGenerator.extend({
             }, {
                 local: require.resolve('../client')
             });
-
         },
 
         askFori18n: prompts.askFori18n
@@ -278,12 +259,14 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.enableTranslation = this.enableTranslation;
             this.configOptions.nativeLanguage = this.nativeLanguage;
             this.configOptions.languages = this.languages;
+            this.configOptions.clientFw = this.clientFw;
         },
 
         insight: function () {
             var insight = this.insight();
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
+            insight.track('app/clientFw', this.clientFw);
             insight.track('app/testFrameworks', this.testFrameworks);
             insight.track('app/otherModules', this.otherModules);
         },
@@ -296,6 +279,7 @@ module.exports = JhipsterGenerator.extend({
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('applicationType', this.applicationType);
+            this.config.set('clientFw', this.clientFw);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);

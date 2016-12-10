@@ -1,5 +1,4 @@
 import org.apache.tools.ant.taskdefs.condition.Os
-apply plugin: 'com.moowork.node'
 apply plugin: 'com.moowork.gulp'
 
 task bower(type: Exec) {

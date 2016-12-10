@@ -9,6 +9,7 @@ module.exports = {
     askForModuleName,
     askFori18n,
     askForTestOpts,
+    askForClient,
     askForMoreModules
 };
 
@@ -128,42 +129,39 @@ function askForTestOpts() {
     }.bind(this));
 }
 
-function askModulesToBeInstalled(done, generator) {
-    generator.httpGet('http://npmsearch.com/query?fields=name,description,author,version&q=keywords:jhipster-module&start=0&size=50',
-        function(body) {
-            var moduleResponse = JSON.parse(body);
-            var choices = [];
-            moduleResponse.results.forEach(function (modDef) {
-                choices.push({
-                    value: { name:modDef.name, version:modDef.version},
-                    name: '(' + modDef.name + '-' + modDef.version + ') '+ modDef.description + ' [' + modDef.author + ']'
-                });
-            });
-            if (choices.length > 0) {
-                generator.prompt({
-                    type: 'checkbox',
-                    name: 'otherModules',
-                    message: 'Which other modules would you like to use?',
-                    choices: choices,
-                    default: []
-                }).then(function (prompt) {
-                    // [ {name: [moduleName], version:[version]}, ...]
-                    generator.otherModules = [];
-                    prompt.otherModules.forEach(function(module) {
-                        generator.otherModules.push({name:module.name[0], version:module.version[0]});
-                    });
-                    generator.configOptions.otherModules = this.otherModules;
-                    done();
-                }.bind(generator));
-            } else {
-                done();
-            }
+function askForClient() {
+    if (this.existingProject) return;
+
+    var done = this.async();
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    var applicationType = this.applicationType;
+
+    this.prompt({
+        type: 'list',
+        name: 'clientFw',
+        when: function (response) {
+            return (applicationType !== 'microservice');
         },
-        function (error) {
-            generator.warning(`Unable to contact server to fetch additional modules: ${ error.message }'`);
-            done();
-        });
+        message: function (response) {
+            return getNumberedQuestion('Which *Framework* would you like to use for the client?', applicationType !== 'microservice');
+        },
+        choices: [
+            {
+                value: 'angular1',
+                name: 'Angular 1.x'
+            },
+            {
+                value: 'angular2',
+                name: '[BETA] Angular 2.x'
+            }
+        ],
+        default: 'angular1'
+    }).then(function (prompt) {
+        this.clientFw = this.configOptions.clientFw = prompt.clientFw;
+        done();
+    }.bind(this));
 }
+
 
 function askForMoreModules() {
     if (this.existingProject) {
@@ -188,3 +186,39 @@ function askForMoreModules() {
     }.bind(this));
 }
 
+function askModulesToBeInstalled(done, generator) {
+    generator.httpGet('http://npmsearch.com/query?fields=name,description,author,version&q=keywords:jhipster-module&start=0&size=50',
+        function(body) {
+            var moduleResponse = JSON.parse(body);
+            var choices = [];
+            moduleResponse.results.forEach(function (modDef) {
+                choices.push({
+                    value: { name:modDef.name, version:modDef.version},
+                    name: `(${modDef.name}-${modDef.version}) ${modDef.description} [${modDef.author}]`
+                });
+            });
+            if (choices.length > 0) {
+                generator.prompt({
+                    type: 'checkbox',
+                    name: 'otherModules',
+                    message: 'Which other modules would you like to use?',
+                    choices: choices,
+                    default: []
+                }).then(function (prompt) {
+                    // [ {name: [moduleName], version:[version]}, ...]
+                    generator.otherModules = [];
+                    prompt.otherModules.forEach(function(module) {
+                        generator.otherModules.push({name:module.name[0], version:module.version[0]});
+                    });
+                    generator.configOptions.otherModules = this.otherModules;
+                    done();
+                }.bind(generator));
+            } else {
+                done();
+            }
+        },
+        function (error) {
+            generator.warning(`Unable to contact server to fetch additional modules: ${ error.message }`);
+            done();
+        });
+}
