@@ -1,7 +1,9 @@
-$icon-font-path: "../fonts/";
+$fa-font-path: '~font-awesome/fonts';
 
-/* Sass bower components will be injected here */
-/* bower:scss */
-/* endinject */
-/* bower:sass */
-/* endinject */
+/***************************
+put Sass variables here:
+eg $input-color: red;
+****************************/
+
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/font-awesome/scss/font-awesome';
