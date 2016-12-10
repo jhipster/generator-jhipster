@@ -49,7 +49,7 @@ public class GatewayConfiguration {
 
         private final JHipsterProperties jHipsterProperties;
 
-        pubilc RateLimitingConfiguration() {
+        public RateLimitingConfiguration(JHipsterProperties jHipsterProperties) {
             this.jHipsterProperties = jHipsterProperties;
         }
 
