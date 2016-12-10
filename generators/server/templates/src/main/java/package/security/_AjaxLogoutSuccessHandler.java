@@ -7,8 +7,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;<% } %>
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
-<% if (authenticationType == 'oauth2') { %>
-import javax.inject.Inject;<% } %>
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,12 +17,17 @@ import java.io.IOException;
  */
 @Component
 public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlRequestHandler
-    implements LogoutSuccessHandler {<% if (authenticationType == 'oauth2') { %>
+    implements LogoutSuccessHandler {
+    <%_ if (authenticationType == 'oauth2') { _%>
 
     public static final String BEARER_AUTHENTICATION = "Bearer ";
 
-    @Inject
-    private TokenStore tokenStore;<% } %>
+    private final TokenStore tokenStore;
+
+    public AjaxLogoutSuccessHandler(TokenStore tokenStore) {
+        this.tokenStore = tokenStore;
+    }
+    <%_ } _%>
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,

@@ -26,7 +26,6 @@ import org.springframework.context.annotation.ComponentScan;
 <%_ } _%>import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -51,8 +50,11 @@ public class <%= mainClass %> {
 
     private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);
 
-    @Inject
-    private Environment env;
+    private final Environment env;
+
+    public <%= mainClass %>(Environment env) {
+        this.env = env;
+    }
 
     /**
      * Initializes <%= baseName %>.

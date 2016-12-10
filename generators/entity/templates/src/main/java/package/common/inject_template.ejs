@@ -1,19 +1,29 @@
 <%_ if (!viaService) { _%>
 
-    @Inject
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    private final <%= entityClass %>Repository <%= entityInstance %>Repository;
     <%_ if (dto == 'mapstruct') { _%>
 
-    @Inject
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
+    private final <%= entityClass %>Mapper <%= entityInstance %>Mapper;
     <%_ } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>
 
-    @Inject
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
+    private final <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
     <%_ } _%>
 <%_  } else { _%>
 
-    @Inject
-    private <%= entityClass %>Service <%= entityInstance %>Service;
+    private final <%= entityClass %>Service <%= entityInstance %>Service;
 <%_ } _%>
+
+    public <%= constructorName %>(<% if (!viaService) { %><%= entityClass %>Repository <%= entityInstance %>Repository<% if (dto == 'mapstruct') { %>, <%= entityClass %>Mapper <%= entityInstance %>Mapper<% } %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository)<% } %><%  } else { %><%= entityClass %>Service <%= entityInstance %>Service<% } %>) {
+        <%_ if (!viaService) { _%>
+        this.<%= entityInstance %>Repository = <%= entityInstance %>Repository;
+            <%_ if (dto == 'mapstruct') { _%>
+        this.<%= entityInstance %>Mapper = <%= entityInstance %>Mapper;
+            <%_ } _%>
+            <%_ if (searchEngine == 'elasticsearch') { _%>
+        this.<%= entityInstance %>SearchRepository = <%= entityInstance %>SearchRepository;
+            <%_ } _%>
+        <%_  } else { _%>
+        this.<%= entityInstance %>Service = <%= entityInstance %>Service;
+        <%_ } _%>
+    }

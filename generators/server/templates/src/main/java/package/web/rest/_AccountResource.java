@@ -27,7 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 <%_ if (authenticationType == 'session') { _%>
@@ -45,17 +44,27 @@ public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
-    @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Inject
-    private UserService userService;<% if (authenticationType == 'session') { %>
+    private final UserService userService;
 
-    @Inject
-    private PersistentTokenRepository persistentTokenRepository;<% } %>
+    private final MailService mailService;
 
-    @Inject
-    private MailService mailService;
+    <%_ if (authenticationType == 'session') { _%>
+
+    private final PersistentTokenRepository persistentTokenRepository;
+    <%_ } _%>
+
+    public AccountResource(UserRepository userRepository, UserService userService,
+            MailService mailService<% if (authenticationType == 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
+
+        this.userRepository = userRepository;
+        this.userService = userService;
+        this.mailService = mailService;
+        <%_ if (authenticationType == 'session') { _%>
+        this.persistentTokenRepository = persistentTokenRepository;
+        <%_ } _%>
+    }
 
     /**
      * POST  /register : register the user.

@@ -37,7 +37,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.lang.management.ManagementFactory;
@@ -62,12 +61,21 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     private HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
+<%_ if (databaseType == 'sql') { _%>
+
+    private HikariDataSource hikariDataSource;
+<%_ } _%>
+
+    public MetricsConfiguration(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
 <%_ if (databaseType == 'sql') { _%>
 
     @Autowired(required = false)
-    private HikariDataSource hikariDataSource;
+    public void setHikariDataSource(HikariDataSource hikariDataSource) {
+        this.hikariDataSource = hikariDataSource;
+    }
 <%_ } _%>
 
     @Override
@@ -122,11 +130,14 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
         private final Logger log = LoggerFactory.getLogger(GraphiteRegistry.class);
 
-        @Inject
-        private MetricRegistry metricRegistry;
+        private final MetricRegistry metricRegistry;
 
-        @Inject
-        private JHipsterProperties jHipsterProperties;
+        private final JHipsterProperties jHipsterProperties;
+
+        public GraphiteRegistry(MetricRegistry metricRegistry, JHipsterProperties jHipsterProperties) {
+            this.metricRegistry = metricRegistry;
+            this.jHipsterProperties = jHipsterProperties;
+        }
 
         @PostConstruct
         private void init() {
@@ -152,11 +163,14 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
         private final Logger log = LoggerFactory.getLogger(PrometheusRegistry.class);
 
-        @Inject
-        private MetricRegistry metricRegistry;
+        private final MetricRegistry metricRegistry;
 
-        @Inject
-        private JHipsterProperties jHipsterProperties;
+        private final JHipsterProperties jHipsterProperties;
+
+        public PrometheusRegistry(MetricRegistry metricRegistry, JHipsterProperties jHipsterProperties) {
+            this.metricRegistry = metricRegistry;
+            this.jHipsterProperties = jHipsterProperties;
+        }
 
         @Override
         public void onStartup(ServletContext servletContext) throws ServletException {

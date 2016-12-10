@@ -19,7 +19,6 @@ import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
@@ -27,27 +26,36 @@ import java.util.Set;
 
 @Service
 public class SocialService {
+
     private final Logger log = LoggerFactory.getLogger(SocialService.class);
 
-    @Inject
-    private UsersConnectionRepository usersConnectionRepository;
+    private final UsersConnectionRepository usersConnectionRepository;
 
-    @Inject
-    private AuthorityRepository authorityRepository;
+    private final AuthorityRepository authorityRepository;
 
-    @Inject
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
+    private final MailService mailService;
     <%_ if (searchEngine == 'elasticsearch') { _%>
-    @Inject
-    private UserSearchRepository userSearchRepository;
 
+    private final UserSearchRepository userSearchRepository;
     <%_ } _%>
-    @Inject
-    private MailService mailService;
+
+    public SocialService(UsersConnectionRepository usersConnectionRepository, AuthorityRepository authorityRepository,
+            PasswordEncoder passwordEncoder, UserRepository userRepository,
+            MailService mailService<% if (searchEngine == 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+
+        this.usersConnectionRepository = usersConnectionRepository;
+        this.authorityRepository = authorityRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.mailService = mailService;
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        this.userSearchRepository = userSearchRepository;
+        <%_ } _%>
+    }
 
     public void deleteUserSocialConnection(String login) {
         ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(login);

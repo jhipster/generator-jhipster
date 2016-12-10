@@ -32,54 +32,81 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 <%_ } _%>
 
-import javax.inject.Inject;
+import javax.annotation.PostConstruct;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (authenticationType == 'session') { %>
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Inject
-    private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
+    private final UserDetailsService userDetailsService;
+    <%_ if (authenticationType == 'session') { _%>
 
-    @Inject
-    private AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
+    private final JHipsterProperties jHipsterProperties;
 
-    @Inject
-    private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;<% } if (authenticationType == 'session' || authenticationType == 'jwt') { %>
+    private final AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
 
-    @Inject
-    private Http401UnauthorizedEntryPoint authenticationEntryPoint;<% } %>
+    private final AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
 
-    @Inject
-    private UserDetailsService userDetailsService;<% if (authenticationType == 'session') { %>
+    private final AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
 
-    @Inject
-    private RememberMeServices rememberMeServices;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+    private final RememberMeServices rememberMeServices;
+    <%_ } _%>
+    <%_ if (authenticationType == 'jwt') { _%>
 
-    @Inject
-    private SessionRegistry sessionRegistry;<% } %><% if (authenticationType == 'jwt') { %>
+    private final TokenProvider tokenProvider;
+    <%_ } _%>
+    <%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
 
-    @Inject
-    private TokenProvider tokenProvider;<% } %>
+    private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
+    <%_ } _%>
+    <%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    private final SessionRegistry sessionRegistry;
+    <%_ } _%>
+
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType == 'session') { %>,
+            JHipsterProperties jHipsterProperties, AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler,
+            AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler, AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler,
+            RememberMeServices rememberMeServices<% } if (authenticationType == 'jwt') { %>,
+            TokenProvider tokenProvider<% } if (authenticationType == 'session' || authenticationType == 'jwt') { %>, Http401UnauthorizedEntryPoint authenticationEntryPoint<% } %><% if (clusteredHttpSession == 'hazelcast') { %>SessionRegistry sessionRegistry<% } %>) {
+
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userDetailsService = userDetailsService;
+        <%_ if (authenticationType == 'session') { _%>
+        this.jHipsterProperties = jHipsterProperties;
+        this.ajaxAuthenticationSuccessHandler = ajaxAuthenticationSuccessHandler;
+        this.ajaxAuthenticationFailureHandler = ajaxAuthenticationFailureHandler;
+        this.ajaxLogoutSuccessHandler = ajaxLogoutSuccessHandler;
+        this.rememberMeServices = rememberMeServices;
+        <%_ } _%>
+        <%_ if (authenticationType == 'jwt') { _%>
+        this.tokenProvider = tokenProvider;
+        <%_ } _%>
+        <%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        <%_ } _%>
+        <%_ if (clusteredHttpSession == 'hazelcast') { _%>
+        this.sessionRegistry = sessionRegistry;
+        <%_ } _%>
     }
 
-    @Inject
-    public void configureGlobal(AuthenticationManagerBuilder auth) {
+    @PostConstruct
+    public void init() {
         try {
-            auth
+            authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
                     .passwordEncoder(passwordEncoder());
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override

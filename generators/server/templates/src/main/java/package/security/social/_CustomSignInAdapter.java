@@ -22,25 +22,30 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.servlet.http.Cookie;
 <%_ } _%>
 
-import javax.inject.Inject;
-
 public class CustomSignInAdapter implements SignInAdapter {
 
     @SuppressWarnings("unused")
     private final Logger log = LoggerFactory.getLogger(CustomSignInAdapter.class);
 
-    @Inject
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
-
+    private final JHipsterProperties jHipsterProperties;
     <%_ if (authenticationType == 'jwt') { _%>
-    @Inject
-    private TokenProvider tokenProvider;
+
+    private final TokenProvider tokenProvider;
 
     <%_ } _%>
+
+    public CustomSignInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties<% if (authenticationType == 'jwt') { %>,
+            TokenProvider tokenProvider<% } %>) {
+        this.userDetailsService = userDetailsService;
+        this.jHipsterProperties = jHipsterProperties;
+        <%_ if (authenticationType == 'jwt') { _%>
+        this.tokenProvider = tokenProvider;
+        <%_ } _%>
+    }
     <%_ if (authenticationType == 'jwt') { _%>
+
     @Override
     public String signIn(String userId, Connection<?> connection, NativeWebRequest request){
         try {

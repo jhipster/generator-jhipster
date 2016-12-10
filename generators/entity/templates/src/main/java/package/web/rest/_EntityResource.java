@@ -24,8 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.inject.Inject;<% if (validation) { %>
+<% if (validation) { %>
 import javax.validation.Valid;<% } %>
 import java.net.URI;
 import java.net.URISyntaxException;<% if (dto == 'mapstruct') { %>
@@ -49,7 +48,7 @@ public class <%= entityClass %>Resource {
     <% var viaService = service != 'no';
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
-    <%- include('../../common/inject_template', {viaService: viaService}); -%>
+    <%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
 
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.

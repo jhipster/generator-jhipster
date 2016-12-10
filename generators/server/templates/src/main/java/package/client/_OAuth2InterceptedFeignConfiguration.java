@@ -9,15 +9,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 
-import javax.inject.Inject;
 import java.io.IOException;
 
 @Configuration
 public class OAuth2InterceptedFeignConfiguration {
 
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
 
     private LoadBalancerClient loadBalancerClient;
+
+    public OAuth2InterceptedFeignConfiguration(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
     @Bean(name = "oauth2RequestInterceptor")
     public RequestInterceptor getOAuth2RequestInterceptor() throws IOException {
@@ -27,11 +30,6 @@ public class OAuth2InterceptedFeignConfiguration {
         return new OAuth2FeignRequestInterceptor(
             new DefaultOAuth2ClientContext(), jHipsterProperties.getSecurity().getClientAuthorization()
         );
-    }
-
-    @Inject
-    public void setjHipsterProperties(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
     }
 
     @Autowired(required = false)

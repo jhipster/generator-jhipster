@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<%}%>
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -63,20 +62,20 @@ public class CustomPersistentRememberMeServices extends
 
     private static final int DEFAULT_TOKEN_LENGTH = 16;
 
-    private SecureRandom random;
+    private final SecureRandom random;
 
-    @Inject
-    private PersistentTokenRepository persistentTokenRepository;
+    private final PersistentTokenRepository persistentTokenRepository;
 
-    @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Inject
-    public CustomPersistentRememberMeServices(JHipsterProperties jHipsterProperties, org.springframework.security.core.userdetails
-        .UserDetailsService userDetailsService) {
+    public CustomPersistentRememberMeServices(JHipsterProperties jHipsterProperties,
+            org.springframework.security.core.userdetails.UserDetailsService userDetailsService,
+            PersistentTokenRepository persistentTokenRepository, UserRepository userRepository) {
 
         super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
-        random = new SecureRandom();
+        this.random = new SecureRandom();
+        this.persistentTokenRepository = persistentTokenRepository;
+        this.userRepository = userRepository;
     }
 
     @Override

@@ -12,18 +12,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.inject.Inject;
-
 @RestController
 @RequestMapping("/social")
 public class SocialController {
+
     private final Logger log = LoggerFactory.getLogger(SocialController.class);
 
-    @Inject
-    private SocialService socialService;
+    private final SocialService socialService;
 
-    @Inject
-    private ProviderSignInUtils providerSignInUtils;
+    private final ProviderSignInUtils providerSignInUtils;
+
+    public SocialController(SocialService socialService, ProviderSignInUtils providerSignInUtils) {
+        this.socialService = socialService;
+        this.providerSignInUtils = providerSignInUtils;
+    }
 
     @GetMapping("/signup")
     public RedirectView signUp(WebRequest webRequest, @CookieValue(name = "NG_TRANSLATE_LANG_KEY", required = false, defaultValue = "\"<%= nativeLanguage %>\"") String langKey) {

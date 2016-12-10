@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<%}%>
 
-import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,8 +22,11 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     private final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 
-    @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override<% if (databaseType == 'sql') { %>
     @Transactional<%}%>

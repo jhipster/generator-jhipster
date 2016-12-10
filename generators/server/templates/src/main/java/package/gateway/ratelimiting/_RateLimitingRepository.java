@@ -2,7 +2,6 @@ package <%=packageName%>.gateway.ratelimiting;
 
 import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import com.datastax.driver.core.*;
 
@@ -11,12 +10,15 @@ import com.datastax.driver.core.*;
  */
 public class RateLimitingRepository {
 
-    @Inject
-    private Session session;
+    private final Session session;
 
     private PreparedStatement rateLimitingIncrement;
 
     private PreparedStatement rateLimitingCount;
+
+    public RateLimitingRepository(Session session) {
+        this.session = session;
+    }
 
     @PostConstruct
     public void init() {

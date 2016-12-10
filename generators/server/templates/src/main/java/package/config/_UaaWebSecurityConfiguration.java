@@ -13,25 +13,31 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
-import javax.inject.Inject;
+import javax.annotation.PostConstruct;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class UaaWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Inject
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    public UaaWebSecurityConfiguration(UserDetailsService userDetailsService, AuthenticationManagerBuilder authenticationManagerBuilder) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
+    }
+
+    @PostConstruct
+    public void init() throws Exception {
+        authenticationManagerBuilder
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Inject
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-            .userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder());
     }
 
     @Override

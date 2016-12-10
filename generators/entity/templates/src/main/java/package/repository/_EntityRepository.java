@@ -12,8 +12,7 @@ import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+import javax.annotation.PostConstruct;<% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %>
 import java.util.ArrayList;
@@ -45,14 +44,17 @@ public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') 
 @Repository
 public class <%= entityClass %>Repository {
 
-    @Inject
-    private Session session;
+    private final Session session;
 
     private Mapper<<%= entityClass %>> mapper;
 
     private PreparedStatement findAllStmt;
 
     private PreparedStatement truncateStmt;
+
+    public <%= entityClass %>Repository(Session session) {
+        this.session = session;
+    }
 
     @PostConstruct
     public void init() {

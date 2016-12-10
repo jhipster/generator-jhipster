@@ -22,8 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;<% } if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;<% if (dto == 'mapstruct') { %>
+<% if (dto == 'mapstruct') { %>
 import java.util.LinkedList;<% } %>
 import java.util.List;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
@@ -40,7 +39,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implements <%= entityClass %>Service<% } %>{
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-    <%- include('../../common/inject_template', {viaService: viaService}); -%>
+    <%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName}); -%>
 
     /**
      * Save a <%= entityInstance %>.

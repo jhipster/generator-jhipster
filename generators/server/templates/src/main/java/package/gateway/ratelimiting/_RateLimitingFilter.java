@@ -5,7 +5,6 @@ import <%=packageName%>.security.SecurityUtils;
 
 import java.util.Calendar;
 import java.util.Date;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,8 +26,7 @@ public class RateLimitingFilter extends ZuulFilter {
 
     private long rateLimit = 100000L;
 
-    @Inject
-    private RateLimitingRepository rateLimitingRepository;
+    private final RateLimitingRepository rateLimitingRepository;
 
     public RateLimitingFilter(RateLimitingRepository rateLimitingRepository, JHipsterProperties jHipsterProperties) {
         this.rateLimitingRepository = rateLimitingRepository;

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 @Configuration
 public class LoggingConfiguration {
@@ -27,18 +26,22 @@ public class LoggingConfiguration {
 
     @Value("${server.port}")
     private String serverPort;
-
     <%_ if (serviceDiscoveryType == "eureka") { _%>
+
     @Value("${eureka.instance.instanceId}")
     private String instanceId;
     <%_ } _%>
     <%_ if (serviceDiscoveryType == "consul") { _%>
+
     @Value("${spring.cloud.consul.discovery.instanceId}")
     private String instanceId;
     <%_ } _%>
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
+
+    public LoggingConfiguration(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
     @PostConstruct
     private void init() {

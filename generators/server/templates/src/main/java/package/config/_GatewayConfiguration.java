@@ -5,8 +5,6 @@ import <%=packageName%>.gateway.ratelimiting.RateLimitingRepository;
 import <%=packageName%>.gateway.accesscontrol.AccessControlFilter;
 import <%=packageName%>.gateway.responserewriting.SwaggerBasePathRewritingFilter;
 
-import javax.inject.Inject;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,8 +47,11 @@ public class GatewayConfiguration {
     @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")
     public static class RateLimitingConfiguration {
 
-        @Inject
-        private JHipsterProperties jHipsterProperties;
+        private final JHipsterProperties jHipsterProperties;
+
+        pubilc RateLimitingConfiguration() {
+            this.jHipsterProperties = jHipsterProperties;
+        }
 
         @Bean
         public RateLimitingRepository rateLimitingRepository() {

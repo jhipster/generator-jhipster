@@ -1,7 +1,5 @@
 package <%=packageName%>.config.liquibase;
 
-import javax.inject.Inject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,12 +31,14 @@ public class AsyncSpringLiquibase extends SpringLiquibase {
     // named "logger" because there is already a field called "log" in "SpringLiquibase"
     private final Logger logger = LoggerFactory.getLogger(AsyncSpringLiquibase.class);
 
-    @Inject
-    @Qualifier("taskExecutor")
-    private TaskExecutor taskExecutor;
+    private final TaskExecutor taskExecutor;
 
-    @Inject
-    private Environment env;
+    private final Environment env;
+
+    public AsyncSpringLiquibase(@Qualifier("taskExecutor") TaskExecutor taskExecutor, Environment env) {
+        this.taskExecutor = taskExecutor;
+        this.env = env;
+    }
 
     @Override
     public void afterPropertiesSet() throws LiquibaseException {

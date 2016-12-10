@@ -16,15 +16,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
-import javax.inject.Inject;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Inject
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
+
+    public MicroserviceSecurityConfiguration(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -95,18 +96,21 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-    @Inject
-    JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-    @Inject
-    DiscoveryClient discoveryClient;
+    private final DiscoveryClient discoveryClient;
+
+    public MicroserviceSecurityConfiguration(JHipsterProperties jHipsterProperties,
+            DiscoveryClient discoveryClient) {
+
+        this.jHipsterProperties = jHipsterProperties;
+        this.discoveryClient = discoveryClient;
+    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -136,9 +140,11 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
     }
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+    public JwtAccessTokenConverter jwtAccessTokenConverter(
+            @Qualifier("loadBalancedRestTemplate") RestTemplate keyUriRestTemplate) {
+
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setVerifierKey(getKeyFromAuthorizationServer());
+        converter.setVerifierKey(getKeyFromAuthorizationServer(keyUriRestTemplate));
         return converter;
     }
 
@@ -149,11 +155,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
         return restTemplate;
     }
 
-    @Inject
-    @Qualifier("loadBalancedRestTemplate")
-    private RestTemplate keyUriRestTemplate;
-
-    private String getKeyFromAuthorizationServer() {
+    private String getKeyFromAuthorizationServer(RestTemplate keyUriRestTemplate) {
         // Load available UAA servers
         discoveryClient.getServices();
         HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
