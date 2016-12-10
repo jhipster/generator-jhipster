@@ -13,11 +13,16 @@ if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
 
-<% if (!skipClient) { %>
-war {
-    webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
+bootRun {
+    args = []
 }
 
+<%_ if (!skipClient) { _%>
+    <%_ if (clientFw === 'angular1') { _%>
+task gulpConstantDev(type: GulpTask) {
+    args = ["ngconstant:dev", "--no-notification"]
+}
+    <%_ } else { _%>
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     def osName = System.getProperty("os.name").toLowerCase();
     if (osName.contains("windows")) {
@@ -26,7 +31,12 @@ task webpack(type: NodeTask, dependsOn: 'npmInstall') {
       script = project.file('node_modules/.bin/webpack')
     }
     args = ["--config", "webpack/webpack.dev.js"]
-}<% } %>
+}
+    <%_ } _%>
+war {
+    webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
+}
+<%_ } _%>
 
 processResources {
     filesMatching('**/logback-spring.xml') {
@@ -46,5 +56,10 @@ processResources {
     }
 }
 
-<% if (!skipClient) { %>
-processResources.dependsOn webpack<% } %>
+<%_ if (!skipClient) { _%>
+    <%_ if (clientFw === 'angular1') { _%>
+processResources.dependsOn gulpConstantDev
+    <%_ } else { _%>
+processResources.dependsOn webpack
+    <%_ } _%>
+<%_ } _%>

@@ -1,7 +1,11 @@
 import org.apache.tools.ant.taskdefs.condition.Os
-apply plugin: 'org.springframework.boot'<% if(!skipClient) { %>
+apply plugin: 'org.springframework.boot'
+<%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-<% } %>
+    <%_ if (clientFw === 'angular1') { _%>
+apply plugin: 'com.moowork.gulp'
+    <%_ } _%>
+<%_ } _%>
 
 ext {
     logbackLoglevel = "INFO"
@@ -20,7 +24,16 @@ if (project.hasProperty('swagger')) {
     profiles += ',swagger'
 }
 
-<% if (!skipClient) { %>
+bootRun {
+    args = []
+}
+
+<%_ if (!skipClient) { _%>
+    <%_ if (clientFw === 'angular1') { _%>
+task gulpBuildWithOpts(type: GulpTask) {
+    args = ["build", "--no-notification"]
+}
+    <%_ } else { _%>
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     def osName = System.getProperty("os.name").toLowerCase();
     if (osName.contains("windows")) {
@@ -30,10 +43,11 @@ task webpack(type: NodeTask, dependsOn: 'npmInstall') {
     }
     args = ["-p", "--config", "webpack/webpack.prod.js"]
 }
-
+    <%_ } _%>
 war {
     webAppDirName = '<%= CLIENT_DIST_DIR %>'
-}<% } %>
+}
+<%_ } _%>
 
 processResources {
     filesMatching('**/logback-spring.xml') {
@@ -52,14 +66,19 @@ processResources {
         }
     }
 }
-//TODO check for angular version
-<% if (!skipClient) { %>
-<%_ if (yarnInstall) { _%>
+
+<%_ if (!skipClient) { _%>
+    <%_ if (yarnInstall) { _%>
 gulpBuildWithOpts.dependsOn 'yarn_install'
-<%_ } else { _%>
+    <%_ } else { _%>
 gulpBuildWithOpts.dependsOn 'npmInstall'
-<%_ } _%>
+    <%_ } _%>
+    <%_ if (clientFw === 'angular1') { _%>
 gulpBuildWithOpts.dependsOn 'bower'
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
-bootRun.dependsOn gulp_test<% } %>
+bootRun.dependsOn gulp_test
+    <%_ } else { _%>
+processResources.dependsOn webpack
+    <%_ } _%>
+<%_ } _%>
