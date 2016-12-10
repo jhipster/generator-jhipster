@@ -376,7 +376,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js'
+        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway-routes.service.js'
     ],
 
     microservice: [
