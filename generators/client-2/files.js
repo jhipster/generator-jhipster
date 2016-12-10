@@ -421,8 +421,8 @@ const files = {
             condition: generator => generator.testFrameworks.indexOf('protractor') !== -1,
             path: TEST_SRC_DIR,
             templates: [
-                'e2e/account/_account.js',
-                'e2e/admin/_administration.js',
+                'e2e/account/_account.spec.ts',
+                'e2e/admin/_administration.spec.ts',
                 '_protractor.conf.js'
             ]
         }

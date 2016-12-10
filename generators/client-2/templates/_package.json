@@ -70,8 +70,9 @@
     "map-stream": "0.0.6",
     "phantomjs-prebuilt": "2.1.13",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
-    "protractor": "3.3.0",
-    "protractor-jasmine2-screenshot-reporter": "0.3.1",
+    "protractor": "4.0.11",
+    "protractor-jasmine2-screenshot-reporter": "0.3.2",
+    "ts-node": "^1.7.1",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "raw-loader": "0.5.1",
@@ -94,6 +95,7 @@
   "scripts": {
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
     "postinstall": "webdriver-manager update",
+    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     <%_ } _%>
     "tsc": "tsc",
     "tsc:w": "tsc -w",
