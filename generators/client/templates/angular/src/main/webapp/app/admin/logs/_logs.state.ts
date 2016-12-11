@@ -1,5 +1,5 @@
 import { LogsComponent } from './logs.component';
-import { JhiLanguageService  } from '../../shared';
+import { JhiLanguageService } from '../../shared';
 
 export const logsState = {
     name: 'logs',

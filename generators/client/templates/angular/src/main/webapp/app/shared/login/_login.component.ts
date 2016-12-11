@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateService } from 'ui-router-ng2';
 <%_ if (enableTranslation){ _%>
-import { JhiLanguageService  } from '../language/language.service';
+import { JhiLanguageService } from '../language/language.service';
 <%_ } _%>
 import { LoginService } from '../login/login.service';
 import { StateStorageService } from '../auth/state-storage.service';

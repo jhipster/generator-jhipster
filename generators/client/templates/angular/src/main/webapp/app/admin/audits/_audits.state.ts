@@ -1,5 +1,5 @@
 import { AuditsComponent } from './audits.component';
-import { JhiLanguageService  } from '../../shared';
+import { JhiLanguageService } from '../../shared';
 
 export const auditState = {
     name: 'audits',

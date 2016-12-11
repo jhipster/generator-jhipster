@@ -3,7 +3,7 @@ import { SocialRegisterComponent } from './social-register.component';
 import { SocialAuthComponent } from './social-auth.component';
 <%_ } _%>
 <%_ if (enableTranslation){ _%>
-import { JhiLanguageService  } from '../../shared';
+import { JhiLanguageService } from '../../shared';
 <%_ } _%>
 
 export const socialRegisterState = {

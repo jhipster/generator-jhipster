@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 <%_ if (enableTranslation){ _%>
-import { JhiLanguageService  } from '../language/language.service';
+import { JhiLanguageService } from '../language/language.service';
 <%_ } _%>
 import { Principal } from '../auth/principal.service';
 <%_ if (authenticationType === 'oauth2') { _%>
