@@ -275,7 +275,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'components/login/_login.html', method: 'copyHtml' },
-                'components/login/_login.service.js',
+                { file: 'components/login/_login.service.js', method: 'copyJs' },
                 'components/login/_login.controller.js',
                 'components/form/_show-validation.directive.js',
                 'components/form/_maxbytes.directive.js',
