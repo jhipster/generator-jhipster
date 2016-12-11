@@ -8,40 +8,28 @@ export class HasAnyAuthorityDirective implements OnInit {
 
     @Input('has-any-authority') hasAnyAuthority: string;
     authority: string[];
-    element: any;
 
-    constructor(private principal: Principal, el: ElementRef, private renderer: Renderer) {
-        this.element = $(el.nativeElement);
+    constructor(private principal: Principal, private el: ElementRef, private renderer: Renderer) {
     }
 
     ngOnInit() {
         this.authority = this.hasAnyAuthority.replace(/\s+/g, '').split(',');
 
         if (this.authority.length > 0) {
-            this.defineVisibility(true);
-
-            //TODO this needs to be migrated
-            /*scope.$watch(function() {
-                return Principal.isAuthenticated();
-            }, function() {
-                defineVisibility(true);
-            });*/
+            this.setVisibilitySync();
         }
+        this.principal.getAuthenticationState().subscribe(identity => this.setVisibilitySync());
     }
 
     private setVisible () {
-        this.element.removeClass('hidden');
+        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', false);
     }
 
     private setHidden () {
-        this.element.addClass('hidden');
+        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', true);
     }
 
-    private defineVisibility (reset) {
-
-        if (reset) {
-            this.setVisible();
-        }
+    private setVisibilitySync () {
 
         let result = this.principal.hasAnyAuthority(this.authority);
         if (result) {
