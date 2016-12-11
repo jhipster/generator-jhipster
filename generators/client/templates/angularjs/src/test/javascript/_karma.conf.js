@@ -35,7 +35,7 @@ module.exports = function (config) {
 
 
         // list of files / patterns to exclude
-        exclude: [<% if (testFrameworks.indexOf('protractor') > -1) { %>'<%= TEST_SRC_DIR %>e2e/**'<% } %>],
+        exclude: [<% if (protractorTests) { %>'<%= TEST_SRC_DIR %>e2e/**'<% } %>],
 
         preprocessors: {
             './**/*.js': sourcePreprocessors

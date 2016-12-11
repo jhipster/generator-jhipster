@@ -376,7 +376,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.testFrameworks.indexOf('protractor') !== -1,
+            condition: generator => generator.protractorTests,
             path: TEST_SRC_DIR,
             templates: [
                 'e2e/account/_account.js',
