@@ -151,7 +151,7 @@ function writeFiles() {
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
             // Create Protractor test files
-            if (this.testFrameworks.indexOf('protractor') !== -1) {
+            if (this.protractorTests) {
                 this.template(CLIENT_TEST_SRC_DIR + 'e2e/entities/_entity.js', CLIENT_TEST_SRC_DIR + 'e2e/entities/' + this.entityFileName + '.js', this, {});
             }
         },
@@ -162,7 +162,7 @@ function writeFiles() {
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
                     SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
 
-            if (this.testFrameworks.indexOf('gatling') !== -1) {
+            if (this.gatlingTests) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
                     TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }

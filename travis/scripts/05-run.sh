@@ -63,12 +63,12 @@ fi
 if [ "$RUN_APP" == 1 ]; then
     if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
         cd "$HOME"/uaa
-        java -jar target/*.war --spring.profiles.active="$PROFILE" &
+        java -jar target/*.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS &
         sleep 80
     fi
 
     cd "$HOME"/app
-    java -jar app.war --spring.profiles.active="$PROFILE" &
+    java -jar app.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS &
     sleep 40
 
     if [[ ("$JHIPSTER" != 'app-microservice-eureka') && ("$JHIPSTER" != 'app-microservice-consul') ]]; then

@@ -12,7 +12,7 @@ var gulp = require('gulp'),<% if(useSass) { %>
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant'),
     rename = require('gulp-rename'),
-    eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
+    eslint = require('gulp-eslint'),<% if (protractorTests) { %>
     argv = require('yargs').argv,
     gutil = require('gulp-util'),
     protractor = require('gulp-protractor').protractor,<% } %>
@@ -170,7 +170,7 @@ gulp.task('test', ['inject:test', 'ngconstant:dev'], function (done) {
     }, done).start();
 });
 
-<%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
+<%_ if (protractorTests) { _%>
 /* to run individual suites pass `gulp itest --suite suiteName` */
 gulp.task('protractor', function () {
     var configObj = {

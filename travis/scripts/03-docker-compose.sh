@@ -13,7 +13,7 @@ elif [[ ("$JHIPSTER" == 'app-mongodb') && (-a src/main/docker/mongodb.yml) ]]; t
 elif [[ ("$JHIPSTER" == 'app-mysql') && (-a src/main/docker/mysql.yml) ]]; then
     docker-compose -f src/main/docker/mysql.yml up -d
 
-elif [[ ("$JHIPSTER" == 'app-psql-es-noi18n') ]]; then
+elif [[ ("$JHIPSTER" == 'app-psql-es-noi18n') || ("$JHIPSTER" == 'app-ng2-jwt') ]]; then
     if [ -a src/main/docker/elasticsearch.yml ]; then
         docker-compose -f src/main/docker/elasticsearch.yml up -d
     fi

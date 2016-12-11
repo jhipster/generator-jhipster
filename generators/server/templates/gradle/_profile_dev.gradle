@@ -1,4 +1,11 @@
+import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'org.springframework.boot'
+<%_ if(!skipClient) { _%>
+apply plugin: 'com.moowork.node'
+    <%_ if (clientFw === 'angular1') { _%>
+apply plugin: 'com.moowork.gulp'
+    <%_ } _%>
+<%_ } _%>
 
 ext {
     logbackLoglevel = "DEBUG"

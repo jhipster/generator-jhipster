@@ -19,6 +19,6 @@ export class AuditsService  {
             search: params
         };
 
-        return this.http.get('management/jhipster/audits', options);
+        return this.http.get('management/audits', options);
     }
 }

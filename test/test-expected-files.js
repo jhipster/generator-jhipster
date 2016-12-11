@@ -137,8 +137,11 @@ const expectedFiles = {
         SERVER_TEST_RES_DIR + 'config/application.yml',
         SERVER_TEST_RES_DIR + 'logback-test.xml',
         SERVER_TEST_RES_DIR + 'ehcache.xml',
-        TEST_DIR + 'gatling/conf/gatling.conf',
         '.editorconfig'
+    ],
+
+    gatling: [
+        TEST_DIR + 'gatling/conf/gatling.conf'
     ],
 
     i18nJson: [

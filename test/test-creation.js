@@ -11,7 +11,8 @@ const expectedFiles = require('./test-expected-files');
 const constants = require('../generators/generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
+    TEST_DIR = constants.TEST_DIR;
 
 
 describe('JHipster generator', function () {
@@ -44,6 +45,7 @@ describe('JHipster generator', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.gatling);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
@@ -711,6 +713,105 @@ describe('JHipster generator', function () {
         it('creates expected files with Kafka message broker enabled', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.messageBroker);
+        });
+    });
+
+    describe('Protractor tests', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, skipChecks: true})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'serverPort': '8080',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'clusteredHttpSession': false,
+                    'websocket': false,
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Disk',
+                    'prodDatabaseType': 'mysql',
+                    'searchEngine': false,
+                    'buildTool': 'maven',
+                    'enableSocialSignIn': false,
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'useSass': false,
+                    'applicationType': 'monolith',
+                    'testFrameworks': [
+                        'protractor'
+                    ],
+                    'jhiPrefix': 'jhi',
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': [
+                        'en'
+                    ]
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with Protractor enabled', function () {
+            assert.file(expectedFiles.server);
+            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+                useSass: false,
+                enableTranslation: true,
+                authenticationType: 'session',
+                testFrameworks: [
+                    'protractor'
+                ]
+            }));
+            assert.noFile([
+                TEST_DIR + 'gatling/gatling.conf',
+                TEST_DIR + 'gatling/logback.xml'
+            ]);
+        });
+    });
+
+    describe('Cucumber tests', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, skipChecks: true})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'serverPort': '8080',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'clusteredHttpSession': false,
+                    'websocket': false,
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Disk',
+                    'prodDatabaseType': 'mysql',
+                    'searchEngine': false,
+                    'buildTool': 'maven',
+                    'enableSocialSignIn': false,
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'useSass': false,
+                    'applicationType': 'monolith',
+                    'testFrameworks': [
+                        'cucumber'
+                    ],
+                    'jhiPrefix': 'jhi',
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': [
+                        'en'
+                    ]
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with Cucumber enabled', function () {
+            assert.file(expectedFiles.server);
+            assert.file([
+                TEST_DIR + 'features/user/user.feature'
+            ]);
+            assert.noFile([
+                TEST_DIR + 'gatling/gatling.conf',
+                TEST_DIR + 'gatling/logback.xml'
+            ]);
         });
     });
 

@@ -179,6 +179,7 @@ module.exports = JhipsterServerGenerator.extend({
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
             }
+
             var baseName = this.config.get('baseName');
             if (baseName) {
                 // to avoid overriding name from configOptions
@@ -372,6 +373,9 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+            this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
+            this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
             if (this.configOptions.clientFw) {
                 this.clientFw = this.configOptions.clientFw;
             }

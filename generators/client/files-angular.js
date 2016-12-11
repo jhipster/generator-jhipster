@@ -202,7 +202,7 @@ const files = {
             condition: generator => generator.enableSocialSignIn,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/_social.component.html', method: 'copyHtml' },
+                { file: 'shared/social/_social.component.html', method: 'copyHtml' },
                 { file: 'account/social/_social-register.component.html', method: 'copyHtml' },
                 'account/social/_social-register.component.ts',
                 'shared/social/_social.component.ts',
@@ -418,11 +418,11 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.testFrameworks.indexOf('protractor') !== -1,
+            condition: generator => generator.protractorTests,
             path: TEST_SRC_DIR,
             templates: [
-                'e2e/account/_account.js',
-                'e2e/admin/_administration.js',
+                'e2e/account/_account.spec.ts',
+                'e2e/admin/_administration.spec.ts',
                 '_protractor.conf.js'
             ]
         }

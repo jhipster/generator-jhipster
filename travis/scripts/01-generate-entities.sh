@@ -92,7 +92,7 @@ elif [ "$JHIPSTER" == "app-gateway-uaa" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-else
+elif [[ ("$JHIPSTER" != "app-ng2-default") && ("$JHIPSTER" != "app-ng2-jwt") && ("$JHIPSTER" != "app-ng2-sass-noi18n") ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation

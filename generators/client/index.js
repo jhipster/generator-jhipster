@@ -265,6 +265,8 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+
             if (this.configOptions.enableTranslation !== undefined) {
                 this.enableTranslation = this.configOptions.enableTranslation;
             }
