@@ -156,7 +156,6 @@ module.exports = JhipsterClientGenerator.extend({
             if (baseName) {
                 this.baseName = baseName;
             }
-            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
 
             var clientConfigFound = this.useSass !== undefined;
             if (clientConfigFound) {
@@ -266,6 +265,8 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+
             if (this.configOptions.enableTranslation !== undefined) {
                 this.enableTranslation = this.configOptions.enableTranslation;
             }
