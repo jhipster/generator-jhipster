@@ -208,7 +208,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%_ if (service != 'no') { _%>
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service);
         <%_ } else { _%>
-            <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (searchEngine == 'elasticsearch') { %>, <%= entityInstance %>SearchRepository<% } %><% if (dto == 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %>);
+            <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto == 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine == 'elasticsearch') { %>, <%= entityInstance %>SearchRepository<% } %>);
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
