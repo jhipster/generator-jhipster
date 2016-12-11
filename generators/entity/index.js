@@ -117,6 +117,7 @@ module.exports = EntityGenerator.extend({
             if (this.testFrameworks === undefined) {
                 this.testFrameworks = ['gatling'];
             }
+            this.clientFw = this.config.get('clientFw');
 
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
