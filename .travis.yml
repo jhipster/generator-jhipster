@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "6.9.1"
+  - "6.9.2"
 jdk:
   - oraclejdk8
 cache:
@@ -39,6 +39,9 @@ env:
     - JHIPSTER=app-jwt
     - JHIPSTER=app-microservice-eureka
     - JHIPSTER=app-microservice-consul
+    - JHIPSTER=app-ng2-default
+    - JHIPSTER=app-ng2-jwt
+    - JHIPSTER=app-ng2-sass-noi18n
 
 before_install:
   - jdk_switcher use oraclejdk8
