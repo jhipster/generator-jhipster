@@ -12,6 +12,8 @@ import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;<% } %>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
@@ -24,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import java.time.LocalDate;
 <%_ } _%>
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.*;<% if (databaseType == 'cassandra') { %>
+import java.util.stream.Collectors;<% } %>
 
 /**
  * Service class for managing users.
@@ -260,6 +263,18 @@ public class UserService {
             log.debug("Changed password for User: {}", user);
         });
     }
+
+    <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)<%_ } _%>
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    public Page<ManagedUserVM> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(ManagedUserVM::new);
+    }<% } else { // Cassandra %>
+    public List<ManagedUserVM> getAllManagedUsers() {
+        return userRepository.findAll().stream()
+            .map(ManagedUserVM::new)
+            .collect(Collectors.toList());
+    }<% } %>
 
     <%_ if (databaseType == 'sql') { _%>
     @Transactional(readOnly = true)
