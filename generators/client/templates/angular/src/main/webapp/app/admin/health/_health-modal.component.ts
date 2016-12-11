@@ -11,7 +11,7 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
 
     currentHealth: any;
 
-    constructor(private healthService:JhiHealthService, public activeModal: NgbActiveModal) {}
+    constructor(private healthService:<%=jhiPrefixCapitalized%>HealthService, public activeModal: NgbActiveModal) {}
 
     baseName(name) {
         return this.healthService.getBaseName(name);

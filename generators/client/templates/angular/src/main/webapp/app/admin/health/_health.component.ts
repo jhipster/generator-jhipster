@@ -39,7 +39,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     }
 
     showHealth(health: any) {
-        const modalRef  = this.modalService.open(JhiHealthModalComponent);
+        const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>HealthModalComponent);
         modalRef.componentInstance.currentHealth = health;
         modalRef.result.then((result) => {
             console.log(`Closed with: ${result}`);
