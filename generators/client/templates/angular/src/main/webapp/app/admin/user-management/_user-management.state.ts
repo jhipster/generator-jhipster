@@ -7,7 +7,7 @@ import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { <% if (enableTranslation){ %>JhiLanguageService , <% } %>PaginationUtil } from '../../shared';
+import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
 
 export const userMgmtState = {
     name: 'user-management',
@@ -46,7 +46,7 @@ export const userMgmtState = {
         }<% if (enableTranslation){ %>,
         {
             token: 'translate',
-            deps: [JhiLanguageService ],
+            deps: [JhiLanguageService],
             resolveFn: (languageService) => languageService.setLocations(['user-management'])
         }<% } %>
 
@@ -55,7 +55,7 @@ export const userMgmtState = {
     resolve: [
         {
             token: 'translate',
-            deps: [JhiLanguageService ],
+            deps: [JhiLanguageService],
             resolveFn: (languageService) => languageService.setLocations(['user-management'])
         }
     ]
@@ -76,7 +76,7 @@ export const userMgmtDetailState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['user-management'])
     }]
 };

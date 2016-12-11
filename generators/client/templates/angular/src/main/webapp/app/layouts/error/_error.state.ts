@@ -14,7 +14,7 @@ export const errorState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['error'])
     }]
 };
@@ -31,7 +31,7 @@ export const accessdeniedState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['error'])
     }]
 };

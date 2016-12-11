@@ -12,7 +12,7 @@ import {
     OrderByPipe,
     <%_ if (enableTranslation){ _%>
     JhiTranslate,
-    <%=jhiPrefixCapitalized%>MissingTranslationHandler,
+    JhiMissingTranslationHandler,
     JhiLanguageService ,
     FindLanguageFromKeyPipe,
     <%_ }_%>

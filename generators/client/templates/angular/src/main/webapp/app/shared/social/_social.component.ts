@@ -18,7 +18,7 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
 
     constructor (
         <%_ if (enableTranslation){ _%>
-        private languageService: JhiLanguageService ,
+        private languageService: JhiLanguageService,
         <%_ } _%>
         private csrfService: CSRFService,
         private socialService: SocialService

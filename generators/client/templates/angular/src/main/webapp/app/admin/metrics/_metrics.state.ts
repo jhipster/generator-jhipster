@@ -14,7 +14,7 @@ export const metricsState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['metrics'])
     }]
 };

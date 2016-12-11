@@ -13,7 +13,7 @@ export const homeState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['home'])
     }]
 };

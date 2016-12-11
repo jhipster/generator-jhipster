@@ -14,7 +14,7 @@ export const auditState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['audits'])
     }]
 };

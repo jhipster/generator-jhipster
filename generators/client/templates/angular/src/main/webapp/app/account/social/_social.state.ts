@@ -21,7 +21,7 @@ export const socialRegisterState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['social'])
     }]
 };

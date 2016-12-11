@@ -22,7 +22,7 @@ export class UserMgmtDialogComponent implements OnInit {
     constructor(
         public activeModal: NgbActiveModal,
         <%_ if (enableTranslation){ _%>
-        private languageService: JhiLanguageService ,
+        private languageService: JhiLanguageService,
         <%_ } _%>
         private userService: UserService,
         private eventManager: EventManager
