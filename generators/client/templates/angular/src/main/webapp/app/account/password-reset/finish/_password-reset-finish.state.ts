@@ -1,5 +1,5 @@
 import { PasswordResetFinishComponent } from './password-reset-finish.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../../shared';
+import { JhiLanguageService  } from '../../../shared';
 
 export const finishResetState = {
     name: 'finishReset',
@@ -13,7 +13,7 @@ export const finishResetState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['reset'])
     }]
 };

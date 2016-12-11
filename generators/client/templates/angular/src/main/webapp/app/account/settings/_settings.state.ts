@@ -1,5 +1,5 @@
 import { SettingsComponent } from './settings.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const settingsState = {
     name: 'settings',
@@ -16,7 +16,7 @@ export const settingsState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['settings'])
     }]
 };

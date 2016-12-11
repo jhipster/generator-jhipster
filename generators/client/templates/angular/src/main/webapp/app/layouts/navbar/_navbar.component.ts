@@ -3,7 +3,7 @@ import { StateService } from 'ui-router-ng2';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
-import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
+import { <% if (enableTranslation){ %>JhiLanguageService , <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 
@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
         private $state: StateService,
         private loginService : LoginService,
         <%_ if (enableTranslation){ _%>
-        private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+        private languageService: JhiLanguageService ,
         <%_ } _%>
         private principal: Principal,
         private loginModalService: LoginModalService,

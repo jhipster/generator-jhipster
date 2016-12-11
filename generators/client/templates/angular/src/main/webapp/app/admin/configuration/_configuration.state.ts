@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const configState = {
     name: '<%=jhiPrefix%>-configuration',
@@ -14,7 +14,7 @@ export const configState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['configuration'])
     }]
 };

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 <%_ if (enableTranslation){ _%>
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../language/language.service';
+import { JhiLanguageService  } from '../language/language.service';
 <%_ } _%>
 import { Principal } from '../auth/principal.service';
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -20,7 +20,7 @@ export class LoginService {
 
     constructor (
         <%_ if (enableTranslation){ _%>
-        private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+        private languageService: JhiLanguageService ,
         <%_ } _%>
         private principal: Principal,
         <%_ if (websocket === 'spring-websocket') { _%>

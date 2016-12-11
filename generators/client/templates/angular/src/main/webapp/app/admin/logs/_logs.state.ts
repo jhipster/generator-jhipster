@@ -1,5 +1,5 @@
 import { LogsComponent } from './logs.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const logsState = {
     name: 'logs',
@@ -14,7 +14,7 @@ export const logsState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['logs'])
     }]
 };

@@ -1,5 +1,5 @@
 import { AuditsComponent } from './audits.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const auditState = {
     name: 'audits',
@@ -14,7 +14,7 @@ export const auditState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['audits'])
     }]
 };

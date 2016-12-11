@@ -1,5 +1,5 @@
 import { PasswordComponent } from './password.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const passwordState = {
     name: 'password',
@@ -14,7 +14,7 @@ export const passwordState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['password'])
     }]
 };

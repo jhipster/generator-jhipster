@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const healthState = {
     name: '<%=jhiPrefix%>-health',
@@ -14,7 +14,7 @@ export const healthState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['health'])
     }]
 };

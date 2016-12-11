@@ -1,7 +1,7 @@
 import { Directive, OnInit, ElementRef } from '@angular/core';
 
 <%_ if (enableTranslation){ _%>
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 <%_ } _%>
 
 @Directive({
@@ -12,7 +12,7 @@ export class ActiveMenuDirective implements OnInit {
     language: string;
     $element: any;
 
-    constructor(private el: ElementRef<% if (enableTranslation){ %>, private languageService: <%=jhiPrefixCapitalized%>LanguageService<% } %>) {
+    constructor(private el: ElementRef<% if (enableTranslation){ %>, private languageService: JhiLanguageService <% } %>) {
         this.$element = $(el.nativeElement);
     }
 
