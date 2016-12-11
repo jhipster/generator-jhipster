@@ -15,7 +15,6 @@
     "messageBroker": false,
     "buildTool": "gradle",
     "enableSocialSignIn": false,
-    "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
     "useSass": false,
     "applicationType": "monolith",
     "clientFw": "angular2",
@@ -28,6 +27,8 @@
     "languages": [
       "en"
     ],
-    "travis": true
+    "travis": true,
+    "serviceDiscoveryType": false,
+    "jwtSecretKey": "82c6dce0d969c5bc3ab2530ecc5c18baaef1c987"
   }
 }

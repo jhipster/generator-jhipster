@@ -171,6 +171,10 @@ module.exports = JhipsterGenerator.extend({
             var configFound = this.baseName !== undefined && this.applicationType !== undefined;
             if (configFound) {
                 this.existingProject = true;
+                // If translation is not defined, it is enabled by default
+                if (this.enableTranslation === undefined) {
+                    this.enableTranslation = true;
+                }
             }
         }
     },

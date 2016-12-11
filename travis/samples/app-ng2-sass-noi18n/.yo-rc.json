@@ -23,6 +23,8 @@
       "gatling"
     ],
     "jhiPrefix": "jhi",
-    "travis": true
+    "travis": true,
+    "serviceDiscoveryType": false,
+    "enableTranslation": false
   }
 }
