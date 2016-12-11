@@ -9,10 +9,10 @@ export class LogsService {
     constructor(private http: Http) { }
 
     changeLevel(log: Log): Observable<Response> {
-        return this.http.put('management/jhipster/logs', log);
+        return this.http.put('management/logs', log);
     }
 
     findAll(): Observable<Log[]> {
-        return this.http.get('management/jhipster/logs').map((res: Response) => res.json());
+        return this.http.get('management/logs').map((res: Response) => res.json());
     }
 }
