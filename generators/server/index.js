@@ -179,6 +179,9 @@ module.exports = JhipsterServerGenerator.extend({
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
             }
+            this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
+            this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
+
             var baseName = this.config.get('baseName');
             if (baseName) {
                 // to avoid overriding name from configOptions

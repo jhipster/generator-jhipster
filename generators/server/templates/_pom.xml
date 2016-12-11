@@ -37,13 +37,13 @@
         <%_ } _%>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>3.4</commons-lang.version>
-        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <%_ if (cucumberTests) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.2</frontend-maven-plugin.version>
         <%_ } _%>
-        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+        <%_ if (gatlingTests) { _%>
         <gatling.version>2.2.0</gatling.version>
         <gatling-maven-plugin.version>2.2.0</gatling-maven-plugin.version>
         <%_ } _%>
@@ -373,7 +373,7 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+        <%_ if (gatlingTests) { _%>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
@@ -803,7 +803,7 @@
             <artifactId>spring-social-twitter</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <%_ if (cucumberTests) { _%>
         <!-- cucumber -->
         <dependency>
             <groupId>info.cukes</groupId>
@@ -822,7 +822,7 @@
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
-        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <%_ if (cucumberTests) { _%>
         <testResources>
             <testResource>
                 <directory><%= SERVER_TEST_RES_DIR %></directory>
@@ -854,7 +854,7 @@
                     <expandEmptyElements>false</expandEmptyElements>
                 </configuration>
             </plugin>
-            <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+            <%_ if (gatlingTests) { _%>
             <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
@@ -963,7 +963,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+                <%_ if (cucumberTests) { _%>
                 <executions>
                     <execution>
                         <id>default-test</id>

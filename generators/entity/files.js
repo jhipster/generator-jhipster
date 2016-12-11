@@ -162,7 +162,7 @@ function writeFiles() {
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
                     SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
 
-            if (this.testFrameworks.indexOf('gatling') !== -1) {
+            if (this.gatlingTests) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
                     TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }

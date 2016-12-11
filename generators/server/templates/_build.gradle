@@ -98,7 +98,7 @@ test {
     reports.html.enabled = false
 }
 
-<% if (testFrameworks.indexOf('cucumber') != -1) { %>
+<% if (cucumberTests) { %>
 task cucumberTest(type: Test) {
     include '**/CucumberTest*'
 
@@ -112,11 +112,11 @@ test.finalizedBy(cucumberTest)<% } %>
 
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
-    reportOn test<% if (testFrameworks.indexOf('cucumber') != -1) { %>
+    reportOn test<% if (cucumberTests) { %>
     reportOn cucumberTest<% } %>
 }
 
-<% if (testFrameworks.indexOf('cucumber') != -1) { %>
+<% if (cucumberTests) { %>
 cucumberTest.finalizedBy(testReport)<% } %>
 <% if(!skipClient) {%>
     <%_ if (clientFw === 'angular1') { _%>
@@ -125,7 +125,7 @@ apply from: 'gradle/yeoman.gradle'<% } %>
 apply from: 'gradle/sonar.gradle'
 <% if (databaseType === 'sql') { %>
 apply from: 'gradle/liquibase.gradle'<% } %>
-<% if (testFrameworks.indexOf('gatling') != -1) { %>
+<% if (gatlingTests) { %>
 apply from: 'gradle/gatling.gradle'<% } %>
 apply from: 'gradle/mapstruct.gradle'
 apply from: 'gradle/docker.gradle'
@@ -325,7 +325,7 @@ dependencies {
     testCompile "com.jayway.jsonpath:json-path"<% if (databaseType == 'cassandra') { %>
     testCompile("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
         exclude(module: 'org.slf4j')
-    }<% } %><% if (testFrameworks.indexOf('cucumber') != -1) { %>
+    }<% } %><% if (cucumberTests) { %>
     testCompile "info.cukes:cucumber-junit:${cucumber_version}"
     testCompile "info.cukes:cucumber-spring:${cucumber_version}"<% } %>
     testCompile "org.springframework.boot:spring-boot-starter-test"
@@ -337,7 +337,7 @@ dependencies {
     testCompile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %><% if (databaseType == 'mongodb') { %>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"<% } %>
     testCompile "org.hamcrest:hamcrest-library"
-    <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+    <%_ if (gatlingTests) { _%>
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
