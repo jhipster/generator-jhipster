@@ -1,6 +1,6 @@
-'use strict';
+import { browser, element, by, $ } from 'protractor';
 
-describe('account', function () {
+describe('account', () => {
 
     var username = element(by.id('username'));
     var password = element(by.id('password'));
@@ -8,11 +8,11 @@ describe('account', function () {
     var login = element(by.id('login'));
     var logout = element(by.id('logout'));
 
-    beforeAll(function () {
+    beforeAll(() => {
         browser.get('/');
     });
 
-    it('should fail to login with bad password', function () {
+    it('should fail to login with bad password', () => {
         expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
         accountMenu.click();
         login.click();
@@ -25,17 +25,20 @@ describe('account', function () {
         expect(error).toMatch(/Failed to sign in!/);
     });
 
-    it('should login successfully with admin account', function () {
+    it('should login successfully with admin account', () => {
         expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
 
-        username.clear().sendKeys('admin');
-        password.clear().sendKeys('admin');
+        username.clear();
+        username.sendKeys('admin');
+        password.clear();
+        password.sendKeys('admin');
         element(by.css('button[type=submit]')).click();
+        browser.waitForAngular();
 
         expect($('.alert-success').getText()).toMatch(/You are logged in as user "admin"/);
     });
 
-    it('should be able to update settings', function () {
+    it('should be able to update settings', () => {
         accountMenu.click();
         element(by.css('[uisref="settings"]')).click();
 
@@ -46,7 +49,7 @@ describe('account', function () {
         expect(message).toMatch(/Settings saved!/);
     });
 
-    it('should be able to update password', function () {
+    it('should be able to update password', () => {
         accountMenu.click();
         element(by.css('[uisref="password"]')).click();
 
@@ -70,12 +73,14 @@ describe('account', function () {
         accountMenu.click();
         element(by.css('[uisref="password"]')).click();
         // change back to default
-        password.clear().sendKeys('admin');
-        element(by.id('confirmPassword')).clear().sendKeys('admin');
+        password.clear();
+        password.sendKeys('admin');
+        element(by.id('confirmPassword')).clear();
+        element(by.id('confirmPassword')).sendKeys('admin');
         element(by.css('button[type=submit]')).click();
     });
 
-    afterAll(function () {
+    afterAll(() => {
         accountMenu.click();
         logout.click();
     });
