@@ -127,9 +127,7 @@ module.exports = EntityGenerator.extend({
             if (this.testFrameworks === undefined) {
                 this.testFrameworks = ['gatling'];
             }
-            if (this.testFrameworks.indexOf('protractor') !== -1) {
-                this.protractorTests = true;
-            }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
             //this.clientFw = this.config.get('clientFw'); //TODO enable this when the checkClientVersion method is removed
 
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];

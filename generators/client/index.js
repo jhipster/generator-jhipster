@@ -156,9 +156,8 @@ module.exports = JhipsterClientGenerator.extend({
             if (baseName) {
                 this.baseName = baseName;
             }
-            if (this.testFrameworks.indexOf('protractor') !== -1) {
-                this.protractorTests = true;
-            }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+
             var clientConfigFound = this.useSass !== undefined;
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
