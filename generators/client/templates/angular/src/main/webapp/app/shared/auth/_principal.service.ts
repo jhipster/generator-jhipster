@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { AccountService } from './account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';//Barrel doesnt work here. No idea why!
@@ -8,6 +10,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 export class Principal {
     private _identity: any;
     private authenticated: boolean = false;
+    private authenticationState = new Subject<any>();
 
     constructor(
         private account: AccountService<% if (websocket === 'spring-websocket') { %>,
@@ -68,10 +71,12 @@ export class Principal {
                 this._identity = null;
                 this.authenticated = false;
             }
+            this.authenticationState.next(this._identity);
             return this._identity;
         }).catch(err => {
             this._identity = null;
             this.authenticated = false;
+            this.authenticationState.next(this._identity);
             return null;
         });
     }
@@ -82,5 +87,9 @@ export class Principal {
 
     isIdentityResolved (): boolean {
         return this._identity !== undefined;
+    }
+
+    getAuthenticationState(): Observable<any> {
+        return this.authenticationState.asObservable();
     }
 }

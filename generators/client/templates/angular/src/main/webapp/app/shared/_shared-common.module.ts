@@ -11,7 +11,7 @@ import {
     FilterPipe,
     OrderByPipe,
     <%_ if (enableTranslation){ _%>
-    <%=jhiPrefixCapitalized%>Translate,
+    JhiTranslate,
     <%=jhiPrefixCapitalized%>MissingTranslationHandler,
     <%=jhiPrefixCapitalized%>LanguageService,
     FindLanguageFromKeyPipe,
@@ -43,7 +43,7 @@ import {
         CapitalizePipe,
         KeysPipe,
         <%_ if (enableTranslation){ _%>
-        <%=jhiPrefixCapitalized%>Translate,
+        JhiTranslate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
         JhiAlertComponent,
@@ -74,7 +74,7 @@ import {
         CapitalizePipe,
         KeysPipe,
         <%_ if (enableTranslation){ _%>
-        <%=jhiPrefixCapitalized%>Translate,
+        JhiTranslate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
         JhiAlertComponent,
