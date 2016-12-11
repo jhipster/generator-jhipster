@@ -12,7 +12,7 @@ export class SettingsComponent implements OnInit {
     settingsAccount: any;
     languages: any[];
 
-    constructor(private account: AccountService, private principal: Principal<% if (enableTranslation){ %>, private languageService: JhiLanguageService  <% } %>) {}
+    constructor(private account: AccountService, private principal: Principal<% if (enableTranslation){ %>, private languageService: JhiLanguageService <% } %>) {}
 
     ngOnInit () {
         this.principal.identity().then((account) => {

@@ -4,7 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from './user.model';
 import { UserService } from './user.service';
 <%_ if (enableTranslation){ _%>
-import { JhiLanguageService  } from '../../shared';
+import { JhiLanguageService } from '../../shared';
 <%_ }_%>
 import { EventManager } from '../../shared/service/event-manager.service';
 

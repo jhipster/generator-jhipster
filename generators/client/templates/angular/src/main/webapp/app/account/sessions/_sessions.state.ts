@@ -1,5 +1,5 @@
 import { SessionsComponent } from './sessions.component';
-import { JhiLanguageService  } from '../../shared';
+import { JhiLanguageService } from '../../shared';
 
 export const sessionsState = {
     name: 'sessions',
