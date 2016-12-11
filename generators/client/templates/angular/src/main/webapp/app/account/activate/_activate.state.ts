@@ -1,5 +1,5 @@
 import { ActivateComponent } from './activate.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const activateState = {
     name: 'activate',
@@ -14,7 +14,7 @@ export const activateState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['activate'])
     }]
 };

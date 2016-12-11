@@ -18,8 +18,6 @@ const files = {
                 '_package.json',
                 '_tsconfig.json',
                 '_tslint.json',
-                '_.eslintrc.json',
-                '_.eslintignore',
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js'

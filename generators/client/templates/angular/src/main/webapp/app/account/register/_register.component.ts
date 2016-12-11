@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { Register } from './register.service';
-import { LoginModalService<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% }%> } from '../../shared';
+import { LoginModalService<% if (enableTranslation) { %>, JhiLanguageService <% }%> } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
 
     constructor(
         <%_ if (enableTranslation) { _%>
-        private languageService: <%=jhiPrefixCapitalized%>LanguageService,
+        private languageService: JhiLanguageService ,
         <%_ } _%>
         private loginModalService : LoginModalService,
         private registerService: Register,

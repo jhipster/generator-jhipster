@@ -1,5 +1,5 @@
 import { TransitionService, Transition } from 'ui-router-ng2';
-import { Principal, StateStorageService, AuthService<% if (enableTranslation) { %>, <%=jhiPrefixCapitalized%>LanguageService<% } %> } from '../../shared';
+import { Principal, StateStorageService, AuthService<% if (enableTranslation) { %>, JhiLanguageService <% } %> } from '../../shared';
 
 export function registerTransitionHooks($transitions: TransitionService) {
     $transitions.onStart({}, (transition: Transition) => {
@@ -13,7 +13,7 @@ export function registerTransitionHooks($transitions: TransitionService) {
 
         <%_ if (enableTranslation) { _%>
         // Update the language //FIXME not sure if this is required, its causing some weird error as well
-        /*let languageService = transition.injector().get(<%=jhiPrefixCapitalized%>LanguageService);
+        /*let languageService = transition.injector().get(JhiLanguageService );
         languageService.getCurrent().then(current => {
             languageService.changeLanguage(current);
         });*/
@@ -35,7 +35,7 @@ export function registerTransitionHooks($transitions: TransitionService) {
             titleKey = toState.data.pageTitle;
         }
         <%_ if (enableTranslation) { _%>
-        let languageService = transition.injector().get(<%=jhiPrefixCapitalized%>LanguageService);
+        let languageService = transition.injector().get(JhiLanguageService );
         languageService.updateTitle(titleKey);
         <%_ } else { _%>
         window.document.title = titleKey;

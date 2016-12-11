@@ -1,6 +1,6 @@
 import { Transition } from 'ui-router-ng2';
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
-import { <% if (enableTranslation){ %><%=jhiPrefixCapitalized%>LanguageService, <% } %><%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
+import { <% if (enableTranslation){ %>JhiLanguageService , <% } %><%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
 export const trackerState = {
     name: '<%=jhiPrefix%>-tracker',
@@ -15,7 +15,7 @@ export const trackerState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['tracker'])
     }],
     onEnter: (trans: Transition) => {

@@ -1573,8 +1573,6 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
                     if (returnFiles) {
                         filesOut.push(templatePathTo);
                     } else {
-                        this.log(templatePath);
-                        this.log(templatePathTo);
                         _this[method](templatePath, templatePathTo, _this, interpolateRegex, useTemplate);
                     }
                 });

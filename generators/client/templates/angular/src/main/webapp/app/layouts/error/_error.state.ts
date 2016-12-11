@@ -1,5 +1,5 @@
 import { ErrorComponent } from './error.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const errorState = {
     name: 'error',
@@ -14,7 +14,7 @@ export const errorState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['error'])
     }]
 };
@@ -31,7 +31,7 @@ export const accessdeniedState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['error'])
     }]
 };

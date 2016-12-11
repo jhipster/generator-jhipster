@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const metricsState = {
     name: '<%=jhiPrefix%>-metrics',
@@ -14,7 +14,7 @@ export const metricsState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['metrics'])
     }]
 };

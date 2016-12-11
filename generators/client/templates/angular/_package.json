@@ -45,8 +45,6 @@
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.26.0",
     "del": "2.2.2",
-    "eslint-config-angular": "0.5.0",
-    "eslint-plugin-angular": "1.4.1",
     "event-stream": "3.3.4",
     "exports-loader": "0.6.3",
     "extract-text-webpack-plugin": "2.0.0-beta.4",
@@ -106,6 +104,8 @@
     <%_ } _%>
     "tsc": "tsc",
     "tsc:w": "tsc -w",
+    "lint": "tslint src/main/webapp/app/**/*.ts --force",
+    "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
     "webpack:dev": "webpack --watch --config webpack/webpack.dev.js",
     "webpack:prod": "webpack -p --config webpack/webpack.prod.js"
   }

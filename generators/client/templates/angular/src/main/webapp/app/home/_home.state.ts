@@ -1,5 +1,5 @@
 import { HomeComponent } from './home.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../shared';
+import { JhiLanguageService  } from '../shared';
 
 export const homeState = {
     name: 'home',
@@ -13,7 +13,7 @@ export const homeState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['home'])
     }]
 };

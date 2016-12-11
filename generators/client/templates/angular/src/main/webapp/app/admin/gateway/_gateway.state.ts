@@ -1,5 +1,5 @@
 import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const gatewayState = {
     name: 'gateway',
@@ -14,7 +14,7 @@ export const gatewayState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['gateway'])
     }]
 }

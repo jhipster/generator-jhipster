@@ -13,7 +13,7 @@ import {
     <%_ if (enableTranslation){ _%>
     JhiTranslate,
     <%=jhiPrefixCapitalized%>MissingTranslationHandler,
-    <%=jhiPrefixCapitalized%>LanguageService,
+    JhiLanguageService ,
     FindLanguageFromKeyPipe,
     <%_ }_%>
     KeysPipe,
@@ -55,8 +55,8 @@ import {
     ],
     providers: [
         <%_ if (enableTranslation){ _%>
-        <%=jhiPrefixCapitalized%>LanguageService,
-        { provide: MissingTranslationHandler, useClass: <%=jhiPrefixCapitalized%>MissingTranslationHandler },
+        JhiLanguageService,
+        { provide: MissingTranslationHandler, useClass: JhiMissingTranslationHandler },
         <%_ } _%>
         alertServiceProvider(),
         PaginationUtil,

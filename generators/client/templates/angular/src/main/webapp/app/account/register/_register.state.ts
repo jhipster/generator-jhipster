@@ -1,5 +1,5 @@
 import { RegisterComponent } from './register.component';
-import { <%=jhiPrefixCapitalized%>LanguageService } from '../../shared';
+import { JhiLanguageService  } from '../../shared';
 
 export const registerState = {
     name: 'register',
@@ -14,7 +14,7 @@ export const registerState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [<%=jhiPrefixCapitalized%>LanguageService],
+        deps: [JhiLanguageService ],
         resolveFn: (languageService) => languageService.setLocations(['register'])
     }]
 };
