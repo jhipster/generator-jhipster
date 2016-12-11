@@ -8,7 +8,7 @@ export class <%=jhiPrefixCapitalized%>MetricsService {
     constructor (private http: Http) {}
 
     getMetrics(): Observable<any> {
-        return this.http.get('management/jhipster/metrics').map((res: Response) => res.json());
+        return this.http.get('management/metrics').map((res: Response) => res.json());
     }
 
     threadDump(): Observable<any> {
