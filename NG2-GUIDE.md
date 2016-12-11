@@ -3,11 +3,11 @@
 ## <a name="setup"></a> Generator development setup
 JHipster is a [Yeoman Generator](http://yeoman.io/), so you must follow the [Yeoman authoring documentation](http://yeoman.io/authoring/) in order to be able to run and test your changes.
 
-Make sure you have installed Java8, Git, NodeJS, NPM, YO, Bower and Gulp CLI else follow the 'Local installation' steps detailed [here](https://jhipster.github.io/installation/)
+Make sure you have installed Java8, Git, NodeJS, NPM and YO else follow the 'Local installation' steps detailed [here](https://jhipster.github.io/installation/)
 
 Here are the most important steps.
 
-### Fork the generator-jhipster project and checkout the angular-2 branch
+### Fork the generator-jhipster project and checkout the  master branch
 
 Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhipster) and click on the "fork" button. You can then clone your own fork of the project, and start working on it.
 
@@ -15,18 +15,14 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 Now do
 ```
-git checkout angular-2
-```
- or you can do below to directly get the angular-2 branch skipping above steps
-```
-git clone -b angular-2 --single-branch https://github.com/jhipster/generator-jhipster.git
+git clone -b master --single-branch https://github.com/jhipster/generator-jhipster.git
 ```
 
 ### Set NPM to use the cloned project
 
-Now `cd` In to your cloned `generator-jhipster` project directory. Make sure you are in the `angular-2` branch, type `npm link`.
+Now `cd` In to your cloned `generator-jhipster` project directory. Make sure you are in the `master` branch, type `npm link`.
 
-This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `yo jhipster`, you will now use the angular-2 development version of JHipster.
+This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `yo jhipster`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
@@ -51,7 +47,7 @@ Create a new directory and `cd` into it. Now run
 ```
 yo jhipster
 ```
-Now for the question `Which *Angular* version would you like to use for the client?` choose `[BETA] Angular 2.x (stable)`
+Now for the question `Which *Framework* would you like to use for the client?` choose `[BETA] Angular 2.x`
 
 Answer all other questions appropriately. Please note that since this is a WIP some options might not work. If you are unsure use the default options.
 
@@ -61,7 +57,7 @@ Now to have a proper developer experience do as below.
 
 Open a new terminal on this folder and run `./mvnw` or `./gradlew` based on the build tool you choose. Leave this window open.
 
-Now open another terminal on this folder and run `gulp` this will start a development server with live reload and live compile of Typescript.
+Now open another terminal on this folder and run `npm run webpack:dev` this will start a development server with live reload and live compile of Typescript.
 
 Now open [http://localhost:9000/](http://localhost:9000/)
 

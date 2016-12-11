@@ -106,6 +106,8 @@
     <%_ } _%>
     "tsc": "tsc",
     "tsc:w": "tsc -w",
+    "lint": "tslint src/main/webapp/app/**/*.ts --force",
+    "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
     "webpack:dev": "webpack --watch --config webpack/webpack.dev.js",
     "webpack:prod": "webpack -p --config webpack/webpack.prod.js"
   }
