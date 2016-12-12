@@ -3,7 +3,6 @@
 const expect = require('chai').expect,
     Reader = require('../../../lib/reader/json_file_reader'),
     Parser = require('../../../lib/parser/json_parser'),
-    RelationshipTypes = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
     UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
     BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
     BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
