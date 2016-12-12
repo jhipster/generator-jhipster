@@ -22,6 +22,8 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     refresh () {
         this.updatingMetrics = true;
         this.metricsService.getMetrics().subscribe((metrics) => {
+            console.log("Jai recu les metrics ");
+            console.log(metrics);
             this.metrics = metrics;
             this.updatingMetrics = false;
             this.servicesStats = {};
@@ -31,15 +33,17 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
                 if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
                     this.servicesStats[key] = value;
                 }
-                if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
+            });
+            Object.keys(metrics.gauges).forEach((key) => {
+                if (key.indexOf('jcache.statistics') !== -1) {
+                    let value = metrics.gauges[key].value;
                     // remove gets or puts
                     let index = key.lastIndexOf('.');
                     let newKey = key.substr(0, index);
 
                     // Keep the name of the domain
-                    index = newKey.lastIndexOf('.');
                     this.cachesStats[newKey] = {
-                        'name': newKey.substr(index + 1),
+                        'name': newKey.substr(18),
                         'value': value
                     };
                 }
