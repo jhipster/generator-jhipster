@@ -1,4 +1,0 @@
-Description:
-    Creates entities from the passed JDL file location
-Example:
-    jhipster import-jdl .\model.jh

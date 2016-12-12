@@ -1,9 +1,0 @@
-Description:
-    Generates a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry.
-    Adds the spring-cloud-cloudfoundry-connector dependency to Maven / Gradle as appropriate.
-
-Example:
-    jhipster cloudfoundry
-
-    This will create:
-        a deploy/cloudfoundry/manifest.yml file

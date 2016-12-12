@@ -1,8 +1,0 @@
-version: '2'
-services:
-    msmongodb-mongodb:
-        image: mongo:3.2.3
-        ports:
-            - "27017:27017"
-        # volumes:
-        #     - ~/volumes/jhipster/msmongodb/mongodb/:/data/db/
