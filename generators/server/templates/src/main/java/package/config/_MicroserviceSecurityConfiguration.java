@@ -159,7 +159,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
         // Load available UAA servers
         discoveryClient.getServices();
         HttpEntity<Void> request = new HttpEntity<Void>(new HttpHeaders());
-        return (String) this.keyUriRestTemplate
+        return (String) keyUriRestTemplate
             .exchange("http://<%= uaaBaseName %>/oauth/token_key", HttpMethod.GET, request, Map.class).getBody()
             .get("value");
 
