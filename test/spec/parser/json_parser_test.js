@@ -67,13 +67,61 @@ describe('::parse', function () {
         'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
       var content = Parser.parseEntities(entities);
-      expect(content.options.filter( o => o.name === BinaryOptions.DTO && o.value === BinaryOptionValues.dto.MAPSTRUCT && o.entityNames.has('Employee')).length).eq(1);
-      expect(content.options.filter( o => o.name === BinaryOptions.PAGINATION && o.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] && o.entityNames.has('Employee')).length).eq(1);
-      expect(content.options.filter( o => o.name === BinaryOptions.SERVICE && o.value === BinaryOptionValues.service.SERVICE_CLASS && o.entityNames.has('Employee')).length).eq(1);
-      expect(content.options.filter( o => o.name === BinaryOptions.SEARCH_ENGINE && o.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH && o.entityNames.has('Employee')).length).eq(1);
-      expect(content.options.filter( o => o.name === BinaryOptions.MICROSERVICE && o.value === 'mymicroservice' && o.entityNames.has('Employee')).length).eq(1);
-      expect(content.options.filter( o => o.name === BinaryOptions.ANGULAR_SUFFIX && o.value === 'myentities' && o.entityNames.has('Employee')).length).eq(1);
-      expect(content.options.filter( o => o.name === UnaryOptions.NO_FLUENT_METHOD && o.entityNames.has('Employee')).length).eq(1);
+      expect(
+        content.options.filter(
+          option =>
+            option.name === BinaryOptions.DTO &&
+            option.value === BinaryOptionValues.dto.MAPSTRUCT &&
+            option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
+      expect(
+        content.options.filter(
+          option =>
+            option.name === BinaryOptions.PAGINATION &&
+            option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
+            option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
+      expect(
+        content.options.filter(
+          option =>
+            option.name === BinaryOptions.SERVICE &&
+            option.value === BinaryOptionValues.service.SERVICE_CLASS &&
+            option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
+      expect(
+        content.options.filter(
+          option =>
+            option.name === BinaryOptions.SEARCH_ENGINE &&
+            option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
+            option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
+      expect(
+        content.options.filter(
+          option =>
+            option.name === BinaryOptions.MICROSERVICE &&
+            option.value === 'mymicroservice' &&
+            option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
+      expect(
+        content.options.filter(
+          option =>
+            option.name === BinaryOptions.ANGULAR_SUFFIX &&
+            option.value === 'myentities' &&
+            option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
+      expect(
+        content.options.filter(
+          option =>
+            option.name === UnaryOptions.NO_FLUENT_METHOD &&
+            option.entityNames.has('Employee')
+        ).length
+      ).to.eq(1);
     });
   });
 
@@ -109,7 +157,9 @@ describe('::parse', function () {
         'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
       var content = Parser.parseEntities(entities);
-      expect(content.relationships.relationships.OneToMany).has.property('OneToMany_Department{employee}_Employee{department(foo)}');
+      expect(
+        content.relationships.relationships.OneToMany
+      ).has.property('OneToMany_Department{employee}_Employee{department(foo)}');
     });
     it('parses unidirectional ManyToOne relationships', function () {
       var entities = {
@@ -133,8 +183,12 @@ describe('::parse', function () {
       };
       entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
       var content = Parser.parseEntities(entities);
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom).to.eq('A relationship');
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo).to.be.undefined;
+      expect(
+        content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom
+      ).to.eq('A relationship');
+      expect(
+        content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo
+      ).to.be.undefined;
     });
     it('parses comments in relationships for owned', function () {
       var entities = {
@@ -143,8 +197,12 @@ describe('::parse', function () {
       };
       entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
       var content = Parser.parseEntities(entities);
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom).to.be.undefined;
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo).to.eq('Another side of the same relationship');
+      expect(
+        content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom
+      ).to.be.undefined;
+      expect(
+        content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo
+      ).to.eq('Another side of the same relationship');
     });
     it('parses required relationships in owner', function () {
       var entities = {
@@ -152,8 +210,12 @@ describe('::parse', function () {
         'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
       var content = Parser.parseEntities(entities);
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].isInjectedFieldInFromRequired).to.be.true;
-      expect(content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].isInjectedFieldInToRequired).to.be.undefined;
+      expect(
+        content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].isInjectedFieldInFromRequired
+      ).to.be.true;
+      expect(
+        content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].isInjectedFieldInToRequired
+      ).to.be.undefined;
     });
     it('parses required relationships in owned', function () {
       var entities = {
@@ -161,8 +223,12 @@ describe('::parse', function () {
         'Task': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Task.json')
       };
       var content = Parser.parseEntities(entities);
-      expect(content.relationships.relationships.ManyToMany['ManyToMany_Job{task(title)}_Task{job}'].isInjectedFieldInToRequired).to.be.true;
-      expect(content.relationships.relationships.ManyToMany['ManyToMany_Job{task(title)}_Task{job}'].isInjectedFieldInFromRequired).to.be.undefined;
+      expect(
+        content.relationships.relationships.ManyToMany['ManyToMany_Job{task(title)}_Task{job}'].isInjectedFieldInToRequired
+      ).to.be.true;
+      expect(
+        content.relationships.relationships.ManyToMany['ManyToMany_Job{task(title)}_Task{job}'].isInjectedFieldInFromRequired
+      ).to.be.undefined;
     });
   });
 
@@ -170,8 +236,13 @@ describe('::parse', function () {
     it('parses server options', function () {
       var yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
       var content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
-      expect(content.options.filter( o => o.name === UnaryOptions.SKIP_CLIENT && o.entityNames.has('*')).length).eq(1);
-      expect(content.options.filter( o => o.name === UnaryOptions.SKIP_SERVER && o.entityNames.has('*')).length).eq(1);
+      expect(content.options.filter(
+        option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
+      ).to.eq(1);
+      expect(
+        content.options.filter(
+          option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
+      ).to.eq(1);
     });
   });
 
