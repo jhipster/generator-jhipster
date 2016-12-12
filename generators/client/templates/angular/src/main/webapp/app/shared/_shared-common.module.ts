@@ -13,7 +13,7 @@ import {
     <%_ if (enableTranslation){ _%>
     JhiTranslate,
     JhiMissingTranslationHandler,
-    JhiLanguageService ,
+    JhiLanguageService,
     FindLanguageFromKeyPipe,
     <%_ }_%>
     KeysPipe,

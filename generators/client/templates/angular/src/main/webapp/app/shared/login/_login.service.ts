@@ -20,7 +20,7 @@ export class LoginService {
 
     constructor (
         <%_ if (enableTranslation){ _%>
-        private languageService: JhiLanguageService ,
+        private languageService: JhiLanguageService,
         <%_ } _%>
         private principal: Principal,
         <%_ if (websocket === 'spring-websocket') { _%>

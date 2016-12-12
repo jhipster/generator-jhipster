@@ -26,7 +26,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
         private eventManager: EventManager,
         private $state: StateService,
         <%_ if (enableTranslation){ _%>
-        private languageService: JhiLanguageService ,
+        private languageService: JhiLanguageService,
         <%_ } _%>
         private loginService: LoginService,
         private stateStorageService: StateStorageService,
