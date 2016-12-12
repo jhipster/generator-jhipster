@@ -6,7 +6,7 @@ import { LANGUAGES } from './language.constants';
 import { TranslatePartialLoader } from './translate-partial-loader.provider';
 
 @Injectable()
-export class JhiLanguageService  {
+export class JhiLanguageService {
 
     defaultLang = '<%= nativeLanguage %>';
     defaultLocation = 'global';

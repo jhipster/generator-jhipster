@@ -1,5 +1,5 @@
 import { SessionsComponent } from './sessions.component';
-import { JhiLanguageService  } from '../../shared';
+import { JhiLanguageService } from '../../shared';
 
 export const sessionsState = {
     name: 'sessions',
@@ -14,7 +14,7 @@ export const sessionsState = {
     },
     resolve: [{
         token: 'translate',
-        deps: [JhiLanguageService ],
+        deps: [JhiLanguageService],
         resolveFn: (languageService) => languageService.setLocations(['sessions'])
     }]
 };

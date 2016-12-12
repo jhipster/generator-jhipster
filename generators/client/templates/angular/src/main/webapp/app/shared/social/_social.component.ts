@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SocialService } from './social.service';
 import { CSRFService } from '../auth/csrf.service';
 <%_ if (enableTranslation){ _%>
-import { JhiLanguageService  } from '../language/language.service';
+import { JhiLanguageService } from '../language/language.service';
 <%_ } _%>
 
 @Component({
@@ -18,7 +18,7 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
 
     constructor (
         <%_ if (enableTranslation){ _%>
-        private languageService: JhiLanguageService ,
+        private languageService: JhiLanguageService,
         <%_ } _%>
         private csrfService: CSRFService,
         private socialService: SocialService
