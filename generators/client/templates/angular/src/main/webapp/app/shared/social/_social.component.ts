@@ -34,4 +34,8 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
         this.csrf = this.csrfService.getCSRF();
     }
 
+    submit()
+    {
+        $('#form' + this.label).submit();
+    }
 }

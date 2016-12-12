@@ -1,4 +1,4 @@
-<form action="{{ providerURL }}" method="POST">
+<form action="{{ providerURL }}" method="POST" (ngSubmit)="submit()" id="form{{label}}">
     <button type="submit" class="btn btn-block jh-btn-social jh-btn-{{ provider }}">
         <span jhi-translate="social.btnLabel" translate-values="{ label: '{{label}}' }">Sign in with {{ label }}</span>
     </button>
