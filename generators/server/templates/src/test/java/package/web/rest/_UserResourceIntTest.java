@@ -3,21 +3,22 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.service.UserService;
+import <%=packageName%>.service.MailService;
 <% if (databaseType == 'sql') { %>
 import org.apache.commons.lang3.RandomStringUtils;<% } %>
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+<% if (databaseType == 'sql') { %>
 import javax.persistence.EntityManager;<% } %>
 
 <%_ if (enableSocialSignIn) { _%>
@@ -36,11 +37,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
 
-    @Inject
-    private UserService userService;
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private UserService userService;<% if (searchEngine == 'elasticsearch') { %>
+
+    @Autowired
+    private UserSearchRepository userSearchRepository;<% } %>
 
     private MockMvc restUserMockMvc;
 <%_ if (databaseType == 'sql') { _%>
@@ -68,9 +75,7 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
 
     @Before
     public void setup() {
-        UserResource userResource = new UserResource();
-        ReflectionTestUtils.setField(userResource, "userRepository", userRepository);
-        ReflectionTestUtils.setField(userResource, "userService", userService);
+        UserResource userResource = new UserResource(userRepository, mailService, userService<% if (searchEngine == 'elasticsearch') { %>, userSearchRepository<% } %>);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
     }
 

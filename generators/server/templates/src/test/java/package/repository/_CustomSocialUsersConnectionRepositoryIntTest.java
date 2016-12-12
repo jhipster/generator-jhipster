@@ -6,6 +6,7 @@ import <%=packageName%>.domain.SocialUserConnection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.social.connect.*;
@@ -15,12 +16,11 @@ import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 import org.springframework.social.oauth1.OAuth1Operations;
 import org.springframework.social.oauth1.OAuth1ServiceProvider;
 import org.springframework.social.oauth2.*;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.junit4.SpringRunner;<% if (databaseType === 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +42,7 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
 
     private ConnectionRepository connectionRepository;
 
-    @Inject
+    @Autowired
     private SocialUserConnectionRepository socialUserConnectionRepository;
 
     @Before

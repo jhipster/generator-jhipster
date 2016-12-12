@@ -22,18 +22,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob == true) { %>
 import org.springframework.util.Base64Utils;<% } %>
-
-import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+<% if (databaseType == 'sql') { %>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.Instant;
@@ -176,26 +175,26 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;
     <%_ } } _%>
 
-    @Inject
+    @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %>
 
-    @Inject
+    @Autowired
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } if (service != 'no') { %>
 
-    @Inject
+    @Autowired
     private <%= entityClass %>Service <%= entityInstance %>Service;<% } if (searchEngine == 'elasticsearch') { %>
 
-    @Inject
+    @Autowired
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
 
-    @Inject
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
-    @Inject
+    @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 <%_ if (databaseType == 'sql') { _%>
 
-    @Inject
+    @Autowired
     private EntityManager em;
 <%_ } _%>
 
@@ -206,17 +205,10 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
         <%_ if (service != 'no') { _%>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", <%= entityInstance %>Service);
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service);
         <%_ } else { _%>
-            <%_ if (searchEngine == 'elasticsearch') { _%>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);
-            <%_ } _%>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);
-        <%_ } _%>
-        <%_ if (service == 'no' && dto == 'mapstruct') { _%>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);
+            <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto == 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine == 'elasticsearch') { %>, <%= entityInstance %>SearchRepository<% } %>);
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

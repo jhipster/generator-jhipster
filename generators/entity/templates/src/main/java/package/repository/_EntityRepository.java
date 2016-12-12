@@ -11,9 +11,7 @@ import org.springframework.data.repository.query.Param;<% } %>
 import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+<% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %>
 import java.util.ArrayList;
@@ -45,8 +43,7 @@ public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') 
 @Repository
 public class <%= entityClass %>Repository {
 
-    @Inject
-    private Session session;
+    private final Session session;
 
     private Mapper<<%= entityClass %>> mapper;
 
@@ -54,11 +51,11 @@ public class <%= entityClass %>Repository {
 
     private PreparedStatement truncateStmt;
 
-    @PostConstruct
-    public void init() {
-        mapper = new MappingManager(session).mapper(<%= entityClass %>.class);
-        findAllStmt = session.prepare("SELECT * FROM <%= entityInstance %>");
-        truncateStmt = session.prepare("TRUNCATE <%= entityInstance %>");
+    public <%= entityClass %>Repository(Session session) {
+        this.session = session;
+        this.mapper = new MappingManager(session).mapper(<%= entityClass %>.class);
+        this.findAllStmt = session.prepare("SELECT * FROM <%= entityInstance %>");
+        this.truncateStmt = session.prepare("TRUNCATE <%= entityInstance %>");
     }
 
     public List<<%= entityClass %>> findAll() {
