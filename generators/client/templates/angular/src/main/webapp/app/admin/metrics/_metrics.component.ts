@@ -22,8 +22,6 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     refresh () {
         this.updatingMetrics = true;
         this.metricsService.getMetrics().subscribe((metrics) => {
-            console.log("Jai recu les metrics ");
-            console.log(metrics);
             this.metrics = metrics;
             this.updatingMetrics = false;
             this.servicesStats = {};
