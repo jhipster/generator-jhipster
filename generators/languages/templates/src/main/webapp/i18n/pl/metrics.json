@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Statystyki Ehcache",
+        "cache": {
+            "title": "Statystyki Cache",
             "cachename": "Nazwa cache",
-            "objects": "Obiekty",
             "hits": "Odsłon",
             "misses": "Nietrafionych",
-            "evictioncount": "Liczba wyeksmitowanych",
-            "mean": "Średni czas pobierania (ms)"
+            "evictions": "Liczba wyeksmitowanych"
         },
         "datasource": {
-        	"usage": "Użycie",
+            "usage": "Użycie",
             "title": "Statystyki bazy danych (czas w milisekundach)",
             "name": "Użycie puli połączeń",
             "count": "Licznik",

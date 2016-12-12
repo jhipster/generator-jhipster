@@ -1,5 +1,5 @@
 'use strict';
-var util = require('util'),
+const util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
@@ -7,18 +7,11 @@ var util = require('util'),
     pluralize = require('pluralize'),
     prompts = require('./prompts'),
     jhiCore = require('jhipster-core'),
+    writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
 
-/* constants used througout */
+/* constants used throughout */
 const constants = require('../generator-constants'),
-    INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR = constants.ANGULAR_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    TEST_DIR = constants.TEST_DIR,
-    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
     SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
 
@@ -76,7 +69,7 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
-        // remove extention if feeding json files
+        // remove extension if feeding json files
         if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');
         }
@@ -102,9 +95,19 @@ module.exports = EntityGenerator.extend({
         this.relNameChoices = [];
     },
     initializing: {
+
+        // Temporary check until entity generator is compatible with angular 2
+        checkClientVersion: function () {
+            this.clientFw = this.config.get('clientFw');
+
+            if (this.clientFw && this.clientFw === 'angular2') {
+                this.error(chalk.red('The entity generator does not support Angular 2 applications yet!'));
+            }
+        },
+
         getConfig: function (args) {
             this.useConfigurationFile = false;
-            this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
+            this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
             this.applicationType = this.config.get('applicationType');
@@ -113,7 +116,8 @@ module.exports = EntityGenerator.extend({
             this.hibernateCache = this.config.get('hibernateCache');
             this.databaseType = this.config.get('databaseType');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
-            this.searchEngine = this.config.get('searchEngine');
+            this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
+            this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
@@ -123,12 +127,18 @@ module.exports = EntityGenerator.extend({
             if (this.testFrameworks === undefined) {
                 this.testFrameworks = ['gatling'];
             }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+            this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
+            this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
+
+            //this.clientFw = this.config.get('clientFw'); //TODO enable this when the checkClientVersion method is removed
 
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
+            this.microserviceAppName = '';
 
             this.filename = this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
             if (shelljs.test('-f', this.filename)) {
@@ -151,25 +161,9 @@ module.exports = EntityGenerator.extend({
                 this.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf('Detail', this.name.length - 'Detail'.length) !== -1) {
                 this.error(chalk.red('The entity name cannot end with \'Detail\''));
-            } else if (jhiCore.isReservedClassName(this.name)) {
+            } else if (!this.skipServer && jhiCore.isReservedClassName(this.name)) {
                 this.error(chalk.red('The entity name cannot contain a Java or JHipster reserved keyword'));
             }
-        },
-
-        validateTableName: function () {
-            var prodDatabaseType = this.prodDatabaseType;
-            if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
-                this.error(chalk.red('The table name cannot contain special characters'));
-            } else if (this.entityTableName === '') {
-                this.error(chalk.red('The table name cannot be empty'));
-            } else if (jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
-                this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
-            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
-                this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
-            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
-                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
-            }
-
         },
 
         setupVars: function () {
@@ -188,6 +182,22 @@ module.exports = EntityGenerator.extend({
                 this.log(`\nThe entity ${ this.name } is being updated.\n`);
                 this._loadJson();
             }
+        },
+
+        validateTableName: function () {
+            var prodDatabaseType = this.prodDatabaseType;
+            if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
+                this.error(chalk.red('The table name cannot contain special characters'));
+            } else if (this.entityTableName === '') {
+                this.error(chalk.red('The table name cannot be empty'));
+            } else if (!this.skipServer && jhiCore.isReservedTableName(this.entityTableName, prodDatabaseType)) {
+                this.error(chalk.red(`The table name cannot contain a ${prodDatabaseType.toUpperCase()} reserved keyword`));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 26) {
+                this.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
+            } else if (prodDatabaseType === 'oracle' && this.entityTableName.length > 14) {
+                this.warning('The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names');
+            }
+
         }
     },
 
@@ -205,6 +215,7 @@ module.exports = EntityGenerator.extend({
         this.service = this.fileData.service;
         this.fluentMethods = this.fileData.fluentMethods;
         this.pagination = this.fileData.pagination;
+        this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         this.javadoc = this.fileData.javadoc;
         this.entityTableName = this.fileData.entityTableName;
         if (_.isUndefined(this.entityTableName)) {
@@ -227,9 +238,12 @@ module.exports = EntityGenerator.extend({
             if (!this.microserviceName) {
                 this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
             }
+            this.microserviceAppName = this._getMicroserviceAppName();
             this.skipServer = true;
-            this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
+    },
+    _getMicroserviceAppName: function () {
+        return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
     },
     /* end of Helper methods */
 
@@ -336,7 +350,7 @@ module.exports = EntityGenerator.extend({
             if (_.isUndefined(this.changelogDate)
                 && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 var currentDate = this.dateFormatForLiquibase();
-                this.warning(`hangelogDate is missing in .jhipster/${ this.name }.json, using ${ currentDate } as fallback`);
+                this.warning(`changelogDate is missing in .jhipster/${ this.name }.json, using ${ currentDate } as fallback`);
                 this.changelogDate = currentDate;
             }
             if (_.isUndefined(this.dto)) {
@@ -361,7 +375,7 @@ module.exports = EntityGenerator.extend({
             if (this.useConfigurationFile && this.updateEntity === 'regenerate') {
                 return; //do not update if regenerating entity
             }
-            // store informations in a file for further use.
+            // store information in a file for further use.
             if (!this.useConfigurationFile && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
                 this.changelogDate = this.dateFormatForLiquibase();
             }
@@ -603,154 +617,8 @@ module.exports = EntityGenerator.extend({
             insight.track('entity/fluentMethods', this.fluentMethods);
         }
     },
-    writing : {
-        saveRemoteEntityPath: function() {
-            if (_.isUndefined(this.microservicePath)) {
-                return;
-            }
 
-            this.copy(this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json', this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
-        },
-
-        writeEnumFiles: function() {
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
-                if (field.fieldIsEnum === true) {
-                    var fieldType = field.fieldType;
-                    var enumInfo = new Object();
-                    enumInfo.packageName = this.packageName;
-                    enumInfo.enumName = fieldType;
-                    enumInfo.enumValues = field.fieldValues;
-                    field.enumInstance = _.lowerFirst(enumInfo.enumName);
-                    enumInfo.enumInstance = field.enumInstance;
-                    enumInfo.angularAppName = this.angularAppName;
-                    enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
-                    if (!this.skipServer) {
-                        this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
-                            SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
-                    }
-
-                    // Copy for each
-                    if (!this.skipClient && this.enableTranslation) {
-                        var languages = this.languages || this.getAllInstalledLanguages();
-                        languages.forEach(function (language) {
-                            this.copyEnumI18n(language, enumInfo);
-                        }, this);
-                    }
-
-                }
-            }
-        },
-
-        writeServerFiles: function() {
-            if (this.skipServer) return;
-
-            this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Entity.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
-
-            this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_EntityRepository.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java', this, {});
-
-            if (this.searchEngine === 'elasticsearch') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_EntitySearchRepository.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java', this, {});
-            }
-
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_EntityResource.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'Resource.java', this, {});
-            if (this.service === 'serviceImpl') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/service/_EntityService.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
-                this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.entityClass + 'ServiceImpl.java', this, {});
-            } else if (this.service === 'serviceClass') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
-            }
-            if (this.dto === 'mapstruct') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/service/dto/_EntityDTO.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/dto/' + this.entityClass + 'DTO.java', this, {});
-
-                this.template(SERVER_MAIN_SRC_DIR + 'package/service/mapper/_EntityMapper.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/mapper/' + this.entityClass + 'Mapper.java', this, {});
-            }
-        },
-
-        writeDbFiles: function() {
-            if (this.skipServer) return;
-
-            if (this.databaseType === 'sql') {
-                this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
-                    SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
-
-                if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
-                    this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity_constraints.xml',
-                        SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_constraints_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
-                    this.addConstraintsChangelogToLiquibase(this.changelogDate + '_added_entity_constraints_' + this.entityClass);
-                }
-
-                this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
-            }
-            if (this.databaseType === 'cassandra') {
-                this.template(SERVER_MAIN_RES_DIR + 'config/cql/changelog/_added_entity.cql',
-                    SERVER_MAIN_RES_DIR + 'config/cql/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
-            }
-        },
-
-        writeClientFiles: function () {
-            if (this.skipClient) {
-                return;
-            }
-
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityPluralFileName + '.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-detail.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.html', this, {}, true);
-
-            this.addEntityToMenu(this.entityStateName, this.enableTranslation);
-
-            this.template(ANGULAR_DIR + 'entities/_entity-management.state.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js', this, {});
-            this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js', this, {});
-            this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js', this, {});
-            this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js', this, {});
-            this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js', this, {});
-            this.template(ANGULAR_DIR + 'entities/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
-            if (this.searchEngine === 'elasticsearch') {
-                this.template(ANGULAR_DIR + 'entities/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
-            }
-
-            // Copy for each
-            if (this.enableTranslation) {
-                var languages = this.languages || this.getAllInstalledLanguages();
-                languages.forEach(function (language) {
-                    this.copyI18n(language);
-                }, this);
-            }
-        },
-
-        writeClientTestFiles: function () {
-            if (this.skipClient) return;
-
-            this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
-                CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
-            // Create Protractor test files
-            if (this.testFrameworks.indexOf('protractor') !== -1) {
-                this.template(CLIENT_TEST_SRC_DIR + 'e2e/entities/_entity.js', CLIENT_TEST_SRC_DIR + 'e2e/entities/' + this.entityFileName + '.js', this, {});
-            }
-        },
-
-        writeTestFiles: function() {
-            if (this.skipServer) return;
-
-            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
-                    SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
-
-            if (this.testFrameworks.indexOf('gatling') !== -1) {
-                this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
-                    TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
-            }
-        }
-    },
+    writing : writeFiles(),
 
     install: function () {
         var injectJsFilesToIndex = function () {
@@ -795,22 +663,10 @@ module.exports = EntityGenerator.extend({
                         entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
-                    modules.forEach(function (module) {
-                        if (module.hookFor === 'entity' && module.hookType === 'post') {
-                            // compose with the modules callback generator
-                            try {
-                                this.composeWith(module.generatorCallback, {
-                                    options: {
-                                        entityConfig: entityConfig,
-                                        force: this.options['force']
-                                    }
-                                });
-                            } catch (err) {
-                                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
-                            }
-                        }
-                    }, this);
+                    this.callHooks('entity', 'post', {
+                        entityConfig: entityConfig,
+                        force: this.options['force']
+                    });
                 }
             } catch (err) {
                 this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.'));

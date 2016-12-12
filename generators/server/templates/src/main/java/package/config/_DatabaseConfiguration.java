@@ -1,13 +1,21 @@
 package <%=packageName%>.config;
-<% if (databaseType == 'sql') { %>
+<%_ if (databaseType == 'sql') { _%>
+
 import <%=packageName%>.config.liquibase.AsyncSpringLiquibase;
 
-import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import liquibase.integration.spring.SpringLiquibase;
+<%_ } _%>
+<%_ if (databaseType == 'mongodb' && authenticationType == 'oauth2') { _%>
+
+import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
+<%_ } _%>
+<%_ if (databaseType == 'mongodb') { _%>
+
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
 import com.mongodb.Mongo;
-import com.github.mongobee.Mongobee;<% } %>
+import com.github.mongobee.Mongobee;
+<%_ } _%>
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 import org.h2.tools.Server;
 <%_ } _%>
@@ -21,13 +29,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb') { %>
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType == 'mongodb') { %>
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
-import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
-import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
@@ -57,19 +62,12 @@ import java.util.List;
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
-public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends AbstractMongoConfiguration <% } %>{
+public class DatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType == 'sql') { %>
 
     @Inject
-    private Environment env;<% } %><% if (databaseType == 'mongodb') { %>
-
-    @Inject
-    private Mongo mongo;
-
-    @Inject
-    private MongoProperties mongoProperties;<% } %><% if (databaseType == 'sql') { %>
-
+    private Environment env;<% } %><% if (databaseType == 'sql') { %>
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 
     /**
@@ -83,8 +81,8 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     public Server h2TCPServer() throws SQLException {
         return Server.createTcpServer("-tcp","-tcpAllowOthers");
     }
-
 <%_ } _%>
+
     @Bean
     public SpringLiquibase liquibase(DataSource dataSource, LiquibaseProperties liquibaseProperties) {
 
@@ -105,8 +103,8 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     }
 
     @Bean
-    public Hibernate4Module hibernate4Module() {
-        return new Hibernate4Module();
+    public Hibernate5Module hibernate5Module() {
+        return new Hibernate5Module();
     }<% } %><% if (databaseType == 'mongodb') { %>
 
     @Bean
@@ -119,31 +117,17 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         return new LocalValidatorFactoryBean();
     }
 
-    @Override
-    protected String getDatabaseName() {
-        return mongoProperties.getDatabase();
-    }
-
-    @Override
-    public Mongo mongo() throws Exception {
-        return mongo;
-    }
-
     @Bean
     public CustomConversions customConversions() {
         List<Converter<?, ?>> converters = new ArrayList<>();<% if (authenticationType == 'oauth2') { %>
         converters.add(new OAuth2AuthenticationReadConverter());<% } %>
         converters.add(DateToZonedDateTimeConverter.INSTANCE);
         converters.add(ZonedDateTimeToDateConverter.INSTANCE);
-        converters.add(DateToLocalDateConverter.INSTANCE);
-        converters.add(LocalDateToDateConverter.INSTANCE);
-        converters.add(DateToLocalDateTimeConverter.INSTANCE);
-        converters.add(LocalDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converters);
     }
 
     @Bean
-    public Mongobee mongobee() {
+    public Mongobee mongobee(Mongo mongo, MongoProperties mongoProperties) {
         log.debug("Configuring Mongobee");
         Mongobee mongobee = new Mongobee(mongo);
         mongobee.setDbName(mongoProperties.getDatabase());

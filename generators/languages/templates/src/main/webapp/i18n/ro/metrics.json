@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Statistici Ehcache",
+        "cache": {
+            "title": "Statistici cache",
             "cachename": "Nume cache",
-            "objects": "Obiecte",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Eviction count",
-            "mean": "Timp mediu get (ms)"
+            "evictions": "Evictions"
         },
         "datasource": {
-        	"usage": "Folosire",
+            "usage": "Folosire",
             "title": "Statistici sursă date(timpi in milisecunde)",
             "name": "Folosire pool",
             "count": "Număr",

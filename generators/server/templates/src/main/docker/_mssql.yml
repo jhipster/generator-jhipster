@@ -1,0 +1,13 @@
+version: '2'
+services:
+    <%= baseName.toLowerCase() %>-mssql:
+        container_name: <%= baseName.toLowerCase() %>-mssql
+        image: <%= DOCKER_MSSQL %>
+        # volumes are not supported on macOS
+        # volumes:
+        #     - ~/volumes/jhipster/jhitest/mssql/:/var/opt/mssql/data/
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=yourStrong(!)Password
+        ports:
+            - 1433:1433

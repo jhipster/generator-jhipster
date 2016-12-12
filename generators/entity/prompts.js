@@ -24,7 +24,7 @@ function askForMicroserviceJson() {
         return;
     }
 
-    var cb = this.async();
+    var done = this.async();
 
     var prompts = [
         {
@@ -58,7 +58,7 @@ function askForMicroserviceJson() {
         }
     ];
 
-    this.prompt(prompts, function(props) {
+    this.prompt(prompts).then(function(props) {
         if (props.useMicroserviceJson) {
             this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
             if(path.isAbsolute(props.microservicePath)) {
@@ -71,7 +71,7 @@ function askForMicroserviceJson() {
             this.useMicroserviceJson = true;
             this._loadJson();
         }
-        cb();
+        done();
     }.bind(this));
 }
 
@@ -82,7 +82,7 @@ function askForUpdate() {
     if (isForce || !this.useConfigurationFile) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -95,11 +95,11 @@ function askForUpdate() {
                 },
                 {
                     value: 'add',
-                    name: '[BETA] Yes, add more fields and relationships'
+                    name: 'Yes, add more fields and relationships'
                 },
                 {
                     value: 'remove',
-                    name: '[BETA] Yes, remove fields and relationships'
+                    name: 'Yes, remove fields and relationships'
                 },
                 {
                     value: 'none',
@@ -109,12 +109,12 @@ function askForUpdate() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.updateEntity = props.updateEntity;
         if (this.updateEntity === 'none') {
             this.env.error(chalk.green('Aborting entity update, no changes were made.'));
         }
-        cb();
+        done();
 
     }.bind(this));
 }
@@ -129,29 +129,28 @@ function askForFields() {
         logFieldsAndRelationships.call(this);
     }
 
-    var cb = this.async();
+    var done = this.async();
 
-    askForField.call(this, cb);
+    askForField.call(this, done);
 }
 
 function askForFieldsToRemove() {
     // prompt only if data is imported from a file
-    if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
+    if (!this.useConfigurationFile || this.updateEntity !== 'remove' || this.fieldNameChoices.length === 0) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
 
     var prompts = [
         {
             type: 'checkbox',
             name: 'fieldsToRemove',
             message: 'Please choose the fields you want to remove',
-            choices: this.fieldNameChoices,
-            default: 'none'
+            choices: this.fieldNameChoices
         },
         {
             when: function (response) {
-                return response.fieldsToRemove !== 'none';
+                return response.fieldsToRemove.length !== 0;
             },
             type: 'confirm',
             name: 'confirmRemove',
@@ -159,7 +158,7 @@ function askForFieldsToRemove() {
             default: true
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         if (props.confirmRemove) {
             this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
             var i;
@@ -172,7 +171,7 @@ function askForFieldsToRemove() {
                 }
             }
         }
-        cb();
+        done();
 
     }.bind(this));
 }
@@ -186,33 +185,32 @@ function askForRelationships() {
         return;
     }
 
-    var cb = this.async();
+    var done = this.async();
 
-    askForRelationship.call(this, cb);
+    askForRelationship.call(this, done);
 }
 
 function askForRelationsToRemove() {
     // prompt only if data is imported from a file
-    if (!this.useConfigurationFile || this.updateEntity !== 'remove') {
+    if (!this.useConfigurationFile || this.updateEntity !== 'remove' || this.relNameChoices.length === 0) {
         return;
     }
     if (this.databaseType === 'mongodb' || this.databaseType === 'cassandra') {
         return;
     }
 
-    var cb = this.async();
+    var done = this.async();
 
     var prompts = [
         {
             type: 'checkbox',
             name: 'relsToRemove',
             message: 'Please choose the relationships you want to remove',
-            choices: this.relNameChoices,
-            default: 'none'
+            choices: this.relNameChoices
         },
         {
             when: function (response) {
-                return response.relsToRemove !== 'none';
+                return response.relsToRemove.length !== 0;
             },
             type: 'confirm',
             name: 'confirmRemove',
@@ -220,7 +218,7 @@ function askForRelationsToRemove() {
             default: true
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         if (props.confirmRemove) {
             this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
             var i;
@@ -233,7 +231,7 @@ function askForRelationsToRemove() {
                 }
             }
         }
-        cb();
+        done();
 
     }.bind(this));
 }
@@ -242,10 +240,10 @@ function askForTableName() {
     // don't prompt if there are no relationships
     var entityTableName = this.entityTableName;
     var prodDatabaseType = this.prodDatabaseType;
-    if (this.relationships.length === 0 || !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
+    if (!this.relationships || this.relationships.length === 0 || !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'input',
@@ -268,21 +266,21 @@ function askForTableName() {
             default: entityTableName
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         /* overwrite the table name for the entity using name obtained from the user*/
         if (props.entityTableName !== this.entityTableName) {
             this.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
         }
-        cb();
+        done();
     }.bind(this));
 }
 
 function askForDTO() {
-    // don't prompt if data is imported from a file
-    if (this.useConfigurationFile) {
+    // don't prompt if data is imported from a file or server is skipped
+    if (this.useConfigurationFile || this.skipServer) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -301,18 +299,18 @@ function askForDTO() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.dto = props.dto;
-        cb();
+        done();
     }.bind(this));
 }
 
 function askForService() {
-    // don't prompt if data are imported from a file
-    if (this.useConfigurationFile) {
+    // don't prompt if data is imported from a file or server is skipped
+    if (this.useConfigurationFile || this.skipServer) {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -335,9 +333,9 @@ function askForService() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.service = props.service;
-        cb();
+        done();
     }.bind(this));
 }
 
@@ -349,7 +347,7 @@ function askForPagination() {
     if (this.databaseType === 'cassandra') {
         return;
     }
-    var cb = this.async();
+    var done = this.async();
     var prompts = [
         {
             type: 'list',
@@ -376,18 +374,19 @@ function askForPagination() {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
-        cb();
+        done();
     }.bind(this));
 }
 
 /**
  * ask question for a field creation
  */
-function askForField(cb) {
+function askForField(done) {
     this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
+    var skipServer = this.skipServer;
     var prodDatabaseType = this.prodDatabaseType;
     var databaseType = this.databaseType;
     var fieldNamesUnderscored = this.fieldNamesUnderscored;
@@ -413,8 +412,8 @@ function askForField(cb) {
                     return 'Your field name cannot start with a upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
-                } else if (jhiCore.isReservedFieldName(input, prodDatabaseType)) {
-                    return `Your field name cannot contain a Java or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
+                } else if (!skipServer && jhiCore.isReservedFieldName(input, prodDatabaseType)) {
+                    return `Your field name cannot contain a Java, AngularJS or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
@@ -424,7 +423,7 @@ function askForField(cb) {
         },
         {
             when: function (response) {
-                return response.fieldAdd === true && (databaseType === 'sql' || databaseType === 'mongodb');
+                return response.fieldAdd === true && (skipServer || databaseType === 'sql' || databaseType === 'mongodb');
             },
             type: 'list',
             name: 'fieldType',
@@ -530,7 +529,7 @@ function askForField(cb) {
                         return 'Enum value "' + enums[i] + '" cannot start with a number';
                     }
                     if (enums[i] === '') {
-                        return 'Enum value cannot be empty (did you accidently type "," twice in a row?)';
+                        return 'Enum value cannot be empty (did you accidentally type "," twice in a row?)';
                     }
                 }
 
@@ -581,7 +580,7 @@ function askForField(cb) {
                 },
                 {
                     value: 'LocalDate',
-                    name: 'LocalDate (Warning: only compatible with cassandra v3)'
+                    name: 'LocalDate (Warning: only compatible with Cassandra v3)'
                 },
                 {
                     value: 'ZonedDateTime',
@@ -655,7 +654,8 @@ function askForField(cb) {
             when: function (response) {
                 return response.fieldAdd === true &&
                     response.fieldValidate === true &&
-                    response.fieldType === 'String';
+                    (response.fieldType === 'String' ||
+                    response.fieldTypeBlobContent === 'text');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -688,8 +688,7 @@ function askForField(cb) {
                     response.fieldType === 'Long' ||
                     response.fieldType === 'Float' ||
                     response.fieldType === 'Double' ||
-                    response.fieldType === 'BigDecimal' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'BigDecimal');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -794,8 +793,7 @@ function askForField(cb) {
                     response.fieldValidate === true &&
                     response.fieldValidateRules.indexOf('min') !== -1 &&
                     (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'Long');
             },
             type: 'input',
             name: 'fieldValidateRulesMin',
@@ -812,8 +810,7 @@ function askForField(cb) {
                     response.fieldValidate === true &&
                     response.fieldValidateRules.indexOf('max') !== -1 &&
                     (response.fieldType === 'Integer' ||
-                    response.fieldType === 'Long' ||
-                    response.fieldTypeBlobContent === 'text');
+                    response.fieldType === 'Long');
             },
             type: 'input',
             name: 'fieldValidateRulesMax',
@@ -906,7 +903,7 @@ function askForField(cb) {
             default: '^[a-zA-Z0-9]*$'
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         if (props.fieldAdd) {
             if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
@@ -932,9 +929,9 @@ function askForField(cb) {
         }
         logFieldsAndRelationships.call(this);
         if (props.fieldAdd) {
-            askForField.call(this, cb);
+            askForField.call(this, done);
         } else {
-            cb();
+            done();
         }
     }.bind(this));
 }
@@ -942,7 +939,7 @@ function askForField(cb) {
 /**
  * ask question for a relationship creation
  */
-function askForRelationship(cb) {
+function askForRelationship(done) {
     var name = this.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
     var fieldNamesUnderscored = this.fieldNamesUnderscored;
@@ -1102,7 +1099,7 @@ function askForRelationship(cb) {
             default: 0
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
 
         if (props.relationshipAdd) {
             var relationship = {
@@ -1118,16 +1115,16 @@ function askForRelationship(cb) {
             if(props.otherEntityName.toLowerCase() === 'user') {
                 relationship.ownerSide = true;
             }
-            
+
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
             this.relationships.push(relationship);
         }
         logFieldsAndRelationships.call(this);
         if (props.relationshipAdd) {
-            askForRelationship.call(this, cb);
+            askForRelationship.call(this, done);
         } else {
             this.log('\n');
-            cb();
+            done();
         }
     }.bind(this));
 }

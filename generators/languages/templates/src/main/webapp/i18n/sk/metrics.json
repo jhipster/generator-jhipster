@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache štatistiky",
+        "cache": {
+            "title": "Cache štatistiky",
             "cachename": "Meno cache",
-            "objects": "Objekty",
             "hits": "Zásahy",
             "misses": "Minutia",
-            "evictioncount": "Počet eviction",
-            "mean": "Priemerný čas odozvy (ms)"
+            "evictions": "Počet eviction"
         },
         "datasource": {
-        	"usage": "Používanie",
+            "usage": "Používanie",
             "title": "DataSource štatistiky (čas v milisekundách)",
             "name": "Využitie poolu",
             "count": "Počet",

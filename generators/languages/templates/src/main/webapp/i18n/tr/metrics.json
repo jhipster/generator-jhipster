@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache istatistikleri",
+        "cache": {
+            "title": "Cache istatistikleri",
             "cachename": "Cache adı",
-            "objects": "Nesneler",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Eviction count",
-            "mean": "Mean get time (ms)"
+            "evictions": "Evictions"
         },
         "datasource": {
-        	"usage": "Kullanım",
+            "usage": "Kullanım",
             "title": "Veri kaynağı istatistikleri (milisaniye cinsinden)",
             "name": "Havuz kullanımı",
             "count": "Sayaç",

@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Email;
 import javax.validation.constraints.*;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 /**
  * A DTO representing a user, with his authorities.
  */
@@ -19,7 +20,6 @@ public class UserDTO {
         if (enableSocialSignIn) {
             columnMax = 100;
         } _%>
-    @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = <%=columnMax %>)
     private String login;

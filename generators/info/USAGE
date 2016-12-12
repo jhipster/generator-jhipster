@@ -1,5 +1,5 @@
 Description:
-    Display informations about your current project and system.
+    Display information about your current project and system.
 
 Example:
     yo jhipster:information

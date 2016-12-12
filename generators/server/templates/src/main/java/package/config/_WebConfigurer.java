@@ -42,9 +42,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private JHipsterProperties jHipsterProperties;
 
     @Autowired(required = false)
-    private MetricRegistry metricRegistry;<% if (hibernateCache == 'hazelcast') { %>
+    private MetricRegistry metricRegistry;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 
-    // Hazelcast instance is injected to force its initialization before the Servlet filter uses it.
     @Inject
     private HazelcastInstance hazelcastInstance;<% } %>
 
@@ -74,7 +73,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
         FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", new SpringAwareWebFilter());
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("instance-name", "<%=baseName%>");
+        parameters.put("instance-name", hazelcastInstance.getName());
         // Name of the distributed map storing your web session objects
         parameters.put("map-name", "clustered-http-sessions");
 
@@ -129,11 +128,15 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
         File root;
         String prefixPath = resolvePathPrefix();
+        <%_ if (clientFw === 'angular2') { _%>
+        root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
+        <%_ } else { _%>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
         } else {
             root = new File(prefixPath + "<%= CLIENT_MAIN_SRC_DIR %>");
         }
+        <%_ } _%>
         if (root.exists() && root.isDirectory()) {
             container.setDocumentRoot(root);
         }
@@ -190,7 +193,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         ServletRegistration.Dynamic metricsAdminServlet =
             servletContext.addServlet("metricsServlet", new MetricsServlet());
 
-        metricsAdminServlet.addMapping("/management/jhipster/metrics/*");
+        metricsAdminServlet.addMapping("/management/metrics/*");
         metricsAdminServlet.setAsyncSupported(true);
         metricsAdminServlet.setLoadOnStartup(2);
     }

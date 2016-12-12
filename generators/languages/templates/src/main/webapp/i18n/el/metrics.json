@@ -70,16 +70,14 @@
             }
         },
         "ehcache": {
-            "title": "Ehcache statistics",
+            "title": "Cache statistics",
             "cachename": "Όνομα cache",
-            "objects": "Αντικείμενα",
             "hits": "Κτυπήματα",
             "misses": "Αποφυγές",
-            "evictioncount": "Αριθμός εξώσεων",
-            "mean": "Μέσος χρόνος (ms)"
+            "evictions": "Αριθμός εξώσεων"
         },
         "datasource": {
-        	"usage": "Χρήση",
+            "usage": "Χρήση",
             "title": "Στατιστικά του DataSource(φορά σε χιλιοστά του δευτερολέπτου)",
             "name": "Χρήση Pool",
             "count": "Αριθμός",

@@ -55,11 +55,11 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
-        // This adds support for a `--[no-]check-install` flag
-        this.option('check-install', {
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: true
+            defaults: false
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -69,6 +69,13 @@ module.exports = JhipsterGenerator.extend({
             defaults: 'jhi'
         });
 
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm install',
+            type: Boolean,
+            defaults: false
+        });
+
         this.currentQuestion = 0;
         this.totalQuestions = constants.QUESTIONS;
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
@@ -76,16 +83,17 @@ module.exports = JhipsterGenerator.extend({
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
-        this.checkInstall = this.options['check-install'];
-
+        this.skipChecks = this.options['skip-checks'];
+        this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
     },
+
     initializing: {
         displayLogo: function () {
             this.printJHipsterLogo();
         },
 
         checkJava: function () {
-            if (!this.checkInstall || this.skipServer) return;
+            if (this.skipChecks || this.skipServer) return;
             var done = this.async();
             exec('java -version', function (err, stdout, stderr) {
                 if (err) {
@@ -101,7 +109,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGit: function () {
-            if (!this.checkInstall || this.skipClient) return;
+            if (this.skipChecks || this.skipClient) return;
             var done = this.async();
             this.isGitInstalled(function (code) {
                 this.gitInstalled = code === 0;
@@ -123,27 +131,16 @@ module.exports = JhipsterGenerator.extend({
             }.bind(this));
         },
 
-        checkBower: function () {
-            if (!this.checkInstall || this.skipClient) return;
+        checkYarn: function () {
+            if (this.skipChecks || this.skipClient || !this.yarnInstall) return;
             var done = this.async();
-            exec('bower --version', function (err) {
+            exec('yarn --version', function (err) {
                 if (err) {
-                    this.warning('bower is not found on your computer.\n',
-                        ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
-                    );
-                }
-                done();
-            }.bind(this));
-        },
-
-        checkGulp: function () {
-            if (!this.checkInstall || this.skipClient) return;
-            var done = this.async();
-            exec('gulp --version', function (err) {
-                if (err) {
-                    this.warning('gulp is not found on your computer.\n',
-                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
-                    );
+                    this.warning('yarn is not found on your computer.\n',
+                        ' Using npm instead');
+                    this.yarnInstall = false;
+                } else {
+                    this.yarnInstall = true;
                 }
                 done();
             }.bind(this));
@@ -162,6 +159,11 @@ module.exports = JhipsterGenerator.extend({
             }
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.clientFw = this.config.get('clientFw');
+            if (!this.clientFw) {
+                /* for backward compatibility */
+                this.clientFw = 'angular1';
+            }
             this.testFrameworks = this.config.get('testFrameworks');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
@@ -169,6 +171,10 @@ module.exports = JhipsterGenerator.extend({
             var configFound = this.baseName !== undefined && this.applicationType !== undefined;
             if (configFound) {
                 this.existingProject = true;
+                // If translation is not defined, it is enabled by default
+                if (this.enableTranslation === undefined) {
+                    this.enableTranslation = true;
+                }
             }
         }
     },
@@ -178,7 +184,11 @@ module.exports = JhipsterGenerator.extend({
 
         askForApplicationType: prompts.askForApplicationType,
 
-        askForModuleName: prompts.askForModuleName
+        askForClient: prompts.askForClient,
+
+        askForModuleName: prompts.askForModuleName,
+
+        askForMoreModules: prompts.askForMoreModules,
     },
 
     configuring: {
@@ -186,6 +196,8 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.skipI18nQuestion = true;
             this.configOptions.baseName = this.baseName;
             this.configOptions.logo = false;
+            this.configOptions.clientFw = this.clientFw;
+            this.configOptions.otherModules = this.otherModules;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
                 this.skipClient = true;
@@ -235,7 +247,6 @@ module.exports = JhipsterGenerator.extend({
             }, {
                 local: require.resolve('../client')
             });
-
         },
 
         askFori18n: prompts.askFori18n
@@ -252,13 +263,16 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.enableTranslation = this.enableTranslation;
             this.configOptions.nativeLanguage = this.nativeLanguage;
             this.configOptions.languages = this.languages;
+            this.configOptions.clientFw = this.clientFw;
         },
 
         insight: function () {
             var insight = this.insight();
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
+            insight.track('app/clientFw', this.clientFw);
             insight.track('app/testFrameworks', this.testFrameworks);
+            insight.track('app/otherModules', this.otherModules);
         },
 
         composeLanguages: function () {
@@ -269,9 +283,11 @@ module.exports = JhipsterGenerator.extend({
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('applicationType', this.applicationType);
+            this.config.set('clientFw', this.clientFw);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);
+            this.config.set('otherModules', this.otherModules);
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);
@@ -280,11 +296,11 @@ module.exports = JhipsterGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
+            this.yarnInstall && this.config.set('yarn', true);
         }
     },
 
     writing: {
-
         cleanup: function () {
             cleanup.cleanupOldFiles(this, this.javaDir, this.testDir);
         },
@@ -314,22 +330,10 @@ module.exports = JhipsterGenerator.extend({
                 if (modules.length > 0) {
                     this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // run through all post app creation module hooks
-                    modules.forEach(function (module) {
-                        if (module.hookFor === 'app' && module.hookType === 'post') {
-                            // compose with the modules callback generator
-                            try {
-                                this.composeWith(module.generatorCallback, {
-                                    options: {
-                                        appConfig: this.configOptions,
-                                        force: this.options['force']
-                                    }
-                                });
-                            } catch (err) {
-                                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
-                            }
-                        }
-                    }, this);
+                    this.callHooks('app', 'post', {
+                        appConfig: this.configOptions,
+                        force: this.options['force']
+                    });
                 }
             } catch (err) {
                 this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.'));

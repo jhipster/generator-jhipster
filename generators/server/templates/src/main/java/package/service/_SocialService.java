@@ -4,6 +4,9 @@ import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
+<%_ if (searchEngine == 'elasticsearch') { _%>
+import <%=packageName%>.repository.search.UserSearchRepository;
+<%_ } _%>
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +41,11 @@ public class SocialService {
     @Inject
     private UserRepository userRepository;
 
+    <%_ if (searchEngine == 'elasticsearch') { _%>
+    @Inject
+    private UserSearchRepository userSearchRepository;
+
+    <%_ } _%>
     @Inject
     private MailService mailService;
 
@@ -99,6 +107,9 @@ public class SocialService {
         newUser.setAuthorities(authorities);
         newUser.setLangKey(langKey);
 
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        userSearchRepository.save(newUser);
+        <%_ } _%>
         return userRepository.save(newUser);
     }
 

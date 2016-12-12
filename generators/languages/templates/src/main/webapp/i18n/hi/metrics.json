@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache सांख्यिकी",
+        "cache": {
+            "title": "Cache सांख्यिकी",
             "cachename": "Cache का नाम",
-            "objects": "Objects",
             "hits": "हिट्स कूल",
             "misses": "मिस",
-            "evictioncount": "बेदखली गणना",
-            "mean": "Mean get time (ms)"
+            "evictions": "बेदखली गणना"
         },
         "datasource": {
-        	"usage": "उपयोग",
+            "usage": "उपयोग",
             "title": "डेटास्रोत सांख्यिकी (मिलीसेकंड में समय)",
             "name": "पूल उपयोग",
             "count": "गिनती",

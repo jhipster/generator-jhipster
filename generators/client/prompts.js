@@ -28,7 +28,7 @@ function askForClientSideOpts() {
             default: false
         }
     ];
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.useSass = props.useSass;
         done();
     }.bind(this));

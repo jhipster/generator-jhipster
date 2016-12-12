@@ -69,14 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache統計",
+        "cache": {
+            "title": "Cache統計",
             "cachename": "Cache name",
-            "objects": "Objects",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Eviction count",
-            "mean": "Mean get time (ms)"
+            "evictions": "Evictions"
         },
         "datasource": {
             "usage": "使用状況",

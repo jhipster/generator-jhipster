@@ -33,14 +33,14 @@ module.exports = ReportGenerator.extend({
         displayConfiguration: function () {
             var done = this.async();
             var result = shelljs.cat('.yo-rc.json');
-            this.log('##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
+            this.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
                 '\n```yaml\n' + result + '\n```\n');
             done();
         },
 
         displayEntities: function () {
             var done = this.async();
-            this.log('##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
+            this.log('\n##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
             shelljs.ls('.jhipster/*.json').forEach(function(file) {
                 this.log(file.split('/')[1]);
                 var result = shelljs.cat(file);
@@ -51,7 +51,7 @@ module.exports = ReportGenerator.extend({
 
         checkJava: function () {
             var done = this.async();
-            this.log('##### **Browsers and Operating System**\n');
+            this.log('\n##### **Browsers and Operating System**\n');
             shelljs.exec('java -version', {silent:true}, function (err, stdout, stderr) {
                 if (!err) {
                     this.log(stderr);
@@ -116,6 +116,16 @@ module.exports = ReportGenerator.extend({
             shelljs.exec('yo --version', {silent:true}, function (err, stdout, stderr) {
                 if (!err) {
                     this.log('yeoman: ' + stdout);
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkYarn: function () {
+            var done = this.async();
+            shelljs.exec('yarn --version', {silent:true}, function (err, stdout, stderr) {
+                if (!err) {
+                    this.log('yarn: ' + stdout);
                 }
                 done();
             }.bind(this));

@@ -16,7 +16,7 @@ module.exports = {
     classify: classify,
     rewriteJSONFile: rewriteJSONFile,
     copyWebResource: copyWebResource,
-    wordwrap: wordwrap
+    getJavadoc: getJavadoc
 };
 
 function rewriteFile(args, _this) {
@@ -175,7 +175,8 @@ function geti18nJson(key, _this, template) {
         file = JSON.parse(file);
         return file;
     } catch (err) {
-        _this.log('error' + err);
+        _this.log(err);
+        _this.log('Error in file: ' + filename);
         // 'Error reading translation file!'
         return undefined;
     }
@@ -197,15 +198,12 @@ function deepFind(obj, path, placeholder) {
     return current;
 }
 
-function wordwrap (text, width, seperator, keepLF) {
-    var wrappedText = '';
+function getJavadoc (text, indentSize) {
+    var javadoc = _.repeat(' ', indentSize) + '/**';
     var rows = text.split('\n');
     for (var i = 0; i < rows.length; i++) {
-        var row = rows[i];
-        if (keepLF === true && i !== 0) {
-            wrappedText = wrappedText + '\\n';
-        }
-        wrappedText = wrappedText + seperator + _.padEnd(row,width) + seperator;
+        javadoc = javadoc + '\n' + _.repeat(' ', indentSize) + ' * ' + rows[i];
     }
-    return wrappedText;
+    javadoc = javadoc + '\n' + _.repeat(' ', indentSize) + ' */';
+    return javadoc;
 }

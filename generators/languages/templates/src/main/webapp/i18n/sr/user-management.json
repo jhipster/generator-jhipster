@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Korisnici",
+            "createLabel": "Kreiraj novog korisnika",
+            "createOrEditLabel": "Kreiraj ili izmeni korisnika"
+        },
+        "created": "Kreiran je novi korisnik {{ param }}",
+        "updated": "Korisnik {{ param }} je izmenjen",
+        "deleted": "Korisnik {{ param }} je obrisan",
+        "delete": {
+            "question": "Da li ste sigurni da želite da obrišite korisnika {{ login }}?"
+        },
+        "detail": {
+            "title": "Korisnik"
+        },
+        "login": "Korisničko ime",
+        "firstName": "Ime",
+        "lastName": "Prezime",
+        "email": "Email",
+        "activated": "Aktiviran",
+        "deactivated": "Deaktiviran",
+        "profiles": "Profili",
+        "langKey": "Jezik",
+        "createdBy": "Korisnika kreirao",
+        "createdDate": "Datum kreiranja",
+        "lastModifiedBy": "Korisnika izmenio",
+        "lastModifiedDate": "Datum izmene"
+    }
+}

@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= baseName %></title>
+    <meta name="description" content="">
+    <%_ if(enableTranslation) { _%>
+    <meta name="google" value="notranslate">
+    <%_ } _%>
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css content/css/vendor.css -->
+    <!-- bower:css -->
+    <!-- endinject -->
+    <%_ if(useSass) { _%>
+    <link rel="stylesheet" href="content/css/vendor.css">
+    <%_ } _%>
+    <!-- endbuild -->
+    <!-- build:css content/css/main.css -->
+    <link rel="stylesheet" href="content/css/main.css">
+    <!-- endbuild -->
+</head>
+<body ng-app="<%= angularAppName %>" ng-strict-di>
+    <!--[if lt IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <page-ribbon></page-ribbon>
+    <div ui-view="navbar" ng-cloak></div>
+    <div class="container">
+        <div class="well" ui-view="content">
+            <!-- inject:troubleshoot -->
+            <!-- This content is for troubleshooting purpose and will be removed by `gulp install` task -->
+            <h1>An error has occured :-(</h1>
+            <i>There was an error when generating this application with <a href="http://jhipster.github.io/">JHipster</a></i>
+            <p>If you are seeing this, it means something went wrong during the initial setup of the application.</p>
+            <h2>Usual error causes</h2>
+            <ol>
+                <li>You had a network error while running <code style="color:red">npm install</code> or <code style="color:red">bower install</code>. If you are behind a corporate proxy, it is likely that this error was caused by your proxy. Have a look at the JHipster error logs, you will probably have the cause of the error.</li>
+                <li>You installed a Node.js version that doesn't work with JHipster: please use an LTS (long-term support) version, as it's the only version we support.</li>
+            </ol>
+            <h2>Running JHipster again</h2>
+            <p>If you want to go fast, run <code style="color:red">yo jhipster --force</code> to regenerate application and run everything again.</p>
+            <p>If you want to have more control on what you generate, so you can debug your issue more easily, you should follow the following steps:</p>
+            <ol>
+                <li>Install npm dependencies with the command <code style="color:red">npm install</code></li>
+                <li>Install bower dependencies with the command <code style="color:red">bower install</code></li>
+                <li>Run the initial setup using gulp with the command <code style="color:red">gulp install</code></li>
+            </ol>
+            <p><i>Note:</i> if you are re-generating an existing JHipster application with some existing entities, use <code style="color:red">yo jhipster --force --with-entities</code> to regenerate your applications with its entities.</p>
+
+            <h2>Getting more help</h2>
+
+            <p>
+              <i>Please note that we all do this in the spirit of Open Source.</i> All discussions are public, so that everyone can participate and help each other.
+            </p>
+
+            <h3>If you have a question on how to use JHipster</h3>
+            <p>
+                Go to Stack Overflow with the <a href="http://stackoverflow.com/tags/jhipster" target="_blank">"jhipster"</a> tag.
+            </p>
+
+            <h3>If you have a bug or a feature request</h3>
+            <p>
+                First read our <a href="https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md" target="_blank">contributing guidelines</a>.
+            </p>
+            <p>
+            Then, fill a ticket on our <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank">bug tracker</a>, we'll be happy to resolve your issue!
+            </p>
+
+            <h3>If you want to chat with contributors and other users</h3>
+            <p>
+                Join our chat room on <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank">Gitter.im</a>. Please note that this is a public chat room, and that we expect you to respect other people and write in a correct English language!
+            </p>
+            <!-- endinject -->
+        </div>
+
+        <div class="footer" ng-cloak>
+            <p data-translate="footer">This is your footer</p>
+        </div>
+    </div>
+
+    <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
+    <script>
+        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+        ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>-->
+
+    <!-- build:js app/vendor.js -->
+    <!-- bower:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
+
+    <!-- build:js app/app.js  -->
+    <!-- inject:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
+
+</body>
+</html>

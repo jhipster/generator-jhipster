@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Estadísticas de Ehcache",
+        "cache": {
+            "title": "Estadísticas de cache",
             "cachename": "Nombre cache",
-            "objects": "Objetos",
             "hits": "Accesos",
             "misses": "Fallos",
-            "evictioncount": "Contador desalojo",
-            "mean": "Tiempo medio de respuesta (ms)"
+            "evictions": "Contador desalojo"
         },
         "datasource": {
-        	"usage": "Uso",
+            "usage": "Uso",
             "title": "Estadísticas de la fuente de datos (tiempo en milisegundos)",
             "name": "Uso del pool",
             "count": "Recuento",

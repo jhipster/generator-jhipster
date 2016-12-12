@@ -4,11 +4,14 @@ Description:
 Example:
     yo jhipster:docker-compose
 
-
     This will create:
         docker-compose.yml
-        jhipster-registry.yml
-        elk.yml
+
+    If using Service discovery and Configuration:
+        jhipster-registry.yml or consul.yml
         central-server-config/application.yml
-        log-monitoring/log-congig/logstash.config
-        log-monitoring/log-data/
+
+    If using ELK monitoring:
+        elk.yml
+        log-conf/logstash.conf
+        log-data/

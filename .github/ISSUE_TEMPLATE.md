@@ -31,7 +31,7 @@
 ##### **JHipster Version(s)**
 
 <!-- to provide all information we need, you can use: yo jhipster:info -->
-<!-- which version of Jhipster are you using, is it a regression? -->
+<!-- which version of JHipster are you using, is it a regression? -->
 
 ##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**
 

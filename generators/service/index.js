@@ -28,7 +28,7 @@ module.exports = ServiceGenerator.extend({
     },
 
     prompting: function () {
-        var cb = this.async();
+        var done = this.async();
 
         var prompts = [
             {
@@ -38,9 +38,9 @@ module.exports = ServiceGenerator.extend({
                 default: false
             }
         ];
-        this.prompt(prompts, function (props) {
+        this.prompt(prompts).then(function (props) {
             this.useInterface = props.useInterface;
-            cb();
+            done();
         }.bind(this));
     },
     default: {

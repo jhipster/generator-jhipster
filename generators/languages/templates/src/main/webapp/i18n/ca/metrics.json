@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Estadístiques Ehcache",
+        "cache": {
+            "title": "Estadístiques cache",
             "cachename": "Cau",
-            "objects": "Objectes",
             "hits": "Accessos",
             "misses": "Fallos",
-            "evictioncount": "Contador d'expulcions",
-            "mean": "Temps d'obtenció mig (ms)"
+            "evictions": "Expulcions"
         },
         "datasource": {
-        	"usage": "Utilització",
+            "usage": "Utilització",
             "title": "Estadístiques de l'origen de dades (en milisegons)",
             "name": "Utilització de la bateria de connexions",
             "count": "Total",

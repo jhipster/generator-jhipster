@@ -2,12 +2,15 @@
 
 var chalk = require('chalk');
 
+
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
     askForModuleName,
     askFori18n,
-    askForTestOpts
+    askForTestOpts,
+    askForClient,
+    askForMoreModules
 };
 
 function askForInsightOptIn() {
@@ -24,7 +27,7 @@ function askForInsightOptIn() {
         name: 'insight',
         message: 'May ' + chalk.cyan('JHipster') + ' anonymously report usage statistics to improve the tool over time?',
         default: true
-    }, function (prompt) {
+    }).then(function (prompt) {
         if (prompt.insight !== undefined) {
             insight.optOut = !prompt.insight;
         }
@@ -69,7 +72,7 @@ function askForApplicationType() {
             }
         ],
         default: DEFAULT_APPTYPE
-    }, function (prompt) {
+    }).then(function (prompt) {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
         done();
     }.bind(this));
@@ -97,7 +100,7 @@ function askForTestOpts() {
     var choices = [];
     var defaultChoice = [];
     if (!this.skipServer) {
-        // all server side test frameworks should be addded here
+        // all server side test frameworks should be added here
         choices.push(
             {name: 'Gatling', value: 'gatling'},
             {name: 'Cucumber', value: 'cucumber'}
@@ -105,7 +108,7 @@ function askForTestOpts() {
         defaultChoice = ['gatling'];
     }
     if (!this.skipClient) {
-        // all client side test frameworks should be addded here
+        // all client side test frameworks should be added here
         choices.push(
             {name: 'Protractor', value: 'protractor'}
         );
@@ -120,8 +123,102 @@ function askForTestOpts() {
         },
         choices: choices,
         default: defaultChoice
-    }, function (prompt) {
+    }).then(function (prompt) {
         this.testFrameworks = prompt.testFrameworks;
         done();
     }.bind(this));
+}
+
+function askForClient() {
+    if (this.existingProject) return;
+
+    var done = this.async();
+    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    var applicationType = this.applicationType;
+
+    this.prompt({
+        type: 'list',
+        name: 'clientFw',
+        when: function (response) {
+            return (applicationType !== 'microservice');
+        },
+        message: function (response) {
+            return getNumberedQuestion('Which *Framework* would you like to use for the client?', applicationType !== 'microservice');
+        },
+        choices: [
+            {
+                value: 'angular1',
+                name: 'Angular 1.x'
+            },
+            {
+                value: 'angular2',
+                name: '[BETA] Angular 2.x'
+            }
+        ],
+        default: 'angular1'
+    }).then(function (prompt) {
+        this.clientFw = this.configOptions.clientFw = prompt.clientFw;
+        done();
+    }.bind(this));
+}
+
+
+function askForMoreModules() {
+    if (this.existingProject) {
+        return;
+    }
+
+    var done = this.async();
+    var generator = this;
+    this.prompt({
+        type: 'confirm',
+        name: 'installModules',
+        message: function(response) {
+            return generator.getNumberedQuestion('Would you like to install other generators from the JHipster Market Place?', true);
+        },
+        default: false
+    }).then(function (prompt) {
+        if (prompt.installModules) {
+            askModulesToBeInstalled(done, generator);
+        } else {
+            done();
+        }
+    }.bind(this));
+}
+
+function askModulesToBeInstalled(done, generator) {
+    generator.httpGet('http://npmsearch.com/query?fields=name,description,author,version&q=keywords:jhipster-module&start=0&size=50',
+        function(body) {
+            var moduleResponse = JSON.parse(body);
+            var choices = [];
+            moduleResponse.results.forEach(function (modDef) {
+                choices.push({
+                    value: { name:modDef.name, version:modDef.version},
+                    name: `(${modDef.name}-${modDef.version}) ${modDef.description} [${modDef.author}]`
+                });
+            });
+            if (choices.length > 0) {
+                generator.prompt({
+                    type: 'checkbox',
+                    name: 'otherModules',
+                    message: 'Which other modules would you like to use?',
+                    choices: choices,
+                    default: []
+                }).then(function (prompt) {
+                    // [ {name: [moduleName], version:[version]}, ...]
+                    generator.otherModules = [];
+                    prompt.otherModules.forEach(function(module) {
+                        generator.otherModules.push({name:module.name[0], version:module.version[0]});
+                    });
+                    generator.configOptions.otherModules = this.otherModules;
+                    done();
+                }.bind(generator));
+            } else {
+                done();
+            }
+        },
+        function (error) {
+            generator.warning(`Unable to contact server to fetch additional modules: ${ error.message }`);
+            done();
+        });
 }

@@ -3,7 +3,6 @@ package <%=packageName%>.config;
 import java.io.IOException;
 
 import org.elasticsearch.client.Client;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
@@ -14,7 +13,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@AutoConfigureAfter(value = { JacksonConfiguration.class })
 public class ElasticSearchConfiguration {
 
     @Bean

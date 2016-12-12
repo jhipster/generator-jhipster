@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache статистика",
+        "cache": {
+            "title": "статистика",
             "cachename": "Название кеша",
-            "objects": "Объектов",
             "hits": "Попаданий",
             "misses": "Промахов",
-            "evictioncount": "Количество очисток",
-            "mean": "Среднее по времени (мс)"
+            "evictions": "Количество очисток"
         },
         "datasource": {
-        	"usage": "Usage",
+            "usage": "Usage",
             "title": "Статистика DataSource (время в миллисекундах)",
             "name": "Pool usage",
             "count": "Count",

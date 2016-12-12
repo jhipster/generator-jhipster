@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS persistent_token (
 CREATE TABLE IF NOT EXISTS persistent_token_by_user (
     user_id text,
     persistent_token_series text,
-    PRIMARY KEY(user_id)
+    PRIMARY KEY(user_id, persistent_token_series)
 );
 
 <%_ } _%>

@@ -2,7 +2,6 @@ package <%=packageName%>.config;
 
 <%_ if (authenticationType == 'session') { _%>
 import javax.validation.constraints.NotNull;
-
 <%_ } _%>
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
@@ -153,26 +152,15 @@ public class JHipsterProperties {
     }
 
     public static class Cache {
-
-        private int timeToLiveSeconds = 3600;
         <%_ if (hibernateCache == 'ehcache') { _%>
-
         private final Ehcache ehcache = new Ehcache();
+
         <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         private final Hazelcast hazelcast = new Hazelcast();
 
         <%_ } _%>
-
-        public int getTimeToLiveSeconds() {
-            return timeToLiveSeconds;
-        }
-
-        public void setTimeToLiveSeconds(int timeToLiveSeconds) {
-            this.timeToLiveSeconds = timeToLiveSeconds;
-        }
         <%_ if (hibernateCache == 'ehcache') { _%>
-
         public Ehcache getEhcache() {
             return ehcache;
         }
@@ -191,13 +179,24 @@ public class JHipsterProperties {
         }
         <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+
         public Hazelcast getHazelcast() {
             return hazelcast;
         }
 
         public static class Hazelcast {
 
+            private int timeToLiveSeconds = 3600;
+
             private int backupCount = 1;
+
+            public int getTimeToLiveSeconds() {
+                return timeToLiveSeconds;
+            }
+
+            public void setTimeToLiveSeconds(int timeToLiveSeconds) {
+                this.timeToLiveSeconds = timeToLiveSeconds;
+            }
 
             public int getBackupCount() {
                 return backupCount;
@@ -214,12 +213,22 @@ public class JHipsterProperties {
 
         private String from = "<%=baseName%>@localhost";
 
+        private String baseUrl = "";
+
         public String getFrom() {
             return from;
         }
 
         public void setFrom(String from) {
             this.from = from;
+        }
+
+        public String getBaseUrl() {
+            return baseUrl;
+        }
+
+        public void setBaseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
         }
     }
 
@@ -228,38 +237,48 @@ public class JHipsterProperties {
 
         private final RememberMe rememberMe = new RememberMe();
         <%_ } _%>
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
+
+        private final LoadBalancedResourceDetails clientAuthorization = new LoadBalancedResourceDetails();
+        <%_ } _%>
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 
         private final Authentication authentication = new Authentication();
         <%_ } _%>
-        <%_ if (authenticationType == 'session') { _%>
+        <%_ if (authenticationType === 'session') { _%>
 
         public RememberMe getRememberMe() {
             return rememberMe;
         }
         <%_ } _%>
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
         public Authentication getAuthentication() {
             return authentication;
         }
+        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
 
+        public LoadBalancedResourceDetails getClientAuthorization() {
+            return clientAuthorization;
+        }
+        <%_ } _%>
         public static class Authentication {
-
             <%_ if (authenticationType == 'oauth2') { _%>
-            private final Oauth oauth = new Oauth();
 
+            private final Oauth oauth = new Oauth();
             <%_ } _%>
             <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
-            private final Jwt jwt = new Jwt();
 
+            private final Jwt jwt = new Jwt();
             <%_ } _%>
             <%_ if (authenticationType == 'oauth2') { _%>
+
             public Oauth getOauth() {
                 return oauth;
             }
             <%_ } _%>
             <%_ if (authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
+
             public Jwt getJwt() {
                 return jwt;
             }
@@ -306,6 +325,7 @@ public class JHipsterProperties {
                 private String secret;
 
                 private long tokenValidityInSeconds = 1800;
+
                 private long tokenValidityInSecondsForRememberMe = 2592000;
 
                 public String getSecret() {
@@ -336,6 +356,7 @@ public class JHipsterProperties {
         }
         <%_ } _%>
         <%_ if (authenticationType == 'session') { _%>
+
         public static class RememberMe {
 
             @NotNull
@@ -449,9 +470,9 @@ public class JHipsterProperties {
 
         private final Jmx jmx = new Jmx();
 
-        private final Spark spark = new Spark();
-
         private final Graphite graphite = new Graphite();
+
+        private final Prometheus prometheus = new Prometheus();
 
         private final Logs logs = new Logs();
 
@@ -459,12 +480,12 @@ public class JHipsterProperties {
             return jmx;
         }
 
-        public Spark getSpark() {
-            return spark;
-        }
-
         public Graphite getGraphite() {
             return graphite;
+        }
+
+        public Prometheus getPrometheus() {
+            return prometheus;
         }
 
         public Logs getLogs() {
@@ -481,39 +502,6 @@ public class JHipsterProperties {
 
             public void setEnabled(boolean enabled) {
                 this.enabled = enabled;
-            }
-        }
-
-        public static class Spark {
-
-            private boolean enabled = false;
-
-            private String host = "localhost";
-
-            private int port = 9999;
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public void setEnabled(boolean enabled) {
-                this.enabled = enabled;
-            }
-
-            public String getHost() {
-                return host;
-            }
-
-            public void setHost(String host) {
-                this.host = host;
-            }
-
-            public int getPort() {
-                return port;
-            }
-
-            public void setPort(int port) {
-                this.port = port;
             }
         }
 
@@ -560,7 +548,30 @@ public class JHipsterProperties {
             }
         }
 
-        public static  class Logs {
+        public static class Prometheus {
+
+            private boolean enabled = false;
+
+            private String endpoint = "/prometheusMetrics";
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getEndpoint() {
+                return endpoint;
+            }
+
+            public void setEndpoint(String endpoint) {
+                this.endpoint = endpoint;
+            }
+        }
+
+        public static class Logs {
 
             private boolean enabled = false;
 
@@ -620,8 +631,8 @@ public class JHipsterProperties {
 
             public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
         }
-
     <%_ if (applicationType == 'gateway' || applicationType == 'microservice') { _%>
+
         private final SpectatorMetrics spectatorMetrics = new SpectatorMetrics();
 
         public SpectatorMetrics getSpectatorMetrics() { return spectatorMetrics; }
@@ -636,8 +647,8 @@ public class JHipsterProperties {
         }
     <%_ } _%>
     }
-
     <%_ if (enableSocialSignIn) { _%>
+
     public static class Social {
 
         private String redirectAfterSignIn = "/#/home";
@@ -650,9 +661,9 @@ public class JHipsterProperties {
             this.redirectAfterSignIn = redirectAfterSignIn;
         }
     }
-
     <%_ } _%>
     <%_ if (applicationType == 'gateway') { _%>
+
     public static class Gateway {
 
         private final RateLimiting rateLimiting = new RateLimiting();

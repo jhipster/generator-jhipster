@@ -69,17 +69,23 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Statistiques Ehcache",
+        "cache": {
+            "title": "Statistiques de cache",
             "cachename": "Nom du cache",
-            "objects": "Objets",
             "hits": "Données existantes",
             "misses": "Données non existantes",
-            "evictioncount": "Nombre de suppressions",
-            "mean": "Temps de réponse (ms)"
+            "gets": "Lectures",
+            "puts": "Écritures",
+            "removals": "Suppressions",
+            "evictions": "Évictions",
+            "hitPercent": "% données existantes",
+            "missPercent": "% données non existantes",
+            "averageGetTime": "Temps de lecture moyen (µs)",
+            "averagePutTime": "Temps d'écriture moyen (µs)",
+            "averageRemoveTime": "Temps de suppression moyen (µs)"
         },
         "datasource": {
-        	"usage": "Usage",
+            "usage": "Usage",
             "title": "Statistiques du pool de connexions (Temps en milliseconde)",
             "name": "Utilisation du pool",
             "count": "Total",

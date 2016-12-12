@@ -29,16 +29,18 @@ _%>
             },<% if (fieldsContainLocalDate) { %>
             'update': {
                 method: 'PUT',
-                transformRequest: function (data) {<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
-                    data.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateToServer(data.<%=fields[idx].fieldName%>);<% } }%>
-                    return angular.toJson(data);
+                transformRequest: function (data) {
+                    var copy = angular.copy(data);<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
+                    copy.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateToServer(copy.<%=fields[idx].fieldName%>);<% } }%>
+                    return angular.toJson(copy);
                 }
             },
             'save': {
                 method: 'POST',
-                transformRequest: function (data) {<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
-                    data.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateToServer(data.<%=fields[idx].fieldName%>);<% } }%>
-                    return angular.toJson(data);
+                transformRequest: function (data) {
+                    var copy = angular.copy(data);<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
+                    copy.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateToServer(copy.<%=fields[idx].fieldName%>);<% } }%>
+                    return angular.toJson(copy);
                 }
             }<% } else { %>
             'update': { method:'PUT' }<% } %>

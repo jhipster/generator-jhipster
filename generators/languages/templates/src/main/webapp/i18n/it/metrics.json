@@ -56,7 +56,7 @@
             }
         },
         "servicesstats": {
-            "title": "Statistiche Servizi (in millisecondi),
+            "title": "Statistiche Servizi (in millisecondi)",
             "table": {
                 "name": "Nome servizio",
                 "count": "Count",
@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Statistiche Ehcache",
+        "cache": {
+            "title": "Statistiche cache",
             "cachename": "Nome Cache",
-            "objects": "Oggetti",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Eviction count",
-            "mean": "Mean get time (ms)"
+            "evictions": "Evictions"
         },
         "datasource": {
-        	"usage": "Utilizzo",
+            "usage": "Utilizzo",
             "title": "Statistiche DataSource (in millisecondi)",
             "name": "Pool usage",
             "count": "Count",

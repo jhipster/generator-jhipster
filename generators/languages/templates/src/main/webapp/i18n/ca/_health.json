@@ -4,17 +4,21 @@
         "refresh.button": "Actualitzar",
         "stacktrace": "Traça d'error",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
+            "details": "Detalls",
+            "properties": "Propietats",
+            "name": "Nom",
+            "value": "Valor",
             "error": "Error"
         },
         "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Message broker",
+            <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "configServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "Espai al disc",
             "mail": "Compte de correu electrònic"<% if (searchEngine === 'elasticsearch') { %>,
@@ -28,8 +32,8 @@
             "status": "Estat"
         },
         "status": {
-            "UP": "FINS",
-            "DOWN": "BAIX"
+            "UP": "ACTIU",
+            "DOWN": "INACTIU"
         }
     }
 }

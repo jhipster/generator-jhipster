@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache 통계",
+        "cache": {
+            "title": "Cache 통계",
             "cachename": "캐시명",
-            "objects": "객체(Objects)",
             "hits": "횟수",
             "misses": "실패(Misses)",
-            "evictioncount": "제거(Eviction) 횟수",
-            "mean": "평균시간 (밀리초)"
+            "evictions": "제거(Eviction) 횟수"
         },
         "datasource": {
-        	"usage": "Usage",
+            "usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",

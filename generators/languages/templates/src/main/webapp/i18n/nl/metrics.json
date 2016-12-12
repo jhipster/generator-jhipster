@@ -69,14 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache statistieken",
+        "cache": {
+            "title": "Cache statistieken",
             "cachename": "Cache naam",
-            "objects": "Objecten",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Uitzetting aantal",
-            "mean": "Gemiddelde get tijd (ms)"
+            "evictions": "Uitzetting aantal"
         },
         "datasource": {
             "usage": "Gebruik",

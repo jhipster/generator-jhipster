@@ -11,10 +11,14 @@
             "error": "त्रुटि"
         },
         "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Message broker",
+            <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "configServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "डिस्क स्थान",
             "mail": "ईमेल"<% if (searchEngine === 'elasticsearch') { %>,

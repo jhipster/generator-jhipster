@@ -12,13 +12,17 @@ services:
         environment:
             - SPRING_PROFILES_ACTIVE=dev,native
             - SECURITY_USER_PASSWORD=<%= adminPassword %>
-            <%_ if (useElk) { _%>
+            <%_ if (monitoring === 'elk') { _%>
             - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
             - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
             - JHIPSTER_METRICS_LOGS_ENABLED=true
             - JHIPSTER_METRICS_LOGS_REPORTFREQUENCY=60
             <%_ } _%>
+            <%_ if (monitoring === 'prometheus') { _%>
+            - JHIPSTER_METRICS_PROMETHEUS_ENABLED=true
+            - JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics
+            <%_ } _%>
             # - GIT_URI=https://github.com/jhipster/jhipster-registry/
-            # - GIT_SEARCH_PATH=central-config
+            # - GIT_SEARCH_PATHS=central-config
         ports:
             - 8761:8761

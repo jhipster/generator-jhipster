@@ -39,23 +39,35 @@
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="io.undertow" level="WARN"/><% if (hibernateCache == 'ehcache') { %>
-    <logger name="net.sf.ehcache" level="WARN"/><% } %>
+    <logger name="org.ehcache" level="WARN"/><% } %>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/><% if (searchEngine == 'elasticsearch') { %>
     <logger name="org.elasticsearch" level="WARN"/><% } %>
     <logger name="org.hibernate.validator" level="WARN"/>
+    <%_ if (databaseType == 'sql') { _%>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <%_ } else if (databaseType == 'mongodb') { _%>
+    <logger name="org.mongodb.driver" level="WARN"/>
+    <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
+    <%_ if (messageBroker == 'kafka') { _%>
+    <logger name="kafka" level="WARN"/>
+    <logger name="org.I0Itec" level="WARN"/>
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'mssql') { _%>
+    <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
+    <%_ } _%>
     <logger name="springfox" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/><% if (databaseType == 'sql') { %>
-    <logger name="liquibase" level="WARN"/><% } %>
+    <logger name="liquibase" level="WARN"/>
+    <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
     <logger name="sun.rmi.transport" level="WARN"/>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">

@@ -48,7 +48,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @LastModifiedDate<% if (databaseType == 'sql') { %>
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'mongodb') { %>
-    @Field("last_modified_date  ")<% } %>
+    @Field("last_modified_date")<% } %>
     @JsonIgnore
     private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
 

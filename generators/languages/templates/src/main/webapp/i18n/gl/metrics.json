@@ -69,14 +69,12 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Estadísticas de Ehcache",
+        "cache": {
+            "title": "Estadísticas de cache",
             "cachename": "Nome cache",
-            "objects": "Obxetos",
             "hits": "Accesos",
             "misses": "Fallos",
-            "evictioncount": "Reconto desaloxo",
-            "mean": "tempo medio de resposta (ms)"
+            "evictions": "Reconto desaloxo"
         },
         "datasource": {
             "usage": "Uso",

@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache Statistiken",
+        "cache": {
+            "title": "Cache Statistiken",
             "cachename": "Cache Name",
-            "objects": "Objekte",
             "hits": "Treffer",
             "misses": "Keine Treffer",
-            "evictioncount": "Anzahl entfernter Objekte",
-            "mean": "Durchschnittliche Zugriffszeit (ms)"
+            "evictions": "Anzahl entfernter Objekte"
         },
         "datasource": {
-        	"usage": "Usage",
+            "usage": "Usage",
             "title": "Datenquelle (Zeit in Millisekunden)",
             "name": "Pool-Auslastung",
             "count": "Anzahl",

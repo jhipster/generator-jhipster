@@ -49,7 +49,7 @@ function prompting() {
             default: 'turtle'
         }];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;

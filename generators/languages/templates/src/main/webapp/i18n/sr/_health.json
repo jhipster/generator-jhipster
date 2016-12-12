@@ -1,0 +1,39 @@
+{
+    "health": {
+        "title": "Ispravnost sistema",
+        "refresh.button": "Osveži",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detalji",
+            "properties": "Osobine",
+            "name": "Ime",
+            "value": "Vrednost",
+            "error": "Greška"
+        },
+        "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Broker za poruke",
+            <%_ } _%>
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Mikroservis Refresh Scope",
+            "configServer": "Mikroservis Konfiguracioni Server",
+            "hystrix": "Hystrix",
+            <%_ } _%>
+            "diskSpace": "Veličina diska",
+            "mail": "E-mail"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elastična pretraga"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "SQL baza podataka"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Ime servisa",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "AKTIVAN",
+            "DOWN": "NEAKTIVAN"
+        }
+    }
+}

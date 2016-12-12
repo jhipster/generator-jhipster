@@ -15,6 +15,15 @@ const expectedFiles = {
     elk : [
         'jhipster-console.yml',
         'log-conf/logstash.conf'
+    ],
+    prometheus : [
+        'prometheus.yml',
+        'prometheus-conf/alert.rules',
+        'prometheus-conf/prometheus.yml',
+        'alertmanager-conf/config.yml'
+    ],
+    monolith : [
+        'docker-compose.yml'
     ]
 };
 
@@ -28,12 +37,13 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '01-gateway'
                     ],
                     clusteredDbApps: [],
-                    elk: false
+                    monitoring: 'no'
                 })
                 .on('end', done);
         });
@@ -50,12 +60,13 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
-                    elk: false
+                    monitoring: 'no'
                 })
                 .on('end', done);
         });
@@ -72,13 +83,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '01-gateway',
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
-                    elk: false
+                    monitoring: 'no'
                 })
                 .on('end', done);
         });
@@ -95,13 +107,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '01-gateway',
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -110,6 +123,33 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
         it('creates expected elk files', function () {
             assert.file(expectedFiles.elk);
+        });
+    });
+
+    describe('gateway and one microservice, with prometheus', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: './',
+                    'chosenApps': [
+                        '01-gateway',
+                        '02-mysql'
+                    ],
+                    clusteredDbApps: [],
+                    monitoring: 'prometheus'
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('creates expected prometheus files', function () {
+            assert.file(expectedFiles.prometheus);
         });
     });
 
@@ -122,6 +162,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                 })
                 .withOptions({force: true})
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '01-gateway',
@@ -129,7 +170,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '06-uaa'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -149,6 +190,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '01-gateway',
@@ -158,7 +200,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                         '07-mariadb'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -178,6 +220,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '01-gateway',
@@ -188,7 +231,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     clusteredDbApps: [
                         '04-mongo'
                     ],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -200,7 +243,7 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
     });
 
-    describe('gateway and 1 microservice, with cassandra cluster', function () {
+    describe('gateway and 1 microservice, with Cassandra cluster', function () {
         beforeEach(function (done) {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
@@ -208,13 +251,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
+                    composeApplicationType: 'microservice',
                     directoryPath: './',
                     'chosenApps': [
                         '01-gateway',
                         '05-cassandra'
                     ],
                     clusteredDbApps: [],
-                    elk: true
+                    monitoring: 'elk'
                 })
                 .on('end', done);
         });
@@ -223,6 +267,29 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
         it('creates expected elk files', function () {
             assert.file(expectedFiles.elk);
+        });
+    });
+
+    describe('monolith', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withPrompts({
+                    composeApplicationType: 'monolith',
+                    directoryPath: './',
+                    'chosenApps': [
+                        '08-monolith'
+                    ],
+                    clusteredDbApps: [],
+                    monitoring: 'elk'
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.monolith);
         });
     });
 });

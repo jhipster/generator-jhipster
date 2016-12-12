@@ -62,8 +62,8 @@ public class <%= entityClass %>Repository {
     }
 
     public List<<%= entityClass %>> findAll() {
-        List<<%= entityClass %>> <%= entityInstancePlural %> = new ArrayList<>();
-        BoundStatement stmt =  findAllStmt.bind();
+        List<<%= entityClass %>> <%= entityInstancePlural %>List = new ArrayList<>();
+        BoundStatement stmt = findAllStmt.bind();
         session.execute(stmt).all().stream().map(
             row -> {
                 <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
@@ -86,8 +86,8 @@ public class <%= entityClass %>Repository {
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get<%= fields[idx].fieldType %>("<%= fieldName %>"));<% } } %>
                 return <%= entityInstance %>;
             }
-        ).forEach(<%= entityInstancePlural %>::add);
-        return <%= entityInstancePlural %>;
+        ).forEach(<%= entityInstancePlural %>List::add);
+        return <%= entityInstancePlural %>List;
     }
 
     public <%= entityClass %> findOne(UUID id) {
@@ -107,7 +107,7 @@ public class <%= entityClass %>Repository {
     }
 
     public void deleteAll() {
-        BoundStatement stmt =  truncateStmt.bind();
+        BoundStatement stmt = truncateStmt.bind();
         session.execute(stmt);
     }
 }<% } %>

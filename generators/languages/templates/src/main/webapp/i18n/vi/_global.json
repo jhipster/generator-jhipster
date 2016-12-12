@@ -1,0 +1,126 @@
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Bạn đang sử dụng một trình duyệt <strong>quá cũ</strong>. Vui lòng <a href=\"http://browsehappy.com/?locale=en\">nâng cấp trình duyệt</a> của bạn để có trải nghiệm tốt nhất.",
+        "menu": {
+            "home": "Trang chủ",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Thực thể",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Tài khoản",
+                "settings": "Cài đặt",
+                "password": "Mật khẩu",
+                "sessions": "Phiên đăng nhập",
+                "login": "Đăng nhập",
+                "logout": "Đăng xuất",
+                "register": "Đăng ký"
+            },
+            "admin": {
+                "main": "Quản trị",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Điều hướng",
+                <%_ } _%>
+                "userManagement": "Quản lý tài khoản",
+                "tracker": "Theo dõi người dùng",
+                "metrics": "Số liệu",
+                "health": "Tình trạng",
+                "configuration": "Cấu hình",
+                "logs": "Ghi logs",
+                "audits": "Kiểm duyệt",
+                "apidocs": "API",
+                "database": "Cơ sở dữ liệu",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Ngôn ngữ"
+        },
+        "form": {
+            "username": "Tên tài khoản",
+            "username.placeholder": "Nhập tên tài khoản của bạn",
+            "newpassword": "Mật khẩu mới",
+            "newpassword.placeholder": "Nhập mật khẩu mới",
+            "confirmpassword": "Xác nhận mật khẩu mới",
+            "confirmpassword.placeholder": "Nhập lại mật khẩu mới",
+            "email": "E-mail",
+            "email.placeholder": "Nhập e-mail của bạn"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Nếu bạn muốn <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">đăng nhập</a>, bạn có thể thử với tài khoản mặc định:<br/>- Quản trị viên (tài khoản=\"admin\" và mật khẩu=\"admin\") <br/>- Người dùng (tài khoản=\"user\" và mật khẩu=\"user\").",
+                "register": "Bạn vẫn chưa có tài khoản? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Đăng ký tài khoản mới</a>"
+            },
+            "error": {
+                "dontmatch": "Xác nhận mật khẩu không khớp!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Bạn phải nhập mật khẩu.",
+                    "minlength": "Mật khẩu phải có ít nhất 4 ký tự.",
+                    "maxlength": "Mật khẩu không được vượt quá 50 ký tự.",
+                    "strength": "Độ mạnh của mật khẩu:"
+                },
+                "confirmpassword": {
+                    "required": "Bạn phải nhập lại mật khẩu để xác nhận.",
+                    "minlength": "Mật khẩu phải có ít nhất 4 ký tự.",
+                    "maxlength": "Mật khẩu không được vượt quá 50 ký tự."
+                },
+                "email": {
+                    "required": "Bạn phải nhập e-mail.",
+                    "invalid": "E-mail bạn nhập không hợp lệ.",
+                    "minlength": "E-mail phải có ít nhất 5 ký tự.",
+                    "maxlength": "E-mail không được vượt quá 50 ký tự."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev":"Phát triển"
+        }
+    },
+    "entity": {
+        "action": {
+            "addblob": "Thêm nội dung",
+            "addimage": "Thêm ảnh",
+            "back": "Quay lại",
+            "cancel": "Hủy",
+            "delete": "Xóa",
+            "edit": "Sửa",
+            "open": "Mở",
+            "save": "Lưu",
+            "view": "Xem"
+        },
+        "detail": {
+            "field": "Trường",
+            "value": "Giá trị"
+        },
+        "delete": {
+            "title": "Xác nhận hành động xóa"
+        },
+        "validation": {
+            "required": "Trường này bắt buộc phải nhập.",
+            "minlength": "Trường này phải có ít nhất {{ min }} ký tự.",
+            "maxlength": "Trường này không được vượt quá {{ max }} ký tự.",
+            "min": "Trường này phải lớn hơn {{ min }}.",
+            "max": "Trường này phải nhỏ hơn {{ max }}.",
+            "minbytes": "Dung lượng trường này phải lớn hơn {{ min }} bytes.",
+            "maxbytes": "Dung lượng trường này phải nhỏ hơn {{ max }} bytes.",
+            "pattern": "Trường này phải theo định dạng {{ pattern }}.",
+            "number": "Trường này phải là một số.",
+            "datetimelocal": "Trường này phải là định dạng thời gian."
+        }
+    },
+    "error": {
+        "server.not.reachable": "Không tìm thấy máy chủ",
+        "url.not.found": "Không tìm thấy",
+        "NotNull": "Trường {{ fieldName }} không được để trống!",
+        "Size": "Trường {{ fieldName }} không nằm trong giới hạn tối thiểu/tối đa!",
+        "userexists": "Tên đăng nhập đã được sử dụng!",
+        "emailexists": "E-mail đã được sử dụng!",
+        "idexists": "Thêm mới {{ entityName }} không được trùng với định danh đã tồn tại"
+    },
+    "footer": "Đây là chân trang của bạn"
+}

@@ -69,17 +69,15 @@
                 "p99": "p99"
             }
         },
-        "ehcache": {
-            "title": "Ehcache आकडेवारी",
+        "cache": {
+            "title": "Cache आकडेवारी",
             "cachename": "कॅशे नाव",
-            "objects": "ऑब्जेक्ट्स",
             "hits": "हिट्स",
             "misses": "Misses",
-            "evictioncount": "जमा मोजणी",
-            "mean": "मध्य प्राप्त वेळ (ms)"
+            "evictions": "जमा मोजणी"
         },
         "datasource": {
-        	"usage": "वापर",
+            "usage": "वापर",
             "title": "माहितीचा स्रोत आकडेवारी (मिलिसेकंद वेळ)",
             "name": "पूल वापर",
             "count": "गणना",

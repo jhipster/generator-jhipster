@@ -24,7 +24,7 @@
         "langKey": "語言",
         "createdBy": "創建者",
         "createdDate": "創建日期",
-        "lastModifiedBy": "修改者",
-        "lastModifiedDate": "修改日期"
+        "lastModifiedBy": "最近修改者",
+        "lastModifiedDate": "最近修改日期"
     }
 }

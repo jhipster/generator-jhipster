@@ -1,38 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
-         name="CM1"
-         updateCheck="false"
-         maxBytesLocalHeap="16M">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns='http://www.ehcache.org/v3'
+         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
-    <diskStore path="java.io.tmpdir"/>
+    <cache-template name="simple">
+        <expiry>
+            <ttl unit="seconds">3600</ttl>
+        </expiry>
+        <heap>100</heap>
+    </cache-template>
 
-    <defaultCache
-            eternal="false"
-            overflowToDisk="false"
-            />
+    <cache alias="<%=packageName%>.domain.User" uses-template="simple"/>
 
-    <cache name="<%=packageName%>.domain.User"
-           timeToLiveSeconds="3600">
-    </cache>
+    <cache alias="<%=packageName%>.domain.Authority" uses-template="simple"/>
 
-    <cache name="<%=packageName%>.domain.Authority"
-           timeToLiveSeconds="3600">
-    </cache>
+    <cache alias="<%=packageName%>.domain.User.authorities" uses-template="simple"/>
 
-    <cache name="<%=packageName%>.domain.User.authorities"
-           timeToLiveSeconds="3600">
-    </cache>
+    <cache alias="<%=packageName%>.domain.PersistentToken" uses-template="simple"/>
 
-    <cache name="<%=packageName%>.domain.PersistentToken"
-           timeToLiveSeconds="3600">
-    </cache>
+    <cache alias="<%=packageName%>.domain.User.persistentTokens" uses-template="simple"/>
 
-    <cache name="<%=packageName%>.domain.User.persistentTokens"
-           timeToLiveSeconds="3600">
-    </cache>
+    <cache alias="<%=packageName%>.domain.PersistentAuditEvent" uses-template="simple"/>
 
-    <cache name="<%=packageName%>.domain.PersistentAuditEvent"
-           timeToLiveSeconds="3600">
-    </cache>
-</ehcache>
+</config>

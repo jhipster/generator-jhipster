@@ -11,7 +11,7 @@ function prompting() {
         return;
     }
 
-    var cb = this.async();
+    var done = this.async();
 
     var prompts = [
         {
@@ -85,7 +85,7 @@ function prompting() {
             default: 3
         }];
 
-    this.prompt(prompts, function (props) {
+    this.prompt(prompts).then(function (props) {
         this.applicationName = _.kebabCase(props.applicationName);
         this.environmentName = _.kebabCase(props.environmentName);
         this.bucketName = _.kebabCase(props.bucketName);
@@ -96,6 +96,6 @@ function prompting() {
         this.dbPassword = props.dbPassword;
         this.dbInstanceClass = props.dbInstanceClass;
 
-        cb();
+        done();
     }.bind(this));
 }

@@ -1,9 +1,0 @@
-{
-    "activate": {
-        "title": "सक्रियन",
-        "messages": {
-            "success": "<strong>आपला वापरकर्ता सक्रिय झाला आहे.</strong> कृपया <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन करा</a>.",
-            "error": "<strong>आपल्या वापरकर्ता सक्रिय केले जाऊ शकत नाही.</strongकृपया साइन अप करण्यासाठी नोंदणी फॉर्म वापरा."
-        }
-    }
-}

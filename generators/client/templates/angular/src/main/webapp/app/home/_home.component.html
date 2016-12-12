@@ -1,0 +1,44 @@
+<div *ngIf="isAuthenticated">
+    <div class="row">
+        <div class="col-md-4">
+            <span class="hipster img-responsive img-rounded"></span>
+        </div>
+        <div class="col-md-8">
+            <h1 jhi-translate="home.title">Welcome, Java Hipster!</h1>
+            <p class="lead" jhi-translate="home.subtitle">This is your homepage</p>
+
+            <div [ngSwitch]="isAuthenticated()">
+                <div class="alert alert-success" *ngSwitchCase="true">
+                    <span *ngIf="account" jhi-translate="home.logged.message"
+                        translate-values="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
+                </div>
+
+                <div class="alert alert-warning" *ngSwitchCase="false">
+                    <span jhi-translate="global.messages.info.authenticated.prefix">If you want to </span>
+                    <a class="alert-link" (click)="login()" jhi-translate="global.messages.info.authenticated.link">sign in</a><span jhi-translate="global.messages.info.authenticated.suffix"></span>
+                </div>
+
+                <div class="alert alert-warning" *ngSwitchCase="false">
+                    <span jhi-translate="global.messages.info.register.noaccount">You don't have an account yet?</span>
+                    <a class="alert-link" uiSref="register" jhi-translate="global.messages.info.register.link">Register a new account</a>
+                </div>
+            </div>
+
+            <p jhi-translate="home.question">
+                If you have any question on JHipster:
+            </p>
+
+            <ul>
+                <li><a href="http://jhipster.github.io/" target="_blank" jhi-translate="home.link.homepage">JHipster homepage</a></li>
+                <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" jhi-translate="home.link.stackoverflow">JHipster on Stack Overflow</a></li>
+                <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" jhi-translate="home.link.bugtracker">JHipster bug tracker</a></li>
+                <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" jhi-translate="home.link.chat">JHipster public chat room</a></li>
+                <li><a href="https://twitter.com/java_hipster" target="_blank"  jhi-translate="home.link.follow">follow @java_hipster on Twitter</a></li>
+            </ul>
+
+            <p>
+             <span jhi-translate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" jhi-translate="home.github">Github</a>!
+            </p>
+        </div>
+    </div>
+</div>

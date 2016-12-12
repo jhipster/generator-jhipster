@@ -12,6 +12,6 @@ services:
             dockerfile: mongodb/MongoDB.Dockerfile
         command: mongod --replSet rs1 --noprealloc --smallfiles
     <%= baseName.toLowerCase() %>-mongodb-config:
-        image: mongo:<%= DOCKER_MONGODB %>
+        image: <%= DOCKER_MONGODB %>
         container_name: <%= baseName.toLowerCase() %>-mongodb-config
         command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
