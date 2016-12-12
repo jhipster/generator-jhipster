@@ -1,6 +1,6 @@
 <nav class="navbar navbar-light bg-faded">
     <div class="container">
-        <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+        <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()"></button>
         <div class="collapse navbar-toggleable-md" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
             <a class="navbar-brand logo" uiSref="home" (click)="collapseNavbar()">
                 <span class="logo-img"></span>
