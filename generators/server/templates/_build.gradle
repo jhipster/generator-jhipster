@@ -315,6 +315,10 @@ dependencies {
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     compile "com.h2database:h2"
     <%_ } _%>
+    <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+    compile "com.microsoft.sqlserver:mssql-jdbc:${mssql_jdbc_driver_version}"
+    compile "com.github.sabomichal:liquibase-mssql:${liquibase_mssql_version}"
+    <%_ } _%>
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"<% if (enableSocialSignIn) { %>
     compile "org.apache.httpcomponents:httpclient"
     compile "org.springframework.social:spring-social-security"
