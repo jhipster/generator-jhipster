@@ -64,7 +64,7 @@ public class GatewayConfiguration {
         }
 
         @Bean
-        public RateLimitingFilter rateLimitingFilter() {
+        public RateLimitingFilter rateLimitingFilter(RateLimitingRepository rateLimitingRepository) {
             return new RateLimitingFilter(rateLimitingRepository, jHipsterProperties);
         }
     }
