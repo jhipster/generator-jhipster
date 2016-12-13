@@ -66,7 +66,6 @@
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
-        <javax.inject.version>1</javax.inject.version>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <jna.version>4.2.2</jna.version>
         <%_ } _%>
@@ -401,11 +400,6 @@
             <version>${jcache.version}</version>
         </dependency>
         <%_ } _%>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>${javax.inject.version}</version>
-        </dependency>
         <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
         <dependency>
             <groupId>mysql</groupId>

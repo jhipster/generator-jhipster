@@ -15,16 +15,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.*;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;<% if (databaseType === 'sql') { %>
+import org.springframework.test.context.junit4.SpringRunner;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.inject.Inject;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,20 +34,20 @@ import static org.mockito.Mockito.*;
 @Transactional<% } %>
 public class SocialServiceIntTest {
 
-    @Inject
+    @Autowired
     private AuthorityRepository authorityRepository;
 
-    @Inject
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
-
     <%_ if (searchEngine === 'elasticsearch') { _%>
-    @Inject
+    @Autowired
     private UserSearchRepository userSearchRepository;
 
     <%_ } _%>
+
     @Mock
     private MailService mockMailService;
 
@@ -67,15 +66,8 @@ public class SocialServiceIntTest {
         doNothing().when(mockConnectionRepository).addConnection(anyObject());
         when(mockUsersConnectionRepository.createConnectionRepository(anyString())).thenReturn(mockConnectionRepository);
 
-        socialService = new SocialService();
-        ReflectionTestUtils.setField(socialService, "authorityRepository", authorityRepository);
-        ReflectionTestUtils.setField(socialService, "passwordEncoder", passwordEncoder);
-        ReflectionTestUtils.setField(socialService, "mailService", mockMailService);
-        ReflectionTestUtils.setField(socialService, "userRepository", userRepository);
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        ReflectionTestUtils.setField(socialService, "userSearchRepository", userSearchRepository);
-        <%_ } _%>
-        ReflectionTestUtils.setField(socialService, "usersConnectionRepository", mockUsersConnectionRepository);
+        socialService = new SocialService(mockUsersConnectionRepository, authorityRepository,
+                passwordEncoder, userRepository, mockMailService<% if (searchEngine === 'elasticsearch') { %>, userSearchRepository<% } %>);
     }
 
     @Test

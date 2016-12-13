@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import java.time.LocalDate;
 <%_ } _%>
 import java.time.ZonedDateTime;
-import javax.inject.Inject;
 import java.util.*;
 
 /**
@@ -35,31 +34,50 @@ import java.util.*;
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
     <%_ if (enableSocialSignIn) { _%>
 
-    @Inject
-    private SocialService socialService;
+    private final SocialService socialService;
     <%_ } _%>
-
-    @Inject
-    private PasswordEncoder passwordEncoder;
     <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
 
-    @Inject
-    public JdbcTokenStore jdbcTokenStore;
+    public final JdbcTokenStore jdbcTokenStore;
+    <%_ } _%>
+    <%_ if (searchEngine == 'elasticsearch') { _%>
+
+    private final UserSearchRepository userSearchRepository;
+    <%_ } _%>
+    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+        <%_ if (authenticationType == 'session') { _%>
+
+    private final PersistentTokenRepository persistentTokenRepository;
+        <%_ } _%>
+
+    private final AuthorityRepository authorityRepository;
     <%_ } _%>
 
-    @Inject
-    private UserRepository userRepository;<% if (searchEngine == 'elasticsearch') { %>
-
-    @Inject
-    private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
-
-    @Inject
-    private PersistentTokenRepository persistentTokenRepository;<% } %><% } %>
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    @Inject
-    private AuthorityRepository authorityRepository;<% } %>
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder<% if (enableSocialSignIn) { %>, SocialService socialService<% } %><% if (databaseType == 'sql' && authenticationType == 'oauth2') { %>, JdbcTokenStore jdbcTokenStore<% } %><% if (searchEngine == 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %>) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        <%_ if (enableSocialSignIn) { _%>
+        this.socialService = socialService;
+        <%_ } _%>
+        <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
+        this.jdbcTokenStore = jdbcTokenStore;
+        <%_ } _%>
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        this.userSearchRepository = userSearchRepository;
+        <%_ } _%>
+        <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+            <%_ if (authenticationType == 'session') { _%>
+        this.persistentTokenRepository = persistentTokenRepository;
+            <%_ } _%>
+        this.authorityRepository = authorityRepository;
+        <%_ } _%>
+    }
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);

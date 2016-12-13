@@ -29,15 +29,17 @@ import org.springframework.security.oauth2.provider.code.AuthorizationCodeServic
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;<% } %>
 import org.springframework.security.oauth2.provider.token.TokenStore;<% if (databaseType == 'sql') { %>
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %>
-
-import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+<% if (databaseType == 'sql') { %>
 import javax.sql.DataSource;<% } %>
 
 @Configuration
 public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
 
-    @Inject
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    public OAuth2ServerConfiguration(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Bean
     public JdbcTokenStore tokenStore() {
@@ -53,14 +55,19 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-        @Inject
-        private TokenStore tokenStore;
+        private final TokenStore tokenStore;
 
-        @Inject
-        private Http401UnauthorizedEntryPoint authenticationEntryPoint;
+        private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
 
-        @Inject
-        private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
+        private final AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
+
+        public ResourceServerConfiguration(TokenStore tokenStore, Http401UnauthorizedEntryPoint authenticationEntryPoint,
+                AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler) {
+
+            this.tokenStore = tokenStore;
+            this.authenticationEntryPoint = authenticationEntryPoint;
+            this.ajaxLogoutSuccessHandler = ajaxLogoutSuccessHandler;
+        }
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -102,14 +109,23 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
 
     @Configuration
     @EnableAuthorizationServer
-    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {<% if (databaseType == 'sql') { %>
+    protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-        @Inject
-        private DataSource dataSource;<% } %>
+        private final AuthenticationManager authenticationManager;
 
-        @Inject
-        private TokenStore tokenStore;
-<% if (databaseType == 'sql') { %>
+        private final TokenStore tokenStore;
+<%_ if (databaseType == 'sql') { _%>
+
+        private final DataSource dataSource;
+
+        public AuthorizationServerConfiguration(@Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager,
+                TokenStore tokenStore, DataSource dataSource) {
+
+            this.authenticationManager = authenticationManager;
+            this.tokenStore = tokenStore;
+            this.dataSource = dataSource;
+        }
+
         @Bean
         protected AuthorizationCodeServices authorizationCodeServices() {
             return new JdbcAuthorizationCodeServices(dataSource);
@@ -119,15 +135,24 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
         public ApprovalStore approvalStore() {
             return new JdbcApprovalStore(dataSource);
         }
-<% } else { %>
-        @Inject
-        private OAuth2ApprovalRepository oAuth2ApprovalRepository;
+<%_ } else { _%>
 
-        @Inject
-        private OAuth2CodeRepository oAuth2CodeRepository;
+        private final OAuth2ApprovalRepository oAuth2ApprovalRepository;
 
-        @Inject
-        private OAuth2ClientDetailsRepository oAuth2ClientDetailsRepository;
+        private final OAuth2CodeRepository oAuth2CodeRepository;
+
+        private final OAuth2ClientDetailsRepository oAuth2ClientDetailsRepository;
+
+        public AuthorizationServerConfiguration(@Qualifier("authenticationManagerBean") AuthenticationManager authenticationManager,
+                TokenStore tokenStore, OAuth2ApprovalRepository oAuth2ApprovalRepository, OAuth2CodeRepository oAuth2CodeRepository,
+                OAuth2ClientDetailsRepository oAuth2ClientDetailsRepository) {
+
+            this.authenticationManager = authenticationManager;
+            this.tokenStore = tokenStore;
+            this.oAuth2ApprovalRepository = oAuth2ApprovalRepository;
+            this.oAuth2CodeRepository = oAuth2CodeRepository;
+            this.oAuth2ClientDetailsRepository = oAuth2ClientDetailsRepository;
+        }
 
         @Bean
         public ApprovalStore approvalStore() {
@@ -138,10 +163,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
         protected AuthorizationCodeServices authorizationCodeServices() {
             return new MongoDBAuthorizationCodeServices(oAuth2CodeRepository);
         }
-<% } %>
-        @Inject
-        @Qualifier("authenticationManagerBean")
-        private AuthenticationManager authenticationManager;
+<%_ } _%>
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)

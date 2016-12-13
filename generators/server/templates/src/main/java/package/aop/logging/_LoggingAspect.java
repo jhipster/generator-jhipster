@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 
 /**
@@ -25,8 +24,11 @@ public class LoggingAspect {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Inject
-    private Environment env;
+    private final Environment env;
+
+    public LoggingAspect(Environment env) {
+        this.env = env;
+    }
 
     /**
      * Pointcut that matches all repositories, services and Web REST endpoints.

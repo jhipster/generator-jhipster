@@ -22,7 +22,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import java.security.KeyPair;
 
@@ -33,8 +32,14 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
     @EnableResourceServer
     public static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-        @Inject
-        TokenStore tokenStore;
+        private final TokenStore tokenStore;
+
+        private final JHipsterProperties jHipsterProperties;
+
+        public ResourceServerConfiguration(TokenStore tokenStore, JHipsterProperties jHipsterProperties) {
+            this.tokenStore = tokenStore;
+            this.jHipsterProperties = jHipsterProperties;
+        }
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -76,8 +81,11 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
         }
     }
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
+
+    public UaaConfiguration(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -117,7 +125,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
     /**
      * This bean generates an token enhancer, which manages the exchange between JWT acces tokens and Authentication
-     * in both direction.
+     * in both directions.
      *
      * @return an access token converter configured with the authorization server's public/private keys
      */
