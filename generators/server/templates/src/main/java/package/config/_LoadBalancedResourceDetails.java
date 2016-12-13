@@ -17,7 +17,7 @@ public class LoadBalancedResourceDetails extends ClientCredentialsResourceDetail
 
     private LoadBalancerClient loadBalancerClient;
 
-    private JHipsterProperties jHipsterProperties;
+    private ApplicationProperties applicationProperties;
 
     @Autowired(required = false)
     public void setLoadBalancerClient(LoadBalancerClient loadBalancerClient) {

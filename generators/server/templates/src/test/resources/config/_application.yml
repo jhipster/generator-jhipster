@@ -47,7 +47,7 @@ spring:
         username:
         password:
     jpa:
-        database-platform: <%=packageName%>.domain.util.FixedH2Dialect
+        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
         open-in-view: false
         show-sql: true
@@ -115,6 +115,14 @@ server:
 # ===================================================================
 
 jhipster:
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+
+# ===================================================================
+# Application specific properties
+# ===================================================================
+
+application:
     async:
         corePoolSize: 2
         maxPoolSize: 50
@@ -151,8 +159,6 @@ jhipster:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
     swagger:
         title: <%=baseName%> API
         description: <%=baseName%> API documentation

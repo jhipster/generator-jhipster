@@ -1,6 +1,6 @@
 package <%=packageName%>.security.social;
 
-import <%=packageName%>.config.JHipsterProperties;
+import <%=packageName%>.config.ApplicationProperties;
 <%_ if (authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.jwt.TokenProvider;
 <%_ } _%>
@@ -29,17 +29,17 @@ public class CustomSignInAdapter implements SignInAdapter {
 
     private final UserDetailsService userDetailsService;
 
-    private final JHipsterProperties jHipsterProperties;
+    private final ApplicationProperties applicationProperties;
     <%_ if (authenticationType == 'jwt') { _%>
 
     private final TokenProvider tokenProvider;
 
     <%_ } _%>
 
-    public CustomSignInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties<% if (authenticationType == 'jwt') { %>,
+    public CustomSignInAdapter(UserDetailsService userDetailsService, ApplicationProperties applicationProperties<% if (authenticationType == 'jwt') { %>,
             TokenProvider tokenProvider<% } %>) {
         this.userDetailsService = userDetailsService;
-        this.jHipsterProperties = jHipsterProperties;
+        this.applicationProperties = applicationProperties;
         <%_ if (authenticationType == 'jwt') { _%>
         this.tokenProvider = tokenProvider;
         <%_ } _%>
@@ -62,7 +62,7 @@ public class CustomSignInAdapter implements SignInAdapter {
         } catch (AuthenticationException exception) {
             log.error("Social authentication error");
         }
-        return jHipsterProperties.getSocial().getRedirectAfterSignIn();
+        return applicationProperties.getSocial().getRedirectAfterSignIn();
     }
 
     private Cookie getSocialAuthenticationCookie(String token) {
@@ -80,7 +80,7 @@ public class CustomSignInAdapter implements SignInAdapter {
             null,
             user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-        return jHipsterProperties.getSocial().getRedirectAfterSignIn();
+        return applicationProperties.getSocial().getRedirectAfterSignIn();
     }
     <%_ } _%>
 }

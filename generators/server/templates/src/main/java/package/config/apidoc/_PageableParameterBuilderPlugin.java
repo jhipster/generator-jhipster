@@ -1,14 +1,18 @@
 package <%=packageName%>.config.apidoc;
 
-import <%=packageName%>.config.Constants;
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Function;
+
+import io.github.jhipster.config.JHipsterConstants;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
 import springfox.documentation.schema.ModelReference;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.Parameter;
@@ -27,7 +31,7 @@ import static springfox.documentation.spi.schema.contexts.ModelContext.inputPara
 
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER)
-@Profile(Constants.SPRING_PROFILE_SWAGGER)
+@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class PageableParameterBuilderPlugin implements ParameterBuilderPlugin {
     private final TypeNameExtractor nameExtractor;
     private final TypeResolver resolver;

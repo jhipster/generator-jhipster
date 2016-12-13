@@ -1,13 +1,15 @@
 package <%=packageName%>.config.apidoc;
 
-import <%=packageName%>.config.Constants;
-import <%=packageName%>.config.JHipsterProperties;
+import <%=packageName%>.config.ApplicationProperties;
+
+import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
+
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -26,7 +28,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @Configuration
 @EnableSwagger2
 @Import(springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class)
-@Profile(Constants.SPRING_PROFILE_SWAGGER)
+@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class SwaggerConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
@@ -36,27 +38,27 @@ public class SwaggerConfiguration {
     /**
      * Swagger Springfox configuration.
      *
-     * @param jHipsterProperties the properties of the application
+     * @param applicationProperties the properties of the application
      * @return the Swagger Springfox configuration
      */
     @Bean
-    public Docket swaggerSpringfoxDocket(JHipsterProperties jHipsterProperties) {
+    public Docket swaggerSpringfoxDocket(ApplicationProperties applicationProperties) {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
         Contact contact = new Contact(
-            jHipsterProperties.getSwagger().getContactName(),
-            jHipsterProperties.getSwagger().getContactUrl(),
-            jHipsterProperties.getSwagger().getContactEmail());
+            applicationProperties.getSwagger().getContactName(),
+            applicationProperties.getSwagger().getContactUrl(),
+            applicationProperties.getSwagger().getContactEmail());
 
         ApiInfo apiInfo = new ApiInfo(
-            jHipsterProperties.getSwagger().getTitle(),
-            jHipsterProperties.getSwagger().getDescription(),
-            jHipsterProperties.getSwagger().getVersion(),
-            jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
+            applicationProperties.getSwagger().getTitle(),
+            applicationProperties.getSwagger().getDescription(),
+            applicationProperties.getSwagger().getVersion(),
+            applicationProperties.getSwagger().getTermsOfServiceUrl(),
             contact,
-            jHipsterProperties.getSwagger().getLicense(),
-            jHipsterProperties.getSwagger().getLicenseUrl());
+            applicationProperties.getSwagger().getLicense(),
+            applicationProperties.getSwagger().getLicenseUrl());
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)

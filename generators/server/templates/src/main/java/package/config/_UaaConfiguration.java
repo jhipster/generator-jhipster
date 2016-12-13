@@ -34,11 +34,11 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
         private final TokenStore tokenStore;
 
-        private final JHipsterProperties jHipsterProperties;
+        private final ApplicationProperties applicationProperties;
 
-        public ResourceServerConfiguration(TokenStore tokenStore, JHipsterProperties jHipsterProperties) {
+        public ResourceServerConfiguration(TokenStore tokenStore, ApplicationProperties applicationProperties) {
             this.tokenStore = tokenStore;
-            this.jHipsterProperties = jHipsterProperties;
+            this.applicationProperties = applicationProperties;
         }
 
         @Override
@@ -81,10 +81,10 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
         }
     }
 
-    private final JHipsterProperties jHipsterProperties;
+    private final ApplicationProperties applicationProperties;
 
-    public UaaConfiguration(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
+    public UaaConfiguration(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
     }
 
     @Override
@@ -98,8 +98,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .autoApprove(true)
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
             .and()
-            .withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
-            .secret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())
+            .withClient(applicationProperties.getSecurity().getClientAuthorization().getClientId())
+            .secret(applicationProperties.getSecurity().getClientAuthorization().getClientSecret())
             .scopes("web-app")
             .autoApprove(true)
             .authorizedGrantTypes("client_credentials");

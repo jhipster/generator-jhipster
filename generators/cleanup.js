@@ -45,4 +45,22 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java');
         generator.removeFile(javaDir + 'config/hazelcast/package-info.java');
     }
+    if (generator.isJhipsterVersionLessThan('4.0.0')) {
+        generator.removeFile(javaDir + 'aop/logging/LoggingAspect.java');
+        generator.removeFile(javaDir + 'async/ExceptionHandlingAsyncTaskExecutor.java');
+        generator.removeFile(javaDir + 'async/package-info.java');
+        generator.removeFile(javaDir + 'config/JHipsterProperties.java');
+        generator.removeFile(javaDir + 'config/jcache/SpringCacheRegionFactory.java');
+        generator.removeFile(javaDir + 'config/jcache/SpringCacheRegionFactory.java');
+        generator.removeFile(javaDir + 'config/liquibase/AsyncSpringLiquibase.java');
+        generator.removeFile(javaDir + 'config/liquibase/package-info.java');
+        generator.removeFile(javaDir + 'config/locale/AngularCookieLocaleResolver.java');
+        generator.removeFile(javaDir + 'config/locale/package-info.java');
+        generator.removeFile(javaDir + 'domain/util/FixedH2Dialect.java');
+        generator.removeFile(javaDir + 'domain/util/FixedPostgreSQL82Dialect');
+        generator.removeFile(javaDir + 'domain/util/JSR310DateConverters.java');
+        generator.removeFile(javaDir + 'security/AjaxAuthenticationFailureHandler.java');
+        generator.removeFile(javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
+        generator.removeFile(javaDir + 'security/AjaxLogoutSuccessHandler.java');
+    }
 }

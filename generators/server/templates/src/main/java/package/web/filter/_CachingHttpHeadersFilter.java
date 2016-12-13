@@ -1,6 +1,6 @@
 package <%=packageName%>.web.filter;
 
-import <%=packageName%>.config.JHipsterProperties;
+import <%=packageName%>.config.ApplicationProperties;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -17,15 +17,15 @@ public class CachingHttpHeadersFilter implements Filter {
 
     private long CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(1461L);
 
-    private JHipsterProperties jHipsterProperties;
+    private ApplicationProperties applicationProperties;
 
-    public CachingHttpHeadersFilter(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
+    public CachingHttpHeadersFilter(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
     }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays());
+        CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(applicationProperties.getHttp().getCache().getTimeToLiveInDays());
     }
 
     @Override

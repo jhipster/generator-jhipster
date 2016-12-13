@@ -115,10 +115,10 @@ server:
             http-only: true
 
 # ===================================================================
-# JHipster specific properties
+# Application specific properties
 # ===================================================================
 
-jhipster:
+application:
     async:
         corePoolSize: 2
         maxPoolSize: 50

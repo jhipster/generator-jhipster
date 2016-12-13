@@ -1,6 +1,6 @@
 package <%=packageName%>.config.social;
 
-import <%=packageName%>.config.JHipsterProperties;
+import <%=packageName%>.config.ApplicationProperties;
 import <%=packageName%>.repository.SocialUserConnectionRepository;
 import <%=packageName%>.repository.CustomSocialUsersConnectionRepository;
 <%_ if (authenticationType == 'jwt') { _%>
@@ -124,9 +124,9 @@ public class SocialConfiguration implements SocialConfigurer {
     }
 
     @Bean
-    public SignInAdapter signInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties<% if (authenticationType == 'jwt') { %>,
+    public SignInAdapter signInAdapter(UserDetailsService userDetailsService, ApplicationProperties applicationProperties<% if (authenticationType == 'jwt') { %>,
             TokenProvider tokenProvider<% } %>) {
-        return new CustomSignInAdapter(userDetailsService, jHipsterProperties<% if (authenticationType == 'jwt') { %>,
+        return new CustomSignInAdapter(userDetailsService, applicationProperties<% if (authenticationType == 'jwt') { %>,
             tokenProvider<% } %>);
     }
 

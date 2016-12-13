@@ -83,7 +83,7 @@ spring:
         <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
-        database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle10gDialect
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
@@ -110,7 +110,7 @@ spring:
             <%_ if (hibernateCache == 'ehcache') { _%>
             hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
             hibernate.javax.cache.uri: ${spring.cache.jcache.config}
-            hibernate.cache.region.factory_class: <%=packageName%>.config.jcache.SpringCacheRegionFactory
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.SpringCacheRegionFactory
     cache:
         jcache:
             config: ehcache.xml

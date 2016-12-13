@@ -1,6 +1,6 @@
 package <%=packageName%>.config;
 
-import <%=packageName%>.config.JHipsterProperties;
+import <%=packageName%>.config.ApplicationProperties;
 
 import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
 import <%=packageName%>.gateway.ratelimiting.RateLimitingRepository;
@@ -30,8 +30,8 @@ public class GatewayConfiguration {
     public static class AccessControlFilterConfiguration {
 
         @Bean
-        public AccessControlFilter accessControlFilter(RouteLocator routeLocator, JHipsterProperties jHipsterProperties){
-            return new AccessControlFilter(routeLocator, jHipsterProperties);
+        public AccessControlFilter accessControlFilter(RouteLocator routeLocator, ApplicationProperties applicationProperties){
+            return new AccessControlFilter(routeLocator, applicationProperties);
         }
     }
 
@@ -52,10 +52,10 @@ public class GatewayConfiguration {
     @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")
     public static class RateLimitingConfiguration {
 
-        private final JHipsterProperties jHipsterProperties;
+        private final ApplicationProperties applicationProperties;
 
-        public RateLimitingConfiguration(JHipsterProperties jHipsterProperties) {
-            this.jHipsterProperties = jHipsterProperties;
+        public RateLimitingConfiguration(ApplicationProperties applicationProperties) {
+            this.applicationProperties = applicationProperties;
         }
 
         @Bean
@@ -65,7 +65,7 @@ public class GatewayConfiguration {
 
         @Bean
         public RateLimitingFilter rateLimitingFilter(RateLimitingRepository rateLimitingRepository) {
-            return new RateLimitingFilter(rateLimitingRepository, jHipsterProperties);
+            return new RateLimitingFilter(rateLimitingRepository, applicationProperties);
         }
     }
 }

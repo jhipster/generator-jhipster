@@ -1,12 +1,16 @@
 package <%=packageName%>.config;
+<%_ if (hibernateCache == 'hazelcast') { _%>
 
-<% if (hibernateCache == 'hazelcast') { %>
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.EvictionPolicy;
-import com.hazelcast.config.MaxSizeConfig;<% } %>
+import com.hazelcast.config.MaxSizeConfig;
+
+import io.github.jhipster.config.JHipsterConstants;
+<%_ } _%>
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -90,7 +94,7 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {
+    public HazelcastInstance hazelcastInstance(ApplicationProperties applicationProperties) {
         log.debug("Configuring Hazelcast");
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
@@ -100,7 +104,7 @@ public class CacheConfiguration {
         log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
 
         // In development, everything goes through 127.0.0.1, with a different port
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             log.debug("Application is running with the \"dev\" profile, Hazelcast " +
                       "cluster will only work with localhost instances");
 
@@ -128,7 +132,7 @@ public class CacheConfiguration {
         config.getNetworkConfig().setPortAutoIncrement(true);
 
         // In development, remove multicast auto-configuration
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
 
             config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
@@ -137,9 +141,9 @@ public class CacheConfiguration {
         }
         <%_ } _%>
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
-        config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
+        config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(applicationProperties));
         <%_ if (clusteredHttpSession == 'hazelcast') { _%>
-        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(jHipsterProperties));
+        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(applicationProperties));
         <%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
@@ -174,9 +178,9 @@ public class CacheConfiguration {
         return mapConfig;
     }
 
-    private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
+    private MapConfig initializeDomainMapConfig(ApplicationProperties applicationProperties) {
         MapConfig mapConfig = new MapConfig();
-        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
+        mapConfig.setTimeToLiveSeconds(applicationProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
 
@@ -189,10 +193,10 @@ public class CacheConfiguration {
     }
     <%_ } _%><%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
-    private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {
+    private MapConfig initializeClusteredSession(ApplicationProperties applicationProperties) {
         MapConfig mapConfig = new MapConfig();
-        mapConfig.setBackupCount(jHipsterProperties.getCache().getHazelcast().getBackupCount());
-        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
+        mapConfig.setBackupCount(applicationProperties.getCache().getHazelcast().getBackupCount());
+        mapConfig.setTimeToLiveSeconds(applicationProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
 
