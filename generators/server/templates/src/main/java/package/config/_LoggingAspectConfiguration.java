@@ -1,6 +1,7 @@
 package <%=packageName%>.config;
 
-import io.github.jhipster.aop.logging.LoggingAspect;
+import <%=packageName%>.aop.logging.LoggingAspect;
+
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.springframework.context.annotation.*;

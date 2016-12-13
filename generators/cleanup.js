@@ -46,7 +46,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(javaDir + 'config/hazelcast/package-info.java');
     }
     if (generator.isJhipsterVersionLessThan('4.0.0')) {
-        generator.removeFile(javaDir + 'aop/logging/LoggingAspect.java');
         generator.removeFile(javaDir + 'async/ExceptionHandlingAsyncTaskExecutor.java');
         generator.removeFile(javaDir + 'async/package-info.java');
         generator.removeFile(javaDir + 'config/JHipsterProperties.java');
