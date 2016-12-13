@@ -36,7 +36,7 @@
     </table>
 
     <!-- TODO : use ng-bootstrap to handle pagination -->
-    <div class="text-center">
+    <div class="text-xs-center">
         <jhi-item-count [page]="page" [total]="totalItems" [items-per-page]="itemsPerPage"></jhi-item-count>
         <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage"(click)="loadPage(page)"></ngb-pagination>
     </div>
