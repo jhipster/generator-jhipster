@@ -44,7 +44,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 @Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
 @Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %>
-public class <%= entityClass %> implements Serializable {
+public class <%= entityClass %> extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 <% if (databaseType == 'sql') { %>
