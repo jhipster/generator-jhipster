@@ -343,6 +343,10 @@ ui bootstrap tweaks
     outline: none;
 }
 
+.card {
+    padding: 19px;
+    background-color: #f5f5f5;
+}
 
 <%_ if (enableSocialSignIn) { _%>
 /* ==========================================================================
