@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.github.jhipster.config.metrics.GraphiteRegistry,\
+  io.github.jhipster.config.metrics.PrometheusRegistry,\
+  io.github.jhipster.config.JHipsterProperties,\
+  io.github.jhipster.security.AjaxAuthenticationFailureHandler,\
+  io.github.jhipster.security.AjaxAuthenticationSuccessHandler,\
+  io.github.jhipster.security.AjaxLogoutSuccessHandler
