@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { Audit } from './audit.model';
 import { AuditsService } from './audits.service';
 import { ParseLinks } from '../../shared';
+import { ITEMS_PER_PAGE } from '../../shared/constants/pagination.constants';
 
 @Component({
   selector: '<%=jhiPrefix%>-audit',
@@ -12,6 +13,7 @@ import { ParseLinks } from '../../shared';
 export class AuditsComponent implements OnInit {
     audits: Audit[];
     fromDate: string;
+    itemsPerPage: any;
     links: any;
     page: number;
     orderProp: string;
@@ -21,6 +23,7 @@ export class AuditsComponent implements OnInit {
     datePipe : DatePipe;
 
     constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string){ 
+        this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
         this.reverse = false;
         this.orderProp = 'timestamp';
@@ -43,7 +46,7 @@ export class AuditsComponent implements OnInit {
     }
 
     onChangeDate () {
-        this.auditsService.query({page: this.page - 1, size: 20, fromDate: this.fromDate, toDate: this.toDate}).subscribe(res => {
+        this.auditsService.query({page: this.page - 1, size: this.itemsPerPage, fromDate: this.fromDate, toDate: this.toDate}).subscribe(res => {
             this.audits = res.json();
             this.links = this.parseLinks.parse(res.headers.get('link'));
             this.totalItems = + res.headers.get('X-Total-Count');

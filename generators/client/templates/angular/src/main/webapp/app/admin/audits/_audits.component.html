@@ -37,6 +37,7 @@
 
     <!-- TODO : use ng-bootstrap to handle pagination -->
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadPage(page)"></uib-pagination>
+        <jhi-item-count [page]="page" [total]="totalItems" [items-per-page]="itemsPerPage"></jhi-item-count>
+        <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage"(click)="loadPage(page)"></ngb-pagination>
     </div>
 </div>

@@ -346,6 +346,7 @@ ui bootstrap tweaks
 .card {
     padding: 19px;
     background-color: #f5f5f5;
+    margin-top: 20px;
 }
 
 <%_ if (enableSocialSignIn) { _%>
