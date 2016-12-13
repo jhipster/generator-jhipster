@@ -12,8 +12,11 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     cachesStats: any = {};
     servicesStats: any = {};
     updatingMetrics: boolean = true;
+    JCACHE_KEY:string ;
 
-    constructor(private modalService: NgbModal, private metricsService:<%=jhiPrefixCapitalized%>MetricsService) {}
+    constructor(private modalService: NgbModal, private metricsService:<%=jhiPrefixCapitalized%>MetricsService) {
+        this.JCACHE_KEY = 'jcache.statistics';
+    }
 
     ngOnInit() {
         this.refresh();
@@ -41,7 +44,7 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
 
                     // Keep the name of the domain
                     this.cachesStats[newKey] = {
-                        'name': newKey.substr(18),
+                        'name': this.JCACHE_KEY.length,
                         'value': value
                     };
                 }
