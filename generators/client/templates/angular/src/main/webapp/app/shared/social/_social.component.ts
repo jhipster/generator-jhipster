@@ -33,5 +33,4 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
         this.providerURL = this.socialService.getProviderURL(this.provider);
         this.csrf = this.csrfService.getCSRF();
     }
-
 }
