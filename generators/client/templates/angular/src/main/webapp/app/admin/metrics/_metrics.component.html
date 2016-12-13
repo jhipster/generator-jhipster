@@ -173,27 +173,39 @@
         </table>
     </div>
     <% if (hibernateCache == 'ehcache') { %>
-    <h3 jhi-translate="metrics.ehcache.title">Ehcache statistics</h3>
+    <h3 jhi-translate="metrics.cache.title">Cache statistics</h3>
     <div class="table-responsive" *ngIf="!updatingMetrics">
         <table class="table table-striped">
             <thead>
             <tr>
-                <th jhi-translate="metrics.ehcache.cachename">Cache name</th>
-                <th class="text-right" jhi-translate="metrics.ehcache.objects">Objects</th>
-                <th class="text-right" jhi-translate="metrics.ehcache.hits">Hits</th>
-                <th class="text-right" jhi-translate="metrics.ehcache.misses">Misses</th>
-                <th class="text-right" jhi-translate="metrics.ehcache.evictioncount">Eviction count</th>
-                <th class="text-right" jhi-translate="metrics.ehcache.mean">Mean get time (ms)</th>
+                <th jhi-translate="metrics.cache.cachename">Cache name</th>
+                <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
+                <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
+                <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
+                <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
+                <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
+                <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
+                <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
+                <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+                <th class="text-right" data-translate="metrics.cache.averageGetTime">Average get time (µs)</th>
+                <th class="text-right" data-translate="metrics.cache.averagePutTime">Average put time (µs)</th>
+                <th class="text-right" data-translate="metrics.cache.averageRemoveTime">Average remove time (µs)</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let entry of cachesStats | keys">
-                <td>{{entry.value.name}}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.objects'].value}}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.hits'].value}}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.misses'].value}}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.eviction-count'].value}}</td>
-                <td class="text-right">{{metrics.gauges[entry.key + '.mean-get-time'].value}}</td>
+                <td>{{entry.key}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-hits'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-misses'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-gets'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-puts'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-removals'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-evictions'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-hit-percentage'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-miss-percentage'].value }}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.average-get-time'].value  | number : '1.2-2' }}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.average-put-time'].value  | number : '1.2-2'}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.average-remove-time'].value | number : '1.2-2' }}</td>
             </tr>
             </tbody>
         </table>
