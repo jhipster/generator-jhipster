@@ -343,11 +343,7 @@ ui bootstrap tweaks
     outline: none;
 }
 
-.card {
-    padding: 19px;
-    background-color: #f5f5f5;
-    margin-top: 20px;
-}
+
 
 <%_ if (enableSocialSignIn) { _%>
 /* ==========================================================================
@@ -395,3 +391,20 @@ Social Buttons
 <%_ } _%>
 
 /* jhipster-needle-css-add-main JHipster will add new css style */
+
+/* ==============================================================
+Bootstrap 4 tweaks
+===============================================================*/
+
+/*FIXME this is to support grids in table class; */
+table td[class*=col-], table th[class*=col-] {
+    position: static;
+    display: table-cell;
+    float: none;
+}
+
+.card {
+    padding: 19px;
+    background-color: #f5f5f5;
+    margin-top: 20px;
+}
