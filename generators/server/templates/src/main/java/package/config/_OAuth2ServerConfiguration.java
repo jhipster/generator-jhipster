@@ -8,9 +8,9 @@ import <%=packageName%>.config.oauth2.MongoDBTokenStore;
 import <%=packageName%>.repository.*;
 <%_ } _%>
 import <%=packageName%>.security.Http401UnauthorizedEntryPoint;
+import <%=packageName%>.security.AuthoritiesConstants;
 
 import io.github.jhipster.security.AjaxLogoutSuccessHandler;
-import io.github.jhipster.security.AuthoritiesConstants;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile(Constants.SPRING_PROFILE_TEST)
+@Profile(JHipsterConstants.SPRING_PROFILE_TEST)
 public class CassandraTestConfiguration extends CassandraConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CassandraTestConfiguration.class);
