@@ -34,15 +34,15 @@
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
-                    <span class="label label-danger" (click)="setActive(user, true)" *ngIf="!user.activated"
+                    <span class="tag tag-danger" (click)="setActive(user, true)" *ngIf="!user.activated"
                           jhi-translate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
-                    <span class="label label-success" (click)="setActive(user, false)" *ngIf="user.activated"
+                    <span class="tag tag-success" (click)="setActive(user, false)" *ngIf="user.activated"
                           jhi-translate="userManagement.activated" style="cursor: pointer;">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
                     <div *ngFor="let authority of user.authorities">
-                        <span class="label label-info">{{ authority }}</span>
+                        <span class="tag tag-info">{{ authority }}</span>
                     </div>
                 </td><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
