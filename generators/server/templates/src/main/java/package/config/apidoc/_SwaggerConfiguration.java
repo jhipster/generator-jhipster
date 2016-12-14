@@ -37,7 +37,7 @@ public class SwaggerConfiguration {
     /**
      * Swagger Springfox configuration.
      *
-     * @param JHipsterProperties the properties of the application
+     * @param jHipsterProperties the properties of the application
      * @return the Swagger Springfox configuration
      */
     @Bean
