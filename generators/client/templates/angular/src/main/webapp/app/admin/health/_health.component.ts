@@ -21,11 +21,11 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         return this.healthService.getBaseName(name);
     }
 
-    getLabelClass(statusState) {
+    getTagClass(statusState) {
         if (statusState === 'UP') {
-            return 'label-success';
+            return 'tag-success';
         } else {
-            return 'label-danger';
+            return 'tag-danger';
         }
     }
 
