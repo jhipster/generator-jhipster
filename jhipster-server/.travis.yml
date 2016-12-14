@@ -10,7 +10,7 @@ cache:
 before_install:
   - java -version
 script:
-  - ./mvnw clean test
+  - ./mvnw clean test -Dgpg.skip
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
