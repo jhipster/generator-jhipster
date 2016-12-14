@@ -20,12 +20,9 @@ public class GraphiteRegistry {
 
     private final Logger log = LoggerFactory.getLogger(GraphiteRegistry.class);
 
-    private final MetricRegistry metricRegistry;
-
     private final JHipsterProperties jHipsterProperties;
 
     public GraphiteRegistry(MetricRegistry metricRegistry, JHipsterProperties jHipsterProperties) {
-        this.metricRegistry = metricRegistry;
         this.jHipsterProperties = jHipsterProperties;
         if (this.
             jHipsterProperties.getMetrics().getGraphite().isEnabled()) {
