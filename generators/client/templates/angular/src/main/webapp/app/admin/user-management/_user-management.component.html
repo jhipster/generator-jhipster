@@ -80,7 +80,7 @@
     <%_ if (databaseType !== 'cassandra') { _%>
     <div class="text-xs-center">
         <jhi-item-count [page]="page" [total]="queryCount" [items-per-page]="itemsPerPage"></jhi-item-count>
-        <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" [pageSize]="itesmPerPage" (click)="loadPage(page)"></ngb-pagination>
+        <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" (click)="loadPage(page)"></ngb-pagination>
     </div>
     <%_ } _%>
 </div>
