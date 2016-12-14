@@ -20,12 +20,12 @@
                    [(ngModel)]="user.login" required minlength=1 maxlength=50 pattern="^[_'.@A-Za-z0-9-]*$">
 
             <div *ngIf="loginInput.dirty && loginInput.invalid">
-                <p class="help-block"
+                <p class="form-text text-muted"
                    *ngIf="loginInput.errors.required" jhi-translate="entity.validation.required">
                     This field is required.
                 </p>
 
-                <p class="help-block"
+                <p class="form-text text-muted"
                    *ngIf="loginInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="50">
                     This field cannot be longer than 50 characters.
@@ -38,7 +38,7 @@
                    [(ngModel)]="user.firstName" maxlength="50">
 
             <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
-                <p class="help-block"
+                <p class="form-text text-muted"
                    *ngIf="firstNameInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="50">
                     This field cannot be longer than 50 characters.
@@ -51,7 +51,7 @@
                    [(ngModel)]="user.lastName" maxlength="50">
 
             <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
-                <p class="help-block"
+                <p class="form-text text-muted"
                    *ngIf="lastNameInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="50">
                     This field cannot be longer than 50 characters.
@@ -64,17 +64,17 @@
                    [(ngModel)]="user.email" required maxlength="100">
 
             <div *ngIf="emailInput.dirty && emailInput.invalid">
-                <p class="help-block"
+                <p class="form-text text-muted"
                    *ngIf="emailInput.errors.required" jhi-translate="entity.validation.required">
                     This field is required.
                 </p>
 
-                <p class="help-block"
+                <p class="form-text text-muted"
                    *ngIf="emailInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="100">
                     This field cannot be longer than 100 characters.
                 </p>
-				<p class="help-block"
+		<p class="form-text text-muted"
                    *ngIf="emailInput.errors.email" jhi-translate="global.messages.validate.email.invalid">
                     Your e-mail is invalid.
                  </p>
@@ -103,7 +103,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span
             jhi-translate="entity.action.cancel">Cancel</span>
         </button>
