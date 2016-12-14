@@ -143,6 +143,14 @@ if (project.hasProperty('shell')) {
     }
 }
 
+if (project.hasProperty('graphite')) {
+    apply from: 'gradle/graphite.gradle'
+}
+
+if (project.hasProperty('prometheus')) {
+    apply from: 'gradle/prometheus.gradle'
+}
+
 group = '<%= packageName %>'
 version = '0.0.1-SNAPSHOT'
 
@@ -173,7 +181,6 @@ repositories {
 dependencies {
     compile "io.github.jhipster:jhipster:0.0.4"
     compile "io.dropwizard.metrics:metrics-core"
-    compile "io.dropwizard.metrics:metrics-graphite:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-healthchecks:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
@@ -181,9 +188,6 @@ dependencies {
     compile ("io.dropwizard.metrics:metrics-servlets:${dropwizard_metrics_version}") {
         exclude(module: 'metrics-healthchecks')
     }
-    compile "io.prometheus:simpleclient:${prometheus_simpleclient_version}"
-    compile "io.prometheus:simpleclient_servlet:${prometheus_simpleclient_version}"
-    compile "io.prometheus:simpleclient_dropwizard:${prometheus_simpleclient_version}"
     compile("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
         exclude(module: 'ch.qos.logback')
     }

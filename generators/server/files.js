@@ -114,6 +114,8 @@ function writeFiles() {
                 this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                 this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                 this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                this.template('gradle/_graphite.gradle', 'gradle/graphite.gradle', this, {});
+                this.template('gradle/_prometheus.gradle', 'gradle/prometheus.gradle', this, {});
                 if (this.gatlingTests) {
                     this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
                 }
