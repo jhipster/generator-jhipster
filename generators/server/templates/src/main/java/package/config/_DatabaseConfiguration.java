@@ -13,7 +13,9 @@ import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 <%_ } _%>
 <%_ if (databaseType == 'mongodb') { _%>
 
+import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
+
 import com.mongodb.Mongo;
 import com.github.mongobee.Mongobee;
 <%_ } _%>

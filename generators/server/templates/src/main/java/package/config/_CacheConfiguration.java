@@ -1,6 +1,7 @@
 package <%=packageName%>.config;
 <%_ if (hibernateCache == 'hazelcast') { _%>
 
+import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 
 import com.hazelcast.config.Config;
@@ -9,8 +10,6 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.MaxSizeConfig;
-
-import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
 import org.slf4j.Logger;

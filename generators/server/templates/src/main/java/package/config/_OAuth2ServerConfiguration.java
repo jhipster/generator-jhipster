@@ -1,13 +1,17 @@
 package <%=packageName%>.config;
-<% if (databaseType == 'mongodb') { %>
+
+<%_ if (databaseType == 'mongodb') { _%>
 import <%=packageName%>.config.oauth2.MongoDBApprovalStore;
 import <%=packageName%>.config.oauth2.MongoDBAuthorizationCodeServices;
 import <%=packageName%>.config.oauth2.MongoDBClientDetailsService;
 import <%=packageName%>.config.oauth2.MongoDBTokenStore;
-import <%=packageName%>.repository.*;<% } %>
-import <%=packageName%>.security.AjaxLogoutSuccessHandler;
-import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.repository.*;
+<%_ } _%>
 import <%=packageName%>.security.Http401UnauthorizedEntryPoint;
+
+import io.github.jhipster.security.AjaxLogoutSuccessHandler;
+import io.github.jhipster.security.AuthoritiesConstants;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

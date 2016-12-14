@@ -1,6 +1,9 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.config.cassandra.CassandraConfiguration;
+
+import io.github.jhipster.config.JHipsterConstants;
+
 import org.apache.cassandra.config.DatabaseDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
