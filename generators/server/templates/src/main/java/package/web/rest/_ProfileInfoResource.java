@@ -1,7 +1,9 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.config.DefaultProfileUtil;
-import <%=packageName%>.config.ApplicationProperties;
+
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +20,11 @@ public class ProfileInfoResource {
 
     private final Environment env;
 
-    private final ApplicationProperties applicationProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-    public ProfileInfoResource(Environment env, ApplicationProperties applicationProperties) {
+    public ProfileInfoResource(Environment env, JHipsterProperties jHipsterProperties) {
         this.env = env;
-        this.applicationProperties = applicationProperties;
+        this.jHipsterProperties = jHipsterProperties;
     }
 
     @GetMapping("/profile-info")
@@ -32,7 +34,7 @@ public class ProfileInfoResource {
     }
 
     private String getRibbonEnv(String[] activeProfiles) {
-        String[] displayOnActiveProfiles = applicationProperties.getRibbon().getDisplayOnActiveProfiles();
+        String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();
 
         if (displayOnActiveProfiles == null) {
             return null;

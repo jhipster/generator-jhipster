@@ -1,9 +1,10 @@
 package <%=packageName%>.security.social;
-
-import <%=packageName%>.config.ApplicationProperties;
 <%_ if (authenticationType == 'jwt') { _%>
+
 import <%=packageName%>.security.jwt.TokenProvider;
 <%_ } _%>
+
+import io.github.jhipster.config.JHipsterProperties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,17 +30,17 @@ public class CustomSignInAdapter implements SignInAdapter {
 
     private final UserDetailsService userDetailsService;
 
-    private final ApplicationProperties applicationProperties;
+    private final JHipsterProperties jHipsterProperties;
     <%_ if (authenticationType == 'jwt') { _%>
 
     private final TokenProvider tokenProvider;
 
     <%_ } _%>
 
-    public CustomSignInAdapter(UserDetailsService userDetailsService, ApplicationProperties applicationProperties<% if (authenticationType == 'jwt') { %>,
+    public CustomSignInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties<% if (authenticationType == 'jwt') { %>,
             TokenProvider tokenProvider<% } %>) {
         this.userDetailsService = userDetailsService;
-        this.applicationProperties = applicationProperties;
+        this.jHipsterProperties = jHipsterProperties;
         <%_ if (authenticationType == 'jwt') { _%>
         this.tokenProvider = tokenProvider;
         <%_ } _%>
@@ -62,7 +63,7 @@ public class CustomSignInAdapter implements SignInAdapter {
         } catch (AuthenticationException exception) {
             log.error("Social authentication error");
         }
-        return applicationProperties.getSocial().getRedirectAfterSignIn();
+        return jHipsterProperties.getSocial().getRedirectAfterSignIn();
     }
 
     private Cookie getSocialAuthenticationCookie(String token) {
@@ -80,7 +81,7 @@ public class CustomSignInAdapter implements SignInAdapter {
             null,
             user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-        return applicationProperties.getSocial().getRedirectAfterSignIn();
+        return jHipsterProperties.getSocial().getRedirectAfterSignIn();
     }
     <%_ } _%>
 }

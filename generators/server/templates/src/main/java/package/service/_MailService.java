@@ -1,7 +1,8 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.config.ApplicationProperties;
 import <%=packageName%>.domain.User;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ public class MailService {
 
     private static final String BASE_URL = "baseUrl";
 
-    private final ApplicationProperties applicationProperties;
+    private final JHipsterProperties jHipsterProperties;
 
     private final JavaMailSenderImpl javaMailSender;
 
@@ -43,10 +44,10 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
-    public MailService(ApplicationProperties applicationProperties, JavaMailSenderImpl javaMailSender,
+    public MailService(JHipsterProperties jHipsterProperties, JavaMailSenderImpl javaMailSender,
             MessageSource messageSource, SpringTemplateEngine templateEngine) {
 
-        this.applicationProperties = applicationProperties;
+        this.jHipsterProperties = jHipsterProperties;
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
@@ -62,7 +63,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             message.setTo(to);
-            message.setFrom(applicationProperties.getMail().getFrom());
+            message.setFrom(jHipsterProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
@@ -78,7 +79,7 @@ public class MailService {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, applicationProperties.getMail().getBaseUrl());
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("activationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -90,7 +91,7 @@ public class MailService {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, applicationProperties.getMail().getBaseUrl());
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("creationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -102,7 +103,7 @@ public class MailService {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
-        context.setVariable(BASE_URL, applicationProperties.getMail().getBaseUrl());
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("passwordResetEmail", context);
         String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);

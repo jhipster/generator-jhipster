@@ -115,14 +115,6 @@ server:
 # ===================================================================
 
 jhipster:
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-
-# ===================================================================
-# Application specific properties
-# ===================================================================
-
-application:
     async:
         corePoolSize: 2
         maxPoolSize: 50
@@ -169,3 +161,13 @@ application:
         contactEmail:
         license:
         licenseUrl:
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

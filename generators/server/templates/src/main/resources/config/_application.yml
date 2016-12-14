@@ -115,10 +115,10 @@ server:
             http-only: true
 
 # ===================================================================
-# Application specific properties
+# JHipster specific properties
 # ===================================================================
 
-application:
+jhipster:
     async:
         corePoolSize: 2
         maxPoolSize: 50
@@ -153,3 +153,11 @@ application:
     ribbon:
         # comma separated list of profiles to show a ribbon on the GUI
         displayOnActiveProfiles: dev
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

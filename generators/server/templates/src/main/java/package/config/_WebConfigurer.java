@@ -1,6 +1,7 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.JHipsterProperties;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
@@ -38,17 +39,17 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     private final Environment env;
 
-    private final ApplicationProperties applicationProperties;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 
     private final HazelcastInstance hazelcastInstance;<% } %>
 
     private MetricRegistry metricRegistry;
 
-    public WebConfigurer(Environment env, ApplicationProperties applicationProperties<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>,
+    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>,
             MetricRegistry metricRegistry) {
 
         this.env = env;
-        this.applicationProperties = applicationProperties;
+        this.jHipsterProperties = jHipsterProperties;
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         this.hazelcastInstance = hazelcastInstance;
         <%_ } _%>
@@ -171,7 +172,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.debug("Registering Caching HTTP Headers Filter");
         FilterRegistration.Dynamic cachingHttpHeadersFilter =
             servletContext.addFilter("cachingHttpHeadersFilter",
-                new CachingHttpHeadersFilter(applicationProperties));
+                new CachingHttpHeadersFilter(jHipsterProperties));
 
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
@@ -210,7 +211,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     public CorsFilter corsFilter() {
         log.debug("Registering CORS filter");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = applicationProperties.getCors();
+        CorsConfiguration config = jHipsterProperties.getCors();
         source.registerCorsConfiguration("/api/**", config);
         source.registerCorsConfiguration("/v2/api-docs", config);
         source.registerCorsConfiguration("/oauth/**", config);

@@ -4,7 +4,9 @@ import com.datastax.driver.core.exceptions.DriverException;<%}%>
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.config.ApplicationProperties;
+
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import org.springframework.dao.DataAccessException;<%}%>
@@ -68,11 +70,11 @@ public class CustomPersistentRememberMeServices extends
 
     private final UserRepository userRepository;
 
-    public CustomPersistentRememberMeServices(ApplicationProperties applicationProperties,
+    public CustomPersistentRememberMeServices(JHipsterProperties jHipsterProperties,
             org.springframework.security.core.userdetails.UserDetailsService userDetailsService,
             PersistentTokenRepository persistentTokenRepository, UserRepository userRepository) {
 
-        super(applicationProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
+        super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
         this.random = new SecureRandom();
         this.persistentTokenRepository = persistentTokenRepository;
         this.userRepository = userRepository;

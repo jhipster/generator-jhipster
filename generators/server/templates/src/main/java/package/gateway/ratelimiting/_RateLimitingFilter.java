@@ -1,7 +1,8 @@
 package <%=packageName%>.gateway.ratelimiting;
 
-import <%=packageName%>.config.ApplicationProperties;
 import <%=packageName%>.security.SecurityUtils;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,9 +29,9 @@ public class RateLimitingFilter extends ZuulFilter {
 
     private final RateLimitingRepository rateLimitingRepository;
 
-    public RateLimitingFilter(RateLimitingRepository rateLimitingRepository, ApplicationProperties applicationProperties) {
+    public RateLimitingFilter(RateLimitingRepository rateLimitingRepository, JHipsterProperties jHipsterProperties) {
         this.rateLimitingRepository = rateLimitingRepository;
-        this.rateLimit = applicationProperties.getGateway().getRateLimiting().getLimit();
+        this.rateLimit = jHipsterProperties.getGateway().getRateLimiting().getLimit();
     }
 
     @Override

@@ -1,6 +1,9 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.security.AuthoritiesConstants;
+
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -34,11 +37,11 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
 
         private final TokenStore tokenStore;
 
-        private final ApplicationProperties applicationProperties;
+        private final JHipsterProperties jHipsterProperties;
 
-        public ResourceServerConfiguration(TokenStore tokenStore, ApplicationProperties applicationProperties) {
+        public ResourceServerConfiguration(TokenStore tokenStore, JHipsterProperties jHipsterProperties) {
             this.tokenStore = tokenStore;
-            this.applicationProperties = applicationProperties;
+            this.jHipsterProperties = jHipsterProperties;
         }
 
         @Override
@@ -81,10 +84,10 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
         }
     }
 
-    private final ApplicationProperties applicationProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-    public UaaConfiguration(ApplicationProperties applicationProperties) {
-        this.applicationProperties = applicationProperties;
+    public UaaConfiguration(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
     }
 
     @Override
@@ -98,8 +101,8 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter {
             .autoApprove(true)
             .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
             .and()
-            .withClient(applicationProperties.getSecurity().getClientAuthorization().getClientId())
-            .secret(applicationProperties.getSecurity().getClientAuthorization().getClientSecret())
+            .withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
+            .secret(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret())
             .scopes("web-app")
             .autoApprove(true)
             .authorizedGrantTypes("client_credentials");

@@ -64,6 +64,7 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/SwaggerConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/apidoc/PageableParameterBuilderPlugin.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/package-info.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/ApplicationProperties.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/AsyncConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/CacheConfiguration.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/Constants.java',

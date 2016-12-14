@@ -175,25 +175,6 @@ server:
 # ===================================================================
 
 jhipster:
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        graphite:
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: <%= baseName %>
-        prometheus:
-            enabled: false
-            endpoint: /prometheusMetrics
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: false
-            reportFrequency: 60 # in seconds
-
-# ===================================================================
-# Application specific properties
-# ===================================================================
-
-application:
     <%_ if (applicationType == 'gateway') { _%>
     gateway:
         rate-limiting: # Warning! Read the documentation in the GatewayConfiguration class.
@@ -252,6 +233,19 @@ application:
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
         baseUrl: http://my-server-url-to-change # Modify according to your server's URL
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: <%= baseName %>
+        prometheus:
+            enabled: false
+            endpoint: /prometheusMetrics
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: false
+            reportFrequency: 60 # in seconds
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
@@ -263,3 +257,11 @@ application:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

@@ -1,7 +1,6 @@
 package <%=packageName%>.config.apidoc;
 
-import <%=packageName%>.config.ApplicationProperties;
-
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
@@ -38,27 +37,27 @@ public class SwaggerConfiguration {
     /**
      * Swagger Springfox configuration.
      *
-     * @param applicationProperties the properties of the application
+     * @param JHipsterProperties the properties of the application
      * @return the Swagger Springfox configuration
      */
     @Bean
-    public Docket swaggerSpringfoxDocket(ApplicationProperties applicationProperties) {
+    public Docket swaggerSpringfoxDocket(JHipsterProperties jHipsterProperties) {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
         Contact contact = new Contact(
-            applicationProperties.getSwagger().getContactName(),
-            applicationProperties.getSwagger().getContactUrl(),
-            applicationProperties.getSwagger().getContactEmail());
+            jHipsterProperties.getSwagger().getContactName(),
+            jHipsterProperties.getSwagger().getContactUrl(),
+            jHipsterProperties.getSwagger().getContactEmail());
 
         ApiInfo apiInfo = new ApiInfo(
-            applicationProperties.getSwagger().getTitle(),
-            applicationProperties.getSwagger().getDescription(),
-            applicationProperties.getSwagger().getVersion(),
-            applicationProperties.getSwagger().getTermsOfServiceUrl(),
+            jHipsterProperties.getSwagger().getTitle(),
+            jHipsterProperties.getSwagger().getDescription(),
+            jHipsterProperties.getSwagger().getVersion(),
+            jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
             contact,
-            applicationProperties.getSwagger().getLicense(),
-            applicationProperties.getSwagger().getLicenseUrl());
+            jHipsterProperties.getSwagger().getLicense(),
+            jHipsterProperties.getSwagger().getLicenseUrl());
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)

@@ -6,10 +6,10 @@ import <%=packageName%>.security.*;
 <%_ if (authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.jwt.*;
 <%_ } _%>
-<%_ if (authenticationType == 'session') { _%>
-import <%=packageName%>.config.ApplicationProperties;
-<%_ } _%>
 
+<%_ if (authenticationType == 'session') { _%>
+import io.github.jhipster.config.JHipsterProperties;
+<%_ } _%>
 import io.github.jhipster.security.AjaxAuthenticationFailureHandler;
 import io.github.jhipster.security.AjaxAuthenticationSuccessHandler;
 import io.github.jhipster.security.AjaxLogoutSuccessHandler;
@@ -48,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     <%_ if (authenticationType == 'session') { _%>
 
-    private final ApplicationProperties applicationProperties;
+    private final JHipsterProperties jHipsterProperties;
 
     private final AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
 
@@ -72,7 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
 
     public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType == 'session') { %>,
-            ApplicationProperties applicationProperties, AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler,
+            JHipsterProperties jHipsterProperties, AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler,
             AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler, AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler,
             RememberMeServices rememberMeServices<% } if (authenticationType == 'jwt') { %>,
             TokenProvider tokenProvider<% } if (authenticationType == 'session' || authenticationType == 'jwt') { %>, Http401UnauthorizedEntryPoint authenticationEntryPoint<% } %><% if (clusteredHttpSession == 'hazelcast') { %>, SessionRegistry sessionRegistry<% } %>) {
@@ -80,7 +80,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
         <%_ if (authenticationType == 'session') { _%>
-        this.applicationProperties = applicationProperties;
+        this.jHipsterProperties = jHipsterProperties;
         this.ajaxAuthenticationSuccessHandler = ajaxAuthenticationSuccessHandler;
         this.ajaxAuthenticationFailureHandler = ajaxAuthenticationFailureHandler;
         this.ajaxLogoutSuccessHandler = ajaxLogoutSuccessHandler;
@@ -147,7 +147,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .rememberMe()
             .rememberMeServices(rememberMeServices)
             .rememberMeParameter("remember-me")
-            .key(applicationProperties.getSecurity().getRememberMe().getKey())
+            .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
         .and()
             .formLogin()
             .loginProcessingUrl("/api/authentication")

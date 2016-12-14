@@ -1,6 +1,8 @@
 package <%=packageName%>.config;
 <%_ if (hibernateCache == 'hazelcast') { _%>
 
+import io.github.jhipster.config.JHipsterProperties;
+
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
@@ -94,7 +96,7 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public HazelcastInstance hazelcastInstance(ApplicationProperties applicationProperties) {
+    public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {
         log.debug("Configuring Hazelcast");
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
@@ -141,9 +143,9 @@ public class CacheConfiguration {
         }
         <%_ } _%>
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
-        config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(applicationProperties));
+        config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ if (clusteredHttpSession == 'hazelcast') { _%>
-        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(applicationProperties));
+        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(jHipsterProperties));
         <%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
@@ -178,9 +180,9 @@ public class CacheConfiguration {
         return mapConfig;
     }
 
-    private MapConfig initializeDomainMapConfig(ApplicationProperties applicationProperties) {
+    private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
-        mapConfig.setTimeToLiveSeconds(applicationProperties.getCache().getHazelcast().getTimeToLiveSeconds());
+        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
 
@@ -193,10 +195,10 @@ public class CacheConfiguration {
     }
     <%_ } _%><%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
-    private MapConfig initializeClusteredSession(ApplicationProperties applicationProperties) {
+    private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
-        mapConfig.setBackupCount(applicationProperties.getCache().getHazelcast().getBackupCount());
-        mapConfig.setTimeToLiveSeconds(applicationProperties.getCache().getHazelcast().getTimeToLiveSeconds());
+        mapConfig.setBackupCount(jHipsterProperties.getCache().getHazelcast().getBackupCount());
+        mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }
 

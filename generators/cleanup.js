@@ -48,7 +48,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
     if (generator.isJhipsterVersionLessThan('4.0.0')) {
         generator.removeFile(javaDir + 'async/ExceptionHandlingAsyncTaskExecutor.java');
         generator.removeFile(javaDir + 'async/package-info.java');
-        generator.removeFile(javaDir + 'config/JHipsterProperties.java');
+        generator.removeFile(javaDir + 'config/jHipsterProperties.java');
+        generator.removeFile(javaDir + 'config/LoadBalancedResourceDetails.java');
         generator.removeFile(javaDir + 'config/jcache/SpringCacheRegionFactory.java');
         generator.removeFile(javaDir + 'config/jcache/SpringCacheRegionFactory.java');
         generator.removeFile(javaDir + 'config/liquibase/AsyncSpringLiquibase.java');

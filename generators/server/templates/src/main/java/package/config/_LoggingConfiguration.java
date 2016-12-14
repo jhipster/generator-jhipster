@@ -1,5 +1,7 @@
 package <%=packageName%>.config;
 
+import io.github.jhipster.config.JHipsterProperties;
+
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
@@ -35,11 +37,11 @@ public class LoggingConfiguration {
     private String instanceId;
     <%_ } _%>
 
-    private final ApplicationProperties applicationProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-    public LoggingConfiguration(ApplicationProperties applicationProperties) {
-        this.applicationProperties = applicationProperties;
-        if (applicationProperties.getLogging().getLogstash().isEnabled()) {
+    public LoggingConfiguration(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+        if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
             addLogstashAppender(context);
 
             // Add context listener
@@ -63,8 +65,8 @@ public class LoggingConfiguration {
         <%_ } _%>
 
         // Set the Logstash appender config from JHipster properties
-        logstashAppender.setSyslogHost(applicationProperties.getLogging().getLogstash().getHost());
-        logstashAppender.setPort(applicationProperties.getLogging().getLogstash().getPort());
+        logstashAppender.setSyslogHost(jHipsterProperties.getLogging().getLogstash().getHost());
+        logstashAppender.setPort(jHipsterProperties.getLogging().getLogstash().getPort());
         logstashAppender.setCustomFields(customFields);
 
         // Limit the maximum length of the forwarded stacktrace so that it won't exceed the 8KB UDP limit of logstash
@@ -79,7 +81,7 @@ public class LoggingConfiguration {
         AsyncAppender asyncLogstashAppender = new AsyncAppender();
         asyncLogstashAppender.setContext(context);
         asyncLogstashAppender.setName("ASYNC_LOGSTASH");
-        asyncLogstashAppender.setQueueSize(applicationProperties.getLogging().getLogstash().getQueueSize());
+        asyncLogstashAppender.setQueueSize(jHipsterProperties.getLogging().getLogstash().getQueueSize());
         asyncLogstashAppender.addAppender(logstashAppender);
         asyncLogstashAppender.start();
 

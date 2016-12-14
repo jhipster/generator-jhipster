@@ -190,25 +190,6 @@ server:
 # ===================================================================
 
 jhipster:
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
-            enabled: false
-            host: localhost
-            port: 2003
-            prefix: <%= baseName %>
-        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
-            enabled: false
-            endpoint: /prometheusMetrics
-        logs: # Reports Dropwizard metrics in the logs
-            enabled: false
-            reportFrequency: 60 # in seconds
-
-# ===================================================================
-# Application specific properties
-# ===================================================================
-
-application:
     <%_ if (applicationType == 'gateway') { _%>
     gateway:
         rate-limiting: # Read the documentation in the GatewayConfiguration class before enabling.
@@ -264,6 +245,19 @@ application:
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
         baseUrl: http://127.0.0.1:8080
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: <%= baseName %>
+        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
+            enabled: false
+            endpoint: /prometheusMetrics
+        logs: # Reports Dropwizard metrics in the logs
+            enabled: false
+            reportFrequency: 60 # in seconds
     logging:
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
@@ -275,3 +269,12 @@ application:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
+
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

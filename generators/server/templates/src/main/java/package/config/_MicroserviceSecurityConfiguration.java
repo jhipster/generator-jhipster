@@ -76,6 +76,8 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 <%_ if(authenticationType == 'uaa') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
@@ -101,14 +103,14 @@ import java.util.Map;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-    private final ApplicationProperties applicationProperties;
+    private final JHipsterProperties jHipsterProperties;
 
     private final DiscoveryClient discoveryClient;
 
-    public MicroserviceSecurityConfiguration(ApplicationProperties applicationProperties,
+    public MicroserviceSecurityConfiguration(JHipsterProperties jHipsterProperties,
             DiscoveryClient discoveryClient) {
 
-        this.applicationProperties = applicationProperties;
+        this.jHipsterProperties = jHipsterProperties;
         this.discoveryClient = discoveryClient;
     }
 
