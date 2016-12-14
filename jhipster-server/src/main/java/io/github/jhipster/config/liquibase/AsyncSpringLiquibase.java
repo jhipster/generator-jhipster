@@ -1,3 +1,19 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.jhipster.config.liquibase;
 
 import org.slf4j.Logger;
@@ -12,19 +28,13 @@ import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 
 /**
- * Specific liquibase.integration.spring.SpringLiquibase that will update the database asynchronously.
- * <p>
- *     By default, this asynchronous version only works when using the "dev" profile.<p>
- *     The standard liquibase.integration.spring.SpringLiquibase starts Liquibase in the current thread:
- *     <ul>
- *         <li>This is needed if you want to do some database requests at startup</li>
- *         <li>This ensure that the database is ready when the application starts</li>
- *     </ul>
- *     But as this is a rather slow process, we use this asynchronous version to speed up our start-up time:
- *     <ul>
- *         <li>On a recent MacBook Pro, start-up time is down from 14 seconds to 8 seconds</li>
- *         <li>In production, this can help your application run on platforms like Heroku, where it must start/restart very quickly</li>
- *     </ul>
+ * Specific liquibase.integration.spring.SpringLiquibase that will update the database asynchronously. <p> By default,
+ * this asynchronous version only works when using the "dev" profile.<p> The standard
+ * liquibase.integration.spring.SpringLiquibase starts Liquibase in the current thread: <ul> <li>This is needed if you
+ * want to do some database requests at startup</li> <li>This ensure that the database is ready when the application
+ * starts</li> </ul> But as this is a rather slow process, we use this asynchronous version to speed up our start-up
+ * time: <ul> <li>On a recent MacBook Pro, start-up time is down from 14 seconds to 8 seconds</li> <li>In production,
+ * this can help your application run on platforms like Heroku, where it must start/restart very quickly</li> </ul>
  */
 public class AsyncSpringLiquibase extends SpringLiquibase {
 
@@ -43,13 +53,15 @@ public class AsyncSpringLiquibase extends SpringLiquibase {
     @Override
     public void afterPropertiesSet() throws LiquibaseException {
         if (!env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE)) {
-            if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants.SPRING_PROFILE_HEROKU)) {
+            if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT, JHipsterConstants
+                .SPRING_PROFILE_HEROKU)) {
                 taskExecutor.execute(() -> {
                     try {
                         logger.warn("Starting Liquibase asynchronously, your database might not be ready at startup!");
                         initDb();
                     } catch (LiquibaseException e) {
-                        logger.error("Liquibase could not start correctly, your database is NOT ready: {}", e.getMessage(), e);
+                        logger.error("Liquibase could not start correctly, your database is NOT ready: {}", e
+                            .getMessage(), e);
                     }
                 });
             } else {

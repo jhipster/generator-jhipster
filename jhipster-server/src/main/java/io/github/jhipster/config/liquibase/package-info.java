@@ -1,4 +1,4 @@
 /**
  * Liquibase specific code.
  */
-package io.gihtub.jhipster.store.config.liquibase;
+package io.github.jhipster.config.liquibase;

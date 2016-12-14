@@ -1,15 +1,30 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.jhipster.config.locale;
+
+import java.util.Locale;
+import java.util.TimeZone;
+import javax.servlet.http.*;
 
 import org.springframework.context.i18n.LocaleContext;
 import org.springframework.context.i18n.TimeZoneAwareLocaleContext;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.util.WebUtils;
-
-import java.util.Locale;
-import java.util.TimeZone;
-
-import javax.servlet.http.*;
 
 /**
  * Angular cookie saved the locale with a double quote (%22en%22).
@@ -77,7 +92,7 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
                 }
             }
             request.setAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME,
-                locale != null ? locale: determineDefaultLocale(request));
+                locale != null ? locale : determineDefaultLocale(request));
 
             request.setAttribute(TIME_ZONE_REQUEST_ATTRIBUTE_NAME,
                 timeZone != null ? timeZone : determineDefaultTimeZone(request));
