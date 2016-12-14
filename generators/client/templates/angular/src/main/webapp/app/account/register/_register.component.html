@@ -1,6 +1,6 @@
 <div>
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 offset-md-2">
             <h1 jhi-translate="register.title">Registration</h1>
 
             <div class="alert alert-success" *ngIf="success" jhi-translate="register.messages.success">
@@ -24,9 +24,9 @@
             </div>
         </div>
         <%_ if (enableSocialSignIn) { _%>
-        <div class="col-md-4 col-md-offset-2">
+        <div class="col-md-4 offset-md-2">
         <%_ } else { _%>
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-8 offset-md-2">
         <%_ } _%>
             <form name="form" role="form" (ngSubmit)="register()" #registerForm="ngForm">
                 <div class="form-group">
@@ -34,18 +34,18 @@
                     <input type="text" class="form-control" [(ngModel)]="registerAccount.login" id="login" name="login" #login="ngModel" placeholder="{{'global.form.username.placeholder' | translate}}"
                             required minlength="1" maxlength="50" pattern="^[_'.@A-Za-z0-9-]*$">
                     <div *ngIf="login.dirty && login.invalid">
-                        <p class="help-block" *ngIf="login.errors.required" jhi-translate="register.messages.validate.login.required">
+                        <p class="form-text text-muted" *ngIf="login.errors.required" jhi-translate="register.messages.validate.login.required">
                             Your username is required.
                         </p>
-                        <p class="help-block" *ngIf="login.errors.minlength"
+                        <p class="form-text text-muted" *ngIf="login.errors.minlength"
                                 jhi-translate="register.messages.validate.login.minlength">
                             Your username is required to be at least 1 character.
                         </p>
-                        <p class="help-block" *ngIf="login.errors.maxlength"
+                        <p class="form-text text-muted" *ngIf="login.errors.maxlength"
                                 jhi-translate="register.messages.validate.login.maxlength">
                             Your username cannot be longer than 50 characters.
                         </p>
-                        <p class="help-block" *ngIf="login.errors.pattern"
+                        <p class="form-text text-muted" *ngIf="login.errors.pattern"
                                jhi-translate="register.messages.validate.login.pattern">
                             Your username can only contain lower-case letters and digits.
                         </p>
@@ -56,19 +56,19 @@
                     <input type="email" class="form-control" id="email" name="email" #email="ngModel" placeholder="{{'global.form.email.placeholder' | translate}}"
                             [(ngModel)]="registerAccount.email" minlength=5 maxlength=100 required>
                     <div *ngIf="email.dirty && email.invalid">
-                        <p class="help-block" *ngIf="email.errors.required"
+                        <p class="form-text text-muted" *ngIf="email.errors.required"
                                 jhi-translate="global.messages.validate.email.required">
                             Your e-mail is required.
                         </p>
-                        <p class="help-block" *ngIf="email.errors.invalid"
+                        <p class="form-text text-muted" *ngIf="email.errors.invalid"
                                jhi-translate="global.messages.validate.email.invalid">
                             Your e-mail is invalid.
                         </p>
-                        <p class="help-block" *ngIf="email.errors.minlength"
+                        <p class="form-text text-muted" *ngIf="email.errors.minlength"
                                jhi-translate="global.messages.validate.email.minlength">
                             Your e-mail is required to be at least 5 characters.
                         </p>
-                        <p class="help-block" *ngIf="email.errors.maxlength"
+                        <p class="form-text text-muted" *ngIf="email.errors.maxlength"
                                jhi-translate="global.messages.validate.email.maxlength">
                             Your e-mail cannot be longer than 100 characters.
                         </p>
@@ -79,15 +79,15 @@
                     <input type="password" class="form-control" id="password" name="password" #password="ngModel" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
                             [(ngModel)]="registerAccount.password" minlength=4 maxlength=50 required>
                     <div *ngIf="password.dirty && password.invalid">
-                        <p class="help-block" *ngIf="password.errors.required"
+                        <p class="form-text text-muted" *ngIf="password.errors.required"
                                 jhi-translate="global.messages.validate.newpassword.required">
                             Your password is required.
                         </p>
-                        <p class="help-block" *ngIf="password.errors.minlength"
+                        <p class="form-text text-muted" *ngIf="password.errors.minlength"
                                 jhi-translate="global.messages.validate.newpassword.minlength">
                             Your password is required to be at least 4 characters.
                         </p>
-                        <p class="help-block" *ngIf="password.errors.maxlength"
+                        <p class="form-text text-muted" *ngIf="password.errors.maxlength"
                                 jhi-translate="global.messages.validate.newpassword.maxlength">
                             Your password cannot be longer than 50 characters.
                         </p>
@@ -99,15 +99,15 @@
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" #confirmPasswordInput="ngModel" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
                             [(ngModel)]="confirmPassword" minlength=4 maxlength=50 required>
                     <div *ngIf="confirmPasswordInput.dirty && confirmPasswordInput.invalid">
-                        <p class="help-block" *ngIf="confirmPasswordInput.errors.required"
+                        <p class="form-text text-muted" *ngIf="confirmPasswordInput.errors.required"
                                jhi-translate="global.messages.validate.confirmpassword.required">
                             Your confirmation password is required.
                         </p>
-                        <p class="help-block" *ngIf="confirmPasswordInput.errors.minlength"
+                        <p class="form-text text-muted" *ngIf="confirmPasswordInput.errors.minlength"
                               jhi-translate="global.messages.validate.confirmpassword.minlength">
                             Your confirmation password is required to be at least 4 characters.
                         </p>
-                        <p class="help-block" *ngIf="confirmPasswordInput.errors.maxlength"
+                        <p class="form-text text-muted" *ngIf="confirmPasswordInput.errors.maxlength"
                                jhi-translate="global.messages.validate.confirmpassword.maxlength">
                             Your confirmation password cannot be longer than 50 characters.
                         </p>
