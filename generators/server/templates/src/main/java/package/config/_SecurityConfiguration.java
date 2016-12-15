@@ -10,9 +10,7 @@ import <%=packageName%>.security.jwt.*;
 <%_ if (authenticationType == 'session') { _%>
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
-import io.github.jhipster.security.AjaxAuthenticationFailureHandler;
-import io.github.jhipster.security.AjaxAuthenticationSuccessHandler;
-import io.github.jhipster.security.AjaxLogoutSuccessHandler;
+import io.github.jhipster.security.*;
 
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
@@ -50,21 +48,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JHipsterProperties jHipsterProperties;
 
-    private final AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
-
-    private final AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
-
-    private final AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
-
     private final RememberMeServices rememberMeServices;
     <%_ } _%>
     <%_ if (authenticationType == 'jwt') { _%>
 
     private final TokenProvider tokenProvider;
-    <%_ } _%>
-    <%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
-
-    private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
     <%_ } _%>
     <%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
@@ -72,25 +60,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
 
     public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType == 'session') { %>,
-            JHipsterProperties jHipsterProperties, AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler,
-            AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler, AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler,
-            RememberMeServices rememberMeServices<% } if (authenticationType == 'jwt') { %>,
-            TokenProvider tokenProvider<% } if (authenticationType == 'session' || authenticationType == 'jwt') { %>, Http401UnauthorizedEntryPoint authenticationEntryPoint<% } %><% if (clusteredHttpSession == 'hazelcast') { %>, SessionRegistry sessionRegistry<% } %>) {
+        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<% } if (authenticationType == 'jwt') { %>,
+            TokenProvider tokenProvider<% } %><% if (clusteredHttpSession == 'hazelcast') { %>, SessionRegistry sessionRegistry<% } %>) {
 
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
         <%_ if (authenticationType == 'session') { _%>
         this.jHipsterProperties = jHipsterProperties;
-        this.ajaxAuthenticationSuccessHandler = ajaxAuthenticationSuccessHandler;
-        this.ajaxAuthenticationFailureHandler = ajaxAuthenticationFailureHandler;
-        this.ajaxLogoutSuccessHandler = ajaxLogoutSuccessHandler;
         this.rememberMeServices = rememberMeServices;
         <%_ } _%>
         <%_ if (authenticationType == 'jwt') { _%>
         this.tokenProvider = tokenProvider;
-        <%_ } _%>
-        <%_ if (authenticationType == 'session' || authenticationType == 'jwt') { _%>
-        this.authenticationEntryPoint = authenticationEntryPoint;
         <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast') { _%>
         this.sessionRegistry = sessionRegistry;
@@ -106,6 +86,30 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         } catch (Exception e) {
             throw new BeanInitializationException("Security configuration failed", e);
         }
+    }
+    <%_ if (authenticationType == 'session') { _%>
+
+    @Bean
+    public AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
+        return new AjaxAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
+        return new AjaxAuthenticationFailureHandler();
+    }
+    <%_ } _%>
+    <%_ if (authenticationType == 'session' || authenticationType == 'oauth2') { _%>
+
+    @Bean
+    public AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler() {
+        return new AjaxLogoutSuccessHandler();
+    }
+    <%_ } _%>
+
+    @Bean
+    public Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint() {
+        return new Http401UnauthorizedEntryPoint();
     }
 
     @Bean
@@ -142,7 +146,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .ignoringAntMatchers("/websocket/**")<% } %>
         .and()<% } %>
             .exceptionHandling()
-            .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
+            .authenticationEntryPoint(http401UnauthorizedEntryPoint())<% if (authenticationType == 'session') { %>
         .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
@@ -151,15 +155,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .formLogin()
             .loginProcessingUrl("/api/authentication")
-            .successHandler(ajaxAuthenticationSuccessHandler)
-            .failureHandler(ajaxAuthenticationFailureHandler)
+            .successHandler(ajaxAuthenticationSuccessHandler())
+            .failureHandler(ajaxAuthenticationFailureHandler())
             .usernameParameter("j_username")
             .passwordParameter("j_password")
             .permitAll()
         .and()
             .logout()
             .logoutUrl("/api/logout")
-            .logoutSuccessHandler(ajaxLogoutSuccessHandler)<% if (clusteredHttpSession == 'hazelcast') { %>
+            .logoutSuccessHandler(ajaxLogoutSuccessHandler())<% if (clusteredHttpSession == 'hazelcast') { %>
             .deleteCookies("hazelcast.sessionId")<% } %>
             .permitAll()<% } %>
         .and()<% if (authenticationType == 'jwt') { %>

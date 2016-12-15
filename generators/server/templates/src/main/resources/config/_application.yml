@@ -133,6 +133,7 @@ jhipster:
     mail:
         from: <%= baseName %>@localhost
     swagger:
+        defaultIncludePattern: /api/.*
         title: <%=baseName%> API
         description: <%=baseName%> API documentation
         version: 0.0.1

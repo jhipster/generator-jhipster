@@ -1,15 +1,15 @@
 package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
-import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.config.JHipsterProperties;<% if (!skipClient) { %>
+import io.github.jhipster.web.filter.CachingHttpHeadersFilter;<% } %>
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %><% if (!skipClient) { %>
-import <%=packageName%>.web.filter.CachingHttpHeadersFilter;<% } %>
+import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

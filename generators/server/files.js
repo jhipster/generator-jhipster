@@ -219,7 +219,6 @@ function writeFiles() {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
             }
 
-            this.template(SERVER_MAIN_SRC_DIR + 'package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
@@ -319,9 +318,6 @@ function writeFiles() {
         writeServerJavaConfigFiles: function () {
             this.template(SERVER_MAIN_SRC_DIR + 'package/aop/logging/_LoggingAspect.java', javaDir + 'aop/logging/LoggingAspect.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DefaultProfileUtil.java', javaDir + 'config/DefaultProfileUtil.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_package-info.java', javaDir + 'config/apidoc/package-info.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_SwaggerConfiguration.java', javaDir + 'config/apidoc/SwaggerConfiguration.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/apidoc/_PageableParameterBuilderPlugin.java', javaDir + 'config/apidoc/PageableParameterBuilderPlugin.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_package-info.java', javaDir + 'config/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
@@ -407,9 +403,6 @@ function writeFiles() {
         },
 
         writeServerJavaWebFiles: function () {
-
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_package-info.java', javaDir + 'web/rest/vm/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/vm/_LoggerVM.java', javaDir + 'web/rest/vm/LoggerVM.java', this, {});
 

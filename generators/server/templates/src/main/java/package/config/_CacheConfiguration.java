@@ -32,7 +32,9 @@ import org.springframework.cache.support.NoOpCacheManager;<% } %><% if (clustere
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;<% } %>
 
+<%_ if (hibernateCache == 'hazelcast') { _%>
 import javax.annotation.PreDestroy;
+<%_ } _%>
 <%_ if (hibernateCache == 'ehcache') { _%>
 import javax.cache.CacheManager;
 <%_ } _%>
@@ -78,14 +80,13 @@ public class CacheConfiguration {
             <%_ } _%>
         <%_ } _%>
     }
+    <%_ if (hibernateCache == 'hazelcast') { _%>
 
     @PreDestroy
     public void destroy() {
-        log.info("Closing Cache Manager");<% if (hibernateCache == 'ehcache') { %>
-        cacheManager.close();<% } %><% if (hibernateCache == 'hazelcast') { %>
-        Hazelcast.shutdownAll();<% } %>
+        log.info("Closing Cache Manager");
+        Hazelcast.shutdownAll();
     }
-    <%_ if (hibernateCache == 'hazelcast') { _%>
 
     @Bean
     public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {

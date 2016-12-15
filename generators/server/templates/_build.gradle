@@ -179,7 +179,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.github.jhipster:jhipster:0.0.4"
+    compile "io.github.jhipster:jhipster:0.0.5"
     compile "io.dropwizard.metrics:metrics-core"
     compile "io.dropwizard.metrics:metrics-healthchecks:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"

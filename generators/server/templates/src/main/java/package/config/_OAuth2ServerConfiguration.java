@@ -7,9 +7,9 @@ import <%=packageName%>.config.oauth2.MongoDBClientDetailsService;
 import <%=packageName%>.config.oauth2.MongoDBTokenStore;
 import <%=packageName%>.repository.*;
 <%_ } _%>
-import <%=packageName%>.security.Http401UnauthorizedEntryPoint;
 import <%=packageName%>.security.AuthoritiesConstants;
 
+import io.github.jhipster.security.Http401UnauthorizedEntryPoint;
 import io.github.jhipster.security.AjaxLogoutSuccessHandler;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -61,15 +61,15 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
 
         private final TokenStore tokenStore;
 
-        private final Http401UnauthorizedEntryPoint authenticationEntryPoint;
+        private final Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint;
 
         private final AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
 
-        public ResourceServerConfiguration(TokenStore tokenStore, Http401UnauthorizedEntryPoint authenticationEntryPoint,
-                AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler) {
+        public ResourceServerConfiguration(TokenStore tokenStore, Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint,
+            AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler) {
 
             this.tokenStore = tokenStore;
-            this.authenticationEntryPoint = authenticationEntryPoint;
+            this.http401UnauthorizedEntryPoint = http401UnauthorizedEntryPoint;
             this.ajaxLogoutSuccessHandler = ajaxLogoutSuccessHandler;
         }
 
@@ -77,7 +77,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
         public void configure(HttpSecurity http) throws Exception {
             http
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
+                .authenticationEntryPoint(http401UnauthorizedEntryPoint)
             .and()
                 .logout()
                 .logoutUrl("/api/logout")
