@@ -18,14 +18,15 @@ export class NotificationInterceptor extends HttpInterceptable {
             let headers = [];
             let i;
             for(i = 0; i < arr.length; i++){
-                if(arr[i][0].endsWith('app-alert') || arr[i][0].endsWith('app-params')) {
+                if(arr[i][0].indexOf('app-alert', arr[i][0].length - 'app-alert'.length) !== -1 ||
+                    arr[i][0].indexOf('app-params', arr[i][0].length - 'app-params'.length) !== -1) {
                     headers.push(arr[i][0]);
                 }
             }
             headers.sort();
             let alertKey = headers.length >= 1 ? error.headers.get(headers[0]) : null;
             if(typeof alertKey === 'string'){
-                //AlertService.success(alertKey, { param : response.headers(headers[1])});
+                //AlertService.sucnpm linkcess(alertKey, { param : response.headers(headers[1])});
             }
             return Observable.throw(error);
         });
