@@ -4,7 +4,8 @@ import <%=packageName%>.config.Constants;
 <% if (databaseType == 'cassandra') { %>
 import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;<% } %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType == 'sql') { %>
+import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
@@ -115,7 +116,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         name = "jhi_user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'sql') { %>
+    @BatchSize(size = 20)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
     private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType == 'session' && databaseType == 'sql') { %>
 
