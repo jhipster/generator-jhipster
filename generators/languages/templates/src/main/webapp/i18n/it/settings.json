@@ -3,12 +3,11 @@
         "title": "Impostazioni per l'utente [<b>{{username}}</b>]",
         "form": {
             "firstname": "Nome",
-            "firstname.placeholder": "Tuo nome",
+            "firstname.placeholder": "Il tuo nome",
             "lastname": "Cognome",
-            "lastname.placeholder": "Tuo cognome",
+            "lastname.placeholder": "Il tuo cognome",
             "button": "Salva",
             "language": "Lingua"
-
         },
         "messages": {
             "error": {
@@ -18,14 +17,14 @@
             "success": "<strong>Impostazioni salvate!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "È richiesto l'inserimento di un nome.",
+                    "required": "Il nome è obbligatorio.",
                     "minlength": "Il nome deve contenere almeno un carattere",
-                    "maxlength": "Il nome può avere una lunghezza massima di 50 caratteri"
+                    "maxlength": "Il nome può avere più di 50 caratteri"
                 },
                 "lastname": {
-                    "required": "È richiesto l'inserimento di un cognome.",
+                    "required": "Il cognome è obbligatorio.",
                     "minlength": "Il cognome deve contenere almeno un carattere",
-                    "maxlength": "Il cognome può avere una lunghezza massima di 50 caratteri"
+                    "maxlength": "Il cognome può avere più di 50 caratteri"
                 }
             }
         }

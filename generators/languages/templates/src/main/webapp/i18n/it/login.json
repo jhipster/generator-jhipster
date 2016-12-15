@@ -3,9 +3,9 @@
         "title": "Accedi",
         "form": {
             "password": "Password",
-            "password.placeholder": "la password",
-            "rememberme": "Login automatico",
-            "button": "Login"
+            "password.placeholder": "La tua password",
+            "rememberme": "Ricordami",
+            "button": "Accedi"
         },
         "messages": {
             "error": {
