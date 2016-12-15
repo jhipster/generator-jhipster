@@ -26,7 +26,7 @@ export class NotificationInterceptor extends HttpInterceptable {
             headers.sort();
             let alertKey = headers.length >= 1 ? error.headers.get(headers[0]) : null;
             if(typeof alertKey === 'string'){
-                //AlertService.sucnpm linkcess(alertKey, { param : response.headers(headers[1])});
+                //AlertService.success(alertKey, { param : response.headers(headers[1])});
             }
             return Observable.throw(error);
         });
