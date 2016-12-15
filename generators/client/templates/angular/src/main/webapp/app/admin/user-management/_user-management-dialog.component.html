@@ -20,16 +20,16 @@
                    [(ngModel)]="user.login" required minlength=1 maxlength=50 pattern="^[_'.@A-Za-z0-9-]*$">
 
             <div *ngIf="loginInput.dirty && loginInput.invalid">
-                <p class="form-text text-muted"
+                <small class="form-text text-danger"
                    *ngIf="loginInput.errors.required" jhi-translate="entity.validation.required">
                     This field is required.
-                </p>
+                </small>
 
-                <p class="form-text text-muted"
+                <small class="form-text text-danger"
                    *ngIf="loginInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="50">
                     This field cannot be longer than 50 characters.
-                </p>
+                </small>
             </div>
         </div>
         <div class="form-group">
@@ -38,11 +38,11 @@
                    [(ngModel)]="user.firstName" maxlength="50">
 
             <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
-                <p class="form-text text-muted"
+                <small class="form-text text-danger"
                    *ngIf="firstNameInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="50">
                     This field cannot be longer than 50 characters.
-                </p>
+                </small>
             </div>
         </div>
         <div class="form-group">
@@ -51,11 +51,11 @@
                    [(ngModel)]="user.lastName" maxlength="50">
 
             <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
-                <p class="form-text text-muted"
+                <small class="form-text text-danger"
                    *ngIf="lastNameInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="50">
                     This field cannot be longer than 50 characters.
-                </p>
+                </small>
             </div>
         </div>
         <div class="form-group">
@@ -64,20 +64,20 @@
                    [(ngModel)]="user.email" required maxlength="100">
 
             <div *ngIf="emailInput.dirty && emailInput.invalid">
-                <p class="form-text text-muted"
+                <small class="form-text text-danger"
                    *ngIf="emailInput.errors.required" jhi-translate="entity.validation.required">
                     This field is required.
-                </p>
+                </small>
 
-                <p class="form-text text-muted"
+                <small class="form-text text-danger"
                    *ngIf="emailInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
                    translate-value-max="100">
                     This field cannot be longer than 100 characters.
-                </p>
-		<p class="form-text text-muted"
+                </small>
+		<small class="form-text text-danger"
                    *ngIf="emailInput.errors.email" jhi-translate="global.messages.validate.email.invalid">
                     Your e-mail is invalid.
-                 </p>
+                 </small>
             </div>
         </div>
         <div class="form-group">

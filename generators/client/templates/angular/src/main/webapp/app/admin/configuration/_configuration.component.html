@@ -3,7 +3,7 @@
 
     <span jhi-translate="configuration.filter">Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
     <label>Spring configuration</label>
-    <table class="table table-sm table-striped table-bordered"
+    <table class="table table-sm table-striped table-bordered table-responsive"
         style="table-layout:fixed">
         <thead>
         <tr class="row">
@@ -26,7 +26,7 @@
     </table>
     <div *ngFor="let key of keys(allConfiguration)">
         <label><span>{{key}}</span></label>
-        <table class="table table-sm table-striped table-bordered"
+        <table class="table table-sm table-striped table-bordered table-responsive"
                style="table-layout:fixed">
             <thead>
             <tr class="row">
