@@ -359,7 +359,7 @@ table td[class*=col-], table th[class*=col-] {
 }
 
 .card {
-    padding: 25px 15px;
+    padding: 30px;
     margin-top: 20px;
     border: none;
 }
