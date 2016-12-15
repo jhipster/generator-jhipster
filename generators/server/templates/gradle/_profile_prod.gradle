@@ -1,4 +1,3 @@
-import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'org.springframework.boot'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
@@ -35,12 +34,7 @@ task gulpBuildWithOpts(type: GulpTask) {
 }
     <%_ } else { _%>
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
-    def osName = System.getProperty("os.name").toLowerCase();
-    if (osName.contains("windows")) {
-      script = project.file('node_modules/webpack/bin/webpack.js')
-    } else {
-      script = project.file('node_modules/.bin/webpack')
-    }
+    script = project.file('node_modules/webpack/bin/webpack.js')
     args = ["-p", "--config", "webpack/webpack.prod.js"]
 }
     <%_ } _%>
@@ -69,12 +63,17 @@ processResources {
 
 <%_ if (!skipClient) { _%>
     <%_ if (yarnInstall) { _%>
-gulpBuildWithOpts.dependsOn 'yarn_install'
+// Workaround for https://github.com/srs/gradle-node-plugin/issues/134 doesn't work with yarn
+if (!project.hasProperty('nodeInstall')) {
+    gulpBuildWithOpts.dependsOn yarn_install
+} else {
+    gulpBuildWithOpts.dependsOn npmInstall
+}
     <%_ } else { _%>
-gulpBuildWithOpts.dependsOn 'npmInstall'
+gulpBuildWithOpts.dependsOn npmInstall
     <%_ } _%>
     <%_ if (clientFw === 'angular1') { _%>
-gulpBuildWithOpts.dependsOn 'bower'
+gulpBuildWithOpts.dependsOn bower
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
 bootRun.dependsOn gulp_test

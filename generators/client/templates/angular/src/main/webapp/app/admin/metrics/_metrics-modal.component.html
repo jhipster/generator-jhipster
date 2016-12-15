@@ -4,34 +4,34 @@
     <h4 class="modal-title" jhi-translate="metrics.jvm.threads.dump.title">Threads dump</h4>
 </div>
 <div class="modal-body pad">
-    <span class="label label-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="badge">{{threadDumpAll}}</span></span>&nbsp;
-    <span class="label label-success" (click)="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="badge">{{threadDumpRunnable}}</span></span>&nbsp;
-    <span class="label label-info" (click)="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="badge">{{threadDumpWaiting}}</span></span>&nbsp;
-    <span class="label label-warning" (click)="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="badge">{{threadDumpTimedWaiting}}</span></span>&nbsp;
-    <span class="label label-danger" (click)="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="badge">{{threadDumpBlocked}}</span></span>&nbsp;
+    <span class="tag tag-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="tag-pill">{{threadDumpAll}}</span></span>&nbsp;
+    <span class="tag tag-success" (click)="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="tag-pill">{{threadDumpRunnable}}</span></span>&nbsp;
+    <span class="tag tag-info" (click)="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="tag-pill">{{threadDumpWaiting}}</span></span>&nbsp;
+    <span class="tag tag-warning" (click)="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="tag-pill">{{threadDumpTimedWaiting}}</span></span>&nbsp;
+    <span class="tag tag-danger" (click)="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="tag-pill">{{threadDumpBlocked}}</span></span>&nbsp;
     <div class="voffset2">&nbsp;</div>
     Filter
     <input type="text" [(ngModel)]="threadDumpFilter" class="form-control">
     <div class="row pad" *ngFor="let entry of threadDump | filter:threadDumpFilter:'lockName' | keys">
-        <h5><span class="label" [ngClass]="getLabelClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
-            <a (click)="show = !show">
-               <span [hidden]="show" jhi-translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
-               <span [hidden]="!show" jhi-translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
+        <h5><span class="tag" [ngClass]="getTagClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
+            <a (click)="entry.show = !entry.show" href="javascript:void(0);">
+               <span [hidden]="entry.show" jhi-translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
+               <span [hidden]="!entry.show" jhi-translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
             </a>
         </h5>
-        <div class="well" [hidden]="!show">
+        <div class="well" [hidden]="!entry.show">
             <div *ngFor="let st of entry.value.stackTrace | keys">
                 {{st.value.className}}.{{st.value.methodName}}({{st.value.fileName}}:{{st.value.lineNumber}})
                 <span class="voffset1"></span>
             </div>
         </div>
-        <table class="table table-condensed">
+        <table class="table table-sm table-responsive">
             <thead>
                 <tr>
-                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
-                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
-                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
-                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                    <th class="text-xs-right" jhi-translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                    <th class="text-xs-right" jhi-translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                    <th class="text-xs-right" jhi-translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                    <th class="text-xs-right" jhi-translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
                     <th jhi-translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
                 </tr>
             </thead>
@@ -49,5 +49,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default  pull-left" data-dismiss="modal" (click)="activeModal.dismiss('closed')">Done</button>
+    <button type="button" class="btn btn-secondary  pull-left" data-dismiss="modal" (click)="activeModal.dismiss('closed')">Done</button>
 </div>

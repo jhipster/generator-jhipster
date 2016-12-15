@@ -1,34 +1,35 @@
 <div>
-    <h2 jhi-translate="health.title">Health Checks</h2>
-
-    <p>
-        <button type="button" class="btn btn-primary" (click)="refresh()"><span class="fa fa-refresh"></span>&nbsp;<span jhi-translate="health.refresh.button">Refresh</span>
+    <h2>
+        <span jhi-translate="health.title">Health Checks</span>
+        <button class="btn btn-primary float-xs-right" (click)="refresh()">
+            <span class="fa fa-refresh"></span> <span jhi-translate="health.refresh.button">Refresh</span>
         </button>
-    </p>
-
-    <table id="healthCheck" class="table table-striped">
-        <thead>
-            <tr>
-                <th jhi-translate="health.table.service">Service Name</th>
-                <th jhi-translate="health.table.status">Status</th>
-                <th jhi-translate="health.details.details">Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let health of healthData">
-                <!-- TODO: Add translation for service name -->
-                <td><% if (enableTranslation){ %>{{'health.indicator.' + baseName(health.name) | translate}}<% } else { %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{subSystemName(health.name)}}</td>
-                <td class="text-center">
-                    <span class="label" [ngClass]="getLabelClass(health.status)" jhi-translate="{{'health.status.' + health.status}}">
-                        {{health.status}}
-                    </span>
-                </td>
-                <td class="text-center">
-                    <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
-                        <i class="fa fa-eye"></i>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    </h2>
+    <div class="table-responsive">
+        <table id="healthCheck" class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-md-7" jhi-translate="health.table.service">Service Name</th>
+                    <th class="col-md-2 text-xs-center" jhi-translate="health.table.status">Status</th>
+                    <th class="col-md-2 text-xs-center" jhi-translate="health.details.details">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let health of healthData">
+                    <!-- TODO: Add translation for service name -->
+                    <td><% if (enableTranslation){ %>{{'health.indicator.' + baseName(health.name) | translate}}<% } else { %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{subSystemName(health.name)}}</td>
+                    <td class="text-xs-center">
+                        <span class="tag" [ngClass]="getTagClass(health.status)" jhi-translate="{{'health.status.' + health.status}}">
+                            {{health.status}}
+                        </span>
+                    </td>
+                    <td class="text-xs-center">
+                        <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

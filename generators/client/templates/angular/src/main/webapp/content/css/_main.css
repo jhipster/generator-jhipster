@@ -1,15 +1,3 @@
-body {
-    background: #fafafa;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #333;
-}
-
-/* ==========================================================================
-Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
-========================================================================== */
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-    display: none !important;
-}
 
 /* ==========================================================================
 Developement Ribbon
@@ -94,22 +82,6 @@ Logo styles
 /* ==========================================================================
 Main page styles
 ========================================================================== */
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 300px;
-    font-size: 18px;
-    font-weight: 200;
-    line-height: 30px;
-    background-color: #eee;
-    border-radius: 6px;
-    padding: 60px;
-}
-
-.hero-unit h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
-}
 
 .hipster {
     display: inline-block;
@@ -175,24 +147,6 @@ a:hover {
 
 .hand {
     cursor: pointer;
-}
-
-/* ==========================================================================
-Metrics and Health styles
-========================================================================== */
-#threadDump .popover, #healthCheck .popover {
-    top: inherit;
-    display: block;
-    font-size: 10px;
-    max-width: 1024px;
-}
-
-#healthCheck .popover {
-    margin-left: -50px;
-}
-
-.health-details {
-    min-width: 400px;
 }
 
 /* ==========================================================================
@@ -343,7 +297,6 @@ ui bootstrap tweaks
     outline: none;
 }
 
-
 <%_ if (enableSocialSignIn) { _%>
 /* ==========================================================================
 Social Buttons
@@ -390,3 +343,40 @@ Social Buttons
 <%_ } _%>
 
 /* jhipster-needle-css-add-main JHipster will add new css style */
+
+/* ==============================================================
+Bootstrap 4 tweaks
+===============================================================*/
+body, h1, h2, h3, h4 {
+    font-weight: 300;
+}
+
+/*FIXME this is to support grids in table class; */
+table td[class*=col-], table th[class*=col-] {
+    position: static;
+    display: table-cell;
+    float: none;
+}
+
+.card {
+    padding: 30px;
+    margin-top: 20px;
+    border: none;
+}
+
+.jh-navbar {
+    background-color: #353d47;
+    padding: .2em 1em;
+}
+
+.jh-navbar .dropdown-item.active, .jh-navbar .dropdown-item.active:focus, .jh-navbar .dropdown-item.active:hover {
+    background-color: #353d47;
+}
+
+.jh-navbar ul.navbar-nav {
+    padding: 0.5em;
+}
+
+footer {
+    border-top: 1px solid rgba(0,0,0,.125);
+}

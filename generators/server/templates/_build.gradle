@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurper
 import org.gradle.internal.os.OperatingSystem
 
 buildscript {
@@ -15,10 +16,7 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         <%_ if(!skipClient) { _%>
-        classpath "com.moowork.gradle:gradle-node-plugin:0.14"
-            <%_ if(clientFw === 'angular1') { _%>
-        classpath "com.moowork.gradle:gradle-gulp-plugin:0.13"
-            <%_ } _%>
+        classpath "com.moowork.gradle:gradle-node-plugin:1.0.1"
         <%_ } _%>
         classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -32,6 +30,12 @@ apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
+<%_ if(!skipClient) { _%>
+apply plugin: 'com.moowork.node'
+    <%_ if (clientFw === 'angular1') { _%>
+apply plugin: 'com.moowork.gulp'
+    <%_ } _%>
+<%_ } _%>
 apply plugin: 'io.spring.dependency-management'
 <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
 dependencyManagement {
@@ -374,7 +378,29 @@ task wrapper(type: Wrapper) {
 
 task stage(dependsOn: 'bootRepackage') {
 }
+<% if(!skipClient) { %>
+if (project.hasProperty('nodeInstall')) {
+    node {
+        version = '6.9.2'
+        npmVersion = '3.10.9'
+        download = true
+    }
 
+    // Workaround for https://github.com/srs/gradle-node-plugin/issues/134
+    task installLocalNpm {
+        def npmVersion = ''
+        def packageFile = file( new File( (File) node.nodeModulesDir, 'node_modules/npm/package.json' ) )
+        if (packageFile.exists()) {
+            def json = new JsonSlurper().parseText(packageFile.text)
+            npmVersion = json.version
+        }
+        if (npmVersion != node.npmVersion) {
+            npmInstall.dependsOn 'npm_install_npm@' + node.npmVersion
+        }
+    }
+    npmInstall.dependsOn installLocalNpm
+}
+<% } %>
 compileJava.dependsOn processResources
 processResources.dependsOn cleanResources,bootBuildInfo
 bootBuildInfo.mustRunAfter cleanResources
