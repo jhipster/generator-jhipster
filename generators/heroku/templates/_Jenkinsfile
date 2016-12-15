@@ -5,26 +5,27 @@ node {
         checkout scm
     }
 
-    docker.image('jhipster/jhipster-ci-stack').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
-<%_ if (applicationType !== 'microservice') { _%>
-        stage('check tools') {
-            sh "node -v"
-            sh "npm -v"
-            sh "bower -v"
-            sh "gulp -v"
+    docker.image('openjdk:8').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
+        stage('check java') {
             sh "java -version"
         }
 
-        stage('npm install') {
-            sh "npm install"
-        }
-
-<%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
         stage('clean') {
             sh "./mvnw clean"
         }
 
+    <%_ if (applicationType !== 'microservice') { _%>
+        stage('prepare tools') {
+            sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.2 -DnpmVersion=3.10.9"
+            sh "echo '{ \"allow_root\": true }' > /root/.bowerrc"
+        }
+
+        stage('npm install') {
+            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm"
+        }
+
+    <%_ } _%>
         stage('backend tests') {
             try {
                 sh "./mvnw test"
@@ -35,14 +36,38 @@ node {
             }
         }
 
+    <%_ if (applicationType !== 'microservice') { _%>
+        stage('frontend tests') {
+            try {
+                sh "./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test"
+            } catch(err) {
+                throw err
+            } finally {
+                junit '**/target/test-results/karma/TESTS-*.xml'
+            }
+        }
+
+    <%_ } _%>
+        stage('package and deploy') {
+             // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
+            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
+            archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+        }
+
 <%_ } else if (buildTool === 'gradle') { _%>
         stage('clean') {
             sh "./gradlew clean"
         }
+    <%_ if (applicationType !== 'microservice') { _%>
+        stage('npm install') {
+            sh "echo '{ \"allow_root\": true }' > /root/.bowerrc"
+            sh "./gradlew npmInstall -PnodeInstall"
+        }
 
+    <%_ } _%>
         stage('backend tests') {
             try {
-                sh "./gradlew test"
+                sh "./gradlew test -PnodeInstall"
             } catch(err) {
                 throw err
             } finally {
@@ -50,35 +75,29 @@ node {
             }
         }
 
-<%_ } _%>
-<%_ if (applicationType !== 'microservice') { _%>
+    <%_ if (applicationType !== 'microservice') { _%>
         stage('frontend tests') {
             try {
-                sh "gulp test"
+                sh "./gradlew gulp_test -PnodeInstall"
             } catch(err) {
                 throw err
             } finally {
-                <%_ if (buildTool === 'maven') { _%>
-                junit '**/target/test-results/karma/TESTS-*.xml'
-                <%_ } else if (buildTool === 'gradle') { _%>
                 junit '**/build/test-results/karma/TESTS-*.xml'
-                <%_ } _%>
             }
         }
 
-<%_ } _%>
-        stage('package and deploy') {
-<%_ if (buildTool === 'maven') { _%>
-            // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
-            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
-<%_ } else if (buildTool === 'gradle' ) { _%>
-            sh "./gradlew bootRepackage -Pprod -x test"
-            // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
-            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./gradlew deployHeroku"
-<%_ } _%>
-            archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+    <%_ } _%>
+        stage('packaging') {
+            sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall"
+            archiveArtifacts artifacts: '**/build/*.war', fingerprint: true
         }
 
+        stage('deployment') {
+            // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
+            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./gradlew deployHeroku"
+        }
+
+<%_ } _%>
         // Uncomment the following block to add Sonar analysis.
         /*stage('quality analysis') {
             withSonarQubeEnv('Sonar Server') {
