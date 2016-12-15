@@ -16,18 +16,18 @@
                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{'settings.form.firstname.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.firstName" minlength=1 maxlength=50 #firstNameInput="ngModel" required>
                     <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
-                        <p class="form-text text-muted"
+                        <small class="form-text text-danger"
                            *ngIf="firstNameInput.errors.required" jhi-translate="settings.messages.validate.firstname.required">
                             Your first name is required.
-                        </p>
-                        <p class="form-text text-muted"
+                        </small>
+                        <small class="form-text text-danger"
                            *ngIf="firstNameInput.errors.minlength" jhi-translate="settings.messages.validate.firstname.minlength">
                             Your first name is required to be at least 1 character.
-                        </p>
-                        <p class="form-text text-muted"
+                        </small>
+                        <small class="form-text text-danger"
                            *ngIf="firstNameInput.errors.maxlength" jhi-translate="settings.messages.validate.firstname.maxlength">
                             Your first name cannot be longer than 50 characters.
-                        </p>
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
@@ -35,18 +35,18 @@
                     <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{'settings.form.lastname.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.lastName" minlength=1 maxlength=50 #lastNameInput="ngModel" required>
                     <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
-                        <p class="form-text text-muted"
+                        <small class="form-text text-danger"
                            *ngIf="lastNameInput.errors.required" jhi-translate="settings.messages.validate.lastname.required">
                             Your last name is required.
-                        </p>
-                        <p class="form-text text-muted"
+                        </small>
+                        <small class="form-text text-danger"
                            *ngIf="lastNameInput.errors.minlength" jhi-translate="settings.messages.validate.lastname.minlength">
                             Your last name is required to be at least 1 character.
-                        </p>
-                        <p class="form-text text-muted"
+                        </small>
+                        <small class="form-text text-danger"
                            *ngIf="lastNameInput.errors.maxlength" jhi-translate="settings.messages.validate.lastname.maxlength">
                             Your last name cannot be longer than 50 characters.
-                        </p>
+                        </small>
                     </div>
                 </div>
                 <div class="form-group">
@@ -54,22 +54,22 @@
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.email" minlength=5 maxlength=100 #emailInput="ngModel" required>
                     <div *ngIf="emailInput.dirty && emailInput.invalid">
-                        <p class="form-text text-muted"
+                        <small class="form-text text-danger"
                            *ngIf="emailInput.errors.required" jhi-translate="global.messages.validate.email.required">
                             Your e-mail is required.
-                        </p>
-                        <p class="form-text text-muted"
+                        </small>
+                        <small class="form-text text-danger"
                            *ngIf="emailInput.errors.email" jhi-translate="global.messages.validate.email.invalid">
                             Your e-mail is invalid.
-                        </p>
-                        <p class="form-text text-muted"
+                        </small>
+                        <small class="form-text text-danger"
                            *ngIf="emailInput.errors.minlength" jhi-translate="global.messages.validate.email.minlength">
                             Your e-mail is required to be at least 5 characters.
-                        </p>
-                        <p class="form-text text-muted"
+                        </small>
+                        <small class="form-text text-danger"
                            *ngIf="emailInput.errors.maxlength" jhi-translate="global.messages.validate.email.maxlength">
                             Your e-mail cannot be longer than 100 characters.
-                        </p>
+                        </small>
                     </div>
                 </div>
                 <%_ if (enableTranslation){ _%>

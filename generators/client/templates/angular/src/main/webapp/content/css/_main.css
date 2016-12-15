@@ -343,8 +343,6 @@ ui bootstrap tweaks
     outline: none;
 }
 
-
-
 <%_ if (enableSocialSignIn) { _%>
 /* ==========================================================================
 Social Buttons

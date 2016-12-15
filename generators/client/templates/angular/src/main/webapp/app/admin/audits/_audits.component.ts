@@ -3,8 +3,7 @@ import { DatePipe } from '@angular/common';
 
 import { Audit } from './audit.model';
 import { AuditsService } from './audits.service';
-import { ParseLinks } from '../../shared';
-import { ITEMS_PER_PAGE } from '../../shared/constants/pagination.constants';
+import { ParseLinks, ITEMS_PER_PAGE } from '../../shared';
 
 @Component({
   selector: '<%=jhiPrefix%>-audit',
