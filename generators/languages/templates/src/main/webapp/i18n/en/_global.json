@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administration",
-                <%_ if (applicationType == 'gateway') { _%>
+                <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "User management",
@@ -48,8 +48,20 @@
         },
         "messages": {
             "info": {
+                <%_ if (clientFw === 'angular1') { _%>
                 "authenticated": "If you want to <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">sign in</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
                 "register": "You don't have an account yet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Register a new account</a>"
+                <%_ } else if (clientFw === 'angular2') { _%>
+                "authenticated": {
+                    "prefix": "If you want to ",
+                    "link": "sign in",
+                    "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "You don't have an account yet?",
+                    "link": "Register a new account"
+                }
+                <%_ } _%>
             },
             "error": {
                 "dontmatch": "The password and its confirmation do not match!"
@@ -104,9 +116,9 @@
             "required": "This field is required.",
             "minlength": "This field is required to be at least {{ min }} characters.",
             "maxlength": "This field cannot be longer than {{ max }} characters.",
-            "min": "This field should be more than {{ min }}.",
+            "min": "This field should be at least {{ min }}.",
             "max": "This field cannot be more than {{ max }}.",
-            "minbytes": "This field should be more than {{ min }} bytes.",
+            "minbytes": "This field should be at least {{ min }} bytes.",
             "maxbytes": "This field cannot be more than {{ max }} bytes.",
             "pattern": "This field should follow pattern {{ pattern }}.",
             "number": "This field should be a number.",

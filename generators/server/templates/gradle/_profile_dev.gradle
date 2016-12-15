@@ -1,4 +1,11 @@
+import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'org.springframework.boot'
+<%_ if(!skipClient) { _%>
+apply plugin: 'com.moowork.node'
+    <%_ if (clientFw === 'angular1') { _%>
+apply plugin: 'com.moowork.gulp'
+    <%_ } _%>
+<%_ } _%>
 
 ext {
     logbackLoglevel = "DEBUG"
@@ -16,14 +23,27 @@ if (project.hasProperty('no-liquibase')) {
 bootRun {
     args = []
 }
-<% if (!skipClient) { %>
+
+<%_ if (!skipClient) { _%>
+    <%_ if (clientFw === 'angular1') { _%>
+task gulpConstantDev(type: GulpTask) {
+    args = ["ngconstant:dev", "--no-notification"]
+}
+    <%_ } else { _%>
+task webpack(type: NodeTask, dependsOn: 'npmInstall') {
+    def osName = System.getProperty("os.name").toLowerCase();
+    if (osName.contains("windows")) {
+      script = project.file('node_modules/webpack/bin/webpack.js')
+    } else {
+      script = project.file('node_modules/.bin/webpack')
+    }
+    args = ["--config", "webpack/webpack.dev.js"]
+}
+    <%_ } _%>
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
 }
-
-task gulpConstantDev(type: GulpTask) {
-    args = ["ngconstant:dev", "--no-notification"]
-}<% } %>
+<%_ } _%>
 
 processResources {
     filesMatching('**/logback-spring.xml') {
@@ -43,5 +63,10 @@ processResources {
     }
 }
 
-<% if (!skipClient) { %>
-processResources.dependsOn gulpConstantDev<% } %>
+<%_ if (!skipClient) { _%>
+    <%_ if (clientFw === 'angular1') { _%>
+processResources.dependsOn gulpConstantDev
+    <%_ } else { _%>
+processResources.dependsOn webpack
+    <%_ } _%>
+<%_ } _%>

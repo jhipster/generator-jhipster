@@ -67,5 +67,5 @@ RUN \
 USER jhipster
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]
-EXPOSE 8080 3000 3001
+EXPOSE 8080 9000 3001
 CMD ["tail", "-f", "/home/jhipster/generator-jhipster/generators/server/templates/src/main/resources/banner-no-color.txt"]

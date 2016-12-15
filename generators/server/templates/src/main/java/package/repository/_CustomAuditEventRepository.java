@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,11 +25,16 @@ public class CustomAuditEventRepository implements AuditEventRepository {
 
     private static final String ANONYMOUS_USER = "anonymoususer";
 
-    @Inject
-    private PersistenceAuditEventRepository persistenceAuditEventRepository;
+    private final PersistenceAuditEventRepository persistenceAuditEventRepository;
 
-    @Inject
-    private AuditEventConverter auditEventConverter;
+    private final AuditEventConverter auditEventConverter;
+
+    public CustomAuditEventRepository(PersistenceAuditEventRepository persistenceAuditEventRepository,
+            AuditEventConverter auditEventConverter) {
+
+        this.persistenceAuditEventRepository = persistenceAuditEventRepository;
+        this.auditEventConverter = auditEventConverter;
+    }
 
     @Override
     public List<AuditEvent> find(Date after) {

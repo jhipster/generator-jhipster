@@ -4,7 +4,6 @@ import <%=packageName%>.web.rest.vm.RouteVM;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +24,14 @@ public class GatewayResource {
 
     private final Logger log = LoggerFactory.getLogger(GatewayResource.class);
 
-    @Inject
-    private RouteLocator routeLocator;
+    private final RouteLocator routeLocator;
 
-    @Inject
-    private DiscoveryClient discoveryClient;
+    private final DiscoveryClient discoveryClient;
+
+    public GatewayResource(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
+        this.routeLocator = routeLocator;
+        this.discoveryClient = discoveryClient;
+    }
 
     /**
      * GET  /routes : get the active routes.

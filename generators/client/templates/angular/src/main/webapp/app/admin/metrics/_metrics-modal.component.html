@@ -1,0 +1,53 @@
+<!-- Modal used to display the threads dump -->
+<div class="modal-header">
+    <button type="button" class="close" (click)="activeModal.dismiss('closed')">&times;</button>
+    <h4 class="modal-title" jhi-translate="metrics.jvm.threads.dump.title">Threads dump</h4>
+</div>
+<div class="modal-body pad">
+    <span class="label label-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="badge">{{threadDumpAll}}</span></span>&nbsp;
+    <span class="label label-success" (click)="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="badge">{{threadDumpRunnable}}</span></span>&nbsp;
+    <span class="label label-info" (click)="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="badge">{{threadDumpWaiting}}</span></span>&nbsp;
+    <span class="label label-warning" (click)="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="badge">{{threadDumpTimedWaiting}}</span></span>&nbsp;
+    <span class="label label-danger" (click)="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="badge">{{threadDumpBlocked}}</span></span>&nbsp;
+    <div class="voffset2">&nbsp;</div>
+    Filter
+    <input type="text" [(ngModel)]="threadDumpFilter" class="form-control">
+    <div class="row pad" *ngFor="let entry of threadDump | filter:threadDumpFilter:'lockName' | keys">
+        <h5><span class="label" [ngClass]="getLabelClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
+            <a (click)="show = !show">
+               <span [hidden]="show" jhi-translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
+               <span [hidden]="!show" jhi-translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
+            </a>
+        </h5>
+        <div class="well" [hidden]="!show">
+            <div *ngFor="let st of entry.value.stackTrace | keys">
+                {{st.value.className}}.{{st.value.methodName}}({{st.value.fileName}}:{{st.value.lineNumber}})
+                <span class="voffset1"></span>
+            </div>
+        </div>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                    <th class="text-right" jhi-translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                    <th jhi-translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{entry.value.blockedTime}}</td>
+                    <td>{{entry.value.blockedCount}}</td>
+                    <td>{{entry.value.waitedTime}}</td>
+                    <td>{{entry.value.waitedCount}}</td>
+                    <td>{{entry.value.lockName}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default  pull-left" data-dismiss="modal" (click)="activeModal.dismiss('closed')">Done</button>
+</div>

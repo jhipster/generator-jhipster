@@ -11,6 +11,7 @@ import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import org.springframework.data.domain.Page;
@@ -21,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -60,17 +60,24 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    @Inject
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Inject
-    private MailService mailService;
+    private final MailService mailService;
 
-    @Inject
-    private UserService userService;<% if (searchEngine == 'elasticsearch') { %>
+    private final UserService userService;<% if (searchEngine == 'elasticsearch') { %>
 
-    @Inject
-    private UserSearchRepository userSearchRepository;<% } %>
+    private final UserSearchRepository userSearchRepository;<% } %>
+
+    public UserResource(UserRepository userRepository, MailService mailService,
+            UserService userService<% if (searchEngine == 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
+
+        this.userRepository = userRepository;
+        this.mailService = mailService;
+        this.userService = userService;
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        this.userSearchRepository = userSearchRepository;
+        <%_ } _%>
+    }
 
     /**
      * POST  /users  : Creates a new user.
@@ -147,7 +154,7 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    public ResponseEntity<List<ManagedUserVM>> getAllUsers(Pageable pageable)
+    public ResponseEntity<List<ManagedUserVM>> getAllUsers(@ApiParam Pageable pageable)
         throws URISyntaxException {
         <%_ if (databaseType == 'sql') { _%>
         Page<User> page = userRepository.findAllWithAuthorities(pageable);

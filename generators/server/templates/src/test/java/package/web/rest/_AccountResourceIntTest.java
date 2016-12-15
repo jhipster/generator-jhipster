@@ -5,6 +5,9 @@ import <%=packageName%>.<%= mainClass %>;<% if (databaseType == 'sql' || databas
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% } %>
+<%_ if (authenticationType == 'session') { _%>
+import <%=packageName%>.repository.PersistentTokenRepository;
+<%_ } _%>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
@@ -16,15 +19,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
-import javax.inject.Inject;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,14 +46,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    @Inject
+    @Autowired
     private UserRepository userRepository;
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    @Inject
+<%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+
+    @Autowired
     private AuthorityRepository authorityRepository;
-<% } %>
-    @Inject
+<%_ } _%>
+
+    @Autowired
     private UserService userService;
+<%_ if (authenticationType == 'session') { _%>
+
+    @Autowired
+    private PersistentTokenRepository persistentTokenRepository;
+<%_ } _%>
 
     @Mock
     private UserService mockUserService;
@@ -68,15 +77,11 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail((User) anyObject());
 
-        AccountResource accountResource = new AccountResource();
-        ReflectionTestUtils.setField(accountResource, "userRepository", userRepository);
-        ReflectionTestUtils.setField(accountResource, "userService", userService);
-        ReflectionTestUtils.setField(accountResource, "mailService", mockMailService);
+        AccountResource accountResource =
+            new AccountResource(userRepository, userService, mockMailService<% if (authenticationType == 'session') { %>, persistentTokenRepository<% } %>);
 
-        AccountResource accountUserMockResource = new AccountResource();
-        ReflectionTestUtils.setField(accountUserMockResource, "userRepository", userRepository);
-        ReflectionTestUtils.setField(accountUserMockResource, "userService", mockUserService);
-        ReflectionTestUtils.setField(accountUserMockResource, "mailService", mockMailService);
+        AccountResource accountUserMockResource =
+            new AccountResource(userRepository, mockUserService, mockMailService<% if (authenticationType == 'session') { %>, persistentTokenRepository<% } %>);
 
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource).build();
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).build();

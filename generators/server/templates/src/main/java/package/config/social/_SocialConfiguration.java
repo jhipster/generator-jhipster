@@ -1,7 +1,11 @@
 package <%=packageName%>.config.social;
 
+import <%=packageName%>.config.JHipsterProperties;
 import <%=packageName%>.repository.SocialUserConnectionRepository;
 import <%=packageName%>.repository.CustomSocialUsersConnectionRepository;
+<%_ if (authenticationType == 'jwt') { _%>
+import <%=packageName%>.security.jwt.TokenProvider;
+<%_ } _%>
 import <%=packageName%>.security.social.CustomSignInAdapter;
 
 import org.slf4j.Logger;
@@ -9,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
@@ -26,8 +31,6 @@ import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 // jhipster-needle-add-social-connection-factory-import-package
 
-import javax.inject.Inject;
-
 /**
  * Basic Spring Social configuration.
  *
@@ -37,13 +40,19 @@ import javax.inject.Inject;
 @Configuration
 @EnableSocial
 public class SocialConfiguration implements SocialConfigurer {
+
     private final Logger log = LoggerFactory.getLogger(SocialConfiguration.class);
 
-    @Inject
-    private SocialUserConnectionRepository socialUserConnectionRepository;
+    private final SocialUserConnectionRepository socialUserConnectionRepository;
 
-    @Inject
-    Environment environment;
+    private final Environment environment;
+
+    public SocialConfiguration(SocialUserConnectionRepository socialUserConnectionRepository,
+            Environment environment) {
+
+        this.socialUserConnectionRepository = socialUserConnectionRepository;
+        this.environment = environment;
+    }
 
     @Bean
     public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator,
@@ -115,8 +124,10 @@ public class SocialConfiguration implements SocialConfigurer {
     }
 
     @Bean
-    public SignInAdapter signInAdapter() {
-        return new CustomSignInAdapter();
+    public SignInAdapter signInAdapter(UserDetailsService userDetailsService, JHipsterProperties jHipsterProperties<% if (authenticationType == 'jwt') { %>,
+            TokenProvider tokenProvider<% } %>) {
+        return new CustomSignInAdapter(userDetailsService, jHipsterProperties<% if (authenticationType == 'jwt') { %>,
+            tokenProvider<% } %>);
     }
 
     @Bean

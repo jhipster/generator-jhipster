@@ -22,7 +22,6 @@ var javaDir;
 function writeFiles() {
     return {
         cleanupOldServerFiles: function() {
-            javaDir = this.javaDir = constants.SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
         },
 
@@ -102,7 +101,7 @@ function writeFiles() {
                 this.template('_build.gradle', 'build.gradle', this, {});
                 this.template('_settings.gradle', 'settings.gradle', this, {});
                 this.template('_gradle.properties', 'gradle.properties', this, {});
-                if (!this.skipClient) {
+                if (!this.skipClient && this.clientFw === 'angular1') {
                     this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                 }
                 this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
@@ -110,7 +109,7 @@ function writeFiles() {
                 this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                 this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                 this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                if (this.testFrameworks.indexOf('gatling') !== -1) {
+                if (this.gatlingTests) {
                     this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
                 }
                 if (this.databaseType === 'sql') {
@@ -502,7 +501,7 @@ function writeFiles() {
             }
 
             // Create Gatling test files
-            if (this.testFrameworks.indexOf('gatling') !== -1) {
+            if (this.gatlingTests) {
                 this.copy(TEST_DIR + 'gatling/conf/gatling.conf', TEST_DIR + 'gatling/conf/gatling.conf');
                 this.copy(TEST_DIR + 'gatling/conf/logback.xml', TEST_DIR + 'gatling/conf/logback.xml');
                 mkdirp(TEST_DIR + 'gatling/data');
@@ -511,7 +510,7 @@ function writeFiles() {
             }
 
             // Create Cucumber test files
-            if (this.testFrameworks.indexOf('cucumber') !== -1) {
+            if (this.cucumberTests) {
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_StepDefs.java', testDir + 'cucumber/stepdefs/StepDefs.java', this, {});
                 mkdirp(TEST_DIR + 'features/');
@@ -608,7 +607,7 @@ function writeFiles() {
                 this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_AuditResourceIntTest.java', testDir + 'web/rest/AuditResourceIntTest.java', this, {});
             }
             //Cucumber user management tests
-            if (this.testFrameworks.indexOf('cucumber') !== -1) {
+            if (this.cucumberTests) {
                 this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_UserStepDefs.java', testDir + 'cucumber/stepdefs/UserStepDefs.java', this, {});
                 this.copy('src/test/features/user/user.feature', 'src/test/features/user/user.feature');
             }

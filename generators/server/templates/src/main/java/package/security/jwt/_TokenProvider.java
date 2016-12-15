@@ -5,7 +5,6 @@ import <%=packageName%>.config.JHipsterProperties;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +30,11 @@ public class TokenProvider {
 
     private long tokenValidityInMillisecondsForRememberMe;
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
+
+    public TokenProvider(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
 
     @PostConstruct
     public void init() {

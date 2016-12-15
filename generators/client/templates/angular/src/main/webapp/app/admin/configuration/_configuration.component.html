@@ -1,0 +1,47 @@
+<div *ngIf="allConfiguration && configuration">
+    <h2 jhi-translate="configuration.title">Configuration</h2>
+
+    <span jhi-translate="configuration.filter">Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
+    <label>Spring configuration</label>
+    <table class="table table-condensed table-striped table-bordered table-responsive"
+        style="table-layout:fixed">
+        <thead>
+        <tr>
+            <th class="col-sm-4" (click)="orderProp = 'prefix'; reverse=!reverse"><span jhi-translate="configuration.table.prefix">Prefix</span></th>
+            <th jhi-translate="configuration.table.properties" class="col-sm-8" (click)="orderProp = 'properties'; reverse=!reverse">Properties</th>
+        </tr>
+        </thead>
+
+        <tr *ngFor="let entry of (configuration | filter:filter:'prefix' | orderBy:orderProp:reverse)">
+            <td><span>{{entry.prefix}}</span></td>
+            <td>
+                <div class="row" *ngFor="let key of keys(entry.properties)">
+                    <div class="col-md-4">{{key}}</div>
+                    <div class="col-md-8">
+                        <span class="pull-right label label-default break">{{entry.properties[key]}}</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div *ngFor="let key of keys(allConfiguration)">
+        <label><span>{{key}}</span></label>
+        <table class="table table-condensed table-striped table-bordered table-responsive"
+               style="table-layout:fixed">
+            <thead>
+            <tr>
+                <th class="col-sm-4">Property</th>
+                <th class="col-sm-8">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of allConfiguration[key]">
+                <td class="break">{{item.key}}</td>
+                <td class="break">
+                    <span class="pull-right label label-default break">{{item.val}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

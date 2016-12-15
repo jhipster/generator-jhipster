@@ -24,7 +24,6 @@ import org.springframework.web.filter.CorsFilter;
 import java.io.File;
 import java.nio.file.Paths;<% } %>
 import java.util.*;
-import javax.inject.Inject;
 import javax.servlet.*;
 
 /**
@@ -35,17 +34,23 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
-    @Inject
-    private Environment env;
+    private final Environment env;
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 
-    @Autowired(required = false)
-    private MetricRegistry metricRegistry;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+    private final HazelcastInstance hazelcastInstance;<% } %>
 
-    @Inject
-    private HazelcastInstance hazelcastInstance;<% } %>
+    private MetricRegistry metricRegistry;
+
+    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>, HazelcastInstance hazelcastInstance<% } %>,
+            MetricRegistry metricRegistry) {
+
+        this.env = env;
+        this.jHipsterProperties = jHipsterProperties;
+        <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+        this.hazelcastInstance = hazelcastInstance;
+        <%_ } _%>
+    }
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -128,11 +133,15 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
         File root;
         String prefixPath = resolvePathPrefix();
+        <%_ if (clientFw === 'angular2') { _%>
+        root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
+        <%_ } else { _%>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
         } else {
             root = new File(prefixPath + "<%= CLIENT_MAIN_SRC_DIR %>");
         }
+        <%_ } _%>
         if (root.exists() && root.isDirectory()) {
             container.setDocumentRoot(root);
         }
@@ -220,4 +229,9 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         h2ConsoleServlet.setInitParameter("-properties", "<%= SERVER_MAIN_RES_DIR %>");
         h2ConsoleServlet.setLoadOnStartup(1);
     }<% } %>
+
+    @Autowired(required = false)
+    public void setMetricRegistry(MetricRegistry metricRegistry) {
+        this.metricRegistry = metricRegistry;
+    }
 }

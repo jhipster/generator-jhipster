@@ -1,0 +1,114 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+        <h4 class="modal-title" id="myUserLabel" jhi-translate="userManagement.home.createOrEditLabel">
+            Create or edit a User</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group">
+            <label jhi-translate="global.field.id">ID</label>
+            <input type="text" class="form-control" name="id"
+                   [(ngModel)]="user.id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" jhi-translate="userManagement.login">Login</label>
+            <input type="text" class="form-control" name="login" #loginInput="ngModel"
+                   [(ngModel)]="user.login" required minlength=1 maxlength=50 pattern="^[_'.@A-Za-z0-9-]*$">
+
+            <div *ngIf="loginInput.dirty && loginInput.invalid">
+                <p class="help-block"
+                   *ngIf="loginInput.errors.required" jhi-translate="entity.validation.required">
+                    This field is required.
+                </p>
+
+                <p class="help-block"
+                   *ngIf="loginInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
+                   translate-value-max="50">
+                    This field cannot be longer than 50 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" jhi-translate="userManagement.firstName">First Name</label>
+            <input type="text" class="form-control" name="firstName" #firstNameInput="ngModel"
+                   [(ngModel)]="user.firstName" maxlength="50">
+
+            <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
+                <p class="help-block"
+                   *ngIf="firstNameInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
+                   translate-value-max="50">
+                    This field cannot be longer than 50 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label jhi-translate="userManagement.lastName">Last Name</label>
+            <input type="text" class="form-control" name="lastName" #lastNameInput="ngModel"
+                   [(ngModel)]="user.lastName" maxlength="50">
+
+            <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
+                <p class="help-block"
+                   *ngIf="lastNameInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
+                   translate-value-max="50">
+                    This field cannot be longer than 50 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" jhi-translate="userManagement.email">Email</label>
+            <input type="email" class="form-control" name="email" #emailInput="ngModel"
+                   [(ngModel)]="user.email" required maxlength="100">
+
+            <div *ngIf="emailInput.dirty && emailInput.invalid">
+                <p class="help-block"
+                   *ngIf="emailInput.errors.required" jhi-translate="entity.validation.required">
+                    This field is required.
+                </p>
+
+                <p class="help-block"
+                   *ngIf="emailInput.errors.maxlength" jhi-translate="entity.validation.maxlength"
+                   translate-value-max="100">
+                    This field cannot be longer than 100 characters.
+                </p>
+				<p class="help-block"
+                   *ngIf="emailInput.errors.email" jhi-translate="global.messages.validate.email.invalid">
+                    Your e-mail is invalid.
+                 </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="activated">
+                <input [disabled]="user.id === null" type="checkbox" id="activated" name="activated" [(ngModel)]="user.activated">
+                <span jhi-translate="userManagement.activated">Activated</span>
+            </label>
+        </div>
+
+        <%_ if (enableTranslation){ _%>
+        <div class="form-group" *ngIf="languages && languages.length > 0">
+            <label jhi-translate="userManagement.langKey">Lang Key</label>
+            <select class="form-control" id="langKey" name="langKey" [(ngModel)]="user.langKey">
+                <option *ngFor="let language of languages" [value]="language">{{language | findLanguageFromKey}}</option>
+            </select>
+        </div>
+        <%_ } _%>
+        <div class="form-group">
+            <label jhi-translate="userManagement.profiles">Profiles</label>
+            <select class="form-control" multiple name="authority" [(ngModel)]="user.authorities">
+                <option *ngFor="let authority of authorities" [value]="authority">{{authority}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span
+            jhi-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-floppy-o"></span>&nbsp;<span jhi-translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

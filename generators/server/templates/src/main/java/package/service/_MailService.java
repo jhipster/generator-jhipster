@@ -17,7 +17,6 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.apache.commons.lang3.StringUtils;
 <%_ } _%>
 
-import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import java.util.Locale;
 
@@ -36,17 +35,22 @@ public class MailService {
 
     private static final String BASE_URL = "baseUrl";
 
-    @Inject
-    private JHipsterProperties jHipsterProperties;
+    private final JHipsterProperties jHipsterProperties;
 
-    @Inject
-    private JavaMailSenderImpl javaMailSender;
+    private final JavaMailSenderImpl javaMailSender;
 
-    @Inject
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
-    @Inject
-    private SpringTemplateEngine templateEngine;
+    private final SpringTemplateEngine templateEngine;
+
+    public MailService(JHipsterProperties jHipsterProperties, JavaMailSenderImpl javaMailSender,
+            MessageSource messageSource, SpringTemplateEngine templateEngine) {
+
+        this.jHipsterProperties = jHipsterProperties;
+        this.javaMailSender = javaMailSender;
+        this.messageSource = messageSource;
+        this.templateEngine = templateEngine;
+    }
 
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {

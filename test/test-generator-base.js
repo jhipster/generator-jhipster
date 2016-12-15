@@ -3,6 +3,7 @@
 'use strict';
 
 const assert = require('assert'),
+    expectedFiles = require('./test-expected-files'),
     Generator = require('../generators/generator-base');
 
 Generator.prototype.log = function (msg) {console.log(msg);};
@@ -127,6 +128,39 @@ describe('Generator Base', function () {
             it('return the default app name', function () {
                 Generator.prototype.baseName = '9myApp';
                 assert.equal(Generator.prototype.getMainClassName(), 'Application');
+            });
+        });
+    });
+
+    describe('writeFilesToDisk', function () {
+        describe('when called with default angular client options', function () {
+            it('should produce correct files', function () {
+                let files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
+                let generator = {
+                    useSass: false,
+                    enableTranslation: true,
+                    authenticationType: 'session',
+                    testFrameworks: []
+                };
+                let filesToAssert = expectedFiles.client;
+                filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
+                let out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                assert.deepEqual(out, filesToAssert);
+            });
+        });
+        describe('when called with default angular client options skipping user-management', function () {
+            it('should produce correct files', function () {
+                let files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
+                let generator = {
+                    useSass: false,
+                    enableTranslation: true,
+                    authenticationType: 'session',
+                    skipUserManagement: true,
+                    testFrameworks: []
+                };
+                let filesToAssert = expectedFiles.client.sort();
+                let out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                assert.deepEqual(out, filesToAssert);
             });
         });
     });

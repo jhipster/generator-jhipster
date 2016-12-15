@@ -31,7 +31,6 @@ import javax.annotation.PreDestroy;
 <%_ if (hibernateCache == 'ehcache') { _%>
 import javax.cache.CacheManager;
 <%_ } _%>
-import javax.inject.Inject;
 
 @Configuration
 @EnableCaching
@@ -40,22 +39,40 @@ import javax.inject.Inject;
 public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
-    <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
+    <%_ if (hibernateCache == 'hazelcast') { _%>
 
-    @Inject
-    private Environment env;<%_ } _%>
-    <%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+    private final Environment env;
+        <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 
-    @Inject
-    private DiscoveryClient discoveryClient;
+    private final DiscoveryClient discoveryClient;
 
-    @Inject
-    private ServerProperties serverProperties;<%_ } _%>
-    <%_ if (hibernateCache == 'ehcache' || hibernateCache == 'no') { _%>
-
-    @Inject
-    private CacheManager cacheManager;
+    private final ServerProperties serverProperties;
+        <%_ } _%>
     <%_ } _%>
+    <%_ if (hibernateCache == 'ehcache') { _%>
+
+    private CacheManager cacheManager;
+        <%_ if (clusteredHttpSession == 'hazelcast') { _%>
+
+    private final Environment env;
+        <%_ } _%>
+    <%_ } _%>
+
+    public CacheConfiguration(<% if (hibernateCache == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { %>, DiscoveryClient discoveryClient, ServerProperties serverProperties<% } } %><% if (hibernateCache == 'ehcache') { %>CacheManager cacheManager<% if (clusteredHttpSession == 'hazelcast') { %>, Environment env<% } } %>) {
+        <%_ if (hibernateCache == 'hazelcast') { _%>
+        this.env = env;
+            <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+        this.discoveryClient = discoveryClient;
+        this.serverProperties = serverProperties;
+            <%_ } _%>
+        <%_ } _%>
+        <%_ if (hibernateCache == 'ehcache') { _%>
+        this.cacheManager = cacheManager;
+            <%_ if (clusteredHttpSession == 'hazelcast') { _%>
+        this.env = env;
+            <%_ } _%>
+        <%_ } _%>
+    }
 
     @PreDestroy
     public void destroy() {
@@ -63,8 +80,8 @@ public class CacheConfiguration {
         cacheManager.close();<% } %><% if (hibernateCache == 'hazelcast') { %>
         Hazelcast.shutdownAll();<% } %>
     }
-
     <%_ if (hibernateCache == 'hazelcast') { _%>
+
     @Bean
     public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
         log.debug("Starting HazelcastCacheManager");
@@ -164,13 +181,14 @@ public class CacheConfiguration {
     }
 
     <%_ } else if (hibernateCache == 'no'){ _%>
+
     @Bean
     public CacheManager cacheManager() {
         log.debug("No cache");
-        cacheManager = new NoOpCacheManager();
-        return cacheManager;
+        return new NoOpCacheManager();
     }
     <%_ } _%><%_ if (clusteredHttpSession == 'hazelcast') { _%>
+
     private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
         mapConfig.setBackupCount(jHipsterProperties.getCache().getHazelcast().getBackupCount());

@@ -18,6 +18,15 @@ module.exports = JDLGenerator.extend({
     },
 
     initializing: {
+        // Temporary check until entity generator is compatible with angular 2
+        checkClientVersion: function () {
+            this.clientFw = this.config.get('clientFw');
+
+            if (this.clientFw && this.clientFw === 'angular2') {
+                this.error(chalk.red('The import-jdl generator does not support Angular 2 applications yet!'));
+            }
+        },
+
         validate: function () {
             this.jdlFiles && this.jdlFiles.forEach(function (key) {
                 if (!shelljs.test('-f', key)) {
