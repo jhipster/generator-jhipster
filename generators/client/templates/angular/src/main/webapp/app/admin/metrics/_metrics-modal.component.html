@@ -4,11 +4,11 @@
     <h4 class="modal-title" jhi-translate="metrics.jvm.threads.dump.title">Threads dump</h4>
 </div>
 <div class="modal-body pad">
-    <span class="tag tag-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="badge">{{threadDumpAll}}</span></span>&nbsp;
-    <span class="tag tag-success" (click)="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="badge">{{threadDumpRunnable}}</span></span>&nbsp;
-    <span class="tag tag-info" (click)="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="badge">{{threadDumpWaiting}}</span></span>&nbsp;
-    <span class="tag tag-warning" (click)="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="badge">{{threadDumpTimedWaiting}}</span></span>&nbsp;
-    <span class="tag tag-danger" (click)="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="badge">{{threadDumpBlocked}}</span></span>&nbsp;
+    <span class="tag tag-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="tag-pill">{{threadDumpAll}}</span></span>&nbsp;
+    <span class="tag tag-success" (click)="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="tag-pill">{{threadDumpRunnable}}</span></span>&nbsp;
+    <span class="tag tag-info" (click)="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="tag-pill">{{threadDumpWaiting}}</span></span>&nbsp;
+    <span class="tag tag-warning" (click)="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="tag-pill">{{threadDumpTimedWaiting}}</span></span>&nbsp;
+    <span class="tag tag-danger" (click)="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="tag-pill">{{threadDumpBlocked}}</span></span>&nbsp;
     <div class="voffset2">&nbsp;</div>
     Filter
     <input type="text" [(ngModel)]="threadDumpFilter" class="form-control">

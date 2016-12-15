@@ -12,7 +12,7 @@
             <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate show-validation>
 
                 <div class="form-group">
-                    <label class="control-label" for="firstName" jhi-translate="settings.form.firstname">First Name</label>
+                    <label class="form-control-label" for="firstName" jhi-translate="settings.form.firstname">First Name</label>
                     <input type="text" class="form-control" id="firstName" name="firstName" placeholder="{{'settings.form.firstname.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.firstName" minlength=1 maxlength=50 #firstNameInput="ngModel" required>
                     <div *ngIf="firstNameInput.dirty && firstNameInput.invalid">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="lastName" jhi-translate="settings.form.lastname">Last Name</label>
+                    <label class="form-control-label" for="lastName" jhi-translate="settings.form.lastname">Last Name</label>
                     <input type="text" class="form-control" id="lastName" name="lastName" placeholder="{{'settings.form.lastname.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.lastName" minlength=1 maxlength=50 #lastNameInput="ngModel" required>
                     <div *ngIf="lastNameInput.dirty && lastNameInput.invalid">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="email" jhi-translate="global.form.email">E-mail</label>
+                    <label class="form-control-label" for="email" jhi-translate="global.form.email">E-mail</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            [(ngModel)]="settingsAccount.email" minlength=5 maxlength=100 #emailInput="ngModel" required>
                     <div *ngIf="emailInput.dirty && emailInput.invalid">

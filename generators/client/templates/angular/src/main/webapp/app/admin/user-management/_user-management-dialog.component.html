@@ -15,7 +15,7 @@
         </div>
 
         <div class="form-group">
-            <label class="control-label" jhi-translate="userManagement.login">Login</label>
+            <label class="form-control-label" jhi-translate="userManagement.login">Login</label>
             <input type="text" class="form-control" name="login" #loginInput="ngModel"
                    [(ngModel)]="user.login" required minlength=1 maxlength=50 pattern="^[_'.@A-Za-z0-9-]*$">
 
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" jhi-translate="userManagement.firstName">First Name</label>
+            <label class="form-control-label" jhi-translate="userManagement.firstName">First Name</label>
             <input type="text" class="form-control" name="firstName" #firstNameInput="ngModel"
                    [(ngModel)]="user.firstName" maxlength="50">
 
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" jhi-translate="userManagement.email">Email</label>
+            <label class="form-control-label" jhi-translate="userManagement.email">Email</label>
             <input type="email" class="form-control" name="email" #emailInput="ngModel"
                    [(ngModel)]="user.email" required maxlength="100">
 
