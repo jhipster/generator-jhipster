@@ -1,13 +1,11 @@
 <div>
-    <h2 jhi-translate="userManagement.home.title">Users</h2>
+    <h2>
+        <span jhi-translate="userManagement.home.title">Users</span>
+        <button class="btn btn-primary float-xs-right" uiSref="user-management.new">
+            <span class="fa fa-plus"></span> <span jhi-translate="userManagement.home.createLabel">Create a new User</span>
+        </button>
+    </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-        <div class="col-md-4">
-            <button class="btn btn-primary" uiSref="user-management.new">
-                <span class="fa fa-plus"></span> <span jhi-translate="userManagement.home.createLabel">Create a new User</span>
-            </button>
-        </div>
-    </div>
     <div class="table-responsive" *ngIf="users">
         <table class="table table-striped">
             <thead>

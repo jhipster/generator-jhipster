@@ -1,10 +1,10 @@
 <div>
-    <h2 jhi-translate="health.title">Health Checks</h2>
-
-    <p>
-        <button type="button" class="btn btn-primary" (click)="refresh()"><span class="fa fa-refresh"></span>&nbsp;<span jhi-translate="health.refresh.button">Refresh</span>
+    <h2>
+        <span jhi-translate="health.title">Health Checks</span>
+        <button class="btn btn-primary float-xs-right" (click)="refresh()">
+            <span class="fa fa-refresh"></span> <span jhi-translate="health.refresh.button">Refresh</span>
         </button>
-    </p>
+    </h2>
     <div class="table-responsive">
         <table id="healthCheck" class="table table-striped">
             <thead>
