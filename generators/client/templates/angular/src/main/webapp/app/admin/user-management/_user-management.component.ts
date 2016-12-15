@@ -25,6 +25,7 @@ export class UserMgmtComponent implements OnInit {
     itemsPerPage: any;
     page: any;
     predicate: any;
+    previousPage: any;
     reverse: any;
     <%_ } _%>
 
@@ -39,7 +40,8 @@ export class UserMgmtComponent implements OnInit {
         private eventManager: EventManager
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = 1;
+        this.page = $state.params['page'];
+        this.previousPage = this.page;
         this.reverse = false;
         this.predicate = 'id';
     }
@@ -91,7 +93,6 @@ export class UserMgmtComponent implements OnInit {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
         <%_ } _%>
         this.users = data;
     }
@@ -107,8 +108,10 @@ export class UserMgmtComponent implements OnInit {
         return result;
     }
     loadPage (page) {
-        this.page = page;
-        this.transition();
+        if(page !== this.previousPage) {
+            this.previousPage = page;
+            this.transition();
+        }
     }
     transition () {
         this.$state.transitionTo(this.$state.$current, {
