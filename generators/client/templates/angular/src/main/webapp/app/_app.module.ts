@@ -15,6 +15,7 @@ import { HomeComponent, homeState } from './home';
 import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
 import { localStorageConfig } from './blocks/config/localstorage.config';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
+import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
@@ -67,7 +68,8 @@ let routerConfig = {
         ProfileService,
         { provide: Window, useValue: window },
         { provide: Document, useValue: document },
-        customHttpProvider()
+        customHttpProvider(),
+        PaginationConfig
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
