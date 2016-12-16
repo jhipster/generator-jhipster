@@ -5,15 +5,7 @@ export class PaginationUtil  {
 
     parseAscending (sort: string) {
         let sortArray = sort.split(',');
-        if (sortArray.length > 1){
-            return sortArray.slice(-1)[0] === 'asc';
-        } else {
-            return this.parseAscendingEncoded(sort);
-        }
-    }
-
-    parseAscendingEncoded (sort: string) {
-        let sortArray = sort.split('%2C');
+        sortArray = sortArray.length > 1 ? sortArray : sort.split('%2C');
         if (sortArray.length > 1){
             return sortArray.slice(-1)[0] === 'asc';
         }
