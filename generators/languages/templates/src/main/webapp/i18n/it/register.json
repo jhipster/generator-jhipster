@@ -7,9 +7,9 @@
         "messages": {
             "validate": {
                 "login": {
-                    "required": "Il nome utente è necessario per autenticarsi.",
+                    "required": "Il nome utente è obbligatorio.",
                     "minlength": "Il nome utente deve essere di almeno 1 carattere",
-                    "maxlength": "Il nome utente non può avere più di 50 caratteri",
+                    "maxlength": "Il nome utente non può contenere più di 50 caratteri",
                     "pattern": "Il nome utente può contenere solo lettere minuscole e cifre."
                 }
             },
@@ -17,7 +17,7 @@
             "error": {
                 "fail": "<strong>La registrazione dell'account è fallita!</strong> Riprova più tardi.",
                 "userexists": "<strong>Il nome utente scelto è già registrato!</strong> Si prega di scegliere un altro nome utente.",
-                "emailexists": "<strong>L'indirizzo email è già in uso</strong> Si prega di sceglierne un'altra."
+                "emailexists": "<strong>L'indirizzo e-mail è già in uso</strong> Si prega di sceglierne un altro."
             }
         }
     }
