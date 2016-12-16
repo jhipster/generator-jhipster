@@ -3,29 +3,28 @@
         "title": "Impostazioni per l'utente [<b>{{username}}</b>]",
         "form": {
             "firstname": "Nome",
-            "firstname.placeholder": "Tuo nome",
+            "firstname.placeholder": "Il tuo nome",
             "lastname": "Cognome",
-            "lastname.placeholder": "Tuo cognome",
+            "lastname.placeholder": "Il tuo cognome",
             "button": "Salva",
             "language": "Lingua"
-
         },
         "messages": {
             "error": {
                 "fail": "<strong>Si è verificato un errore!</strong> Impossibile salvare le impostazioni.",
-                "emailexists": "<strong>L'indirizzo email è già in uso!</strong> Sceglierne un altro per favore."
+                "emailexists": "<strong>L'indirizzo e-mail è già in uso!</strong> Si prega di sceglierne un altro."
             },
             "success": "<strong>Impostazioni salvate!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "È richiesto l'inserimento di un nome.",
-                    "minlength": "Il nome deve contenere almeno un carattere",
-                    "maxlength": "Il nome può avere una lunghezza massima di 50 caratteri"
+                    "required": "Il nome è obbligatorio.",
+                    "minlength": "Il nome deve essere di almeno 1 carattere",
+                    "maxlength": "Il nome non può contenere più di 50 caratteri"
                 },
                 "lastname": {
-                    "required": "È richiesto l'inserimento di un cognome.",
-                    "minlength": "Il cognome deve contenere almeno un carattere",
-                    "maxlength": "Il cognome può avere una lunghezza massima di 50 caratteri"
+                    "required": "Il cognome è obbligatorio.",
+                    "minlength": "Il cognome deve essere di almeno 1 carattere",
+                    "maxlength": "Il cognome non può contenere più di 50 caratteri"
                 }
             }
         }
