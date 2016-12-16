@@ -1,7 +1,13 @@
+os:
+  - linux
 language: java
-install: mvn clean test -DskipTests=true -Dgpg.skip=true
 jdk:
   - oraclejdk8
+cache:
+  directories:
+    - $HOME/.m2
+install:
+    - mvn clean install -Dgpg.skip=true
 notifications:
   webhooks:
     on_success: change  # options: [always|never|change] default: always
