@@ -11,7 +11,7 @@
 
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <packaging>jar</packaging>
     <name>JHipster core library</name>
     <description>Server-side library used by applications created with the JHipster generator, see https://jhipster.github.io/ for more information on JHipster</description>
@@ -38,6 +38,7 @@
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <prometheus-simpleclient.version>0.0.18</prometheus-simpleclient.version>
+        <springfox.version>2.6.1</springfox.version>
         <spring-cloud.version>Brixton.SR7</spring-cloud.version>
         <spring-security-oauth2.version>2.0.12.RELEASE</spring-security-oauth2.version>
     </properties>
@@ -71,6 +72,16 @@
             <artifactId>metrics-graphite</artifactId>
             <version>${dropwizard-metrics.version}</version>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${springfox.version}</version>
         </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>

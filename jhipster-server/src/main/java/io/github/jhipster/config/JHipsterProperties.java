@@ -406,6 +406,8 @@ public class JHipsterProperties {
 
         private String licenseUrl;
 
+        private String defaultIncludePattern = "/api/.*";
+
         public String getTitle() {
             return title;
         }
@@ -476,6 +478,14 @@ public class JHipsterProperties {
 
         public void setLicenseUrl(String licenseUrl) {
             this.licenseUrl = licenseUrl;
+        }
+
+        public String getDefaultIncludePattern() {
+            return defaultIncludePattern;
+        }
+
+        public void setDefaultIncludePattern(String defaultIncludePattern) {
+            this.defaultIncludePattern = defaultIncludePattern;
         }
     }
 
