@@ -1,7 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
-import {PaginationConfig} from '../blocks/config/uib-pagination.config';
-
 import {
     <%=angular2AppName%>SharedLibsModule,
     <%=angular2AppName%>SharedCommonModule,
@@ -60,7 +58,6 @@ import {
         SocialService,
         <%_ } _%>
         AuthService,
-        PaginationConfig
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [

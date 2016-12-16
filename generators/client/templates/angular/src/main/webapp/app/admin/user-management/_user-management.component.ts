@@ -5,8 +5,7 @@ import { StateService } from 'ui-router-ng2';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { AlertService, ITEMS_PER_PAGE, ParseLinks, Principal } from '../../shared';
-import { EventManager } from '../../shared/service/event-manager.service';
+import { AlertService, EventManager, ITEMS_PER_PAGE, PaginationUtil, ParseLinks, Principal } from '../../shared';
 
 @Component({
     selector: 'user-mgmt',
@@ -37,10 +36,11 @@ export class UserMgmtComponent implements OnInit {
         private principal: Principal,
         <%_ } _%>
         private $state: StateService,
-        private eventManager: EventManager
+        private eventManager: EventManager,
+        private paginationUtil: PaginationUtil
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = $state.params['page'];
+        this.page = paginationUtil.parsePage($state.params['page']);
         this.previousPage = this.page;
         this.reverse = false;
         this.predicate = 'id';
@@ -107,7 +107,7 @@ export class UserMgmtComponent implements OnInit {
         }
         return result;
     }
-    loadPage (page) {
+    loadPage (page: number) {
         if(page !== this.previousPage) {
             this.previousPage = page;
             this.transition();

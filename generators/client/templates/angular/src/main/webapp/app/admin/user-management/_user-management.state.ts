@@ -10,7 +10,6 @@ import { User } from './user.model';
 import { UserService } from './user.service';
 import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
 
-
 export const userMgmtState = {
     name: 'user-management',
     parent: 'admin',
