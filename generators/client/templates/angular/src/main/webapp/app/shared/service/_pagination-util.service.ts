@@ -13,7 +13,6 @@ export class PaginationUtil  {
     }
 
     parseAscendingEncoded (sort: string) {
-        console.log("Je parse encoded");
         let sortArray = sort.split('%2C');
         if (sortArray.length > 1){
             return sortArray.slice(-1)[0] === 'asc';
