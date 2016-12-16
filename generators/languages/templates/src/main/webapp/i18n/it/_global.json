@@ -64,25 +64,25 @@
                 <%_ } _%>
             },
             "error": {
-                "dontmatch" : "La password e la conferma non corrispondono!"
+                "dontmatch" : "La password e la sua conferma non corrispondono!"
             },
             "validate": {
                 "newpassword": {
-                    "required": "È necessario inserire una password.",
-                    "minlength": "La tua password deve essere di almeno 4 caratteri",
-                    "maxlength": "La tua password non può essere più di 50 caratteri",
+                    "required": "La password è obbligatoria.",
+                    "minlength": "La password deve essere di almeno 4 caratteri",
+                    "maxlength": "La password non può contenere più di 50 caratteri",
                     "strength": "Robustezza della password:"
                 },
                 "confirmpassword": {
-                    "required": "È necessaria la password di conferma.",
+                    "required": "La password di conferma è obbligatoria.",
                     "minlength": "La tua password deve essere di almeno 4 caratteri",
-                    "maxlength": "La tua password non può essere più di 50 caratteri"
+                    "maxlength": "La tua password non può contenere più di 50 caratteri"
                 },
                 "email": {
-                    "required": "È necessario un indirizzo e-mail.",
-                    "invalid": "Il tuo indirizzo e-mail non è valido.",
-                    "minlength": "Il tuo indirizzo e-mail deve essere di almeno 5 caratteri",
-                    "maxlength": "Il tuo indirizzo e-mail non può essere più di 50 caratteri"
+                    "required": "L'indirizzo e-mail è obbligatorio.",
+                    "invalid": "L'indirizzo e-mail non è valido.",
+                    "minlength": "L'indirizzo e-mail deve essere di almeno 5 caratteri",
+                    "maxlength": "L'indirizzo e-mail non può contenere più di 50 caratteri"
                 }
             }
         },
@@ -134,5 +134,5 @@
         "emailexists": "L'email è già in uso!",
         "idexists": "Un(a) nuovo/a {{entityName}} non può già avere un ID"
     },
-    "footer": "Pié di pagina"
+    "footer": "Piè di pagina"
 }
