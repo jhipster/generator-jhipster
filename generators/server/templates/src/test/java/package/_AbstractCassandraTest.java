@@ -1,5 +1,7 @@
 package <%=packageName%>;
 
+import io.github.jhipster.config.JHipsterConstants;
+
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import org.apache.cassandra.exceptions.ConfigurationException;
@@ -21,14 +23,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import <%=packageName%>.config.Constants;
-
 import static org.cassandraunit.utils.EmbeddedCassandraServerHelper.getNativeTransportPort;
 
 /**
  * Base class for starting/stopping Cassandra during tests.
  */
-@ActiveProfiles(Constants.SPRING_PROFILE_TEST)
+@ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
 public class AbstractCassandraTest {
 
     public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";

@@ -1,6 +1,6 @@
 package <%=packageName%>.config;
 
-import <%=packageName%>.config.JHipsterProperties;
+import io.github.jhipster.config.JHipsterProperties;
 
 import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
 import <%=packageName%>.gateway.ratelimiting.RateLimitingRepository;

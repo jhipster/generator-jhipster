@@ -1,6 +1,9 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.config.cassandra.CassandraConfiguration;
+
+import io.github.jhipster.config.JHipsterConstants;
+
 import org.apache.cassandra.config.DatabaseDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile(Constants.SPRING_PROFILE_TEST)
+@Profile(JHipsterConstants.SPRING_PROFILE_TEST)
 public class CassandraTestConfiguration extends CassandraConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CassandraTestConfiguration.class);

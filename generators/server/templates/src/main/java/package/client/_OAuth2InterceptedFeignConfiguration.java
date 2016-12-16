@@ -1,6 +1,7 @@
 package <%=packageName%>.client;
 
-import <%=packageName%>.config.JHipsterProperties;
+import io.github.jhipster.security.uaa.LoadBalancedResourceDetails;
+
 import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -14,26 +15,14 @@ import java.io.IOException;
 @Configuration
 public class OAuth2InterceptedFeignConfiguration {
 
-    private final JHipsterProperties jHipsterProperties;
+    private final LoadBalancedResourceDetails loadBalancedResourceDetails;
 
-    private LoadBalancerClient loadBalancerClient;
-
-    public OAuth2InterceptedFeignConfiguration(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
+    public OAuth2InterceptedFeignConfiguration(LoadBalancedResourceDetails loadBalancedResourceDetails) {
+        this.loadBalancedResourceDetails = loadBalancedResourceDetails;
     }
 
     @Bean(name = "oauth2RequestInterceptor")
     public RequestInterceptor getOAuth2RequestInterceptor() throws IOException {
-        if (loadBalancerClient != null) {
-            jHipsterProperties.getSecurity().getClientAuthorization().setLoadBalancerClient(loadBalancerClient);
-        }
-        return new OAuth2FeignRequestInterceptor(
-            new DefaultOAuth2ClientContext(), jHipsterProperties.getSecurity().getClientAuthorization()
-        );
-    }
-
-    @Autowired(required = false)
-    public void setLoadBalancerClient(LoadBalancerClient loadBalancerClient) {
-        this.loadBalancerClient = loadBalancerClient;
+        return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), loadBalancedResourceDetails);
     }
 }

@@ -7,7 +7,7 @@ import { UIRouterModule } from 'ui-router-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule } from './shared';
-import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; //TODO these couldnt be used from barrels due to an error
+import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; //TODO these couldn't be used from barrels due to an error
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
 import { appState } from './app.state';

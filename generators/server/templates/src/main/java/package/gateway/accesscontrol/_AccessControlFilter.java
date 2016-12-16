@@ -1,6 +1,6 @@
 package <%=packageName%>.gateway.accesscontrol;
 
-import <%=packageName%>.config.JHipsterProperties;
+import io.github.jhipster.config.JHipsterProperties;
 
 import java.util.List;
 import java.util.Map;

@@ -45,4 +45,29 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java');
         generator.removeFile(javaDir + 'config/hazelcast/package-info.java');
     }
+    if (generator.isJhipsterVersionLessThan('4.0.0')) {
+        generator.removeFile(javaDir + 'async/ExceptionHandlingAsyncTaskExecutor.java');
+        generator.removeFile(javaDir + 'async/package-info.java');
+        generator.removeFile(javaDir + 'config/jHipsterProperties.java');
+        generator.removeFile(javaDir + 'config/LoadBalancedResourceDetails.java');
+        generator.removeFile(javaDir + 'config/apidoc/package-info.java');
+        generator.removeFile(javaDir + 'config/apidoc/PageableParameterBuilderPlugin.java');
+        generator.removeFile(javaDir + 'config/apidoc/SwaggerConfiguration.java');
+        generator.removeFile(javaDir + 'config/jcache/SpringCacheRegionFactory.java');
+        generator.removeFile(javaDir + 'config/jcache/SpringCacheRegionFactory.java');
+        generator.removeFile(javaDir + 'config/liquibase/AsyncSpringLiquibase.java');
+        generator.removeFile(javaDir + 'config/liquibase/package-info.java');
+        generator.removeFile(javaDir + 'config/locale/AngularCookieLocaleResolver.java');
+        generator.removeFile(javaDir + 'config/locale/package-info.java');
+        generator.removeFile(javaDir + 'domain/util/FixedH2Dialect.java');
+        generator.removeFile(javaDir + 'domain/util/FixedPostgreSQL82Dialect');
+        generator.removeFile(javaDir + 'domain/util/JSR310DateConverters.java');
+        generator.removeFile(javaDir + 'domain/util/JSR310PersistenceConverters.java');
+        generator.removeFile(javaDir + 'security/AjaxAuthenticationFailureHandler.java');
+        generator.removeFile(javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
+        generator.removeFile(javaDir + 'security/AjaxLogoutSuccessHandler.java');
+        generator.removeFile(javaDir + 'security/Http401UnauthorizedEntryPoint.java');
+        generator.removeFile(javaDir + 'web/filter/CachingHttpHeadersFilter.java');
+        generator.removeFile(javaDir + 'web/filter/package-info.java');
+    }
 }

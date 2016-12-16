@@ -1,9 +1,10 @@
 package <%=packageName%>.security.social;
-
-import <%=packageName%>.config.JHipsterProperties;
 <%_ if (authenticationType == 'jwt') { _%>
+
 import <%=packageName%>.security.jwt.TokenProvider;
 <%_ } _%>
+
+import io.github.jhipster.config.JHipsterProperties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
