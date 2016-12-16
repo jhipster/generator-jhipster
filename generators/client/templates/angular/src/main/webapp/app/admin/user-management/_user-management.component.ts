@@ -42,7 +42,7 @@ export class UserMgmtComponent implements OnInit {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = paginationUtil.parsePage($state.params['page']);
         this.previousPage = this.page;
-        this.reverse = false;
+        this.reverse = paginationUtil.parseAscending($state.params['sort']);
         this.predicate = 'id';
     }
 

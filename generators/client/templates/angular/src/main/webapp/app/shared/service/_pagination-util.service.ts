@@ -8,7 +8,10 @@ export class PaginationUtil  {
         if (sortArray.length > 1){
             return sort.split(',').slice(-1)[0] === 'asc';
         } else {
-            // default to true if no sort defined
+            sortArray = sort.split('%2C');
+            if (sortArray.length > 1){
+                return sort.split('%2C').slice(-1)[0] === 'asc';
+            }
             return true;
         }
     }

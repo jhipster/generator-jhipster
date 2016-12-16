@@ -57,7 +57,7 @@ import {
         <%_ if (enableSocialSignIn) { _%>
         SocialService,
         <%_ } _%>
-        AuthService,
+        AuthService
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
