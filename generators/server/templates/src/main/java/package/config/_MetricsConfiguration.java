@@ -5,7 +5,8 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.config.jcache.JCacheGaugeSet;
 <%_ } _%>
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
-import <%=packageName%>.config.metrics.SpectatorLogMetricWriter;
+import io.github.jhipster.config.metrics.SpectatorLogMetricWriter;
+
 import com.netflix.spectator.api.Registry;
 import org.springframework.boot.actuate.autoconfigure.ExportMetricReader;
 import org.springframework.boot.actuate.autoconfigure.ExportMetricWriter;
