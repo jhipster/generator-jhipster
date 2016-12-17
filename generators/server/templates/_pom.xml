@@ -86,7 +86,7 @@
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <node.version>v6.9.2</node.version>
-        <%_ if (!yarnInstall) { _%>
+        <%_ if (clientPackageManager === 'npm') { _%>
         <npm.version>3.10.9</npm.version>
         <%_ } _%>
         <sortpom-maven-plugin.version>2.5.0</sortpom-maven-plugin.version>
@@ -146,7 +146,7 @@
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase></profile.no-liquibase>
         <profile.swagger></profile.swagger>
-        <%_ if (yarnInstall) { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
         <yarn.version>v0.17.10</yarn.version>
         <%_ } _%>
     </properties>
@@ -1124,10 +1124,10 @@
                                         <artifactId>frontend-maven-plugin</artifactId>
                                         <versionRange>${frontend-maven-plugin.version}</versionRange>
                                         <goals>
-                                            <%_ if (yarnInstall) { _%>
+                                            <%_ if (clientPackageManager === 'yarn') { _%>
                                             <goal>install-node-and-yarn</goal>
                                             <goal>yarn</goal>
-                                            <%_ } else { _%>
+                                            <%_ } else if (clientPackageManager === 'npm') { _%>
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
                                             <%_ } _%>
@@ -1195,7 +1195,7 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>${frontend-maven-plugin.version}</version>
                         <executions>
-                            <%_ if (yarnInstall) { _%>
+                            <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
                                 <id>install node and yarn</id>
                                 <goals>
@@ -1206,7 +1206,7 @@
                                     <yarnVersion>${yarn.version}</yarnVersion>
                                 </configuration>
                             </execution>
-                            <%_ } else { _%>
+                            <%_ } else if (clientPackageManager === 'npm') { _%>
                             <execution>
                                 <id>install node and npm</id>
                                 <goals>
@@ -1299,7 +1299,7 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>${frontend-maven-plugin.version}</version>
                         <executions>
-                            <%_ if (yarnInstall) { _%>
+                            <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
                                 <id>install node and yarn</id>
                                 <goals>
@@ -1323,7 +1323,7 @@
                                     <%_ } _%>
                                 </configuration>
                             </execution>
-                            <%_ } else { _%>
+                            <%_ } else if (clientPackageManager === 'npm') { _%>
                             <execution>
                                 <id>install node and npm</id>
                                 <goals>
