@@ -48,10 +48,10 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Ak sa chcete <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prihlásiť</a>, môžete vyskúšať predvolené účty:<br/>- Administrátor (meno=\"admin\" a heslo=\"admin\") <br/>- Používateľ (meno=\"user\" a heslo=\"user\").",
                 "register": "Ešte nemáte účet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Zaregistrujte si nový účet.</a>"
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "Ak sa chcete ",
                     "link": "prihlásiť",

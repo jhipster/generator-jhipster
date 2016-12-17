@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Kies een nieuw wachtwoord",
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Uw wachtwoord is gereset.</strong> Gelieve <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">authenticeer</a>.",
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "success": "<strong>Uw wachtwoord is gereset.</strong> Gelieve ",
                 <%_ } _%>
                 "keymissing": "De reset sleutel ontbreekt.",

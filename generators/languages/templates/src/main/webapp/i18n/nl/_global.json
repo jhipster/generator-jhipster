@@ -48,10 +48,10 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Indien u wilt <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">aanmelden</a>, dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\").",
                 "register": "U heeft nog geen gebruiker? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Registreer een nieuwe gebruiker</a>"
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "Indien u wilt ",
                     "link": "aanmelden",

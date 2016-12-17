@@ -2,9 +2,9 @@
     "activate": {
         "title": "Activatie",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Uw gebuiker werd geactiveerd.</strong> Gelieve te <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">authenticeren</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>Uw gebuiker werd geactiveerd.</strong> Gelieve te ",
             <%_ } _%>
             "error": "<strong>Uw gebruiker kon niet geactiveerd worden.</strong> Gelieve het registratie formulier te gebruiken om zich in te schrijven."

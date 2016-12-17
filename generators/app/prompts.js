@@ -138,7 +138,7 @@ function askForClient() {
 
     this.prompt({
         type: 'list',
-        name: 'clientFw',
+        name: 'clientFramework',
         when: function (response) {
             return (applicationType !== 'microservice');
         },
@@ -157,7 +157,7 @@ function askForClient() {
         ],
         default: 'angular1'
     }).then(function (prompt) {
-        this.clientFw = this.configOptions.clientFw = prompt.clientFw;
+        this.clientFramework = this.configOptions.clientFramework = prompt.clientFramework;
         done();
     }.bind(this));
 }

@@ -64,7 +64,7 @@ describe('JHipster generator', function () {
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'baseName': 'jhipster',
-                    'clientFw': 'angular2',
+                    'clientFramework': 'angular2',
                     'packageName': 'com.mycompany.myapp',
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',

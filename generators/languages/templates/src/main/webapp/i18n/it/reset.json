@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Scegliere una nuova password",
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>La tua password è stata reimpostata .</strong> Per favore <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autenticati</a>.",
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "success": "<strong>La tua password è stata reimpostata .</strong> Per favore ",
                 <%_ } _%>
                 "keymissing": "La chiave di reimpostazione non è presente.",

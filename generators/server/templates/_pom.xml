@@ -1131,7 +1131,7 @@
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
                                             <%_ } _%>
-                                            <%_ if (clientFw === 'angular1') { _%>
+                                            <%_ if (clientFramework === 'angular1') { _%>
                                             <goal>bower</goal>
                                             <goal>gulp</goal>
                                             <%_ } _%>
@@ -1189,7 +1189,7 @@
             </dependencies>
             <build>
                 <plugins>
-                    <%_ if (!skipClient && clientFw === 'angular2') { _%>
+                    <%_ if (!skipClient && clientFramework === 'angular2') { _%>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
@@ -1355,7 +1355,7 @@
                             </execution>
                                 <%_ } _%>
                             <%_ } _%>
-                            <%_ if (clientFw === 'angular1') { _%>
+                            <%_ if (clientFramework === 'angular1') { _%>
                             <execution>
                                 <id>bower install</id>
                                 <goals>
@@ -1385,7 +1385,7 @@
                                 </configuration>
                             </execution>
                             <%_ } _%>
-                            <%_ if (clientFw === 'angular2') { _%>
+                            <%_ if (clientFramework === 'angular2') { _%>
                             <execution>
                                 <id>webpack build</id>
                                 <goals>

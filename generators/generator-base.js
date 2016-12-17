@@ -42,7 +42,7 @@ util.inherits(Generator, yeoman.Base);
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
         var navbarPath;
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
@@ -74,7 +74,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
         var navbarAdminPath;
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
             navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
@@ -104,7 +104,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
         var entityMenuPath;
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
@@ -547,7 +547,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
     var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
     var loginfullPath, registerfullPath;
-    if (this.clientFw === 'angular1') {
+    if (this.clientFramework === 'angular1') {
         loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
         registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
     } else {

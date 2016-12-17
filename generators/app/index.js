@@ -159,10 +159,10 @@ module.exports = JhipsterGenerator.extend({
             }
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.clientFw = this.config.get('clientFw');
-            if (!this.clientFw) {
+            this.clientFramework = this.config.get('clientFramework');
+            if (!this.clientFramework) {
                 /* for backward compatibility */
-                this.clientFw = 'angular1';
+                this.clientFramework = 'angular1';
             }
             this.testFrameworks = this.config.get('testFrameworks');
             this.enableTranslation = this.config.get('enableTranslation');
@@ -196,7 +196,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.skipI18nQuestion = true;
             this.configOptions.baseName = this.baseName;
             this.configOptions.logo = false;
-            this.configOptions.clientFw = this.clientFw;
+            this.configOptions.clientFramework = this.clientFramework;
             this.configOptions.otherModules = this.otherModules;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
@@ -263,14 +263,14 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.enableTranslation = this.enableTranslation;
             this.configOptions.nativeLanguage = this.nativeLanguage;
             this.configOptions.languages = this.languages;
-            this.configOptions.clientFw = this.clientFw;
+            this.configOptions.clientFramework = this.clientFramework;
         },
 
         insight: function () {
             var insight = this.insight();
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
-            insight.track('app/clientFw', this.clientFw);
+            insight.track('app/clientFramework', this.clientFramework);
             insight.track('app/testFrameworks', this.testFrameworks);
             insight.track('app/otherModules', this.otherModules);
         },
@@ -283,7 +283,7 @@ module.exports = JhipsterGenerator.extend({
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('applicationType', this.applicationType);
-            this.config.set('clientFw', this.clientFw);
+            this.config.set('clientFramework', this.clientFramework);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);

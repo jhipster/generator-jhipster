@@ -1,7 +1,7 @@
 apply plugin: 'org.springframework.boot'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
@@ -28,7 +28,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 task gulpBuildWithOpts(type: GulpTask) {
     args = ["build", "--no-notification"]
 }
@@ -72,7 +72,7 @@ if (!project.hasProperty('nodeInstall')) {
     <%_ } else { _%>
 gulpBuildWithOpts.dependsOn npmInstall
     <%_ } _%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 gulpBuildWithOpts.dependsOn bower
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test

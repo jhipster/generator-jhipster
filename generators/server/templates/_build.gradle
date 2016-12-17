@@ -32,7 +32,7 @@ apply plugin: 'war'
 apply plugin: 'propdeps'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
@@ -123,7 +123,7 @@ task testReport(type: TestReport) {
 <% if (cucumberTests) { %>
 cucumberTest.finalizedBy(testReport)<% } %>
 <% if(!skipClient) {%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 apply from: 'gradle/yeoman.gradle'<% } %>
     <%_ } _%>
 apply from: 'gradle/sonar.gradle'

@@ -2,9 +2,9 @@
     "activate": {
         "title": "启用",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>您的账号已启用.</strong> 请 <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登录</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>您的账号已启用.</strong> 请 ",
             <%_ } _%>
             "error": "<strong>您的账号无法启用.</strong> 请重新注册."

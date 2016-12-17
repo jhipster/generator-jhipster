@@ -2,9 +2,9 @@
     "activate": {
         "title": "Activation",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Votre compte utilisateur a été activé.</strong> Merci de vous <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">authentifier</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>Votre compte utilisateur a été activé.</strong> Merci de vous ",
             <%_ } _%>
             "error": "<strong>Votre compte utilisateur n'a pas pu être activé.</strong> Utilisez le formulaire d'enregistrement pour en créer un nouveau."
