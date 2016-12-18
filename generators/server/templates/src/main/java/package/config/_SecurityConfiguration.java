@@ -15,7 +15,7 @@ import io.github.jhipster.security.*;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
+import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
