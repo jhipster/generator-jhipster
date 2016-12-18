@@ -1,4 +1,7 @@
-<% var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; %>
+<%
+var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.';
+var ngValidators = '../../../../../../ng_validators';
+%>
 <form name="editForm" role="form" novalidate ng-submit="vm.save()"<% if (validation) { %> show-validation<% } %>>
 
     <div class="modal-header">
@@ -71,7 +74,7 @@
                 <%_ if (fieldType == 'LocalDate') { _%>
                 <div class="input-group">
                     <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" uib-datepicker-popup="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
-                    <%- include ng_validators %>/>
+                    <%- include(ngValidators) %>/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -79,18 +82,18 @@
                 <%_ } else if(fieldType == 'ZonedDateTime') { _%>
                 <div class="input-group">
                     <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" datetime-picker="{{dateformat}}" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" is-open="vm.datePickerOpenStatus.<%=fieldName %>"
-                    <%- include ng_validators %>  />
+                    <%- include(ngValidators) %>/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
                 <%_ } else if(fieldTypeBlobContent == 'text') { _%>
                 <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
-                    ng-model="vm.<%= entityInstance %>.<%= fieldName %>" <%- include ng_validators %> ></textarea>
+                    ng-model="vm.<%= entityInstance %>.<%= fieldName %>" <%- include(ngValidators) %>></textarea>
                 <%_ } else { _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>"
-                    <%- include ng_validators %> />
+                    <%- include(ngValidators) %>/>
                     <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="field_<%= fieldName %>ContentType"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>ContentType" />

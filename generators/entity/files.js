@@ -4,17 +4,17 @@ const _ = require('lodash');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
-INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
-CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-ANGULAR_DIR = constants.ANGULAR_DIR,
-SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-TEST_DIR = constants.TEST_DIR,
-SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+    INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
+    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
+    ANGULAR_DIR = constants.ANGULAR_DIR,
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
+    TEST_DIR = constants.TEST_DIR,
+    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
 
-module.exports = {
-    writeFiles
-};
+    SERVER_TEMPLATES_DIR = 'server',
+    CLIENT_NG1_TEMPLATES_DIR = 'client/angularjs',
+    CLIENT_I18N_TEMPLATES_DIR = 'client';
 
 /**
 * The default is to use a file path string. It implies use of the template method.
@@ -27,7 +27,7 @@ const serverFiles = {
             path: SERVER_MAIN_RES_DIR,
             templates: [{
                 file: 'config/liquibase/changelog/_added_entity.xml', interpolate : INTERPOLATE_REGEX,
-                renameTo: generator => 'config/liquibase/changelog/' + generator.changelogDate + '_added_entity_' + generator.entityClass + '.xml'
+                renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
             }]
         },
         {
@@ -35,7 +35,7 @@ const serverFiles = {
             path: SERVER_MAIN_RES_DIR,
             templates: [{
                 file: 'config/liquibase/changelog/_added_entity_constraints.xml', interpolate : INTERPOLATE_REGEX,
-                renameTo: generator => 'config/liquibase/changelog/' + generator.changelogDate + '_added_entity_constraints_' + generator.entityClass + '.xml'
+                renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`
             }]
         },
         {
@@ -43,7 +43,7 @@ const serverFiles = {
             path: SERVER_MAIN_RES_DIR,
             templates: [{
                 file: 'config/cql/changelog/_added_entity.cql',
-                renameTo: generator => 'config/cql/changelog/' + generator.changelogDate + '_added_entity_' + generator.entityClass + '.cql'
+                renameTo: generator => `config/cql/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.cql`
             }]
         }
     ],
@@ -53,15 +53,15 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/domain/_Entity.java',
-                    renameTo: generator => generator.packageFolder + '/domain/' + generator.entityClass + '.java'
+                    renameTo: generator => `${generator.packageFolder}/domain/${generator.entityClass}.java`
                 },
                 {
                     file: 'package/repository/_EntityRepository.java',
-                    renameTo: generator => generator.packageFolder + '/repository/' + generator.entityClass + 'Repository.java'
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
                 },
                 {
                     file: 'package/web/rest/_EntityResource.java',
-                    renameTo: generator => generator.packageFolder + '/web/rest/' + generator.entityClass + 'Resource.java'
+                    renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}Resource.java`
                 }
             ]
         },
@@ -70,7 +70,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [{
                 file: 'package/repository/search/_EntitySearchRepository.java',
-                renameTo: generator => generator.packageFolder + '/repository/search/' + generator.entityClass + 'SearchRepository.java'
+                renameTo: generator => `${generator.packageFolder}/repository/search/${generator.entityClass}SearchRepository.java`
             }]
         },
         {
@@ -79,11 +79,11 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/service/_EntityService.java',
-                    renameTo: generator => generator.packageFolder + '/service/' + generator.entityClass + 'Service.java'
+                    renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}Service.java`
                 },
                 {
                     file: 'package/service/impl/_EntityServiceImpl.java',
-                    renameTo: generator => generator.packageFolder + '/service/impl/' + generator.entityClass + 'ServiceImpl.java'
+                    renameTo: generator => `${generator.packageFolder}/service/impl/${generator.entityClass}ServiceImpl.java`
                 }
             ]
         },
@@ -92,7 +92,7 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [{
                 file: 'package/service/impl/_EntityServiceImpl.java',
-                renameTo: generator => generator.packageFolder + '/service/' + generator.entityClass + 'Service.java'
+                renameTo: generator => `${generator.packageFolder}/service/${generator.entityClass}Service.java`
             }]
         },
         {
@@ -101,11 +101,11 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/service/dto/_EntityDTO.java',
-                    renameTo: generator => generator.packageFolder + '/service/dto/' + generator.entityClass + 'DTO.java'
+                    renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}DTO.java`
                 },
                 {
                     file: 'package/service/mapper/_EntityMapper.java',
-                    renameTo: generator => generator.packageFolder + '/service/mapper/' + generator.entityClass + 'Mapper.java'
+                    renameTo: generator => `${generator.packageFolder}/service/mapper/${generator.entityClass}Mapper.java`
                 }
             ]
         }
@@ -115,7 +115,7 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
                 file: 'package/web/rest/_EntityResourceIntTest.java',
-                renameTo: generator => generator.packageFolder + '/web/rest/' + generator.entityClass + 'ResourceIntTest.java'
+                renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
             }]
         },
         {
@@ -123,7 +123,7 @@ const serverFiles = {
             path: TEST_DIR,
             templates: [{
                 file: 'gatling/simulations/_EntityGatlingTest.scala', interpolate: INTERPOLATE_REGEX,
-                renameTo: generator => 'gatling/simulations/' + generator.entityClass + 'GatlingTest.scala'
+                renameTo: generator => `gatling/simulations/${generator.entityClass}GatlingTest.scala`
             }]
         }
     ]
@@ -136,43 +136,43 @@ const angularjsFiles = {
             templates: [
                 {
                     file: 'entities/_entity-management.html', method: 'copyHtml', template: true,
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityPluralFileName + '.html'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityPluralFileName}.html`
                 },
                 {
                     file: 'entities/_entity-management-detail.html', method: 'copyHtml', template: true,
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '-detail.html'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.html`
                 },
                 {
                     file: 'entities/_entity-management-dialog.html', method: 'copyHtml', template: true,
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '-dialog.html'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.html`
                 },
                 {
                     file: 'entities/_entity-management-delete-dialog.html', method: 'copyHtml', template: true,
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '-delete-dialog.html'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.html`
                 },
                 {
                     file: 'entities/_entity-management.state.js',
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '.state.js'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.state.js`
                 },
                 {
                     file: 'entities/_entity-management.controller.js',
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '.controller' + '.js'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.controller.js`
                 },
                 {
                     file: 'entities/_entity-management-dialog.controller.js',
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '-dialog.controller' + '.js'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.controller.js`
                 },
                 {
                     file: 'entities/_entity-management-delete-dialog.controller.js',
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '-delete-dialog.controller' + '.js'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.controller.js`
                 },
                 {
                     file: 'entities/_entity-management-detail.controller.js',
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityFileName + '-detail.controller' + '.js'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.controller.js`
                 },
                 {
                     file: 'entities/_entity.service.js',
-                    renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityServiceFileName + '.service' + '.js'
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.js`
                 }
 
             ]
@@ -182,7 +182,7 @@ const angularjsFiles = {
             path: ANGULAR_DIR,
             templates: [{
                 file: 'entities/_entity-search.service.js',
-                renameTo: generator => 'entities/' + generator.entityFolderName + '/' + generator.entityServiceFileName + '.search.service' + '.js'
+                renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.search.service.js`
             }]
         }
     ],
@@ -191,7 +191,7 @@ const angularjsFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
                 file: 'spec/app/entities/_entity-management-detail.controller.spec.js',
-                renameTo: generator => 'spec/app/entities/' + generator.entityFolderName + '/' + generator.entityFileName + '-detail.controller.spec.js'
+                renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.controller.spec.js`
             }]
         },
         {
@@ -199,10 +199,16 @@ const angularjsFiles = {
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
                 file: 'e2e/entities/_entity.js',
-                renameTo: generator => 'e2e/entities/' + generator.entityFileName + '.js'
+                renameTo: generator => `e2e/entities/${generator.entityFileName}.js`
             }]
         }
     ]
+};
+
+module.exports = {
+    writeFiles,
+    serverFiles,
+    angularjsFiles
 };
 
 function writeFiles() {
@@ -218,7 +224,7 @@ function writeFiles() {
             if (this.skipServer) return;
 
             // write server side files
-            this.writeFilesToDisk(serverFiles, this, false);
+            this.writeFilesToDisk(serverFiles, this, false, SERVER_TEMPLATES_DIR);
 
             if (this.databaseType === 'sql') {
                 if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
@@ -246,15 +252,17 @@ function writeFiles() {
                     enumInfo.angularAppName = this.angularAppName;
                     enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
                     if (!this.skipServer) {
-                        this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
-                        SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+                        this.template(
+                            `${SERVER_TEMPLATES_DIR}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,
+                            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`, enumInfo, {}
+                        );
                     }
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
                         var languages = this.languages || this.getAllInstalledLanguages();
                         languages.forEach(function (language) {
-                            this.copyEnumI18n(language, enumInfo);
+                            this.copyEnumI18n(language, enumInfo, CLIENT_I18N_TEMPLATES_DIR);
                         }, this);
                     }
 
@@ -266,7 +274,7 @@ function writeFiles() {
             if (this.skipClient) return;
 
             // write client side files for angular 1.x
-            this.writeFilesToDisk(angularjsFiles, this, false);
+            this.writeFilesToDisk(angularjsFiles, this, false, CLIENT_NG1_TEMPLATES_DIR);
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation);
 
@@ -274,7 +282,7 @@ function writeFiles() {
             if (this.enableTranslation) {
                 var languages = this.languages || this.getAllInstalledLanguages();
                 languages.forEach(function (language) {
-                    this.copyI18n(language);
+                    this.copyI18n(language, CLIENT_I18N_TEMPLATES_DIR);
                 }, this);
             }
         }

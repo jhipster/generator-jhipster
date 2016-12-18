@@ -6,7 +6,6 @@ var path = require('path'),
     _ = require('lodash');
 
 const constants = require('./generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     LANGUAGES_MAIN_SRC_DIR = '../../languages/templates/' + constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = {
@@ -118,7 +117,7 @@ function stripContent(source, regex, _this, _opt) {
 
     var body = html.readFileAsString(path.join(_this.sourceRoot(), source));
     //temp hack to fix error thrown by ejs during entity creation, this needs a permanent fix when we add more .ejs files
-    _opt.filename = path.join(_this.sourceRoot(), CLIENT_MAIN_SRC_DIR + 'app/entities/ng_validators.ejs');
+    _opt.filename = path.join(_this.sourceRoot(), 'client/ng_validators.ejs');
     body = engine(body, _this, _opt);
     body = body.replace(regex, '');
 
