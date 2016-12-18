@@ -6,7 +6,6 @@ var util = require('util'),
     cleanup = require('../cleanup'),
     prompts = require('./prompts'),
     packagejs = require('../../package.json'),
-    shelljs = require('shelljs'),
     exec = require('child_process').exec;
 
 var JhipsterGenerator = generators.Base.extend({});
@@ -165,6 +164,7 @@ module.exports = JhipsterGenerator.extend({
                 /* for backward compatibility */
                 this.clientFramework = 'angular1';
             }
+            this.otherModules = this.config.get('otherModules');
             this.testFrameworks = this.config.get('testFrameworks');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
@@ -338,10 +338,13 @@ module.exports = JhipsterGenerator.extend({
     end: {
         localInstall: function() {
             if (this.skipClient === true) {
+                if (this.otherModules === undefined) {
+                    this.otherModules = [];
+                }
                 // Generate a package.json file containing the current version of the generator as dependency
                 this.template('_skipClientApp.package.json', 'package.json', this, {});
 
-                if(this.yarnInstall) {
+                if (this.yarnInstall) {
                     this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
                     this.spawnCommand('yarn', ['install']);
                 }
