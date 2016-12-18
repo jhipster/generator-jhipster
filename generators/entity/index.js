@@ -99,6 +99,9 @@ module.exports = EntityGenerator.extend({
         // Temporary check until entity generator is compatible with angular 2
         checkClientVersion: function () {
             this.clientFramework = this.config.get('clientFramework');
+            if (!this.clientFramework) {
+                this.clientFramework = 'angular1';
+            }
 
             if (this.clientFramework && this.clientFramework === 'angular2') {
                 this.error(chalk.red('The entity generator does not support Angular 2 applications yet!'));
