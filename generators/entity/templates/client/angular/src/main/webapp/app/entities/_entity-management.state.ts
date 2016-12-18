@@ -1,24 +1,16 @@
-<%
-var i18nToLoad = [entityInstance];
-for (var idx in fields) {
-    if (fields[idx].fieldIsEnum == true) {
-        i18nToLoad.push(fields[idx].enumInstance);
-    }
-}
-i18nToLoad.push('global');
-%>
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { UserMgmtComponent } from './user-management.component';
-import { UserMgmtDetailComponent } from './user-management-detail.component';
-import { UserMgmtDialogComponent } from './user-management-dialog.component';
-import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
-import { User } from './user.model';
-import { UserService } from './user.service';
-import { JhiLanguageService, PaginationUtil } from '../../shared';
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
+import { <%= entityClass %>MgmtComponent } from './<%= entityFileName %>-management.component';
+import { <%= entityClass %>MgmtDetailComponent } from './<%= entityFileName %>-management-detail.component';
+import { <%= entityClass %>MgmtDialogComponent } from './<%= entityFileName %>-management-dialog.component';
+import { <%= entityClass %>MgmtDeleteDialogComponent } from './<%= entityFileName %>-management-delete-dialog.component';
+import { <%= entityClass %> } from './<%= entityFileName %>.model';
+import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
 
-export const <%= entityInstance %>State = {
+export const <%= entityInstance %>MgmtState = {
     name: '<%= entityStateName %>',
     parent: 'entity',
     url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
@@ -27,9 +19,9 @@ export const <%= entityInstance %>State = {
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
     },
     views: {
-        'content@': { component: <%= entityAngularJSName %>Component }
+        'content@': { component: <%= entityClass %>MgmtComponent }
     },
-    <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
     params: {
         page: {
             value: '1',
@@ -41,69 +33,58 @@ export const <%= entityInstance %>State = {
         },
         search: null
     },
-    <%_ } _%>
     resolve: [
-        <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
         {
             token: 'pagingParams',
-            deps: [PaginationUtil, '$stateParams'],
+            deps: [PaginationUtil, '$stateParams', PaginationConfig],
             resolveFn: (paginationUtil, stateParams) => {
                 return {
                     page: paginationUtil.parsePage(stateParams['page']),
                     sort: stateParams['sort'],
-                    search: stateParams['search'],
                     predicate: paginationUtil.parsePredicate(stateParams['sort']),
-                    ascending: paginationUtil.parseAscending(stateParams['sort'])
+                    ascending: paginationUtil.parseAscending(stateParams['sort']),
+                    search: stateParams['search']
                 };
             }
-        }<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
-        <%_ } if (enableTranslation){ _%>
+        }<% if (enableTranslation){ %>,
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(<%= i18nToLoad %>)
-        }
-        <%_ } _%>
+            resolveFn: (languageService) => languageService.setLocations(['<%= entityInstance %>'])
+        }<% } %>
+
     ]
+    <%_ } else { _%>
+    resolve: [
+        {
+            token: 'translate',
+            deps: [JhiLanguageService],
+            resolveFn: (languageService) => languageService.setLocations(['<%= entityInstance %>'])
+        }
+    ]
+    <%_ } _%>
 
 };
 
-export const <%= entityInstance %>DetailState = {
+export const <%= entityInstance %>MgmtDetailState = {
     name: '<%= entityStateName %>-detail',
     parent: 'entity',
-    url: '/<%= entityUrl %>/{id}',
+    url: '/<%= entityStateName %>/:id',
     data: {
         authorities: ['ROLE_USER'],
-        pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
+        pageTitle: '<%= entityInstance %>Management.detail.title'
     },
     views: {
-        'content@': { component: <%= entityAngularJSName %>DetailComponent }
+        'content@': { component: <%= entityClass %>MgmtDetailComponent }
     },
-    resolve: [
-        <%_ if (enableTranslation){ _%>
-        {
-            token: 'translate',
-            deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(<%= i18nToLoad %>)
-        },
-        <%_ } _%>
-        {
-            token: 'previousState',
-            deps: [$stateParams, StateService],
-            resolveFn: (stateParams, stateService) => {
-                //TODO this needs to be tested
-                var currentStateData = {
-                    name: stateParams.current.name || '<%= entityStateName %>',
-                    params: stateParams.params,
-                    url: stateService.href(stateParams.current.name, stateParams.params)
-                };
-                return currentStateData;
-            }
-        }
-    ]
+    resolve: [{
+        token: 'translate',
+        deps: [JhiLanguageService],
+        resolveFn: (languageService) => languageService.setLocations(['<%= entityInstance %>'])
+    }]
 };
 
-export const <%= entityInstance %>NewState = {
+export const <%= entityInstance %>MgmtNewState = {
     name: '<%= entityStateName %>.new',
     url: '/new',
     data: {
@@ -112,19 +93,19 @@ export const <%= entityInstance %>NewState = {
     onEnter: (trans: Transition) => {
         let $state = trans.router.stateService;
         let modalService = trans.injector().get(NgbModal);
-        const modalRef  = modalService.open(<%= entityAngularJSName %>DialogComponent, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.entity = new <%= entityAngularJSName %>();
+        const modalRef  = modalService.open(<%= entityClass %>MgmtDialogComponent, { size: 'lg', backdrop: 'static'});
+        modalRef.componentInstance.<%= entityInstance %> = new <%= entityClass %>();
         modalRef.result.then((result) => {
             console.log(`Closed with: ${result}`);
-            $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
+            $state.go('<%= entityInstance %>', null, { reload: true });
         }, (reason) => {
             console.log(`Dismissed ${reason}`);
-            $state.go('<%= entityStateName %>');
+            $state.go('<%= entityInstance %>');
         });
     }
 };
 
-export const <%= entityInstance %>EditState = {
+export const <%= entityInstance %>MgmtEditState = {
     name: '<%= entityStateName %>.edit',
     url: '/{id}/edit',
     data: {
@@ -133,42 +114,42 @@ export const <%= entityInstance %>EditState = {
     onEnter: (trans: Transition) => {
         let $state = trans.router.stateService;
         let modalService = trans.injector().get(NgbModal);
-        let entityService: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
+        let <%= entityInstance %>Service: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
         let id = trans.params()['id'];
-        entityService.find(id).subscribe(entity => {
-            const modalRef  = modalService.open(<%= entityInstance %>DialogComponent, { size: 'lg', backdrop: 'static'});
-            modalRef.componentInstance.entity = entity;
+        <%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            const modalRef  = modalService.open(<%= entityClass %>MgmtDialogComponent, { size: 'lg', backdrop: 'static'});
+            modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
             modalRef.result.then((result) => {
                 console.log(`Closed with: ${result}`);
-                $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
+                $state.go('<%= entityInstance %>', null, { reload: true });
             }, (reason) => {
                 console.log(`Dismissed ${reason}`);
-                $state.go('^');
+                $state.go('<%= entityInstance %>');
             });
         });
     }
 };
 
-export const <%= entityInstance %>DeleteState = {
-    name: 'user-management.delete',
-    url: '/{login}/delete',
+export const <%= entityInstance %>MgmtDeleteState = {
+    name: '<%= entityStateName %>.delete',
+    url: '/{id}/delete',
     data: {
-        authorities: ['ROLE_ADMIN']
+        authorities: ['ROLE_USER']
     },
     onEnter: (trans: Transition) => {
         let $state = trans.router.stateService;
         let modalService = trans.injector().get(NgbModal);
-        let entityService: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
+        let <%= entityInstance %>Service: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
         let id = trans.params()['id'];
-        entityService.find(id).subscribe(entity => {
-            const modalRef  = modalService.open(<%= entityInstance %>DeleteDialogComponent, { size: 'md'});
-            modalRef.componentInstance.entity = entity;
+        <%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            const modalRef  = modalService.open(<%= entityClass %>MgmtDeleteDialogComponent, { size: 'md'});
+            modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
             modalRef.result.then((result) => {
                 console.log(`Closed with: ${result}`);
-                $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
+                $state.go('<%= entityInstance %>', null, { reload: true });
             }, (reason) => {
                 console.log(`Dismissed ${reason}`);
-                $state.go('^');
+                $state.go('<%= entityInstance %>');
             });
         });
     }

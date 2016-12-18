@@ -60,20 +60,15 @@ module.exports = JDLGenerator.extend({
         generateEntities: function () {
             this.log('Generating entities.');
             try {
-                var clientFw = this.config.get('clientFw');
-                var task = 'entity';
-                if (clientFw && clientFw === 'angular2') {
-                    task = 'entity-2';
-                }
                 this.getExistingEntities().forEach(function (entity) {
-                    this.composeWith('jhipster:' + task, {
+                    this.composeWith('jhipster:entity', {
                         options: {
                             regenerate: true,
                             'skip-install': true
                         },
                         args: [entity.name]
                     }, {
-                        local: require.resolve('../' + task)
+                        local: require.resolve('../entity')
                     });
                 }, this);
             } catch (e) {
