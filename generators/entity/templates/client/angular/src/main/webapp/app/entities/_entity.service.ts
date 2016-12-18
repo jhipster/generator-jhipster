@@ -6,13 +6,12 @@ _%>
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-
 @Injectable()
 export class <%= entityClass %>Service {
     constructor(private http: Http<% if (hasDate) { %>, dateUtils: DateUtils<% } %>) { }
 
     private resourceUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/<%= entityApiUrl %>';
-    <%_ if(searchEngine == 'elasticsearch') _%>
+    <%_ if(searchEngine === 'elasticsearch') { _%>
     private resourceSearchUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/_search/<%= entityApiUrl %>';
     <% _ } _%>
 
@@ -48,7 +47,7 @@ export class <%= entityClass %>Service {
         return this.http.delete(`${resourceUrl}/${login}`);
     }
 
-    <%_ if(searchEngine == 'elasticsearch') _%>
+    <%_ if(searchEngine === 'elasticsearch') { _%>
     search(id: string): Observable<Response> {
         return this.http.get(`${resourceSearchUrl}/${id}`).map((res: Response) => res.json());
     }

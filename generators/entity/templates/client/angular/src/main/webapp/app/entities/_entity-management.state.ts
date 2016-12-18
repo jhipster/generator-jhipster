@@ -1,5 +1,5 @@
 <%
-var i18nToLoad = ['<%= entityInstance %>'];
+var i18nToLoad = [entityInstance];
 for (var idx in fields) {
     if (fields[idx].fieldIsEnum == true) {
         i18nToLoad.push(fields[idx].enumInstance);
