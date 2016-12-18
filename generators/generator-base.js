@@ -1557,24 +1557,29 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
             if (!blockTemplate.condition || blockTemplate.condition(_this)) {
                 let path = blockTemplate.path ? blockTemplate.path : '';
                 blockTemplate.templates.map(templateObj => {
-                    let templatePath = prefix ? `${prefix}/` : '';
+                    let templatePath = path;
                     let method = 'template';
                     let useTemplate = false;
-                    let interpolateRegex = {};
+                    let interpolate = {};
+                    let templatePathTo ;
                     if (typeof templateObj === 'string') {
-                        templatePath += path + templateObj;
+                        templatePath += templateObj;
                     } else {
-                        templatePath += path + templateObj.file;
+                        templatePath += templateObj.file;
                         method = templateObj.method ? templateObj.method : method;
                         useTemplate = templateObj.template ? templateObj.template : useTemplate;
-                        interpolateRegex = templateObj.interpolate ? templateObj.interpolate : interpolateRegex;
+                        interpolate = templateObj.interpolate ? { interpolate: templateObj.interpolate } : interpolate;
                     }
-                    let templatePathTo = templatePath.replace(`${prefix}/`,'');
-                    templatePathTo = templatePathTo.replace(/([/])_|^_/, '$1');
+                    if (templateObj && templateObj.renameTo) {
+                        templatePathTo = path + templateObj.renameTo(_this);
+                    } else {
+                        templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
+                    }
+                    let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
                     if (returnFiles) {
                         filesOut.push(templatePathTo);
                     } else {
-                        _this[method](templatePath, templatePathTo, _this, interpolateRegex, useTemplate);
+                        _this[method](templatePathFrom, templatePathTo, _this, interpolate, useTemplate);
                     }
                 });
             }
