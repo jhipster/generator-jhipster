@@ -230,6 +230,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
+            this.config.set('clientFramework', this.clientFramework);
             this.config.set('clientPackageManager', this.clientPackageManager);
         }
     },
