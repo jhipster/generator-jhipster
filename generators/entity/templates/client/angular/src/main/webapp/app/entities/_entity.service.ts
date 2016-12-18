@@ -3,44 +3,45 @@
         hasDate = true;
     }
 _%>
-angular
-    .module('<%=angularAppName%>')
-    .factory('<%= entityClass %>', <%= entityClass %>);
+import { Injectable } from '@angular/core';
+import { Http, Response, URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
 
-<%= entityClass %>.$inject = ['$resource'<% if (hasDate) { %>, 'DateUtils'<% } %>];
+@Injectable()
+export class <%= entityClass %>Service {
+    constructor(private http: Http<% if (hasDate) { %>, dateUtils: DateUtils<% } %>) { }
 
-function <%= entityClass %> ($resource<% if (hasDate) { %>, DateUtils<% } %>) {
-    var resourceUrl = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/<%= entityApiUrl %>/:id';
+    private resourceUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/<%= entityApiUrl %>';
 
-    return $resource(resourceUrl, {}, {
-        'query': { method: 'GET', isArray: true},
-        'get': {
-            method: 'GET',
-            transformResponse: function (data) {
-                if (data) {
-                    data = angular.fromJson(data);<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
-                    data.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateFromServer(data.<%=fields[idx].fieldName%>);<% }if (fields[idx].fieldType == 'ZonedDateTime') { %>
-                    data.<%=fields[idx].fieldName%> = DateUtils.convertDateTimeFromServer(data.<%=fields[idx].fieldName%>);<% } }%>
-                }
-                return data;
-            }
-        },<% if (fieldsContainLocalDate) { %>
-        'update': {
-            method: 'PUT',
-            transformRequest: function (data) {
-                var copy = angular.copy(data);<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
-                copy.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateToServer(copy.<%=fields[idx].fieldName%>);<% } }%>
-                return angular.toJson(copy);
-            }
-        },
-        'save': {
-            method: 'POST',
-            transformRequest: function (data) {
-                var copy = angular.copy(data);<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
-                copy.<%=fields[idx].fieldName%> = DateUtils.convertLocalDateToServer(copy.<%=fields[idx].fieldName%>);<% } }%>
-                return angular.toJson(copy);
-            }
-        }<% } else { %>
-        'update': { method:'PUT' }<% } %>
-    });
+    create(entity:<%= entityClass %>): Observable<Response> {
+        //TODO dateUtils.convertLocalDateToServer when any filed has date
+        return this.http.post(resourceUrl, entity);
+    }
+
+    update(entity:<%= entityClass %>): Observable<Response> {
+        //TODO dateUtils.convertLocalDateToServer when any filed has date
+        return this.http.put(resourceUrl, entity);
+    }
+
+    find(id:string): Observable<<%= entityClass %>> {
+        //TODO dateUtils.convertLocalDateFromServer & dateUtils.convertDateTimeFromServer
+        return this.http.get(`${resourceUrl}/${id}`).map((res: Response) => res.json());
+    }
+
+    query(req: any): Observable<Response> {
+        let params: URLSearchParams = new URLSearchParams();
+        params.set('page', req.page);
+        params.set('size', req.size);
+        params.set('sort', req.sort);
+
+        let options = {
+            search: params
+        };
+
+        return this.http.get(resourceUrl, options);
+    }
+
+    delete(id:string): Observable<Response> {
+        return this.http.delete(`${resourceUrl}/${login}`);
+    }
 }
