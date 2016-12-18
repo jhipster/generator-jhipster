@@ -20,10 +20,6 @@ export class PaginationUtil  {
 
     // sort can be in the format `id,asc` or `id`
     parsePredicate (sort: string) {
-        let sortArray = sort.split(',');
-        if (sortArray.length > 1){
-            sortArray.pop();
-        }
-        return sortArray.join(',');
+        return sort.split(',')[0].split('%2C')[0];
     }
 }

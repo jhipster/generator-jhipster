@@ -1,0 +1,8 @@
+<% if (!viaService) {
+    if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
+        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine == 'elasticsearch') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        <%= entityInstance %>SearchRepository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
+        <%= entityInstance %>SearchRepository.delete(UUID.fromString(id));<% } %><% }
+} else { %>
+        <%= entityInstance %>Service.delete(id);<% } %>

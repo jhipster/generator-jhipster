@@ -1,0 +1,35 @@
+        vm.<%= entityInstancePlural %> = [];
+        <%_ if (fieldsContainBlob) { _%>
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
+        <%_ } _%>
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        vm.clear = clear;
+        vm.search = search;
+        vm.loadAll = loadAll;
+        <%_ } _%>
+
+        loadAll();
+
+        function loadAll() {
+            <%= entityClass %>.query(function(result) {
+                vm.<%= entityInstancePlural %> = result;
+                vm.searchQuery = null;
+            });
+        }
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+
+        function search() {
+            if (!vm.searchQuery) {
+                return vm.loadAll();
+            }
+            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
+                vm.<%= entityInstancePlural %> = result;
+                vm.currentSearch = vm.searchQuery;
+            });
+        }
+
+        function clear() {
+            vm.searchQuery = null;
+            loadAll();
+        }<%_ } _%>

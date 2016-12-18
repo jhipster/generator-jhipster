@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Vytvořit <%= entityClassHumanized %>",
+                "createOrEditLabel": "Vytvořit nebo upravit <%= entityClassHumanized %>",
+                "search": "Vyhledat <%= entityClassHumanized %>"
+            },<% if (!microserviceAppName) { %>
+            "created": "Byl vytvořen potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }}",
+            "updated": "Potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }} byl upravený.",
+            "deleted": "Potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }} bol smazaný.",<% } %>
+            "delete": {
+                "question": "Jste si jisti, že chcete smazat <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Byl vytvořen potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }}",
+            "updated": "Potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }} byl upravený.",
+            "deleted": "Potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }} bol smazaný."
+        }
+    }<% } %>
+}

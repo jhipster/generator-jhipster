@@ -77,8 +77,8 @@ export class AlertService {
             toast: alertOptions.toast,
             position: alertOptions.position ? alertOptions.position : 'top right',
             scoped: alertOptions.scoped,
-            close: function (alerts) {
-                return this.closeAlert(this.id, alerts);
+            close: (alerts) => {
+                return this.closeAlert(alertOptions.alertId, alerts);
             }
         };
         if (!alert.scoped) {

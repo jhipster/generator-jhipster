@@ -1,0 +1,8 @@
+{
+    "<%= angularAppName %>": {
+        "<%= enumName %>" : {
+            "null": ""<% for (enumId in enums) { %>,
+            "<%=enums[enumId]%>": "<%=enums[enumId]%>"<% } %>
+        }
+    }
+}
