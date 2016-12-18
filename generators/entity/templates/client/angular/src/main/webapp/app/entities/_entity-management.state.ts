@@ -5,7 +5,8 @@ for (var idx in fields) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
-i18nToLoad.push('global'); %>
+i18nToLoad.push('global');
+%>
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
