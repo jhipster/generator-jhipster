@@ -1,4 +1,4 @@
-import {Directive, Input, Output, OnInit, Renderer, EventEmitter, ElementRef} from '@angular/core';
+import { Directive, Input, Output, OnInit, Renderer, EventEmitter, ElementRef } from '@angular/core';
 
 @Directive({
     selector: '[jh-sort]'

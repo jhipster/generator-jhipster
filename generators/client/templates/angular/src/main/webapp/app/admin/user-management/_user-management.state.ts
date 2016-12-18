@@ -92,7 +92,7 @@ export const userMgmtNewState = {
         let $state = trans.router.stateService;
         let modalService = trans.injector().get(NgbModal);
         const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.user = new User(null, null, null, null, null, true, null, null, null, null, null, null, null);
+        modalRef.componentInstance.user = new User();
         modalRef.result.then((result) => {
             console.log(`Closed with: ${result}`);
             $state.go('user-management', null, { reload: true });
