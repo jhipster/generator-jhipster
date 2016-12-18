@@ -14,6 +14,7 @@ const constants = require('../generator-constants'),
 
     SERVER_TEMPLATES_DIR = 'server',
     CLIENT_NG1_TEMPLATES_DIR = 'client/angularjs',
+    CLIENT_NG2_TEMPLATES_DIR = 'client/angular',
     CLIENT_I18N_TEMPLATES_DIR = 'client';
 
 /**
@@ -205,10 +206,87 @@ const angularjsFiles = {
     ]
 };
 
+const angularFiles = {
+    client: [
+        {
+            path: ANGULAR_DIR,
+            templates: [
+                {
+                    file: 'entities/_entity-management.component.html', method: 'copyHtml', template: true,
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityPluralFileName}.component.html`
+                },
+                {
+                    file: 'entities/_entity-management-detail.component.html', method: 'copyHtml', template: true,
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.html`
+                },
+                {
+                    file: 'entities/_entity-management-dialog.component.html', method: 'copyHtml', template: true,
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.html`
+                },
+                {
+                    file: 'entities/_entity-management-delete-dialog.component.html', method: 'copyHtml', template: true,
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.html`
+                },
+                {
+                    file: 'entities/_entity-management.state.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.state.ts`
+                },
+                {
+                    file: 'entities/_entity-management.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
+                },
+                {
+                    file: 'entities/_entity-management-dialog.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.ts`
+                },
+                {
+                    file: 'entities/_entity-management-delete-dialog.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.ts`
+                },
+                {
+                    file: 'entities/_entity-management-detail.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.ts`
+                },
+                {
+                    file: 'entities/_entity.service.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.service.ts`
+                }
+
+            ]
+        },
+        {
+            condition: generator => generator.searchEngine === 'elasticsearch',
+            path: ANGULAR_DIR,
+            templates: [{
+                file: 'entities/_entity-search.service.ts',
+                renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.search.service.ts`
+            }]
+        }
+    ]/*, //TODO enable once test files are migrated
+    test: [
+        {
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [{
+                file: 'spec/app/entities/_entity-management-detail.controller.spec.js',
+                renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.controller.spec.js`
+            }]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [{
+                file: 'e2e/entities/_entity.js',
+                renameTo: generator => `e2e/entities/${generator.entityFileName}.js`
+            }]
+        }
+    ]*/
+};
+
 module.exports = {
     writeFiles,
     serverFiles,
-    angularjsFiles
+    angularjsFiles,
+    angularFiles
 };
 
 function writeFiles() {
@@ -273,8 +351,13 @@ function writeFiles() {
         writeClientFiles: function () {
             if (this.skipClient) return;
 
-            // write client side files for angular 1.x
-            this.writeFilesToDisk(angularjsFiles, this, false, CLIENT_NG1_TEMPLATES_DIR);
+            if (this.clientFramework === 'angular1') {
+                // write client side files for angular 1.x
+                this.writeFilesToDisk(angularjsFiles, this, false, CLIENT_NG1_TEMPLATES_DIR);
+            } else {
+                // write client side files for angular 2.x +
+                this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
+            }
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation);
 
