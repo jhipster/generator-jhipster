@@ -1,205 +1,174 @@
-angular
-    .module('<%=angularAppName%>')
-    .config(stateConfig);
+<%
+var i18nToLoad = ['<%= entityInstance %>'];
+for (var idx in fields) {
+    if (fields[idx].fieldIsEnum == true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+i18nToLoad.push('global'); %>
+import { Transition } from 'ui-router-ng2';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-stateConfig.$inject = ['$stateProvider'];
+import { UserMgmtComponent } from './user-management.component';
+import { UserMgmtDetailComponent } from './user-management-detail.component';
+import { UserMgmtDialogComponent } from './user-management-dialog.component';
+import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
+import { User } from './user.model';
+import { UserService } from './user.service';
+import { JhiLanguageService, PaginationUtil } from '../../shared';
 
-function stateConfig($stateProvider) {
-    $stateProvider
-    .state('<%= entityStateName %>', {
-        parent: 'entity',
-        url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+export const <%= entityInstance %>State = {
+    name: '<%= entityStateName %>',
+    parent: 'entity',
+    url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
+    data: {
+        authorities: ['ROLE_USER'],
+        pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+    },
+    views: {
+        'content@': { component: <%= entityAngularJSName %>Component }
+    },
+    <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+    params: {
+        page: {
+            value: '1',
+            squash: true
         },
-        views: {
-            'content@': {
-                templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityPluralFileName %>.html',
-                controller: '<%= entityAngularJSName %>Controller',
-                controllerAs: 'vm'
-            }
+        sort: {
+            value: 'id,asc',
+            squash: true
         },
+        search: null
+    },
+    <%_ } _%>
+    resolve: [
         <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
-        params: {
-            page: {
-                value: '1',
-                squash: true
-            },
-            sort: {
-                value: 'id,asc',
-                squash: true
-            },
-            search: null
-        },
-        <%_ } _%>
-        resolve: {
-        <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
-            pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+        {
+            token: 'pagingParams',
+            deps: [PaginationUtil, '$stateParams'],
+            resolveFn: (paginationUtil, stateParams) => {
                 return {
-                    page: PaginationUtil.parsePage($stateParams.page),
-                    sort: $stateParams.sort,
-                    predicate: PaginationUtil.parsePredicate($stateParams.sort),
-                    ascending: PaginationUtil.parseAscending($stateParams.sort),
-                    search: $stateParams.search
+                    page: paginationUtil.parsePage(stateParams['page']),
+                    sort: stateParams['sort'],
+                    search: stateParams['search'],
+                    predicate: paginationUtil.parsePredicate(stateParams['sort']),
+                    ascending: paginationUtil.parseAscending(stateParams['sort'])
                 };
-            }]<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
-        <%_ } if (enableTranslation){ _%>
-            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                $translatePartialLoader.addPart('<%= entityInstance %>');<%
-                for (var idx in fields) {
-                  if (fields[idx].fieldIsEnum == true) { %>
-                $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
-                $translatePartialLoader.addPart('global');
-                return $translate.refresh();
-            }]
-        <%_ } _%>
-        }
-    })
-    .state('<%= entityStateName %>-detail', {
-        parent: 'entity',
-        url: '/<%= entityUrl %>/{id}',
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
-        },
-        views: {
-            'content@': {
-                templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.html',
-                controller: '<%= entityAngularJSName %>DetailController',
-                controllerAs: 'vm'
             }
+        }<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
+        <%_ } if (enableTranslation){ _%>
+        {
+            token: 'translate',
+            deps: [JhiLanguageService],
+            resolveFn: (languageService) => languageService.setLocations(<%= i18nToLoad %>)
+        }
+        <%_ } _%>
+    ]
+
+};
+
+export const <%= entityInstance %>DetailState = {
+    name: '<%= entityStateName %>-detail',
+    parent: 'entity',
+    url: '/<%= entityUrl %>/{id}',
+    data: {
+        authorities: ['ROLE_USER'],
+        pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
+    },
+    views: {
+        'content@': { component: <%= entityAngularJSName %>DetailComponent }
+    },
+    resolve: [
+        <%_ if (enableTranslation){ _%>
+        {
+            token: 'translate',
+            deps: [JhiLanguageService],
+            resolveFn: (languageService) => languageService.setLocations(<%= i18nToLoad %>)
         },
-        resolve: {<% if (enableTranslation){ %>
-            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                $translatePartialLoader.addPart('<%= entityInstance %>');<%
-                for (var idx in fields) {
-                  if (fields[idx].fieldIsEnum == true) { %>
-                $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
-                return $translate.refresh();
-            }],<% } %>
-            entity: ['$stateParams', '<%= entityClass %>', function($stateParams, <%= entityClass %>) {
-                return <%= entityClass %>.get({id : $stateParams.id}).$promise;
-            }],
-            previousState: ["$state", function ($state) {
+        <%_ } _%>
+        {
+            token: 'previousState',
+            deps: [$stateParams, StateService],
+            resolveFn: (stateParams, stateService) => {
+                //TODO this needs to be tested
                 var currentStateData = {
-                    name: $state.current.name || '<%= entityStateName %>',
-                    params: $state.params,
-                    url: $state.href($state.current.name, $state.params)
+                    name: stateParams.current.name || '<%= entityStateName %>',
+                    params: stateParams.params,
+                    url: stateService.href(stateParams.current.name, stateParams.params)
                 };
                 return currentStateData;
-            }]
+            }
         }
-    })
-    .state('<%= entityStateName %>-detail.edit', {
-        parent: '<%= entityStateName %>-detail',
-        url: '/detail/edit',
-        data: {
-            authorities: ['ROLE_USER']
-        },
-        onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-            $uibModal.open({
-                templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                controller: '<%= entityAngularJSName %>DialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                resolve: {
-                    entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                        return <%= entityClass %>.get({id : $stateParams.id}).$promise;
-                    }]
-                }
-            }).result.then(function() {
-                $state.go('^', {}, { reload: false });
-            }, function() {
+    ]
+};
+
+export const <%= entityInstance %>NewState = {
+    name: '<%= entityStateName %>.new',
+    url: '/new',
+    data: {
+        authorities: ['ROLE_USER']
+    },
+    onEnter: (trans: Transition) => {
+        let $state = trans.router.stateService;
+        let modalService = trans.injector().get(NgbModal);
+        const modalRef  = modalService.open(<%= entityAngularJSName %>DialogComponent, { size: 'lg', backdrop: 'static'});
+        modalRef.componentInstance.entity = new <%= entityAngularJSName %>();
+        modalRef.result.then((result) => {
+            console.log(`Closed with: ${result}`);
+            $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
+        }, (reason) => {
+            console.log(`Dismissed ${reason}`);
+            $state.go('<%= entityStateName %>');
+        });
+    }
+};
+
+export const <%= entityInstance %>EditState = {
+    name: '<%= entityStateName %>.edit',
+    url: '/{id}/edit',
+    data: {
+        authorities: ['ROLE_USER']
+    },
+    onEnter: (trans: Transition) => {
+        let $state = trans.router.stateService;
+        let modalService = trans.injector().get(NgbModal);
+        let entityService: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
+        let id = trans.params()['id'];
+        entityService.find(id).subscribe(entity => {
+            const modalRef  = modalService.open(<%= entityInstance %>DialogComponent, { size: 'lg', backdrop: 'static'});
+            modalRef.componentInstance.entity = entity;
+            modalRef.result.then((result) => {
+                console.log(`Closed with: ${result}`);
+                $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
+            }, (reason) => {
+                console.log(`Dismissed ${reason}`);
                 $state.go('^');
             });
-        }]
-    })
-    .state('<%= entityStateName %>.new', {
-        parent: '<%= entityStateName %>',
-        url: '/new',
-        data: {
-            authorities: ['ROLE_USER']
-        },
-        onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-            $uibModal.open({
-                templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                controller: '<%= entityAngularJSName %>DialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                resolve: {
-                    entity: function () {
-                        return {
-                            <%_ for (idx in fields) { _%>
-                                <%_ if (fields[idx].fieldType == 'Boolean' && fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { _%>
-                            <%= fields[idx].fieldName %>: false,
-                                <%_ } else { _%>
-                            <%= fields[idx].fieldName %>: null,
-                                    <%_ if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { _%>
-                            <%= fields[idx].fieldName %>ContentType: null,
-                                    <%_ } _%>
-                                <%_ } _%>
-                            <%_ } _%>
-                            id: null
-                        };
-                    }
-                }
-            }).result.then(function() {
+        });
+    }
+};
+
+export const <%= entityInstance %>DeleteState = {
+    name: 'user-management.delete',
+    url: '/{login}/delete',
+    data: {
+        authorities: ['ROLE_ADMIN']
+    },
+    onEnter: (trans: Transition) => {
+        let $state = trans.router.stateService;
+        let modalService = trans.injector().get(NgbModal);
+        let entityService: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
+        let id = trans.params()['id'];
+        entityService.find(id).subscribe(entity => {
+            const modalRef  = modalService.open(<%= entityInstance %>DeleteDialogComponent, { size: 'md'});
+            modalRef.componentInstance.entity = entity;
+            modalRef.result.then((result) => {
+                console.log(`Closed with: ${result}`);
                 $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
-            }, function() {
-                $state.go('<%= entityStateName %>');
-            });
-        }]
-    })
-    .state('<%= entityStateName %>.edit', {
-        parent: '<%= entityStateName %>',
-        url: '/{id}/edit',
-        data: {
-            authorities: ['ROLE_USER']
-        },
-        onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-            $uibModal.open({
-                templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                controller: '<%= entityAngularJSName %>DialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                resolve: {
-                    entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                        return <%= entityClass %>.get({id : $stateParams.id}).$promise;
-                    }]
-                }
-            }).result.then(function() {
-                $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
-            }, function() {
+            }, (reason) => {
+                console.log(`Dismissed ${reason}`);
                 $state.go('^');
             });
-        }]
-    })
-    .state('<%= entityStateName %>.delete', {
-        parent: '<%= entityStateName %>',
-        url: '/{id}/delete',
-        data: {
-            authorities: ['ROLE_USER']
-        },
-        onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-            $uibModal.open({
-                templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.html',
-                controller: '<%= entityAngularJSName %>DeleteController',
-                controllerAs: 'vm',
-                size: 'md',
-                resolve: {
-                    entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                        return <%= entityClass %>.get({id : $stateParams.id}).$promise;
-                    }]
-                }
-            }).result.then(function() {
-                $state.go('<%= entityStateName %>', null, { reload: '<%= entityStateName %>' });
-            }, function() {
-                $state.go('^');
-            });
-        }]
-    });
-}
+        });
+    }
+};

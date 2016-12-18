@@ -253,14 +253,6 @@ const angularFiles = {
                 }
 
             ]
-        },
-        {
-            condition: generator => generator.searchEngine === 'elasticsearch',
-            path: ANGULAR_DIR,
-            templates: [{
-                file: 'entities/_entity-search.service.ts',
-                renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityServiceFileName}.search.service.ts`
-            }]
         }
     ]/*, //TODO enable once test files are migrated
     test: [

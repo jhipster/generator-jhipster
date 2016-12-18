@@ -12,6 +12,9 @@ export class <%= entityClass %>Service {
     constructor(private http: Http<% if (hasDate) { %>, dateUtils: DateUtils<% } %>) { }
 
     private resourceUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/<%= entityApiUrl %>';
+    <%_ if(searchEngine == 'elasticsearch') _%>
+    private resourceSearchUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/_search/<%= entityApiUrl %>';
+    <% _ } _%>
 
     create(entity:<%= entityClass %>): Observable<Response> {
         //TODO dateUtils.convertLocalDateToServer when any filed has date
@@ -44,4 +47,10 @@ export class <%= entityClass %>Service {
     delete(id:string): Observable<Response> {
         return this.http.delete(`${resourceUrl}/${login}`);
     }
+
+    <%_ if(searchEngine == 'elasticsearch') _%>
+    search(id: string): Observable<Response> {
+        return this.http.get(`${resourceSearchUrl}/${id}`).map((res: Response) => res.json());
+    }
+    <% _ } _%>
 }
