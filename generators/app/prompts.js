@@ -174,7 +174,7 @@ function askForMoreModules() {
         type: 'confirm',
         name: 'installModules',
         message: function(response) {
-            return generator.getNumberedQuestion('Would you like to install other generators from the JHipster Market Place?', true);
+            return generator.getNumberedQuestion('Would you like to install other generators from the JHipster Marketplace?', true);
         },
         default: false
     }).then(function (prompt) {
