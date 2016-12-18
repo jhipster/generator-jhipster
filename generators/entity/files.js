@@ -32,7 +32,7 @@ const serverFiles = {
             }]
         },
         {
-            condition: generator => generator.databaseType === 'sql' && (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne),
+            condition: generator => generator.databaseType === 'sql' && (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne),
             path: SERVER_MAIN_RES_DIR,
             templates: [{
                 file: 'config/liquibase/changelog/_added_entity_constraints.xml', interpolate : INTERPOLATE_REGEX,
