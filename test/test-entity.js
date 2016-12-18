@@ -27,6 +27,19 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js'
     ],
+    clientNg2 : [
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foos.component.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-detail.component.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-dialog.component.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-delete-dialog.component.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.state.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-dialog.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-delete-dialog.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-detail.component.ts',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.ts',
+        //CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js'
+    ],
     clientWithSuffix : [
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foos-management.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-detail.html',
@@ -50,7 +63,7 @@ const expectedFiles = {
         TEST_DIR + 'gatling/simulations/FooGatlingTest.scala'
     ]
 };
-describe('JHipster generator entity', function () {
+describe('JHipster generator entity for angular1', function () {
     describe('no dto, no service, no pagination', function () {
         beforeEach(function (done) {
             helpers.run(require.resolve('../generators/entity'))
@@ -278,4 +291,128 @@ describe('JHipster generator entity', function () {
             assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');
         });
     });
+});
+
+describe('JHipster generator entity for angular2', function () {
+    describe('no dto, no service, no pagination', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'no',
+                    service: 'no',
+                    pagination: 'no'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.clientNg2);
+        });
+    });
+
+    // Enable these tests once migration is complete
+    /*describe('no dto, no service, with pagination', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'no',
+                    service: 'no',
+                    pagination: 'pagination'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
+        });
+    });
+
+    describe('no dto, no service, with infinite-scroll', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'no',
+                    service: 'no',
+                    pagination: 'infinite-scroll'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
+        });
+    });
+
+    describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/noi18n-ng2'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'infinite-scroll'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
+            assert.noFile([
+                CLIENT_MAIN_SRC_DIR + 'i18n/en/foo.json',
+                CLIENT_MAIN_SRC_DIR + 'i18n/fr/foo.json'
+            ]);
+        });
+    });
+
+    describe('with angulr suffix', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                })
+                .withArguments(['foo'])
+                .withOptions({'angular-suffix': 'management'})
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'infinite-scroll'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.clientWithSuffix);
+            assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');
+        });
+    });*/
 });

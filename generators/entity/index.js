@@ -96,18 +96,6 @@ module.exports = EntityGenerator.extend({
     },
     initializing: {
 
-        // Temporary check until entity generator is compatible with angular 2
-        checkClientVersion: function () {
-            this.clientFramework = this.config.get('clientFramework');
-            if (!this.clientFramework) {
-                this.clientFramework = 'angular1';
-            }
-
-            if (this.clientFramework && this.clientFramework === 'angular2') {
-                this.error(chalk.red('The entity generator does not support Angular 2 applications yet!'));
-            }
-        },
-
         getConfig: function (args) {
             this.useConfigurationFile = false;
             this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
@@ -134,7 +122,10 @@ module.exports = EntityGenerator.extend({
             this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
             this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
 
-            //this.clientFramework = this.config.get('clientFramework'); //TODO enable this when the checkClientVersion method is removed
+            this.clientFramework = this.config.get('clientFramework');
+            if (!this.clientFramework) {
+                this.clientFramework = 'angular1';
+            }
 
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
