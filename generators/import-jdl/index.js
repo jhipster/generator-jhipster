@@ -18,15 +18,6 @@ module.exports = JDLGenerator.extend({
     },
 
     initializing: {
-        // Temporary check until entity generator is compatible with angular 2
-        checkClientVersion: function () {
-            this.clientFramework = this.config.get('clientFramework');
-
-            if (this.clientFramework && this.clientFramework === 'angular2') {
-                this.error(chalk.red('The import-jdl generator does not support Angular 2 applications yet!'));
-            }
-        },
-
         validate: function () {
             this.jdlFiles && this.jdlFiles.forEach(function (key) {
                 if (!shelljs.test('-f', key)) {
@@ -69,15 +60,20 @@ module.exports = JDLGenerator.extend({
         generateEntities: function () {
             this.log('Generating entities.');
             try {
+                var clientFw = this.config.get('clientFw');
+                var task = 'entity';
+                if (clientFw && clientFw === 'angular2') {
+                    task = 'entity-2';
+                }
                 this.getExistingEntities().forEach(function (entity) {
-                    this.composeWith('jhipster:entity', {
+                    this.composeWith('jhipster:' + task, {
                         options: {
                             regenerate: true,
                             'skip-install': true
                         },
                         args: [entity.name]
                     }, {
-                        local: require.resolve('../entity')
+                        local: require.resolve('../' + task)
                     });
                 }, this);
             } catch (e) {

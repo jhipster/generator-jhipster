@@ -106,22 +106,108 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
         var entityMenuPath;
         if (this.clientFramework === 'angular1') {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
-        } else {
+        	jhipsterUtils.rewriteFile({
+	            file: entityMenuPath,
+	            needle: 'jhipster-needle-add-entity-to-menu',
+	            splicable: [`<li ui-sref-active="active">
+	                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+	                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+	                                <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+	                            </a>
+	                        </li>`
+	            ]
+	        }, this);
+		} else {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
-        }
-        jhipsterUtils.rewriteFile({
-            file: entityMenuPath,
-            needle: 'jhipster-needle-add-entity-to-menu',
-            splicable: [`<li ui-sref-active="active">
-                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
-            ]
-        }, this);
+	        jhipsterUtils.rewriteFile({
+	            file: entityMenuPath,
+	            needle: 'jhipster-needle-add-entity-to-menu',
+	            splicable: [`<li>
+	                            <a class="dropdown-item" uiSref="${routerName}" uiSrefActive="active" (click)="collapseNavbar()">
+	                                <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+	                                <span ${enableTranslation ? 'jhi-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+	                            </a>
+	                        </li>`
+	            ]
+	        }, this);
+		}
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+    }
+};
+/**
+ * Add a new entity in the TS modules file.
+ *
+ * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ */
+Generator.prototype.addEntityToModule = function (entityInstance, entityClass, entityFolderName, entityFileName, enableTranslation) {
+    try {
+        if (this.clientFramework === 'angular1') {
+            return;
+        }
+        var entityPath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
+        var indexPath = CLIENT_MAIN_SRC_DIR + 'app/entities/index.ts';
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}-management-dialog.component';
+export * from './${entityFolderName}/${entityFileName}-management-delete-dialog.component';
+export * from './${entityFolderName}/${entityFileName}-management-detail.component';
+export * from './${entityFolderName}/${entityFileName}-management.component';
+export * from './${entityFolderName}/${entityFileName}.state';
+export * from './${entityFolderName}/${entityFileName}.service';
+export * from './${entityFolderName}/${entityFileName}.model';`]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-states',
+            splicable: [`${entityInstance}MgmtState,
+    ${entityInstance}MgmtDetailState,
+    ${entityInstance}MgmtNewState,
+    ${entityInstance}MgmtEditState,
+    ${entityInstance}MgmtDeleteState,`]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-entryComponents',
+            splicable: [`${entityClass}MgmtDialogComponent,
+        ${entityClass}MgmtDeleteDialogComponent,`]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-declarations',
+            splicable: [`${entityClass}MgmtComponent,
+        ${entityClass}MgmtDetailComponent,
+        ${entityClass}MgmtDialogComponent,
+        ${entityClass}MgmtDeleteDialogComponent,`]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-providers',
+            splicable: [`${entityClass}Service,`]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-import',
+            splicable: [`${entityClass}MgmtComponent,
+    ${entityClass}MgmtDetailComponent,
+    ${entityClass}MgmtDialogComponent,
+    ${entityClass}MgmtDeleteDialogComponent,
+    ${entityClass}Service,
+    ${entityInstance}MgmtState,
+    ${entityInstance}MgmtDetailState,
+    ${entityInstance}MgmtNewState,
+    ${entityInstance}MgmtEditState,
+    ${entityInstance}MgmtDeleteState,`]
+        }, this);
+    } catch (e) {this.log(e);
+        this.log(chalk.yellow('\nUnable to find ') + indexPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance+ entityClass+ entityFolderName+ entityFileName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 

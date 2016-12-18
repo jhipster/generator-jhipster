@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized  %>",
+                "createLabel": "Crează o nouă <%= entityClassHumanized %>",
+                "createOrEditLabel": "Crează sau editează o <%= entityClassHumanized %>",
+                "search": "Search for <%= entityClassHumanized %>"
+            },<% if (!microserviceAppName) { %>
+            "created": "O nouă <%= entityClassHumanized %> este creată cu identificatorul {{ param }}",
+            "updated": "O <%= entityClassHumanized %> este editată cu identificatorul {{ param }}",
+            "deleted": "O <%= entityClassHumanized %> este stearsă cu identificatorul {{ param }}",<% } %>
+            "delete": {
+                "question": "Ești sigur că dorești să stergi <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "O nouă <%= entityClassHumanized %> este creată cu identificatorul {{ param }}",
+            "updated": "O <%= entityClassHumanized %> este editată cu identificatorul {{ param }}",
+            "deleted": "O <%= entityClassHumanized %> este stearsă cu identificatorul {{ param }}"
+        }
+    }<% } %>
+}

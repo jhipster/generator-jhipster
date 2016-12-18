@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPlural %>",
+                "createLabel": "Crear novo <%= entityClassHumanized %>",
+                "createOrEditLabel": "Crear ou editar <%= entityClassHumanized %>",
+                "search": "Search for <%= entityClassHumanized %>"
+            },<% if (!microserviceAppName) { %>
+            "created": "Un novo <%= entityClassHumanized %> foi creado co identificador {{ param }}",
+            "updated": "Un <%= entityClassHumanized %> foi actualizado co identificador {{ param }}",
+            "deleted": "Un <%= entityClassHumanized %> foi eliminado co identificador {{ param }}",<% } %>
+            "delete": {
+                "question": "Seguro que desexa eliminar <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Un novo <%= entityClassHumanized %> foi creado co identificador {{ param }}",
+            "updated": "Un <%= entityClassHumanized %> foi actualizado co identificador {{ param }}",
+            "deleted": "Un <%= entityClassHumanized %> foi eliminado co identificador {{ param }}"
+        }
+    }<% } %>
+}

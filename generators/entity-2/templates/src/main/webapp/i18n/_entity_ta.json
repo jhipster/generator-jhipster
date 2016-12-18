@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized  %>",
+                "createLabel": "<%= entityClassHumanized %>-ஐ உருவாக்கு",
+                "createOrEditLabel": "<%= entityClassHumanized %> -ஐ மாற்று (அ) உருவாக்கு",
+                "search": "Search for <%= entityClassHumanized %>"
+            },<% if (!microserviceAppName) { %>
+            "created": "<%= entityClassHumanized %> புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
+            "updated": "<%= entityClassHumanized %> மாற்றப்பட்டது, அடையாளம்  {{ param }}",
+            "deleted": "A <%= entityClassHumanized %> நீக்கப்பட்டது, அடையாளம {{ param }}",<% } %>
+            "delete": {
+                "question": "நீக்குவதற்கு உறுதி செய் <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "<%= entityClassHumanized %> புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
+            "updated": "<%= entityClassHumanized %> மாற்றப்பட்டது, அடையாளம்  {{ param }}",
+            "deleted": "A <%= entityClassHumanized %> நீக்கப்பட்டது, அடையாளம {{ param }}"
+        }
+    }<% } %>
+}

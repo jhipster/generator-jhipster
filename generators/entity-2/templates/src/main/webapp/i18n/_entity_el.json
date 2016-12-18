@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Δημιουργήστε ένα νέο <%= entityClassHumanized %>",
+                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityClassHumanized %>",
+                "search": "Αναζήτηση για <%= entityClassHumanized %>"
+            },<% if (!microserviceAppName) { %>
+            "created": "Ένα νέο <%= entityClassHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
+            "updated": "Ένα <%= entityClassHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
+            "deleted": "Ένα <%= entityClassHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}",<% } %>
+            "delete": {
+                "question": "Είστε βέβαιοι όταν θέλετε να διαγράψετε το ακόλουθο <%= entityClassHumanized %> {{ id }};"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Ένα νέο <%= entityClassHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
+            "updated": "Ένα <%= entityClassHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
+            "deleted": "Ένα <%= entityClassHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}"
+        }
+    }<% } %>
+}
