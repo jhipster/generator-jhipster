@@ -176,6 +176,14 @@ module.exports = JhipsterGenerator.extend({
                     this.enableTranslation = true;
                 }
             }
+            this.clientPackageManager = this.config.get('clientPackageManager');
+            if (!this.clientPackageManager) {
+                if (this.yarnInstall) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
+                }
+            }
         }
     },
 
@@ -219,6 +227,7 @@ module.exports = JhipsterGenerator.extend({
                 this.generatorType = 'client';
                 // defaults to use when skipping server
             }
+            this.configOptions.clientPackageManager = this.clientPackageManager;
         },
 
         composeServer: function () {
@@ -264,6 +273,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.nativeLanguage = this.nativeLanguage;
             this.configOptions.languages = this.languages;
             this.configOptions.clientFramework = this.clientFramework;
+            this.configOptions.clientPackageManager = this.clientPackageManager;
         },
 
         insight: function () {
@@ -296,7 +306,7 @@ module.exports = JhipsterGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
-            this.yarnInstall && this.config.set('yarn', true);
+            this.config.set('clientPackageManager', this.clientPackageManager);
         }
     },
 

@@ -127,6 +127,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
         this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
+        this.clientPackageManager = this.configOptions.clientPackageManager;
     },
 
     initializing: {
@@ -171,6 +172,13 @@ module.exports = JhipsterClientGenerator.extend({
                 }
 
                 this.existingProject = true;
+            }
+            if (!this.clientPackageManager) {
+                if (this.yarnInstall) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
+                }
             }
         }
     },
@@ -222,7 +230,8 @@ module.exports = JhipsterClientGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
-            this.yarnInstall && this.config.set('yarn', true);
+            this.config.set('clientFramework', this.clientFramework);
+            this.config.set('clientPackageManager', this.clientPackageManager);
         }
     },
 
@@ -353,14 +362,15 @@ module.exports = JhipsterClientGenerator.extend({
         }
 
         if (!this.options['skip-install']) {
-            if (!this.yarnInstall) {
-                this.installDependencies(installConfig);
-            } else {
+            if (this.clientPackageManager === 'yarn') {
                 this.spawnCommandSync('yarn');
                 if (this.clientFramework === 'angular1') {
                     this.spawnCommandSync('bower', ['install']);
                 }
                 injectDependenciesAndConstants();
+
+            } else if (this.clientPackageManager === 'npm') {
+                this.installDependencies(installConfig);
             }
         } else {
             injectDependenciesAndConstants();
