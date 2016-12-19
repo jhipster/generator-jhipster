@@ -264,7 +264,7 @@ describe('JDLParser', function () {
             })
           ]);
         });
-      })
+      });
       describe('when having following comments', function() {
         var input = parseFromFiles(['./test/test_files/following_comments.jdl']);
         var content = JDLParser.parse(input, 'sql');
@@ -283,6 +283,146 @@ describe('JDLParser', function () {
             expect(content.entities.C.fields.name.comment).to.be.undefined;
             expect(content.entities.C.fields.thing.comment).to.eq('abc');
           });
+        });
+      });
+      describe('when parsing another complex JDL file', function() {
+        var input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
+        var content = JDLParser.parse(input, 'sql');
+        it('parses it', function() {
+          expect(content.entities.A).to.deep.eq({ name: 'A', tableName: 'A', fields: {}, comment: undefined });
+          expect(content.entities.B).to.deep.eq({ name: 'B', tableName: 'B', fields: {}, comment: undefined });
+          expect(content.entities.C).to.deep.eq({
+            name: 'C',
+            tableName: 'C',
+            fields: {
+              name: {
+                comment: undefined,
+                name: 'name',
+                type: 'String',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  }
+                }
+              }
+            },
+            comment: undefined
+          });
+          expect(content.entities.D).to.deep.eq({
+            name: 'D',
+            tableName: 'D',
+            fields: {
+              name: {
+                comment: undefined,
+                name: 'name',
+                type: 'String',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  },
+                  minlength: {
+                    name: 'minlength',
+                    value: 1
+                  },
+                  maxlength: {
+                    name: 'maxlength',
+                    value: 42
+                  }
+                }
+              },
+              count: {
+                comment: undefined,
+                name: 'count',
+                type: 'Integer',
+                validations: {}
+              }
+            },
+            comment: undefined
+          });
+          expect(content.entities.E).to.deep.eq({ name: 'E', tableName: 'E', fields: {}, comment: undefined });
+          expect(content.entities.F).to.deep.eq({
+            name: 'F',
+            tableName: 'F',
+            fields: {
+              name: {
+                comment: 'My comment for name of F.',
+                name: 'name',
+                type: 'String',
+                validations: {}
+              },
+              count: {
+                comment: undefined,
+                name: 'count',
+                type: 'Integer',
+                validations: {}
+              },
+              flag: {
+                comment: 'My comment for flag of F.',
+                name: 'flag',
+                type: 'Boolean',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  }
+                }
+              }
+            },
+            comment: 'My comment for F.'
+          });
+          expect(content.entities.G).to.deep.eq({
+            name: 'G',
+            tableName: 'G',
+            fields: {
+              name: {
+                comment: 'xyz',
+                name: 'name',
+                type: 'String',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  }
+                }
+              },
+              count: {
+                comment: 'def',
+                name: 'count',
+                type: 'Integer',
+                validations: {}
+              }
+            },
+            comment: undefined
+          });
+          expect(content.options.length).to.eq(7);
+          expect(content.options[0].name).to.eq('skipClient');
+          expect(content.options[0].entityNames.toString()).to.eq('[G]');
+          expect(content.options[0].excludedNames.toString()).to.eq('[]');
+          expect(content.options[1].name).to.eq('skipServer');
+          expect(content.options[1].entityNames.toString()).to.eq('[B,D]');
+          expect(content.options[1].excludedNames.toString()).to.eq('[D]');
+          expect(content.options[2].name).to.eq('dto');
+          expect(content.options[2].value).to.eq('mapstruct');
+          expect(content.options[2].entityNames.toString()).to.eq('[*]');
+          expect(content.options[2].excludedNames.toString()).to.eq('[G]');
+          expect(content.options[3].name).to.eq('service');
+          expect(content.options[3].entityNames.toString()).to.eq('[G]');
+          expect(content.options[3].excludedNames.toString()).to.eq('[]');
+          expect(content.options[3].value).to.eq('serviceImpl');
+          expect(content.options[4].name).to.eq('service');
+          expect(content.options[4].entityNames.toString()).to.eq('[A,C,D]');
+          expect(content.options[4].excludedNames.toString()).to.eq('[]');
+          expect(content.options[4].value).to.eq('serviceClass');
+          expect(content.options[5].name).to.eq('pagination');
+          expect(content.options[5].entityNames.toString()).to.eq('[*]');
+          expect(content.options[5].excludedNames.toString()).to.eq('[G]');
+          expect(content.options[5].value).to.eq('pager');
+          expect(content.options[6].name).to.eq('pagination');
+          expect(content.options[6].entityNames.toString()).to.eq('[G]');
+          expect(content.options[6].excludedNames.toString()).to.eq('[]');
+          expect(content.options[6].value).to.eq('pagination');
         });
       });
     });
