@@ -42,7 +42,7 @@ util.inherits(Generator, yeoman.Base);
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
         var navbarPath;
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
@@ -74,7 +74,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
         var navbarAdminPath;
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
             navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
@@ -104,7 +104,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
         var entityMenuPath;
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
@@ -547,7 +547,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
     var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
     var loginfullPath, registerfullPath;
-    if (this.clientFw === 'angular1') {
+    if (this.clientFramework === 'angular1') {
         loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
         registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
     } else {
@@ -1334,11 +1334,12 @@ Generator.prototype.generateKeyStore = function() {
  */
 Generator.prototype.printJHipsterLogo = function () {
     this.log(' \n' +
-        chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
-        chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
-        chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
-        chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
-        chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n')
+        chalk.green('        ██╗') + chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗\n') +
+        chalk.green('        ██║') + chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗\n') +
+        chalk.green('        ██║') + chalk.red(' ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝\n') +
+        chalk.green('  ██╗   ██║') + chalk.red(' ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║\n') +
+        chalk.green('  ╚██████╔╝') + chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗\n') +
+        chalk.green('   ╚═════╝ ') + chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝\n')
     );
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
     if (!this.skipChecks) this.checkForNewVersion();
@@ -1556,24 +1557,29 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
             if (!blockTemplate.condition || blockTemplate.condition(_this)) {
                 let path = blockTemplate.path ? blockTemplate.path : '';
                 blockTemplate.templates.map(templateObj => {
-                    let templatePath = prefix ? `${prefix}/` : '';
+                    let templatePath = path;
                     let method = 'template';
                     let useTemplate = false;
-                    let interpolateRegex = {};
+                    let interpolate = {};
+                    let templatePathTo ;
                     if (typeof templateObj === 'string') {
-                        templatePath += path + templateObj;
+                        templatePath += templateObj;
                     } else {
-                        templatePath += path + templateObj.file;
+                        templatePath += templateObj.file;
                         method = templateObj.method ? templateObj.method : method;
                         useTemplate = templateObj.template ? templateObj.template : useTemplate;
-                        interpolateRegex = templateObj.interpolate ? templateObj.interpolate : interpolateRegex;
+                        interpolate = templateObj.interpolate ? { interpolate: templateObj.interpolate } : interpolate;
                     }
-                    let templatePathTo = templatePath.replace(`${prefix}/`,'');
-                    templatePathTo = templatePathTo.replace(/([/])_|^_/, '$1');
+                    if (templateObj && templateObj.renameTo) {
+                        templatePathTo = path + templateObj.renameTo(_this);
+                    } else {
+                        templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
+                    }
+                    let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
                     if (returnFiles) {
                         filesOut.push(templatePathTo);
                     } else {
-                        _this[method](templatePath, templatePathTo, _this, interpolateRegex, useTemplate);
+                        _this[method](templatePathFrom, templatePathTo, _this, interpolate, useTemplate);
                     }
                 });
             }
@@ -1612,23 +1618,24 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     }
 
     // Templates
-    _this.template(webappDir + 'i18n/' + lang + '/_activate.json', webappDir + 'i18n/' + lang + '/activate.json', this, {});
-    _this.template(webappDir + 'i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
-    _this.template(webappDir + 'i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
+    _this.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`, this, {});
+    _this.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`, this, {});
+    _this.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`, this, {});
 
 
 };
 
 Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
-    var lang_prop = lang.replace(/-/g, '_');
-    _this.template(resourceDir + 'i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
+    var langProp = lang.replace(/-/g, '_');
+    _this.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`, this, {});
 
 };
 
-Generator.prototype.copyI18n = function (language) {
+Generator.prototype.copyI18n = function (language, prefix) {
     try {
-        this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_entity_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+        let pathFrom = prefix? `${prefix}/${CLIENT_MAIN_SRC_DIR}` : CLIENT_MAIN_SRC_DIR;
+        this.template(`${pathFrom}i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`, this, {});
         this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
@@ -1636,9 +1643,10 @@ Generator.prototype.copyI18n = function (language) {
     }
 };
 
-Generator.prototype.copyEnumI18n = function (language, enumInfo) {
+Generator.prototype.copyEnumI18n = function (language, enumInfo , prefix) {
     try {
-        this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_enum_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
+        let pathFrom = prefix? `${prefix}/${CLIENT_MAIN_SRC_DIR}` : CLIENT_MAIN_SRC_DIR;
+        this.template(`${pathFrom}i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo, {});
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing

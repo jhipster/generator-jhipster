@@ -133,6 +133,7 @@ jhipster:
     mail:
         from: <%= baseName %>@localhost
     swagger:
+        defaultIncludePattern: /api/.*
         title: <%=baseName%> API
         description: <%=baseName%> API documentation
         version: 0.0.1
@@ -153,3 +154,11 @@ jhipster:
     ribbon:
         # comma separated list of profiles to show a ribbon on the GUI
         displayOnActiveProfiles: dev
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

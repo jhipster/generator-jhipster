@@ -85,9 +85,12 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
+        <node.version>v6.9.2</node.version>
+        <%_ if (clientPackageManager === 'npm') { _%>
+        <npm.version>3.10.9</npm.version>
+        <%_ } _%>
         <sortpom-maven-plugin.version>2.5.0</sortpom-maven-plugin.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
-        <prometheus-simpleclient.version>0.0.18</prometheus-simpleclient.version>
         <logstash-logback-encoder.version>4.7</logstash-logback-encoder.version>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>
@@ -143,6 +146,9 @@
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase></profile.no-liquibase>
         <profile.swagger></profile.swagger>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+        <yarn.version>v0.17.10</yarn.version>
+        <%_ } _%>
     </properties>
 
 <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
@@ -172,6 +178,11 @@
 <%_ } _%>
     <dependencies>
         <dependency>
+            <groupId>io.github.jhipster</groupId>
+            <artifactId>jhipster</artifactId>
+            <version>0.0.6</version>
+        </dependency>
+        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
         </dependency>
@@ -179,10 +190,6 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-annotation</artifactId>
             <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-graphite</artifactId>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
@@ -213,21 +220,6 @@
                     <groupId>io.dropwizard.metrics</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.prometheus</groupId>
-            <artifactId>simpleclient</artifactId>
-            <version>${prometheus-simpleclient.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.prometheus</groupId>
-            <artifactId>simpleclient_servlet</artifactId>
-            <version>${prometheus-simpleclient.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.prometheus</groupId>
-            <artifactId>simpleclient_dropwizard</artifactId>
-            <version>${prometheus-simpleclient.version}</version>
         </dependency>
         <%_ if (databaseType === 'sql') { _%>
         <dependency>
@@ -1132,14 +1124,14 @@
                                         <artifactId>frontend-maven-plugin</artifactId>
                                         <versionRange>${frontend-maven-plugin.version}</versionRange>
                                         <goals>
-                                            <%_ if (yarnInstall) { _%>
+                                            <%_ if (clientPackageManager === 'yarn') { _%>
                                             <goal>install-node-and-yarn</goal>
                                             <goal>yarn</goal>
-                                            <%_ } else { _%>
+                                            <%_ } else if (clientPackageManager === 'npm') { _%>
                                             <goal>install-node-and-npm</goal>
                                             <goal>npm</goal>
                                             <%_ } _%>
-                                            <%_ if (clientFw === 'angular1') { _%>
+                                            <%_ if (clientFramework === 'angular1') { _%>
                                             <goal>bower</goal>
                                             <goal>gulp</goal>
                                             <%_ } _%>
@@ -1197,98 +1189,35 @@
             </dependencies>
             <build>
                 <plugins>
-                    <%_ if (!skipClient) { _%>
+                    <%_ if (!skipClient && clientFramework === 'angular2') { _%>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>${frontend-maven-plugin.version}</version>
                         <executions>
-                            <%_ if (yarnInstall) { _%>
+                            <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
                                 <id>install node and yarn</id>
                                 <goals>
                                     <goal>install-node-and-yarn</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v6.9.2</nodeVersion>
-                                    <yarnVersion>v0.17.10</yarnVersion>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <yarnVersion>${yarn.version}</yarnVersion>
                                 </configuration>
                             </execution>
-                            <execution>
-                                <id>yarn install</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <configuration>
-                                    <%_ if (useSass) { _%>
-                                    <arguments>install --force</arguments>
-                                    <%_ } else { _%>
-                                    <arguments>install</arguments>
-                                    <%_ } _%>
-                                </configuration>
-                            </execution>
-                            <%_ } else { _%>
+                            <%_ } else if (clientPackageManager === 'npm') { _%>
                             <execution>
                                 <id>install node and npm</id>
                                 <goals>
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v6.9.2</nodeVersion>
-                                    <npmVersion>3.10.9</npmVersion>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <npmVersion>${npm.version}</npmVersion>
                                 </configuration>
                             </execution>
-                            <execution>
-                                <id>npm install</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>install</arguments>
-                                </configuration>
-                            </execution>
-                                <%_ if (useSass) { _%>
-                            <execution>
-                                <id>npm rebuild node-sass</id>
-                                <goals>
-                                    <goal>npm</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>rebuild node-sass</arguments>
-                                </configuration>
-                            </execution>
-                                <%_ } _%>
                             <%_ } _%>
-                            <%_ if (clientFw === 'angular1') { _%>
-                            <execution>
-                                <id>bower install</id>
-                                <goals>
-                                    <goal>bower</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>install --no-color</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>gulp build</id>
-                                <goals>
-                                    <goal>gulp</goal>
-                                </goals>
-                                <configuration>
-                                    <arguments>build --no-notification</arguments>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>gulp test</id>
-                                <goals>
-                                    <goal>gulp</goal>
-                                </goals>
-                                <phase>test</phase>
-                                <configuration>
-                                    <arguments>test --no-notification</arguments>
-                                </configuration>
-                            </execution>
-                            <%_ } else if (clientFw === 'angular2') { _%>
                             <execution>
                                 <id>webpack build</id>
                                 <goals>
@@ -1299,17 +1228,18 @@
                                     <arguments>--config webpack/webpack.dev.js</arguments>
                                 </configuration>
                             </execution>
-                            <%_ } _%>
                         </executions>
                     </plugin>
+                    <%_ } _%>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
+                            <%_ if (!skipClient) { _%>
                             <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory>
+                            <%_ } _%>
                         </configuration>
                     </plugin>
-                    <%_ } _%>
                 </plugins>
             </build>
             <properties>
@@ -1363,21 +1293,21 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <%_ if (clientFw === 'angular2' && !skipClient) { _%>
+                    <%_ if (!skipClient) { _%>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>${frontend-maven-plugin.version}</version>
                         <executions>
-                            <%_ if (yarnInstall) { _%>
+                            <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
                                 <id>install node and yarn</id>
                                 <goals>
                                     <goal>install-node-and-yarn</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v6.9.1</nodeVersion>
-                                    <yarnVersion>v0.17.6</yarnVersion>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <yarnVersion>${yarn.version}</yarnVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1393,15 +1323,15 @@
                                     <%_ } _%>
                                 </configuration>
                             </execution>
-                            <%_ } else { _%>
+                            <%_ } else if (clientPackageManager === 'npm') { _%>
                             <execution>
                                 <id>install node and npm</id>
                                 <goals>
                                     <goal>install-node-and-npm</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>v6.9.1</nodeVersion>
-                                    <npmVersion>3.10.9</npmVersion>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <npmVersion>${npm.version}</npmVersion>
                                 </configuration>
                             </execution>
                             <execution>
@@ -1425,6 +1355,37 @@
                             </execution>
                                 <%_ } _%>
                             <%_ } _%>
+                            <%_ if (clientFramework === 'angular1') { _%>
+                            <execution>
+                                <id>bower install</id>
+                                <goals>
+                                    <goal>bower</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install --no-color</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>gulp build</id>
+                                <goals>
+                                    <goal>gulp</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>build --no-notification</arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>gulp test</id>
+                                <goals>
+                                    <goal>gulp</goal>
+                                </goals>
+                                <phase>test</phase>
+                                <configuration>
+                                    <arguments>test --no-notification</arguments>
+                                </configuration>
+                            </execution>
+                            <%_ } _%>
+                            <%_ if (clientFramework === 'angular2') { _%>
                             <execution>
                                 <id>webpack build</id>
                                 <goals>
@@ -1435,6 +1396,7 @@
                                     <arguments>-p --config webpack/webpack.prod.js</arguments>
                                 </configuration>
                             </execution>
+                            <%_ } _%>
                         </executions>
                     </plugin>
                     <%_ } _%>
@@ -1541,6 +1503,44 @@
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev,swagger</spring.profiles.active>
             </properties>
+        </profile>
+        <profile>
+            <!--
+                Profile for monitoring the application with Graphite.
+            -->
+            <id>graphite</id>
+            <dependencies>
+                <dependency>
+                    <groupId>io.dropwizard.metrics</groupId>
+                    <artifactId>metrics-graphite</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <!--
+                Profile for monitoring the application with Prometheus.
+            -->
+            <id>prometheus</id>
+            <properties>
+                <prometheus-simpleclient.version>0.0.18</prometheus-simpleclient.version>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>io.prometheus</groupId>
+                    <artifactId>simpleclient</artifactId>
+                    <version>${prometheus-simpleclient.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>io.prometheus</groupId>
+                    <artifactId>simpleclient_servlet</artifactId>
+                    <version>${prometheus-simpleclient.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>io.prometheus</groupId>
+                    <artifactId>simpleclient_dropwizard</artifactId>
+                    <version>${prometheus-simpleclient.version}</version>
+                </dependency>
+            </dependencies>
         </profile>
         <profile>
             <!--

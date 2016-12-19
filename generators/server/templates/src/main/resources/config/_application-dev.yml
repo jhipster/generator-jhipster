@@ -97,13 +97,13 @@ spring:
         <%_ if (devDatabaseType == 'mysql' || devDatabaseType == 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
-        database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle10gDialect
         <%_ } else if (devDatabaseType === 'mssql') { _%>
         database-platform: org.hibernate.dialect.SQLServer2012Dialect
         <%_ } else { _%>
-        database-platform: <%=packageName%>.domain.util.FixedH2Dialect
+        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
         <%_ if (devDatabaseType == 'mysql' || devDatabaseType === 'mariadb') { _%>
         database: MYSQL
@@ -124,7 +124,7 @@ spring:
             <%_ if (hibernateCache == 'ehcache') { _%>
             hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
             hibernate.javax.cache.uri: ${spring.cache.jcache.config}
-            hibernate.cache.region.factory_class: <%=packageName%>.config.jcache.SpringCacheRegionFactory
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.SpringCacheRegionFactory
     cache:
         jcache:
             config: ehcache.xml
@@ -247,12 +247,12 @@ jhipster:
         baseUrl: http://127.0.0.1:8080
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
-        graphite:
+        graphite: # Use the "graphite" Maven profile to have the Graphite dependencies
             enabled: false
             host: localhost
             port: 2003
             prefix: <%= baseName %>
-        prometheus:
+        prometheus: # Use the "prometheus" Maven profile to have the Prometheus dependencies
             enabled: false
             endpoint: /prometheusMetrics
         logs: # Reports Dropwizard metrics in the logs
@@ -269,3 +269,12 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
+
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

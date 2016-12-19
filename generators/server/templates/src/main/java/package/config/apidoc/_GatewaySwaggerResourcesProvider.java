@@ -1,8 +1,9 @@
 package <%=packageName%>.config.apidoc;
 
-import <%=packageName%>.config.Constants;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ import springfox.documentation.swagger.web.SwaggerResourcesProvider;
  */
 @Component
 @Primary
-@Profile(Constants.SPRING_PROFILE_SWAGGER)
+@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class GatewaySwaggerResourcesProvider implements SwaggerResourcesProvider {
 
     private final Logger log = LoggerFactory.getLogger(GatewaySwaggerResourcesProvider.class);

@@ -1,7 +1,8 @@
 package <%=packageName%>.config;
 <%_ if (databaseType == 'sql') { _%>
 
-import <%=packageName%>.config.liquibase.AsyncSpringLiquibase;
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.liquibase.AsyncSpringLiquibase;
 
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import liquibase.integration.spring.SpringLiquibase;
@@ -12,7 +13,9 @@ import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 <%_ } _%>
 <%_ if (databaseType == 'mongodb') { _%>
 
-import <%=packageName%>.domain.util.JSR310DateConverters.*;
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.domain.util.JSR310DateConverters.*;
+
 import com.mongodb.Mongo;
 import com.github.mongobee.Mongobee;
 <%_ } _%>
@@ -26,8 +29,8 @@ import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;<% } %>
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
+import org.springframework.context.annotation.Configuration;<% if (databaseType == 'mongodb' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+import org.springframework.context.annotation.Profile;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine == 'elasticsearch') { %>
@@ -58,7 +61,7 @@ import java.util.List;
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement<% } %><% if (searchEngine == 'elasticsearch') { %>
 @EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (databaseType == 'mongodb') { %>
-@Profile("!" + Constants.SPRING_PROFILE_CLOUD)
+@Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
@@ -80,7 +83,7 @@ public class DatabaseConfiguration {
      * @throws SQLException if the server failed to start
      */
     @Bean(initMethod = "start", destroyMethod = "stop")
-    @Profile(Constants.SPRING_PROFILE_DEVELOPMENT)
+    @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Server h2TCPServer() throws SQLException {
         return Server.createTcpServer("-tcp","-tcpAllowOthers");
     }
@@ -97,7 +100,7 @@ public class DatabaseConfiguration {
         liquibase.setContexts(liquibaseProperties.getContexts());
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
         liquibase.setDropFirst(liquibaseProperties.isDropFirst());
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_NO_LIQUIBASE)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE)) {
             liquibase.setShouldRun(false);
         } else {
             liquibase.setShouldRun(liquibaseProperties.isEnabled());

@@ -2,9 +2,9 @@
     "activate": {
         "title": "Aktiválás",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>A hozzáférése aktiválásra került.</strong> Kérjük <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépjen be</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>A hozzáférése aktiválásra került.</strong> Kérjük ",
             <%_ } _%>
             "error": "<strong>A hozzáférését nem sikerült aktiválni.</strong> Kérjük használja a regisztrációs oldalt, hogy hozzáférést igényeljen."

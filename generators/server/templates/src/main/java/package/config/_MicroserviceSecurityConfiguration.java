@@ -76,6 +76,8 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
 <%_ if(authenticationType == 'uaa') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;

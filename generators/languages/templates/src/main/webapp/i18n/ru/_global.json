@@ -48,10 +48,10 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Если вы хотите <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">авторизироваться</a>, вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
                 "register": "У вас нет аккаунта? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Создать новый аккаунт</a>"
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "Если вы хотите ",
                     "link": "авторизироваться",

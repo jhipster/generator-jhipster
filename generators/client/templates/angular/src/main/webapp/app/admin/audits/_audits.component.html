@@ -13,30 +13,29 @@
         </div>
     </div>
 
-
-    <table class="table table-condensed table-striped table-bordered table-responsive">
-        <thead>
-        <tr>
-            <th (click)="orderProp = 'timestamp'; reverse=!reverse"><span>Date</span></th>
-            <th (click)="orderProp = 'principal'; reverse=!reverse"><span>User</span></th>
-            <th (click)="orderProp = 'type'; reverse=!reverse"><span>State</span></th>
-            <th (click)="orderProp = 'data.message'; reverse=!reverse"><span>Extra data</span></th>
-        </tr>
-        </thead>
-
-        <tr *ngFor="let audit of getAudits()">
-            <td><span>{{audit.timestamp| date:'medium'}}</span></td>
-            <td><small>{{audit.principal}}</small></td>
-            <td>{{audit.type}}</td>
-            <td>
-                <span ng-show="audit.data.message">{{audit.data.message}}</span>
-                <span ng-show="audit.data.remoteAddress"><span>Remote Address</span> {{audit.data.remoteAddress}}</span>
-            </td>
-        </tr>
-    </table>
-
-    <!-- TODO : use ng-bootstrap to handle pagination -->
-    <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadPage(page)"></uib-pagination>
+    <div class="table-responsive">
+        <table class="table table-condensed table-striped table-bordered">
+            <thead>
+            <tr>
+                <th (click)="orderProp = 'timestamp'; reverse=!reverse"><span>Date</span></th>
+                <th (click)="orderProp = 'principal'; reverse=!reverse"><span>User</span></th>
+                <th (click)="orderProp = 'type'; reverse=!reverse"><span>State</span></th>
+                <th (click)="orderProp = 'data.message'; reverse=!reverse"><span>Extra data</span></th>
+            </tr>
+            </thead>
+            <tr *ngFor="let audit of getAudits()">
+                <td><span>{{audit.timestamp| date:'medium'}}</span></td>
+                <td><small>{{audit.principal}}</small></td>
+                <td>{{audit.type}}</td>
+                <td>
+                    <span ng-show="audit.data.message">{{audit.data.message}}</span>
+                    <span ng-show="audit.data.remoteAddress"><span>Remote Address</span> {{audit.data.remoteAddress}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="text-xs-center">
+        <jhi-item-count [page]="page" [total]="totalItems" [items-per-page]="itemsPerPage"></jhi-item-count>
+        <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage"(click)="loadPage(page)"></ngb-pagination>
     </div>
 </div>

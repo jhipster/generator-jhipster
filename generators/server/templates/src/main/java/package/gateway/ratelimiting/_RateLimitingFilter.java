@@ -1,7 +1,8 @@
 package <%=packageName%>.gateway.ratelimiting;
 
-import <%=packageName%>.config.JHipsterProperties;
 import <%=packageName%>.security.SecurityUtils;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 import java.util.Calendar;
 import java.util.Date;

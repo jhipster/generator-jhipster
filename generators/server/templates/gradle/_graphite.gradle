@@ -1,0 +1,3 @@
+dependencies {
+    compile "io.dropwizard.metrics:metrics-graphite:${dropwizard_metrics_version}"
+}

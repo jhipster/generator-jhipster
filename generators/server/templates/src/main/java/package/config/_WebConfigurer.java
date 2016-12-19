@@ -1,12 +1,15 @@
 package <%=packageName%>.config;
 
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.JHipsterProperties;<% if (!skipClient) { %>
+import io.github.jhipster.web.filter.CachingHttpHeadersFilter;<% } %>
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %><% if (!skipClient) { %>
-import <%=packageName%>.web.filter.CachingHttpHeadersFilter;<% } %>
+import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,10 +63,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);<% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
         initMetrics(servletContext, disps);<% if (!skipClient) { %>
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
         }<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
         }<% } %>
         log.info("Web application fully configured");
@@ -96,7 +99,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         parameters.put("cookie-name", "hazelcast.sessionId");
 
         // Are you debugging? Default is false.
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             parameters.put("debug", "false");
         } else {
             parameters.put("debug", "true");
@@ -133,10 +136,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
         File root;
         String prefixPath = resolvePathPrefix();
-        <%_ if (clientFw === 'angular2') { _%>
+        <%_ if (clientFramework === 'angular2') { _%>
         root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
         <%_ } else { _%>
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
         } else {
             root = new File(prefixPath + "<%= CLIENT_MAIN_SRC_DIR %>");

@@ -12,8 +12,11 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     cachesStats: any = {};
     servicesStats: any = {};
     updatingMetrics: boolean = true;
+    JCACHE_KEY:string ;
 
-    constructor(private modalService: NgbModal, private metricsService:<%=jhiPrefixCapitalized%>MetricsService) {}
+    constructor(private modalService: NgbModal, private metricsService:<%=jhiPrefixCapitalized%>MetricsService) {
+        this.JCACHE_KEY = 'jcache.statistics';
+    }
 
     ngOnInit() {
         this.refresh();
@@ -31,15 +34,17 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
                 if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
                     this.servicesStats[key] = value;
                 }
-                if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
+            });
+            Object.keys(metrics.gauges).forEach((key) => {
+                if (key.indexOf('jcache.statistics') !== -1) {
+                    let value = metrics.gauges[key].value;
                     // remove gets or puts
                     let index = key.lastIndexOf('.');
                     let newKey = key.substr(0, index);
 
                     // Keep the name of the domain
-                    index = newKey.lastIndexOf('.');
                     this.cachesStats[newKey] = {
-                        'name': newKey.substr(index + 1),
+                        'name': this.JCACHE_KEY.length,
                         'value': value
                     };
                 }

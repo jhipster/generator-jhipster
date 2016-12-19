@@ -1,6 +1,7 @@
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
@@ -34,7 +35,7 @@ export const userMgmtState = {
     resolve: [
         {
             token: 'pagingParams',
-            deps: [PaginationUtil, '$stateParams'],
+            deps: [PaginationUtil, '$stateParams', PaginationConfig],
             resolveFn: (paginationUtil, stateParams) => {
                 return {
                     page: paginationUtil.parsePage(stateParams['page']),
@@ -91,7 +92,7 @@ export const userMgmtNewState = {
         let $state = trans.router.stateService;
         let modalService = trans.injector().get(NgbModal);
         const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.user = new User(null, null, null, null, null, true, null, null, null, null, null, null, null);
+        modalRef.componentInstance.user = new User();
         modalRef.result.then((result) => {
             console.log(`Closed with: ${result}`);
             $state.go('user-management', null, { reload: true });

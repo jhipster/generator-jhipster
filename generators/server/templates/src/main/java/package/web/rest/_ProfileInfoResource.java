@@ -1,7 +1,9 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.config.DefaultProfileUtil;
-import <%=packageName%>.config.JHipsterProperties;
+
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 

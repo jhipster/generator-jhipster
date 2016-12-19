@@ -1,8 +1,7 @@
-import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'org.springframework.boot'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
@@ -29,18 +28,13 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 task gulpBuildWithOpts(type: GulpTask) {
     args = ["build", "--no-notification"]
 }
     <%_ } else { _%>
 task webpack(type: NodeTask, dependsOn: 'npmInstall') {
-    def osName = System.getProperty("os.name").toLowerCase();
-    if (osName.contains("windows")) {
-      script = project.file('node_modules/webpack/bin/webpack.js')
-    } else {
-      script = project.file('node_modules/.bin/webpack')
-    }
+    script = project.file('node_modules/webpack/bin/webpack.js')
     args = ["-p", "--config", "webpack/webpack.prod.js"]
 }
     <%_ } _%>
@@ -68,13 +62,18 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (yarnInstall) { _%>
-gulpBuildWithOpts.dependsOn 'yarn_install'
-    <%_ } else { _%>
-gulpBuildWithOpts.dependsOn 'npmInstall'
+    <%_ if (clientPackageManager === 'yarn') { _%>
+// Workaround for https://github.com/srs/gradle-node-plugin/issues/134 doesn't work with yarn
+if (!project.hasProperty('nodeInstall')) {
+    gulpBuildWithOpts.dependsOn yarn_install
+} else {
+    gulpBuildWithOpts.dependsOn npmInstall
+}
+    <%_ } else if (clientPackageManager === 'npm') { _%>
+gulpBuildWithOpts.dependsOn npmInstall
     <%_ } _%>
-    <%_ if (clientFw === 'angular1') { _%>
-gulpBuildWithOpts.dependsOn 'bower'
+    <%_ if (clientFramework === 'angular1') { _%>
+gulpBuildWithOpts.dependsOn bower
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test
 bootRun.dependsOn gulp_test

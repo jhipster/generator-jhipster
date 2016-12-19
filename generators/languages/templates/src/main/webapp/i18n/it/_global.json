@@ -13,7 +13,7 @@
                 "main": "Utente",
                 "settings": "Impostazioni",
                 "password": "Password",
-                "sessions": "Sessione",
+                "sessions": "Sessioni",
                 "login": "Accesso",
                 "logout": "Esci",
                 "register": "Registrazione"
@@ -48,14 +48,14 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFw === 'angular1') { _%>
-                "authenticated": "Se vuoi <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">avviare una sessione</a>, puoi provare ad utilizzare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")",
+                <%_ if (clientFramework === 'angular1') { _%>
+                "authenticated": "Se vuoi <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">accedere</a>, puoi provare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")",
                 "register": "Non hai ancora un account? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Crea un account</a>"
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "Se vuoi ",
-                    "link": "avviare una sessione",
-                    "suffix": ", puoi provare ad utilizzare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")"
+                    "link": "accedere",
+                    "suffix": ", puoi provare gli account di default: <br/> - Amministratore (user = \"admin\" e la password = \"admin\") <br/> - utente (user = \"user\" e la password = \"user\")"
                 },
                 "register": {
                     "noaccount": "Non hai ancora un account?",
@@ -64,25 +64,25 @@
                 <%_ } _%>
             },
             "error": {
-                "dontmatch" : "La password e la conferma non corrispondono!"
+                "dontmatch" : "La password e la sua conferma non corrispondono!"
             },
             "validate": {
                 "newpassword": {
-                    "required": "È necessario immettere una password.",
-                    "minlength": "La tua password deve essere di almeno 4 caratteri",
-                    "maxlength": "La tua password non può essere più di 50 caratteri",
+                    "required": "La password è obbligatoria.",
+                    "minlength": "La password deve essere di almeno 4 caratteri",
+                    "maxlength": "La password non può contenere più di 50 caratteri",
                     "strength": "Robustezza della password:"
                 },
                 "confirmpassword": {
-                    "required": "È necessario la password di conferma.",
+                    "required": "La password di conferma è obbligatoria.",
                     "minlength": "La tua password deve essere di almeno 4 caratteri",
-                    "maxlength": "La tua password non può essere più di 50 caratteri"
+                    "maxlength": "La tua password non può contenere più di 50 caratteri"
                 },
                 "email": {
-                    "required": "È necessario un indirizzo e-mail.",
-                    "invalid": "Il tuo indirizzo email non è valido.",
-                    "minlength": "È necessario che la tua email sia di almeno 4 caratteri",
-                    "maxlength": "Il tuo indirizzo email non può essere più di 50 caratteri"
+                    "required": "L'indirizzo e-mail è obbligatorio.",
+                    "invalid": "L'indirizzo e-mail non è valido.",
+                    "minlength": "L'indirizzo e-mail deve essere di almeno 5 caratteri",
+                    "maxlength": "L'indirizzo e-mail non può contenere più di 50 caratteri"
                 }
             }
         },
@@ -121,7 +121,7 @@
             "minbytes": "Questo campo dovrebbe essere più di {{ min }} byte.",
             "maxbytes": "Questo campo non può essere superiore a {{ max }} byte.",
             "pattern": "Questo campo dovrebbe corrispondere al modello {{ pattern }}.",
-            "number": "Questo campo deve essere un numero.",
+            "number": "Questo campo dovrebbe essere un numero.",
             "datetimelocal": "Questo campo dovrebbe essere data e ora."
         }
     },
@@ -131,8 +131,8 @@
         "NotNull": "Il campo {{ fieldName }} non può essere vuoto!",
         "Size": "Il campo {{ fieldName }} non è conforme ai requisiti di lunghezza min/max!",
         "userexists": "Il nome utente è già in uso!",
-        "emailexists": "L' email è già in uso!",
+        "emailexists": "L'email è già in uso!",
         "idexists": "Un(a) nuovo/a {{entityName}} non può già avere un ID"
     },
-    "footer": "pié di pagina"
+    "footer": "Piè di pagina"
 }

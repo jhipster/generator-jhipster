@@ -1,13 +1,13 @@
 import { ITEMS_PER_PAGE } from '../../shared';
+import {Injectable} from '@angular/core';
+import { NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 
-//PaginationConfig.$inject = ['uibPaginationConfig'];
-
-export function PaginationConfig(/*uibPaginationConfig*/) {
-/*    uibPaginationConfig.itemsPerPage = ITEMS_PER_PAGE;
-    uibPaginationConfig.maxSize = 5;
-    uibPaginationConfig.boundaryLinks = true;
-    uibPaginationConfig.firstText = '«';
-    uibPaginationConfig.previousText = '‹';
-    uibPaginationConfig.nextText = '›';
-    uibPaginationConfig.lastText = '»';*/
+@Injectable()
+export class PaginationConfig{
+    constructor(private config: NgbPaginationConfig){
+        config.boundaryLinks = true;
+        config.maxSize = 5;
+        config.pageSize = ITEMS_PER_PAGE;
+        config.size = 'sm';
+    }
 }

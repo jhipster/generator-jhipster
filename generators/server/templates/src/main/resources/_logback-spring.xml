@@ -23,6 +23,8 @@
 -->
 
     <logger name="<%=packageName%>" level="#logback.loglevel#"/>
+
+    <logger name="io.github.jhipster" level="DEBUG"/>
 <% if (databaseType == 'cassandra') { %>
     <logger name="io.netty" level="WARN"/><% } %>
     <logger name="javax.activation" level="WARN"/>
@@ -38,7 +40,8 @@
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
-    <logger name="io.undertow" level="WARN"/><% if (hibernateCache == 'ehcache') { %>
+    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow.websockets.jsr" level="ERROR"/><% if (hibernateCache == 'ehcache') { %>
     <logger name="org.ehcache" level="WARN"/><% } %>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
