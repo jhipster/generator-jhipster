@@ -185,7 +185,7 @@ noFluentMethod
   = NO_FLUENT_METHOD SPACE FOR SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE* JDLComment? {
     addUniqueElements(parsed.noFluentMethod.list, decl);
     if (ex) {
-        addUniqueElements(parsed.noFluentMethod.excluded, ex);
+      addUniqueElements(parsed.noFluentMethod.excluded, ex);
     }
     return parsed.noFluentMethod;
   }
@@ -238,7 +238,7 @@ microserviceDecl1
       parsed.microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-        addUniqueElements(parsed.microservice[decl[decl.length - 1]].excluded, ex);
+      addUniqueElements(parsed.microservice[decl[decl.length - 1]].excluded, ex);
     }
     return parsed.microservice;
   }
@@ -250,7 +250,7 @@ searchEngineDecl
       parsed.searchEngine[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.searchEngine[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
-        addUniqueElements(parsed.searchEngine[decl[decl.length - 1]].excluded, ex);
+      addUniqueElements(parsed.searchEngine[decl[decl.length - 1]].excluded, ex);
     }
     return parsed.searchEngine;
   }
@@ -260,7 +260,7 @@ noClientDecl
   = SKIP_CLIENT SPACE FOR SPACE* decl:subNoClientDecl SPACE* ex:exclusion? SPACE* JDLComment? {
     addUniqueElements(parsed.noClient.list, decl);
     if (ex) {
-        addUniqueElements(parsed.noClient.excluded, ex);
+      addUniqueElements(parsed.noClient.excluded, ex);
     }
     return parsed.noClient;
   }
@@ -277,7 +277,7 @@ noServerDecl
   = SKIP_SERVER SPACE FOR SPACE* decl:subNoServerDecl SPACE* ex:exclusion? SPACE* JDLComment? {
     addUniqueElements(parsed.noServer.list, decl);
     if (ex) {
-        addUniqueElements(parsed.noServer.excluded, ex);
+      addUniqueElements(parsed.noServer.excluded, ex);
     }
     return parsed.noServer;
   }
@@ -309,7 +309,7 @@ entityList
   / e:ENTITY_NAME SPACE* WITH SPACE* method:([A-z0-9-]+) { return [e, method.toString().replace(/,/g,'')]; }
 
 
-relationshipType 
+relationshipType
 = ONE_TO_ONE { return 'one-to-one'; }
 / ONE_TO_MANY { return 'one-to-many'; }
 / MANY_TO_ONE { return 'many-to-one'; }
