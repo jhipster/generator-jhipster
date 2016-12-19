@@ -1,6 +1,6 @@
 {
   "name": "jhipster-core",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "JHipster's own domain language and core objects",
   "main": "module/index.js",
   "keywords": [
@@ -19,7 +19,7 @@
   },
   "author": {
     "name": "Mathieu Abou-Aichi",
-    "email": "",
+    "email": "mathieu.aa@free.fr",
     "url": "https://github.com/MathieuAA"
   },
   "bugs": {
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "pegjs": "0.10.0",
-    "mocha": "3.1.2",
+    "mocha": "3.2.0",
     "chai": "3.5.0",
     "istanbul": "0.4.5",
     "mocha-clean": "1.0.0"
