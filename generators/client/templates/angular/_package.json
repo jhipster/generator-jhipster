@@ -49,7 +49,7 @@
     "exports-loader": "0.6.3",
     "extract-text-webpack-plugin": "2.0.0-beta.4",
     "file-loader": "0.9.0",
-    "generator-jhipster": "3.9.1",
+    "generator-jhipster": "<%= packagejs.version %>",
     "handlebars-loader": "1.4.0",
     "html-webpack-plugin": "2.24.1",
     "image-webpack-loader": "3.0.0",
