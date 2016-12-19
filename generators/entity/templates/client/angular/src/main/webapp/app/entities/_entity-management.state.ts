@@ -1,11 +1,11 @@
 <%_
- var i18nToLoad = [entityInstance];
- for (var idx in fields) {
-     if (fields[idx].fieldIsEnum == true) {
-         i18nToLoad.push(fields[idx].enumInstance);
-     }
- }
- i18nToLoad.push('global');
+var i18nToLoad = [entityInstance];
+for (var idx in fields) {
+    if (fields[idx].fieldIsEnum == true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+i18nToLoad.push('global');
 _%>
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -52,9 +52,9 @@ export const <%= entityInstance %>State = {
                 return {
                     page: paginationUtil.parsePage(stateParams['page']),
                     sort: stateParams['sort'],
-                    search: stateParams['search']
+                    search: stateParams['search'],
                     predicate: paginationUtil.parsePredicate(stateParams['sort']),
-                    ascending: paginationUtil.parseAscending(stateParams['sort']),
+                    ascending: paginationUtil.parseAscending(stateParams['sort'])
                 };
             }
         }<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
