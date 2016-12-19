@@ -155,7 +155,7 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
                         export * from './${entityFolderName}/${entityFileName}-management-delete-dialog.component';
                         export * from './${entityFolderName}/${entityFileName}-management-detail.component';
                         export * from './${entityFolderName}/${entityFileName}-management.component';
-                        export * from './${entityFolderName}/${entityFileName}.state';
+                        export * from './${entityFolderName}/${entityFileName}-management.state';
                         export * from './${entityFolderName}/${entityFileName}.service';
                         export * from './${entityFolderName}/${entityFileName}.model';`
             ]

@@ -5,7 +5,6 @@ for (var idx in fields) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
-i18nToLoad.push('global');
 _%>
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -47,14 +46,14 @@ export const <%= entityInstance %>State = {
         <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
         {
             token: 'pagingParams',
-            deps: [PaginationUtil, '$stateParams'],
-            resolveFn: (paginationUtil, stateParams) => {
+            deps: [PaginationUtil, Transition],
+            resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
                 return {
-                    page: paginationUtil.parsePage(stateParams['page']),
-                    sort: stateParams['sort'],
-                    search: stateParams['search'],
-                    predicate: paginationUtil.parsePredicate(stateParams['sort']),
-                    ascending: paginationUtil.parseAscending(stateParams['sort'])
+                    page: paginationUtil.parsePage(trans.params()['page']),
+                    sort: trans.params()['sort'],
+                    search: trans.params()['search'],
+                    predicate: paginationUtil.parsePredicate(trans.params()['sort']),
+                    ascending: paginationUtil.parseAscending(trans.params()['sort'])
                 };
             }
         }<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
@@ -62,7 +61,7 @@ export const <%= entityInstance %>State = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations('<%= i18nToLoad %>')
+            resolveFn: (languageService) => languageService.setLocations(['<%= i18nToLoad %>'])
         }
         <%_ } _%>
     ]
@@ -84,18 +83,20 @@ export const <%= entityInstance %>DetailState = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(<%= i18nToLoad %>)
+            resolveFn: (languageService) => languageService.setLocations(['<%= i18nToLoad %>'])
         },
         <%_ } _%>
         {
             token: 'previousState',
-            deps: [$stateParams, StateService],
-            resolveFn: (stateParams, stateService) => {
+            deps: [Transition],
+            resolveFn: (trans: Transition) => {
                 //TODO this needs to be tested
-                var currentStateData = {
-                    name: stateParams.current.name || '<%= entityStateName %>',
-                    params: stateParams.params,
-                    url: stateService.href(stateParams.current.name, stateParams.params)
+                const stateParams = trans.params();
+                const stateService = trans.router.stateService;
+                const currentStateData = {
+                    name: stateService.current.name || '<%= entityStateName %>',
+                    params: stateParams,
+                    url: stateService.href(stateService.current.name, stateParams)
                 };
                 return currentStateData;
             }

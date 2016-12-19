@@ -35,8 +35,9 @@ export const userMgmtState = {
     resolve: [
         {
             token: 'pagingParams',
-            deps: [PaginationUtil, '$stateParams', PaginationConfig],
-            resolveFn: (paginationUtil, stateParams) => {
+            deps: [PaginationUtil, Transition, PaginationConfig],
+            resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
+                const stateParams = trans.params();
                 return {
                     page: paginationUtil.parsePage(stateParams['page']),
                     sort: stateParams['sort'],

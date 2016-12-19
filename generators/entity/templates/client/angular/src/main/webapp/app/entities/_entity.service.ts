@@ -22,17 +22,17 @@ export class <%= entityClass %>Service {
 
     create(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
         //TODO dateUtils.convertLocalDateToServer when any filed has date
-        return this.http.post(resourceUrl, <%= entityInstance %>);
+        return this.http.post(this.resourceUrl, <%= entityInstance %>);
     }
 
     update(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
         //TODO dateUtils.convertLocalDateToServer when any filed has date
-        return this.http.put(resourceUrl, <%= entityInstance %>);
+        return this.http.put(this.resourceUrl, <%= entityInstance %>);
     }
 
     find(id: number): Observable<<%= entityClass %>> {
         //TODO dateUtils.convertLocalDateFromServer & dateUtils.convertDateTimeFromServer
-        return this.http.get(`${resourceUrl}/${id}`).map((res: Response) => res.json());
+        return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => res.json());
     }
 
     query(req: any): Observable<Response> {
@@ -45,16 +45,16 @@ export class <%= entityClass %>Service {
             search: params
         };
 
-        return this.http.get(resourceUrl, options);
+        return this.http.get(this.resourceUrl, options);
     }
 
     delete(id: number): Observable<Response> {
-        return this.http.delete(`${resourceSearchUrl}/${id}`);
+        return this.http.delete(`${this.resourceUrl}/${id}`);
     }
 
     <%_ if(searchEngine === 'elasticsearch') { _%>
     search(query: string): Observable<Response> {
-        return this.http.get(`${resourceSearchUrl}/${query}`).map((res: Response) => res.json());
+        return this.http.get(`${this.resourceSearchUrl}/${query}`).map((res: Response) => res.json());
     }
     <% _ } _%>
 }
