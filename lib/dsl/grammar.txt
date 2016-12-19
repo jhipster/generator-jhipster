@@ -191,7 +191,7 @@ noFluentMethod
   }
 
 subNoFluentMethod
-  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoFluentMethod { return concat([e], sub); }
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoFluentMethod { return addUniqueElements([e], sub); }
   / STAR { return ['*']; }
   / ALL { return ['*']; }
   / e:ENTITY_NAME { return [e]; }
@@ -266,7 +266,7 @@ noClientDecl
   }
 
 subNoClientDecl
-  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoClientDecl { return concat([e], sub); }
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoClientDecl { return addUniqueElements([e], sub); }
   / STAR { return ['*']; }
   / ALL { return ['*']; }
   / e:ENTITY_NAME { return [e]; }
@@ -283,7 +283,7 @@ noServerDecl
   }
 
 subNoServerDecl
-  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoServerDecl { return concat([e], sub); }
+  = e:ENTITY_NAME SPACE* ',' SPACE* sub:subNoServerDecl { return addUniqueElements([e], sub); }
   / STAR { return ['*']; }
   / ALL { return ['*']; }
   / e:ENTITY_NAME { return [e]; }
