@@ -353,6 +353,7 @@ function writeFiles() {
             } else {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
+                this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularJSName, this.entityFolderName, this.entityFileName, this.enableTranslation);
             }
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation);

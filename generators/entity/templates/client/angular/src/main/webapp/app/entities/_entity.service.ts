@@ -1,3 +1,9 @@
+<%_
+    var hasDate = false;
+    if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+        hasDate = true;
+    }
+_%>
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
@@ -6,18 +12,27 @@ import { <%= entityClass %> } from './<%= entityFileName %>.model';
 
 @Injectable()
 export class <%= entityClass %>Service {
-    constructor(private http: Http) { }
+
+    private resourceUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/<%= entityApiUrl %>';
+    <%_ if(searchEngine === 'elasticsearch') { _%>
+    private resourceSearchUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/_search/<%= entityApiUrl %>';
+    <% _ } _%>
+
+    constructor(private http: Http<% if (hasDate) { %>, dateUtils: DateUtils<% } %>) { }
 
     create(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
-        return this.http.post(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/<%= entityApiUrl %>`<%} else { %>`api/<%= entityApiUrl %>`<% } %>, <%= entityInstance %>);
+        //TODO dateUtils.convertLocalDateToServer when any filed has date
+        return this.http.post(resourceUrl, <%= entityInstance %>);
     }
 
     update(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
-        return this.http.put(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/<%= entityApiUrl %>`<%} else { %>`api/<%= entityApiUrl %>`<% } %>, <%= entityInstance %>);
+        //TODO dateUtils.convertLocalDateToServer when any filed has date
+        return this.http.put(resourceUrl, <%= entityInstance %>);
     }
 
     find(id: number): Observable<<%= entityClass %>> {
-        return this.http.get(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/<%= entityApiUrl %>/${id}`<%} else { %>`api/<%= entityApiUrl %>/${id}`<% } %>).map((res: Response) => res.json());
+        //TODO dateUtils.convertLocalDateFromServer & dateUtils.convertDateTimeFromServer
+        return this.http.get(`${resourceUrl}/${id}`).map((res: Response) => res.json());
     }
 
     query(req: any): Observable<Response> {
@@ -30,10 +45,16 @@ export class <%= entityClass %>Service {
             search: params
         };
 
-        return this.http.get('api/<%= entityApiUrl %>', options);
+        return this.http.get(resourceUrl, options);
     }
 
     delete(id: number): Observable<Response> {
-        return this.http.delete(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/<%= entityApiUrl %>/${id}`<%} else { %>`api/<%= entityApiUrl %>/${id}`<% } %>);
+        return this.http.delete(`${resourceSearchUrl}/${id}`);
     }
+
+    <%_ if(searchEngine === 'elasticsearch') { _%>
+    search(query: string): Observable<Response> {
+        return this.http.get(`${resourceSearchUrl}/${query}`).map((res: Response) => res.json());
+    }
+    <% _ } _%>
 }

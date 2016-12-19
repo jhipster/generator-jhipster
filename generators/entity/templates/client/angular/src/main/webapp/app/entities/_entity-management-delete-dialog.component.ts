@@ -9,11 +9,15 @@ import { EventManager } from '../../shared/service/event-manager.service';
     selector: '<%= entityFileName %>-mgmt-delete-dialog',
     templateUrl: './<%= entityFileName %>-management-delete-dialog.component.html'
 })
-export class <%= entityClass %>MgmtDeleteDialogComponent {
+export class <%= entityAngularJSName %>DeleteDialogComponent {
 
     <%= entityInstance %>: <%= entityClass %>;
 
-    constructor(private <%= entityInstance %>Service: <%= entityClass %>Service, public activeModal: NgbActiveModal, private eventManager: EventManager) {}
+    constructor(
+        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        public activeModal: NgbActiveModal,
+        private eventManager: EventManager
+    ) {}
 
     clear () {
         this.activeModal.dismiss('cancel');

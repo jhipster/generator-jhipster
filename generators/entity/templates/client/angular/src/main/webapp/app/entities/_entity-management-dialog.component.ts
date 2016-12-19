@@ -3,16 +3,13 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-<%_ if (enableTranslation){ _%>
-import { JhiLanguageService } from '../../shared';
-<%_ }_%>
-import { EventManager } from '../../shared/service/event-manager.service';
+import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>EventManager } from '../../shared';
 
 @Component({
     selector: '<%= entityFileName %>-mgmt-dialog',
     templateUrl: './<%= entityFileName %>-management-dialog.component.html'
 })
-export class <%= entityClass %>MgmtDialogComponent implements OnInit {
+export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
     <%= entityInstance %>: <%= entityClass %>;
     languages: any[];

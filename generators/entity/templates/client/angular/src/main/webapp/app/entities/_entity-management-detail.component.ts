@@ -9,7 +9,7 @@ import { Transition } from 'ui-router-ng2';
     selector: '<%= entityFileName %>-mgmt-detail',
     templateUrl: './<%= entityFileName %>-management-detail.component.html'
 })
-export class <%= entityClass %>MgmtDetailComponent implements OnInit {
+export class <%= entityAngularJSName %>DetailComponent implements OnInit {
 
     <%= entityInstance %>: <%= entityClass %>;
 

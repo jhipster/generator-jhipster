@@ -11,7 +11,7 @@ import { EventManager, AlertService, ITEMS_PER_PAGE, ParseLinks, Principal, Pagi
     selector: '<%= entityFileName %>-mgmt',
     templateUrl: './<%= entityFileName %>-management.component.html'
 })
-export class <%= entityClass %>MgmtComponent implements OnInit {
+export class <%= entityAngularJSName %>Component implements OnInit {
 
     currentAccount: any;
     <%= entityInstancePlural %>: <%= entityClass %>[];
