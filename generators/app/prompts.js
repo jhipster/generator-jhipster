@@ -105,7 +105,6 @@ function askForTestOpts() {
             {name: 'Gatling', value: 'gatling'},
             {name: 'Cucumber', value: 'cucumber'}
         );
-        defaultChoice = ['gatling'];
     }
     if (!this.skipClient) {
         // all client side test frameworks should be added here
@@ -119,7 +118,7 @@ function askForTestOpts() {
         type: 'checkbox',
         name: 'testFrameworks',
         message: function (response) {
-            return getNumberedQuestion('Which testing frameworks would you like to use?', true);
+            return getNumberedQuestion('Besides JUnit and Karma, which testing frameworks would you like to use?', true);
         },
         choices: choices,
         default: defaultChoice
