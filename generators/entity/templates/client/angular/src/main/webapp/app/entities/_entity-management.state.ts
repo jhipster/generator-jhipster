@@ -49,11 +49,12 @@ export const <%= entityInstance %>State = {
             deps: [PaginationUtil, Transition],
             resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
                 return {
-                    page: paginationUtil.parsePage(trans.params()['page']),
-                    sort: trans.params()['sort'],
-                    search: trans.params()['search'],
-                    predicate: paginationUtil.parsePredicate(trans.params()['sort']),
-                    ascending: paginationUtil.parseAscending(trans.params()['sort'])
+                    const stateParams = trans.params();
+                    page: paginationUtil.parsePage(stateParams['page']),
+                    sort: stateParams['sort'],
+                    search: stateParams['search'],
+                    predicate: paginationUtil.parsePredicate(stateParams['sort']),
+                    ascending: paginationUtil.parseAscending(stateParams['sort'])
                 };
             }
         }<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
