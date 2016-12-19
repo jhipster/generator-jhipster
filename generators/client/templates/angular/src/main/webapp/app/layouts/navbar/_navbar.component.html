@@ -9,10 +9,6 @@
         </a>
     </div>
     <div class="collapse navbar-toggleable-md float-lg-right" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
-        <a class="navbar-brand logo" uiSref="home" (click)="collapseNavbar()">
-            <span class="logo-img"></span>
-            <span jhi-translate="global.title" class="navbar-title"><%= capitalizedBaseName %></span> <span class="navbar-version">{{version}}</span>
-        </a>
         <ul class="nav navbar-nav float-lg-right">
             <li class="nav-item" uiSrefActive="active">
                 <a class="nav-link" uiSref="home" (click)="collapseNavbar()">
