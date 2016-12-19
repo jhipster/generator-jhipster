@@ -45,7 +45,6 @@ describe('JHipster generator', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
-            assert.file(expectedFiles.gatling);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
@@ -55,6 +54,10 @@ describe('JHipster generator', function () {
                 authenticationType: 'session',
                 testFrameworks: []
             }));
+            assert.noFile([
+                TEST_DIR + 'gatling/gatling.conf',
+                TEST_DIR + 'gatling/logback.xml'
+            ]);
         });
         it('contains clientFramework with angular1 value', function () {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
@@ -724,6 +727,7 @@ describe('JHipster generator', function () {
 
         it('creates expected files with Kafka message broker enabled', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.gatling);
             assert.file(expectedFiles.messageBroker);
         });
     });
@@ -1139,7 +1143,6 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files for UAA auth with the Gateway application type', function () {
-            assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.gateway);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.eureka);
@@ -1174,6 +1177,7 @@ describe('JHipster server generator', function () {
         it('creates expected files for default configuration with gatling enabled for server generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
+            assert.file(expectedFiles.gatling);
             assert.noFile(getFilesForOptions(require('../generators/client/files-angularjs').files, {
                 useSass: false,
                 enableTranslation: true,
