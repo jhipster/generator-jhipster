@@ -154,15 +154,15 @@
     </div>
     <%_ if (databaseType !== 'cassandra') { _%>
         <%_ if (pagination == 'pager') { _%>
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %>">
+        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && && <%=entityInstancePlural %>.length">
             <jhi-item-count [page]="page" [total]="queryCount" [items-per-page]="itemsPerPage"></jhi-item-count>
             <!-- TODO: real pager implementation -->
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" (click)="loadPage(page)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
         <%_ } else if (pagination == 'pagination') { _%>
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %>">
+        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
             <jhi-item-count [page]="page" [total]="queryCount" [items-per-page]="itemsPerPage"></jhi-item-count>
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" (click)="loadPage(page)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
         <%_ } _%>
     <%_ } _%>

@@ -22,7 +22,8 @@
         <%_ } _%>
         private $state: StateService,
         private eventManager: EventManager,
-        private paginationUtil: PaginationUtil
+        private paginationUtil: PaginationUtil,
+        private paginationConfig: PaginationConfig
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = paginationUtil.parsePage($state.params['page']);
