@@ -7,7 +7,7 @@ import { EventManager } from '../../shared/service/event-manager.service';
 
 @Component({
     selector: '<%= entityFileName %>-mgmt-delete-dialog',
-    templateUrl: './<%= entityFileName %>-management-delete-dialog.component.html'
+    templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
 })
 export class <%= entityAngularJSName %>DeleteDialogComponent {
 

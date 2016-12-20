@@ -7,7 +7,7 @@ import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>EventManager } 
 
 @Component({
     selector: '<%= entityFileName %>-mgmt-dialog',
-    templateUrl: './<%= entityFileName %>-management-dialog.component.html'
+    templateUrl: './<%= entityFileName %>-dialog.component.html'
 })
 export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 

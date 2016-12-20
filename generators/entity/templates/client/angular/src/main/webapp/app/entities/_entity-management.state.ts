@@ -10,10 +10,10 @@ import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
-import { <%= entityAngularJSName %>Component } from './<%= entityFileName %>-management.component';
-import { <%= entityAngularJSName %>DetailComponent } from './<%= entityFileName %>-management-detail.component';
-import { <%= entityAngularJSName %>DialogComponent } from './<%= entityFileName %>-management-dialog.component';
-import { <%= entityAngularJSName %>DeleteDialogComponent } from './<%= entityFileName %>-management-delete-dialog.component';
+import { <%= entityAngularJSName %>Component } from './<%= entityFileName %>.component';
+import { <%= entityAngularJSName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+import { <%= entityAngularJSName %>DialogComponent } from './<%= entityFileName %>-dialog.component';
+import { <%= entityAngularJSName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';

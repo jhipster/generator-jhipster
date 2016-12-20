@@ -9,7 +9,7 @@ import { EventManager, AlertService, ITEMS_PER_PAGE, ParseLinks, Principal, Pagi
 
 @Component({
     selector: '<%= entityFileName %>-mgmt',
-    templateUrl: './<%= entityFileName %>-management.component.html'
+    templateUrl: './<%= entityFileName %>.component.html'
 })
 export class <%= entityAngularJSName %>Component implements OnInit {
 
