@@ -13,7 +13,6 @@ import { <%= entityAngularJSName %>Component } from './<%= entityFileName %>.com
 import { <%= entityAngularJSName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 import { <%= entityAngularJSName %>DialogComponent } from './<%= entityFileName %>-dialog.component';
 import { <%= entityAngularJSName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
-
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
