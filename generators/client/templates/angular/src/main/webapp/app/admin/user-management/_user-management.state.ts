@@ -1,7 +1,6 @@
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
@@ -35,7 +34,7 @@ export const userMgmtState = {
     resolve: [
         {
             token: 'pagingParams',
-            deps: [PaginationUtil, Transition, PaginationConfig],
+            deps: [PaginationUtil, Transition],
             resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
                 const stateParams = trans.params();
                 return {

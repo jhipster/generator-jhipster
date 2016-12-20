@@ -9,7 +9,6 @@ _%>
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { <%= entityAngularJSName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularJSName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 import { <%= entityAngularJSName %>DialogComponent } from './<%= entityFileName %>-dialog.component';

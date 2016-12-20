@@ -6,6 +6,7 @@ import { StateService } from 'ui-router-ng2';
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { AlertService, EventManager, ITEMS_PER_PAGE, PaginationUtil, ParseLinks, Principal } from '../../shared';
+import { PaginationConfig } from "../../blocks/config/uib-pagination.config";
 
 @Component({
     selector: 'user-mgmt',
@@ -37,7 +38,8 @@ export class UserMgmtComponent implements OnInit {
         <%_ } _%>
         private $state: StateService,
         private eventManager: EventManager,
-        private paginationUtil: PaginationUtil
+        private paginationUtil: PaginationUtil,
+        private paginationConfig: PaginationConfig
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = paginationUtil.parsePage($state.params['page']);
