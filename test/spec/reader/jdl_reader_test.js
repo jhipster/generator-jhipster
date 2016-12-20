@@ -111,5 +111,14 @@ describe('::parseFromFiles', function() {
         expect(content).not.to.be.null;
       });
     });
+    describe('when having multiple internal JDL comments', function() {
+      it('ignores them and does not fail', function() {
+        try {
+          parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
+        } catch (error) {
+          fail(error, null, error);
+        }
+      });
+    });
   });
 });

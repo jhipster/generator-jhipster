@@ -83,7 +83,6 @@ prog
     return parsed;
   }
   / SPACE* comment SPACE* p:prog { return parsed; }
-  / SPACE* JDLComment SPACE* p:prog { return parsed; }
   / SPACE* microservice:microserviceDecl1 SPACE* p:prog {
     parsed.microservice = microservice;
     return parsed;
@@ -112,7 +111,7 @@ prog
 
 //Entities
 entityDecl
-  = jd:comment? SPACE* JDLComment? SPACE* ENTITY SPACE* e:ENTITY_NAME SPACE* tableName:entityTableNameDecl? SPACE* eb:entityBody? SPACE* JDLComment? {
+  = jd:comment? SPACE*  SPACE* ENTITY SPACE* e:ENTITY_NAME SPACE* tableName:entityTableNameDecl? SPACE* eb:entityBody? SPACE*  {
     return { name: e, tableName: tableName ? tableName: e, body: eb, javadoc: jd };
   }
   / ENTITY SPACE* e:ENTITY_NAME SPACE* eb:entityBody? { return { name: e, body: eb, javadoc: '' }; }
@@ -121,11 +120,11 @@ entityTableNameDecl
   = '(' SPACE* name:[A-z0-9_-]+ SPACE* ')' { return name.join(''); }
 
 entityBody
-  = '{' SPACE* JDLComment? SPACE* fdl:fieldDeclList SPACE* JDLComment? SPACE* '}' { return fdl; }
+  = '{' SPACE*  SPACE* fdl:fieldDeclList SPACE*  SPACE* '}' { return fdl; }
   / '' { return []; }
 
 fieldDeclList
-  = JDLComment? SPACE* com:comment? SPACE* JDLComment? SPACE* f:FIELD_NAME SPACE t:type SPACE* vl:validationList? SPACE* com2:comment? SPACE* ','? SPACE* JDLComment? SPACE* fdl:fieldDeclList {
+  =  SPACE* com:comment? SPACE*  SPACE* f:FIELD_NAME SPACE t:type SPACE* vl:validationList? SPACE* com2:comment? SPACE* ','? SPACE*  SPACE* fdl:fieldDeclList {
     return addUniqueElements([{ name: f, type: t, validations: vl, javadoc: com || com2 }], fdl );
   }
   / com:comment? SPACE* f:FIELD_NAME SPACE t:type SPACE* vl:validationList {
@@ -139,7 +138,7 @@ validationList
 
 //Relationship
 relationDecl
-  = RELATIONSHIP SPACE rt:relationshipType SPACE* '{' SPACE* JDLComment? SPACE* bodies:relationshipBodies SPACE* JDLComment? SPACE* '}' {
+  = RELATIONSHIP SPACE rt:relationshipType SPACE* '{' SPACE*  SPACE* bodies:relationshipBodies SPACE*  SPACE* '}' {
         addCardinalityToRelationships(rt, bodies);
         return addUniqueElements([], bodies);
     }
@@ -149,7 +148,7 @@ relationshipBodies
   / rb:relationshipBody { return [rb]; }
 
 relationshipBody
-  = from:relationshipSide SPACE* JDLComment? SPACE* 'to' SPACE* JDLComment? SPACE* to:relationshipSide SPACE* JDLComment? {
+  = from:relationshipSide SPACE*  SPACE* 'to' SPACE*  SPACE* to:relationshipSide SPACE*  {
     return { from: from , to: to };
   }
 
@@ -165,12 +164,12 @@ relationshipSide
 
 //Enum
 enumDecl
-  = ENUM SPACE e:ENUMNAME SPACE* '{' SPACE* JDLComment? SPACE* el:enumPropList SPACE* JDLComment? SPACE* '}' {
+  = ENUM SPACE e:ENUMNAME SPACE* '{' SPACE*  SPACE* el:enumPropList SPACE*  SPACE* '}' {
     return { name: e, values: el };
   }
 
 enumPropList
-  = e:ENUMPROP SPACE* ',' SPACE* JDLComment? SPACE* el:enumPropList { return addUniqueElements([e], el); }
+  = e:ENUMPROP SPACE* ',' SPACE*  SPACE* el:enumPropList { return addUniqueElements([e], el); }
   / e:ENUMPROP { return [e]; }
 
 exclusion
@@ -182,7 +181,7 @@ exclusionSub
 
 // noFluentMethod
 noFluentMethod
-  = NO_FLUENT_METHOD SPACE FOR SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE* JDLComment? {
+  = NO_FLUENT_METHOD SPACE FOR SPACE+ decl:subNoFluentMethod SPACE* ex:exclusion? SPACE*  {
     addUniqueElements(parsed.noFluentMethod.list, decl);
     if (ex) {
       addUniqueElements(parsed.noFluentMethod.excluded, ex);
@@ -198,7 +197,7 @@ subNoFluentMethod
 
 // DTO
 dtoDecl
-  = DTO SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
+  = DTO SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
     parsed.dto[decl[decl.length - 1]] = parsed.dto[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.dto[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
     if (ex) {
@@ -209,7 +208,7 @@ dtoDecl
 
 // Pagination
 pagiDecl
-  = PAGINATE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
+  = PAGINATE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
   	parsed.pagination[decl[decl.length - 1]] =
       parsed.pagination[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.pagination[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -221,7 +220,7 @@ pagiDecl
 
 // Service
 serviceDecl
-  = SERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
+  = SERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
   	parsed.service[decl[decl.length - 1]] =
       parsed.service[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.service[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -233,7 +232,7 @@ serviceDecl
 
 // first way of declaring microservices
 microserviceDecl1
-  = MICROSERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
+  = MICROSERVICE SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
     parsed.microservice[decl[decl.length - 1]] =
       parsed.microservice[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.microservice[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -245,7 +244,7 @@ microserviceDecl1
 
 // searchEngine
 searchEngineDecl
-  = SEARCH SPACE+ decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
+  = SEARCH SPACE+ decl:entityList SPACE* ex:exclusion? SPACE*  {
     parsed.searchEngine[decl[decl.length - 1]] =
       parsed.searchEngine[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.searchEngine[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -257,7 +256,7 @@ searchEngineDecl
 
 // skipClient option
 noClientDecl
-  = SKIP_CLIENT SPACE FOR SPACE* decl:subNoClientDecl SPACE* ex:exclusion? SPACE* JDLComment? {
+  = SKIP_CLIENT SPACE FOR SPACE* decl:subNoClientDecl SPACE* ex:exclusion? SPACE*  {
     addUniqueElements(parsed.noClient.list, decl);
     if (ex) {
       addUniqueElements(parsed.noClient.excluded, ex);
@@ -274,7 +273,7 @@ subNoClientDecl
 
 // skipServer option
 noServerDecl
-  = SKIP_SERVER SPACE FOR SPACE* decl:subNoServerDecl SPACE* ex:exclusion? SPACE* JDLComment? {
+  = SKIP_SERVER SPACE FOR SPACE* decl:subNoServerDecl SPACE* ex:exclusion? SPACE*  {
     addUniqueElements(parsed.noServer.list, decl);
     if (ex) {
       addUniqueElements(parsed.noServer.excluded, ex);
@@ -291,7 +290,7 @@ subNoServerDecl
 
 // angularSuffix option
 angularSuffixDecl
-  = ANGULAR_SUFFIX SPACE* decl:entityList SPACE* ex:exclusion? SPACE* JDLComment? {
+  = ANGULAR_SUFFIX SPACE* decl:entityList SPACE* ex:exclusion? SPACE*  {
     parsed.angularSuffix[decl[decl.length - 1]] =
       parsed.angularSuffix[decl[decl.length - 1]] || { list: [], excluded: [] };
     addUniqueElements(parsed.angularSuffix[decl[decl.length - 1]].list, decl.slice(0, decl.length - 1));
@@ -332,7 +331,6 @@ comment = commentStart notAComment:notAComment* commentStop { return notAComment
 commentStart = '/*' [*]*
 commentStop = [*]+ '/'
 // a completely ignored comment, will not be a Javadoc comment
-JDLComment = '//' [^\n\r]*
 notAComment = !commentStop !commentStart char:. { return char; }
 
 // Constants
