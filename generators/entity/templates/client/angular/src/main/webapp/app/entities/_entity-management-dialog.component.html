@@ -59,7 +59,7 @@
             <%_ } _%>
             <button type="button" (click)="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
                     class="btn btn-default btn-xs pull-right">
-                <span class="glyphicon glyphicon-remove"></span>
+                <span class="fa fa-times"></span>
             </button>
         </div>
         <button type="button" ngf-select class="btn btn-default btn-block"
@@ -73,7 +73,7 @@
         <input id="field_<%= fieldName %>" #<%= fieldName %>="ngModel" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker  #<%= fieldName %>Dp="ngbDatepicker" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
         <%- include ng_validators %>/>
         <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" (click)="<%= fieldName %>Dp.open()"><i class="fa fa-calendar"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" (click)="<%= fieldName %>Dp.open()"><i class="fa fa-calendar"></i></button>
                     </span>
     </div>
     <%_ } else if(fieldType == 'ZonedDateTime') { _%>
@@ -229,10 +229,10 @@ var translationKey = keyPrefix + relationshipName; _%>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
-        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span jhi-translate="entity.action.cancel">Cancel</span>
+        <span class="fa fa-ban"></span>&nbsp;<span jhi-translate="entity.action.cancel">Cancel</span>
     </button>
     <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-        <span class="glyphicon glyphicon-save"></span>&nbsp;<span jhi-translate="entity.action.save">Save</span>
+        <span class="fa fa-save"></span>&nbsp;<span jhi-translate="entity.action.save">Save</span>
     </button>
 </div>
 </form>

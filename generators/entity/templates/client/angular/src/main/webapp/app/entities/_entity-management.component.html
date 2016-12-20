@@ -18,12 +18,12 @@
                         <input type="text" class="form-control" [(ngModel)]="searchQuery" id="searchQuery" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
                         <span  class="input-group-btn width-min" >
                             <button class="btn btn-info" (click)="search(searchQuery)">
-                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="fa fa-search"></span>
                             </button>
                         </span>
                         <span class="input-group-btn width-min" *ngIf="currentSearch">
                             <button class="btn btn-info" (click)="clear()">
-                                <span class="glyphicon glyphicon-trash"></span>
+                                <span class="fa fa-trash-o"></span>
                             </button>
                         </span>
                     </div>

@@ -9,7 +9,9 @@ import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
-
+<%_ if(hasDate) { _%>
+import { DateUtils } from '../../shared/service/date-util.service';
+<%_ } _%>
 @Injectable()
 export class <%= entityClass %>Service {
 
