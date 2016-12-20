@@ -73,6 +73,13 @@ module.exports = JhipsterGenerator.extend({
         this.option('yarn', {
             desc: 'Use yarn instead of npm install',
             type: Boolean,
+            defaults: true
+        });
+
+        // This adds support for a `--npm` flag
+        this.option('npm', {
+            desc: 'Use npm instead of yarn',
+            type: Boolean,
             defaults: false
         });
 
@@ -85,6 +92,9 @@ module.exports = JhipsterGenerator.extend({
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
         this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
+        if (this.options['npm']) {
+            this.yarnInstall = this.configOptions.yarnInstall = false;
+        }
     },
 
     initializing: {
