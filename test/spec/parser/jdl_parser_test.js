@@ -425,6 +425,38 @@ describe('JDLParser', function () {
           expect(content.options[6].value).to.eq('pagination');
         });
       });
+      describe('when having two consecutive comments for fields', function() {
+        var input = parseFromFiles(['./test/test_files/field_comments.jdl']);
+        var content = JDLParser.parse(input, 'sql');
+        it('assigns them correctly', function() {
+          expect(content.entities.TestEntity.fields).to.deep.eq({
+            first: {
+              name: 'first',
+              comment: 'first comment',
+              type: 'String',
+              validations: {}
+            },
+            second: {
+              name: 'second',
+              comment: 'second comment',
+              type: 'String',
+              validations: {}
+            },
+            third: {
+              name: 'third',
+              comment: undefined,
+              type: 'Integer',
+              validations: {}
+            },
+            fourth: {
+              name: 'fourth',
+              comment: 'another',
+              type: 'String',
+              validations: {}
+            }
+          });
+        });
+      });
     });
   });
 });

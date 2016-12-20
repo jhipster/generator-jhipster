@@ -124,11 +124,8 @@ entityBody
   / '' { return []; }
 
 fieldDeclList
-  =  SPACE* com:comment? SPACE*  SPACE* f:FIELD_NAME SPACE t:type SPACE* vl:validationList? SPACE* com2:comment? SPACE* ','? SPACE*  SPACE* fdl:fieldDeclList {
+  = SPACE* com:comment? SPACE* f:FIELD_NAME SPACE_WITHOUT_NEW8LINE* t:type SPACE_WITHOUT_NEW8LINE* vl:validationList? SPACE_WITHOUT_NEW8LINE* com2:comment? SPACE* ','? SPACE* fdl:fieldDeclList {
     return addUniqueElements([{ name: f, type: t, validations: vl, javadoc: com || com2 }], fdl );
-  }
-  / com:comment? SPACE* f:FIELD_NAME SPACE t:type SPACE* vl:validationList {
-    return [{ name: f, type: t, validations: vl, javadoc: com }];
   }
   / '' { return []; }
 
@@ -376,5 +373,6 @@ INJECTED_FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9()]* { return `${head}${tail.join
 ENTITY_NAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 SPACE = ['\n'|'\t'|'\r'|' '|\u2028|\u2029]
+SPACE_WITHOUT_NEW8LINE = ['\t'|' '|\u2028|\u2029]
 REGEX = word:[A-z0-9!@#$%^&*()_+\-=\[\]{};':\\|,.<>\/? ]* { return word.join('') }
 APOSTROPHE = ["|']

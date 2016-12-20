@@ -1,0 +1,9 @@
+entity TestEntity {
+    /** first comment */
+    first String
+    /** second comment */
+    second String
+    third Integer
+    /* another */
+    fourth String
+}
