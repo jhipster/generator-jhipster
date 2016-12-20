@@ -23,10 +23,13 @@ describe('::exportToJSON', function () {
   });
   describe('when passing valid arguments', function () {
     describe('when exporting JDL to entity json for SQL type', function () {
+      var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
+      Exporter.exportToJSON(content);
+      var department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
+      var jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
+      var job = JSON.parse(fs.readFileSync('.jhipster/Job.json', {encoding: 'utf-8'}));
       it('exports it', function () {
-        var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
-        Exporter.exportToJSON(content);
         expect(fs.statSync('.jhipster/Department.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/JobHistory.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Job.json').isFile()).to.be.true;
@@ -35,7 +38,6 @@ describe('::exportToJSON', function () {
         expect(fs.statSync('.jhipster/Task.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Country.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Region.json').isFile()).to.be.true;
-        var department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
         expect(department.relationships).to.deep.eq([
           {
             "relationshipType": "one-to-one",
@@ -67,7 +69,6 @@ describe('::exportToJSON', function () {
         expect(department.dto).to.eq('no');
         expect(department.service).to.eq('no');
         expect(department.pagination).to.eq('no');
-        var jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
         expect(jobHistory.relationships).to.deep.eq([
           {
             "relationshipType": "one-to-one",
@@ -112,7 +113,6 @@ describe('::exportToJSON', function () {
         expect(jobHistory.dto).to.eq('no');
         expect(jobHistory.service).to.eq('no');
         expect(jobHistory.pagination).to.eq('infinite-scroll');
-        var job = JSON.parse(fs.readFileSync('.jhipster/Job.json', {encoding: 'utf-8'}));
         // clean up the mess...
         fs.unlinkSync('.jhipster/Department.json');
         fs.unlinkSync('.jhipster/JobHistory.json');
@@ -126,9 +126,9 @@ describe('::exportToJSON', function () {
       });
     });
     describe('when exporting JDL to entity json for an existing entity', function () {
+      var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
       it('exports it with same changeLogDate', function () {
-        var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
         Exporter.exportToJSON(content);
         expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
         var changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;

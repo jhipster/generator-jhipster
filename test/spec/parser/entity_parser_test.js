@@ -20,9 +20,9 @@ describe('::convert', function () {
       });
     });
     describe('such as an no databaseType', function () {
+      var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       it('throws an error', function () {
         try {
-          var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
           EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql')});
           fail();
         } catch (error) {
@@ -31,9 +31,9 @@ describe('::convert', function () {
       });
     });
     describe('such as invalid databaseType', function () {
+      var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       it('throws an error', function () {
         try {
-          var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
           EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'mongodb'});
           fail();
         } catch (error) {
@@ -44,9 +44,9 @@ describe('::convert', function () {
   });
   describe('when passing valid arguments', function () {
     describe('when converting JDL to entity json for SQL type', function () {
+      var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'mysql'), databaseType: 'mysql'});
       it('converts it', function () {
-        var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'mysql'), databaseType: 'mysql'});
         expect(content).not.to.be.null;
         expect(Object.keys(content).length).to.eq(8);
         for (let i = 0, entities = Object.keys(content); i < entities.length; i++) {
@@ -64,9 +64,9 @@ describe('::convert', function () {
       });
     });
     describe('when converting JDL to entity json for MongoDB type', function () {
+      var input = parseFromFiles(['./test/test_files/mongo_jdl.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'mongodb'), databaseType: 'mongodb'});
       it('converts it', function () {
-        var input = parseFromFiles(['./test/test_files/mongo_jdl.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'mongodb'), databaseType: 'mongodb'});
         expect(content).not.to.be.null;
         expect(Object.keys(content).length).to.eq(8);
         expect(content.Department.relationships.length).to.eq(0);
@@ -78,9 +78,9 @@ describe('::convert', function () {
       });
     });
     describe('when converting JDL to entity json for Cassandra type', function () {
+      var input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'cassandra'), databaseType: 'cassandra'});
       it('converts it', function () {
-        var input = parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'cassandra'), databaseType: 'cassandra'});
         expect(content).not.to.be.null;
         expect(Object.keys(content).length).to.eq(8);
         expect(content.Department.relationships.length).to.eq(0);
@@ -91,9 +91,9 @@ describe('::convert', function () {
       });
     });
     describe('when converting a JDL to JSON with a required relationship', function () {
+      var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
       it('converts it', function() {
-        var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
         expect(content.A.relationships).to.deep.eq([{
           otherEntityField: 'id',
           otherEntityName: 'b',
@@ -106,9 +106,9 @@ describe('::convert', function () {
       });
     });
     describe('when converting a JDL to JSON with fluent methods', function () {
+      var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
       it('converts it', function () {
-        var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
         expect(content.A.fluentMethods).to.be.false;
         expect(content.B.fluentMethods).to.be.true;
         expect(content.C.fluentMethods).to.be.true;
@@ -120,9 +120,9 @@ describe('::convert', function () {
       });
     });
     describe('when converting a JDL to JSON with all different types of bi-directional relationships', function () {
+      var input = parseFromFiles(['./test/test_files/different_relationship_types.jdl']);
+      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
       it('converts it', function() {
-        var input = parseFromFiles(['./test/test_files/different_relationship_types.jdl']);
-        var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
         expect(content.A.relationships).to.deep.eq(
           [
             {

@@ -56,9 +56,9 @@ describe('JDLParser', function () {
     });
     describe('when passing valid args', function () {
       describe('with no error', function () {
+        var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+        var content = JDLParser.parse(input, 'mysql');
         it('builds a JDLObject', function () {
-          var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-          var content = JDLParser.parse(input, 'mysql');
           expect(content).not.to.be.null;
           expect(content.entities.Department).to.deep.eq(new JDLEntity({
             name: 'Department',
@@ -143,17 +143,17 @@ describe('JDLParser', function () {
         });
       });
       describe('with a required relationship', function () {
+        var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it('adds it', function () {
-          var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInFromRequired).to.be.true;
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
         });
       });
       describe("with a field name 'id'", function () {
+        var input = parseFromFiles(['./test/test_files/id_field.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it("doesn't add it", function () {
-          var input = parseFromFiles(['./test/test_files/id_field.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.entities.A).to.deep.eq(new JDLEntity({
             name: 'A',
             tableName: 'A',
@@ -164,8 +164,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with an invalid field type', function () {
+        var input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -175,8 +175,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with an unexistent validation for a field type', function () {
+        var input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -186,8 +186,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with entities that do not exist for a relationship', function () {
+        var input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -197,8 +197,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with User entity as from for a relationship', function () {
+        var input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -208,16 +208,16 @@ describe('JDLParser', function () {
         });
       });
       describe('with User entity as to for a relationship', function () {
+        var input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it('is processed', function () {
-          var input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.relationships.relationships.ManyToOne['ManyToOne_A{user}_User{a}'].to.name).to.eq('User');
           expect(content.relationships.relationships.OneToOne['OneToOne_B{user}_User'].to.name).to.eq('User');
         });
       });
       describe('with an invalid option', function () {
+        var input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -227,27 +227,27 @@ describe('JDLParser', function () {
         });
       });
       describe('with a required enum', function () {
+        var input = parseFromFiles(['./test/test_files/enum.jdl']);
+        var content = JDLParser.parse(input, 'sql');
+        var enumField = new JDLField({
+          name: 'sourceType',
+          type: 'MyEnum'
+        });
+        enumField.addValidation(new JDLValidation({
+          name: Validations.REQUIRED
+        }));
         it('adds it', function () {
-          var input = parseFromFiles(['./test/test_files/enum.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.enums.MyEnum).to.deep.eq(new JDLEnum({
             name: 'MyEnum',
             values: ['AAA', 'BBB', 'CCC']
-          }));
-          var enumField = new JDLField({
-            name: 'sourceType',
-            type: 'MyEnum'
-          });
-          enumField.addValidation(new JDLValidation({
-            name: Validations.REQUIRED
           }));
           expect(content.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
       describe('when using the noFluentMethods option', function () {
+        var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it('adds it correctly', function () {
-          var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.options).to.deep.eq([
               new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,

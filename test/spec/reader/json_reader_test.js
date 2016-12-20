@@ -41,8 +41,8 @@ describe('::parseFromDir', function() {
   });
   describe('when passing valid arguments', function () {
     describe('when reading a jhipster app dir', function () {
+      var content = parseFromDir('./test/test_files/jhipster_app');
       it('reads it', function () {
-        var content = parseFromDir('./test/test_files/jhipster_app');
         expect(content.entities.Country).not.to.be.undefined;
         expect(content.entities.Department).not.to.be.undefined;
         expect(content.entities.Employee).not.to.be.undefined;
@@ -52,8 +52,8 @@ describe('::parseFromDir', function() {
         expect(content.entities.Task).not.to.be.undefined;
         expect(content.entities.NoEntity).to.be.undefined;
         expect(content.entities.BadEntity).to.be.undefined;
-        expect(content.options.filter( o => o.name === UnaryOptions.SKIP_CLIENT).length).eq(1);
-        expect(content.options.filter( o => o.name === UnaryOptions.SKIP_SERVER).length).eq(1);
+        expect(content.options.filter(o => o.name === UnaryOptions.SKIP_CLIENT).length).eq(1);
+        expect(content.options.filter(o => o.name === UnaryOptions.SKIP_SERVER).length).eq(1);
       });
     });
   });
