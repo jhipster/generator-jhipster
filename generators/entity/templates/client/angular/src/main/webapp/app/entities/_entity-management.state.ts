@@ -61,7 +61,7 @@ export const <%= entityInstance %>State = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(['<%= i18nToLoad %>'])
+            resolveFn: (languageService) => languageService.setLocations(<%- printProperArray(i18nToLoad) %>)
         }
         <%_ } _%>
     ]
@@ -83,7 +83,7 @@ export const <%= entityInstance %>DetailState = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(['<%= i18nToLoad %>'])
+            resolveFn: (languageService) => languageService.setLocations(<%- printProperArray(i18nToLoad) %>)
         },
         <%_ } _%>
         {

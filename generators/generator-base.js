@@ -1927,3 +1927,16 @@ Generator.prototype.httpGet = function(url, onSuccess, onFail) {
         });
     }).on('error', onFail);
 };
+
+Generator.prototype.printProperArray = function(array) {
+    let ret = '[';
+    for (let i = 0; i < array.length; i++)
+    {
+        ret += "'" + array[i] + "'";
+        if (i < array.length - 1)
+        {
+            ret += ', ';
+        }
+    }
+    return ret + ']';
+};
