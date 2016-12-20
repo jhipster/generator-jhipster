@@ -47,8 +47,8 @@ export const <%= entityInstance %>State = {
             token: 'pagingParams',
             deps: [PaginationUtil, Transition],
             resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
+                const stateParams = trans.params();
                 return {
-                    const stateParams = trans.params();
                     page: paginationUtil.parsePage(stateParams['page']),
                     sort: stateParams['sort'],
                     search: stateParams['search'],
