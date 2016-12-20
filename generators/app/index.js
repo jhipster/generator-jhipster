@@ -69,9 +69,9 @@ module.exports = JhipsterGenerator.extend({
             defaults: 'jhi'
         });
 
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm install',
+        // This adds support for a `--npm` flag
+        this.option('npm', {
+            desc: 'Use npm instead of yarn',
             type: Boolean,
             defaults: false
         });
@@ -84,7 +84,7 @@ module.exports = JhipsterGenerator.extend({
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
+        this.yarnInstall = this.configOptions.yarnInstall = !this.options['npm'];
     },
 
     initializing: {

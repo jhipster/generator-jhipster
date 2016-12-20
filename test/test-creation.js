@@ -63,7 +63,10 @@ describe('JHipster generator', function () {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
         });
         it('contains clientPackageManager with npm value', function () {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        });
+        it('contains install-node-and-yarn in pom.xml', function () {
+            assert.fileContent('pom.xml', /install-node-and-yarn/);
         });
     });
 
@@ -111,10 +114,10 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('default configuration using yarn flag', function () {
+    describe('default configuration using npm flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true, yarn: true})
+                .withOptions({skipInstall: true, skipChecks: true, npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',
@@ -150,10 +153,10 @@ describe('JHipster generator', function () {
             }));
         });
         it('contains clientPackageManager with yarn value', function () {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
-        it('contains install-node-and-yarn in pom.xml', function () {
-            assert.fileContent('pom.xml', /install-node-and-yarn/);
+        it('contains install-node-and-npm in pom.xml', function () {
+            assert.fileContent('pom.xml', /install-node-and-npm/);
         });
     });
 
@@ -1216,15 +1219,15 @@ describe('JHipster client generator', function () {
         it('contains clientFramework with angular1 value', function () {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
         });
-        it('contains clientPackageManager with npm value', function () {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        it('contains clientPackageManager with yarn value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
         });
     });
 
-    describe('generate client with angularjs 1 using yarn flag', function () {
+    describe('generate client with angularjs 1 using npm flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular1', yarn: true})
+                .withOptions({skipInstall: true, auth: 'session', client: 'angular1', npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
@@ -1237,8 +1240,8 @@ describe('JHipster client generator', function () {
         it('contains clientFramework with angular1 value', function () {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
         });
-        it('contains clientPackageManager with yarn value', function () {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        it('contains clientPackageManager with npm value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
     });
 
@@ -1270,15 +1273,15 @@ describe('JHipster client generator', function () {
         it('contains clientFramework with angular2 value', function () {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
         });
-        it('contains clientPackageManager to npm', function () {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        it('contains clientPackageManager with yarn value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
         });
     });
 
     describe('generate client with angular 2 using yarn flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular2', yarn: true})
+                .withOptions({skipInstall: true, auth: 'session', client: 'angular2', npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
@@ -1303,8 +1306,8 @@ describe('JHipster client generator', function () {
         it('contains clientFramework with angular2 value', function () {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
         });
-        it('contains clientPackageManager with yarn value', function () {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        it('contains clientPackageManager with npm value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
     });
 });
