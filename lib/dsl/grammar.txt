@@ -111,7 +111,7 @@ prog
 
 //Entities
 entityDecl
-  = jd:comment? SPACE*  SPACE* ENTITY SPACE* e:ENTITY_NAME SPACE* tableName:entityTableNameDecl? SPACE* eb:entityBody? SPACE*  {
+  = jd:comment? SPACE* ENTITY SPACE* e:ENTITY_NAME SPACE* tableName:entityTableNameDecl? SPACE* eb:entityBody? SPACE*  {
     return { name: e, tableName: tableName ? tableName: e, body: eb, javadoc: jd };
   }
   / ENTITY SPACE* e:ENTITY_NAME SPACE* eb:entityBody? { return { name: e, body: eb, javadoc: '' }; }
@@ -120,7 +120,7 @@ entityTableNameDecl
   = '(' SPACE* name:[A-z0-9_-]+ SPACE* ')' { return name.join(''); }
 
 entityBody
-  = '{' SPACE*  SPACE* fdl:fieldDeclList SPACE*  SPACE* '}' { return fdl; }
+  = '{' SPACE* fdl:fieldDeclList SPACE* '}' { return fdl; }
   / '' { return []; }
 
 fieldDeclList
@@ -135,7 +135,7 @@ validationList
 
 //Relationship
 relationDecl
-  = RELATIONSHIP SPACE rt:relationshipType SPACE* '{' SPACE*  SPACE* bodies:relationshipBodies SPACE*  SPACE* '}' {
+  = RELATIONSHIP SPACE rt:relationshipType SPACE* '{' SPACE* bodies:relationshipBodies SPACE* '}' {
         addCardinalityToRelationships(rt, bodies);
         return addUniqueElements([], bodies);
     }
@@ -145,7 +145,7 @@ relationshipBodies
   / rb:relationshipBody { return [rb]; }
 
 relationshipBody
-  = from:relationshipSide SPACE*  SPACE* 'to' SPACE*  SPACE* to:relationshipSide SPACE*  {
+  = from:relationshipSide SPACE* 'to' SPACE* to:relationshipSide SPACE*  {
     return { from: from , to: to };
   }
 
@@ -161,12 +161,12 @@ relationshipSide
 
 //Enum
 enumDecl
-  = ENUM SPACE e:ENUMNAME SPACE* '{' SPACE*  SPACE* el:enumPropList SPACE*  SPACE* '}' {
+  = ENUM SPACE e:ENUMNAME SPACE* '{' SPACE* el:enumPropList SPACE* '}' {
     return { name: e, values: el };
   }
 
 enumPropList
-  = e:ENUMPROP SPACE* ',' SPACE*  SPACE* el:enumPropList { return addUniqueElements([e], el); }
+  = e:ENUMPROP SPACE* ',' SPACE* el:enumPropList { return addUniqueElements([e], el); }
   / e:ENUMPROP { return [e]; }
 
 exclusion
