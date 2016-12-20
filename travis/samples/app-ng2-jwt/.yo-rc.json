@@ -17,7 +17,7 @@
     "enableSocialSignIn": false,
     "useSass": false,
     "applicationType": "monolith",
-    "clientFw": "angular2",
+    "clientFramework": "angular2",
     "testFrameworks": [
       "gatling"
     ],
