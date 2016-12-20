@@ -13,4 +13,6 @@ import { PaginationConfig } from "../../blocks/config/uib-pagination.config";
     templateUrl: './<%= entityFileName %>.component.html'
 })
 export class <%= entityAngularJSName %>Component implements OnInit {
-<%- include('pagination-template'); -%>
+    <%_ if (pagination == 'pagination' || pagination == 'pager') { _%>
+    <%- include('pagination-template'); -%>
+        <%_ } _%>
