@@ -22,6 +22,7 @@
         private parseLinks: ParseLinks,
         private principal: Principal
     ) {
+        this.<%= entityInstancePlural %> = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 0;
         this.links = {
@@ -109,3 +110,17 @@
         this.loadAll();
     }
     <%_ } _%>
+
+    private onSuccess(data, headers) {
+        this.links = this.parseLinks.parse(headers.get('link'));
+        this.totalItems = headers.get('X-Total-Count');
+        for (var i = 0; i < data.length; i++) {
+            this.<%= entityInstancePlural %>.push(data[i]);
+        }
+    }
+
+    registerChangeIn<%= entityClassPlural %>() {
+        this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => {
+            this.reset();
+        });
+    }

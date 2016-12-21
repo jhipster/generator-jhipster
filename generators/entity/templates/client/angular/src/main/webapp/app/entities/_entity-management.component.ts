@@ -27,24 +27,16 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         this.registerChangeIn<%= entityClassPlural %>();
     }
 
+    <%_ if (pagination !== 'infinite-scroll') { _%>
     registerChangeIn<%= entityClassPlural %>() {
         this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.loadAll());
     }
+    <% } %>
 
     private onError (error) {
         this.alertService.error(error.message, null, null);
     }
     <%_ if (pagination !== 'no') { _%>
-
-    private onSuccess (data, headers) {
-        <%_ if (databaseType !== 'cassandra') { _%>
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
-        this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
-        <%_ } _%>
-        this.<%= entityInstancePlural %> = data;
-    }
     <%_ if (databaseType !== 'cassandra') { _%>
 
     sort () {

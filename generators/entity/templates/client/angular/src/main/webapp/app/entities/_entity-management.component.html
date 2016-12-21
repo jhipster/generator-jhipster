@@ -52,7 +52,7 @@
             <th></th>
             </tr>
             </thead>
-            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="page >= links['last']"<% } %>>
+            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
             <tr *ngFor="let <%=entityInstance %> of <%=entityInstancePlural %> ;trackBy <%=entityInstance %>?.id">
                 <td><a uiSref="<%= entityStateName %>-detail" [uiParams]="{ id: <%= entityInstance %>.id }">{{<%=entityInstance %>.id}}</a></td>
                 <%_ for (idx in fields) {

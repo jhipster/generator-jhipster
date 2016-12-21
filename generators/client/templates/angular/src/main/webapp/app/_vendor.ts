@@ -5,7 +5,6 @@
 // import 'angular-cache-buster';
 // import 'angular-loading-bar';
 // import 'ng-file-upload';
-// import 'ng-infinite-scroll';
 
 <%_ if(useSass) { _%>
 import '../scss/vendor.scss';
