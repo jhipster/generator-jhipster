@@ -56,7 +56,10 @@ export class <%= entityClass %>Service {
             let params: URLSearchParams = new URLSearchParams();
             params.set('page', req.page);
             params.set('size', req.size);
-            params.paramsMap.set('sort', req.sort);
+            if(req.sort){
+                params.paramsMap.set('sort', req.sort);
+            }
+            params.set('filter', req.filter);
 
             options.search = params;
         }
