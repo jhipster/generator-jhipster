@@ -1,9 +1,8 @@
 <% for (idx in fields) {
-    console.log(fields[idx]);
     if (fields[idx].fieldIsEnum) { _%>
 const enum <%= fields[idx].fieldType %> {<%
         const enums = fields[idx].fieldValues.split(',');
-        for (let i = 0; i < enums.length; i++) { %>
+        for (var i = 0; i < enums.length; i++) { %>
     '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } _%>
 
 };
