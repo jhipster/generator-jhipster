@@ -47,7 +47,10 @@
       authenticationType: '',
       hibernateCache: 'no',
       clusteredHttpSession: false,
-      websocket: false
+      websocket: false,
+      databaseType: 'sql',
+      devDatabaseType: 'h2Memory',
+      prodDatabaseType: 'mysql'
     },
     entities: [],
     relationships: [],
@@ -142,11 +145,20 @@ applicationContentDecl
   / WEBSOCKET SPACE* websocket:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.websocket = websocket;
   }
+  / DATABASE_TYPE SPACE* databaseType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.databaseType = databaseType.join('');
+  }
+  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z0-9] SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.devDatabaseType = devDatabaseType.join('');
+  }
+  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9] SPACE* applicationContentDecl:applicationContentDecl {
+   parsed.application.prodDatabaseType = prodDatabaseType.join('');
+  }
   / ''
 
 booleanChoice
-  = 'true' { return true; }
-  / 'false' { return false; }
+  = TRUE { return true; }
+  / FALSE { return false; }
 
 //Entities
 entityDecl
@@ -378,6 +390,11 @@ AUTHENTICATION_TYPE = 'authenticationType'
 HIBERNATE_CACHE = 'hibernateCache'
 CLUSTERED_HTTP_SESSION = 'clusteredHttpSession'
 WEBSOCKET = 'websocket'
+DATABASE_TYPE = 'databaseType'
+DEV_DATABASE_TYPE = 'devDatabaseType'
+PROD_DATABASE_TYPE = 'prodDatabaseType'
+TRUE = 'true'
+FALSE = 'false'
 // Entity constants
 ENTITY = 'entity'
 RELATIONSHIP = 'relationship'
