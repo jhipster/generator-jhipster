@@ -56,9 +56,9 @@ describe('JDLParser', function () {
     });
     describe('when passing valid args', function () {
       describe('with no error', function () {
+        var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+        var content = JDLParser.parse(input, 'mysql');
         it('builds a JDLObject', function () {
-          var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-          var content = JDLParser.parse(input, 'mysql');
           expect(content).not.to.be.null;
           expect(content.entities.Department).to.deep.eq(new JDLEntity({
             name: 'Department',
@@ -143,17 +143,17 @@ describe('JDLParser', function () {
         });
       });
       describe('with a required relationship', function () {
+        var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it('adds it', function () {
-          var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInFromRequired).to.be.true;
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
         });
       });
       describe("with a field name 'id'", function () {
+        var input = parseFromFiles(['./test/test_files/id_field.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it("doesn't add it", function () {
-          var input = parseFromFiles(['./test/test_files/id_field.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.entities.A).to.deep.eq(new JDLEntity({
             name: 'A',
             tableName: 'A',
@@ -164,8 +164,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with an invalid field type', function () {
+        var input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -175,8 +175,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with an unexistent validation for a field type', function () {
+        var input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -186,8 +186,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with entities that do not exist for a relationship', function () {
+        var input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -197,8 +197,8 @@ describe('JDLParser', function () {
         });
       });
       describe('with User entity as from for a relationship', function () {
+        var input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -208,16 +208,16 @@ describe('JDLParser', function () {
         });
       });
       describe('with User entity as to for a relationship', function () {
+        var input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it('is processed', function () {
-          var input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.relationships.relationships.ManyToOne['ManyToOne_A{user}_User{a}'].to.name).to.eq('User');
           expect(content.relationships.relationships.OneToOne['OneToOne_B{user}_User'].to.name).to.eq('User');
         });
       });
       describe('with an invalid option', function () {
+        var input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
         it('fails', function () {
-          var input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
           try {
             JDLParser.parse(input, 'sql');
             fail();
@@ -227,27 +227,27 @@ describe('JDLParser', function () {
         });
       });
       describe('with a required enum', function () {
+        var input = parseFromFiles(['./test/test_files/enum.jdl']);
+        var content = JDLParser.parse(input, 'sql');
+        var enumField = new JDLField({
+          name: 'sourceType',
+          type: 'MyEnum'
+        });
+        enumField.addValidation(new JDLValidation({
+          name: Validations.REQUIRED
+        }));
         it('adds it', function () {
-          var input = parseFromFiles(['./test/test_files/enum.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.enums.MyEnum).to.deep.eq(new JDLEnum({
             name: 'MyEnum',
             values: ['AAA', 'BBB', 'CCC']
-          }));
-          var enumField = new JDLField({
-            name: 'sourceType',
-            type: 'MyEnum'
-          });
-          enumField.addValidation(new JDLValidation({
-            name: Validations.REQUIRED
           }));
           expect(content.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
       describe('when using the noFluentMethods option', function () {
+        var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
+        var content = JDLParser.parse(input, 'sql');
         it('adds it correctly', function () {
-          var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-          var content = JDLParser.parse(input, 'sql');
           expect(content.options).to.deep.eq([
               new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,
@@ -264,7 +264,7 @@ describe('JDLParser', function () {
             })
           ]);
         });
-      })
+      });
       describe('when having following comments', function() {
         var input = parseFromFiles(['./test/test_files/following_comments.jdl']);
         var content = JDLParser.parse(input, 'sql');
@@ -282,6 +282,197 @@ describe('JDLParser', function () {
           it('assigns the comment to the next field', function() {
             expect(content.entities.C.fields.name.comment).to.be.undefined;
             expect(content.entities.C.fields.thing.comment).to.eq('abc');
+          });
+        });
+      });
+      describe('when parsing another complex JDL file', function() {
+        var input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
+        var content = JDLParser.parse(input, 'sql');
+        it('parses it', function() {
+          expect(content.entities.A).to.deep.eq({ name: 'A', tableName: 'A', fields: {}, comment: undefined });
+          expect(content.entities.B).to.deep.eq({ name: 'B', tableName: 'B', fields: {}, comment: undefined });
+          expect(content.entities.C).to.deep.eq({
+            name: 'C',
+            tableName: 'C',
+            fields: {
+              name: {
+                comment: undefined,
+                name: 'name',
+                type: 'String',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  }
+                }
+              }
+            },
+            comment: undefined
+          });
+          expect(content.entities.D).to.deep.eq({
+            name: 'D',
+            tableName: 'D',
+            fields: {
+              name: {
+                comment: undefined,
+                name: 'name',
+                type: 'String',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  },
+                  minlength: {
+                    name: 'minlength',
+                    value: 1
+                  },
+                  maxlength: {
+                    name: 'maxlength',
+                    value: 42
+                  }
+                }
+              },
+              count: {
+                comment: undefined,
+                name: 'count',
+                type: 'Integer',
+                validations: {}
+              }
+            },
+            comment: undefined
+          });
+          expect(content.entities.E).to.deep.eq({ name: 'E', tableName: 'E', fields: {}, comment: undefined });
+          expect(content.entities.F).to.deep.eq({
+            name: 'F',
+            tableName: 'F',
+            fields: {
+              name: {
+                comment: 'My comment for name of F.',
+                name: 'name',
+                type: 'String',
+                validations: {}
+              },
+              count: {
+                comment: undefined,
+                name: 'count',
+                type: 'Integer',
+                validations: {}
+              },
+              flag: {
+                comment: 'My comment for flag of F.',
+                name: 'flag',
+                type: 'Boolean',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  }
+                }
+              }
+            },
+            comment: 'My comment for F.'
+          });
+          expect(content.entities.G).to.deep.eq({
+            name: 'G',
+            tableName: 'G',
+            fields: {
+              name: {
+                comment: 'xyz',
+                name: 'name',
+                type: 'String',
+                validations: {
+                  required: {
+                    name: 'required',
+                    value: ''
+                  }
+                }
+              },
+              count: {
+                comment: 'def',
+                name: 'count',
+                type: 'Integer',
+                validations: {}
+              }
+            },
+            comment: undefined
+          });
+          expect(content.options.length).to.eq(7);
+          expect(content.options[0].name).to.eq('skipClient');
+          expect(content.options[0].entityNames.toString()).to.eq('[G]');
+          expect(content.options[0].excludedNames.toString()).to.eq('[]');
+          expect(content.options[1].name).to.eq('skipServer');
+          expect(content.options[1].entityNames.toString()).to.eq('[B,D]');
+          expect(content.options[1].excludedNames.toString()).to.eq('[D]');
+          expect(content.options[2].name).to.eq('dto');
+          expect(content.options[2].value).to.eq('mapstruct');
+          expect(content.options[2].entityNames.toString()).to.eq('[*]');
+          expect(content.options[2].excludedNames.toString()).to.eq('[G]');
+          expect(content.options[3].name).to.eq('service');
+          expect(content.options[3].entityNames.toString()).to.eq('[G]');
+          expect(content.options[3].excludedNames.toString()).to.eq('[]');
+          expect(content.options[3].value).to.eq('serviceImpl');
+          expect(content.options[4].name).to.eq('service');
+          expect(content.options[4].entityNames.toString()).to.eq('[A,C,D]');
+          expect(content.options[4].excludedNames.toString()).to.eq('[]');
+          expect(content.options[4].value).to.eq('serviceClass');
+          expect(content.options[5].name).to.eq('pagination');
+          expect(content.options[5].entityNames.toString()).to.eq('[*]');
+          expect(content.options[5].excludedNames.toString()).to.eq('[G]');
+          expect(content.options[5].value).to.eq('pager');
+          expect(content.options[6].name).to.eq('pagination');
+          expect(content.options[6].entityNames.toString()).to.eq('[G]');
+          expect(content.options[6].excludedNames.toString()).to.eq('[]');
+          expect(content.options[6].value).to.eq('pagination');
+        });
+      });
+      describe('when having two consecutive comments for fields', function() {
+        var input = parseFromFiles(['./test/test_files/field_comments.jdl']);
+        var content = JDLParser.parse(input, 'sql');
+        it('assigns them correctly', function() {
+          expect(content.entities.TestEntity.fields).to.deep.eq({
+            first: {
+              name: 'first',
+              comment: 'first comment',
+              type: 'String',
+              validations: {}
+            },
+            second: {
+              name: 'second',
+              comment: 'second comment',
+              type: 'String',
+              validations: {}
+            },
+            third: {
+              name: 'third',
+              comment: undefined,
+              type: 'Integer',
+              validations: {}
+            },
+            fourth: {
+              name: 'fourth',
+              comment: 'another',
+              type: 'String',
+              validations: {}
+            }
+          });
+          expect(content.entities.TestEntity2.fields).to.deep.eq({
+            first: {
+              name: 'first',
+              comment: 'first comment',
+              type: 'String',
+              validations: {
+                required: {
+                  name: 'required',
+                  value: ''
+                }
+              }
+            },
+            second: {
+              name: 'second',
+              comment: 'second comment',
+              type: 'String',
+              validations: {}
+            }
           });
         });
       });

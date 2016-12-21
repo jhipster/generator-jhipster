@@ -1,0 +1,33 @@
+entity A
+entity B {}
+entity C {
+  name String required
+}
+entity D {
+  name String required minlength(1) maxlength(42),
+  count Integer
+}
+entity E {
+}
+/**
+ * My comment for F.
+ */
+entity F {
+  /** My comment for name of F. */
+  name String,
+  count Integer,
+  /** My comment for flag of F. */
+  flag Boolean required
+}
+entity G {
+  /** xyz */ name String required /** abc */
+  count Integer /** def */
+}
+
+dto * with mapstruct except G
+paginate * with pager except G
+paginate G with pagination
+service G with serviceImpl
+service A, C, D, C with serviceClass
+skipServer for B, D except D
+skipClient for G

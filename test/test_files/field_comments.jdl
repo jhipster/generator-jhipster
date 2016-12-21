@@ -1,0 +1,17 @@
+entity TestEntity {
+  /** first comment */
+  first String
+  /** second comment */
+  second String
+  third Integer
+  /* another */
+  fourth String
+}
+
+
+entity TestEntity2 {
+  /** first comment */
+  first String required
+  /** second comment */
+  second String
+}

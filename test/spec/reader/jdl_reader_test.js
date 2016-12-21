@@ -31,9 +31,9 @@ describe('::parse', function () {
   });
   describe('when passing valid arguments', function () {
     describe('when reading JDL content', function () {
+      var input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
+      var content = parse(input);
       it('reads it', function () {
-        var input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
-        var content = parse(input);
         expect(content).not.to.be.null;
       });
     });
@@ -94,21 +94,30 @@ describe('::parseFromFiles', function() {
   });
   describe('when passing valid arguments', function () {
     describe('when reading a single JDL file', function () {
+      var content = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       it('reads it', function () {
-        var content = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
         expect(content).not.to.be.null;
       });
     });
     describe('when reading more than one JDL file', function() {
+      var content = parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
       it('reads them', function () {
-        var content = parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
         expect(content).not.to.be.null;
       });
     });
     describe('when reading a complex JDL file', function() {
+      var content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       it('reads them', function () {
-        var content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
         expect(content).not.to.be.null;
+      });
+    });
+    describe('when having multiple internal JDL comments', function() {
+      it('ignores them and does not fail', function() {
+        try {
+          parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
+        } catch (error) {
+          fail(error, null, error);
+        }
       });
     });
   });

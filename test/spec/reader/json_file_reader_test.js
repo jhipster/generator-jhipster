@@ -51,8 +51,8 @@ describe('JSONFileReader', function () {
       });
     });
     describe('when passing a valid entity name', function () {
+      var content = readEntityJSON('test/test_files/MyEntity.json');
       it('reads the file', function () {
-        var content = readEntityJSON('test/test_files/MyEntity.json');
         expect(content).to.deep.eq({
               "relationships": [],
               "fields": [
