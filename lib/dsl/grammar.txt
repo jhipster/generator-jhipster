@@ -40,6 +40,15 @@
   }
 
   const parsed = {
+    application: {
+      baseName: 'jhipster',
+      packageName: '',
+      packageFolder: '',
+      authenticationType: '',
+      hibernateCache: 'no',
+      clusteredHttpSession: false,
+      websocket: false
+    },
     entities: [],
     relationships: [],
     enums: [],
@@ -108,6 +117,36 @@ prog
     return parsed;
   }
   / '' { return parsed; }
+
+// Application Declaration
+applicationDecl
+  = 'application' SPACE* '{' SPACE* applicationContent:applicationContentDecl SPACE* '}'
+
+applicationContentDecl
+  = 'baseName' SPACE* baseName:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.baseName = baseName.join('');
+  }
+  / 'packageName' SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.packageName = packageName.join('').replace(/,/g, '');
+    parsed.application.packageFolder = parsed.application.packageName.replace(/[.]/g, '/');
+  }
+  / 'authenticationType' SPACE* authenticationType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.authenticationType = authenticationType.join('');
+  }
+  / 'hibernateCache' SPACE* hibernateCache:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.hibernateCache = hibernateCache.join('');
+  }
+  / 'clusteredHttpSession' SPACE* clusteredHttpSession:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.clusteredHttpSession = clusteredHttpSession;
+  }
+  / 'websocket' SPACE* websocket:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.websocket = websocket;
+  }
+  / ''
+
+booleanChoice
+  = 'true' { return true; }
+  / 'false' { return false; }
 
 //Entities
 entityDecl
