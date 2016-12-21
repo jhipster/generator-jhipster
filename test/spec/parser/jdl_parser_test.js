@@ -455,6 +455,25 @@ describe('JDLParser', function () {
               validations: {}
             }
           });
+          expect(content.entities.TestEntity2.fields).to.deep.eq({
+            first: {
+              name: 'first',
+              comment: 'first comment',
+              type: 'String',
+              validations: {
+                required: {
+                  name: 'required',
+                  value: ''
+                }
+              }
+            },
+            second: {
+              name: 'second',
+              comment: 'second comment',
+              type: 'String',
+              validations: {}
+            }
+          });
         });
       });
     });

@@ -124,13 +124,13 @@ entityBody
   / '' { return []; }
 
 fieldDeclList
-  = SPACE* com:comment? SPACE* f:FIELD_NAME SPACE_WITHOUT_NEWLINE* t:type SPACE_WITHOUT_NEWLINE* vl:validationList? SPACE_WITHOUT_NEWLINE* com2:comment? SPACE* ','? SPACE* fdl:fieldDeclList {
+  = SPACE* com:comment? SPACE* f:FIELD_NAME SPACE_WITHOUT_NEWLINE* t:type SPACE_WITHOUT_NEWLINE* vl:validationList? SPACE_WITHOUT_NEWLINE* com2:comment? SPACE_WITHOUT_NEWLINE* ','? SPACE* fdl:fieldDeclList {
     return addUniqueElements([{ name: f, type: t, validations: vl, javadoc: com || com2 }], fdl );
   }
   / '' { return []; }
 
 validationList
-  = v:validation SPACE* vl:validationList { return addUniqueElements([v], vl); }
+  = v:validation SPACE_WITHOUT_NEWLINE* vl:validationList { return addUniqueElements([v], vl); }
   / '' { return []; }
 
 //Relationship
