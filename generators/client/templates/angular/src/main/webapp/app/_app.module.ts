@@ -17,7 +17,6 @@ import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.co
 import { localStorageConfig } from './blocks/config/localstorage.config';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
@@ -54,8 +53,7 @@ let routerConfig = {
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>EntityModule,
-        <%=angular2AppName%>AccountModule,
-        InfiniteScrollModule
+        <%=angular2AppName%>AccountModule
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
