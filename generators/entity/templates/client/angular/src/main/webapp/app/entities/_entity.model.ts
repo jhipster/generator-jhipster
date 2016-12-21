@@ -22,7 +22,7 @@ export class <%= entityClass %> {
     <%_ } else if (fieldType == 'ZonedDateTime') { _%>
  Date,
     <%_ } else if (fieldType == 'LocalDate') { _%>
- Date,
+ any,
     <%_ } else if (fieldType == 'Boolean') { _%>
  Boolean,
     <%_ } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') { _%>
