@@ -7,6 +7,7 @@ _%>
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+<% if (hasDate) { %>import { DateUtils } from "../../shared/service/date-util.service";<% } %>
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 
@@ -35,11 +36,16 @@ export class <%= entityClass %>Service {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => res.json());
     }
 
-    query(req: any): Observable<Response> {
+    query(req?: any): Observable<Response> {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('page', req.page);
-        params.set('size', req.size);
-        params.paramsMap.set('sort', req.sort);
+        if(req) {
+            params.set('page', req.page);
+            params.set('size', req.size);
+            if(req.sort){
+                params.paramsMap.set('sort', req.sort);
+            }
+            params.set('filter', req.filter);
+        }
 
         let options = {
             search: params

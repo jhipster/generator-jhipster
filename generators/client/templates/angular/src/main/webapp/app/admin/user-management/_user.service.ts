@@ -20,11 +20,16 @@ export class UserService {
         return this.http.get(<% if(authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users/${login}`<%} else { %>`api/users/${login}`<% } %>).map((res: Response) => res.json());
     }
 
-    query(req: any): Observable<Response> {
+    query(req?: any): Observable<Response> {
         let params: URLSearchParams = new URLSearchParams();
-        params.set('page', req.page);
-        params.set('size', req.size);
-        params.set('sort', req.sort);
+        if(req) {
+            params.set('page', req.page);
+            params.set('size', req.size);
+            if(req.sort){
+                params.paramsMap.set('sort', req.sort);
+            }
+            params.set('filter', req.filter);
+        }
 
         let options = {
             search: params
