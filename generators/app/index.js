@@ -206,6 +206,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.logo = false;
             this.configOptions.clientFramework = this.clientFramework;
             this.configOptions.otherModules = this.otherModules;
+            this.configOptions.lastQuestion = this.currentQuestion;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
                 this.skipClient = true;
