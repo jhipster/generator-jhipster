@@ -354,12 +354,15 @@ dependencies {
     <%_ if (databaseType === 'cassandra') { _%>
     compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
     <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
-    testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    testCompile "com.h2database:h2"
+    <%_ } _%>
+    <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
+    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
+    runtime fileTree(dir: 'lib', include: '*.jar')
+    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     <%_ } _%>
-    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
-    runtime fileTree(dir: 'lib', include: '*.jar')<%_ } _%>
     optional "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
