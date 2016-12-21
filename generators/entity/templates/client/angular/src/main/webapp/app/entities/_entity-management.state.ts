@@ -6,6 +6,12 @@ for (var idx in fields) {
     }
 }
 _%>
+<%_
+var hasDate = false;
+if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+    hasDate = true;
+}
+_%>
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -137,6 +143,15 @@ export const <%= entityInstance %>EditState = {
         let <%= entityInstance %>Service: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
         let id = trans.params()['id'];
         <%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            <%_ if(hasDate) { _%>
+            <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
+            <%= entityInstance %>.<%=fields[idx].fieldName%> = {
+                 year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
+                 month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
+                 day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
+            }
+            <% }}%>
+            <%_ } _%>
             const modalRef  = modalService.open(<%= entityAngularJSName %>DialogComponent, { size: 'lg', backdrop: 'static'});
             modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
             modalRef.result.then((result) => {
