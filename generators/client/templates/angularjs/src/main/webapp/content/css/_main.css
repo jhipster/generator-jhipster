@@ -32,6 +32,7 @@ Development Ribbon
     width: 15em;
     z-index: 9999;
     pointer-events: none;
+    opacity: 0.75;
 }
 
 .ribbon a {
@@ -75,6 +76,17 @@ Logo styles
 .logo .logo-img {
     height: 45px;
     display: inline-block;
+}
+
+/* ==========================================================================
+Navbar styles
+========================================================================== */
+.navbar-nav .nav-item+.nav-item {
+    margin-left: 1.5rem;
+}
+
+.dropdown-toggle::after {
+    margin-left: 0.15em;
 }
 
 /* ==========================================================================
