@@ -120,26 +120,26 @@ prog
 
 // Application Declaration
 applicationDecl
-  = 'application' SPACE* '{' SPACE* applicationContent:applicationContentDecl SPACE* '}'
+  = APPLICATION SPACE* '{' SPACE* applicationContent:applicationContentDecl SPACE* '}'
 
 applicationContentDecl
-  = 'baseName' SPACE* baseName:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+  = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.baseName = baseName.join('');
   }
-  / 'packageName' SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationContentDecl:applicationContentDecl {
+  / PACKAGE_NAME SPACE* packageName:(([a-z]+'.')*[a-z]+) SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.packageName = packageName.join('').replace(/,/g, '');
     parsed.application.packageFolder = parsed.application.packageName.replace(/[.]/g, '/');
   }
-  / 'authenticationType' SPACE* authenticationType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+  / AUTHENTICATION_TYPE SPACE* authenticationType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.authenticationType = authenticationType.join('');
   }
-  / 'hibernateCache' SPACE* hibernateCache:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+  / HIBERNATE_CACHE SPACE* hibernateCache:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.hibernateCache = hibernateCache.join('');
   }
-  / 'clusteredHttpSession' SPACE* clusteredHttpSession:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+  / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.clusteredHttpSession = clusteredHttpSession;
   }
-  / 'websocket' SPACE* websocket:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+  / WEBSOCKET SPACE* websocket:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.websocket = websocket;
   }
   / ''
@@ -370,6 +370,15 @@ commentStop = [*]+ '/'
 notAComment = !commentStop !commentStart char:. { return char; }
 
 // Constants
+// Application constants
+APPLICATION = 'application'
+BASE_NAME = 'baseName'
+PACKAGE_NAME = 'packageName'
+AUTHENTICATION_TYPE = 'authenticationType'
+HIBERNATE_CACHE = 'hibernateCache'
+CLUSTERED_HTTP_SESSION = 'clusteredHttpSession'
+WEBSOCKET = 'websocket'
+// Entity constants
 ENTITY = 'entity'
 RELATIONSHIP = 'relationship'
 ENUM = 'enum'
