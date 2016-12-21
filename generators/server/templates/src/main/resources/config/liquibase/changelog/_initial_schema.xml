@@ -6,16 +6,32 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="now()" dbms="h2"/>
+    <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="autoIncrement" value="true"/>
+    <%_ } _%>
+    <%_ if (prodDatabaseType == 'postgresql') { _%>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <changeSet id="00000000000000" author="jhipster">
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
+    </changeSet>
+    <%_ } _%>
+    <%_ if (prodDatabaseType == 'oracle') { _%>
     <property name="now" value="sysdate" dbms="oracle"/>
+
+    <changeSet id="00000000000000" author="jhipster">
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
+    </changeSet>
+    <%_ } _%>
+    <%_ if (prodDatabaseType == 'mssql') { _%>
     <property name="now" value="GETDATE()" dbms="mssql"/>
 
-    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle,mssql"/>
-
-    <changeSet id="00000000000000" author="jhipster" dbms="postgresql,oracle">
-        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="1"/>
+    <changeSet id="00000000000000" author="jhipster">
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
     </changeSet>
+    <%_ } _%>
 
     <!--
         JHipster core tables.
