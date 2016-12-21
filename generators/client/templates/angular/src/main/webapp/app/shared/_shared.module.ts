@@ -1,4 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {
     <%=angular2AppName%>SharedLibsModule,
@@ -57,7 +58,8 @@ import {
         <%_ if (enableSocialSignIn) { _%>
         SocialService,
         <%_ } _%>
-        AuthService
+        AuthService,
+        DatePipe
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     exports: [
@@ -67,7 +69,8 @@ import {
         <%_ } _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        DatePipe
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
