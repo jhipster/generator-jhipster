@@ -32,20 +32,9 @@
         this.predicate = paginationUtil.parsePredicate($state.params['sort']);
     }
 
-    ngOnInit() {
-        this.loadAll();
-        this.principal.identity().then((account) => {
-            this.currentAccount = account;
-        });
-        this.registerChangeIn<%= entityClassPlural %>();
-    }
-
-    registerChangeIn<%= entityClassPlural %>() {
-        this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.loadAll());
-    }
     loadAll () {
         this.<%= entityInstance %>Service.query({
-            page: this.page -1,
+            page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
@@ -53,26 +42,7 @@
             (res: Response) => this.onError(res.json())
         );
     }
-    private onSuccess (data, headers) {
-        <%_ if (databaseType !== 'cassandra') { _%>
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
-        this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
-        <%_ } _%>
-        this.<%= entityInstancePlural %> = data;
-    }
-    private onError (error) {
-        this.alertService.error(error.message, null, null);
-    }
     <%_ if (databaseType !== 'cassandra') { _%>
-    sort () {
-        let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
-        return result;
-    }
     loadPage (page: number) {
         if(page !== this.previousPage) {
             this.previousPage = page;
@@ -94,4 +64,4 @@
         });
     }
     <%_ } _%>
-}
+
