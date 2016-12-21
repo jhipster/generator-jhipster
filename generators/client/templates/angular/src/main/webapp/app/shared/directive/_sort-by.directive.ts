@@ -2,7 +2,8 @@ import { Directive, Host, HostListener, Input } from '@angular/core';
 import { JhSortDirective } from './sort.directive';
 
 @Directive({
-    selector: '[jh-sort-by]'
+    selector: '[jh-sort-by]',
+    host: { '(click)': 'onClick()' }
 })
 export class JhSortByDirective {
     @Input('jh-sort-by') jhSortBy: string;
@@ -12,7 +13,7 @@ export class JhSortByDirective {
         this.jhSort = jhSort;
     }
 
-    @HostListener('click') onClick() {
+    onClick() {
         this.jhSort.sort(this.jhSortBy);
     }
 }

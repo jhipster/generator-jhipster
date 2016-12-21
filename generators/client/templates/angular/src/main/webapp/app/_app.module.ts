@@ -8,6 +8,7 @@ import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; //TODO these couldn't be used from barrels due to an error
+import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
 import { appState } from './app.state';
@@ -51,6 +52,7 @@ let routerConfig = {
         Ng2Webstorage,
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
+        <%=angular2AppName%>EntityModule,
         <%=angular2AppName%>AccountModule
     ],
     declarations: [

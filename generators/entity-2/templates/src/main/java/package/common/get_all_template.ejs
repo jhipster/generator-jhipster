@@ -1,0 +1,21 @@
+    <%_
+    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    var mapper = entityInstance + 'Mapper';
+    var entityListToDtoListReference = mapper + '.'+ entityInstancePlural +'To' + entityClass + 'DTOs';
+    if (pagination == 'no') { %>
+    public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+        log.debug("REST request to get all <%= entityClassPlural %>");<% if (viaService) { %>
+        return <%= entityInstance %>Service.findAll();<% } else { %>
+        List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();
+        return <% if (dto == 'mapstruct') { %><%= entityListToDtoListReference %>(<%= entityInstancePlural %>)<% } else { %><%= entityInstancePlural %><% } %>;<% } %>
+    <% } if (pagination != 'no') { %>
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(@ApiParam Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %>)
+        throws URISyntaxException {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+        log.debug("REST request to get a page of <%= entityClassPlural %>");<% if (viaService) { %>
+        Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);<% } else { %>
+        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);<% } %>
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
+        return new ResponseEntity<>(<% if (!viaService && dto == 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
+    <% } -%>
+}

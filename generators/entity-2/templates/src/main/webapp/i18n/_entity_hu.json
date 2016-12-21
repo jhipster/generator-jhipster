@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPlural %>",
+                "createLabel": "Egy új <%= entityClassHumanized %> létrehozása",
+                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClassHumanized %>t",
+                "search": "Search for <%= entityClassHumanized %>"
+            },<% if (!microserviceAppName) { %>
+            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
+            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
+            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",<% } %>
+            "delete": {
+                "question": "Biztos benne, hogy törölni szeretné az <%= entityClassHumanized %>t {{ id }} azonosítóval?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
+            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
+            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+        }
+    }<% } %>
+}

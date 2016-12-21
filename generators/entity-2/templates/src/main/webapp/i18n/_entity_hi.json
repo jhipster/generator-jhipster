@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPlural %>",
+                "createLabel": "नया <%= entityClassHumanized %> बनाएँ",
+                "createOrEditLabel": "<%= entityClassHumanized %> बनाएँ या संपादित करें",
+                "search": "<%= entityClassHumanized %> खोजें"
+            },<% if (!microserviceAppName) { %>
+            "created": "एक नया <%= entityClassHumanized %> [identifier: {{ param }}] तैयार है",
+            "updated": "एक <%= entityClassHumanized %> [identifier: {{ param }}] का अद्यतन हुआ है",
+            "deleted": "<%= entityClassHumanized %> [identifier: {{ param }}] हटा दिया है",<% } %>
+            "delete": {
+                "question": "<%= entityClassHumanized %> [id: {{ id }}] हटाने की पुष्टि करें"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "एक नया <%= entityClassHumanized %> [identifier: {{ param }}] तैयार है",
+            "updated": "एक <%= entityClassHumanized %> [identifier: {{ param }}] का अद्यतन हुआ है",
+            "deleted": "<%= entityClassHumanized %> [identifier: {{ param }}] हटा दिया है"
+        }
+    }<% } %>
+}

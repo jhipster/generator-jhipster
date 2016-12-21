@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <!--
+        Added the constraints for entity <%= entityClass %>.
+    -->
+    <changeSet id="<%= changelogDate %>-2" author="jhipster">
+        <% for (idx in relationships) {
+            var relationshipType = relationships[idx].relationshipType,
+            relationshipName = relationships[idx].relationshipName,
+            ownerSide = relationships[idx].ownerSide,
+            otherEntityName = relationships[idx].otherEntityName;
+            if (otherEntityName === 'user') {
+                otherEntityTableName = 'jhi_user';
+            } else {
+                otherEntityTableName = getEntityProperty(otherEntityName, 'entityTableName');
+                if (!otherEntityTableName) {
+                    otherEntityTableName = getTableName(otherEntityName);
+                }
+            }
+            if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
+                var constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
+                                 baseTableName="<%= entityTableName %>"
+                                 constraintName="<%= constraintName %>"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%= otherEntityTableName %>"/>
+        <%_ } else if (relationshipType == 'many-to-many' && ownerSide) {
+                var joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+                var constraintName = getConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
+                var otherEntityConstraintName = getConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
+          _%>
+
+        <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"
+                                 baseTableName="<%= joinTableName %>"
+                                 constraintName="<%= constraintName %>"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%= entityTableName %>"/>
+        <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(relationshipName) %>_id"
+                                 baseTableName="<%= joinTableName %>"
+                                 constraintName="<%= otherEntityConstraintName %>"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%= otherEntityTableName %>"/>
+        <%  } %><% } %>
+    </changeSet>
+</databaseChangeLog>
