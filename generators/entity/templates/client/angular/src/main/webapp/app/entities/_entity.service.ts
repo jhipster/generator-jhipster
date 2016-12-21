@@ -45,7 +45,7 @@ export class <%= entityClass %>Service {
             <% }}%>
             return jsonResponse;
             <%_ } else { _%>
-                return res;
+                return res.json();
             <%_ } _%>
         });
     }
