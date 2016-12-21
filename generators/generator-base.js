@@ -165,8 +165,8 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-states',
             splicable: [`${entityInstance}State,
-                        ${entityInstance}DetailState,
                         ${entityInstance}NewState,
+                        ${entityInstance}DetailState,
                         ${entityInstance}EditState,
                         ${entityInstance}DeleteState,`
             ]
