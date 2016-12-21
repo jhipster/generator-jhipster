@@ -41,7 +41,7 @@ export class <%= entityClass %>Service {
 
     query(req: any): Observable<Response> {
         let options:any = {};
-        if (req.length) {
+        if (req) {
             let params: URLSearchParams = new URLSearchParams();
             params.set('page', req.page);
             params.set('size', req.size);
