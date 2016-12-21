@@ -270,7 +270,7 @@ public class <%= entityClass %> implements Serializable {
     }
 
     public <%= entityClass %> add<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
-        <%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
+        this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
             <%_ if (relationshipType == 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
             <%_ } else if (otherEntityRelationshipNameCapitalizedPlural != '' && relationshipType == 'many-to-many') {
@@ -281,7 +281,7 @@ public class <%= entityClass %> implements Serializable {
     }
 
     public <%= entityClass %> remove<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
-        <%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
+        this.<%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
             <%_ if (relationshipType == 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
             <%_ } else if (otherEntityRelationshipNameCapitalizedPlural != '' && relationshipType == 'many-to-many') {
