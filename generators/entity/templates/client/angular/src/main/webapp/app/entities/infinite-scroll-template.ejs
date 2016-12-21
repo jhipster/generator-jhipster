@@ -1,19 +1,23 @@
     <%= entityInstancePlural %>: <%= entityClass %>[];
-    byteSize: any;
     currentAccount: any;
     itemsPerPage: any;
     links: any;
-    openFile: any;
     page: any;
     predicate: any;
     queryCount: any;
     reverse: any;
     totalItems: any;
+    <%_ if (fieldsContainBlob) { _%>
+    byteSize: any;
+    openFile: any;
+    <%_ } _%>
 
     constructor(
         private <%= entityInstance %>Service: <%= entityClass %>Service,
         private alertService: AlertService,
+        <%_ if (fieldsContainBlob) { _%>
         private dataUtils: DataUtils,
+        <%_ } _%>
         private eventManager: EventManager,
         private parseLinks: ParseLinks,
         private principal: Principal

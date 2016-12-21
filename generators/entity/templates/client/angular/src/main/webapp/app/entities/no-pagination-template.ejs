@@ -1,35 +1,51 @@
-        vm.<%= entityInstancePlural %> = [];
+    <%= entityInstancePlural %>: <%= entityClass %>[];
+    currentAccount: any;
+    searchQuery: any;
+    <%_ if (fieldsContainBlob) { _%>
+    byteSize: any;
+    openFile: any;
+    <%_ } _%>
+
+    constructor(
+        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        private alertService: AlertService,
         <%_ if (fieldsContainBlob) { _%>
-        vm.openFile = DataUtils.openFile;
-        vm.byteSize = DataUtils.byteSize;
+        private dataUtils: DataUtils,
         <%_ } _%>
-        <%_ if (searchEngine == 'elasticsearch') { _%>
-        vm.clear = clear;
-        vm.search = search;
-        vm.loadAll = loadAll;
+        private eventManager: EventManager,
+        private principal: Principal
+    ) {
+        <%_ if (fieldsContainBlob) { _%>
+        this.openFile = DataUtils.openFile;
+        this.byteSize = DataUtils.byteSize;
         <%_ } _%>
+    }
 
-        loadAll();
+    loadAll() {
+        this.<%= entityInstance %>Service.query({}).subscribe(
+            (res: Response) => {
+                this.<%= entityInstancePlural %> = res.json();
+                this.searchQuery = null;
+            },
+            (res: Response) => this.onError(res.json())
+        );
+    }
+    <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        function loadAll() {
-            <%= entityClass %>.query(function(result) {
-                vm.<%= entityInstancePlural %> = result;
-                vm.searchQuery = null;
-            });
+    search() {
+        if (!this.searchQuery) {
+            return this.loadAll();
         }
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%= entityClass %>Search.query({query: this.searchQuery}).subscribe(
+            (res: Response) => {
+                this.<%= entityInstancePlural %> = res.json();
+                this.currentSearch = this.searchQuery;
+            },
+            (res: Response) => this.onError(res.json())
+        );
+    }
 
-        function search() {
-            if (!vm.searchQuery) {
-                return vm.loadAll();
-            }
-            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
-                vm.<%= entityInstancePlural %> = result;
-                vm.currentSearch = vm.searchQuery;
-            });
-        }
-
-        function clear() {
-            vm.searchQuery = null;
-            loadAll();
-        }<%_ } _%>
+    clear() {
+        this.searchQuery = null;
+        this.loadAll();
+    }<%_ } _%>

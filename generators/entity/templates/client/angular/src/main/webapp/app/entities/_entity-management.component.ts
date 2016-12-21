@@ -4,7 +4,7 @@ import { Response } from '@angular/http';
 import { StateService } from 'ui-router-ng2';
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-import { EventManager, AlertService, ITEMS_PER_PAGE, ParseLinks, Principal, PaginationUtil, DataUtils } from '../../shared';
+import { EventManager, AlertService, ITEMS_PER_PAGE, ParseLinks, Principal, PaginationUtil<%_ if (fieldsContainBlob) { _%>, DataUtils<% } %> } from '../../shared';
 import { PaginationConfig } from "../../blocks/config/uib-pagination.config";
 
 @Component({
@@ -16,6 +16,8 @@ export class <%= entityAngularJSName %>Component implements OnInit {
     <%- include('pagination-template'); -%>
     <%_ } else if (pagination === 'infinite-scroll') { %>
     <%- include('infinite-scroll-template'); -%>
+    <% } else if (pagination === 'no') { _%>
+    <%- include('no-pagination-template'); -%>
     <% } %>
     ngOnInit() {
         this.loadAll();
@@ -29,6 +31,11 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.loadAll());
     }
 
+    private onError (error) {
+        this.alertService.error(error.message, null, null);
+    }
+    <%_ if (pagination !== 'no') { _%>
+
     private onSuccess (data, headers) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
@@ -37,10 +44,6 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         // this.page = pagingParams.page;
         <%_ } _%>
         this.<%= entityInstancePlural %> = data;
-    }
-
-    private onError (error) {
-        this.alertService.error(error.message, null, null);
     }
     <%_ if (databaseType !== 'cassandra') { _%>
 
@@ -51,5 +54,5 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         }
         return result;
     }
-    <% } %>
+    <% } } %>
 }
