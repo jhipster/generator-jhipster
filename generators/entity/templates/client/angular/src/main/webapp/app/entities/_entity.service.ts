@@ -20,11 +20,13 @@ export class <%= entityClass %>Service {
     private resourceSearchUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/_search/<%= entityApiUrl %>';
     <% _ } _%>
 
-    constructor(private http: Http<% if (hasDate) { %>, dateUtils: DateUtils<% } %>) { }
+    constructor(private http: Http<% if (hasDate) { %>, private dateUtils: DateUtils<% } %>) { }
 
     create(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
-        //TODO dateUtils.convertLocalDateToServer when any filed has date
-        return this.http.post(this.resourceUrl, <%= entityInstance %>);
+        let copy = Object.assign({},<%= entityInstance %>);
+        <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %><%= entityInstance %>.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
+        copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);<% } }%>
+        return this.http.post(this.resourceUrl, copy);
     }
 
     update(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {

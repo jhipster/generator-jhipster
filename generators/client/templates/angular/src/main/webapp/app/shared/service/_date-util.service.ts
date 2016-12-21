@@ -33,4 +33,9 @@ export class DateUtils {
     dateformat () {
         return 'yyyy-MM-dd';
     }
+
+    //TODO Find a better way to have Date fields because NgbDatePicker returns an object (Related to entities)
+    toDate(date: any): Date {
+        return new Date(date.year,date.month-1,date.day);
+    }
 }
