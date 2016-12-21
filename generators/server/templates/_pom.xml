@@ -66,6 +66,7 @@
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
+        <jhipster-library.version>0.0.7</jhipster-library.version>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <jna.version>4.2.2</jna.version>
         <%_ } _%>
@@ -180,7 +181,7 @@
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster</artifactId>
-            <version>0.0.6</version>
+            <version>${jhipster-library.version}</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
