@@ -8,7 +8,7 @@ describe('Controller Tests', function() {
     describe('RegisterController', function() {
 
         var $scope, $q; // actual implementations
-        var MockTimeout,<% if(enableTranslation) { %> MockTranslate,<%}%> MockAuth; // mocks
+        var MockTimeout,<% if (enableTranslation) { %> MockTranslate,<%}%> MockAuth; // mocks
         var createController; // local utility function
 
         beforeEach(inject(function($injector) {
@@ -16,10 +16,10 @@ describe('Controller Tests', function() {
             $scope = $injector.get('$rootScope').$new();
             MockTimeout = jasmine.createSpy('MockTimeout');
             MockAuth = jasmine.createSpyObj('MockAuth', ['createAccount']);
-            <% if(enableTranslation) { %>MockTranslate = jasmine.createSpyObj('MockTranslate', ['use']);<% } %>
+            <% if (enableTranslation) { %>MockTranslate = jasmine.createSpyObj('MockTranslate', ['use']);<% } %>
 
             var locals = {
-                'Auth': MockAuth,<% if(enableTranslation) { %>
+                'Auth': MockAuth,<% if (enableTranslation) { %>
                 '$translate': MockTranslate,<% } %>
                 '$timeout': MockTimeout,
                 '$scope': $scope,
@@ -42,7 +42,7 @@ describe('Controller Tests', function() {
 
         it('should update success to OK after creating an account', function() {
             // given
-            <% if(enableTranslation) { %>MockTranslate.use.and.returnValue('<%= nativeLanguage %>');<% } %>
+            <% if (enableTranslation) { %>MockTranslate.use.and.returnValue('<%= nativeLanguage %>');<% } %>
             MockAuth.createAccount.and.returnValue($q.resolve());
             createController();
             $scope.vm.registerAccount.password = $scope.vm.confirmPassword = 'password';
@@ -55,7 +55,7 @@ describe('Controller Tests', function() {
             });
             expect($scope.vm.success).toEqual('OK');
             expect($scope.vm.registerAccount.langKey).toEqual('<%= nativeLanguage %>');
-            <% if(enableTranslation) { %>expect(MockTranslate.use).toHaveBeenCalled();<% } %>
+            <% if (enableTranslation) { %>expect(MockTranslate.use).toHaveBeenCalled();<% } %>
             expect($scope.vm.errorUserExists).toBeNull();
             expect($scope.vm.errorEmailExists).toBeNull();
             expect($scope.vm.error).toBeNull();

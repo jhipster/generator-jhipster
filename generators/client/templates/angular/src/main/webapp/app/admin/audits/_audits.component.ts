@@ -19,14 +19,14 @@ export class AuditsComponent implements OnInit {
     reverse: boolean;
     toDate: string;
     totalItems: number;
-    datePipe : DatePipe;
+    datePipe: DatePipe;
 
-    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string){ 
+    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string) { 
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
         this.reverse = false;
         this.orderProp = 'timestamp';
-        this.datePipe =  new DatePipe(this.locale); //TODO see if there is a better way to inject pipes
+        this.datePipe =  new DatePipe(this.locale); // TODO see if there is a better way to inject pipes
     }
 
     getAudits () {
@@ -45,7 +45,9 @@ export class AuditsComponent implements OnInit {
     }
 
     onChangeDate () {
-        this.auditsService.query({page: this.page - 1, size: this.itemsPerPage, fromDate: this.fromDate, toDate: this.toDate}).subscribe(res => {
+        this.auditsService.query({page: this.page - 1, size: this.itemsPerPage,
+            fromDate: this.fromDate, toDate: this.toDate}).subscribe(res => {
+
             this.audits = res.json();
             this.links = this.parseLinks.parse(res.headers.get('link'));
             this.totalItems = + res.headers.get('X-Total-Count');
@@ -53,7 +55,7 @@ export class AuditsComponent implements OnInit {
     }
 
     previousMonth () {
-        let dateFormat:string = 'yyyy-MM-dd';
+        let dateFormat: string = 'yyyy-MM-dd';
         let fromDate: Date = new Date();
 
         if (fromDate.getMonth() === 0) {
@@ -66,7 +68,7 @@ export class AuditsComponent implements OnInit {
     }
 
     today () {
-        let dateFormat:string = 'yyyy-MM-dd';
+        let dateFormat: string = 'yyyy-MM-dd';
         // Today + 1 day - needed if the current day must be included
         let today: Date = new Date();
 

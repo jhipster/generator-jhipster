@@ -12,8 +12,8 @@ export class AuthService {
         private principal: Principal,
         private $state: StateService,
         private stateStorageService: StateStorageService,
-        private loginModalService : LoginModalService,
-    ){}
+        private loginModalService: LoginModalService,
+    ) {}
 
     authorize (force) {
         let authReturn = this.principal.identity(force).then(authThen.bind(this));
@@ -37,13 +37,14 @@ export class AuthService {
                 this.$state.go(previousState.name, previousState.params);
             }
 
-            if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0 && !this.principal.hasAnyAuthority(toStateInfo.data.authorities)) {
+            if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0 &&
+                !this.principal.hasAnyAuthority(toStateInfo.data.authorities)) {
+
                 if (isAuthenticated) {
                     // user is signed in but not authorized for desired state
                     this.$state.go('accessdenied');
-                }
-                else {
-                    // user is not authenticated. stow the state they wanted before you
+                } else {
+                    // user is not authenticated. Show the state they wanted before you
                     // send them to the login service, so you can return them when you're done
                     let toStateParamsInfo = this.stateStorageService.getDestinationState().params;
                     this.stateStorageService.storePreviousState(toStateInfo.name, toStateParamsInfo);

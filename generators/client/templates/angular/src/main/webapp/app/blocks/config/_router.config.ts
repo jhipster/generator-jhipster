@@ -22,7 +22,7 @@ export class <%=jhiPrefixCapitalized%>RouterConfig {
             decode: function(val: string): boolean { return val === '1' || val === 'true'; },
             encode: function(val: boolean) { return val ? '1' : '0'; },
             equals: function(a, b) { return this.is(a) && a === b; },
-            is: function(val) { return [true,false].indexOf(val) >= 0; },
+            is: function(val) { return [true, false].indexOf(val) >= 0; },
             pattern: /0|1|true|false/
         });
 

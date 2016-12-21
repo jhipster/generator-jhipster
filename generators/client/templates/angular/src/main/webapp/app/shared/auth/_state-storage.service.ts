@@ -6,7 +6,7 @@ import { StateDeclaration } from 'ui-router-ng2';
 export class StateStorageService {
     constructor(
         private $sessionStorage: SessionStorageService
-    ){}
+    ) {}
 
     getPreviousState() {
         return this.$sessionStorage.retrieve('previousState');
@@ -21,13 +21,12 @@ export class StateStorageService {
         this.$sessionStorage.store('previousState', previousState);
     }
 
-    getDestinationState(){
+    getDestinationState() {
         return this.$sessionStorage.retrieve('destinationState');
     }
 
-    storeDestinationState(destinationState: StateDeclaration, destinationStateParams,fromState: StateDeclaration){
-        let destinationInfo =
-        {
+    storeDestinationState(destinationState: StateDeclaration, destinationStateParams, fromState: StateDeclaration) {
+        let destinationInfo = {
             'destination': {
                 'name': destinationState.name,
                 'data': destinationState.data,

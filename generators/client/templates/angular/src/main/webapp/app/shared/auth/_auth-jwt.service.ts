@@ -9,14 +9,14 @@ export class AuthServerProvider {
         private http: Http,
         private $localStorage: LocalStorageService,
         private $sessionStorage: SessionStorageService
-    ){}
+    ) {}
 
     getToken () {
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
     }
 
     login (credentials): Observable<any> {
-<%_ if(authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
         let data = new URLSearchParams();
         data.append('grant_type', 'password');
         data.append('username', credentials.username);
@@ -66,7 +66,7 @@ export class AuthServerProvider {
     }
 
     storeAuthenticationToken(jwt, rememberMe) {
-        if(rememberMe){
+        if (rememberMe) {
             this.$localStorage.store('authenticationToken', jwt);
         } else {
             this.$sessionStorage.store('authenticationToken', jwt);

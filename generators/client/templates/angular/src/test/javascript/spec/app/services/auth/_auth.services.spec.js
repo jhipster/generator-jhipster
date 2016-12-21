@@ -26,7 +26,7 @@ describe('Service Tests', function () {
             $httpBackend.verifyNoOutstandingExpectation();
             $httpBackend.verifyNoOutstandingRequest();
         });
-        it('should call backend on logout then call authServerProvider.logout', function(){
+        it('should call backend on logout then call authServerProvider.logout', function() {
             //GIVEN
             //Set spy
             spyOn(spiedAuthServerProvider, 'logout').and.callThrough();

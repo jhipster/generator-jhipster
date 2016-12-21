@@ -87,7 +87,7 @@
             </label>
         </div>
 
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         <div class="form-group" *ngIf="languages && languages.length > 0">
             <label jhi-translate="userManagement.langKey">Lang Key</label>
             <select class="form-control" id="langKey" name="langKey" [(ngModel)]="user.langKey">

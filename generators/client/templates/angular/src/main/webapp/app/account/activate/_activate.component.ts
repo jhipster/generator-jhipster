@@ -17,7 +17,7 @@ export class ActivateComponent implements OnInit {
 
     constructor(
         private activate: Activate,
-        private loginModalService : LoginModalService,
+        private loginModalService: LoginModalService,
         private trans: Transition
     ) {}
 

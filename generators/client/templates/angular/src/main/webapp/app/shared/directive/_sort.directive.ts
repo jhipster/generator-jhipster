@@ -16,7 +16,7 @@ export class JhSortDirective implements OnInit {
     }
 
     ngOnInit() {
-        //TODO needs to be validated
+        // TODO needs to be validated
         resetClasses();
         if (this.predicate && this.predicate !== '_score') {
             applyClass(this.$element.find('th[jh-sort-by=\'' + this.predicate + '\']'));

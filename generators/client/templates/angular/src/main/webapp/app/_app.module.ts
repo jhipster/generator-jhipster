@@ -1,4 +1,4 @@
-<%_ if(authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
 import { NgModule } from '@angular/core';
@@ -7,7 +7,7 @@ import { UIRouterModule } from 'ui-router-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule } from './shared';
-import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; //TODO these couldn't be used from barrels due to an error
+import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; // TODO these couldn't be used from barrels due to an error
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
 import { appState } from './app.state';
@@ -23,7 +23,7 @@ import {
     FooterComponent,
     ProfileService,
     PageRibbonComponent,
-    <%_ if (enableTranslation){ _%>
+    <%_ if (enableTranslation) { _%>
     ActiveMenuDirective,
     <%_ } _%>
     ErrorComponent,
@@ -59,7 +59,7 @@ let routerConfig = {
         NavbarComponent,
         ErrorComponent,
         PageRibbonComponent,
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         ActiveMenuDirective,
         <%_ } _%>
         FooterComponent

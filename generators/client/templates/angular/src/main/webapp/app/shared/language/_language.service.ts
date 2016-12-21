@@ -13,7 +13,7 @@ export class JhiLanguageService {
     currentLang = '<%= nativeLanguage %>';
     locations: string[] = [];
 
-    constructor (private translateService: TranslateService, private $state: StateService){
+    constructor (private translateService: TranslateService, private $state: StateService) {
         this.init();
     }
 
@@ -51,7 +51,7 @@ export class JhiLanguageService {
         this.translateService.setDefaultLang(this.currentLang);
         let translatePartialLoader: TranslatePartialLoader = <TranslatePartialLoader> this.translateService.currentLoader;
         translatePartialLoader.setLocations(this.locations);
-        //reset the language cache //FIXME not ideal as this increases the http requests
+        // reset the language cache //FIXME not ideal as this increases the http requests
         this.translateService.resetLang(this.currentLang);
         this.translateService.use(this.currentLang);
     }

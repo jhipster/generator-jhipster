@@ -82,8 +82,8 @@ export class UserMgmtComponent implements OnInit {
             (res: Response) => this.onError(res.json())
         );
     }
-    private onSuccess (data, headers) {
-        //hide anonymous user from user management: it's a required user for Spring Security
+    private onSuccess(data, headers) {
+        // hide anonymous user from user management: it's a required user for Spring Security
         for (let i in data) {
             if (data[i]['login'] === 'anonymoususer') {
                 data.splice(i, 1);
@@ -108,7 +108,7 @@ export class UserMgmtComponent implements OnInit {
         return result;
     }
     loadPage (page: number) {
-        if(page !== this.previousPage) {
+        if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
         }

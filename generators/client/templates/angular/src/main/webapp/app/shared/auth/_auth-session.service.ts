@@ -16,7 +16,7 @@ export class AuthServerProvider {
         <%_ } _%>
         private $localStorage: LocalStorageService
 
-    ){}
+    ) {}
 
     getToken () {
         return this.$localStorage.retrieve('authenticationToken');
@@ -43,7 +43,7 @@ export class AuthServerProvider {
         <%_ if (websocket === 'spring-websocket') { _%>
         this.trackerService.disconnect();
         <%_ } _%>
-        <%_ if(authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'uaa') { _%>
         this.$localStorage.clear('authenticationToken');
         <%_ } else { _%>
         // logout from the server

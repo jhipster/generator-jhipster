@@ -6,7 +6,7 @@ export class PaginationUtil  {
     parseAscending (sort: string) {
         let sortArray = sort.split(',');
         sortArray = sortArray.length > 1 ? sortArray : sort.split('%2C');
-        if (sortArray.length > 1){
+        if (sortArray.length > 1) {
             return sortArray.slice(-1)[0] === 'asc';
         }
         // default to true if no sort defined
@@ -21,7 +21,7 @@ export class PaginationUtil  {
     // sort can be in the format `id,asc` or `id`
     parsePredicate (sort: string) {
         let sortArray = sort.split(',');
-        if (sortArray.length > 1){
+        if (sortArray.length > 1) {
             sortArray.pop();
         }
         return sortArray.join(',');

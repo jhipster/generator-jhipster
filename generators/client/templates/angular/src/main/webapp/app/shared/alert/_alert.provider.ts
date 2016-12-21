@@ -1,5 +1,5 @@
 import { Sanitizer } from '@angular/core';
-<%_ if (enableTranslation){ _%>
+<%_ if (enableTranslation) { _%>
 import { TranslateService } from 'ng2-translate/ng2-translate';
 <%_ } _%>
 
@@ -10,7 +10,7 @@ export function alertServiceProvider(toast?: boolean) {
     let isToast = toast ? toast : false;
     return {
         provide: AlertService,
-        useFactory: (sanitizer: Sanitizer<% if (enableTranslation){ %>, translateService: TranslateService<% } %>) => new AlertService(sanitizer<% if (enableTranslation){ %>, translateService<% } %>, isToast),
-        deps: [Sanitizer<% if (enableTranslation){ %>, TranslateService<% } %>]
+        useFactory: (sanitizer: Sanitizer<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) => new AlertService(sanitizer<% if (enableTranslation) { %>, translateService<% } %>, isToast),
+        deps: [Sanitizer<% if (enableTranslation) { %>, TranslateService<% } %>]
     };
 }

@@ -47,7 +47,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         url += '?access_token=' + authToken;
         <%_ } if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         var authToken = this.authServerProvider.getToken();
-        if(authToken) {
+        if (authToken) {
             url += '?access_token=' + authToken;
         }
         <%_ } _%>
@@ -70,7 +70,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
             }
         });
         this.$rootScope.$on('$destroy', () => {
-            if(stateChangeStart && stateChangeStart !== null){
+            if (stateChangeStart && stateChangeStart !== null) {
                 stateChangeStart();
             }
         });

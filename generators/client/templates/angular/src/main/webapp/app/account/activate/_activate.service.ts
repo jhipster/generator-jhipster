@@ -11,7 +11,7 @@ export class Activate {
         let params: URLSearchParams = new URLSearchParams();
         params.set('key', key);
 
-        return this.http.get(<% if(authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/activate'<%} else { %>'api/activate'<% } %>, {
+        return this.http.get(<% if (authenticationType === 'uaa') { %>'<%= uaaBaseName.toLowerCase() %>/api/activate'<%} else { %>'api/activate'<% } %>, {
             search: params
         }).map((res: Response) => res.json());
     }
