@@ -1,9 +1,13 @@
-<%_ for (idx in fields) {
-    var fieldType = fields[idx].fieldType;
+<% for (idx in fields) {
+    console.log(fields[idx]);
     if (fields[idx].fieldIsEnum) { _%>
-import { <%= fieldType %> } from "./<%= fieldType %>";
-    <%_ } _%>
-<%_ } _%>
+const enum <%= fields[idx].fieldType %> {<%
+        const enums = fields[idx].fieldValues.split(',');
+        for (let i = 0; i < enums.length; i++) { %>
+    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } _%>
+
+};
+<%_ } } _%>
 
 export class <%= entityClass %> {
     constructor(
