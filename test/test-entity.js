@@ -28,7 +28,7 @@ const expectedFiles = {
         CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js'
     ],
     clientNg2 : [
-        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foos.component.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.component.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-detail.component.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-dialog.component.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-delete-dialog.component.html',

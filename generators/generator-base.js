@@ -165,8 +165,8 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-states',
             splicable: [`${entityInstance}State,
-                        ${entityInstance}DetailState,
                         ${entityInstance}NewState,
+                        ${entityInstance}DetailState,
                         ${entityInstance}EditState,
                         ${entityInstance}DeleteState,`
             ]
@@ -1926,4 +1926,13 @@ Generator.prototype.httpGet = function(url, onSuccess, onFail) {
             onSuccess(body);
         });
     }).on('error', onFail);
+};
+
+/**
+ * Function to print a proper array with simple quoted strings
+ *
+ *  @param {array} array - the array to print
+ */
+Generator.prototype.toArrayString = function(array) {
+    return `['${array.join('\',\'')}']`;
 };

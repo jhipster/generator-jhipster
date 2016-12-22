@@ -1,5 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UIRouterModule } from 'ui-router-ng2';
+import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
 import {
@@ -15,6 +16,7 @@ let ENTITY_STATES = [
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
+        InfiniteScrollModule,
         UIRouterModule.forChild({ states: ENTITY_STATES })
     ],
     declarations: [

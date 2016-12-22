@@ -18,12 +18,12 @@
                         <input type="text" class="form-control" [(ngModel)]="searchQuery" id="searchQuery" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
                         <span  class="input-group-btn width-min" >
                             <button class="btn btn-info" (click)="search(searchQuery)">
-                                <span class="glyphicon glyphicon-search"></span>
+                                <span class="fa fa-search"></span>
                             </button>
                         </span>
                         <span class="input-group-btn width-min" *ngIf="currentSearch">
                             <button class="btn btn-info" (click)="clear()">
-                                <span class="glyphicon glyphicon-trash"></span>
+                                <span class="fa fa-trash-o"></span>
                             </button>
                         </span>
                     </div>
@@ -52,7 +52,7 @@
             <th></th>
             </tr>
             </thead>
-            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="page >= links['last']"<% } %>>
+            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
             <tr *ngFor="let <%=entityInstance %> of <%=entityInstancePlural %> ;trackBy <%=entityInstance %>?.id">
                 <td><a uiSref="<%= entityStateName %>-detail" [uiParams]="{ id: <%= entityInstance %>.id }">{{<%=entityInstance %>.id}}</a></td>
                 <%_ for (idx in fields) {
@@ -154,15 +154,15 @@
     </div>
     <%_ if (databaseType !== 'cassandra') { _%>
         <%_ if (pagination == 'pager') { _%>
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %>">
+        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
             <jhi-item-count [page]="page" [total]="queryCount" [items-per-page]="itemsPerPage"></jhi-item-count>
             <!-- TODO: real pager implementation -->
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" (click)="loadPage(page)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
         <%_ } else if (pagination == 'pagination') { _%>
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %>">
+        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
             <jhi-item-count [page]="page" [total]="queryCount" [items-per-page]="itemsPerPage"></jhi-item-count>
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" (click)="loadPage(page)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
         <%_ } _%>
     <%_ } _%>

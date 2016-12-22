@@ -6,6 +6,12 @@ for (var idx in fields) {
     }
 }
 _%>
+<%_
+var hasDate = false;
+if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+    hasDate = true;
+}
+_%>
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -47,8 +53,8 @@ export const <%= entityInstance %>State = {
             token: 'pagingParams',
             deps: [PaginationUtil, Transition],
             resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
+                const stateParams = trans.params();
                 return {
-                    const stateParams = trans.params();
                     page: paginationUtil.parsePage(stateParams['page']),
                     sort: stateParams['sort'],
                     search: stateParams['search'],
@@ -61,7 +67,7 @@ export const <%= entityInstance %>State = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(['<%= i18nToLoad %>'])
+            resolveFn: (languageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
         }
         <%_ } _%>
     ]
@@ -83,7 +89,7 @@ export const <%= entityInstance %>DetailState = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(['<%= i18nToLoad %>'])
+            resolveFn: (languageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
         },
         <%_ } _%>
         {
@@ -137,6 +143,15 @@ export const <%= entityInstance %>EditState = {
         let <%= entityInstance %>Service: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
         let id = trans.params()['id'];
         <%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            //TODO Find a better way to format dates so that it works with NgbDatePicker
+            <%_ if(hasDate) { _%>
+            <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>if(<%= entityInstance %>.<%=fields[idx].fieldName%>){
+                <%= entityInstance %>.<%=fields[idx].fieldName%> = {
+                     year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
+                     month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
+                     day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
+                }
+            }<% }}}%>
             const modalRef  = modalService.open(<%= entityAngularJSName %>DialogComponent, { size: 'lg', backdrop: 'static'});
             modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
             modalRef.result.then((result) => {

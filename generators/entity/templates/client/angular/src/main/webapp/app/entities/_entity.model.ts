@@ -1,9 +1,12 @@
-<%_ for (idx in fields) {
-    var fieldType = fields[idx].fieldType;
+<% for (idx in fields) {
     if (fields[idx].fieldIsEnum) { _%>
-import { <%= fieldType %> } from "./<%= fieldType %>";
-    <%_ } _%>
-<%_ } _%>
+const enum <%= fields[idx].fieldType %> {<%
+        const enums = fields[idx].fieldValues.split(',');
+        for (var i = 0; i < enums.length; i++) { %>
+    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } _%>
+
+};
+<%_ } } _%>
 
 export class <%= entityClass %> {
     constructor(
@@ -19,7 +22,7 @@ export class <%= entityClass %> {
     <%_ } else if (fieldType == 'ZonedDateTime') { _%>
  Date,
     <%_ } else if (fieldType == 'LocalDate') { _%>
- Date,
+ any,
     <%_ } else if (fieldType == 'Boolean') { _%>
  Boolean,
     <%_ } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') { _%>
