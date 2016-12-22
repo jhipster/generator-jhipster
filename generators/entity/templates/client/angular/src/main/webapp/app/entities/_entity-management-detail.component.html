@@ -56,7 +56,7 @@
             </span>
             <%_ } else { _%>
             <%_ if (dto == 'no') { _%>
-            {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+            {{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}
             <%_ } else { _%>
             {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
             <%_ } _%>
@@ -68,7 +68,7 @@
             </span>
             <%_ } else { _%>
             <%_ if (dto == 'no') { _%>
-            <a uiSref="<%= otherEntityStateName %>-detail" [uiParams]="{id:<%= entityInstance + "." + relationshipFieldName + ".id" %>}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+            <a uiSref="<%= otherEntityStateName %>-detail" [uiParams]="{id:<%= entityInstance + "." + relationshipFieldName + "?.id" %>}">{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
             <%_ } else { _%>
             <a uiSref="<%= otherEntityStateName %>-detail" [uiParams]="{id:<%= entityInstance + "." + relationshipFieldName + "Id" %>}">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
             <%_ } _%>

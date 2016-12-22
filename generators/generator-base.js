@@ -155,9 +155,19 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
                         export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
                         export * from './${entityFolderName}/${entityFileName}-detail.component';
                         export * from './${entityFolderName}/${entityFileName}.component';
-                        export * from './${entityFolderName}/${entityFileName}.state';
-                        export * from './${entityFolderName}/${entityFileName}.service';
-                        export * from './${entityFolderName}/${entityFileName}.model';`
+                        export * from './${entityFolderName}/${entityFileName}.state';`
+            ]
+        }, this);
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-model-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}.model';`
+            ]
+        }, this);
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-service-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}.service';`
             ]
         }, this);
 
@@ -199,11 +209,11 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-import',
-            splicable: [`${entityAngularJSName}Component,
+            splicable: [`${entityClass}Service,
+                        ${entityAngularJSName}Component,
                         ${entityAngularJSName}DetailComponent,
                         ${entityAngularJSName}DialogComponent,
                         ${entityAngularJSName}DeleteDialogComponent,
-                        ${entityClass}Service,
                         ${entityInstance}State,
                         ${entityInstance}DetailState,
                         ${entityInstance}NewState,
@@ -1412,7 +1422,7 @@ Generator.prototype.generateKeyStore = function() {
             `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
         , function(code) {
             if (code !== 0) {
-                parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
+                parent.env.error(chalk.red('\nFailed to create a KeyStore with \'keytool\''), code);
             } else {
                 parent.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
             }
