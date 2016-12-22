@@ -144,14 +144,13 @@ export const <%= entityInstance %>EditState = {
         let id = trans.params()['id'];
         <%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
             <%_ if(hasDate) { _%>
-            <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>
-            <%= entityInstance %>.<%=fields[idx].fieldName%> = {
-                 year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
-                 month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
-                 day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
-            }
-            <% }}%>
-            <%_ } _%>
+            <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>if(<%= entityInstance %>.<%=fields[idx].fieldName%>){
+                <%= entityInstance %>.<%=fields[idx].fieldName%> = {
+                     year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
+                     month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
+                     day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
+                }
+            }<% }}}%>
             const modalRef  = modalService.open(<%= entityAngularJSName %>DialogComponent, { size: 'lg', backdrop: 'static'});
             modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
             modalRef.result.then((result) => {

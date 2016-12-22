@@ -50,7 +50,7 @@ export class <%= entityClass %>Service {
         });
     }
 
-    query(req: any): Observable<Response> {
+    query(req?: any): Observable<Response> {
         let options:any = {};
         if (req) {
             let params: URLSearchParams = new URLSearchParams();

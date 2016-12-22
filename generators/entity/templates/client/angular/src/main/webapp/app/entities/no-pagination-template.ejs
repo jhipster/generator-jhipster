@@ -22,7 +22,7 @@
     }
 
     loadAll() {
-        this.<%= entityInstance %>Service.query({}).subscribe(
+        this.<%= entityInstance %>Service.query().subscribe(
             (res: Response) => {
                 this.<%= entityInstancePlural %> = res.json();
                 this.searchQuery = null;

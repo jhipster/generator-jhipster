@@ -1937,7 +1937,7 @@ Generator.prototype.printProperArray = function(array) {
     let ret = '[';
     for (var i = 0; i < array.length; i++)
     {
-        ret += "'" + array[i] + "'";
+        ret += '\'' + array[i] + '\'';
         if (i < array.length - 1)
         {
             ret += ', ';

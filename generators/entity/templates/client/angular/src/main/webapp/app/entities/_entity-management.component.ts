@@ -9,7 +9,7 @@ import { PaginationConfig } from "../../blocks/config/uib-pagination.config";
 
 @Component({
     selector: '<%= entityFileName %>-mgmt',
-    templateUrl: './<%= entityFileName %>.component.html'
+    templateUrl: './<%= entityPluralFileName %>.component.html'
 })
 export class <%= entityAngularJSName %>Component implements OnInit {
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
