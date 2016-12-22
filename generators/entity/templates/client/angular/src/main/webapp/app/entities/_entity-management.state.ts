@@ -67,7 +67,7 @@ export const <%= entityInstance %>State = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(<%- printProperArray(i18nToLoad) %>)
+            resolveFn: (languageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
         }
         <%_ } _%>
     ]
@@ -89,7 +89,7 @@ export const <%= entityInstance %>DetailState = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(<%- printProperArray(i18nToLoad) %>)
+            resolveFn: (languageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
         },
         <%_ } _%>
         {
@@ -143,6 +143,7 @@ export const <%= entityInstance %>EditState = {
         let <%= entityInstance %>Service: <%= entityClass %>Service = trans.injector().get(<%= entityClass %>Service);
         let id = trans.params()['id'];
         <%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            //TODO Find a better way to format dates so that it works with NgbDatePicker
             <%_ if(hasDate) { _%>
             <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>if(<%= entityInstance %>.<%=fields[idx].fieldName%>){
                 <%= entityInstance %>.<%=fields[idx].fieldName%> = {

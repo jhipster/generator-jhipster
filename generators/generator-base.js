@@ -1933,15 +1933,6 @@ Generator.prototype.httpGet = function(url, onSuccess, onFail) {
  *
  *  @param {array} array - the array to print
  */
-Generator.prototype.printProperArray = function(array) {
-    let ret = '[';
-    for (var i = 0; i < array.length; i++)
-    {
-        ret += '\'' + array[i] + '\'';
-        if (i < array.length - 1)
-        {
-            ret += ', ';
-        }
-    }
-    return ret + ']';
+Generator.prototype.toArrayString = function(array) {
+   return `['${array.join('\',\'')}']`;
 };
