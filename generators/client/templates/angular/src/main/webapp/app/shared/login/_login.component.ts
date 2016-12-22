@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateService } from 'ui-router-ng2';
-<%_ if (enableTranslation){ _%>
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from '../language/language.service';
 <%_ } _%>
 import { LoginService } from '../login/login.service';
@@ -25,7 +25,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     constructor(
         private eventManager: EventManager,
         private $state: StateService,
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
         private loginService: LoginService,
@@ -41,7 +41,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     }
 
     ngOnInit() {
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         this.languageService.addLocation('login');
         <%_ } _%>
     }

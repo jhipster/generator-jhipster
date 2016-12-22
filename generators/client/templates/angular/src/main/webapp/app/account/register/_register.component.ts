@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
-        private loginModalService : LoginModalService,
+        private loginModalService: LoginModalService,
         private registerService: Register,
         private elementRef: ElementRef,
         private renderer: Renderer) {
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
         if (this.registerAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.registerAccount.langKey = <% if (enableTranslation){ %>this.languageService.getCurrent()<% } else {%> 'en' <% } %>;
+            this.registerAccount.langKey = <% if (enableTranslation) { %>this.languageService.getCurrent()<% } else {%> 'en' <% } %>;
             this.doNotMatch = null;
             this.error = null;
             this.errorUserExists = null;
@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
             this.registerService.save(this.registerAccount).subscribe(() => {
                 this.success = true;
             }, (response) => {
-                //TODO handle this.logout(); on error
+                // TODO handle this.logout(); on error
                 this.success = null;
                 if (response.status === 400 && response.data === 'login already in use') {
                     this.errorUserExists = 'ERROR';

@@ -15,7 +15,7 @@ export class Principal {
     constructor(
         private account: AccountService<% if (websocket === 'spring-websocket') { %>,
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>
-    ){}
+    ) {}
 
     authenticate (_identity) {
         this._identity = _identity;

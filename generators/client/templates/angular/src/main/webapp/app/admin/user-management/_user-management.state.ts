@@ -7,7 +7,7 @@ import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
 
 export const userMgmtState = {
     name: 'user-management',
@@ -44,7 +44,7 @@ export const userMgmtState = {
                     ascending: paginationUtil.parseAscending(stateParams['sort'])
                 };
             }
-        }<% if (enableTranslation){ %>,
+        }<% if (enableTranslation) { %>,
         {
             token: 'translate',
             deps: [JhiLanguageService],

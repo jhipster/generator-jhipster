@@ -93,9 +93,9 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: false
         });
 
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm install',
+        // This adds support for a `--npm` flag
+        this.option('npm', {
+            desc: 'Use npm instead of yarn',
             type: Boolean,
             defaults: false
         });
@@ -126,7 +126,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
-        this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
+        this.yarnInstall = this.configOptions.yarnInstall = !this.options['npm'];
         this.clientPackageManager = this.configOptions.clientPackageManager;
     },
 

@@ -1,5 +1,5 @@
 import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
-<%_ if (enableTranslation){ _%>
+<%_ if (enableTranslation) { _%>
 import { TranslateService } from 'ng2-translate/ng2-translate';
 <%_ } _%>
 
@@ -10,7 +10,7 @@ export class AlertService {
     private alerts: any[];
     private timeout: number;
 
-    constructor(private sanitizer: Sanitizer, <% if (enableTranslation){ %>private translateService: TranslateService, <% } %>private toast: boolean) {
+    constructor(private sanitizer: Sanitizer, <% if (enableTranslation) { %>private translateService: TranslateService, <% } %>private toast: boolean) {
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
         this.timeout = 5000; // default timeout
@@ -89,8 +89,8 @@ export class AlertService {
 
     addAlert(alertOptions, extAlerts): any {
         alertOptions.alertId = this.alertId++;
-        <%_ if (enableTranslation){ _%>
-        if(alertOptions.msg !== undefined){
+        <%_ if (enableTranslation) { _%>
+        if (alertOptions.msg !== undefined) {
             alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
         }
         <%_ } _%>

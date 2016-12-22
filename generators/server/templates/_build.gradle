@@ -183,7 +183,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.github.jhipster:jhipster:0.0.6"
+    compile "io.github.jhipster:jhipster:${jhipster_server_version}"
     compile "io.dropwizard.metrics:metrics-core"
     compile "io.dropwizard.metrics:metrics-healthchecks:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
@@ -204,7 +204,7 @@ dependencies {
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
         exclude(module: 'metrics-core')
         exclude(module: 'metrics-healthchecks')
-    } <% if (hibernateCache == 'hazelcast') { %>
+    }<% if (hibernateCache == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"
     compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate_version}"
     compile "com.hazelcast:hazelcast-spring:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
@@ -225,10 +225,10 @@ dependencies {
     compile "javax.transaction:javax.transaction-api"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
-    <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
     compile ("org.ehcache:ehcache")
     compile ("org.hibernate:hibernate-jcache:${hibernate_version}")
-    <% } %><% if (databaseType == 'sql') { %>
+    <%_ } _%><%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
@@ -353,13 +353,16 @@ dependencies {
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
-    <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
-    testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
+    testCompile "com.h2database:h2"
+    <%_ } _%>
+    <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
+    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
+    runtime fileTree(dir: 'lib', include: '*.jar')
+    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     <%_ } _%>
-    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
-    runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
     optional "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }

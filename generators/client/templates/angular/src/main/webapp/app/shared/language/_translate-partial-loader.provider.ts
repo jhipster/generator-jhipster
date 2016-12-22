@@ -20,8 +20,7 @@ export class TranslatePartialLoader implements TranslateLoader {
             newObserver = this.getPartFile(value, combinedObject, lang);
             if (oldObsevers == null) {
                 oldObsevers = newObserver;
-            }
-            else {
+            } else {
                 oldObsevers = oldObsevers.merge(newObserver);
             }
         });
@@ -32,11 +31,11 @@ export class TranslatePartialLoader implements TranslateLoader {
         return Observable.create(observer => {
             this.http.get(`${this.prefix}/${lang}/${part}${this.suffix}`).subscribe((res) => {
                 let responseObj = res.json();
-                Object.keys(responseObj).forEach(key=>{
+                Object.keys(responseObj).forEach(key => {
                     combinedObject[key] = responseObj[key];
                 });
                 observer.next(combinedObject);
-                //call complete to close this stream (like a promise)
+                // Call complete to close this stream (like a promise)
                 observer.complete();
             });
         });

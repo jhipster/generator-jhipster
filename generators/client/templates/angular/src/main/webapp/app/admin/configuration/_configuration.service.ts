@@ -5,16 +5,16 @@ import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
-    constructor(private http:Http) {
+    constructor(private http: Http) {
     }
 
     get(): Observable<any> {
-        return this.http.get('management/configprops').map((res:Response) => {
-            let properties:any[] = [];
+        return this.http.get('management/configprops').map((res: Response) => {
+            let properties: any[] = [];
 
             const propertiesObject = res.json();
 
-            for(let key in propertiesObject) {
+            for (let key in propertiesObject) {
                 properties.push(propertiesObject[key]);
             }
 
@@ -26,17 +26,17 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
     }
 
     getEnv(): Observable<any> {
-        return this.http.get('management/env').map((res:Response) => {
-            let properties:any = {};
+        return this.http.get('management/env').map((res: Response) => {
+            let properties: any = {};
 
             const propertiesObject = res.json();
 
-            for(let key in propertiesObject) {
+            for (let key in propertiesObject) {
                 let valsObject = propertiesObject[key];
-                let vals:any[] = [];
+                let vals: any[] = [];
 
-                for(let valKey in valsObject) {
-                    vals.push({key: valKey, val:valsObject[valKey]});
+                for (let valKey in valsObject) {
+                    vals.push({key: valKey, val: valsObject[valKey]});
                 }
                 properties[key] = vals;
             }

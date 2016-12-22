@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable,Observer, Subscription} from 'rxjs/Rx';
+import { Observable, Observer, Subscription} from 'rxjs/Rx';
 
 @Injectable()
 export class EventManager {
@@ -8,7 +8,7 @@ export class EventManager {
     observer: Observer<any>;
 
     constructor() {
-        this.observable = Observable.create((observer:Observer<any>) => {
+        this.observable = Observable.create((observer: Observer<any>) => {
             this.observer = observer;
         }).share();
     }
@@ -24,7 +24,7 @@ export class EventManager {
         return subscriber;
     }
 
-    destroy(subscriber: Subscription){
+    destroy(subscriber: Subscription) {
         subscriber.unsubscribe();
     }
 }

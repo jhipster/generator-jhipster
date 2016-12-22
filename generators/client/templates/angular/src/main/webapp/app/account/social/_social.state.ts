@@ -2,7 +2,7 @@ import { SocialRegisterComponent } from './social-register.component';
 <%_ if (authenticationType == 'jwt') { _%>
 import { SocialAuthComponent } from './social-auth.component';
 <%_ } _%>
-<%_ if (enableTranslation){ _%>
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from '../../shared';
 <%_ } _%>
 

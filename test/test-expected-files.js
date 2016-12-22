@@ -17,7 +17,6 @@ const expectedFiles = {
         'gradlew',
         'gradlew.bat',
         'gradle/docker.gradle',
-        'gradle/gatling.gradle',
         'gradle/liquibase.gradle',
         'gradle/mapstruct.gradle',
         'gradle/profile_dev.gradle',

@@ -7,21 +7,21 @@ import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.s
     templateUrl: './configuration.component.html'
 })
 export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
-    allConfiguration:any = null;
-    configuration:any = null;
-    configKeys:any[];
+    allConfiguration: any = null;
+    configuration: any = null;
+    configKeys: any[];
     filter: string;
     orderProp: string;
     reverse: boolean;
 
-    constructor(private configurationService:<%=jhiPrefixCapitalized%>ConfigurationService){
+    constructor(private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService) {
         this.configKeys = [];
         this.filter = '';
         this.orderProp = 'prefix';
         this.reverse = false;
     }
 
-    keys(dict) : Array<string> {
+    keys(dict): Array<string> {
         return Object.keys(dict);
     }
 
@@ -29,7 +29,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
         this.configurationService.get().subscribe((configuration) => {
             this.configuration = configuration;
 
-            for(let config of configuration) {
+            for (let config of configuration) {
                 this.configKeys.push(Object.keys(config.properties));
             }
         });

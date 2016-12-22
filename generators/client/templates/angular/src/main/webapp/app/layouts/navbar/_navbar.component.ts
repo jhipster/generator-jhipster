@@ -3,7 +3,7 @@ import { StateService } from 'ui-router-ng2';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
-import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 
@@ -22,8 +22,8 @@ export class NavbarComponent implements OnInit {
 
     constructor(
         private $state: StateService,
-        private loginService : LoginService,
-        <%_ if (enableTranslation){ _%>
+        private loginService: LoginService,
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
         private principal: Principal,
@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit {
     }
 
     ngOnInit() {
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         this.languageService.getAll().then((languages) => {
             this.languages = languages;
         });
@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit {
         });
     }
 
-    <%_ if (enableTranslation){ _%>
+    <%_ if (enableTranslation) { _%>
     changeLanguage(languageKey: string) {
       this.languageService.changeLanguage(languageKey);
     }

@@ -76,9 +76,7 @@
                 <constraints nullable="<%= nullable %>" />
             </column>
             <%_ }  _%>
-            <%
-
-            } %><% for (idx in relationships) {
+            <%_ } _%><% for (idx in relationships) {
                 var nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName;

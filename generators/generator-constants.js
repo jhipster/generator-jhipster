@@ -1,7 +1,7 @@
 'use strict';
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.5.5';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.5.6';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.13'; // mysql.5.7.14+ doesn't work well with zoned date time, see https://github.com/jhipster/generator-jhipster/pull/4038
 const DOCKER_MARIADB = 'mariadb:10.1.17';
@@ -37,9 +37,9 @@ const JHIPSTER_DOCUMENTATION_URL = 'https://jhipster.github.io';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
 const constants = {
-    QUESTIONS: 14, // maximum possible number of questions
+    QUESTIONS: 15, // maximum possible number of questions
     CLIENT_QUESTIONS: 4,
-    SERVER_QUESTIONS: 10,
+    SERVER_QUESTIONS: 15,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: MAIN_DIR + 'docker/',
 

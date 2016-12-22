@@ -5,12 +5,12 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class HttpInterceptor extends Http {
-    private firstInterceptor : HttpInterceptable;
+    private firstInterceptor: HttpInterceptable;
 
     constructor(
         backend: ConnectionBackend,
         defaultOptions: RequestOptions,
-        interceptors : HttpInterceptable[]
+        interceptors: HttpInterceptable[]
     ) {
         super(backend, defaultOptions);
 
@@ -20,7 +20,7 @@ export class HttpInterceptor extends Http {
          * Note: the array of interceptors are wired in Ng2Modules
          *
         */
-        if(interceptors.length > 0) {
+        if (interceptors.length > 0) {
             interceptors.reduce((chain, current) => {
                 chain.successor = current;
                 return current;
@@ -35,7 +35,7 @@ export class HttpInterceptor extends Http {
     }
 
     get(url: string, options?: RequestOptionsArgs): Observable<Response> {
-        return super.get(url,this.getRequestOptionArgs(options));
+        return super.get(url, this.getRequestOptionArgs(options));
     }
 
     post(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
@@ -50,7 +50,7 @@ export class HttpInterceptor extends Http {
         return super.delete(url, this.getRequestOptionArgs(options));
     }
 
-    getRequestOptionArgs(options?: RequestOptionsArgs) : RequestOptionsArgs {
+    getRequestOptionArgs(options?: RequestOptionsArgs): RequestOptionsArgs {
         if (options == null) {
             options = new RequestOptions();
         }
@@ -68,7 +68,7 @@ export class HttpInterceptor extends Http {
     interceptByPass(observable: Observable<Response>): Observable<Response> {
         observable.forEach(element => {
             var alertKey: String = element.headers.get('X-interceptorApp-alert');
-            // AlertService.success(alertKey, { param : response.headers('X-interceptorApp-params')});
+            // AlertService.success(alertKey, { param: response.headers('X-interceptorApp-params')});
         });
 
         return observable.catch((err, source) => {

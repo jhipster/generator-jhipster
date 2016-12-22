@@ -1,4 +1,4 @@
-<%_ if(authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
 import { NgModule } from '@angular/core';
@@ -24,7 +24,7 @@ import {
     FooterComponent,
     ProfileService,
     PageRibbonComponent,
-    <%_ if (enableTranslation){ _%>
+    <%_ if (enableTranslation) { _%>
     ActiveMenuDirective,
     <%_ } _%>
     ErrorComponent,
@@ -61,7 +61,7 @@ let routerConfig = {
         NavbarComponent,
         ErrorComponent,
         PageRibbonComponent,
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         ActiveMenuDirective,
         <%_ } _%>
         FooterComponent

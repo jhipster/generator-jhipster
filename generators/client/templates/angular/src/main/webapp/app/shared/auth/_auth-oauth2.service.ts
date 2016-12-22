@@ -18,7 +18,7 @@ export class AuthServerProvider {
         <%_ } _%>
         private base64: Base64,
         private $localStorage: LocalStorageService
-    ){}
+    ) {}
 
     getToken () {
         return this.$localStorage.retrieve('authenticationToken');

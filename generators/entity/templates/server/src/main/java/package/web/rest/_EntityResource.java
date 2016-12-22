@@ -16,6 +16,7 @@ import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } } _%><% if (pagination != 'no') { %>
 import io.swagger.annotations.ApiParam;<% } %>
+import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
@@ -111,11 +112,7 @@ public class <%= entityClass %>Resource {
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
-        return Optional.ofNullable(<%= instanceName %>)
-            .map(result -> new ResponseEntity<>(
-                result,
-                HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(<%= instanceName %>));
     }
 
     /**

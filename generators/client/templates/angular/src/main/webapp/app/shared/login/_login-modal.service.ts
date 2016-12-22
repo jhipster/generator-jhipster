@@ -11,7 +11,7 @@ export class LoginModalService {
     ) {}
 
     open (): NgbModalRef {
-        if(this.isOpen) {
+        if (this.isOpen) {
             return;
         }
         this.isOpen = true;

@@ -21,7 +21,7 @@
     "angular2-cookie": "1.2.5",
     "core-js": "2.4.1",
     "jquery": "3.1.1",
-    <%_ if (enableTranslation){ _%>
+    <%_ if (enableTranslation) { _%>
     "ng2-translate": "4.2.0",
     <%_ } _%>
     "ng2-webstorage": "1.3.0",
@@ -43,6 +43,7 @@
     "awesome-typescript-loader": "2.2.4",
     "browser-sync": "2.18.2",
     "browser-sync-webpack-plugin": "1.1.3",
+    "codelyzer": "2.0.0-beta.1",
     "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.26.0",
     "del": "2.2.2",
@@ -87,7 +88,7 @@
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
     <%_ } _%>
-    <%_ if(useSass) { _%>
+    <%_ if (useSass) { _%>
     "sass-loader": "4.0.2",
     "node-sass": "3.13.0",
     "postcss-loader": "1.2.0",

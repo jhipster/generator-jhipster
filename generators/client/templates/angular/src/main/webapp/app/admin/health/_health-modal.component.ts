@@ -11,7 +11,7 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
 
     currentHealth: any;
 
-    constructor(private healthService:<%=jhiPrefixCapitalized%>HealthService, public activeModal: NgbActiveModal) {}
+    constructor(private healthService: <%=jhiPrefixCapitalized%>HealthService, public activeModal: NgbActiveModal) {}
 
     baseName(name) {
         return this.healthService.getBaseName(name);
@@ -21,8 +21,7 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
         return this.healthService.getSubSystemName(name);
     }
 
-    readableValue(value : number)
-    {
+    readableValue(value: number) {
         if (this.currentHealth.name !== 'diskSpace') {
             return value.toString();
         }

@@ -13,7 +13,7 @@ export class <%=jhiPrefixCapitalized%>GatewayComponent implements OnInit {
     gatewayRoutes: GatewayRoute[];
     updatingRoutes: Boolean;
 
-    constructor(private gatewayRoutesService: GatewayRoutesService){ }
+    constructor(private gatewayRoutesService: GatewayRoutesService) { }
 
     ngOnInit () {
         this.refresh();

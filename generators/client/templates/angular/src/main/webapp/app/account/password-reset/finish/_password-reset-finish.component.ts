@@ -20,7 +20,7 @@ export class PasswordResetFinishComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(private passwordResetFinish: PasswordResetFinish,
-        private loginModalService : LoginModalService,
+        private loginModalService: LoginModalService,
         private trans: Transition,
         private elementRef: ElementRef, private renderer: Renderer
     ) {}
