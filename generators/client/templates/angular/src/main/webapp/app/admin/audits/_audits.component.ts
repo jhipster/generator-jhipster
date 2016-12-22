@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { Audit } from './audit.model';
 import { AuditsService } from './audits.service';
 import { ParseLinks, ITEMS_PER_PAGE } from '../../shared';
-
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 @Component({
   selector: '<%=jhiPrefix%>-audit',
   templateUrl: './audits.component.html'
@@ -21,7 +21,7 @@ export class AuditsComponent implements OnInit {
     totalItems: number;
     datePipe : DatePipe;
 
-    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string){ 
+    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string, private paginationConfig: PaginationConfig){ 
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
         this.reverse = false;

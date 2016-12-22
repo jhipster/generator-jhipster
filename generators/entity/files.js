@@ -213,7 +213,7 @@ const angularFiles = {
             templates: [
                 {
                     file: 'entities/_entity-management.component.html', method: 'copyHtml', template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityPluralFileName}.component.html`
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.html`
                 },
                 {
                     file: 'entities/_entity-management-detail.component.html', method: 'copyHtml', template: true,
