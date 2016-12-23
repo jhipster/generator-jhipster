@@ -24,6 +24,7 @@ Developement Ribbon
     width: 15em;
     z-index: 9999;
     pointer-events: none;
+    opacity: 0.75;
 }
 
 .ribbon a {
@@ -65,8 +66,16 @@ Navbar
     background-color: #353d47;
 }
 
+.jh-navbar .dropdown-toggle::after {
+    margin-left: 0.15em;
+}
+
 .jh-navbar ul.navbar-nav {
     padding: 0.5em;
+}
+
+.jh-navbar .navbar-nav .nav-item+.nav-item {
+    margin-left: 1.5rem;
 }
 
 .jh-navbar a.nav-link {
@@ -83,10 +92,17 @@ Navbar
     color: #fff;
 }
 
+
+
 @media screen and (max-width: 992px) {
     .jh-logo-container {
         width: 100%;
     }
+}
+
+.navbar-title {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -110,10 +126,6 @@ Logo styles
     width: 100%;
 }
 
-.navbar-title {
-    display: inline-block;
-    vertical-align: middle;
-}
 
 /* ==========================================================================
 Main page styles
