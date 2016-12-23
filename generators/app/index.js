@@ -337,7 +337,7 @@ module.exports = JhipsterGenerator.extend({
 
     end: {
         localInstall: function() {
-            if (this.skipClient === true) {
+            if (this.skipClient && !this.options['skip-install']) {
                 if (this.otherModules === undefined) {
                     this.otherModules = [];
                 }
