@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Rx';
 @Component({
     selector: 'jhi-alert-error',
     template: `
-        <div class="alerts">
+        <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
                 <ngb-alert type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></ngb-alert>
             </div>
