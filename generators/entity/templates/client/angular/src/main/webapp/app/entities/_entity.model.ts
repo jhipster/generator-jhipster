@@ -20,6 +20,7 @@ if (pkType == 'String') {
 variables.push('id?: ' + tsKeyType);
 for (idx in fields) {
     var fieldType = fields[idx].fieldType;
+<<<<<<< entity-ng2
     var fieldName = fields[idx].fieldName;
     var tsType;
     if (fields[idx].fieldIsEnum) {
@@ -52,5 +53,28 @@ for (idx in relationships) {
 export class <%= entityClass %> {
     constructor(<% for (idx in variables) { %>
         public <%- variables[idx] %>,<% } %>
+=======
+    var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+        public <%= fieldName %>?:<%_ if (fields[idx].fieldIsEnum) { _%>
+ <%= fieldType %>,
+    <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
+ any,
+    <%_ } else if (fieldType == 'ZonedDateTime') { _%>
+ any,
+    <%_ } else if (fieldType == 'LocalDate') { _%>
+ any,
+    <%_ } else if (fieldType == 'Boolean') { _%>
+ Boolean,
+    <%_ } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') { _%>
+ number,
+    <%_ } else if (fieldType == 'String'  || fieldType == 'UUID') { _%>
+ string,
+    <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
+ any,
+    <%_ } else { _%>
+ any,
+    <%_ } _%>
+<%_ } _%>
+>>>>>>> ZonedDateTime semi working, left detail part
     ) { }
 }
