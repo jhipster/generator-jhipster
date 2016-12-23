@@ -139,7 +139,7 @@ function askForClient() {
         type: 'list',
         name: 'clientFramework',
         when: function (response) {
-            return (applicationType !== 'microservice');
+            return (applicationType !== 'microservice' && applicationType !== 'uaa');
         },
         message: function (response) {
             return getNumberedQuestion('Which *Framework* would you like to use for the client?', applicationType !== 'microservice');
