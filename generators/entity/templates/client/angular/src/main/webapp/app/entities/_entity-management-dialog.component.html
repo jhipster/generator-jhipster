@@ -50,7 +50,7 @@
         <%_ if (fieldTypeBlobContent == 'image') { _%>
         <img src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" *ngIf="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
         <%_ } _%>
-        <div *ngIf="<%= entityInstance %>.<%= fieldName %>" class="help-block clearfix">
+        <div *ngIf="<%= entityInstance %>.<%= fieldName %>" class="form-text text-danger clearfix">
             <%_ if (fieldTypeBlobContent == 'any') { _%>
             <a class="pull-left" (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" jhi-translate="entity.action.open">open</a><br>
             <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
@@ -98,64 +98,64 @@
     <%_ } _%>
     <%_ } _%>
     <%_ if (fields[idx].fieldValidate == true) { _%>
-    <div [hidden]="!(<%= fieldName %>.dirty && <%= fieldName %>.invalid)">
+    <div [hidden]="!(editForm.controls.<%= fieldName %>?.dirty && editForm.controls.<%= fieldName %>?.invalid)">
         <%_ if (fields[idx].fieldValidateRules.indexOf('required') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.required" jhi-translate="entity.validation.required">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.required" jhi-translate="entity.validation.required">
             This field is required.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('minlength') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.minlength" jhi-translate="entity.validation.minlength" translate-value-min="<%= fields[idx].fieldValidateRulesMinlength %>">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minlength" jhi-translate="entity.validation.minlength" translate-value-min="<%= fields[idx].fieldValidateRulesMinlength %>">
             This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('maxlength') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.maxlength" jhi-translate="entity.validation.maxlength" translate-value-max="<%= fields[idx].fieldValidateRulesMaxlength %>">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxlength" jhi-translate="entity.validation.maxlength" translate-value-max="<%= fields[idx].fieldValidateRulesMaxlength %>">
             This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('min') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.min" jhi-translate="entity.validation.min" translate-value-min="<%= fields[idx].fieldValidateRulesMin %>">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.min" jhi-translate="entity.validation.min" translate-value-min="<%= fields[idx].fieldValidateRulesMin %>">
             This field should be at least <%= fields[idx].fieldValidateRulesMin %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('max') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.max" jhi-translate="entity.validation.max" translate-value-max="<%= fields[idx].fieldValidateRulesMax %>">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.max" jhi-translate="entity.validation.max" translate-value-max="<%= fields[idx].fieldValidateRulesMax %>">
             This field cannot be more than <%= fields[idx].fieldValidateRulesMax %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('minbytes') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.minbytes" jhi-translate="entity.validation.minbytes" translate-value-min="<%= fields[idx].fieldValidateRulesMinbytes %>">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minbytes" jhi-translate="entity.validation.minbytes" translate-value-min="<%= fields[idx].fieldValidateRulesMinbytes %>">
             This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('maxbytes') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.maxbytes" jhi-translate="entity.validation.maxbytes" translate-value-max="<%= fields[idx].fieldValidateRulesMaxbytes %>">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxbytes" jhi-translate="entity.validation.maxbytes" translate-value-max="<%= fields[idx].fieldValidateRulesMaxbytes %>">
             This field cannot be more than <%= fields[idx].fieldValidateRulesMaxbytes %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('pattern') != -1) { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.pattern" jhi-translate="entity.validation.pattern" translate-value-pattern="<%= fields[idx].fieldValidateRulesPattern %>">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.pattern" jhi-translate="entity.validation.pattern" translate-value-pattern="<%= fields[idx].fieldValidateRulesPattern %>">
             This field should follow pattern "<%= fields[idx].fieldValidateRulesPattern %>".
         </small>
         <%_ } _%>
         <%_ if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.number" jhi-translate="entity.validation.number">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.number" jhi-translate="entity.validation.number">
             This field should be a number.
         </small>
         <%_ } _%>
         <%_ if (fieldType == 'ZonedDateTime') { _%>
-        <small class="help-block"
-           [hidden]="!<%= fieldName %>.errors?.ZonedDateTimelocal" jhi-translate="entity.validation.ZonedDateTimelocal">
+        <small class="form-text text-danger"
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.ZonedDateTimelocal" jhi-translate="entity.validation.ZonedDateTimelocal">
             This field should be a date and time.
         </small>
         <%_ } _%>
@@ -181,14 +181,14 @@ var translationKey = keyPrefix + relationshipName; _%>
 <div class="form-group">
     <label jhi-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
     <%_ if (dto == 'no') { _%>
-    <select class="form-control" id="field_<%= relationshipName %>" #<%= relationshipName %>="ngModel" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>" <% if (relationshipRequired) { %> required<% } %>>
-    <option value=""></option>
-    <option [ngValue]="<%=otherEntityName %>" *ngFor="let <%=otherEntityName %> of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>?.id" [selected]="<%=otherEntityName %> == <%= entityInstance %>.<%=relationshipFieldName %>">{{<%=otherEntityName %>.<%=otherEntityField %>}}</option>
+    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>" <% if (relationshipRequired) { %> required<% } %>>
+    <option [ngValue]="null"></option>
+    <option [ngValue]="<%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>?.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>Option?.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
     </select>
     <%_ } else { _%>
-    <select class="form-control" id="field_<%= relationshipName %>" #<%= relationshipName %>="ngModel" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>Id" <% if (relationshipRequired) { %> required<% } %>>
-    <option value=""></option>
-    <option [ngValue]="<%=otherEntityName %>" *ngFor="let <%=otherEntityName %> of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>?.Id" [selected]="<%=otherEntityName %> == <%= entityInstance %>.<%=relationshipFieldName %>">{{<%=otherEntityName %>.<%=otherEntityField %>}}</option>
+    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>Id" <% if (relationshipRequired) { %> required<% } %>>
+    <option [ngValue]="null"></option>
+    <option [ngValue]="<%=otherEntityName %>Option.id" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>OptionId">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
     </select>
     <%_ } _%>
 </div>
@@ -196,14 +196,14 @@ var translationKey = keyPrefix + relationshipName; _%>
 <div class="form-group">
     <label jhi-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
     <%_ if (dto == 'no') { _%>
-    <select class="form-control" id="field_<%= relationshipName %>" #<%= relationshipName %>="ngModel" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
-    <option value=""></option>
-    <option [ngValue]="<%=otherEntityName %>" *ngFor="let <%=otherEntityName %> of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>?.id" [selected]="<%=otherEntityName %> == <%= entityInstance %>.<%=relationshipFieldName %>">{{<%=otherEntityName %>.<%=otherEntityField %>}}</option>
+    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
+    <option [ngValue]="null"></option>
+    <option [ngValue]="<%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>?.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" *ngFor="let <%=otherEntityName %>Option of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>Option?.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
     </select>
     <%_ } else { _%>
-    <select class="form-control" id="field_<%= relationshipName %>" #<%= relationshipName %>="ngModel" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>Id"<% if (relationshipRequired) { %> required<% } %>>
-    <option value=""></option>
-    <option [ngValue]="<%=otherEntityName %>.id" *ngFor="let <%=otherEntityName %> of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>?.id" [selected]="<%=otherEntityName %>.id == <%= entityInstance %>.<%=relationshipFieldName %>Id">{{<%=otherEntityName %>.<%=otherEntityField %>}}</option>
+    <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" [(ngModel)]="<%= entityInstance %>.<%=relationshipFieldName %>Id"<% if (relationshipRequired) { %> required<% } %>>
+    <option [ngValue]="null"></option>
+    <option [ngValue]="<%=otherEntityName %>Option.id" *ngFor="let <%=otherEntityName %>Option of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>Option?.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
     </select>
     <%_ } _%>
 </div>
@@ -211,15 +211,15 @@ var translationKey = keyPrefix + relationshipName; _%>
 <div class="form-group">
     <label jhi-translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
     <select class="form-control" id="field_<%= relationshipName %>" #<%= relationshipName %>="ngModel" multiple name="<%= relationshipName %>" [(ngModel)]="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
-        <option [ngValue]="<%=otherEntityName %>" *ngFor="let <%=otherEntityName %> of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>?.id" [selected]="<%=otherEntityName %> == <%=entityInstance %>.<%=relationshipFieldNamePlural %>">{{<%=otherEntityName %>.<%=otherEntityField %>}}</option>
+        <option [ngValue]="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: <%=otherEntityName %>Option?.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
     </select>
 </div>
 <%_ } _%>
 <%_ if (relationships[idx].relationshipValidate == true) { _%>
-<div [hidden]="!(<%= relationshipName %>.dirty && <%= relationshipName %>.invalid)">
+<div [hidden]="!(editForm.controls.<%= relationshipName %>?.dirty && editForm.controls.<%= relationshipName %>?.invalid)">
     <%_ if (relationshipRequired) { _%>
-    <small class="help-block"
-       [hidden]="!<%= relationshipName %>.errors?.required" jhi-translate="entity.validation.required">
+    <small class="form-text text-danger"
+       [hidden]="!<%= relationshipName %>?.errors?.required" jhi-translate="entity.validation.required">
         This field is required.
     </small>
     <%_ } _%>
