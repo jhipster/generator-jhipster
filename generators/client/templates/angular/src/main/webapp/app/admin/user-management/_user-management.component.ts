@@ -35,8 +35,7 @@ export class UserMgmtComponent implements OnInit {
         private alertService: AlertService,
         private principal: Principal,
         private $state: StateService,
-        private eventManager: EventManager
-        <%_ if (databaseType !== 'cassandra') { _%>,
+        private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
         private paginationUtil: PaginationUtil,
         private paginationConfig: PaginationConfig
         <%_ } _%>

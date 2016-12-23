@@ -31,8 +31,17 @@ export class TranslatePartialLoader implements TranslateLoader {
         return Observable.create(observer => {
             this.http.get(`${this.prefix}/${lang}/${part}${this.suffix}`).subscribe((res) => {
                 let responseObj = res.json();
+<<<<<<< entity-ng2
                 Object.keys(responseObj).forEach(key => {
                     combinedObject[key] = responseObj[key];
+=======
+                Object.keys(responseObj).forEach(key=>{
+                    if(!combinedObject[key]) {
+                        combinedObject[key] = responseObj[key];
+                    }else{
+                        $.extend(true,combinedObject[key], combinedObject[key], responseObj[key])
+                    }
+>>>>>>> Fix translation issues :)
                 });
                 observer.next(combinedObject);
                 // Call complete to close this stream (like a promise)

@@ -19,13 +19,12 @@
         private alertService: AlertService,
         private principal: Principal,
         private $state: StateService,
-        private eventManager: EventManager,
-        <%_ if (databaseType !== 'cassandra') { _%>,
+        private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
         private paginationUtil: PaginationUtil,
         private paginationConfig: PaginationConfig
         <%_ } _%>
     ) {
-        <%_ if (databaseType !== 'cassandra') { _%>,
+        <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = paginationUtil.parsePage($state.params['page']);
         this.previousPage = this.page;
