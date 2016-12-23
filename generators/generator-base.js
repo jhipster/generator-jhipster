@@ -1422,7 +1422,7 @@ Generator.prototype.generateKeyStore = function() {
             `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
         , function(code) {
             if (code !== 0) {
-                parent.env.error(chalk.red('\nFailed to create a KeyStore with \'keytool\''), code);
+                parent.error('\nFailed to create a KeyStore with \'keytool\'', code);
             } else {
                 parent.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
             }
