@@ -141,7 +141,7 @@
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <spring-cloud.version>Brixton.SR7</spring-cloud.version>
         <%_ } _%>
-        <spring-security.version>4.1.3.RELEASE</spring-security.version>
+        <spring-security.version>4.2.1.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.12.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
