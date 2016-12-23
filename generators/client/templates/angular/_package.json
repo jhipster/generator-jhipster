@@ -38,6 +38,7 @@
     "@types/angular-animate": "1.5.5",
     "@types/angular-mocks": "1.5.7",
     "@types/jasmine": "2.5.38",
+    "angular2-infinite-scroll": "0.2.8",
     "angular2-template-loader": "0.6.0",
     "awesome-typescript-loader": "2.2.4",
     "browser-sync": "2.18.2",

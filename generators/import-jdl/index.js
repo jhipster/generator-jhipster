@@ -18,15 +18,6 @@ module.exports = JDLGenerator.extend({
     },
 
     initializing: {
-        // Temporary check until entity generator is compatible with angular 2
-        checkClientVersion: function () {
-            this.clientFramework = this.config.get('clientFramework');
-
-            if (this.clientFramework && this.clientFramework === 'angular2') {
-                this.error(chalk.red('The import-jdl generator does not support Angular 2 applications yet!'));
-            }
-        },
-
         validate: function () {
             this.jdlFiles && this.jdlFiles.forEach(function (key) {
                 if (!shelljs.test('-f', key)) {
@@ -60,7 +51,7 @@ module.exports = JDLGenerator.extend({
                 jhiCore.exportToJSON(entities, this.options['force']);
             } catch (e) {
                 this.log(e);
-                this.error(`\nError while parsing entities from JDL\n`);
+                this.error('\nError while parsing entities from JDL\n');
             }
 
 

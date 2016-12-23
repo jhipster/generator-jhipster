@@ -4,11 +4,11 @@ import { Directive, Input, Output, OnInit, Renderer, EventEmitter, ElementRef } 
     selector: '[jh-sort]'
 })
 export class JhSortDirective implements OnInit {
-    @Input('jh-sort') predicate: string;
+    @Input() predicate: string;
     @Input() ascending: boolean;
     @Input() callback: Function;
-    @Output() jhSortChange: EventEmitter<any> = new EventEmitter();
-    @Output() ascendingChange: EventEmitter<any> = new EventEmitter();
+    @Output() predicateChange: EventEmitter<any> = new EventEmitter(false);
+    @Output() ascendingChange: EventEmitter<any> = new EventEmitter(false);
     $element: any;
 
     constructor(el: ElementRef, renderer: Renderer) {
@@ -16,46 +16,47 @@ export class JhSortDirective implements OnInit {
     }
 
     ngOnInit() {
-        // TODO needs to be validated
-        resetClasses();
+        //TODO needs to be validated
+        this.resetClasses();
         if (this.predicate && this.predicate !== '_score') {
-            applyClass(this.$element.find('th[jh-sort-by=\'' + this.predicate + '\']'));
-        }
-
-        function applyClass (element) {
-            let thisIcon = element.find('span.glyphicon'),
-                sortIcon = 'glyphicon-sort',
-                sortAsc = 'glyphicon-sort-by-attributes',
-                sortDesc = 'glyphicon-sort-by-attributes-alt',
-                remove = sortIcon + ' ' + sortDesc,
-                add = sortAsc;
-            if (!this.ascending) {
-                remove = sortIcon + ' ' + sortAsc;
-                add = sortDesc;
-            }
-            resetClasses();
-            thisIcon.removeClass(remove);
-            thisIcon.addClass(add);
-        }
-
-        function resetClasses () {
-            let allThIcons = this.$element.find('span.glyphicon'),
-                sortIcon = 'glyphicon-sort',
-                sortAsc = 'glyphicon-sort-by-attributes',
-                sortDesc = 'glyphicon-sort-by-attributes-alt';
-            allThIcons.removeClass(sortAsc + ' ' + sortDesc);
-            allThIcons.addClass(sortIcon);
+            this.applyClass(this.$element.find('th[jh-sort-by=\'' + this.predicate + '\']'));
         }
     }
 
-    sort (field) {
+    applyClass(element) {
+        let thisIcon = element.find('span.fa'),
+            sortIcon = 'fa-sort',
+            sortAsc = 'fa-sort-asc',
+            sortDesc = 'fa-sort-desc',
+            remove = sortIcon + ' ' + sortDesc,
+            add = sortAsc;
+        if (!this.ascending) {
+            remove = sortIcon + ' ' + sortAsc;
+            add = sortDesc;
+        }
+        this.resetClasses();
+        thisIcon.removeClass(remove);
+        thisIcon.addClass(add);
+    }
+
+    resetClasses() {
+        let allThIcons = this.$element.find('span.fa'),
+            sortIcon = 'fa-sort',
+            sortAsc = 'fa-sort-asc',
+            sortDesc = 'fa-sort-desc';
+        allThIcons.removeClass(sortAsc + ' ' + sortDesc);
+        allThIcons.addClass(sortIcon);
+    }
+
+    sort(field) {
         if (field !== this.predicate) {
             this.ascending = true;
         } else {
             this.ascending = !this.ascending;
         }
         this.predicate = field;
-        //$scope.$apply(); TODO not sure if something needs to be done here
+        this.predicateChange.emit(field);
+        this.ascendingChange.emit(this.ascending);
         this.callback();
     }
 }

@@ -436,6 +436,7 @@ module.exports = EntityGenerator.extend({
             if (!this.relationships) {
                 this.relationships = [];
             }
+            this.differentRelationships = [];
 
             // Load in-memory data for fields
             this.fields && this.fields.forEach( function (field) {
@@ -588,6 +589,7 @@ module.exports = EntityGenerator.extend({
                 var entityType = relationship.otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
+                    this.differentRelationships.push(relationship);
                 }
             }, this);
 
