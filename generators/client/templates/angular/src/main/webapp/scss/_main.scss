@@ -24,6 +24,7 @@ Developement Ribbon
     width: 15em;
     z-index: 9999;
     pointer-events: none;
+    opacity: 0.75;
     a {
         color: #fff;
         display: block;
@@ -102,6 +103,17 @@ Logo styles
             background-size: contain;
         }
     }
+}
+
+/* ==========================================================================
++Navbar styles
++========================================================================== */
+.navbar-nav .nav-item+.nav-item {
+    margin-left: 1.5rem;
+}
+
+.dropdown-toggle::after {
+    margin-left: 0.15em;
 }
 
 /* ==========================================================================
