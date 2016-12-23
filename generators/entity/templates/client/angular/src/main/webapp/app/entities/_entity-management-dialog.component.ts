@@ -17,7 +17,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     <%= entityInstance %>: <%= entityClass %>;
     languages: any[];
     authorities: any[];
-    isSaving: Boolean;<%
+    isSaving: boolean;<%
     var queries = [];
     var variables = [];
     var hasManyToMany = false;

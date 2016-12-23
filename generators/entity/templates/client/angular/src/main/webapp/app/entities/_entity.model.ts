@@ -27,7 +27,7 @@ for (idx in fields) {
     } else if (fieldType == 'ZonedDateTime') {
         tsType = 'Date';
     } else if (fieldType == 'Boolean') {
-        tsType = 'Boolean';
+        tsType = 'boolean';
     } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') {
         tsType = 'number';
     } else if (fieldType == 'String'  || fieldType == 'UUID') {
