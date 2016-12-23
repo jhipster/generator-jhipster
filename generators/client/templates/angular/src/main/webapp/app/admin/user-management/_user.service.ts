@@ -25,17 +25,12 @@ export class UserService {
         if(req) {
             params.set('page', req.page);
             params.set('size', req.size);
-<<<<<<< entity-ng2
             if(req.sort){
                 params.paramsMap.set('sort', req.sort);
             }
             params.set('filter', req.filter);
         }
 
-=======
-            params.set('sort', req.sort);
-        }
->>>>>>> Fix compatibility with cassandra
         let options = {
             search: params
         };
