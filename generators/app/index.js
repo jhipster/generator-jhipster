@@ -344,11 +344,11 @@ module.exports = JhipsterGenerator.extend({
                 // Generate a package.json file containing the current version of the generator as dependency
                 this.template('_skipClientApp.package.json', 'package.json', this, {});
 
-                if (this.yarnInstall) {
+                if (this.clientPackageManager === 'yarn') {
                     this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
                     this.spawnCommand('yarn', ['install']);
                 }
-                else {
+                else if (this.clientPackageManager === 'npm') {
                     this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
                     this.npmInstall();
                 }
