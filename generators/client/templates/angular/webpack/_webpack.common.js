@@ -17,7 +17,7 @@ module.exports = function (options) {
             'main': './src/main/webapp/app/app.main'
         },
         resolve: {
-            extensions: ['.ts', '.js'],
+            extensions: ['.ts', '.js', '.html'],
             modules: ['node_modules']
         },
         output: {
