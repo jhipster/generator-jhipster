@@ -26,8 +26,8 @@
                 <th></th>
             </tr>
             </thead>
-            <tbody>
-            <tr *ngFor="let user of users; trackBy: user?.id">
+            <tbody *ngIf ="users">
+            <tr *ngFor="let user of users; trackBy: trackIdentity">
                 <td><a uiSref="user-management-detail" [uiParams]="{ login: user.login }">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>

@@ -12,6 +12,4 @@ export class JhiTranslate {
     @Input('jhi-translate') jhiTranslate: string;
 
     @Input('translate-values') translateValues: any;
-
-    //FIXME add support to pass translate-compile/ directives in translated content doesnt work
 }

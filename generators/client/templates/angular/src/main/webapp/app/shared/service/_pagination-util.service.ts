@@ -15,7 +15,7 @@ export class PaginationUtil  {
 
     // query params are strings, and need to be parsed
     parsePage (page: string) {
-        return parseInt(page);
+        return parseInt(page, 10);
     }
 
     // sort can be in the format `id,asc` or `id`

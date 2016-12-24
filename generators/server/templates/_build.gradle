@@ -86,6 +86,13 @@ if (OperatingSystem.current().isWindows()) {
             classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
     }
+    <%_ if(!skipClient && clientFramework === 'angular1') { _%>
+
+    // avoid random error and hanging in windows, see https://github.com/jhipster/generator-jhipster/pull/4683
+    gulp {
+        bufferOutput = true
+    }
+    <%_ } _%>
 } else {
     bootRun {
         addResources = false
@@ -102,7 +109,7 @@ test {
     reports.html.enabled = false
 }
 
-<% if (cucumberTests) { %>
+<%_ if (cucumberTests) { _%>
 task cucumberTest(type: Test) {
     include '**/CucumberTest*'
 
@@ -112,7 +119,8 @@ task cucumberTest(type: Test) {
     reports.html.enabled = false
 }
 
-test.finalizedBy(cucumberTest)<% } %>
+test.finalizedBy(cucumberTest)
+<%_ } _%>
 
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
@@ -120,17 +128,22 @@ task testReport(type: TestReport) {
     reportOn cucumberTest<% } %>
 }
 
-<% if (cucumberTests) { %>
-cucumberTest.finalizedBy(testReport)<% } %>
-<% if(!skipClient) {%>
+<%_ if (cucumberTests) { _%>
+cucumberTest.finalizedBy(testReport)
+
+<%_ } _%>
+<%_ if (!skipClient) { _%>
     <%_ if (clientFramework === 'angular1') { _%>
-apply from: 'gradle/yeoman.gradle'<% } %>
+apply from: 'gradle/yeoman.gradle'
     <%_ } _%>
+<%_ } _%>
 apply from: 'gradle/sonar.gradle'
-<% if (databaseType === 'sql') { %>
-apply from: 'gradle/liquibase.gradle'<% } %>
-<% if (gatlingTests) { %>
-apply from: 'gradle/gatling.gradle'<% } %>
+<%_ if (databaseType === 'sql') { _%>
+apply from: 'gradle/liquibase.gradle'
+<%_ } _%>
+<%_ if (gatlingTests) { _%>
+apply from: 'gradle/gatling.gradle'
+<%_ } _%>
 apply from: 'gradle/mapstruct.gradle'
 apply from: 'gradle/docker.gradle'
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
@@ -228,13 +241,15 @@ dependencies {
     <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
     compile ("org.ehcache:ehcache")
     compile ("org.hibernate:hibernate-jcache:${hibernate_version}")
-    <%_ } _%><%_ if (databaseType == 'sql') { _%>
+    <%_ } _%>
+    <%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
         exclude(module: 'jetty-servlet')
     }
-    compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %>
+    compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
+    <%_ } _%>
     compile "org.springframework.boot:spring-boot-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-loader-tools"
@@ -268,14 +283,14 @@ dependencies {
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-ribbon"
-    <%_ if (serviceDiscoveryType == 'eureka') { _%>
+        <%_ if (serviceDiscoveryType == 'eureka') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
     compile "org.springframework.cloud:spring-cloud-starter-config"
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType == 'consul') { _%>
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType == 'consul') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     compile "org.springframework.cloud:spring-cloud-starter-consul-config"
-    <%_ } _%>
+        <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-starter-hystrix"
     compile "org.springframework.cloud:spring-cloud-starter-spectator"
     compile "org.springframework.retry:spring-retry"
@@ -351,8 +366,10 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-library"
     <%_ if (gatlingTests) { _%>
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
-    <%_ if (databaseType === 'cassandra') { _%>
-    compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
+        <%_ if (databaseType === 'cassandra') { _%>
+    compile "io.netty:netty-handler:4.0.36.Final"
+        <%_ } _%>
+    <%_ } _%>
     <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
     testCompile "com.h2database:h2"
     <%_ } _%>

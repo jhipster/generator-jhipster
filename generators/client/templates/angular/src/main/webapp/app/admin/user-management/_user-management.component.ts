@@ -59,6 +59,7 @@ export class UserMgmtComponent implements OnInit {
     registerChangeInUsers() {
         this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
+
     setActive (user, isActivated) {
         user.activated = isActivated;
 
@@ -74,6 +75,7 @@ export class UserMgmtComponent implements OnInit {
                 }
             });
     }
+
     loadAll () {
         this.userService.query({
             page: this.page -1,
@@ -84,23 +86,11 @@ export class UserMgmtComponent implements OnInit {
             (res: Response) => this.onError(res.json())
         );
     }
-    private onSuccess(data, headers) {
-        // hide anonymous user from user management: it's a required user for Spring Security
-        for (let i in data) {
-            if (data[i]['login'] === 'anonymoususer') {
-                data.splice(i, 1);
-            }
-        }
-        <%_ if (databaseType !== 'cassandra') { _%>
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
-        this.queryCount = this.totalItems;
-        <%_ } _%>
-        this.users = data;
+
+    trackIdentity (index, item: User) {
+        return item.id;
     }
-    private onError (error) {
-        this.alertService.error(error.error, error.message, null);
-    }
+
     <%_ if (databaseType !== 'cassandra') { _%>
     sort () {
         let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
@@ -109,12 +99,14 @@ export class UserMgmtComponent implements OnInit {
         }
         return result;
     }
+
     loadPage (page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
         }
     }
+
     transition () {
         this.$state.transitionTo(this.$state.$current, {
             page: this.page,
@@ -122,4 +114,25 @@ export class UserMgmtComponent implements OnInit {
         });
     }
     <%_ } _%>
+
+    private onSuccess(data, headers) {
+        // hide anonymous user from user management: it's a required user for Spring Security
+        let hiddenUsersSize = 0;
+        for (let i in data) {
+            if (data[i]['login'] === 'anonymoususer') {
+                data.splice(i, 1);
+                hiddenUsersSize++;
+            }
+        }
+        <%_ if (databaseType !== 'cassandra') { _%>
+        this.links = this.parseLinks.parse(headers.get('link'));
+        this.totalItems = headers.get('X-Total-Count') - hiddenUsersSize;
+        this.queryCount = this.totalItems;
+        <%_ } _%>
+        this.users = data;
+    }
+
+    private onError (error) {
+        this.alertService.error(error.error, error.message, null);
+    }
 }

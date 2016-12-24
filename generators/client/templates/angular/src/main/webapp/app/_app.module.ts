@@ -7,14 +7,13 @@ import { UIRouterModule } from 'ui-router-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule } from './shared';
-import { <%=angular2AppName%>AdminModule } from './admin/admin.module'; //TODO these couldn't be used from barrels due to an error
+import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
 import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
 import { appState } from './app.state';
 import { HomeComponent, homeState } from './home';
 import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
-import { localStorageConfig } from './blocks/config/localstorage.config';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
@@ -32,8 +31,6 @@ import {
     accessdeniedState
 } from './layouts';
 
-localStorageConfig();
-
 let routerConfig = {
     configClass: <%=jhiPrefixCapitalized%>RouterConfig,
     useHash: true,
@@ -49,7 +46,7 @@ let routerConfig = {
     imports: [
         BrowserModule,
         UIRouterModule.forRoot(routerConfig),
-        Ng2Webstorage,
+        Ng2Webstorage.forRoot({ prefix: 'jhi'}),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>EntityModule,
