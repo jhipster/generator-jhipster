@@ -53,7 +53,7 @@ module.exports = function (options) {
                 },
                 {
                     test: /\.html$/,
-                    loader: 'raw',
+                    loader: 'raw-loader',
                     exclude: ['./src/main/webapp/index.html']
                 },
                 { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
@@ -67,8 +67,8 @@ module.exports = function (options) {
                 {
                     test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
                     loaders: [
-                        'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                        'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+                        'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
                     ]
                 },
                 {
@@ -98,7 +98,7 @@ module.exports = function (options) {
                 jQuery: "jquery"
             }),
             new HtmlWebpackPlugin({
-                template: 'handlebars!./src/main/webapp/index.hbs',
+                template: 'handlebars-loader!./src/main/webapp/index.hbs',
                 chunksSortMode: 'dependency',
                 inject: 'body',
                 data: DATAS
