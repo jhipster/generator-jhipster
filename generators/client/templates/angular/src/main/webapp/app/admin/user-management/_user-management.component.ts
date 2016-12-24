@@ -86,7 +86,7 @@ export class UserMgmtComponent implements OnInit {
     }
 
     trackIdentity (index, item: User) {
-        item.id
+        return item.id;
     }
 
     <%_ if (databaseType !== 'cassandra') { _%>
