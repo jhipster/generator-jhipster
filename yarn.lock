@@ -179,11 +179,7 @@ bin-version@^1.0.0:
   dependencies:
     find-versions "^1.0.0"
 
-"binaryextensions@1 || 2":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/binaryextensions/-/binaryextensions-2.0.0.tgz#e597d1a7a6a3558a2d1c7241a16c99965e6aa40f"
-
-binaryextensions@~1.0.0:
+"binaryextensions@1 || 2", binaryextensions@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/binaryextensions/-/binaryextensions-1.0.1.tgz#1e637488b35b58bda5f4774bf96a5212a8c90755"
 
@@ -2193,11 +2189,11 @@ lodash.templatesettings@^3.0.0:
     lodash._reinterpolate "^3.0.0"
     lodash.escape "^3.0.0"
 
-lodash@4.15.0, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.3.0, lodash@^4.6.1:
+lodash@4.15.0:
   version "4.15.0"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.15.0.tgz#3162391d8f0140aa22cf8f6b3c34d6b7f63d3aa9"
 
-lodash@4.17.2, lodash@^4.17.2:
+lodash@4.17.2, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.17.2, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
@@ -3202,11 +3198,7 @@ text-table@^0.2.0, text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-"textextensions@1 || 2":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/textextensions/-/textextensions-2.0.1.tgz#be8cf22d65379c151319f88f0335ad8f667abdca"
-
-textextensions@~1.0.0:
+"textextensions@1 || 2", textextensions@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/textextensions/-/textextensions-1.0.2.tgz#65486393ee1f2bb039a60cbba05b0b68bd9501d2"
 
@@ -3585,9 +3577,9 @@ yeoman-environment@^1.1.0, yeoman-environment@^1.5.2, yeoman-environment@^1.6.1:
     text-table "^0.2.0"
     untildify "^2.0.0"
 
-yeoman-generator@0.24.1:
-  version "0.24.1"
-  resolved "https://registry.yarnpkg.com/yeoman-generator/-/yeoman-generator-0.24.1.tgz#1ca74429d9c5c95db0b22859ec180a2599bc1f8e"
+yeoman-generator@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/yeoman-generator/-/yeoman-generator-1.0.0.tgz#282f900d2b124973e4fc9eb63a3ea26b2d0fd7b0"
   dependencies:
     async "^2.0.0"
     chalk "^1.0.0"
@@ -3602,13 +3594,11 @@ yeoman-generator@0.24.1:
     find-up "^1.0.0"
     github-username "^2.0.0"
     glob "^7.0.3"
-    gruntfile-editor "^1.0.0"
-    html-wiring "^1.0.0"
     istextorbinary "^2.1.0"
     lodash "^4.11.1"
     mem-fs-editor "^2.0.0"
+    minimist "^1.2.0"
     mkdirp "^0.5.0"
-    nopt "^3.0.0"
     path-exists "^2.0.0"
     path-is-absolute "^1.0.0"
     pretty-bytes "^3.0.1"
@@ -3619,12 +3609,8 @@ yeoman-generator@0.24.1:
     shelljs "^0.7.0"
     text-table "^0.2.0"
     through2 "^2.0.0"
-    underscore.string "^3.0.3"
     user-home "^2.0.0"
-    yeoman-assert "^2.0.0"
     yeoman-environment "^1.1.0"
-    yeoman-test "^1.0.0"
-    yeoman-welcome "^1.0.0"
 
 yeoman-generator@^0.23.0:
   version "0.23.4"

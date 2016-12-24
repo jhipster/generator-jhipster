@@ -1,6 +1,6 @@
 'use strict';
 const util = require('util'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
     prompts = require('./prompts'),
@@ -10,7 +10,7 @@ const util = require('util'),
     crypto = require('crypto'),
     mkdirp = require('mkdirp');
 
-var JhipsterServerGenerator = generators.Base.extend({});
+var JhipsterServerGenerator = generator.extend({});
 
 util.inherits(JhipsterServerGenerator, scriptBase);
 
@@ -20,7 +20,7 @@ const constants = require('../generator-constants'),
 
 module.exports = JhipsterServerGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         this.configOptions = this.options.configOptions || {};
 

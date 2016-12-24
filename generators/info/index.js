@@ -1,17 +1,17 @@
 'use strict';
-var generators = require('yeoman-generator'),
+var generator = require('yeoman-generator'),
     chalk = require('chalk'),
     shelljs = require('shelljs'),
     util = require('util'),
     scriptBase = require('../generator-base');
 
-var ReportGenerator = generators.Base.extend({});
+var ReportGenerator = generator.extend({});
 
 util.inherits(ReportGenerator, scriptBase);
 
 module.exports = ReportGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
     },
 
     initializing: {

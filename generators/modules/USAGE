@@ -11,6 +11,7 @@ using:
 var configuration = {'moduleName': 'my-own-generator'};
 
 templates: function() {
-    this.composeWith('jhipster:modules', { options: {
-        configuration: configuration }});
-  }
+    this.composeWith(require.resolve('jhipster:modules'), {
+        configuration: configuration
+    });
+}

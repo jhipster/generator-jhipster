@@ -1,18 +1,18 @@
 'use strict';
 var util = require('util'),
     shelljs = require('shelljs'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     chalk = require('chalk'),
     jhiCore = require('jhipster-core'),
     scriptBase = require('../generator-base');
 
-var JDLGenerator = generators.Base.extend({});
+var JDLGenerator = generator.extend({});
 
 util.inherits(JDLGenerator, scriptBase);
 
 module.exports = JDLGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
         this.argument('jdlFiles', {type: Array, required: true});
 
     },
@@ -70,14 +70,10 @@ module.exports = JDLGenerator.extend({
             this.log('Generating entities.');
             try {
                 this.getExistingEntities().forEach(function (entity) {
-                    this.composeWith('jhipster:entity', {
-                        options: {
-                            regenerate: true,
-                            'skip-install': true
-                        },
-                        args: [entity.name]
-                    }, {
-                        local: require.resolve('../entity')
+                    this.composeWith(require.resolve('../entity'), {
+                        regenerate: true,
+                        'skip-install': true,
+                        name: [entity.name]
                     });
                 }, this);
             } catch (e) {

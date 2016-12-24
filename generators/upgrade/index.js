@@ -1,12 +1,12 @@
 'use strict';
 var util = require('util'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
     shelljs = require('shelljs'),
     semver = require('semver');
 
-var UpgradeGenerator = generators.Base.extend({});
+var UpgradeGenerator = generator.extend({});
 
 util.inherits(UpgradeGenerator, scriptBase);
 
@@ -17,7 +17,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster',
 
 module.exports = UpgradeGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
         this.force = this.options['force'];
     },
 

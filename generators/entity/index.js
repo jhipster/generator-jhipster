@@ -1,6 +1,6 @@
 'use strict';
 const util = require('util'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
     shelljs = require('shelljs'),
@@ -15,13 +15,13 @@ const constants = require('../generator-constants'),
     SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
 
-var EntityGenerator = generators.Base.extend({});
+var EntityGenerator = generator.extend({});
 
 util.inherits(EntityGenerator, scriptBase);
 
 module.exports = EntityGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         // This makes `name` a required argument.
         this.argument('name', {

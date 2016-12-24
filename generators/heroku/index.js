@@ -1,7 +1,7 @@
 'use strict';
 var util = require('util'),
     fs = require('fs'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
     _ = require('lodash'),
@@ -9,13 +9,13 @@ var util = require('util'),
 
 const constants = require('../generator-constants');
 
-var HerokuGenerator = generators.Base.extend({});
+var HerokuGenerator = generator.extend({});
 
 util.inherits(HerokuGenerator, scriptBase);
 
 module.exports = HerokuGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
     },
     initializing: function () {
         this.log(chalk.bold('Heroku configuration is starting'));

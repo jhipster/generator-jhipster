@@ -1,17 +1,17 @@
 'use strict';
 var util = require('util'),
     chalk = require('chalk'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     jhiCore = require('jhipster-core'),
     scriptBase = require('../generator-base');
 
-var ExportJDLGenerator = generators.Base.extend({});
+var ExportJDLGenerator = generator.extend({});
 
 util.inherits(ExportJDLGenerator, scriptBase);
 
 module.exports = ExportJDLGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
         this.baseName = this.config.get('baseName');
         this.jdl = new jhiCore.JDLObject();
         this.argument('jdlFile', { type: String, required: false, defaults: this.baseName + '.jh' });

@@ -1,7 +1,7 @@
 'use strict';
 var util = require('util'),
     os = require('os'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
     glob = require('glob'),
@@ -12,13 +12,13 @@ const constants = require('../generator-constants');
 
 var exec = childProcess.exec;
 
-var CloudFoundryGenerator = generators.Base.extend({});
+var CloudFoundryGenerator = generator.extend({});
 
 util.inherits(CloudFoundryGenerator, scriptBase);
 
 module.exports = CloudFoundryGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
     },
 
     initializing: {

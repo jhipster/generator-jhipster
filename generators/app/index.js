@@ -1,6 +1,6 @@
 'use strict';
 var util = require('util'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
     cleanup = require('../cleanup'),
@@ -8,7 +8,7 @@ var util = require('util'),
     packagejs = require('../../package.json'),
     exec = require('child_process').exec;
 
-var JhipsterGenerator = generators.Base.extend({});
+var JhipsterGenerator = generator.extend({});
 
 util.inherits(JhipsterGenerator, scriptBase);
 
@@ -17,7 +17,7 @@ const constants = require('../generator-constants');
 
 module.exports = JhipsterGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         this.configOptions = {};
         // This adds support for a `--skip-client` flag
@@ -235,28 +235,20 @@ module.exports = JhipsterGenerator.extend({
         composeServer: function () {
             if (this.skipServer) return;
 
-            this.composeWith('jhipster:server', {
-                options: {
-                    'client-hook': !this.skipClient,
-                    configOptions: this.configOptions,
-                    force: this.options['force']
-                }
-            }, {
-                local: require.resolve('../server')
+            this.composeWith(require.resolve('../server'), {
+                'client-hook': !this.skipClient,
+                configOptions: this.configOptions,
+                force: this.options['force']
             });
         },
 
         composeClient: function () {
             if (this.skipClient) return;
 
-            this.composeWith('jhipster:client', {
-                options: {
-                    'skip-install': this.options['skip-install'],
-                    configOptions: this.configOptions,
-                    force: this.options['force']
-                }
-            }, {
-                local: require.resolve('../client')
+            this.composeWith(require.resolve('../client'), {
+                'skip-install': this.options['skip-install'],
+                configOptions: this.configOptions,
+                force: this.options['force']
             });
         },
 
@@ -320,15 +312,11 @@ module.exports = JhipsterGenerator.extend({
         regenerateEntities: function () {
             if (this.withEntities) {
                 this.getExistingEntities().forEach(function (entity) {
-                    this.composeWith('jhipster:entity', {
-                        options: {
-                            regenerate: true,
-                            'skip-install': true,
-                            force: this.options['force']
-                        },
-                        args: [entity.name]
-                    }, {
-                        local: require.resolve('../entity')
+                    this.composeWith(require.resolve('../entity'), {
+                        regenerate: true,
+                        'skip-install': true,
+                        force: this.options['force'],
+                        name: [entity.name]
                     });
                 }, this);
             }

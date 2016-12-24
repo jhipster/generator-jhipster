@@ -1,19 +1,19 @@
 'use strict';
 var util = require('util'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-var ServiceGenerator = generators.Base.extend({});
+var ServiceGenerator = generator.extend({});
 
 util.inherits(ServiceGenerator, scriptBase);
 
 module.exports = ServiceGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
         this.argument('name', {type: String, required: true});
     },
 

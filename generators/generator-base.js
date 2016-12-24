@@ -2,7 +2,7 @@
 var path = require('path'),
     util = require('util'),
     _ = require('lodash'),
-    yeoman = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     chalk = require('chalk'),
     jhipsterUtils = require('./util'),
     Insight = require('insight'),
@@ -26,11 +26,11 @@ const constants = require('./generator-constants'),
 module.exports = Generator;
 
 function Generator() {
-    yeoman.Base.apply(this, arguments);
+    generator.apply(this, arguments);
     this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
 }
 
-util.inherits(Generator, yeoman.Base);
+util.inherits(Generator, generator);
 
 /**
  * Add a new menu element, at the root of the menu.

@@ -1,13 +1,13 @@
 'use strict';
 var util = require('util'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants');
 
-var LanguagesGenerator = generators.Base.extend({});
+var LanguagesGenerator = generator.extend({});
 
 util.inherits(LanguagesGenerator, scriptBase);
 
@@ -15,7 +15,7 @@ var configOptions = {};
 
 module.exports = LanguagesGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         configOptions = this.options.configOptions || {};
 

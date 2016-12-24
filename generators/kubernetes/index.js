@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 'use strict';
-var generators = require('yeoman-generator'),
+var generator = require('yeoman-generator'),
     chalk = require('chalk'),
     shelljs = require('shelljs'),
     crypto = require('crypto'),
@@ -24,7 +24,7 @@ var generators = require('yeoman-generator'),
     writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
 
-var KubernetesGenerator = generators.Base.extend({});
+var KubernetesGenerator = generator.extend({});
 util.inherits(KubernetesGenerator, scriptBase);
 
 /* Constants used throughout */
@@ -32,7 +32,7 @@ const constants = require('../generator-constants');
 
 module.exports = KubernetesGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {

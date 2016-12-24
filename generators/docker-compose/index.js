@@ -1,5 +1,5 @@
 'use strict';
-var generators = require('yeoman-generator'),
+var generator = require('yeoman-generator'),
     chalk = require('chalk'),
     shelljs = require('shelljs'),
     crypto = require('crypto'),
@@ -11,7 +11,7 @@ var generators = require('yeoman-generator'),
     writeFiles = require('./files').writeFiles,
     scriptBase = require('../generator-base');
 
-var DockerComposeGenerator = generators.Base.extend({});
+var DockerComposeGenerator = generator.extend({});
 
 util.inherits(DockerComposeGenerator, scriptBase);
 
@@ -19,7 +19,7 @@ const constants = require('../generator-constants');
 
 module.exports = DockerComposeGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
     },
 
     initializing: {
