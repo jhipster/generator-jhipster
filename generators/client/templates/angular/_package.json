@@ -92,7 +92,6 @@
     "node-sass": "3.13.0",
     "postcss-loader": "1.2.0",
     <%_ } _%>
-
     "yargs": "6.4.0"
   },
   "engines": {

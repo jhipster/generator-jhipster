@@ -71,7 +71,7 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
                 { file: '_404.html', method: 'copy' },
-                { file: '_index.hbs', method: 'copy' }
+                { file: '_index.ejs', method: 'copy' }
             ]
         }
     ],
