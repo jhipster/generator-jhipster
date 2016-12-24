@@ -16,7 +16,7 @@ export class TranslatePartialLoader implements TranslateLoader {
         let combinedObject = new Object();
         let oldObsevers;
         let newObserver;
-        this.locations.forEach((value) => {
+        this.locations && this.locations.forEach((value) => {
             newObserver = this.getPartFile(value, combinedObject, lang);
             if (oldObsevers == null) {
                 oldObsevers = newObserver;
