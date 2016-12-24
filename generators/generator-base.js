@@ -1560,7 +1560,7 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
                     let templatePath = path;
                     let method = 'template';
                     let useTemplate = false;
-                    let interpolate = {};
+                    let options = {};
                     let templatePathTo ;
                     if (typeof templateObj === 'string') {
                         templatePath += templateObj;
@@ -1568,7 +1568,7 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
                         templatePath += templateObj.file;
                         method = templateObj.method ? templateObj.method : method;
                         useTemplate = templateObj.template ? templateObj.template : useTemplate;
-                        interpolate = templateObj.interpolate ? { interpolate: templateObj.interpolate } : interpolate;
+                        options = templateObj.options ? templateObj.options : options;
                     }
                     if (templateObj && templateObj.renameTo) {
                         templatePathTo = path + templateObj.renameTo(_this);
@@ -1579,7 +1579,7 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
                     if (returnFiles) {
                         filesOut.push(templatePathTo);
                     } else {
-                        _this[method](templatePathFrom, templatePathTo, _this, interpolate, useTemplate);
+                        _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
                     }
                 });
             }

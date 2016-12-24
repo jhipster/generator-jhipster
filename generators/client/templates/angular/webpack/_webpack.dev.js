@@ -9,7 +9,9 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
     module: {
         rules: [{
             test: /\.ts$/,
-            loaders: ['tslint-loader'],
+            loaders: [
+                'tslint-loader'
+            ],
             exclude: ['node_modules', /reflect-metadata\/Reflect\.ts/]
         }]
     },

@@ -24,18 +24,18 @@ export class DataUtils {
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
         }
 
-        function paddingSize(base64String) {
-            if (endsWith('==', base64String)) {
+        function paddingSize(value) {
+            if (endsWith('==', value)) {
                 return 2;
             }
-            if (endsWith('=', base64String)) {
+            if (endsWith('=', value)) {
                 return 1;
             }
             return 0;
         }
 
-        function size(base64String) {
-            return base64String.length / 4 * 3 - paddingSize(base64String);
+        function size(value) {
+            return value.length / 4 * 3 - paddingSize(value);
         }
 
         function formatAsBytes(size) {

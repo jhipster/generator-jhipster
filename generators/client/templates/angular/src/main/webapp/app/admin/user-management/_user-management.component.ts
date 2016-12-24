@@ -57,6 +57,7 @@ export class UserMgmtComponent implements OnInit {
     registerChangeInUsers() {
         this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
+
     setActive (user, isActivated) {
         user.activated = isActivated;
 
@@ -72,6 +73,7 @@ export class UserMgmtComponent implements OnInit {
                 }
             });
     }
+
     loadAll () {
         this.userService.query({
             page: this.page -1,
@@ -82,6 +84,35 @@ export class UserMgmtComponent implements OnInit {
             (res: Response) => this.onError(res.json())
         );
     }
+
+    trackIdentity (index, item: User) {
+        return item.id;
+    }
+
+    <%_ if (databaseType !== 'cassandra') { _%>
+    sort () {
+        let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
+    }
+
+    loadPage (page: number) {
+        if (page !== this.previousPage) {
+            this.previousPage = page;
+            this.transition();
+        }
+    }
+
+    transition () {
+        this.$state.transitionTo(this.$state.$current, {
+            page: this.page,
+            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        });
+    }
+    <%_ } _%>
+
     private onSuccess(data, headers) {
         // hide anonymous user from user management: it's a required user for Spring Security
         let hiddenUsersSize = 0;
@@ -98,28 +129,8 @@ export class UserMgmtComponent implements OnInit {
         <%_ } _%>
         this.users = data;
     }
+
     private onError (error) {
         this.alertService.error(error.error, error.message, null);
     }
-    <%_ if (databaseType !== 'cassandra') { _%>
-    sort () {
-        let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
-        return result;
-    }
-    loadPage (page: number) {
-        if (page !== this.previousPage) {
-            this.previousPage = page;
-            this.transition();
-        }
-    }
-    transition () {
-        this.$state.transitionTo(this.$state.$current, {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        });
-    }
-    <%_ } _%>
 }
