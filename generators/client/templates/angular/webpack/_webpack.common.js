@@ -41,8 +41,8 @@ module.exports = function (options) {
         },
         module: {
             rules: [
-                { test: /[\/]angular\.js$/, loader: "exports?angular" },
-                { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' },
+                { test: /[\/]angular\.js$/, loader: "exports-loader?angular" },
+                { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
                 {
                     test: /\.ts$/,
                     loaders: [
@@ -53,10 +53,12 @@ module.exports = function (options) {
                 },
                 {
                     test: /\.html$/,
-                    loader: 'raw',
+                    loader: 'raw-loader',
                     exclude: ['./src/main/webapp/index.html']
                 },
-                { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
+                <%_ if (useSass) { _%>
+                { test: /\.scss$/, loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'] },
+                <%_ } _%>
                 {
                     test: /\.css$/,
                     loader: ExtractTextPlugin.extract({
@@ -67,8 +69,8 @@ module.exports = function (options) {
                 {
                     test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
                     loaders: [
-                        'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                        'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+                        'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
                     ]
                 },
                 {
@@ -98,7 +100,7 @@ module.exports = function (options) {
                 jQuery: "jquery"
             }),
             new HtmlWebpackPlugin({
-                template: 'handlebars!./src/main/webapp/index.hbs',
+                template: './src/main/webapp/index.ejs',
                 chunksSortMode: 'dependency',
                 inject: 'body',
                 data: DATAS

@@ -71,7 +71,8 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
                 { file: '_404.html', method: 'copy' },
-                { file: '_index.hbs', method: 'copy' }
+                //since we use webpack-html-plugin to process the ejs later we need to use `<# #>` for ejs which needs to processed by generator
+                { file: '_index.ejs', method: 'template', options: { delimiter: '#' }}
             ]
         }
     ],
@@ -87,7 +88,6 @@ const files = {
                 '_vendor.ts',
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
-                'blocks/config/_localstorage.config.ts',
                 'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pager.config.ts',
                 'blocks/config/_uib-pagination.config.ts',

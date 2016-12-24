@@ -25,7 +25,7 @@ export class ParseLinks {
             );
             let page: any = queryString.page;
             if ( typeof page === 'string') {
-                page = parseInt(page);
+                page = parseInt(page, 10);
             }
             let name: string = section[1].replace(/rel="(.*)"/, '$1').trim();
             links[name] = page;
