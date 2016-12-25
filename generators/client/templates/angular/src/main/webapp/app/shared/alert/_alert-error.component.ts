@@ -8,7 +8,7 @@ import { EventManager } from '../service/event-manager.service';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
-    selector: 'jhi-alert-error',
+    selector: '<%=jhiPrefix%>-alert-error',
     template: `
         <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Rx';
             </div>
         </div>`
 })
-export class JhiAlertErrorComponent implements OnDestroy {
+export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     alerts: any[];
     cleanHttpErrorListener: Subscription;
