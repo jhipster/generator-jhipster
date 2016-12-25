@@ -9,7 +9,7 @@ import { JhiLanguageService } from '../../shared';
 import { EventManager } from '../../shared/service/event-manager.service';
 
 @Component({
-    selector: 'user-mgmt-dialog',
+    selector: '<%=jhiPrefix%>-user-mgmt-dialog',
     templateUrl: './user-management-dialog.component.html'
 })
 export class UserMgmtDialogComponent implements OnInit {
