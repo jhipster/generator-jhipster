@@ -4,7 +4,7 @@ import { TranslateService, LangChangeEvent } from 'ng2-translate/ng2-translate';
 <%_ } _%>
 
 @Directive({
-    selector: '[active-menu]',
+    selector: '[<%=jhiPrefix%>-active-menu]',
     inputs: ['language:active-menu']
 })
 export class ActiveMenuDirective implements OnInit {
