@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'error',
+    selector: '<%=jhiPrefix%>-error',
     templateUrl: './error.component.html'
 })
 export class ErrorComponent implements OnInit {
