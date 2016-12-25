@@ -1,4 +1,4 @@
-import { Directive, Host, HostListener, Input } from '@angular/core';
+import { Directive, Host, HostListener, Input, ElementRef, Renderer } from '@angular/core';
 import { <%=jhiPrefixCapitalized%>SortDirective } from './sort.directive';
 
 @Directive({
