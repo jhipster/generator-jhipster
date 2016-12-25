@@ -2,11 +2,11 @@ import { Directive, ElementRef, Input, Renderer, OnInit } from '@angular/core';
 import { Principal } from './principal.service';
 
 @Directive({
-    selector: '[has-any-authority]'
+    selector: '[<%=jhiPrefix%>-has-any-authority]'
 })
 export class HasAnyAuthorityDirective implements OnInit {
 
-    @Input('has-any-authority') hasAnyAuthority: string;
+    @Input('<%=jhiPrefix%>-has-any-authority') hasAnyAuthority: string;
     authority: string[];
 
     constructor(private principal: Principal, private el: ElementRef, private renderer: Renderer) {

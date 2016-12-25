@@ -2,10 +2,10 @@ import { Directive, Host, HostListener, Input } from '@angular/core';
 import { JhSortDirective } from './sort.directive';
 
 @Directive({
-    selector: '[jh-sort-by]'
+    selector: '[<%=jhiPrefix%>-sort-by]'
 })
 export class JhSortByDirective {
-    @Input('jh-sort-by') jhSortBy: string;
+    @Input('<%=jhiPrefix%>-sort-by') jhSortBy: string;
     jhSort: JhSortDirective;
 
     constructor(@Host() jhSort: JhSortDirective) {

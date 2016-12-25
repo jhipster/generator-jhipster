@@ -1,10 +1,10 @@
 import { Directive, Input, Output, OnInit, Renderer, EventEmitter, ElementRef } from '@angular/core';
 
 @Directive({
-    selector: '[jh-sort]'
+    selector: '[<%=jhiPrefix%>-sort]'
 })
 export class JhSortDirective implements OnInit {
-    @Input('jh-sort') predicate: string;
+    @Input('<%=jhiPrefix%>-sort') predicate: string;
     @Input() ascending: boolean;
     @Input() callback: Function;
     @Output() jhSortChange: EventEmitter<any> = new EventEmitter();
@@ -19,7 +19,7 @@ export class JhSortDirective implements OnInit {
         // TODO needs to be validated
         resetClasses();
         if (this.predicate && this.predicate !== '_score') {
-            applyClass(this.$element.find('th[jh-sort-by=\'' + this.predicate + '\']'));
+            applyClass(this.$element.find('th[<%=jhiPrefix%>-sort-by=\'' + this.predicate + '\']'));
         }
 
         function applyClass (element) {
