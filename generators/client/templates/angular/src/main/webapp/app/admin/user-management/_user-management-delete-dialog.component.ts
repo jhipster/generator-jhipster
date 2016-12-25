@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 import { EventManager } from '../../shared/service/event-manager.service';
 
 @Component({
-    selector: 'user-mgmt-delete-dialog',
+    selector: '<%=jhiPrefix%>-user-mgmt-delete-dialog',
     templateUrl: './user-management-delete-dialog.component.html'
 })
 export class UserMgmtDeleteDialogComponent {
