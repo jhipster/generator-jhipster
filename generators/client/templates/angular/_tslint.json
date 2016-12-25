@@ -89,7 +89,7 @@
       "check-type"
     ],
 
-    "directive-selector": [true, "attribute", "<%=jhiPrefix%>-", "camelCase"],
+    "directive-selector": [true, "attribute", "<%=jhiPrefix%>", "camelCase"],
     "component-selector": [true, "element", "<%=jhiPrefix%>", "kebab-case"],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
