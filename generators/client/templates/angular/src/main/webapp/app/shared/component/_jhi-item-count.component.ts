@@ -12,7 +12,7 @@ import { Component, Input } from '@angular/core';
 export class <%=jhiPrefixCapitalized%>ItemCountComponent {
     @Input() page: any;
     @Input() total: any;
-    @Input('items-per-page') itemsPerPage: any;
+    @Input() itemsPerPage: any;
 
     constructor() {}
 }
