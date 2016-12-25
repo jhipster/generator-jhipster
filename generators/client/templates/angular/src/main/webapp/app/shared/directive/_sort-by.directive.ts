@@ -7,7 +7,7 @@ import { <%=jhiPrefixCapitalized%>SortDirective } from './sort.directive';
 export class <%=jhiPrefixCapitalized%>SortByDirective {
     @Input() <%=jhiPrefix%>SortBy: string;
 
-    jhSort: <%=jhiPrefixCapitalized%>SortDirective;
+    <%=jhiPrefix%>Sort: <%=jhiPrefixCapitalized%>SortDirective;
 
     constructor(@Host() <%=jhiPrefix%>Sort: <%=jhiPrefixCapitalized%>SortDirective) {
         this.<%=jhiPrefix%>Sort = <%=jhiPrefix%>Sort;
