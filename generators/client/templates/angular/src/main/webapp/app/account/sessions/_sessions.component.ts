@@ -5,7 +5,7 @@ import { SessionsService } from './sessions.service';
 import { Principal } from '../../shared';
 
 @Component({
-    selector: 'sessions',
+    selector: '<%=jhiPrefix%>-sessions',
     templateUrl: './sessions.component.html'
 })
 export class SessionsComponent implements OnInit {
