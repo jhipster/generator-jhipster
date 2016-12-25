@@ -14,6 +14,6 @@ export class <%=jhiPrefixCapitalized%>SortByDirective {
     }
 
     @HostListener('click') onClick() {
-        this.jhSort.sort(this.<%=jhiPrefix%>SortBy);
+        this.<%=jhiPrefix%>Sort.sort(this.<%=jhiPrefix%>SortBy);
     }
 }
