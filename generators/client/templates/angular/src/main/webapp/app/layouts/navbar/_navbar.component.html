@@ -171,7 +171,7 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu *ngIf="languages.length > 1">
                     <li *ngFor="let language of languages">
-                        <a class="dropdown-item" active-menu="{{language}}" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
+                        <a class="dropdown-item" <%=jhiPrefix%>-active-menu="{{language}}" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
                     </li>
                 </ul>
             </li>
