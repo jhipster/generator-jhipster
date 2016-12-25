@@ -7,7 +7,7 @@ import { LoginModalService } from '../../shared';
 import { Transition } from 'ui-router-ng2';
 
 @Component({
-    selector: 'activate',
+    selector: '<%=jhiPrefix%>-activate',
     templateUrl: './activate.component.html'
 })
 export class ActivateComponent implements OnInit {

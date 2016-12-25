@@ -9,7 +9,7 @@
 
             <jhi-alert-error></jhi-alert-error>
 
-            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate show-validation>
+            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate <%=jhiPrefix%>ShowValidation>
 
                 <div class="form-group">
                     <label class="form-control-label" for="firstName" jhi-translate="settings.form.firstname">First Name</label>

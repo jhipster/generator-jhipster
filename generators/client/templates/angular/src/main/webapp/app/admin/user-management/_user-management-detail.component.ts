@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 import { Transition } from 'ui-router-ng2';
 
 @Component({
-    selector: 'user-mgmt-detail',
+    selector: '<%=jhiPrefix%>-user-mgmt-detail',
     templateUrl: './user-management-detail.component.html'
 })
 export class UserMgmtDetailComponent implements OnInit {

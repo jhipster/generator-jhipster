@@ -5,7 +5,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Account, LoginModalService, Principal, EventManager } from '../shared';
 
 @Component({
-    selector: 'home',
+    selector: '<%=jhiPrefix%>-home',
     templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
