@@ -9,19 +9,19 @@
     <div class="table-responsive" *ngIf="users">
         <table class="table table-striped">
             <thead>
-            <tr<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>Sort [predicate]="predicate" [ascending]="reverse" [callback]="transition"<% } %>>
-                <th<% if (databaseType !== 'cassandra') { %> [<%=jhiPrefix%>SortBy]="id"<% } %>><span jhi-translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="fa fa-sort"></span><%_ } _%></th>
-                <th<% if (databaseType !== 'cassandra') { %> [<%=jhiPrefix%>SortBy]="login"<% } %>><span jhi-translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
-                <th<% if (databaseType !== 'cassandra') { %> [<%=jhiPrefix%>SortBy]="email"<% } %>><span jhi-translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
+            <tr<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>Sort predicate="predicate" ascending="reverse" callback="transition"<% } %>>
+                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="id"<% } %>><span jhi-translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="fa fa-sort"></span><%_ } _%></th>
+                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="login"<% } %>><span jhi-translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="email"<% } %>><span jhi-translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th></th>
                 <%_ if (enableTranslation) { _%>
-                <th <% if (databaseType !== 'cassandra') { %> [<%=jhiPrefix%>SortBy]="langKey"<% } %>> <span jhi-translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
+                <th <% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="langKey"<% } %>> <span jhi-translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <%_ } _%>
                 <th><span jhi-translate="userManagement.profiles">Profiles</span></th>
                 <%_ if (databaseType !== 'cassandra') { _%>
-                <th [<%=jhiPrefix%>-SortBy]="createdDate"><span jhi-translate="userManagement.createdDate">Created Date</span> <span class="fa fa-sort"></span></th>
-                <th [<%=jhiPrefix%>SortBy]="lastModifiedBy"><span jhi-translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="fa fa-sort"></span></th>
-                <th [<%=jhiPrefix%>SortBy]="lastModifiedDate"><span jhi-translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="fa fa-sort"></span></th>
+                <th <%=jhiPrefix%>SortBy="createdDate"><span jhi-translate="userManagement.createdDate">Created Date</span> <span class="fa fa-sort"></span></th>
+                <th <%=jhiPrefix%>SortBy="lastModifiedBy"><span jhi-translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="fa fa-sort"></span></th>
+                <th <%=jhiPrefix%>SortBy="lastModifiedDate"><span jhi-translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="fa fa-sort"></span></th>
                 <%_ } _%>
                 <th></th>
             </tr>

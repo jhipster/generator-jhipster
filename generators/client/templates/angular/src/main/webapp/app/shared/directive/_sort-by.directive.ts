@@ -7,10 +7,10 @@ import { <%=jhiPrefixCapitalized%>SortDirective } from './sort.directive';
 export class <%=jhiPrefixCapitalized%>SortByDirective {
     @Input() <%=jhiPrefix%>SortBy: string;
 
-    jhSort: JhSortDirective;
+    jhSort: <%=jhiPrefixCapitalized%>SortDirective;
 
-    constructor(@Host() jhSort: <%=jhiPrefixCapitalized%>SortDirective) {
-        this.jhSort = jhSort;
+    constructor(@Host() <%=jhiPrefix%>Sort: <%=jhiPrefixCapitalized%>SortDirective) {
+        this.<%=jhiPrefix%>Sort = <%=jhiPrefix%>Sort;
     }
 
     @HostListener('click') onClick() {
