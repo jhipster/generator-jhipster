@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Renderer } from '@angular/core';
 
-@Directive({ selector: 'form[show-validation]' })
+@Directive({ selector: 'form[<%=jhiPrefix%>-show-validation]' })
 export class ShowValidationDirective {
     constructor(el: ElementRef, renderer: Renderer) {
        $(el.nativeElement).find('.form-group').each(() => {
