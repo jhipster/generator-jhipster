@@ -43,9 +43,9 @@ public class ManagedUserVM extends UserDTO {
     }
 
     public ManagedUserVM(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,
-                         String email, boolean activated, String langKey, Set<String> authorities<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
+                         String email, boolean activated, String langKey, String imageUrl, Set<String> authorities<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
                          String createdBy, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate<% } %>) {
-        super(login, firstName, lastName, email, activated, langKey, authorities);
+        super(login, firstName, lastName, email, activated, langKey, imageUrl, authorities);
         this.id = id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
         this.createdBy = createdBy;
         this.createdDate = createdDate;

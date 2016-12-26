@@ -52,6 +52,7 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true" nullable="true"/>
             </column>
+            <column name="image_url" type="varchar(256)"/>
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>

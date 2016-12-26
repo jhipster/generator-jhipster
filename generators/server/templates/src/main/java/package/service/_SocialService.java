@@ -73,12 +73,13 @@ public class SocialService {
         }
         UserProfile userProfile = connection.fetchUserProfile();
         String providerId = connection.getKey().getProviderId();
-        User user = createUserIfNotExist(userProfile, langKey, providerId);
+        String imageUrl = connection.getImageUrl();
+        User user = createUserIfNotExist(userProfile, langKey, providerId, imageUrl);
         createSocialConnection(user.getLogin(), connection);
         mailService.sendSocialRegistrationValidationEmail(user, providerId);
     }
 
-    private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId) {
+    private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId, String imageUrl) {
         String email = userProfile.getEmail();
         String userName = userProfile.getUsername();
         if (!StringUtils.isBlank(userName)) {
@@ -114,6 +115,7 @@ public class SocialService {
         newUser.setActivated(true);
         newUser.setAuthorities(authorities);
         newUser.setLangKey(langKey);
+        newUser.setImageUrl(imageUrl);
 
         <%_ if (searchEngine == 'elasticsearch') { _%>
         userSearchRepository.save(newUser);
