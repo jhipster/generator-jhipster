@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.4.2.RELEASE</version>
+        <version>1.4.3.RELEASE</version>
         <relativePath />
     </parent>
 
@@ -1195,6 +1195,7 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
+                    <version>1.4.2.RELEASE</version>
                     <optional>true</optional>
                 </dependency>
             </dependencies>
@@ -1439,6 +1440,7 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
+                    <version>1.4.2.RELEASE</version>
                     <optional>true</optional>
                 </dependency>
             </dependencies>
