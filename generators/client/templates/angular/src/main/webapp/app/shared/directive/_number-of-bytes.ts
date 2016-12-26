@@ -5,11 +5,11 @@ export function numberOfBytes(base64String: string) {
         return str.indexOf(suffix, str.length - suffix.length) !== -1;
     }
 
-    function paddingSize(base64String: string) {
-        if (endsWith('==', base64String)) {
+    function paddingSize(value: string) {
+        if (endsWith('==', value)) {
             return 2;
         }
-        if (endsWith('=', base64String)) {
+        if (endsWith('=', value)) {
             return 1;
         }
         return 0;

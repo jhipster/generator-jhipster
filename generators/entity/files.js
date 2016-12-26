@@ -27,7 +27,7 @@ const serverFiles = {
             condition: generator => generator.databaseType === 'sql',
             path: SERVER_MAIN_RES_DIR,
             templates: [{
-                file: 'config/liquibase/changelog/_added_entity.xml', interpolate : INTERPOLATE_REGEX,
+                file: 'config/liquibase/changelog/_added_entity.xml', options: { interpolate : INTERPOLATE_REGEX },
                 renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
             }]
         },
@@ -35,7 +35,7 @@ const serverFiles = {
             condition: generator => generator.databaseType === 'sql' && (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne),
             path: SERVER_MAIN_RES_DIR,
             templates: [{
-                file: 'config/liquibase/changelog/_added_entity_constraints.xml', interpolate : INTERPOLATE_REGEX,
+                file: 'config/liquibase/changelog/_added_entity_constraints.xml', options: { interpolate : INTERPOLATE_REGEX },
                 renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`
             }]
         },
@@ -123,7 +123,7 @@ const serverFiles = {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [{
-                file: 'gatling/simulations/_EntityGatlingTest.scala', interpolate: INTERPOLATE_REGEX,
+                file: 'gatling/simulations/_EntityGatlingTest.scala', options: { interpolate : INTERPOLATE_REGEX },
                 renameTo: generator => `gatling/simulations/${generator.entityClass}GatlingTest.scala`
             }]
         }
