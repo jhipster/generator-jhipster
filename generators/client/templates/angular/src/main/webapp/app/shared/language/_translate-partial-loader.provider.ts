@@ -35,7 +35,7 @@ export class TranslatePartialLoader implements TranslateLoader {
                     if(!combinedObject[key]) {
                         combinedObject[key] = responseObj[key];
                     }else{
-                        $.extend(true,combinedObject[key], combinedObject[key], responseObj[key])
+                        Object.assign(combinedObject[key],responseObj[key]);
                     }
                 });
                 observer.next(combinedObject);

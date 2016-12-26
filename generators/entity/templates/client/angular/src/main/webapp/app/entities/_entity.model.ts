@@ -25,7 +25,7 @@ for (idx in fields) {
     if (fields[idx].fieldIsEnum) {
         tsType = fieldType;
     } else if (fieldType == 'ZonedDateTime') {
-        tsType = 'Date';
+        tsType = 'any';
     } else if (fieldType == 'Boolean') {
         tsType = 'boolean';
     } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') {
