@@ -5,14 +5,14 @@ export class DataUtils {
 
     constructor () {}
 
-    abbreviate (text: string) {
+    abbreviate (text: string, append = '...') {
         if (typeof text !== 'string') {
             return '';
         }
         if (text.length < 30) {
             return text;
         }
-        return text ? (text.substring(0, 15) + '...' + text.slice(-10)) : '';
+        return text ? (text.substring(0, 15) + append + text.slice(-10)) : '';
     }
 
     byteSize (base64String: string) {

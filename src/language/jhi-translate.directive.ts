@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
     selector: '[jhi-translate]',
     template: '<span [innerHTML]="jhiTranslate | translate:translateValues"></span>'
 })
-export class JhiTranslate {
+export class JhiTranslateComponent {
 
     @Input('jhi-translate') jhiTranslate: string;
 
