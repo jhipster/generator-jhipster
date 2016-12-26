@@ -107,43 +107,43 @@
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('minlength') != -1) { _%>
         <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minlength" jhi-translate="entity.validation.minlength" translate-value-min="<%= fields[idx].fieldValidateRulesMinlength %>">
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minlength" jhi-translate="entity.validation.minlength" translate-values="{ min: <%= fields[idx].fieldValidateRulesMinlength %> }">
             This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('maxlength') != -1) { _%>
         <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxlength" jhi-translate="entity.validation.maxlength" translate-value-max="<%= fields[idx].fieldValidateRulesMaxlength %>">
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxlength" jhi-translate="entity.validation.maxlength" translate-values="{ max: <%= fields[idx].fieldValidateRulesMaxlength %> }">
             This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('min') != -1) { _%>
         <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.min" jhi-translate="entity.validation.min" translate-value-min="<%= fields[idx].fieldValidateRulesMin %>">
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.min" jhi-translate="entity.validation.min" translate-values="{ min: <%= fields[idx].fieldValidateRulesMin %> }">
             This field should be at least <%= fields[idx].fieldValidateRulesMin %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('max') != -1) { _%>
         <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.max" jhi-translate="entity.validation.max" translate-value-max="<%= fields[idx].fieldValidateRulesMax %>">
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.max" jhi-translate="entity.validation.max" translate-values="{ max: <%= fields[idx].fieldValidateRulesMax %> }">
             This field cannot be more than <%= fields[idx].fieldValidateRulesMax %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('minbytes') != -1) { _%>
         <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minbytes" jhi-translate="entity.validation.minbytes" translate-value-min="<%= fields[idx].fieldValidateRulesMinbytes %>">
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minbytes" jhi-translate="entity.validation.minbytes" translate-values="{ min: <%= fields[idx].fieldValidateRulesMinbytes %> }">
             This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('maxbytes') != -1) { _%>
         <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxbytes" jhi-translate="entity.validation.maxbytes" translate-value-max="<%= fields[idx].fieldValidateRulesMaxbytes %>">
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxbytes" jhi-translate="entity.validation.maxbytes" translate-values="{ max: <%= fields[idx].fieldValidateRulesMaxbytes %> }">
             This field cannot be more than <%= fields[idx].fieldValidateRulesMaxbytes %>.
         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.indexOf('pattern') != -1) { _%>
         <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.pattern" jhi-translate="entity.validation.pattern" translate-value-pattern="<%= fields[idx].fieldValidateRulesPattern %>">
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.pattern" jhi-translate="entity.validation.pattern" translate-values="{ pattern: '<%= fields[idx].fieldValidateRulesPattern %>' }">
             This field should follow pattern "<%= fields[idx].fieldValidateRulesPattern %>".
         </small>
         <%_ } _%>
