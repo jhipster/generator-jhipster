@@ -5,13 +5,13 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.4.2.RELEASE</version>
+        <version>1.4.3.RELEASE</version>
         <relativePath/>
     </parent>
 
     <groupId>io.github.jhipster</groupId>
     <artifactId>jhipster</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
     <packaging>jar</packaging>
     <name>JHipster core library</name>
     <description>Server-side library used by applications created with the JHipster generator, see https://jhipster.github.io/ for more information on JHipster</description>
