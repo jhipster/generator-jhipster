@@ -145,13 +145,14 @@ export const <%= entityInstance %>EditState = {
         <%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
             //TODO Find a better way to format dates so that it works with NgbDatePicker
             <%_ if(hasDate) { _%>
-            <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>if(<%= entityInstance %>.<%=fields[idx].fieldName%>){
+            <% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate' ||  fields[idx].fieldType == 'ZonedDateTime') { %>if(<%= entityInstance %>.<%=fields[idx].fieldName%>){
                 <%= entityInstance %>.<%=fields[idx].fieldName%> = {
                      year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
                      month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
                      day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
                 }
-            }<% }}}%>
+            }<% } %>
+            <%}}%>
             const modalRef  = modalService.open(<%= entityAngularJSName %>DialogComponent, { size: 'lg', backdrop: 'static'});
             modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
             modalRef.result.then((result) => {

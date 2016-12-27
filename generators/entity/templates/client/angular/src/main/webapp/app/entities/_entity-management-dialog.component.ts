@@ -8,6 +8,7 @@ import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>EventManager, A
 <%- include('model-class-import-template.ejs'); -%>
 <%- include('service-class-import-template.ejs'); -%>
 
+// TODO replace ng-file-upload dependency by an ng2 depedency
 @Component({
     selector: '<%= entityFileName %>-mgmt-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'

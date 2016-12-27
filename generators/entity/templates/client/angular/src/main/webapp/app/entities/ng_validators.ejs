@@ -29,7 +29,7 @@ if (field.fieldValidate == true) {
         validators.push('maxbytes="' + field.fieldValidateRulesMaxbytes +'"');
     }
     if (rules.indexOf('pattern') != -1) {
-        validators.push('ng-pattern="/' + field.fieldValidateRulesPattern + '/"');
+        validators.push('pattern="' + field.fieldValidateRulesPattern + '"');
     }
 
     result = validators.join(' ');
