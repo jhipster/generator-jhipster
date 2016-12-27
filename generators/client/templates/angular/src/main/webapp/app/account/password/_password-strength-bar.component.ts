@@ -20,31 +20,31 @@ export class PasswordStrengthBarComponent {
 
     measureStrength(p: string): number {
 
-        let _force = 0;
-        let _regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
+        let force = 0;
+        let regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
 
-        let _lowerLetters = /[a-z]+/.test(p);
-        let _upperLetters = /[A-Z]+/.test(p);
-        let _numbers = /[0-9]+/.test(p);
-        let _symbols = _regex.test(p);
+        let lowerLetters = /[a-z]+/.test(p);
+        let upperLetters = /[A-Z]+/.test(p);
+        let numbers = /[0-9]+/.test(p);
+        let symbols = regex.test(p);
 
-        let _flags = [_lowerLetters, _upperLetters, _numbers, _symbols];
-        let _passedMatches = _flags.filter( (isMatchedFlag: boolean) => {
+        let flags = [lowerLetters, upperLetters, numbers, symbols];
+        let passedMatches = flags.filter( (isMatchedFlag: boolean) => {
             return isMatchedFlag === true;
         }).length;
 
-        _force += 2 * p.length + ((p.length >= 10) ? 1 : 0);
-        _force += _passedMatches * 10;
+        force += 2 * p.length + ((p.length >= 10) ? 1 : 0);
+        force += passedMatches * 10;
 
         // penality (short password)
-        _force = (p.length <= 6) ? Math.min(_force, 10) : _force;
+        force = (p.length <= 6) ? Math.min(force, 10) : force;
 
         // penality (poor variety of characters)
-        _force = (_passedMatches === 1) ? Math.min(_force, 10) : _force;
-        _force = (_passedMatches === 2) ? Math.min(_force, 20) : _force;
-        _force = (_passedMatches === 3) ? Math.min(_force, 40) : _force;
+        force = (passedMatches === 1) ? Math.min(force, 10) : force;
+        force = (passedMatches === 2) ? Math.min(force, 20) : force;
+        force = (passedMatches === 3) ? Math.min(force, 40) : force;
 
-        return _force;
+        return force;
     };
 
     getColor(s: number): any {
