@@ -24,7 +24,7 @@ describe('Controller Tests', () => {
                     BaseRequestOptions,
                     {
                         provide: Http,
-                        useFactory: (backendInstance:MockBackend, defaultOptions:BaseRequestOptions) => {
+                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
                             return new Http(backendInstance, defaultOptions);
                         },
                         deps: [MockBackend, BaseRequestOptions]
