@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { ErrorComponent } from './error.component';
-import { JhiLanguageService } from '../../shared';
 
 export const errorState = {
     name: 'error',
