@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { SessionsComponent } from './sessions.component';
-import { JhiLanguageService } from '../../shared';
 
 export const sessionsState = {
     name: 'sessions',

@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { RegisterComponent } from './register.component';
-import { JhiLanguageService } from '../../shared';
 
 export const registerState = {
     name: 'register',
