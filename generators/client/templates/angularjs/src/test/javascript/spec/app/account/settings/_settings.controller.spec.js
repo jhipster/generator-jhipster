@@ -35,8 +35,7 @@ describe('Controller Tests', function() {
                 activated: true,
                 email: "john.doe@mail.com",
                 langKey: "<%= nativeLanguage %>",
-                login: "john",
-                imageUrl: "http://placehold.it/50x50"
+                login: "john"
             };
             MockPrincipal.identity.and.returnValue($q.resolve(accountValues));
             MockAuth.updateAccount.and.returnValue($q.resolve());
