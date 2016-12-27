@@ -1,88 +1,127 @@
-// Karma configuration
-// http://karma-runner.github.io/0.13/config/configuration-file.html
+'use strict';
 
-var sourcePreprocessors = ['coverage'];
-
-function isDebug() {
-    return process.argv.indexOf('--debug') >= 0;
-}
-
-if (isDebug()) {
-    // Disable JS minification if Karma is run with debug option.
-    sourcePreprocessors = [];
-}
+const path = require('path');
+const webpack = require('webpack');
+const WATCH = process.argv.indexOf('--watch') > -1;
+const LoaderOptionsPlugin = require("webpack/lib/LoaderOptionsPlugin");
 
 module.exports = function (config) {
     config.set({
-        // base path, that will be used to resolve files and exclude
-        basePath: '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g, '..'),
 
-        // testing framework to use (jasmine/mocha/qunit/...)
+        // base path that will be used to resolve all patterns (eg. files, exclude)
+        basePath: './',
+
+        // frameworks to use
+        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['jasmine'],
 
         // list of files / patterns to load in the browser
         files: [
-            // bower:js
-            // endbower
-            '<%= MAIN_SRC_DIR %>app/app.module.js',
-            '<%= MAIN_SRC_DIR %>app/app.state.js',
-            '<%= MAIN_SRC_DIR %>app/app.constants.js',
-            '<%= MAIN_SRC_DIR %>app/**/*.+(js|html)',
-            '<%= TEST_SRC_DIR %>spec/helpers/module.js',
-            '<%= TEST_SRC_DIR %>spec/helpers/httpBackend.js',
-            '<%= TEST_SRC_DIR %>**/!(karma.conf<% if (testFrameworks.indexOf("protractor") > -1) { %>|protractor.conf<% } %>).js'
-        ],
+            'spec/entry.ts'
 
 
-        // list of files / patterns to exclude
-        exclude: [<% if (protractorTests) { %>'<%= TEST_SRC_DIR %>e2e/**'<% } %>],
+        // list of files to exclude
+        exclude: [],
 
+        // preprocess matching files before serving them to the browser
+        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            './**/*.js': sourcePreprocessors
+            'spec/entry.ts': ['webpack', 'sourcemap']
         },
 
-        reporters: ['dots', 'junit', 'coverage', 'progress'],
+        webpack: {
+            resolve: {
+                extensions: ['.ts', '.js']
+            },
+            module: {
+                rules: [
+                    {
+                        test: /\.ts$/, enforce: 'pre', loader: 'tslint-loader', exclude: /(test|node_modules)/
+                    },
+                    {
+                        test: /\.ts$/,
+                        loaders: ['awesome-typescript-loader', 'angular2-template-loader?keepUrl=true'],
+                        exclude: /node_modules/
+                    },
+                    {
+                        test: /\.(html|css)$/,
+                        loader: 'raw-loader',
+                        exclude: /\.async\.(html|css)$/
+                    },
+                    {
+                        test: /\.async\.(html|css)$/,
+                        loaders: ['file?name=[name].[hash].[ext]', 'extract']
+                    },
+                    {
+                        test: /src\/main\/webapp\/.+\.ts$/,
+                        enforce: 'post',
+                        exclude: /(test|node_modules)/,
+                        loader: 'sourcemap-istanbul-instrumenter-loader?force-sourcemap=true'
+                    }]
+            },
+            devtool: 'inline-source-map',
+            plugins: [
+                new webpack.ContextReplacementPlugin(
+                    // The (\\|\/) piece accounts for path separators in *nix and Windows
+                    /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+                    root('./src') // location of your src
+                ),
+                new LoaderOptionsPlugin({
+                    options: {
+                        tslint: {
+                            emitErrors: !WATCH,
+                            failOnHint: false
+                        }
+                    }
+                })
+            ]
+        },
 
+        // todo: fix me so I work!
         junitReporter: {<% if (buildTool == 'maven') { %>
             outputFile: 'target/test-results/karma/TESTS-results.xml'<% } else { %>
             outputFile: 'build/test-results/karma/TESTS-results.xml'<% } %>
         },
 
-        coverageReporter: {<% if (buildTool == 'maven') { %>
-            dir: 'target/test-results/coverage',<% } else { %>
-            dir: 'build/test-results/coverage',<% } %>
-            reporters: [
-                {type: 'lcov', subdir: 'report-lcov'}
-            ]
+        remapIstanbulReporter: {
+            reports: { // eslint-disable-line
+            <%_ if (buildTool == 'maven') { _%>
+                'html': 'target/test-results/coverage',
+            <%_ } else { _%>
+                'html': 'build/test-results/coverage',
+            <%_ } _%>
+                'text-summary': null
+            }
         },
+
+        // test results reporter to use
+        // possible values: 'dots', 'progress'
+        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+        reporters: ['progress', 'junit', 'coverage', 'karma-remap-istanbul'],
 
         // web server port
         port: 9876,
 
+        // enable / disable colors in the output (reporters and logs)
+        colors: true,
+
         // level of logging
-        // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
 
         // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: false,
+        autoWatch: WATCH,
 
-        // Start these browsers, currently available:
-        // - Chrome
-        // - ChromeCanary
-        // - Firefox
-        // - Opera
-        // - Safari (only Mac)
-        // - PhantomJS
-        // - IE (only Windows)
+        // start these browsers
+        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS'],
 
         // Continuous Integration mode
-        // if true, it capture browsers, run tests and exit
-        singleRun: false,
-
-        // to avoid DISCONNECTED messages when connecting to slow virtual machines
-        browserDisconnectTimeout: 10000, // default 2000
-        browserDisconnectTolerance: 1, // default 0
-        browserNoActivityTimeout: 4 * 60 * 1000 //default 10000
+        // if true, Karma captures browsers, runs the tests and exits
+        singleRun: !WATCH
     });
 };
+
+function root(__path) {
+    return path.join(__dirname, __path);
+}
