@@ -1,20 +1,20 @@
 import {ComponentFixture, TestBed, async} from '@angular/core/testing';
 import {MockBackend} from '@angular/http/testing';
 import {Http, BaseRequestOptions} from '@angular/http';
-import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component'
+import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component';
 import {<%=jhiPrefixCapitalized%>HealthService} from '../../../../../../main/webapp/app/admin/health/health.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
-import {TranslatePipe} from 'ng2-translate'
+import {TranslatePipe} from 'ng2-translate';
 <%_ } _%>
 
 describe('Controller Tests', () => {
 
     describe('<%=jhiPrefixCapitalized%>HealthCheckController', () => {
 
-        let comp:<%=jhiPrefixCapitalized%>HealthCheckComponent;
-        let fixture:ComponentFixture<<%=jhiPrefixCapitalized%>HealthCheckComponent>;
-        let service:<%=jhiPrefixCapitalized%>HealthService;
+        let comp: <%=jhiPrefixCapitalized%>HealthCheckComponent;
+        let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>HealthCheckComponent>;
+        let service: <%=jhiPrefixCapitalized%>HealthService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
