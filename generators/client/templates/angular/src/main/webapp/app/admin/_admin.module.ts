@@ -1,7 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UIRouterModule } from 'ui-router-ng2';
+import { ParseLinks } from 'ng-jhipster';
 
-import { <%=angular2AppName%>SharedModule, ParseLinks } from '../shared';
+import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import {
     AuditsComponent,
@@ -116,8 +117,7 @@ let ADMIN_STATES = [
         <%_ if (applicationType === 'gateway') { _%>
         GatewayRoutesService,
         <%_ } _%>
-        LogsService,
-        ParseLinks
+        LogsService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

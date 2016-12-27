@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-
 import { StateService } from 'ui-router-ng2';
+import { EventManager, PaginationUtil, ParseLinks } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { AlertService, EventManager, ITEMS_PER_PAGE, PaginationUtil, ParseLinks, Principal } from '../../shared';
+import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt',
