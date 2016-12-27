@@ -136,7 +136,7 @@ const files = {
                 'layouts/profiles/_page-ribbon.component.ts',
                 'layouts/main/_main.component.ts',
                 'layouts/main/_main.component.html',
-                'layouts/navbar/_navbar.component.ts',
+                { file: 'layouts/navbar/_navbar.component.ts', method: 'copyJs' },
                 { file: 'layouts/navbar/_navbar.component.html', method: 'copyHtml' },
                 'layouts/footer/_footer.component.ts',
                 { file: 'layouts/footer/_footer.component.html', method: 'copyHtml' },

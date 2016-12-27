@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { HomeComponent } from './home.component';
-import { JhiLanguageService } from '../shared';
 
 export const homeState = {
     name: 'home',
