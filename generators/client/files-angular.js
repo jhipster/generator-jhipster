@@ -395,9 +395,10 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 '_karma.conf.js',
+                'spec/_spec.ts',
                 'spec/helpers/_module.js',
                 'spec/helpers/_httpBackend.js',
-                'spec/app/admin/health/_health.controller.spec.js',
+                'spec/app/admin/health/_health.component.spec.ts',
                 'spec/app/account/password/_password.controller.spec.js',
                 'spec/app/account/password/_password-strength-bar.directive.spec.js',
                 'spec/app/account/settings/_settings.controller.spec.js',

@@ -1,51 +1,73 @@
-'use strict';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {MockBackend} from '@angular/http/testing';
+import {Http, BaseRequestOptions} from '@angular/http';
+import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component'
+import {<%=jhiPrefixCapitalized%>HealthService} from '../../../../../../main/webapp/app/admin/health/health.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {TranslatePipe} from 'ng2-translate'
 
-describe('Controller Tests', function () {
+describe('Controller Tests', () => {
 
-    describe('<%=jhiPrefixCapitalized%>HealthCheckController', function () {
-        var $scope, jhiHealthService; // actual implementations
-        var createController; // local utility functions
+    describe('<%=jhiPrefixCapitalized%>HealthCheckController', () => {
 
-        beforeEach(inject(function ($injector, <%=jhiPrefixCapitalized%>HealthService) {
-            $scope = $injector.get('$rootScope').$new();
-            jhiHealthService = <%=jhiPrefixCapitalized%>HealthService;
-            var locals = {
-                '$scope': $scope
-            };
-            createController = function() {
-                $injector.get('$controller')('<%=jhiPrefixCapitalized%>HealthCheckController as vm', locals);
-            };
-            createController();
-        }));
+        let comp:<%=jhiPrefixCapitalized%>HealthCheckComponent;
+        let fixture:ComponentFixture<<%=jhiPrefixCapitalized%>HealthCheckComponent>;
+        let service:<%=jhiPrefixCapitalized%>HealthService;
 
-        describe('baseName and subSystemName', function () {
-            it('should return the basename when it has no sub system', function () {
-                expect($scope.vm.baseName('base')).toBe('base');
-            });
-
-            it('should return the basename when it has sub systems', function () {
-                expect($scope.vm.baseName('base.subsystem.system')).toBe('base');
-            });
-
-            it('should return the sub system name', function () {
-                expect($scope.vm.subSystemName('subsystem')).toBe('');
-            });
-
-            it('should return the subsystem when it has multiple keys', function () {
-                expect($scope.vm.subSystemName('subsystem.subsystem.system')).toBe(' - subsystem.system');
-            });
-
-
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent, TranslatePipe],
+                providers: [
+                    MockBackend,
+                    BaseRequestOptions,
+                    {
+                        provide: Http,
+                        useFactory: (backendInstance:MockBackend, defaultOptions:BaseRequestOptions) => {
+                            return new Http(backendInstance, defaultOptions);
+                        },
+                        deps: [MockBackend, BaseRequestOptions]
+                    },
+                    <%=jhiPrefixCapitalized%>HealthService,
+                    {
+                        provide: NgbModal,
+                        useValue: null
+                    }
+                ]
+            }).compileComponents();
         });
 
-        describe('transformHealthData', function () {
-            it('should flatten empty health data', function () {
-                var data = {};
-                var expected = [];
-                expect(jhiHealthService.transformHealthData(data)).toEqual(expected);
+        beforeEach(() => {
+            fixture = TestBed.createComponent(<%=jhiPrefixCapitalized%>HealthCheckComponent);
+            comp = fixture.componentInstance;
+            service = fixture.debugElement.injector.get(<%=jhiPrefixCapitalized%>HealthService);
+        });
+
+        describe('baseName and subSystemName', () => {
+            it('should return the basename when it has no sub system', () => {
+                expect(comp.baseName('base')).toBe('base');
             });
 
-            it('should flatten health data with no subsystems', function () {
+            it('should return the basename when it has sub systems', () => {
+                expect(comp.baseName('base.subsystem.system')).toBe('base');
+            });
+
+            it('should return the sub system name', () => {
+                expect(comp.subSystemName('subsystem')).toBe('');
+            });
+
+            it('should return the subsystem when it has multiple keys', () => {
+                expect(comp.subSystemName('subsystem.subsystem.system')).toBe(' - subsystem.system');
+            });
+        });
+
+        describe('transformHealthData', () => {
+            it('should flatten empty health data', () => {
+                var data = {};
+                var expected = [];
+                expect(service.transformHealthData(data)).toEqual(expected);
+            });
+
+            it('should flatten health data with no subsystems', () => {
                 var data = {
                     'status': 'UP',
                     'db': {
@@ -61,6 +83,7 @@ describe('Controller Tests', function () {
                 var expected = [
                     {
                         'name': 'db',
+                        'error': undefined,
                         'status': 'UP',
                         'details': {
                             'database': 'H2',
@@ -69,14 +92,14 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'mail',
-                        'status': 'UP',
-                        'error': 'mail.a.b.c'
+                        'error': 'mail.a.b.c',
+                        'status': 'UP'
                     }
                 ];
-                expect(jhiHealthService.transformHealthData(data)).toEqual(expected);
+                expect(service.transformHealthData(data)).toEqual(expected);
             });
 
-            it('should flatten health data with subsystems at level 1, main system has no additional information', function () {
+            it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
                 var data = {
                     'status': 'UP',
                     'db': {
@@ -104,6 +127,7 @@ describe('Controller Tests', function () {
                 var expected = [
                     {
                         'name': 'db',
+                        'error': undefined,
                         'status': 'UP',
                         'details': {
                             'database': 'H2',
@@ -112,11 +136,12 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'mail',
-                        'status': 'UP',
-                        'error': 'mail.a.b.c'
+                        'error': 'mail.a.b.c',
+                        'status': 'UP'
                     },
                     {
                         'name': 'system.subsystem1',
+                        'error': undefined,
                         'status': 'UP',
                         'details': {
                             'property1': 'system.subsystem1.property1'
@@ -124,17 +149,17 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'system.subsystem2',
-                        'status': 'DOWN',
                         'error': 'system.subsystem1.error',
+                        'status': 'DOWN',
                         'details': {
                             'property2': 'system.subsystem2.property2'
                         }
                     }
                 ];
-                expect(jhiHealthService.transformHealthData(data)).toEqual(expected);
+                expect(service.transformHealthData(data)).toEqual(expected);
             });
 
-            it('should flatten health data with subsystems at level 1, main system has additional information', function () {
+            it('should flatten health data with subsystems at level 1, main system has additional information', () => {
                 var data = {
                     'status': 'UP',
                     'db': {
@@ -163,6 +188,7 @@ describe('Controller Tests', function () {
                 var expected = [
                     {
                         'name': 'db',
+                        'error': undefined,
                         'status': 'UP',
                         'details': {
                             'database': 'H2',
@@ -171,11 +197,12 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'mail',
-                        'status': 'UP',
-                        'error': 'mail.a.b.c'
+                        'error': 'mail.a.b.c',
+                        'status': 'UP'
                     },
                     {
                         'name': 'system',
+                        'error': undefined,
                         'status': 'DOWN',
                         'details': {
                             'property1': 'system.property1'
@@ -183,6 +210,7 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'system.subsystem1',
+                        'error': undefined,
                         'status': 'UP',
                         'details': {
                             'property1': 'system.subsystem1.property1'
@@ -190,17 +218,17 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'system.subsystem2',
-                        'status': 'DOWN',
                         'error': 'system.subsystem1.error',
+                        'status': 'DOWN',
                         'details': {
                             'property2': 'system.subsystem2.property2'
                         }
                     }
                 ];
-                expect(jhiHealthService.transformHealthData(data)).toEqual(expected);
+                expect(service.transformHealthData(data)).toEqual(expected);
             });
 
-            it('should flatten health data with subsystems at level 1, main system has additional error', function () {
+            it('should flatten health data with subsystems at level 1, main system has additional error', () => {
                 var data = {
                     'status': 'UP',
                     'db': {
@@ -229,6 +257,7 @@ describe('Controller Tests', function () {
                 var expected = [
                     {
                         'name': 'db',
+                        'error': undefined,
                         'status': 'UP',
                         'details': {
                             'database': 'H2',
@@ -237,16 +266,17 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'mail',
-                        'status': 'UP',
-                        'error': 'mail.a.b.c'
+                        'error': 'mail.a.b.c',
+                        'status': 'UP'
                     },
                     {
                         'name': 'system',
-                        'status': 'DOWN',
-                        'error': 'show me'
+                        'error': 'show me',
+                        'status': 'DOWN'
                     },
                     {
                         'name': 'system.subsystem1',
+                        'error': undefined,
                         'status': 'UP',
                         'details': {
                             'property1': 'system.subsystem1.property1'
@@ -254,16 +284,15 @@ describe('Controller Tests', function () {
                     },
                     {
                         'name': 'system.subsystem2',
-                        'status': 'DOWN',
                         'error': 'system.subsystem1.error',
+                        'status': 'DOWN',
                         'details': {
                             'property2': 'system.subsystem2.property2'
                         }
                     }
                 ];
-                expect(jhiHealthService.transformHealthData(data)).toEqual(expected);
+                expect(service.transformHealthData(data)).toEqual(expected);
             });
         });
-
     });
 });

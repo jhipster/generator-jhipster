@@ -65,6 +65,7 @@
     "karma-junit-reporter": "1.2.0",
     "karma-phantomjs-launcher": "1.0.2",
     "karma-script-launcher": "1.0.0",
+    "karma-typescript": "2.1.5",
     "lazypipe": "1.0.1",
     "lodash": "4.17.3",
     "map-stream": "0.0.6",
@@ -102,6 +103,7 @@
     "postinstall": "webdriver-manager update",
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     <%_ } _%>
+    "test": "karma start <%= TEST_SRC_DIR %>karma.conf.js",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",

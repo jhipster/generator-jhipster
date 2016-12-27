@@ -1,47 +1,39 @@
 // Karma configuration
-// http://karma-runner.github.io/0.13/config/configuration-file.html
-
-var sourcePreprocessors = ['coverage'];
-
-function isDebug() {
-    return process.argv.indexOf('--debug') >= 0;
-}
-
-if (isDebug()) {
-    // Disable JS minification if Karma is run with debug option.
-    sourcePreprocessors = [];
-}
+// http://karma-runner.github.io/1.0/config/configuration-file.html
+'use strict';
 
 module.exports = function (config) {
     config.set({
+
         // base path, that will be used to resolve files and exclude
         basePath: '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g, '..'),
 
         // testing framework to use (jasmine/mocha/qunit/...)
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'karma-typescript'],
 
         // list of files / patterns to load in the browser
         files: [
-            // bower:js
-            // endbower
-            '<%= MAIN_SRC_DIR %>app/app.module.js',
-            '<%= MAIN_SRC_DIR %>app/app.state.js',
-            '<%= MAIN_SRC_DIR %>app/app.constants.js',
-            '<%= MAIN_SRC_DIR %>app/**/*.+(js|html)',
-            '<%= TEST_SRC_DIR %>spec/helpers/module.js',
-            '<%= TEST_SRC_DIR %>spec/helpers/httpBackend.js',
-            '<%= TEST_SRC_DIR %>**/!(karma.conf<% if (testFrameworks.indexOf("protractor") > -1) { %>|protractor.conf<% } %>).js'
+            {pattern: '<%= TEST_SRC_DIR %>spec/spec.ts'},
+
+            {pattern: '<%= MAIN_SRC_DIR %>app/admin/health/health.component.ts'},
+            {pattern: '<%= MAIN_SRC_DIR %>app/admin/health/health.service.ts'},
+            {pattern: '<%= MAIN_SRC_DIR %>app/admin/health/health-modal.component.ts'},
+
+            {pattern: '<%= TEST_SRC_DIR %>spec/app/admin/health/health.component.spec.ts'}
         ],
 
+        proxies: {
+            '/app/': '/base/src/main/webapp/app/'
+        },
 
         // list of files / patterns to exclude
         exclude: [<% if (protractorTests) { %>'<%= TEST_SRC_DIR %>e2e/**'<% } %>],
 
         preprocessors: {
-            './**/*.js': sourcePreprocessors
+            '**/*.ts': ['karma-typescript']
         },
 
-        reporters: ['dots', 'junit', 'coverage', 'progress'],
+        reporters: ['dots', 'junit', 'coverage', 'progress', 'karma-typescript'],
 
         junitReporter: {<% if (buildTool == 'maven') { %>
             outputFile: 'target/test-results/karma/TESTS-results.xml'<% } else { %>
@@ -64,7 +56,7 @@ module.exports = function (config) {
         logLevel: config.LOG_INFO,
 
         // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: false,
+        autoWatch: true,
 
         // Start these browsers, currently available:
         // - Chrome
