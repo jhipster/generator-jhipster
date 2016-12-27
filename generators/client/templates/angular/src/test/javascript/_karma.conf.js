@@ -18,10 +18,11 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'spec/entry.ts'
+        ],
 
 
         // list of files to exclude
-        exclude: [],
+        exclude: [<% if (protractorTests) { %>'e2e/**'<% } %>],
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -77,6 +78,11 @@ module.exports = function (config) {
             ]
         },
 
+        // test results reporter to use
+        // possible values: 'dots', 'progress'
+        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+        reporters: ['dots', 'junit', 'progress', 'coverage', 'karma-remap-istanbul'],
+
         // todo: fix me so I work!
         junitReporter: {<% if (buildTool == 'maven') { %>
             outputFile: 'target/test-results/karma/TESTS-results.xml'<% } else { %>
@@ -93,11 +99,6 @@ module.exports = function (config) {
                 'text-summary': null
             }
         },
-
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'junit', 'coverage', 'karma-remap-istanbul'],
 
         // web server port
         port: 9876,
