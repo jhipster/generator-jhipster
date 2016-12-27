@@ -66,7 +66,7 @@ export const userMgmtState = {
 
 export const userMgmtDetailState = {
     name: 'user-management-detail',
-    parent: 'admin',
+    parent: 'user-management',
     url: '/user/:login',
     data: {
         authorities: ['ROLE_ADMIN'],
