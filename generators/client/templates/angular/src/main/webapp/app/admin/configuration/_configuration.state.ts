@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
-import { JhiLanguageService } from '../../shared';
 
 export const configState = {
     name: '<%=jhiPrefix%>-configuration',

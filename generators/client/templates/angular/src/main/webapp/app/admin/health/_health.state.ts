@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
-import { JhiLanguageService } from '../../shared';
 
 export const healthState = {
     name: '<%=jhiPrefix%>-health',
