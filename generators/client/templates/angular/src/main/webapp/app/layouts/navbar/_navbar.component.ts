@@ -78,6 +78,6 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.principal.getImageUrl();
+        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
     }
 }
