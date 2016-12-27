@@ -8,7 +8,7 @@ import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>Principal, Log
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 
 @Component({
-    selector: 'navbar',
+    selector: '<%=jhiPrefix%>-navbar',
     templateUrl: './navbar.component.html'
 })
 export class NavbarComponent implements OnInit {

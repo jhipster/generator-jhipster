@@ -6,7 +6,7 @@ import { JhiLanguageService } from '../language/language.service';
 <%_ } _%>
 
 @Component({
-    selector: 'jh-social',
+    selector: '<%=jhiPrefix%>-social',
     templateUrl: './social.component.html'
 })
 export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {

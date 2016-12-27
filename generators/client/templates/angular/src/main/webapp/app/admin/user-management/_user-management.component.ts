@@ -9,7 +9,7 @@ import { AlertService, EventManager, ITEMS_PER_PAGE, PaginationUtil, ParseLinks,
 import { PaginationConfig } from "../../blocks/config/uib-pagination.config";
 
 @Component({
-    selector: 'user-mgmt',
+    selector: '<%=jhiPrefix%>-user-mgmt',
     templateUrl: './user-management.component.html'
 })
 export class UserMgmtComponent implements OnInit {

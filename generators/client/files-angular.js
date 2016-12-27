@@ -18,6 +18,7 @@ const files = {
                 '_package.json',
                 '_tsconfig.json',
                 '_tslint.json',
+                '_angular-cli.json',
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js'
@@ -395,25 +396,10 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 '_karma.conf.js',
-                'spec/helpers/_module.js',
-                'spec/helpers/_httpBackend.js',
-                'spec/app/admin/health/_health.controller.spec.js',
-                'spec/app/account/password/_password.controller.spec.js',
-                'spec/app/account/password/_password-strength-bar.directive.spec.js',
-                'spec/app/account/settings/_settings.controller.spec.js',
-                'spec/app/account/activate/_activate.controller.spec.js',
-                'spec/app/account/register/_register.controller.spec.js',
-                'spec/app/account/reset/finish/_reset-finish.controller.spec.js',
-                'spec/app/account/reset/request/_reset-request.controller.spec.js',
-                'spec/app/services/auth/_auth.services.spec.js',
-                'spec/app/components/login/_login.controller.spec.js'
-            ]
-        },
-        {
-            condition: generator => generator.authenticationType === 'session',
-            path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/account/sessions/_sessions.controller.spec.js'
+                'spec/_entry.ts',
+                'spec/app/admin/health/_health.component.spec.ts',
+                'spec/helpers/_spyobject.ts',
+                'spec/app/_simple.spec.ts'
             ]
         },
         {

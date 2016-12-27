@@ -39,6 +39,7 @@
     "@types/angular-mocks": "1.5.8",
     "@types/jasmine": "2.5.38",
     "angular2-infinite-scroll": "0.2.8",
+    "angular-cli": "1.0.0-beta.24",
     "angular2-template-loader": "0.6.0",
     "awesome-typescript-loader": "3.0.0-beta.17",
     "browser-sync": "2.18.5",
@@ -64,7 +65,9 @@
     "karma-jasmine": "1.1.0",
     "karma-junit-reporter": "1.2.0",
     "karma-phantomjs-launcher": "1.0.2",
-    "karma-script-launcher": "1.0.0",
+    "karma-remap-istanbul": "0.3.2",
+    "karma-sourcemap-loader": "0.3.7",
+    "karma-webpack": "1.8.0",
     "lazypipe": "1.0.1",
     "lodash": "4.17.3",
     "map-stream": "0.0.6",
@@ -77,6 +80,7 @@
     "proxy-middleware": "0.15.0",
     "raw-loader": "0.5.1",
     "run-sequence": "1.2.2",
+    "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "string-replace-webpack-plugin": "0.0.4",
     "style-loader": "0.13.1",
     "tslint": "4.2.0",
@@ -98,6 +102,9 @@
     "node": "^4.3"
   },
   "scripts": {
+    "start": "npm run webpack:dev",
+    "test": "karma start src/test/javascript/karma.conf.js",
+    "test:watch": "karma start --watch",
     <%_ if (protractorTests) { _%>
     "postinstall": "webdriver-manager update",
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",

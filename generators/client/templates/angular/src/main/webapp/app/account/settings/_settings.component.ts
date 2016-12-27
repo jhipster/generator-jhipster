@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from '../../shared';
 
 @Component({
-    selector: 'settings',
+    selector: '<%=jhiPrefix%>-settings',
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {

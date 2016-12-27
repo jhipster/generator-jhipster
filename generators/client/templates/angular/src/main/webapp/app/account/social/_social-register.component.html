@@ -12,7 +12,7 @@
                 <strong>Registration failed!</strong> Please try again later.
             </div>
 
-            <jh-social *ngIf="success" provider="{{ provider }}"></jh-social>
+            <<%=jhiPrefix%>-social *ngIf="success" provider="{{ provider }}"></<%=jhiPrefix%>-social>
             <br/>
             <div class="alert alert-warning" jhi-translate="global.messages.info.authenticated">
                 If you want to <a class="alert-link" href="#/login">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
