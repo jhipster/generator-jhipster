@@ -83,7 +83,7 @@ const files = {
             templates: [
                 '_app.main.ts',
                 '_app.module.ts',
-                '_app.state.ts',
+                { file: '_app.state.ts', method: 'copyJs' },
                 '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
@@ -170,7 +170,7 @@ const files = {
                 { file: 'account/password/_password.component.html', method: 'copyHtml' },
                 { file: 'account/password/_password.state.ts', method: 'copyJs' },
                 'account/password/_password-strength-bar.component.ts',
-                'account/register/_register.component.ts',
+                { file: 'account/register/_register.component.ts', method: 'copyJs' },
                 'account/register/_register.service.ts',
                 { file: 'account/register/_register.state.ts', method: 'copyJs' },
                 { file: 'account/register/_register.component.html', method: 'copyHtml' },
@@ -182,7 +182,7 @@ const files = {
                 'account/password-reset/finish/_password-reset-finish.component.ts',
                 { file: 'account/password-reset/finish/_password-reset-finish.component.html', method: 'copyHtml' },
                 'account/password-reset/finish/_password-reset-finish.service.ts',
-                'account/settings/_settings.component.ts',
+                { file: 'account/settings/_settings.component.ts', method: 'copyJs' },
                 { file: 'account/settings/_settings.component.html', method: 'copyHtml' },
                 { file: 'account/settings/_settings.state.ts', method: 'copyJs' }
             ]

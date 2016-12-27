@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import {PasswordResetInitComponent} from './password-reset-init.component';
-import { JhiLanguageService } from '../../../shared';
 
 export const requestResetState = {
     name: 'requestReset',

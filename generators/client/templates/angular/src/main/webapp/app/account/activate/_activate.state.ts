@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { ActivateComponent } from './activate.component';
-import { JhiLanguageService } from '../../shared';
 
 export const activateState = {
     name: 'activate',
