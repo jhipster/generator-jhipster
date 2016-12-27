@@ -18,6 +18,7 @@ const files = {
                 '_package.json',
                 '_tsconfig.json',
                 '_tslint.json',
+                '_angular-cli.json',
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
                 'webpack/_webpack.prod.js'
