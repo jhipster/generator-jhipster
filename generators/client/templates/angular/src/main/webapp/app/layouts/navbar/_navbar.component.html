@@ -31,57 +31,6 @@
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
-            <li ngbDropdown class="nav-item dropdown pointer">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
-                    <span>
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="hidden-sm" jhi-translate="global.menu.account.main">
-                            Account
-                        </span>
-                        <b class="caret"></b>
-                    </span>
-                </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" uiSref="settings" uiSrefActive="active" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
-                            <span jhi-translate="global.menu.account.settings">Settings</span>
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" uiSref="password" uiSrefActive="active" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-clock-o" aria-hidden="true"></i>
-                            <span jhi-translate="global.menu.account.password">Password</span>
-                        </a>
-                    </li>
-                    <%_ if (authenticationType == 'session') { _%>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" uiSref="sessions" uiSrefActive="active" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-cloud" aria-hidden="true"></i>
-                            <span jhi-translate="global.menu.account.sessions">Sessions</span>
-                        </a>
-                    </li>
-                    <%_ } _%>
-                    <li *ngSwitchCase="true">
-                        <a class="dropdown-item" (click)="logout()" id="logout">
-                            <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
-                            <span jhi-translate="global.menu.account.logout">Sign out</span>
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="false">
-                        <a class="dropdown-item" (click)="login()" id="login">
-                            <i class="fa fa-fw fa-sign-in" aria-hidden="true"></i>
-                            <span jhi-translate="global.menu.account.login">Sign in</span>
-                        </a>
-                    </li>
-                    <li *ngSwitchCase="false">
-                        <a class="dropdown-item" uiSref="register" uiSrefActive="active" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-registered" aria-hidden="true"></i>
-                            <span jhi-translate="global.menu.account.register">Register</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
             <li *ngSwitchCase="true" has-authority="ROLE_ADMIN" ngbDropdown class="nav-item dropdown pointer">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
@@ -176,6 +125,60 @@
                 </ul>
             </li>
             <%_ } _%>
+            <li ngbDropdown class="nav-item dropdown pointer">
+              <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
+                    <span *ngSwitchCase="false">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <span class="hidden-sm" jhi-translate="global.menu.account.main">
+                            Account
+                        </span>
+                        <b class="caret"></b>
+                    </span>
+                    <span *ngSwitchCase="true">
+                        <img [src]="getImageUrl()" class="profile-image img-circle">
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" uiSref="settings" uiSrefActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
+                            <span jhi-translate="global.menu.account.settings">Settings</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" uiSref="password" uiSrefActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-clock-o" aria-hidden="true"></i>
+                            <span jhi-translate="global.menu.account.password">Password</span>
+                        </a>
+                    </li>
+                    <%_ if (authenticationType == 'session') { _%>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" uiSref="sessions" uiSrefActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-cloud" aria-hidden="true"></i>
+                            <span jhi-translate="global.menu.account.sessions">Sessions</span>
+                        </a>
+                    </li>
+                    <%_ } _%>
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" (click)="logout()" id="logout">
+                            <i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>
+                            <span jhi-translate="global.menu.account.logout">Sign out</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="false">
+                        <a class="dropdown-item" (click)="login()" id="login">
+                            <i class="fa fa-fw fa-sign-in" aria-hidden="true"></i>
+                            <span jhi-translate="global.menu.account.login">Sign in</span>
+                        </a>
+                    </li>
+                    <li *ngSwitchCase="false">
+                        <a class="dropdown-item" uiSref="register" uiSrefActive="active" (click)="collapseNavbar()">
+                            <i class="fa fa-fw fa-registered" aria-hidden="true"></i>
+                            <span jhi-translate="global.menu.account.register">Register</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>
