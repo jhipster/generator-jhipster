@@ -308,28 +308,6 @@ const files = {
                 'shared/constants/_pagination.constants.ts',
                 //models
                 'shared/model/_account.model.ts',
-                //pipes
-                'shared/pipe/_keys.pipe.ts',
-                'shared/pipe/_filter.pipe.ts',
-                'shared/pipe/_order-by.pipe.ts',
-                'shared/pipe/_capitalize.pipe.ts',
-                'shared/pipe/_truncate-characters.pipe.ts',
-                'shared/pipe/_truncate-words.pipe.ts',
-                //directives
-                'shared/directive/_sort.directive.ts',
-                'shared/directive/_sort-by.directive.ts',
-                'shared/directive/_show-validation.directive.ts',
-                'shared/directive/_maxbytes.directive.ts',
-                'shared/directive/_minbytes.directive.ts',
-                'shared/directive/_number-of-bytes.ts',
-                //services
-                'shared/service/_date-util.service.ts',
-                'shared/service/_data-util.service.ts',
-                'shared/service/_pagination-util.service.ts',
-                'shared/service/_parse-links.service.ts',
-                'shared/service/_event-manager.service.ts',
-                //components
-                'shared/component/_jhi-item-count.component.ts',
                 //login
                 { file: 'shared/login/_login.component.html', method: 'copyHtml' },
                 'shared/login/_login.service.ts',
@@ -346,12 +324,9 @@ const files = {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'shared/language/_jhi-translate.directive.ts',
-                'shared/language/_translate-partial-loader.provider.ts',
                 'shared/language/_language.pipe.ts',
                 'shared/language/_language.constants.ts',
-                'shared/language/_language.service.ts',
-                'shared/language/_jhi-missing-translation.config.ts'
+                'shared/language/_language.helper.ts'
             ]
         }
     ],
