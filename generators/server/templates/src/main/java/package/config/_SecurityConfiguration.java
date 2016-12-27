@@ -13,6 +13,9 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.*;
 
 import org.springframework.beans.factory.BeanInitializationException;
+<%_ if (authenticationType !== 'oauth2') { _%>
+import org.springframework.beans.factory.annotation.Autowired;
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2') { %>
@@ -26,12 +29,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;<% } %>
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 <%_ if (authenticationType == 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 
 import javax.annotation.PostConstruct;
@@ -57,6 +64,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (clusteredHttpSession == 'hazelcast') { _%>
 
     private final SessionRegistry sessionRegistry;
+    <%_ } _%>
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    @Autowired(required = false)
+    private CorsFilter corsFilter;
     <%_ } _%>
 
     public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType == 'session') { %>,
@@ -140,11 +152,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionManagement()
             .maximumSessions(32) // maximum number of concurrent sessions for one user
             .sessionRegistry(sessionRegistry)
-            .and().and()<% } %><% if (authenticationType == 'session') { %>
+            .and().and()<% } %>
+            <%_ if (authenticationType == 'session') { _%>
             .csrf()
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())<% if (websocket == 'spring-websocket' && authenticationType != 'session') { %>
-            .ignoringAntMatchers("/websocket/**")<% } %>
-        .and()<% } %>
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            <%_ } _%>
+            // By default CORS is disabled. Uncomment here and in application.yml to enable.
+            // .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling()
             .authenticationEntryPoint(http401UnauthorizedEntryPoint())<% if (authenticationType == 'session') { %>
         .and()

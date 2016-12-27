@@ -123,7 +123,7 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
-    #cors: #By default CORS are not enabled. Uncomment to enable.
+    #cors: #By default CORS is disabled. Uncomment here and in SecurityConfiguration.java to enable.
         #allowed-origins: "*"
         #allowed-methods: GET, PUT, POST, DELETE, OPTIONS
         #allowed-headers: "*"
