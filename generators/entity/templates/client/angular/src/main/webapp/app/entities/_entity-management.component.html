@@ -36,7 +36,7 @@
     <div class="table-responsive" *ngIf="<%=entityInstancePlural %>">
         <table class="table table-striped">
             <thead>
-            <tr<% if (pagination != 'no') { %> jh-sort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>"<% } %>>
+            <tr<% if (pagination != 'no') { %> jh-sort (predicate)="predicate" (ascending)="reverse" (callback)="<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>"<% } %>>
             <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span jhi-translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="fa fa-sort"></span><% } %></th>
             <%_ for (idx in fields) { _%>
             <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span jhi-translate="<%=keyPrefix + fields[idx].fieldName %>"><%= fields[idx].fieldNameHumanized %></span><% if (pagination != 'no') { %> <span class="fa fa-sort"></span><% } %></th>
