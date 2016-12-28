@@ -15,9 +15,8 @@ import {Component, ElementRef, Input, Renderer} from '@angular/core';
         </div>`
 })
 export class PasswordStrengthBarComponent {
-    
-    colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
 
+    colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
 
     constructor(private renderer: Renderer, private elementRef: ElementRef) { }
 
