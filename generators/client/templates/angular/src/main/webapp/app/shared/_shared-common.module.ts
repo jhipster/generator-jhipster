@@ -30,9 +30,7 @@ import {
     ParseLinks,
     DataUtils,
     DateUtils,
-    EventManager,
-    JhSortDirective,
-    JhSortByDirective
+    EventManager
 } from './';
 
 @NgModule({
@@ -57,9 +55,7 @@ import {
         <%=jhiPrefixCapitalized%>SortByDirective,
         MaxbytesValidator,
         MinbytesValidator,
-        ShowValidationDirective,
-        JhSortDirective,
-        JhSortByDirective
+        ShowValidationDirective
     ],
     providers: [
         <%_ if (enableTranslation) { _%>
@@ -92,9 +88,7 @@ import {
         <%=jhiPrefixCapitalized%>SortByDirective,
         MaxbytesValidator,
         MinbytesValidator,
-        ShowValidationDirective,
-        JhSortDirective,
-        JhSortByDirective
+        ShowValidationDirective
     ]
 })
 export class <%=angular2AppName%>SharedCommonModule {}
