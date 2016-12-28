@@ -397,6 +397,8 @@ const files = {
                 '_karma.conf.js',
                 'spec/_entry.ts',
                 'spec/app/admin/health/_health.component.spec.ts',
+                'spec/app/shared/pipe/_capitalize.pipe.spec.ts',
+                'spec/app/shared/pipe/_keys.pipe.spec.ts',
                 'spec/helpers/_spyobject.ts',
                 'spec/app/_simple.spec.ts'
             ]
