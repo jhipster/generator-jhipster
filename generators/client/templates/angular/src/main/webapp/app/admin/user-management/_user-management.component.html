@@ -53,21 +53,21 @@
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
-                            <span class="hidden-xs hidden-sm" jhi-translate="entity.action.view"></span>
+                            <span class="hidden-sm-down" jhi-translate="entity.action.view"></span>
                         </button>
                         <button type="submit"
                                 uiSref="user-management.edit"
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
-                            <span class="hidden-xs hidden-sm" jhi-translate="entity.action.edit"></span>
+                            <span class="hidden-sm-down" jhi-translate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
                                 uiSref="user-management.delete"
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="fa fa-remove"></span>
-                            <span class="hidden-xs hidden-sm" jhi-translate="entity.action.delete"></span>
+                            <span class="hidden-sm-down" jhi-translate="entity.action.delete"></span>
                         </button>
                     </div>
                 </td>

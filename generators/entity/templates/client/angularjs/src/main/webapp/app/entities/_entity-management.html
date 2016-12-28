@@ -7,7 +7,7 @@
             <div class="col-xs-4 no-padding-left">
                 <button class="btn btn-primary" ui-sref="<%= entityStateName %>.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> data-translate="<%= keyPrefix %>home.createLabel">
+                    <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs-down" <% } %> data-translate="<%= keyPrefix %>home.createLabel">
                         Create new <%= entityClassHumanized %>
                     </span>
                 </button>
@@ -130,19 +130,19 @@
                                     ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})"
                                     class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-xs hidden-sm" data-translate="entity.action.view"></span>
+                                <span class="hidden-sm-down" data-translate="entity.action.view"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="<%= entityStateName %>.edit({id:<%=entityInstance %>.id})"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"></span>
+                                <span class="hidden-sm-down" data-translate="entity.action.edit"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="<%= entityStateName %>.delete({id:<%=entityInstance %>.id})"
                                     class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-xs hidden-sm" data-translate="entity.action.delete"></span>
+                                <span class="hidden-sm-down" data-translate="entity.action.delete"></span>
                             </button>
                         </div>
                     </td>
