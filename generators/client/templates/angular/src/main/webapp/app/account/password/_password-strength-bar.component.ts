@@ -1,7 +1,7 @@
 import {Component, Input, ElementRef} from '@angular/core';
 
 @Component({
-    selector: 'password-strength-bar',
+    selector: '<%=jhiPrefix%>-password-strength-bar',
     template: `
         <div id="strength">
             <small<% if (enableTranslation) { %> jhi-translate="global.messages.validate.newpassword.strength"<% } %>>Password strength:</small>
@@ -54,20 +54,15 @@ export class PasswordStrengthBarComponent {
                 let idx = 0;
                 if (s <= 10) {
                     idx = 0;
-                }
-                else if (s <= 20) {
+                } else if (s <= 20) {
                     idx = 1;
-                }
-                else if (s <= 30) {
+                } else if (s <= 30) {
                     idx = 2;
-                }
-                else if (s <= 40) {
+                } else if (s <= 40) {
                     idx = 3;
-                }
-                else {
+                } else {
                     idx = 4;
                 }
-
                 return {idx: idx + 1, col: this.colors[idx]};
             }
         };
@@ -80,7 +75,7 @@ export class PasswordStrengthBarComponent {
             this.el.nativeElement.className = '';
             let lis = this.el.nativeElement.getElementsByTagName('li');
             for (let i = 0; i < lis.length; i++) {
-                if(i < c.idx) {
+                if (i < c.idx) {
                     lis[i].style.backgroundColor = c.col;
                 } else {
                     lis[i].style.backgroundColor = '#DDD';

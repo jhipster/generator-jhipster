@@ -10,7 +10,7 @@ import {
     CapitalizePipe,
     FilterPipe,
     OrderByPipe,
-    <%_ if (enableTranslation){ _%>
+    <%_ if (enableTranslation) { _%>
     JhiTranslate,
     JhiMissingTranslationHandler,
     JhiLanguageService,
@@ -20,10 +20,12 @@ import {
     MaxbytesValidator,
     MinbytesValidator,
     ShowValidationDirective,
-    JhiItemCountComponent,
+    <%=jhiPrefixCapitalized%>ItemCountComponent,
     alertServiceProvider,
-    JhiAlertComponent,
-    JhiAlertErrorComponent,
+    <%=jhiPrefixCapitalized%>AlertComponent,
+    <%=jhiPrefixCapitalized%>AlertErrorComponent,
+    <%=jhiPrefixCapitalized%>SortDirective,
+    <%=jhiPrefixCapitalized%>SortByDirective,
     PaginationUtil,
     ParseLinks,
     DataUtils,
@@ -42,19 +44,21 @@ import {
         FilterPipe,
         CapitalizePipe,
         KeysPipe,
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         JhiTranslate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiItemCountComponent,
+        <%=jhiPrefixCapitalized%>AlertComponent,
+        <%=jhiPrefixCapitalized%>AlertErrorComponent,
+        <%=jhiPrefixCapitalized%>ItemCountComponent,
+        <%=jhiPrefixCapitalized%>SortDirective,
+        <%=jhiPrefixCapitalized%>SortByDirective,
         MaxbytesValidator,
         MinbytesValidator,
         ShowValidationDirective
     ],
     providers: [
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         JhiLanguageService,
         { provide: MissingTranslationHandler, useClass: JhiMissingTranslationHandler },
         <%_ } _%>
@@ -73,13 +77,15 @@ import {
         FilterPipe,
         CapitalizePipe,
         KeysPipe,
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         JhiTranslate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiItemCountComponent,
+        <%=jhiPrefixCapitalized%>AlertComponent,
+        <%=jhiPrefixCapitalized%>AlertErrorComponent,
+        <%=jhiPrefixCapitalized%>ItemCountComponent,
+        <%=jhiPrefixCapitalized%>SortDirective,
+        <%=jhiPrefixCapitalized%>SortByDirective,
         MaxbytesValidator,
         MinbytesValidator,
         ShowValidationDirective

@@ -2,12 +2,12 @@
     "activate": {
         "title": "Attivazione",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Il tuo account è stato attivato.</strong> Si prega di <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">accedere</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>Il tuo account è stato attivato.</strong> Si prega di ",
             <%_ } _%>
-            "error": "<strong>Il tuo account non può essere verificato.</strong> Si prega di compilare il modulo, per registrarsi."
+            "error": "<strong>Il tuo account non può essere attivato.</strong> Si prega di usare il modulo di registrazione per iscriversi."
         }
     }
 }

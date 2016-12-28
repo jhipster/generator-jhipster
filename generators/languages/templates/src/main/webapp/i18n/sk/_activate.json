@@ -2,9 +2,9 @@
     "activate": {
         "title": "Aktivácia",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Váš používateľský účet bol aktivovaný.</strong> <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Prihláste sa</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>Váš používateľský účet bol aktivovaný.</strong> ",
             <%_ } _%>
             "error": "<strong>Váš používateľský účet nemohol byť aktivovaný.</strong> Prosím použite registračný formulár pre prihlásenie."

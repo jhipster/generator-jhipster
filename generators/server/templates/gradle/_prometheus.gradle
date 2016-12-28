@@ -1,0 +1,5 @@
+dependencies {
+    compile "io.prometheus:simpleclient:${prometheus_simpleclient_version}"
+    compile "io.prometheus:simpleclient_servlet:${prometheus_simpleclient_version}"
+    compile "io.prometheus:simpleclient_dropwizard:${prometheus_simpleclient_version}"
+}

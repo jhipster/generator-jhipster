@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Trii la seva nova contrasenya",
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>La contrasenya ha estat canviada.</strong> Si us plau, <a href=\"#/login\">inicii sessió</a>.",
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "success": "<strong>La contrasenya ha estat canviada.</strong> Si us plau, ",
                 <%_ } _%>
                 "keymissing": "Falta especificar la clau de reinicialització.",

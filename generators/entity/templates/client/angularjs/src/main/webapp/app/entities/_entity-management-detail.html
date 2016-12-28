@@ -1,0 +1,92 @@
+<% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
+<div>
+    <h2><span data-translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <%_ for (idx in fields) {
+            var fieldName = fields[idx].fieldName;
+            var fieldType = fields[idx].fieldType;
+            var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+        <dt><span data-translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
+        <dd>
+            <%_ if (fields[idx].fieldIsEnum) { _%>
+            <span data-translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
+            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
+            <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
+                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)">
+                    <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" alt="<%=entityInstance %> image"/>
+                </a>
+                {{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}
+            </div>
+            <%_ } else if (fieldType == 'ZonedDateTime') { _%>
+            <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
+            <%_ } else if (fieldType == 'LocalDate') { _%>
+            <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
+            <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
+            <div ng-if="vm.<%= entityInstance %>.<%= fieldName %>">
+                <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" data-translate="entity.action.open">open</a>
+                {{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}
+            </div>
+            <%_ } else { _%>
+            <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
+            <%_ } _%>
+        </dd>
+        <%_ } _%>
+        <%_ for (idx in relationships) {
+                var relationshipType = relationships[idx].relationshipType;
+                var ownerSide = relationships[idx].ownerSide;
+                var relationshipName = relationships[idx].relationshipName;
+                var relationshipFieldName = relationships[idx].relationshipFieldName;
+                var relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                var relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+                var otherEntityName = relationships[idx].otherEntityName;
+                var otherEntityStateName = relationships[idx].otherEntityStateName;
+                var otherEntityField = relationships[idx].otherEntityField;
+                var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                if (relationshipType == 'many-to-one'
+                    || (relationshipType == 'one-to-one' && ownerSide == true)
+                    || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
+        <dt><span data-translate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
+        <dd>
+            <%_ if (otherEntityName == 'user') { _%>
+                <%_ if (relationshipType == 'many-to-many') { _%>
+            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldNamePlural %>">
+                {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
+            </span>
+                <%_ } else { _%>
+                    <%_ if (dto == 'no') { _%>
+            {{vm.<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+                    <%_ } else { _%>
+            {{vm.<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
+                    <%_ } _%>
+                <%_ } _%>
+            <%_ } else { _%>
+                <%_ if (relationshipType == 'many-to-many') { _%>
+            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldNamePlural %>">
+                <a ui-sref="<%= otherEntityStateName %>-detail({id: <%= relationshipFieldName %>.id})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+            </span>
+                <%_ } else { _%>
+                    <%_ if (dto == 'no') { _%>
+            <a ui-sref="<%= otherEntityStateName %>-detail({id:vm.<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{vm.<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+                    <%_ } else { _%>
+            <a ui-sref="<%= otherEntityStateName %>-detail({id:vm.<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{vm.<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                    <%_ } _%>
+                <%_ } _%>
+            <%_ } _%>
+        </dd>
+        <%_ } _%>
+        <%_ } _%>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="<%= entityStateName %>-detail.edit({id:vm.<%=entityInstance %>.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-xs hidden-sm" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

@@ -1,13 +1,14 @@
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
 
 export const userMgmtState = {
     name: 'user-management',
@@ -34,7 +35,7 @@ export const userMgmtState = {
     resolve: [
         {
             token: 'pagingParams',
-            deps: [PaginationUtil, '$stateParams'],
+            deps: [PaginationUtil, '$stateParams', PaginationConfig],
             resolveFn: (paginationUtil, stateParams) => {
                 return {
                     page: paginationUtil.parsePage(stateParams['page']),
@@ -43,7 +44,7 @@ export const userMgmtState = {
                     ascending: paginationUtil.parseAscending(stateParams['sort'])
                 };
             }
-        }<% if (enableTranslation){ %>,
+        }<% if (enableTranslation) { %>,
         {
             token: 'translate',
             deps: [JhiLanguageService],
@@ -65,7 +66,7 @@ export const userMgmtState = {
 
 export const userMgmtDetailState = {
     name: 'user-management-detail',
-    parent: 'admin',
+    parent: 'user-management',
     url: '/user/:login',
     data: {
         authorities: ['ROLE_ADMIN'],
@@ -91,7 +92,7 @@ export const userMgmtNewState = {
         let $state = trans.router.stateService;
         let modalService = trans.injector().get(NgbModal);
         const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.user = new User(null, null, null, null, null, true, null, null, null, null, null, null, null);
+        modalRef.componentInstance.user = new User();
         modalRef.result.then((result) => {
             console.log(`Closed with: ${result}`);
             $state.go('user-management', null, { reload: true });

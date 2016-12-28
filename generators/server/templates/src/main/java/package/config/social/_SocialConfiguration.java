@@ -1,12 +1,13 @@
 package <%=packageName%>.config.social;
 
-import <%=packageName%>.config.JHipsterProperties;
 import <%=packageName%>.repository.SocialUserConnectionRepository;
 import <%=packageName%>.repository.CustomSocialUsersConnectionRepository;
 <%_ if (authenticationType == 'jwt') { _%>
 import <%=packageName%>.security.jwt.TokenProvider;
 <%_ } _%>
 import <%=packageName%>.security.social.CustomSignInAdapter;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

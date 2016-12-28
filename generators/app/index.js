@@ -69,9 +69,9 @@ module.exports = JhipsterGenerator.extend({
             defaults: 'jhi'
         });
 
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm install',
+        // This adds support for a `--npm` flag
+        this.option('npm', {
+            desc: 'Use npm instead of yarn',
             type: Boolean,
             defaults: false
         });
@@ -84,7 +84,7 @@ module.exports = JhipsterGenerator.extend({
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.yarnInstall = this.configOptions.yarnInstall = this.options['yarn'] || this.config.get('yarn');
+        this.yarnInstall = this.configOptions.yarnInstall = !this.options['npm'];
     },
 
     initializing: {
@@ -132,7 +132,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkYarn: function () {
-            if (this.skipChecks || this.skipClient || !this.yarnInstall) return;
+            if (this.skipChecks || !this.yarnInstall) return;
             var done = this.async();
             exec('yarn --version', function (err) {
                 if (err) {
@@ -159,11 +159,12 @@ module.exports = JhipsterGenerator.extend({
             }
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.clientFw = this.config.get('clientFw');
-            if (!this.clientFw) {
+            this.clientFramework = this.config.get('clientFramework');
+            if (!this.clientFramework) {
                 /* for backward compatibility */
-                this.clientFw = 'angular1';
+                this.clientFramework = 'angular1';
             }
+            this.otherModules = this.config.get('otherModules');
             this.testFrameworks = this.config.get('testFrameworks');
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
@@ -174,6 +175,14 @@ module.exports = JhipsterGenerator.extend({
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
+                }
+            }
+            this.clientPackageManager = this.config.get('clientPackageManager');
+            if (!this.clientPackageManager) {
+                if (this.yarnInstall) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
                 }
             }
         }
@@ -196,8 +205,9 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.skipI18nQuestion = true;
             this.configOptions.baseName = this.baseName;
             this.configOptions.logo = false;
-            this.configOptions.clientFw = this.clientFw;
+            this.configOptions.clientFramework = this.clientFramework;
             this.configOptions.otherModules = this.otherModules;
+            this.configOptions.lastQuestion = this.currentQuestion;
             this.generatorType = 'app';
             if (this.applicationType === 'microservice') {
                 this.skipClient = true;
@@ -219,6 +229,7 @@ module.exports = JhipsterGenerator.extend({
                 this.generatorType = 'client';
                 // defaults to use when skipping server
             }
+            this.configOptions.clientPackageManager = this.clientPackageManager;
         },
 
         composeServer: function () {
@@ -263,14 +274,15 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.enableTranslation = this.enableTranslation;
             this.configOptions.nativeLanguage = this.nativeLanguage;
             this.configOptions.languages = this.languages;
-            this.configOptions.clientFw = this.clientFw;
+            this.configOptions.clientFramework = this.clientFramework;
+            this.configOptions.clientPackageManager = this.clientPackageManager;
         },
 
         insight: function () {
             var insight = this.insight();
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
-            insight.track('app/clientFw', this.clientFw);
+            insight.track('app/clientFramework', this.clientFramework);
             insight.track('app/testFrameworks', this.testFrameworks);
             insight.track('app/otherModules', this.otherModules);
         },
@@ -283,7 +295,7 @@ module.exports = JhipsterGenerator.extend({
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('applicationType', this.applicationType);
-            this.config.set('clientFw', this.clientFw);
+            this.config.set('clientFramework', this.clientFramework);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);
@@ -296,7 +308,7 @@ module.exports = JhipsterGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
-            this.yarnInstall && this.config.set('yarn', true);
+            this.config.set('clientPackageManager', this.clientPackageManager);
         }
     },
 
@@ -324,6 +336,25 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: {
+        localInstall: function() {
+            if (this.skipClient && !this.options['skip-install']) {
+                if (this.otherModules === undefined) {
+                    this.otherModules = [];
+                }
+                // Generate a package.json file containing the current version of the generator as dependency
+                this.template('_skipClientApp.package.json', 'package.json', this, {});
+
+                if (this.clientPackageManager === 'yarn') {
+                    this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
+                    this.spawnCommand('yarn', ['install']);
+                }
+                else if (this.clientPackageManager === 'npm') {
+                    this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                    this.npmInstall();
+                }
+            }
+        },
+
         afterRunHook: function () {
             try {
                 var modules = this.getModuleHooks();

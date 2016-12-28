@@ -19,11 +19,13 @@ import { LoginModalService } from '../../shared/login/login-modal.service';
 export class AuthExpiredInterceptor extends HttpInterceptable {
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    constructor(private injector : Injector) {
+    constructor(private injector: Injector) {
         super();
     }
 <%_ } if (authenticationType === 'session') { _%>
-    constructor(private injector : Injector, private stateStorageService : StateStorageService) {
+    constructor(private injector: Injector,
+        private stateStorageService: StateStorageService) {
+
         super();
     }
 <%_ } _%>
@@ -37,11 +39,11 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
         let self = this;
 
         return <Observable<Response>> observable.catch((error, source) => {
-            if(error.status === 401) {
-                let principal : Principal = self.injector.get(Principal);
+            if (error.status === 401) {
+                let principal: Principal = self.injector.get(Principal);
 
-                if(principal.isAuthenticated()) {
-                    let auth : AuthService = self.injector.get(AuthService);
+                if (principal.isAuthenticated()) {
+                    let auth: AuthService = self.injector.get(AuthService);
                     auth.authorize(true);
                 }
             }
@@ -53,15 +55,15 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
         let self = this;
 
         return <Observable<Response>> observable.catch((error) => {
-            //todo: this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach..... but I don't know how to do this bow
-            if(error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
+            // TODO this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach.. this needs to be updated
+            if (error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
                 let authServerProvider = self.injector.get(AuthServerProvider);
                 let destination = this.stateStorageService.getDestinationState();
                 let to = destination.destination;
                 let toParams = destination.params;
                 authServerProvider.logout();
 
-                if(to.name === 'accessdenied') {
+                if (to.name === 'accessdenied') {
                     self.stateStorageService.storePreviousState(to.name, toParams);
                 }
 

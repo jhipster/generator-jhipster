@@ -69,7 +69,7 @@ module.exports = JhipsterServerGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.logo = this.configOptions.logo;
         this.baseName = this.configOptions.baseName;
-        this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
+        this.clientPackageManager = this.configOptions.clientPackageManager;
     },
     initializing: {
         displayLogo: function () {
@@ -174,7 +174,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
             this.uaaBaseName = this.config.get('uaaBaseName');
-            this.clientFw = this.config.get('clientFw');
+            this.clientFramework = this.config.get('clientFramework');
             var testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
@@ -376,8 +376,8 @@ module.exports = JhipsterServerGenerator.extend({
             this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
             this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
             this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
-            if (this.configOptions.clientFw) {
-                this.clientFw = this.configOptions.clientFw;
+            if (this.configOptions.clientFramework) {
+                this.clientFramework = this.configOptions.clientFramework;
             }
         },
 

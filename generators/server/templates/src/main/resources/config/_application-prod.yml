@@ -83,7 +83,7 @@ spring:
         <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
-        database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle10gDialect
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
@@ -104,13 +104,14 @@ spring:
         <%_ } _%>
         show-sql: false
         properties:
+            hibernate.id.new_generator_mappings: true
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: false
             <%_ if (hibernateCache == 'ehcache') { _%>
             hibernate.javax.cache.provider: org.ehcache.jsr107.EhcacheCachingProvider
             hibernate.javax.cache.uri: ${spring.cache.jcache.config}
-            hibernate.cache.region.factory_class: <%=packageName%>.config.jcache.SpringCacheRegionFactory
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.SpringCacheRegionFactory
     cache:
         jcache:
             config: ehcache.xml
@@ -257,3 +258,11 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

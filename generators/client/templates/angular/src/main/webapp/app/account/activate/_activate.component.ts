@@ -7,7 +7,7 @@ import { LoginModalService } from '../../shared';
 import { Transition } from 'ui-router-ng2';
 
 @Component({
-    selector: 'activate',
+    selector: '<%=jhiPrefix%>-activate',
     templateUrl: './activate.component.html'
 })
 export class ActivateComponent implements OnInit {
@@ -17,7 +17,7 @@ export class ActivateComponent implements OnInit {
 
     constructor(
         private activate: Activate,
-        private loginModalService : LoginModalService,
+        private loginModalService: LoginModalService,
         private trans: Transition
     ) {}
 

@@ -9,14 +9,18 @@ import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache != 'no' 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
-<% if (searchEngine == 'elasticsearch') { %>
-import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
-
+<%_ if (searchEngine == 'elasticsearch') { _%>
+import org.springframework.data.elasticsearch.annotations.Document;
+<%_ } _%>
+<%_ if (databaseType == 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-<% } %><% if (databaseType == 'sql') { %>
-import javax.persistence.*;<% } %>
+<%_ } _%>
+
+<%_ if (databaseType == 'sql') { _%>
+import javax.persistence.*;
+<%_ } _%>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -40,7 +44,12 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private static final long serialVersionUID = 1L;
 <% if (databaseType == 'sql') { %>
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    <%_ }  else { _%>
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    <%_ } _%>
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     @Id
     private String id;<% } %><% if (databaseType == 'cassandra') { %>

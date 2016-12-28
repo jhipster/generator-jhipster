@@ -93,9 +93,9 @@ module.exports = JhipsterClientGenerator.extend({
             defaults: false
         });
 
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm install',
+        // This adds support for a `--npm` flag
+        this.option('npm', {
+            desc: 'Use npm instead of yarn',
             type: Boolean,
             defaults: false
         });
@@ -116,7 +116,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
-        this.clientFw = this.options['client'];
+        this.clientFramework = this.options['client'];
         this.otherModules = this.configOptions.otherModules || [];
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
@@ -126,7 +126,8 @@ module.exports = JhipsterClientGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
-        this.yarnInstall = this.configOptions.yarnInstall = this.configOptions.yarnInstall || this.options['yarn'] || this.config.get('yarn');
+        this.yarnInstall = this.configOptions.yarnInstall = !this.options['npm'];
+        this.clientPackageManager = this.configOptions.clientPackageManager;
     },
 
     initializing: {
@@ -171,6 +172,13 @@ module.exports = JhipsterClientGenerator.extend({
                 }
 
                 this.existingProject = true;
+            }
+            if (!this.clientPackageManager) {
+                if (this.yarnInstall) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
+                }
             }
         }
     },
@@ -222,7 +230,8 @@ module.exports = JhipsterClientGenerator.extend({
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
             }
-            this.yarnInstall && this.config.set('yarn', true);
+            this.config.set('clientFramework', this.clientFramework);
+            this.config.set('clientPackageManager', this.clientPackageManager);
         }
     },
 
@@ -235,8 +244,8 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.configOptions.websocket !== undefined) {
                 this.websocket = this.configOptions.websocket;
             }
-            if (this.configOptions.clientFw) {
-                this.clientFw = this.configOptions.clientFw;
+            if (this.configOptions.clientFramework) {
+                this.clientFramework = this.configOptions.clientFramework;
             }
             if (this.configOptions.databaseType) {
                 this.databaseType = this.configOptions.databaseType;
@@ -298,7 +307,7 @@ module.exports = JhipsterClientGenerator.extend({
     },
 
     writing: function () {
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             return writeAngularJsFiles.call(this);
         } else {
             return writeAngularFiles.call(this);
@@ -317,7 +326,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.options['skip-install']) {
                 this.log(logMsg);
             } else {
-                if (this.clientFw === 'angular1') {
+                if (this.clientFramework === 'angular1') {
                     this.spawnCommand('gulp', ['install']);
                 }
             }
@@ -329,7 +338,7 @@ module.exports = JhipsterClientGenerator.extend({
             callback: injectDependenciesAndConstants
         };
 
-        if (this.clientFw === 'angular1') {
+        if (this.clientFramework === 'angular1') {
             logMsg =
             'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
             '\n' +
@@ -353,14 +362,15 @@ module.exports = JhipsterClientGenerator.extend({
         }
 
         if (!this.options['skip-install']) {
-            if (!this.yarnInstall) {
-                this.installDependencies(installConfig);
-            } else {
+            if (this.clientPackageManager === 'yarn') {
                 this.spawnCommandSync('yarn');
-                if (this.clientFw === 'angular1') {
+                if (this.clientFramework === 'angular1') {
                     this.spawnCommandSync('bower', ['install']);
                 }
                 injectDependenciesAndConstants();
+
+            } else if (this.clientPackageManager === 'npm') {
+                this.installDependencies(installConfig);
             }
         } else {
             injectDependenciesAndConstants();

@@ -1,8 +1,10 @@
 <div>
-    <h2 jhi-translate="metrics.title">Application Metrics</h2>
-    <p>
-        <button type="button" class="btn btn-primary" (click)="refresh()"><span class="fa fa-refresh"></span>&nbsp;<span jhi-translate="metrics.refresh.button">Refresh</span></button>
-    </p>
+    <h2>
+        <span jhi-translate="metrics.title">Application Metrics</span>
+        <button class="btn btn-primary float-xs-right" (click)="refresh()">
+            <span class="fa fa-refresh"></span> <span jhi-translate="metrics.refresh.button">Refresh</span>
+        </button>
+    </h2>
 
     <h3 jhi-translate="metrics.jvm.title">JVM Metrics</h3>
     <div class="row" *ngIf="!updatingMetrics">

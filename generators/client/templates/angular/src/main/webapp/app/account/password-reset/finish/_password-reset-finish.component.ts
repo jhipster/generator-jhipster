@@ -7,7 +7,7 @@ import { LoginModalService } from '../../../shared';
 import { Transition } from 'ui-router-ng2';
 
 @Component({
-    selector: 'password-reset-finish',
+    selector: '<%=jhiPrefix%>-password-reset-finish',
     templateUrl: './password-reset-finish.component.html'
 })
 export class PasswordResetFinishComponent implements OnInit {
@@ -20,7 +20,7 @@ export class PasswordResetFinishComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(private passwordResetFinish: PasswordResetFinish,
-        private loginModalService : LoginModalService,
+        private loginModalService: LoginModalService,
         private trans: Transition,
         private elementRef: ElementRef, private renderer: Renderer
     ) {}

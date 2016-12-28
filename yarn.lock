@@ -1917,11 +1917,11 @@ istextorbinary@^2.1.0:
     editions "^1.1.1"
     textextensions "1 || 2"
 
-jhipster-core@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.2.0.tgz#1c172fc157d119d5735748dbe2abd17295fb0dde"
+jhipster-core@1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-1.2.4.tgz#29bb8f033db21ae9314b933213ed423ed1d7d735"
   dependencies:
-    lodash "4.16.4"
+    lodash "4.17.2"
 
 jodid25519@^1.0.0:
   version "1.0.2"
@@ -2193,21 +2193,17 @@ lodash.templatesettings@^3.0.0:
     lodash._reinterpolate "^3.0.0"
     lodash.escape "^3.0.0"
 
-lodash@4.15.0:
+lodash@4.15.0, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.3.0, lodash@^4.6.1:
   version "4.15.0"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.15.0.tgz#3162391d8f0140aa22cf8f6b3c34d6b7f63d3aa9"
 
-lodash@4.16.4, lodash@^4.0.0, lodash@^4.11.1, lodash@^4.14.0, lodash@^4.3.0, lodash@^4.6.1:
-  version "4.16.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.4.tgz#01ce306b9bad1319f2a5528674f88297aeb70127"
+lodash@4.17.2, lodash@^4.17.2:
+  version "4.17.2"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
 lodash@^3.2.0, lodash@^3.3.1, lodash@^3.6.0:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
-
-lodash@^4.17.2:
-  version "4.17.2"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"
 
 log-symbols@^1.0.1:
   version "1.0.2"

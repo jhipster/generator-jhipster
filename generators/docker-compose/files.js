@@ -17,7 +17,6 @@ function writeFiles() {
             }
             if(this.serviceDiscoveryType === 'consul'){
                 this.template('_consul.yml', 'consul.yml');
-                this.copy('consul-conf/_acl_config.json', 'consul-conf/acl_config.json');
             }
             if(this.serviceDiscoveryType){
                 this.template('central-server-config/_application.yml', 'central-server-config/application.yml');

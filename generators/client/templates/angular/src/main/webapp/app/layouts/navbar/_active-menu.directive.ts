@@ -1,19 +1,18 @@
-import { Directive, OnInit, ElementRef, Renderer} from '@angular/core';
-<%_ if (enableTranslation){ _%>
+import { Directive, OnInit, ElementRef, Renderer, Input} from '@angular/core';
+<%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from 'ng2-translate/ng2-translate';
 <%_ } _%>
 
 @Directive({
-    selector: '[active-menu]',
-    inputs: ['language:active-menu']
+    selector: '[<%=jhiPrefix%>ActiveMenu]'
 })
 export class ActiveMenuDirective implements OnInit {
-    language: string;
+    @Input() <%=jhiPrefix%>ActiveMenu: string;
 
-    constructor(private el: ElementRef, private renderer: Renderer<% if (enableTranslation){ %>, private translateService: TranslateService<% } %>) {}
+    constructor(private el: ElementRef, private renderer: Renderer<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {}
 
     ngOnInit() {
-<%_ if (enableTranslation){ _%>
+<%_ if (enableTranslation) { _%>
       this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
          this.updateActiveFlag(event.lang);
       });
@@ -21,7 +20,7 @@ export class ActiveMenuDirective implements OnInit {
     }
 
     updateActiveFlag(selectedLanguage) {
-      if (this.language === selectedLanguage) {
+      if (this.<%=jhiPrefix%>ActiveMenu === selectedLanguage) {
           this.renderer.setElementClass(this.el.nativeElement, 'active', true);
       } else {
           this.renderer.setElementClass(this.el.nativeElement, 'active', false);

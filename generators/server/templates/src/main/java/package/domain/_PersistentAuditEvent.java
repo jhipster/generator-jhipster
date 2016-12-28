@@ -3,6 +3,8 @@ package <%=packageName%>.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %>
+
+import java.io.Serializable;
 import java.time.LocalDateTime;<% if (databaseType == 'sql') { %>
 import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
@@ -16,10 +18,15 @@ import java.util.Map;
 @Entity
 @Table(name = "jhi_persistent_audit_event")<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "jhi_persistent_audit_event")<% } %>
-public class PersistentAuditEvent {
+public class PersistentAuditEvent implements Serializable {
 
     @Id<% if (databaseType == 'sql') { %>
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb') { _%>
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    <%_ }  else { _%>
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    <%_ } _%>
     @Column(name = "event_id")
     private Long id;<% } else { %>
     @Field("event_id")

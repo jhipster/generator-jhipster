@@ -1,12 +1,17 @@
 package <%=packageName%>.config;
+<%_ if (hibernateCache == 'hazelcast') { _%>
 
-<% if (hibernateCache == 'hazelcast') { %>
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.JHipsterProperties;
+
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.EvictionPolicy;
-import com.hazelcast.config.MaxSizeConfig;<% } %>
+import com.hazelcast.config.MaxSizeConfig;
+<%_ } _%>
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -27,7 +32,9 @@ import org.springframework.cache.support.NoOpCacheManager;<% } %><% if (clustere
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;<% } %>
 
+<%_ if (hibernateCache == 'hazelcast') { _%>
 import javax.annotation.PreDestroy;
+<%_ } _%>
 <%_ if (hibernateCache == 'ehcache') { _%>
 import javax.cache.CacheManager;
 <%_ } _%>
@@ -73,14 +80,13 @@ public class CacheConfiguration {
             <%_ } _%>
         <%_ } _%>
     }
+    <%_ if (hibernateCache == 'hazelcast') { _%>
 
     @PreDestroy
     public void destroy() {
-        log.info("Closing Cache Manager");<% if (hibernateCache == 'ehcache') { %>
-        cacheManager.close();<% } %><% if (hibernateCache == 'hazelcast') { %>
-        Hazelcast.shutdownAll();<% } %>
+        log.info("Closing Cache Manager");
+        Hazelcast.shutdownAll();
     }
-    <%_ if (hibernateCache == 'hazelcast') { _%>
 
     @Bean
     public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
@@ -100,7 +106,7 @@ public class CacheConfiguration {
         log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
 
         // In development, everything goes through 127.0.0.1, with a different port
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             log.debug("Application is running with the \"dev\" profile, Hazelcast " +
                       "cluster will only work with localhost instances");
 
@@ -128,7 +134,7 @@ public class CacheConfiguration {
         config.getNetworkConfig().setPortAutoIncrement(true);
 
         // In development, remove multicast auto-configuration
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
 
             config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);

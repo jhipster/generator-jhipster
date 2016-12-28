@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Principal, AccountService<% if (enableTranslation){ %>, JhiLanguageService<% } %> } from '../../shared';
+import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from '../../shared';
 
 @Component({
-    selector: 'settings',
+    selector: '<%=jhiPrefix%>-settings',
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
@@ -12,13 +12,13 @@ export class SettingsComponent implements OnInit {
     settingsAccount: any;
     languages: any[];
 
-    constructor(private account: AccountService, private principal: Principal<% if (enableTranslation){ %>, private languageService: JhiLanguageService<% } %>) {}
+    constructor(private account: AccountService, private principal: Principal<% if (enableTranslation) { %>, private languageService: JhiLanguageService<% } %>) {}
 
     ngOnInit () {
         this.principal.identity().then((account) => {
             this.settingsAccount = this.copyAccount(account);
         });
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         this.languageService.getAll().then((languages) => {
             this.languages = languages;
         });
@@ -32,7 +32,7 @@ export class SettingsComponent implements OnInit {
             this.principal.identity(true).then((account) => {
                 this.settingsAccount = this.copyAccount(account);
             });
-            <%_ if (enableTranslation){ _%>
+            <%_ if (enableTranslation) { _%>
             this.languageService.getCurrent().then((current) => {
                 if (this.settingsAccount.langKey !== current) {
                     this.languageService.changeLanguage(this.settingsAccount.langKey);

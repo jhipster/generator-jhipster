@@ -48,10 +48,10 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "Hvis du ønsker at <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
                 "register": "You don't have an account yet? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Register a new account</a>"
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "Hvis du ønsker at ",
                     "link": "logge ind",

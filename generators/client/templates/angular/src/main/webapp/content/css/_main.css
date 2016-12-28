@@ -1,58 +1,42 @@
-body {
-    background: #fafafa;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #333;
-}
+/* ==============================================================
+Bootstrap tweaks
+===============================================================*/
 
-/* ==========================================================================
-Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
-========================================================================== */
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-    display: none !important;
+body, h1, h2, h3, h4 {
+    font-weight: 300;
 }
 
 /* ==========================================================================
 Developement Ribbon
 ========================================================================== */
 .ribbon {
-    background-color: #a00;
-    box-shadow: 0 0 10px #888;
+    background-color: rgba(170, 0, 0, 0.5);
     left: -3.5em;
-    moz-box-shadow: 0 0 10px #888;
     moz-transform: rotate(-45deg);
     ms-transform: rotate(-45deg);
     o-transform: rotate(-45deg);
+    webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
     overflow: hidden;
     position: absolute;
     top: 40px;
-    transform: rotate(-45deg);
-    webkit-box-shadow: 0 0 10px #888;
-    webkit-transform: rotate(-45deg);
     white-space: nowrap;
     width: 15em;
     z-index: 9999;
     pointer-events: none;
+    opacity: 0.75;
 }
 
 .ribbon a {
-    border: 1px solid #faa;
     color: #fff;
     display: block;
-    font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 400;
     margin: 1px 0;
     padding: 10px 50px;
     text-align: center;
     text-decoration: none;
     text-shadow: 0 0 5px #444;
     pointer-events: none;
-}
-
-/* ==========================================================================
-Version number in navbar
-========================================================================== */
-.navbar-version {
-    font-size: 10px;
-    color: #ccc
 }
 
 /* ==========================================================================
@@ -63,6 +47,62 @@ Browser Upgrade Prompt
     background: #ccc;
     color: #000;
     padding: 0.2em 0;
+}
+
+/* ==========================================================================
+Navbar
+========================================================================== */
+.navbar-version {
+    font-size: 10px;
+    color: #ccc
+}
+
+.jh-navbar {
+    background-color: #353d47;
+    padding: .2em 1em;
+}
+
+.jh-navbar .dropdown-item.active, .jh-navbar .dropdown-item.active:focus, .jh-navbar .dropdown-item.active:hover {
+    background-color: #353d47;
+}
+
+.jh-navbar .dropdown-toggle::after {
+    margin-left: 0.15em;
+}
+
+.jh-navbar ul.navbar-nav {
+    padding: 0.5em;
+}
+
+.jh-navbar .navbar-nav .nav-item+.nav-item {
+    margin-left: 1.5rem;
+}
+
+.jh-navbar a.nav-link {
+    font-weight: 400;
+}
+
+.jh-navbar .jh-navbar-toggler {
+    color: #ccc;
+    font-size: 1.5em;
+    padding: 10px;
+}
+
+.jh-navbar .jh-navbar-toggler:hover {
+    color: #fff;
+}
+
+
+
+@media screen and (max-width: 992px) {
+    .jh-logo-container {
+        width: 100%;
+    }
+}
+
+.navbar-title {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* ==========================================================================
@@ -86,30 +126,10 @@ Logo styles
     width: 100%;
 }
 
-.navbar-title {
-    display: inline-block;
-    vertical-align: middle;
-}
 
 /* ==========================================================================
 Main page styles
 ========================================================================== */
-.hero-unit {
-    margin: 50px auto 0 auto;
-    width: 300px;
-    font-size: 18px;
-    font-weight: 200;
-    line-height: 30px;
-    background-color: #eee;
-    border-radius: 6px;
-    padding: 60px;
-}
-
-.hero-unit h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
-}
 
 .hipster {
     display: inline-block;
@@ -136,6 +156,12 @@ only screen and (                min-resolution: 2dppx) {
 /* ==========================================================================
 Generic styles
 ========================================================================== */
+.card {
+    padding: 30px;
+    margin-top: 20px;
+    border: none;
+}
+
 .error {
     color: white;
     background-color: red;
@@ -166,6 +192,17 @@ Generic styles
     opacity: 1;
 }
 
+/*FIXME this is to support grids in table class; */
+table td[class*=col-], table th[class*=col-] {
+    position: static;
+    display: table-cell;
+    float: none;
+}
+
+footer {
+    border-top: 1px solid rgba(0,0,0,.125);
+}
+
 /* ==========================================================================
 make sure browsers use the pointer cursor for anchors, even with no href
 ========================================================================== */
@@ -175,24 +212,6 @@ a:hover {
 
 .hand {
     cursor: pointer;
-}
-
-/* ==========================================================================
-Metrics and Health styles
-========================================================================== */
-#threadDump .popover, #healthCheck .popover {
-    top: inherit;
-    display: block;
-    font-size: 10px;
-    max-width: 1024px;
-}
-
-#healthCheck .popover {
-    margin-left: -50px;
-}
-
-.health-details {
-    min-width: 400px;
 }
 
 /* ==========================================================================
@@ -389,20 +408,3 @@ Social Buttons
 <%_ } _%>
 
 /* jhipster-needle-css-add-main JHipster will add new css style */
-
-/* ==============================================================
-Bootstrap 4 tweaks
-===============================================================*/
-
-/*FIXME this is to support grids in table class; */
-table td[class*=col-], table th[class*=col-] {
-    position: static;
-    display: table-cell;
-    float: none;
-}
-
-.card {
-    padding: 19px;
-    background-color: #f5f5f5;
-    margin-top: 20px;
-}

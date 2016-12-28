@@ -1,6 +1,5 @@
 'use strict';
-var fs = require('fs'),
-    chalk = require('chalk');
+var fs = require('fs');
 
 const FILE_EXTENSION = '.original',
     S3_STANDARD_REGION = 'us-east-1';
@@ -13,15 +12,7 @@ var S3 = module.exports = function S3(Aws, generator) {
     try {
         progressbar = require('progress');
     } catch (e) {
-        generator.env.error(chalk.red(
-            'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n') +
-            chalk.yellow('WINDOWS\n') +
-            chalk.green('cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
-            'npm install aws-sdk progress node-uuid\n\n') +
-            chalk.yellow('LINUX / MAC\n') +
-            chalk.green('cd /usr/local/lib/node_modules/generator-jhipster\n' +
-            'npm install aws-sdk progress node-uuid')
-        );
+        generator.error('Something went wrong while running jhipster:aws:\n' + e);
     }
 };
 

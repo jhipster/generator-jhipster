@@ -1,7 +1,7 @@
 apply plugin: 'org.springframework.boot'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
@@ -28,7 +28,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 task gulpBuildWithOpts(type: GulpTask) {
     args = ["build", "--no-notification"]
 }
@@ -62,17 +62,17 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (yarnInstall) { _%>
+    <%_ if (clientPackageManager === 'yarn') { _%>
 // Workaround for https://github.com/srs/gradle-node-plugin/issues/134 doesn't work with yarn
 if (!project.hasProperty('nodeInstall')) {
     gulpBuildWithOpts.dependsOn yarn_install
 } else {
     gulpBuildWithOpts.dependsOn npmInstall
 }
-    <%_ } else { _%>
+    <%_ } else if (clientPackageManager === 'npm') { _%>
 gulpBuildWithOpts.dependsOn npmInstall
     <%_ } _%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 gulpBuildWithOpts.dependsOn bower
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test

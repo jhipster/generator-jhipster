@@ -80,7 +80,7 @@ module.exports = LanguagesGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.currentLanguages = this.config.get('languages');
-            this.clientFw = this.config.get('clientFw');
+            this.clientFramework = this.config.get('clientFramework');
         }
     },
 
@@ -147,8 +147,8 @@ module.exports = LanguagesGenerator.extend({
             if (configOptions.skipServer) {
                 this.skipServer = configOptions.skipServer;
             }
-            if (configOptions.clientFw) {
-                this.clientFw = configOptions.clientFw;
+            if (configOptions.clientFramework) {
+                this.clientFramework = configOptions.clientFramework;
             }
         },
 
@@ -170,7 +170,7 @@ module.exports = LanguagesGenerator.extend({
             }
             insight.track('languages/language', language);
         }, this);
-        if (!this.skipClient && this.clientFw === 'angular1') {
+        if (!this.skipClient && this.clientFramework === 'angular1') {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
         }
     }

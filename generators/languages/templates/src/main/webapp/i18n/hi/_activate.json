@@ -2,9 +2,9 @@
     "activate": {
         "title": "सक्रियण",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>आपका उपयोगकर्ता सक्रिय हो गया है.</strong> कृपया <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">साइन इन करें</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>आपका उपयोगकर्ता सक्रिय हो गया है.</strong> कृपया ",
             <%_ } _%>
             "error": "<strong>आपके उपयोगकर्ता सक्रिय नहीं किया जा सका.</strong> कृपया साइन इन करने के लिए पंजीकरण फार्म का उपयोग करें."

@@ -5,7 +5,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Account, LoginModalService, Principal, EventManager } from '../shared';
 
 @Component({
-    selector: 'home',
+    selector: '<%=jhiPrefix%>-home',
     templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
         this.registerAuthenticationSuccess();
     }
 
-    registerAuthenticationSuccess(){
+    registerAuthenticationSuccess() {
         this.eventManager.subscribe('authenticationSuccess', (message) => {
             this.principal.identity().then((account) => {
                 this.account = account;

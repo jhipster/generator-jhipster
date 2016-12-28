@@ -82,7 +82,7 @@
                     addApiKeyAuthorization();
                 });
 
-                function addApiKeyAuthorization(){
+                function addApiKeyAuthorization() {
                 <% if (authenticationType === 'session') { %>
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);

@@ -4,7 +4,9 @@ import com.datastax.driver.core.exceptions.DriverException;<%}%>
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.config.JHipsterProperties;
+
+import io.github.jhipster.config.JHipsterProperties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import org.springframework.dao.DataAccessException;<%}%>

@@ -32,7 +32,7 @@ apply plugin: 'war'
 apply plugin: 'propdeps'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
@@ -86,6 +86,13 @@ if (OperatingSystem.current().isWindows()) {
             classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
     }
+    <%_ if(!skipClient && clientFramework === 'angular1') { _%>
+
+    // avoid random error and hanging in windows, see https://github.com/jhipster/generator-jhipster/pull/4683
+    gulp {
+        bufferOutput = true
+    }
+    <%_ } _%>
 } else {
     bootRun {
         addResources = false
@@ -102,7 +109,7 @@ test {
     reports.html.enabled = false
 }
 
-<% if (cucumberTests) { %>
+<%_ if (cucumberTests) { _%>
 task cucumberTest(type: Test) {
     include '**/CucumberTest*'
 
@@ -112,7 +119,8 @@ task cucumberTest(type: Test) {
     reports.html.enabled = false
 }
 
-test.finalizedBy(cucumberTest)<% } %>
+test.finalizedBy(cucumberTest)
+<%_ } _%>
 
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
@@ -120,17 +128,22 @@ task testReport(type: TestReport) {
     reportOn cucumberTest<% } %>
 }
 
-<% if (cucumberTests) { %>
-cucumberTest.finalizedBy(testReport)<% } %>
-<% if(!skipClient) {%>
-    <%_ if (clientFw === 'angular1') { _%>
-apply from: 'gradle/yeoman.gradle'<% } %>
+<%_ if (cucumberTests) { _%>
+cucumberTest.finalizedBy(testReport)
+
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
+apply from: 'gradle/yeoman.gradle'
     <%_ } _%>
+<%_ } _%>
 apply from: 'gradle/sonar.gradle'
-<% if (databaseType === 'sql') { %>
-apply from: 'gradle/liquibase.gradle'<% } %>
-<% if (gatlingTests) { %>
-apply from: 'gradle/gatling.gradle'<% } %>
+<%_ if (databaseType === 'sql') { _%>
+apply from: 'gradle/liquibase.gradle'
+<%_ } _%>
+<%_ if (gatlingTests) { _%>
+apply from: 'gradle/gatling.gradle'
+<%_ } _%>
 apply from: 'gradle/mapstruct.gradle'
 apply from: 'gradle/docker.gradle'
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
@@ -145,6 +158,14 @@ if (project.hasProperty('shell')) {
     dependencies {
         compile "org.springframework.boot:spring-boot-starter-remote-shell"
     }
+}
+
+if (project.hasProperty('graphite')) {
+    apply from: 'gradle/graphite.gradle'
+}
+
+if (project.hasProperty('prometheus')) {
+    apply from: 'gradle/prometheus.gradle'
 }
 
 group = '<%= packageName %>'
@@ -175,8 +196,8 @@ repositories {
 }
 
 dependencies {
+    compile "io.github.jhipster:jhipster:${jhipster_server_version}"
     compile "io.dropwizard.metrics:metrics-core"
-    compile "io.dropwizard.metrics:metrics-graphite:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-healthchecks:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-jvm:${dropwizard_metrics_version}"
     compile "io.dropwizard.metrics:metrics-servlet:${dropwizard_metrics_version}"
@@ -184,9 +205,6 @@ dependencies {
     compile ("io.dropwizard.metrics:metrics-servlets:${dropwizard_metrics_version}") {
         exclude(module: 'metrics-healthchecks')
     }
-    compile "io.prometheus:simpleclient:${prometheus_simpleclient_version}"
-    compile "io.prometheus:simpleclient_servlet:${prometheus_simpleclient_version}"
-    compile "io.prometheus:simpleclient_dropwizard:${prometheus_simpleclient_version}"
     compile("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
         exclude(module: 'ch.qos.logback')
     }
@@ -199,7 +217,7 @@ dependencies {
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
         exclude(module: 'metrics-core')
         exclude(module: 'metrics-healthchecks')
-    } <% if (hibernateCache == 'hazelcast') { %>
+    }<% if (hibernateCache == 'hazelcast') { %>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"
     compile "com.hazelcast:hazelcast-hibernate52:${hazelcast_hibernate_version}"
     compile "com.hazelcast:hazelcast-spring:${hazelcast_version}"<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
@@ -220,16 +238,18 @@ dependencies {
     compile "javax.transaction:javax.transaction-api"<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile "net.jpountz.lz4:lz4:${lz4_version}"<% } %>
     compile "org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:${geronimo_javamail_1_4_mail_version}"
-    <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
     compile ("org.ehcache:ehcache")
     compile ("org.hibernate:hibernate-jcache:${hibernate_version}")
-    <% } %><% if (databaseType == 'sql') { %>
+    <%_ } _%>
+    <%_ if (databaseType == 'sql') { _%>
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core:${liquibase_core_version}") {
         exclude(module: 'jetty-servlet')
     }
-    compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"<% } %>
+    compile "com.mattbertolini:liquibase-slf4j:${liquibase_slf4j_version}"
+    <%_ } _%>
     compile "org.springframework.boot:spring-boot-actuator"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.springframework.boot:spring-boot-loader-tools"
@@ -263,14 +283,14 @@ dependencies {
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-ribbon"
-    <%_ if (serviceDiscoveryType == 'eureka') { _%>
+        <%_ if (serviceDiscoveryType == 'eureka') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-eureka"
     compile "org.springframework.cloud:spring-cloud-starter-config"
-    <%_ } _%>
-    <%_ if (serviceDiscoveryType == 'consul') { _%>
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType == 'consul') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     compile "org.springframework.cloud:spring-cloud-starter-consul-config"
-    <%_ } _%>
+        <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-starter-hystrix"
     compile "org.springframework.cloud:spring-cloud-starter-spectator"
     compile "org.springframework.retry:spring-retry"
@@ -346,15 +366,20 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-library"
     <%_ if (gatlingTests) { _%>
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
-    <%_ if (databaseType === 'cassandra') { _%>
-    compile "io.netty:netty-handler:4.0.36.Final"<%_ } _%><%_ } _%>
-    <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
-    testCompile "com.h2database:h2"<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+        <%_ if (databaseType === 'cassandra') { _%>
+    compile "io.netty:netty-handler:4.0.36.Final"
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
+    testCompile "com.h2database:h2"
+    <%_ } _%>
+    <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
+    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
+    runtime fileTree(dir: 'lib', include: '*.jar')
+    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
     <%_ } _%>
-    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
-    runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
     optional "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }

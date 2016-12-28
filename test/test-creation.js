@@ -45,7 +45,6 @@ describe('JHipster generator', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
-            assert.file(expectedFiles.gatling);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
@@ -55,6 +54,19 @@ describe('JHipster generator', function () {
                 authenticationType: 'session',
                 testFrameworks: []
             }));
+            assert.noFile([
+                TEST_DIR + 'gatling/gatling.conf',
+                TEST_DIR + 'gatling/logback.xml'
+            ]);
+        });
+        it('contains clientFramework with angular1 value', function () {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
+        });
+        it('contains clientPackageManager with npm value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        });
+        it('contains install-node-and-yarn in pom.xml', function () {
+            assert.fileContent('pom.xml', /install-node-and-yarn/);
         });
     });
 
@@ -64,7 +76,7 @@ describe('JHipster generator', function () {
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
                     'baseName': 'jhipster',
-                    'clientFw': 'angular2',
+                    'clientFramework': 'angular2',
                     'packageName': 'com.mycompany.myapp',
                     'packageFolder': 'com/mycompany/myapp',
                     'authenticationType': 'session',
@@ -97,12 +109,15 @@ describe('JHipster generator', function () {
                 testFrameworks: []
             }));
         });
+        it('contains clientFramework with angular2 value', function () {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
+        });
     });
 
-    describe('default configuration using yarn flag', function () {
+    describe('default configuration using npm flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true, yarn: true})
+                .withOptions({skipInstall: true, skipChecks: true, npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'packageName': 'com.mycompany.myapp',
@@ -137,8 +152,11 @@ describe('JHipster generator', function () {
                 testFrameworks: []
             }));
         });
-        it('contains install-node-and-yarn in pom.xml', function () {
-            assert.fileContent('pom.xml', /install-node-and-yarn/);
+        it('contains clientPackageManager with yarn value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        });
+        it('contains install-node-and-npm in pom.xml', function () {
+            assert.fileContent('pom.xml', /install-node-and-npm/);
         });
     });
 
@@ -712,6 +730,7 @@ describe('JHipster generator', function () {
 
         it('creates expected files with Kafka message broker enabled', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.gatling);
             assert.file(expectedFiles.messageBroker);
         });
     });
@@ -1127,7 +1146,6 @@ describe('JHipster generator', function () {
         });
 
         it('creates expected files for UAA auth with the Gateway application type', function () {
-            assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.gateway);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.eureka);
@@ -1162,6 +1180,7 @@ describe('JHipster server generator', function () {
         it('creates expected files for default configuration with gatling enabled for server generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
+            assert.file(expectedFiles.gatling);
             assert.noFile(getFilesForOptions(require('../generators/client/files-angularjs').files, {
                 useSass: false,
                 enableTranslation: true,
@@ -1197,6 +1216,33 @@ describe('JHipster client generator', function () {
                 testFrameworks: []
             }));
         });
+        it('contains clientFramework with angular1 value', function () {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
+        });
+        it('contains clientPackageManager with yarn value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        });
+    });
+
+    describe('generate client with angularjs 1 using npm flag', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/client'))
+                .withOptions({skipInstall: true, auth: 'session', client: 'angular1', npm: true})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'useSass': true
+                })
+                .on('end', done);
+        });
+        it('contains clientFramework with angular1 value', function () {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
+        });
+        it('contains clientPackageManager with npm value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        });
     });
 
     describe('generate client with angular 2', function () {
@@ -1223,6 +1269,45 @@ describe('JHipster client generator', function () {
                 authenticationType: 'session',
                 testFrameworks: []
             }));
+        });
+        it('contains clientFramework with angular2 value', function () {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
+        });
+        it('contains clientPackageManager with yarn value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        });
+    });
+
+    describe('generate client with angular 2 using yarn flag', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/client'))
+                .withOptions({skipInstall: true, auth: 'session', client: 'angular2', npm: true})
+                .withPrompts({
+                    'baseName': 'jhipster',
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'useSass': true
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for default configuration for client-2 generator', function () {
+            assert.noFile(expectedFiles.server);
+            assert.noFile(expectedFiles.maven);
+            assert.file(expectedFiles.i18nJson);
+            assert.file(getFilesForOptions(require('../generators/client/files-angular').files, {
+                useSass: true,
+                enableTranslation: true,
+                authenticationType: 'session',
+                testFrameworks: []
+            }));
+        });
+        it('contains clientFramework with angular2 value', function () {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
+        });
+        it('contains clientPackageManager with npm value', function () {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
     });
 });

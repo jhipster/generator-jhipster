@@ -3,9 +3,9 @@ package <%=packageName%>;
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
 <%_ } _%>
-import <%=packageName%>.config.Constants;
 import <%=packageName%>.config.DefaultProfileUtil;
-import <%=packageName%>.config.JHipsterProperties;
+
+import io.github.jhipster.config.JHipsterConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ import java.util.Collection;
 @ComponentScan
 <%_ } _%>
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %>})
-@EnableConfigurationProperties({JHipsterProperties.class<% if (databaseType == 'sql') { %>, LiquibaseProperties.class<% } %>})
+@EnableConfigurationProperties(<% if (databaseType == 'sql') { %>LiquibaseProperties.class<% } %>)
 <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
 @EnableDiscoveryClient
 <%_ } _%>
@@ -71,11 +71,11 @@ public class <%= mainClass %> {
     public void initApplication() {
         log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-        if (activeProfiles.contains(Constants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(Constants.SPRING_PROFILE_PRODUCTION)) {
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             log.error("You have misconfigured your application! It should not run " +
                 "with both the 'dev' and 'prod' profiles at the same time.");
         }
-        if (activeProfiles.contains(Constants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(Constants.SPRING_PROFILE_CLOUD)) {
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
             log.error("You have misconfigured your application! It should not" +
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }

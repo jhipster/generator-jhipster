@@ -1,7 +1,7 @@
-import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateService } from 'ui-router-ng2';
-<%_ if (enableTranslation){ _%>
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from '../language/language.service';
 <%_ } _%>
 import { LoginService } from '../login/login.service';
@@ -15,7 +15,7 @@ import { SocialService } from '../social/social.service';
     selector: '<%=jhiPrefix%>-login-modal',
     templateUrl: './login.component.html'
 })
-export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
+export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, AfterViewInit {
     authenticationError: boolean;
     password: string;
     rememberMe: boolean;
@@ -25,7 +25,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     constructor(
         private eventManager: EventManager,
         private $state: StateService,
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
         private loginService: LoginService,
@@ -41,7 +41,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
     }
 
     ngOnInit() {
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         this.languageService.addLocation('login');
         <%_ } _%>
     }
@@ -73,12 +73,10 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
                 this.$state.go('home');
             }
 
-            this.eventManager.broadcast(
-                {
-                    name: 'authenticationSuccess',
-                    content: 'Sending Authentication Success'
-                }
-            );
+            this.eventManager.broadcast({
+                name: 'authenticationSuccess',
+                content: 'Sending Authentication Success'
+            });
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
             // since login is succesful, go to stored previousState and clear previousState

@@ -2,11 +2,10 @@
 var path = require('path'),
     html = require('html-wiring'),
     shelljs = require('shelljs'),
-    engine = require('ejs').render,
+    ejs = require('ejs'),
     _ = require('lodash');
 
 const constants = require('./generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     LANGUAGES_MAIN_SRC_DIR = '../../languages/templates/' + constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = {
@@ -101,28 +100,27 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
         // uses template method instead of copy if template boolean is set as true
         template ? _this.template(source, dest, _this, _opt) : _this.copy(source, dest);
     } else {
-        var body = stripContent(source, regex, _this, _opt);
-        switch (type) {
-        case 'html' :
-            body = replacePlaceholders(body, _this);
-            break;
-        case 'js' :
-            body = replaceTitle(body, _this, template);
-            break;
-        }
-        _this.write(dest, body);
+        stripContent(source, regex, _this, _opt, (body) => {
+            switch (type) {
+            case 'html' :
+                body = replacePlaceholders(body, _this);
+                break;
+            case 'js' :
+                body = replaceTitle(body, _this, template);
+                break;
+            }
+            _this.write(dest, body);
+        });
     }
 }
 
-function stripContent(source, regex, _this, _opt) {
-
-    var body = html.readFileAsString(path.join(_this.sourceRoot(), source));
-    //temp hack to fix error thrown by ejs during entity creation, this needs a permanent fix when we add more .ejs files
-    _opt.filename = path.join(_this.sourceRoot(), CLIENT_MAIN_SRC_DIR + 'app/entities/ng_validators.ejs');
-    body = engine(body, _this, _opt);
-    body = body.replace(regex, '');
-
-    return body;
+function stripContent(source, regex, _this, _opt, cb) {
+    ejs.renderFile(path.join(_this.sourceRoot(), source), _this, _opt, (err, res) => {
+        if(!err) {
+            res = res.replace(regex, '');
+            cb(res);
+        }
+    });
 }
 
 function replaceTitle(body, _this, template) {
@@ -171,7 +169,7 @@ function geti18nJson(key, _this, template) {
     try {
         var file = html.readFileAsString(path.join(_this.sourceRoot(), filename));
 
-        file = render ? engine(file, _this, {}) : file;
+        file = render ? ejs.render(file, _this, {}) : file;
         file = JSON.parse(file);
         return file;
     } catch (err) {

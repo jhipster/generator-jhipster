@@ -10,7 +10,7 @@ export class SocialRegisterComponent implements OnInit  {
     @Input() provider: string;
     providerLabel: string;
 
-    constructor (@Inject('$stateParams') private $stateParams){}
+    constructor (@Inject('$stateParams') private $stateParams) {}
 
     ngOnInit() {
         this.success = this.$stateParams.success;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-<%_ if (enableTranslation){ _%>
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from '../language/language.service';
 <%_ } _%>
 import { Principal } from '../auth/principal.service';
@@ -19,7 +19,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 export class LoginService {
 
     constructor (
-        <%_ if (enableTranslation){ _%>
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
         private principal: Principal,
@@ -30,15 +30,15 @@ export class LoginService {
     ) {}
 
     login (credentials, callback?) {
-        let cb = callback || function(){};
+        let cb = callback || function() {};
 
         return new Promise((resolve, reject) => {
             this.authServerProvider.login(credentials).subscribe(data => {
                 this.principal.identity(true).then(account => {
-                    <%_ if (enableTranslation){ _%>
+                    <%_ if (enableTranslation) { _%>
                     // After the login the language will be changed to
                     // the language selected by the user during his registration
-                    if (account!== null) {
+                    if (account !== null) {
                         this.languageService.changeLanguage(account.langKey);
                     }
                     <%_ } _%>

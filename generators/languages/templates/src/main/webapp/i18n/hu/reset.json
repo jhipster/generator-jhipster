@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Válasszon új jelszót",
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">lépjen be vele</a>.",
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük ",
                 <%_ } _%>
                 "keymissing": "A jelszó visszaállító kulcs hiányzik.",

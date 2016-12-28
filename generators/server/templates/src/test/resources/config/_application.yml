@@ -47,7 +47,7 @@ spring:
         username:
         password:
     jpa:
-        database-platform: <%=packageName%>.domain.util.FixedH2Dialect
+        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
         open-in-view: false
         show-sql: true
@@ -57,6 +57,7 @@ spring:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         properties:
+            hibernate.id.new_generator_mappings: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
@@ -153,13 +154,11 @@ jhipster:
 <%_ } _%>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
-    swagger:
-        title: <%=baseName%> API
-        description: <%=baseName%> API documentation
-        version: 0.0.1
-        termsOfServiceUrl:
-        contactName:
-        contactUrl:
-        contactEmail:
-        license:
-        licenseUrl:
+
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+# ===================================================================
+
+application:

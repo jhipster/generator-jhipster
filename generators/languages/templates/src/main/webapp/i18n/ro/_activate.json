@@ -2,9 +2,9 @@
     "activate": {
         "title": "Activare",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Contul dumneavoastră a fost activat.</strong> Vă rugăm să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>Contul dumneavoastră a fost activat.</strong> Vă rugăm să vă ",
             <%_ } _%>
             "error": "<strong>Contul dumneavoastră nu a putut fi activat.</strong> Vă rugăm să folosiți formularul de înregistrare."

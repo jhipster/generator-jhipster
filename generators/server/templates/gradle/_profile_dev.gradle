@@ -2,7 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'org.springframework.boot'
 <%_ if(!skipClient) { _%>
 apply plugin: 'com.moowork.node'
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
@@ -12,7 +12,7 @@ ext {
 }
 
 dependencies {
-    compile "org.springframework.boot:spring-boot-devtools"
+    compile "org.springframework.boot:spring-boot-devtools:1.4.2.RELEASE"
 }
 
 def profiles = 'dev'
@@ -25,7 +25,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
 }
@@ -64,7 +64,7 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientFw === 'angular1') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
 processResources.dependsOn gulpConstantDev
     <%_ } else { _%>
 processResources.dependsOn webpack

@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Vyberte si nové heslo",
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Vaše heslo bolo obnovené.</strong> Môžete sa <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">prihlásiť</a>.",
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "success": "<strong>Vaše heslo bolo obnovené.</strong> Môžete sa ",
                 <%_ } _%>
                 "keymissing": "Chýba kľúč na obnovenie hesla.",

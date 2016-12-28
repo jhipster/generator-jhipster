@@ -7,7 +7,7 @@ import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseTyp
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.service.util.RandomUtil;
+import <%=packageName%>.service.util.RandomUtil;<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import java.time.LocalDate;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;

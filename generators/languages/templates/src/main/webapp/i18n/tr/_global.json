@@ -48,10 +48,10 @@
         },
         "messages": {
             "info": {
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
                 "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" href=\"\" ng-click=\"vm.register()\">Yeni hesap oluştur</a>"
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "",
                     "link": "Giriş",

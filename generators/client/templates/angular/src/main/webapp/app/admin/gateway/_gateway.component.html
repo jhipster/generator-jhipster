@@ -1,12 +1,11 @@
 <div>
-    <h2 jhi-translate="gateway.title">Gateway</h2>
-
-    <h3 jhi-translate="gateway.routes.title">Current routes</h3>
-    <p>
-        <button type="button" class="btn btn-primary" (click)="refresh()" (disabled)="updatingRoutes">
-            <span class="fa fa-refresh"></span>&nbsp;<span jhi-translate="gateway.refresh.button">Refresh</span>
+    <h2>
+        <span jhi-translate="gateway.title">Gateway</span>
+        <button class="btn btn-primary float-xs-right" (click)="refresh()" (disabled)="updatingRoutes">
+            <span class="fa fa-refresh"></span> <span jhi-translate="gateway.refresh.button">Refresh</span>
         </button>
-    </p>
+    </h2>
+    <h3 jhi-translate="gateway.routes.title">Current routes</h3>
     <table class="table table-striped table-responsive">
         <thead>
         <tr>

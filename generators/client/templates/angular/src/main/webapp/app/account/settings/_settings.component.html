@@ -9,7 +9,7 @@
 
             <jhi-alert-error></jhi-alert-error>
 
-            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate show-validation>
+            <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate <%=jhiPrefix%>ShowValidation>
 
                 <div class="form-group">
                     <label class="form-control-label" for="firstName" jhi-translate="settings.form.firstname">First Name</label>
@@ -72,7 +72,7 @@
                         </small>
                     </div>
                 </div>
-                <%_ if (enableTranslation){ _%>
+                <%_ if (enableTranslation) { _%>
                 <div class="form-group" *ngIf="languages && languages.length > 0">
                     <label for="langKey" jhi-translate="settings.form.language">Language</label>
                     <select class="form-control" id="langKey" name="langKey" [(ngModel)]="settingsAccount.langKey">

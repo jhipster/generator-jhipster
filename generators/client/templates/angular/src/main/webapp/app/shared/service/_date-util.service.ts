@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DateUtils {
 
-    constructor (private datePipe:DatePipe) {}
+    constructor (private datePipe: DatePipe) {}
 
     convertDateTimeFromServer (date: any) {
         if (date) {

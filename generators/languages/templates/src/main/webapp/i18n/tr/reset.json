@@ -18,9 +18,9 @@
             },
             "messages": {
                 "info": "Yeni şifre seç",
-                <%_ if (clientFw === 'angular1') { _%>
+                <%_ if (clientFramework === 'angular1') { _%>
                 "success": "<strong>Şifren sıfırlandı.</strong> Lütfen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">giriş yap</a>.",
-                <%_ } else if (clientFw === 'angular2') { _%>
+                <%_ } else if (clientFramework === 'angular2') { _%>
                 "success": "<strong>Şifren sıfırlandı.</strong> Lütfen ",
                 <%_ } _%>
                 "keymissing": "Şifre sıfırlama anahtarı geçersiz.",

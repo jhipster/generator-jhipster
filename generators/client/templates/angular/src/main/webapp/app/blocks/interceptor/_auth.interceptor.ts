@@ -19,14 +19,14 @@ export class AuthInterceptor extends HttpInterceptable {
             options.headers.append('Authorization', 'Bearer ' + token.access_token);
         }
         <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        if(!!token) {
+        if (!!token) {
             options.headers.append('Authorization', 'Bearer ' + token);
         }
         <%_ } _%>
         return options;
     }
 
-    responseIntercept(observable : Observable<Response>) : Observable<Response> {
+    responseIntercept(observable: Observable<Response>) : Observable<Response> {
         return observable; //by pass
     }
 

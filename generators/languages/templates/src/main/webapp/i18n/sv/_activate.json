@@ -2,9 +2,9 @@
     "activate": {
         "title": "Aktivering",
         "messages": {
-            <%_ if (clientFw === 'angular1') { _%>
+            <%_ if (clientFramework === 'angular1') { _%>
             "success": "<strong>Ditt användarnamn har blivit aktiverat.</strong>. Vänligen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logga in</a>.",
-            <%_ } else if (clientFw === 'angular2') { _%>
+            <%_ } else if (clientFramework === 'angular2') { _%>
             "success": "<strong>Ditt användarnamn har blivit aktiverat.</strong>. Vänligen ",
             <%_ } _%>
             "error": "<strong>Ditt användarnamn kunde inte aktiveras.</strong> Använd gärna registreringsformuläret."
