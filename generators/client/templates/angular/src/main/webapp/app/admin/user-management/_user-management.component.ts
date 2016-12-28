@@ -74,9 +74,9 @@ export class UserMgmtComponent implements OnInit {
             });
     }
 
-    loadAll () {
+    loadAll() {
         this.userService.query({
-            page: this.page -1,
+            page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
