@@ -52,13 +52,15 @@ export class <%=jhiPrefixCapitalized%>HealthService {
         let hasDetails = false;
 
         for (let key in healthObject) {
-            let value = healthObject[key];
-            if (key === 'status' || key === 'error') {
-                healthData[key] = value;
-            } else {
-                if (!this.isHealthObject(value)) {
-                    details[key] = value;
-                    hasDetails = true;
+            if (healthObject.hasOwnProperty(key)) {
+                let value = healthObject[key];
+                if (key === 'status' || key === 'error') {
+                    healthData[key] = value;
+                } else {
+                    if (!this.isHealthObject(value)) {
+                        details[key] = value;
+                        hasDetails = true;
+                    }
                 }
             }
         }
@@ -77,13 +79,15 @@ export class <%=jhiPrefixCapitalized%>HealthService {
 
     private flattenHealthData (result, path, data): any {
         for (let key in data) {
-            let value = data[key];
-            if (this.isHealthObject(value)) {
-                if (this.hasSubSystem(value)) {
-                    this.addHealthObject(result, false, value, this.getModuleName(path, key));
-                    this.flattenHealthData(result, this.getModuleName(path, key), value);
-                } else {
-                    this.addHealthObject(result, true, value, this.getModuleName(path, key));
+            if (data.hasOwnProperty(key)) {
+                let value = data[key];
+                if (this.isHealthObject(value)) {
+                    if (this.hasSubSystem(value)) {
+                        this.addHealthObject(result, false, value, this.getModuleName(path, key));
+                        this.flattenHealthData(result, this.getModuleName(path, key), value);
+                    } else {
+                        this.addHealthObject(result, true, value, this.getModuleName(path, key));
+                    }
                 }
             }
         }
@@ -109,9 +113,11 @@ export class <%=jhiPrefixCapitalized%>HealthService {
         let result = false;
 
         for (let key in healthObject) {
-            let value = healthObject[key];
-            if (value && value.status) {
-                result = true;
+            if (healthObject.hasOwnProperty(key)) {
+                let value = healthObject[key];
+                if (value && value.status) {
+                    result = true;
+                }
             }
         }
 
@@ -122,8 +128,10 @@ export class <%=jhiPrefixCapitalized%>HealthService {
         let result = false;
 
         for (let key in healthObject) {
-            if (key === 'status') {
-                result = true;
+            if (healthObject.hasOwnProperty(key)) {
+                if (key === 'status') {
+                    result = true;
+                }
             }
         }
 
