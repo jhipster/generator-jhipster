@@ -13,7 +13,6 @@ import io.github.jhipster.security.Http401UnauthorizedEntryPoint;
 import io.github.jhipster.security.AjaxLogoutSuccessHandler;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -68,15 +67,15 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
 
         private final AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
 
-        @Autowired(required = false)
-        private CorsFilter corsFilter;
+        private final CorsFilter corsFilter;
 
         public ResourceServerConfiguration(TokenStore tokenStore, Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint,
-            AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler) {
+            AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler, CorsFilter corsFilter) {
 
             this.tokenStore = tokenStore;
             this.http401UnauthorizedEntryPoint = http401UnauthorizedEntryPoint;
             this.ajaxLogoutSuccessHandler = ajaxLogoutSuccessHandler;
+            this.corsFilter = corsFilter;
         }
 
         @Override
@@ -91,8 +90,7 @@ public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
             .and()
                 .csrf()
                 .disable()
-                // By default CORS is disabled. Uncomment here and in application.yml to enable.
-                // .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers()
                 .frameOptions().disable()
             .and()<% if (!websocket) { %>

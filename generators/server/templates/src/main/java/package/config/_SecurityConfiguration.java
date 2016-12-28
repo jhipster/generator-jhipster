@@ -13,9 +13,6 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.*;
 
 import org.springframework.beans.factory.BeanInitializationException;
-<%_ if (authenticationType !== 'oauth2') { _%>
-import org.springframework.beans.factory.annotation.Autowired;
-<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2') { %>
@@ -67,13 +64,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
 
     <%_ if (authenticationType !== 'oauth2') { _%>
-    @Autowired(required = false)
-    private CorsFilter corsFilter;
+    private final CorsFilter corsFilter;
     <%_ } _%>
 
-    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType == 'session') { %>,
-        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<% } if (authenticationType == 'jwt') { %>,
-            TokenProvider tokenProvider<% } %><% if (clusteredHttpSession == 'hazelcast') { %>, SessionRegistry sessionRegistry<% } %>) {
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType === 'session') { %>,
+        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<% } if (authenticationType === 'jwt') { %>,
+            TokenProvider tokenProvider<% } %><% if (clusteredHttpSession === 'hazelcast') { %>, SessionRegistry sessionRegistry<% } if (authenticationType !== 'oauth2') { %>,
+        CorsFilter corsFilter<% } %>) {
 
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
@@ -86,6 +83,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast') { _%>
         this.sessionRegistry = sessionRegistry;
+        <%_ } _%>
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        this.corsFilter = corsFilter;
         <%_ } _%>
     }
 
@@ -158,8 +158,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
             <%_ } _%>
-            // By default CORS is disabled. Uncomment here and in application.yml to enable.
-            // .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+            <%_ if (authenticationType !== 'oauth2') { _%>
+            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+            <%_ } _%>
             .exceptionHandling()
             .authenticationEntryPoint(http401UnauthorizedEntryPoint())<% if (authenticationType == 'session') { %>
         .and()
