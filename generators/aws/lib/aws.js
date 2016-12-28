@@ -13,7 +13,11 @@ var AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
         cb();
     } catch (e) {
         generator.log('Installing AWS dependencies into your JHipster folder');
-        shelljs.exec('npm install aws-sdk progress uuid --prefix node_modules/generator-jhipster', {silent: true}, function (code, msg, err) {
+        var installCommand = 'yarn add aws-sdk progress uuid --modules-folder node_modules/generator-jhipster/node_modules';
+        if (generator.config.get('clientPackageManager') === 'npm') {
+            installCommand = 'npm install aws-sdk progress uuid --prefix node_modules/generator-jhipster';
+        }
+        shelljs.exec(installCommand, {silent: true}, function (code, msg, err) {
             if (code !== 0) generator.error('Something went wrong while installing:\n' + err);
             Aws = require('aws-sdk');
             cb();
