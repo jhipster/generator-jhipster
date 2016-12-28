@@ -31,6 +31,7 @@ export class NavbarComponent implements OnInit {
         private profileService: ProfileService
     ) {
         this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
+        this.isNavbarCollapsed = true;
     }
 
     ngOnInit() {
