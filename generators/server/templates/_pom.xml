@@ -56,8 +56,7 @@
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate.version>5.2.4.Final</hibernate.version>
-        <%_ } _%>
-        <%_ if (databaseType === 'sql') { _%>
+        <hibernate-validator.version>5.3.3.Final</hibernate-validator.version>
         <hikaricp.version>2.4.6</hikaricp.version>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
@@ -72,6 +71,9 @@
         <jhipster.server.version>0.0.7</jhipster.server.version>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <jna.version>4.2.2</jna.version>
+        <%_ } _%>
+        <%_ if (authenticationType === 'jwt') { _%>
+        <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
@@ -477,7 +479,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.3.3.Final</version>
+            <version>${hibernate-validator.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -630,7 +632,7 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.7.0</version>
+            <version>${jjwt.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'uaa') { _%>
