@@ -2,7 +2,6 @@
 var S3 = require('./s3.js'),
     Rds = require('./rds.js'),
     shelljs = require('shelljs'),
-    os = require('os'),
     Eb = require('./eb.js');
 
 var Aws, generator;
@@ -14,18 +13,7 @@ var AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
         cb();
     } catch (e) {
         generator.log('Installing AWS dependencies into your JHipster folder');
-        var jhipsterPath = 'node_modules/generator-jhipster';
-        var skipClient = generator.config.get('skipClient');
-        // use the global JHipster for apps with no client-side code
-        if (skipClient) {
-            var prefix = shelljs.exec('npm config get prefix', {silent:true}).trim();
-            if (os.platform() === 'win32') {
-                jhipsterPath = prefix + '/' + jhipsterPath;
-            } else {
-                jhipsterPath = prefix + '/lib/' + jhipsterPath;
-            }
-        }
-        shelljs.exec('npm install aws-sdk progress node-uuid --prefix ' + jhipsterPath, {silent:true}, function (code, msg, err) {
+        shelljs.exec('npm install aws-sdk progress uuid --prefix node_modules/generator-jhipster', {silent: true}, function (code, msg, err) {
             if (code !== 0) generator.error('Something went wrong while installing:\n' + err);
             Aws = require('aws-sdk');
             cb();
