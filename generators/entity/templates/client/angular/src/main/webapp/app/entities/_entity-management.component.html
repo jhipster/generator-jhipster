@@ -53,7 +53,7 @@
             </tr>
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
-            <tr *ngFor="let <%=entityInstance %> of <%=entityInstancePlural %> ;trackBy <%=entityInstance %>?.id">
+            <tr *ngFor="let <%=entityInstance %> of <%=entityInstancePlural %> ;trackBy trackId">
                 <td><a uiSref="<%= entityStateName %>-detail" [uiParams]="{ id: <%= entityInstance %>.id }">{{<%=entityInstance %>.id}}</a></td>
                 <%_ for (idx in fields) {
                 var fieldName = fields[idx].fieldName;
@@ -155,13 +155,13 @@
     <%_ if (databaseType !== 'cassandra') { _%>
         <%_ if (pagination == 'pager') { _%>
         <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
-            <jhi-item-count [page]="page" [total]="queryCount" [items-per-page]="itemsPerPage"></jhi-item-count>
+            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
             <!-- TODO: real pager implementation -->
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
         <%_ } else if (pagination == 'pagination') { _%>
         <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
-            <jhi-item-count [page]="page" [total]="queryCount" [items-per-page]="itemsPerPage"></jhi-item-count>
+            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
         <%_ } _%>

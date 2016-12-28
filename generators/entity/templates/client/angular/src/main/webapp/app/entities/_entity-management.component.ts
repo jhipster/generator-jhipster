@@ -27,6 +27,10 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         this.registerChangeIn<%= entityClassPlural %>();
     }
 
+    trackId (index, item: <%= entityClass %>) {
+        return item.id;
+    }
+
     <%_ if (pagination !== 'infinite-scroll') { _%>
     registerChangeIn<%= entityClassPlural %>() {
         this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.loadAll());
