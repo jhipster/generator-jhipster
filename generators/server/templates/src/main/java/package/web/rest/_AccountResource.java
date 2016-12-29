@@ -49,7 +49,6 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
-
     <%_ if (authenticationType == 'session') { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;

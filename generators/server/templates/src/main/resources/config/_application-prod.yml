@@ -12,8 +12,8 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-
 <%_ if (serviceDiscoveryType == 'eureka') { _%>
+
 eureka:
     instance:
         prefer-ip-address: true
@@ -157,12 +157,12 @@ spring:
         password:
     thymeleaf:
         cache: true
-
 <%_ if (databaseType === 'sql') { _%>
+
 liquibase:
     contexts: prod
-
 <%_ } _%>
+
 server:
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     port: <%= serverPort %>

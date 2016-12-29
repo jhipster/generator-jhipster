@@ -12,8 +12,8 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-
 <%_ if (serviceDiscoveryType == 'eureka') { _%>
+
 eureka:
     instance:
         prefer-ip-address: true
@@ -178,10 +178,11 @@ spring:
     thymeleaf:
         cache: false
 <%_ if (databaseType === 'sql') { _%>
+
 liquibase:
     contexts: dev
-
 <%_ } _%>
+
 server:
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     port: <%= serverPort %>
@@ -276,7 +277,6 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
-
 
 # ===================================================================
 # Application specific properties
