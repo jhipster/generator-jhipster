@@ -3,7 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { EventManager } from '../../shared/service/event-manager.service';
+import { EventManager } from 'shared/service/event-manager.service';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt-delete-dialog',

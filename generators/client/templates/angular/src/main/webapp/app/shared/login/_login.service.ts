@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from '../language/language.service';
+import { JhiLanguageService } from 'shared/language/language.service';
 <%_ } _%>
-import { Principal } from '../auth/principal.service';
+import { Principal } from 'shared/auth/principal.service';
 <%_ if (authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../auth/auth-oauth2.service';
+import { AuthServerProvider } from 'shared/auth/auth-oauth2.service';
 <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider } from '../auth/auth-jwt.service';
+import { AuthServerProvider } from 'shared/auth/auth-jwt.service';
 <%_ } else { _%>
-import { AuthServerProvider } from '../auth/auth-session.service';
+import { AuthServerProvider } from 'shared/auth/auth-session.service';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'shared/tracker/tracker.service';
 <%_ } _%>
 
 @Injectable()

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ProfileService } from '../profiles/profile.service'; // barrel doesn't work here
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
+import { ProfileService } from 'layouts/profiles/profile.service'; // barrel doesn't work here
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>Principal, LoginModalService, LoginService } from 'shared';
 
-import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
+import { VERSION, DEBUG_INFO_ENABLED } from 'app.constants';
 
 @Component({
     selector: '<%=jhiPrefix%>-navbar',

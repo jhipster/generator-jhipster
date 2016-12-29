@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 
-import { LoginModalService } from '../login/login-modal.service';
+import { LoginModalService } from 'shared/login/login-modal.service';
 import { Principal } from './principal.service';
 import { StateStorageService } from './state-storage.service';
 

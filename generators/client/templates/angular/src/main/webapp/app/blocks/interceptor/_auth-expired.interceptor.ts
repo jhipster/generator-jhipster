@@ -3,17 +3,17 @@ import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthService } from '../../shared/auth/auth.service';
-import { Principal } from '../../shared/auth/principal.service';
+import { AuthService } from 'shared/auth/auth.service';
+import { Principal } from 'shared/auth/principal.service';
     <%_ if (authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../../shared/auth/auth-oauth2.service';
+import { AuthServerProvider } from 'shared/auth/auth-oauth2.service';
     <%_ } else { _%>
-import {AuthServerProvider} from '../../shared/auth/auth-jwt.service';
+import {AuthServerProvider} from 'shared/auth/auth-jwt.service';
     <%_ } _%>
 <%_ } if (authenticationType === 'session') { _%>
-import { AuthServerProvider } from '../../shared/auth/auth-session.service';
-import { StateStorageService } from '../../shared/auth/state-storage.service';
-import { LoginModalService } from '../../shared/login/login-modal.service';
+import { AuthServerProvider } from 'shared/auth/auth-session.service';
+import { StateStorageService } from 'shared/auth/state-storage.service';
+import { LoginModalService } from 'shared/login/login-modal.service';
 <%_ } _%>
 
 export class AuthExpiredInterceptor extends HttpInterceptable {

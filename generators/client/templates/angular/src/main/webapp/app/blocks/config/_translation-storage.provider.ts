@@ -1,4 +1,4 @@
-import {LANGUAGES} from '../../shared';
+import {LANGUAGES} from 'shared';
 
 // TranslationStorageProvider.$inject = ['$cookies', '$log'];
 

@@ -2,13 +2,13 @@ import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { StateService } from 'ui-router-ng2';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from '../language/language.service';
+import { JhiLanguageService } from 'shared/language/language.service';
 <%_ } _%>
-import { LoginService } from '../login/login.service';
-import { StateStorageService } from '../auth/state-storage.service';
-import { EventManager } from '../service/event-manager.service';
+import { LoginService } from 'shared/login/login.service';
+import { StateStorageService } from 'shared/auth/state-storage.service';
+import { EventManager } from 'shared/service/event-manager.service';
 <%_ if (enableSocialSignIn) { _%>
-import { SocialService } from '../social/social.service';
+import { SocialService } from 'shared/social/social.service';
 <%_ } _%>
 
 @Component({

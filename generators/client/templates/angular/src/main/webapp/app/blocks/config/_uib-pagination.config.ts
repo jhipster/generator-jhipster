@@ -1,4 +1,4 @@
-import { ITEMS_PER_PAGE } from '../../shared';
+import { ITEMS_PER_PAGE } from 'shared';
 import {Injectable} from '@angular/core';
 import { NgbPaginationConfig} from '@ng-bootstrap/ng-bootstrap';
 

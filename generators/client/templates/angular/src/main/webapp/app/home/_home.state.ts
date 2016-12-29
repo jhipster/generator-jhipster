@@ -1,5 +1,5 @@
 import { HomeComponent } from './home.component';
-import { JhiLanguageService } from '../shared';
+import { JhiLanguageService } from 'shared';
 
 export const homeState = {
     name: 'home',

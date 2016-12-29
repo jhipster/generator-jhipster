@@ -1,5 +1,5 @@
 import { SettingsComponent } from './settings.component';
-import { JhiLanguageService } from '../../shared';
+import { JhiLanguageService } from 'shared';
 
 export const settingsState = {
     name: 'settings',

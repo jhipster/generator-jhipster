@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
-import { Principal } from '../../shared';
+import { Principal } from 'shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-sessions',

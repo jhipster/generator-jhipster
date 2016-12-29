@@ -1,5 +1,5 @@
 import { TransitionService, Transition } from 'ui-router-ng2';
-import { Principal, StateStorageService, AuthService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from '../../shared';
+import { Principal, StateStorageService, AuthService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'shared';
 
 export function registerTransitionHooks($transitions: TransitionService) {
     $transitions.onStart({}, (transition: Transition) => {

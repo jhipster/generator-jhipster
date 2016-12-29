@@ -4,7 +4,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 <%_ } _%>
 
 import { AlertService } from './alert.service';
-import { EventManager } from '../service/event-manager.service';
+import { EventManager } from 'shared/service/event-manager.service';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({

@@ -1,14 +1,14 @@
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
+import { PaginationConfig } from 'blocks/config/uib-pagination.config';
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from 'shared';
 
 export const userMgmtState = {
     name: 'user-management',

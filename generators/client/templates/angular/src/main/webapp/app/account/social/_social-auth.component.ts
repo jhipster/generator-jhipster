@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
-import { AuthService, LoginService } from '../../shared';
+import { AuthService, LoginService } from 'shared';
 import { CookieService } from 'angular2-cookie/core';
 
 @Component({

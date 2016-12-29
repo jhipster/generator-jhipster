@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SocialService } from './social.service';
-import { CSRFService } from '../auth/csrf.service';
+import { CSRFService } from 'auth/csrf.service';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from '../language/language.service';
+import { JhiLanguageService } from 'language/language.service';
 <%_ } _%>
 
 @Component({

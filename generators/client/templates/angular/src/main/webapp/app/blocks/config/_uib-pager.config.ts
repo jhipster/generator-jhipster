@@ -1,4 +1,4 @@
-import { ITEMS_PER_PAGE } from '../../shared';
+import { ITEMS_PER_PAGE } from 'shared';
 
 //PagerConfig.$inject = ['uibPagerConfig'];
 

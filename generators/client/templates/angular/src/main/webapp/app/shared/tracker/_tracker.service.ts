@@ -6,9 +6,9 @@ import { Observable, Observer } from 'rxjs/Rx';
 import { LocalStorageService } from 'ng2-webstorage';
 <%_ } _%>
 
-import { CSRFService } from '../auth/csrf.service';
+import { CSRFService } from 'shared/auth/csrf.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider } from '../auth/auth-jwt.service';
+import { AuthServerProvider } from 'shared/auth/auth-jwt.service';
 <%_ } _%>
 
 @Injectable()

@@ -1,5 +1,5 @@
 import { ErrorComponent } from './error.component';
-import { JhiLanguageService } from '../../shared';
+import { JhiLanguageService } from 'shared';
 
 export const errorState = {
     name: 'error',
