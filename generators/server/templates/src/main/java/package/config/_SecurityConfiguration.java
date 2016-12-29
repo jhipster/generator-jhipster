@@ -62,8 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SessionRegistry sessionRegistry;
     <%_ } _%>
-
     <%_ if (authenticationType !== 'oauth2') { _%>
+
     private final CorsFilter corsFilter;
     <%_ } _%>
 
