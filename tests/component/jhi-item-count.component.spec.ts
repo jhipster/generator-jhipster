@@ -18,8 +18,8 @@ import {ComponentFixture, TestBed, async } from '@angular/core/testing';
 import {JhiItemCountComponent} from '../../src/component/jhi-item-count.component';
 
 
-function getElementHtml(element: ComponentFixture<JhiItemCountComponent>): string{
-	return element.nativeElement.querySelector('.jhi-item-count').innerHTML.trim();
+function getElementHtml(element: ComponentFixture<JhiItemCountComponent>): string {
+    return element.nativeElement.querySelector('.jhi-item-count').innerHTML.trim();
 }
 
 describe('JhiItemCountComponent test', () => {
@@ -46,19 +46,19 @@ describe('JhiItemCountComponent test', () => {
         });
 
         it('should change the content on page change', () => {
-        	comp.page = 1;
-        	comp.itemsPerPage = 10;
-        	comp.total = 100;
-        	fixture.detectChanges();
+            comp.page = 1;
+            comp.itemsPerPage = 10;
+            comp.total = 100;
+            fixture.detectChanges();
 
-        	expect(getElementHtml(fixture)).toBe(`Showing 1 -
+            expect(getElementHtml(fixture)).toBe(`Showing 1 -
             10
             of 100 items.`);
 
-        	comp.page = 2;
-        	fixture.detectChanges();
+            comp.page = 2;
+            fixture.detectChanges();
 
-        	expect(getElementHtml(fixture)).toBe(`Showing 11 -
+            expect(getElementHtml(fixture)).toBe(`Showing 11 -
             20
             of 100 items.`);
         });
