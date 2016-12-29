@@ -306,26 +306,26 @@ public class JHipsterProperties {
 
             public static class Oauth {
 
-                private String clientid;
+                private String clientId;
 
-                private String secret;
+                private String clientSecret;
 
                 private int tokenValidityInSeconds = 1800;
 
-                public String getClientid() {
-                    return clientid;
+                public String getClientId() {
+                    return clientId;
                 }
 
-                public void setClientid(String clientid) {
-                    this.clientid = clientid;
+                public void setClientId(String clientId) {
+                    this.clientId = clientId;
                 }
 
-                public String getSecret() {
-                    return secret;
+                public String getClientSecret() {
+                    return clientSecret;
                 }
 
-                public void setSecret(String secret) {
-                    this.secret = secret;
+                public void setClientSecret(String clientSecret) {
+                    this.clientSecret = clientSecret;
                 }
 
                 public int getTokenValidityInSeconds() {
