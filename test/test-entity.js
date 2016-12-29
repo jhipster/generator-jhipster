@@ -50,7 +50,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-dialog.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-delete-dialog.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-detail.controller.js',
-        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management.service.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-management-detail.controller.spec.js'
     ],
     server : [
@@ -287,6 +287,7 @@ describe('JHipster generator entity for angular1', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
+            
             assert.file(expectedFiles.clientWithSuffix);
             assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');
         });
