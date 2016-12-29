@@ -25,7 +25,6 @@ class SpyService {
 }
 
 function callback(spyService) {
-    console.log(spyService);
     spyService.called = true;
 }
 
@@ -44,7 +43,6 @@ describe('Event Manager test', () => {
 
         it('should create an observable and callback when broadcasted', inject([EventManager, SpyService],
             (eventManager: EventManager, spyService: SpyService) => {
-
             expect(spyService.called).toBeFalsy();
             eventManager.subscribe('modifier', (response) => callback(spyService));
             eventManager.broadcast({ name: 'modifier', content: 'modified something'});
