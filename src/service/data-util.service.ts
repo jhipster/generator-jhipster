@@ -16,6 +16,9 @@
 
 import { Injectable } from '@angular/core';
 
+/**
+ * An utility service for data.
+ */
 @Injectable()
 export class DataUtils {
 
