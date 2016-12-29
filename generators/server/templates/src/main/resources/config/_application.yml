@@ -3,6 +3,9 @@
 #
 # This configuration will be overriden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -116,6 +119,8 @@ server:
 
 # ===================================================================
 # JHipster specific properties
+#
+# Full reference is available at: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 jhipster:
@@ -123,7 +128,7 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
-    #cors: #By default CORS is disabled. Uncomment to enable.
+    # By default CORS is disabled. Uncomment to enable.
         #allowed-origins: "*"
         #allowed-methods: GET, PUT, POST, DELETE, OPTIONS
         #allowed-headers: "*"
@@ -152,13 +157,15 @@ jhipster:
         <%_ } _%>
 <%_ } _%>
     ribbon:
-        # comma separated list of profiles to show a ribbon on the GUI
         displayOnActiveProfiles: dev
 
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
 # to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 application:
