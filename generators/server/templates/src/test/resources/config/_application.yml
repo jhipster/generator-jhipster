@@ -122,9 +122,9 @@ server:
 
 jhipster:
     async:
-        corePoolSize: 2
-        maxPoolSize: 50
-        queueCapacity: 10000
+        core-pool-size: 2
+        max-pool-size: 50
+        queue-capacity: 10000
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
     security:
         authentication:
@@ -132,28 +132,28 @@ jhipster:
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
+                token-validity-in-seconds: 86400
     <%_ } _%>
     <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
-            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-            tokenServiceId: <%= uaaBaseName.toLowerCase() %>
+            access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
+            token-service-id: <%= uaaBaseName.toLowerCase() %>
             <%_ } _%>
-            clientId: internal
-            clientSecret: internal
+            client-id: internal
+            client-secret: internal
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2') { _%>
             oauth:
-                clientid: <%= baseName %>app
-                secret: my-secret-token-to-change-in-production
+                client-id: <%= baseName %>app
+                client-secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
+                token-validity-in-seconds: 1800
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
     security:
-        rememberMe:
+        remember-me:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
