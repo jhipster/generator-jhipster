@@ -16,7 +16,7 @@ import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { JhiLanguageService, PaginationUtil } from '../../shared';
+import { JhiLanguageService, PaginationUtil } from 'shared';
 
 export const <%= entityInstance %>State = {
     name: '<%= entityStateName %>',

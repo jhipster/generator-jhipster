@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UIRouter, trace, Category } from 'ui-router-ng2';
-import { DEBUG_INFO_ENABLED } from '../../app.constants';
+import { DEBUG_INFO_ENABLED } from 'app.constants';
 import { registerTransitionHooks } from './register-transition-hooks';
 
 @Injectable()

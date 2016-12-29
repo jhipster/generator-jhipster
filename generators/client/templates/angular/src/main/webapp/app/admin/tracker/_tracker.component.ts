@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-tracker',

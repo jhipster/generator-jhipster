@@ -1,7 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { UIRouterModule } from 'ui-router-ng2';
 
-import { <%=angular2AppName%>SharedModule } from '../shared';
+import { <%=angular2AppName%>SharedModule } from 'shared';
 
 let ENTITY_STATES = [
 

@@ -5,7 +5,7 @@ import { LocalStorageService } from 'ng2-webstorage';
 
 import { Base64 } from './base64.service';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'tracker/tracker.service';
 <%_ } _%>
 
 @Injectable()

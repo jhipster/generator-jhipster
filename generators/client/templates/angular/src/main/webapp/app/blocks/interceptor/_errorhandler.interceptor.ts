@@ -1,7 +1,7 @@
 import { HttpInterceptable } from './http.interceptable';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { EventManager } from '../../shared/service/event-manager.service';
+import { EventManager } from 'shared/service/event-manager.service';
 
 export class ErrorHandlerInterceptor extends HttpInterceptable {
 

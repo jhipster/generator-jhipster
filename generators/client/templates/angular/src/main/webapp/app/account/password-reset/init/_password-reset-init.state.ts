@@ -1,5 +1,5 @@
 import {PasswordResetInitComponent} from './password-reset-init.component';
-import { JhiLanguageService } from '../../../shared';
+import { JhiLanguageService } from 'shared';
 
 export const requestResetState = {
     name: 'requestReset',

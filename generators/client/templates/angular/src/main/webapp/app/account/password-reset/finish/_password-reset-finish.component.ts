@@ -2,7 +2,7 @@ import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { PasswordResetFinish } from './password-reset-finish.service';
-import { LoginModalService } from '../../../shared';
+import { LoginModalService } from 'shared';
 
 import { Transition } from 'ui-router-ng2';
 

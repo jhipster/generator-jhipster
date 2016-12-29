@@ -5,13 +5,13 @@ import { HttpInterceptor } from './http.interceptor';
 import { AuthInterceptor } from './auth.interceptor';
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
 <%_ } if (authenticationType === 'session') { _%>
-import { StateStorageService } from '../../shared/auth/state-storage.service';
+import { StateStorageService } from 'shared/auth/state-storage.service';
 <%_ } _%>
 import { AuthExpiredInterceptor } from './auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
 import { NotificationInterceptor } from './notification.interceptor';
 
-import { EventManager } from '../../shared/service/event-manager.service';
+import { EventManager } from 'shared/service/event-manager.service';
 
 export const customHttpProvider = () => ({
     provide: Http,
