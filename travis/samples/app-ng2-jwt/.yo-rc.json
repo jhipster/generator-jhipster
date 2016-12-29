@@ -19,7 +19,8 @@
     "applicationType": "monolith",
     "clientFramework": "angular2",
     "testFrameworks": [
-      "gatling"
+      "gatling",
+      "protractor"
     ],
     "jhiPrefix": "jhi",
     "enableTranslation": true,
