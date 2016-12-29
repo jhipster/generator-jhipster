@@ -35,8 +35,10 @@ import org.springframework.security.oauth2.provider.token.TokenStore;<% if (data
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-<% if (databaseType == 'sql') { %>
-import javax.sql.DataSource;<% } %>
+<%_ if (databaseType == 'sql') { _%>
+
+import javax.sql.DataSource;
+<%_ } _%>
 
 @Configuration
 public class OAuth2ServerConfiguration {<% if (databaseType == 'sql') { %>
