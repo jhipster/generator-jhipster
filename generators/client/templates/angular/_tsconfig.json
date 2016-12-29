@@ -9,7 +9,7 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
-        "baseUrl": "<%= CLIENT_MAIN_SRC_DIR %>",
+        "baseUrl": "<%= MAIN_SRC_DIR %>",
         "outDir": "<%= DIST_DIR %>app",
         "lib": ["es6", "dom"],
         "typeRoots": [
