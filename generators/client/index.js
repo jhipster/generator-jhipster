@@ -316,6 +316,14 @@ module.exports = JhipsterClientGenerator.extend({
 
     install: function () {
 
+        let logMsg =
+            'To install your dependencies manually, run: ' + chalk.yellow.bold(this.clientPackageManager + ' install');
+
+        if (this.clientFramework === 'angular1') {
+            logMsg =
+                'To install your dependencies manually, run: ' + chalk.yellow.bold(this.clientPackageManager + ' install & bower install');
+        }
+
         let injectDependenciesAndConstants = () => {
             if (this.options['skip-install']) {
                 this.log(logMsg);
@@ -355,32 +363,28 @@ module.exports = JhipsterClientGenerator.extend({
     },
 
     end: function () {
-        this.log(chalk.green.bold('\nClient app generated successfully.\n'));
+        this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         let logMsg =
-            'After running ' + chalk.yellow.bold(this.clientPackageManager + ' install') + ' ...' +
-            '\n' +
-            '\nStart Webpack dev server with:' +
+            'Start your Webpack development server with:' +
             '\n ' + chalk.yellow.bold(this.clientPackageManager + ' run webpack:dev') +
             '\n';
 
         if (this.clientFramework === 'angular1') {
             logMsg =
-            'After running ' + chalk.yellow.bold(this.clientPackageManager + ' install & bower install') + ' ...' +
-            '\n' +
-            '\nInject your front end dependencies into your source code:' +
-            '\n ' + chalk.yellow.bold('gulp inject') +
-            '\n' +
-            '\nGenerate the AngularJS constants:' +
-            '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
-            (this.useSass ?
-            '\n' +
-            '\nCompile your Sass style sheets:' +
-            '\n ' + chalk.yellow.bold('gulp sass') : '') +
-            '\n' +
-            '\nOr do all of the above:' +
-            '\n ' + chalk.yellow.bold('gulp install') +
-            '\n';
+                'Inject your front end dependencies into your source code:' +
+                '\n ' + chalk.yellow.bold('gulp inject') +
+                '\n' +
+                '\nGenerate the AngularJS constants:' +
+                '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
+                (this.useSass ?
+                '\n' +
+                '\nCompile your Sass style sheets:' +
+                '\n ' + chalk.yellow.bold('gulp sass') : '') +
+                '\n' +
+                '\nOr do all of the above:' +
+                '\n ' + chalk.yellow.bold('gulp install') +
+                '\n';
         }
         this.log(chalk.green(logMsg));
     }
