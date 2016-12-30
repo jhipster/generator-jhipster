@@ -24,7 +24,7 @@
     <%_ if (enableTranslation) { _%>
     "ng2-translate": "4.2.0",
     <%_ } _%>
-    "ng-jhipster": "0.0.2",
+    "ng-jhipster": "0.0.3",
     "ng2-webstorage": "1.4.2",
     "reflect-metadata": "0.1.9",
     "rxjs": "5.0.2",
