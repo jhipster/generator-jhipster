@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 import { MissingTranslationHandler, MissingTranslationHandlerParams } from 'ng2-translate/ng2-translate';
+import { ConfigHelper } from '../helper';
 
 export class JhiMissingTranslationHandler implements MissingTranslationHandler {
     handle(key: MissingTranslationHandlerParams) {
-        return `translation-not-found[${key}]`;
+        return `${ConfigHelper.getConfig().noi18nMessage}[${key}]`;
     }
 }
