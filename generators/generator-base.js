@@ -51,12 +51,15 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
         jhipsterUtils.rewriteFile({
             file: navbarPath,
             needle: 'jhipster-needle-add-element-to-menu',
-            splicable: [`<li ui-sref-active="active">
-                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
+            splicable: [
+                this.stripMargin(
+                    `|<li ui-sref-active="active">
+                     |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                     |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                     |        <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                     |    </a>
+                     |</li>`
+                )
             ]
         }, this);
     } catch (e) {
@@ -82,12 +85,15 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
         jhipsterUtils.rewriteFile({
             file: navbarAdminPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
-            splicable: [`<li ui-sref-active="active" >
-                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
+            splicable: [
+                this.stripMargin(
+                    `|<li ui-sref-active="active" >
+                     |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                     |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                     |        <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                     |    </a>
+                     |</li>`
+                )
             ]
         }, this);
     } catch (e) {
@@ -109,12 +115,15 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             jhipsterUtils.rewriteFile({
                 file: entityMenuPath,
                 needle: 'jhipster-needle-add-entity-to-menu',
-                splicable: [`<li ui-sref-active="active">
-                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                    <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                    <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`
+                splicable: [
+                    this.stripMargin(
+                        `|<li ui-sref-active="active">
+                         |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                         |        <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                         |        <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                         |    </a>
+                         |</li>`
+                    )
                 ]
             }, this);
         } else {
@@ -122,12 +131,15 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             jhipsterUtils.rewriteFile({
                 file: entityMenuPath,
                 needle: 'jhipster-needle-add-entity-to-menu',
-                splicable: [`<li>
-                                <a class="dropdown-item" uiSref="${routerName}" uiSrefActive="active" (click)="collapseNavbar()">
-                                    <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                                    <span ${enableTranslation ? 'jhi-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`
+                splicable: [
+                    this.stripMargin(
+                        `|<li>
+                         |    <a class="dropdown-item" uiSref="${routerName}" uiSrefActive="active" (click)="collapseNavbar()">
+                         |        <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                         |        <span ${enableTranslation ? 'jhi-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                         |    </a>
+                         |</li>`
+                    )
                 ]
             }, this);
         }
@@ -151,11 +163,14 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         jhipsterUtils.rewriteFile({
             file: indexPath,
             needle: 'jhipster-needle-add-entity-to-index-export',
-            splicable: [`export * from './${entityFolderName}/${entityFileName}-dialog.component';
-                        export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
-                        export * from './${entityFolderName}/${entityFileName}-detail.component';
-                        export * from './${entityFolderName}/${entityFileName}.component';
-                        export * from './${entityFolderName}/${entityFileName}.state';`
+            splicable: [
+                this.stripMargin(
+                    `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
+                     |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
+                     |export * from './${entityFolderName}/${entityFileName}-detail.component';
+                     |export * from './${entityFolderName}/${entityFileName}.component';
+                     |export * from './${entityFolderName}/${entityFileName}.state';`
+                )
             ]
         }, this);
         jhipsterUtils.rewriteFile({
@@ -174,29 +189,38 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-states',
-            splicable: [`${entityInstance}State,
-                        ${entityInstance}NewState,
-                        ${entityInstance}DetailState,
-                        ${entityInstance}EditState,
-                        ${entityInstance}DeleteState,`
+            splicable: [
+                this.stripMargin(
+                    `|${entityInstance}State,
+                     |${entityInstance}NewState,
+                     |${entityInstance}DetailState,
+                     |${entityInstance}EditState,
+                     |${entityInstance}DeleteState,`
+                )
             ]
         }, this);
 
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-entryComponents',
-            splicable: [`${entityAngularJSName}DialogComponent,
-                        ${entityAngularJSName}DeleteDialogComponent,`
+            splicable: [
+                this.stripMargin(
+                    `|${entityAngularJSName}DialogComponent,
+                     |${entityAngularJSName}DeleteDialogComponent,`
+                )
             ]
         }, this);
 
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-declarations',
-            splicable: [`${entityAngularJSName}Component,
-                        ${entityAngularJSName}DetailComponent,
-                        ${entityAngularJSName}DialogComponent,
-                        ${entityAngularJSName}DeleteDialogComponent,`
+            splicable: [
+                this.stripMargin(
+                    `|${entityAngularJSName}Component,
+                     |${entityAngularJSName}DetailComponent,
+                     |${entityAngularJSName}DialogComponent,
+                     |${entityAngularJSName}DeleteDialogComponent,`
+                )
             ]
         }, this);
 
@@ -209,16 +233,19 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-import',
-            splicable: [`${entityClass}Service,
-                        ${entityAngularJSName}Component,
-                        ${entityAngularJSName}DetailComponent,
-                        ${entityAngularJSName}DialogComponent,
-                        ${entityAngularJSName}DeleteDialogComponent,
-                        ${entityInstance}State,
-                        ${entityInstance}DetailState,
-                        ${entityInstance}NewState,
-                        ${entityInstance}EditState,
-                        ${entityInstance}DeleteState,`
+            splicable: [
+                this.stripMargin(
+                    `|${entityClass}Service,
+                     |${entityAngularJSName}Component,
+                     |${entityAngularJSName}DetailComponent,
+                     |${entityAngularJSName}DialogComponent,
+                     |${entityAngularJSName}DeleteDialogComponent,
+                     |${entityInstance}State,
+                     |${entityInstance}DetailState,
+                     |${entityInstance}NewState,
+                     |${entityInstance}EditState,
+                     |${entityInstance}DeleteState,`
+                )
             ]
         }, this);
     } catch (e) {this.log(e);
@@ -1945,4 +1972,11 @@ Generator.prototype.httpGet = function(url, onSuccess, onFail) {
  */
 Generator.prototype.toArrayString = function(array) {
     return `['${array.join('\',\'')}']`;
+};
+
+/**
+ * Strip margin indicated by pipe `|` from a string literal
+ */
+Generator.prototype.stripMargin = function(content) {
+    return content.replace(/^[ ]*\|/gm,'');
 };

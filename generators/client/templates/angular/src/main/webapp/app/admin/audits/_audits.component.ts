@@ -23,7 +23,12 @@ export class AuditsComponent implements OnInit {
     totalItems: number;
     datePipe: DatePipe;
 
-    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string, private paginationConfig: PaginationConfig){ 
+    constructor(
+        private auditsService: AuditsService,
+        private parseLinks: ParseLinks,
+        @Inject(LOCALE_ID) private locale: string,
+        private paginationConfig: PaginationConfig
+    ) { 
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
         this.reverse = false;
