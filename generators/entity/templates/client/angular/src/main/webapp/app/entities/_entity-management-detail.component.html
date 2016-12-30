@@ -1,6 +1,6 @@
 <% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div *ngIf="<%= entityInstance %>">
-    <h2><span jhi-translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
+    <h2><span jhiTranslate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal">
@@ -8,10 +8,10 @@
         var fieldName = fields[idx].fieldName;
         var fieldType = fields[idx].fieldType;
         var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-        <dt><span jhi-translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
+        <dt><span jhiTranslate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameHumanized %></span></dt>
         <dd>
             <%_ if (fields[idx].fieldIsEnum) { _%>
-            <span jhi-translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</span>
+            <span jhiTranslate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'image') { _%>
             <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
                 <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
@@ -25,7 +25,7 @@
             <span>{{<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
             <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent == 'any') { _%>
             <div *ngIf="<%= entityInstance %>.<%= fieldName %>">
-                <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" jhi-translate="entity.action.open">open</a>
+                <a (click)="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" jhiTranslate="entity.action.open">open</a>
                 {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
             </div>
             <%_ } else { _%>
@@ -47,7 +47,7 @@
         if (relationshipType == 'many-to-one'
         || (relationshipType == 'one-to-one' && ownerSide == true)
         || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
-        <dt><span jhi-translate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
+        <dt><span jhiTranslate="<%= keyPrefix %>.<%= relationshipName %>"><%= relationshipNameHumanized %></span></dt>
         <dd>
             <%_ if (otherEntityName == 'user') { _%>
             <%_ if (relationshipType == 'many-to-many') { _%>
@@ -82,12 +82,12 @@
     <button type="submit"
             uiSref="<%= entityStateName %>"
             class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhi-translate="entity.action.back"> Back</span>
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
     </button>
 
     <button type="button"
             uiSref="<%= entityStateName %>.edit" [uiParams]="{ id: <%= entityInstance %>.id }"
             class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhi-translate="entity.action.edit"> Edit</span>
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
     </button>
 </div>
