@@ -622,7 +622,7 @@ module.exports = EntityGenerator.extend({
             this.log('\n' + chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n'));
             this.spawnCommand('gulp', ['inject:app']);
         };
-        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework == 'angular1') {
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
             injectJsFilesToIndex.call(this);
         }
     },
