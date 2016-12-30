@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Directive, Host, HostListener, Input } from '@angular/core';
+import { Directive, Host, HostListener, Input, ElementRef, Renderer } from '@angular/core';
 import { JhiSortDirective } from './sort.directive';
+import { ConfigHelper } from '../helper';
 
 @Directive({
     selector: '[jhiSortBy]'
@@ -22,13 +23,31 @@ import { JhiSortDirective } from './sort.directive';
 export class JhiSortByDirective {
     @Input() jhiSortBy: string;
 
+    sortAscIcon = 'fa-sort-asc';
+    sortDescIcon = 'fa-sort-desc';
+
     jhiSort: JhiSortDirective;
 
-    constructor(@Host() jhiSort: JhiSortDirective) {
+    constructor(@Host() jhiSort: JhiSortDirective, private el: ElementRef, private renderer: Renderer) {
         this.jhiSort = jhiSort;
+        let config = ConfigHelper.getConfig();
+        this.sortAscIcon = config.sortAscIcon;
+        this.sortDescIcon = config.sortDescIcon;
     }
 
     @HostListener('click') onClick() {
-        this.jhiSort.sort(this.jhiSortBy);
+        if (this.jhiSort.predicate && this.jhiSort.predicate !== '_score') {
+            this.jhiSort.sort(this.jhiSortBy);
+            this.applyClass();
+        }
     }
+
+    private applyClass () {
+        let childSpan = this.el.nativeElement.children[1];
+        let add = this.sortAscIcon;
+        if (!this.jhiSort.ascending) {
+            add = this.sortDescIcon;
+        }
+        this.renderer.setElementClass(childSpan, add, true);
+    };
 }

@@ -18,13 +18,15 @@ import { Component, Input } from '@angular/core';
 /**
  * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ng2-translate is too verbose and buggy
  */
+/* tslint:disable */
 @Component({
-    selector: '[jhi-translate]',
+    selector: '[jhiTranslate]',
     template: '<span [innerHTML]="jhiTranslate | translate:translateValues"></span>'
 })
 export class JhiTranslateComponent {
 
-    @Input('jhi-translate') jhiTranslate: string;
+    @Input() jhiTranslate: string;
 
-    @Input('translate-values') translateValues: any;
+    @Input() translateValues: any;
 }
+/* tslint:enable */
