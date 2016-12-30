@@ -113,6 +113,7 @@ module.exports = EntityGenerator.extend({
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
+            this.jhiPrefix = this.config.get('jhiPrefix');
             this.testFrameworks = this.config.get('testFrameworks');
             // backward compatibility on testing frameworks
             if (this.testFrameworks === undefined) {

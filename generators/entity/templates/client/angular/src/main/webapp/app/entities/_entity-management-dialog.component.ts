@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>EventManager } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>EventManager, AlertService } from '../../shared';
+import { AlertService } from '../../shared';
 <%- include('model-class-import-template.ejs'); -%>
 <%- include('service-class-import-template.ejs'); -%>
 
 // TODO replace ng-file-upload dependency by an ng2 depedency
 @Component({
-    selector: '<%= entityFileName %>-mgmt-dialog',
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'
 })
 export class <%= entityAngularJSName %>DialogComponent implements OnInit {
@@ -82,10 +83,12 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     save () {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
-            this.<%= entityInstance %>Service.update(this.<%= entityInstance %>).subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
+                .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {<% if (!enableTranslation){ %>
             this.<%= entityInstance %>.langKey = 'en';<% } %>
-            this.<%= entityInstance %>Service.create(this.<%= entityInstance %>).subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+            this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
+                .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 
@@ -102,13 +105,16 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
     private onError (error) {
         this.alertService.error(error.message, null, null);
-    }<%
+    }
+    <%_
     for (idx in relationships) {
-        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized; %>
+        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized; _%>
     track<%- otherEntityNameCapitalized %>ById(index, item: <%- relationships[idx].otherEntityNameCapitalized %>){
         return item.id;
-    } <% } %>
-    <% if (hasManyToMany){ %>
+    }
+    <%_ } _%>
+
+    <%_ if (hasManyToMany){ _%>
     getSelected(selectedVals: Array<any>, option: any) {
         if(selectedVals) {
             for (let i = 0; i < selectedVals.length; i++) {
@@ -117,5 +123,6 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
             }
         }
         return option;
-    }<% } %>
+    }
+    <%_ } _%>
 }
