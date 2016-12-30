@@ -29,7 +29,7 @@ import { Component, Input } from '@angular/core';
         </div>`
 })
 export class JhiItemCountComponent {
-    
+
    /**
     *  current page number.
     */
