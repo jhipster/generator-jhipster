@@ -93,7 +93,7 @@ export class Principal {
         return this.authenticationState.asObservable();
     }
 
-    getImageUrl (): String {
+    getImageUrl(): String {
         return this._identity.imageUrl;
     }
 }
