@@ -1,11 +1,11 @@
 import { Injector } from '@angular/core';
 import { Http, XHRBackend, RequestOptions } from '@angular/http';
+import { EventManager } from 'ng-jhipster';
+
 import { HttpInterceptor } from './http.interceptor';
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
-import { EventManager } from 'ng-jhipster';
-
 <%_ } if (authenticationType === 'session') { _%>
 import { StateStorageService } from '../../shared/auth/state-storage.service';
 <%_ } _%>
