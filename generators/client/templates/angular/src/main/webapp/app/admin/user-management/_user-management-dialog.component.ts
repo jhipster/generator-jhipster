@@ -19,7 +19,7 @@ export class UserMgmtDialogComponent implements OnInit {
     authorities: any[];
     isSaving: Boolean;
 
-    constructor(
+    constructor (
         public activeModal: NgbActiveModal,
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
@@ -38,11 +38,11 @@ export class UserMgmtDialogComponent implements OnInit {
         <%_ } _%>
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.user.id !== null) {
             this.userService.update(this.user).subscribe(response => this.onSaveSuccess(response), () => this.onSaveError());
@@ -53,7 +53,7 @@ export class UserMgmtDialogComponent implements OnInit {
     }
 
     private onSaveSuccess(result) {
-        this.eventManager.broadcast({ name: 'userListModification', content:'OK' });
+        this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }

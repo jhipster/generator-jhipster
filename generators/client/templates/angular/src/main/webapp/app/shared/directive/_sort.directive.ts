@@ -8,7 +8,7 @@ export class <%=jhiPrefixCapitalized%>SortDirective {
     @Input() predicate: string;
     @Input() ascending: boolean;
     @Input() callback: Function;
-    
+
     constructor() { }
 
     sort(field) {

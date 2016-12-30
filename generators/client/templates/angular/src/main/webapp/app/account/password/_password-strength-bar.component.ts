@@ -1,4 +1,4 @@
-import {Component, Input, ElementRef} from '@angular/core';
+import {Component, ElementRef, Input, Renderer} from '@angular/core';
 
 @Component({
     selector: '<%=jhiPrefix%>-password-strength-bar',
@@ -15,70 +15,70 @@ import {Component, Input, ElementRef} from '@angular/core';
         </div>`
 })
 export class PasswordStrengthBarComponent {
-    strength: any;
 
-    constructor(private el: ElementRef) {
-        this.strength = {
-            colors: ['#F00', '#F90', '#FF0', '#9F0', '#0F0'],
-            mesureStrength: (p) => {
+    colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
 
-                let _force = 0;
-                let _regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
+    constructor(private renderer: Renderer, private elementRef: ElementRef) { }
 
-                let _lowerLetters = /[a-z]+/.test(p);
-                let _upperLetters = /[A-Z]+/.test(p);
-                let _numbers = /[0-9]+/.test(p);
-                let _symbols = _regex.test(p);
+    measureStrength(p: string): number {
 
-                let _flags = [_lowerLetters, _upperLetters, _numbers, _symbols];
-                let _passedMatches = $.grep(_flags, (el) => {
-                    return el === true;
-                }).length;
+        let force = 0;
+        let regex = /[$-/:-?{-~!"^_`\[\]]/g; // "
 
-                _force += 2 * p.length + ((p.length >= 10) ? 1 : 0);
-                _force += _passedMatches * 10;
+        let lowerLetters = /[a-z]+/.test(p);
+        let upperLetters = /[A-Z]+/.test(p);
+        let numbers = /[0-9]+/.test(p);
+        let symbols = regex.test(p);
 
-                // penality (short password)
-                _force = (p.length <= 6) ? Math.min(_force, 10) : _force;
+        let flags = [lowerLetters, upperLetters, numbers, symbols];
+        let passedMatches = flags.filter( (isMatchedFlag: boolean) => {
+            return isMatchedFlag === true;
+        }).length;
 
-                // penality (poor variety of characters)
-                _force = (_passedMatches === 1) ? Math.min(_force, 10) : _force;
-                _force = (_passedMatches === 2) ? Math.min(_force, 20) : _force;
-                _force = (_passedMatches === 3) ? Math.min(_force, 40) : _force;
+        force += 2 * p.length + ((p.length >= 10) ? 1 : 0);
+        force += passedMatches * 10;
 
-                return _force;
+        // penality (short password)
+        force = (p.length <= 6) ? Math.min(force, 10) : force;
 
-            },
-            getColor: function (s) {
+        // penality (poor variety of characters)
+        force = (passedMatches === 1) ? Math.min(force, 10) : force;
+        force = (passedMatches === 2) ? Math.min(force, 20) : force;
+        force = (passedMatches === 3) ? Math.min(force, 40) : force;
 
-                let idx = 0;
-                if (s <= 10) {
-                    idx = 0;
-                } else if (s <= 20) {
-                    idx = 1;
-                } else if (s <= 30) {
-                    idx = 2;
-                } else if (s <= 40) {
-                    idx = 3;
-                } else {
-                    idx = 4;
-                }
-                return {idx: idx + 1, col: this.colors[idx]};
-            }
-        };
-    }
+        return force;
+    };
+
+    getColor(s: number): any {
+        let idx = 0;
+        if (s <= 10) {
+            idx = 0;
+        } else if (s <= 20) {
+            idx = 1;
+        } else if (s <= 30) {
+            idx = 2;
+        } else if (s <= 40) {
+            idx = 3;
+        } else {
+            idx = 4;
+        }
+        return {idx: idx + 1, col: this.colors[idx]};
+    };
 
     @Input()
     set passwordToCheck(password: string) {
         if (password) {
-            let c = this.strength.getColor(this.strength.mesureStrength(password));
-            this.el.nativeElement.className = '';
-            let lis = this.el.nativeElement.getElementsByTagName('li');
+            let c = this.getColor(this.measureStrength(password));
+            let element = this.elementRef.nativeElement;
+            if ( element.className ) {
+                this.renderer.setElementClass(element, element.className , false);
+            }
+            let lis = element.getElementsByTagName('li');
             for (let i = 0; i < lis.length; i++) {
                 if (i < c.idx) {
-                    lis[i].style.backgroundColor = c.col;
+                    this.renderer.setElementStyle(lis[i], 'backgroundColor', c.col);
                 } else {
-                    lis[i].style.backgroundColor = '#DDD';
+                    this.renderer.setElementStyle(lis[i], 'backgroundColor', '#DDD');
                 }
             }
         }

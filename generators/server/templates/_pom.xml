@@ -55,9 +55,8 @@
         <hazelcast-hibernate.version>1.1.1</hazelcast-hibernate.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
+        <hibernate-validator.version>5.3.3.Final</hibernate-validator.version>
         <hibernate.version>5.2.4.Final</hibernate.version>
-        <%_ } _%>
-        <%_ if (databaseType === 'sql') { _%>
         <hikaricp.version>2.4.6</hikaricp.version>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
@@ -69,7 +68,10 @@
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
-        <jhipster.server.version>0.0.7</jhipster.server.version>
+        <jhipster.server.version>0.0.9</jhipster.server.version>
+        <%_ if (authenticationType === 'jwt') { _%>
+        <jjwt.version>0.7.0</jjwt.version>
+        <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <jna.version>4.2.2</jna.version>
         <%_ } _%>
@@ -477,7 +479,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.3.3.Final</version>
+            <version>${hibernate-validator.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -630,7 +632,7 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.7.0</version>
+            <version>${jjwt.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'uaa') { _%>

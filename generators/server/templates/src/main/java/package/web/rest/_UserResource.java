@@ -155,23 +155,13 @@ public class UserResource {
     @Timed<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public ResponseEntity<List<ManagedUserVM>> getAllUsers(@ApiParam Pageable pageable)
         throws URISyntaxException {
-        <%_ if (databaseType == 'sql') { _%>
-        Page<User> page = userRepository.findAllWithAuthorities(pageable);
-        <%_ } else { // MongoDB _%>
-        Page<User> page = userRepository.findAll(pageable);
-        <%_ } _%>
-        List<ManagedUserVM> managedUserVMs = page.getContent().stream()
-            .map(ManagedUserVM::new)
-            .collect(Collectors.toList());
+        final Page<ManagedUserVM> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-        return new ResponseEntity<>(managedUserVMs, headers, HttpStatus.OK);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }<% } else { // Cassandra %>
     public ResponseEntity<List<ManagedUserVM>> getAllUsers()
         throws URISyntaxException {
-        List<User> users = userRepository.findAll();
-        List<ManagedUserVM> managedUserVMs = users.stream()
-            .map(ManagedUserVM::new)
-            .collect(Collectors.toList());
+        final List<ManagedUserVM> managedUserVMs = userService.getAllManagedUsers();
         return new ResponseEntity<>(managedUserVMs, HttpStatus.OK);
     }<% } %>
 

@@ -399,7 +399,17 @@ module.exports = JhipsterServerGenerator.extend({
                 chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' and place it in the `' +
                 chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
         }
-        this.log(chalk.green.bold('\nServer app generated successfully.\n'));
+        this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+
+        let logMsg =
+            'Run your Spring Boot application:' +
+            '\n ' + chalk.yellow.bold('./mvnw');
+        if (this.buildTool === 'gradle') {
+            logMsg =
+                'Run your Spring Boot application:' +
+                '\n ' + chalk.yellow.bold('./gradlew');
+        }
+        this.log(chalk.green(logMsg));
     }
 
 });

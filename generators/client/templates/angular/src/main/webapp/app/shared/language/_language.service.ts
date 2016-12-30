@@ -17,7 +17,7 @@ export class JhiLanguageService {
         this.init();
     }
 
-    init () {
+    init() {
         this.translateService.setDefaultLang(this.defaultLang);
         this.translateService.currentLang = this.currentLang;
         // FIXME onTranslationChange may not be required at all

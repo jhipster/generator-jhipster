@@ -42,29 +42,39 @@ export class RegisterComponent implements OnInit {
         if (this.registerAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.registerAccount.langKey = <% if (enableTranslation) { %>this.languageService.getCurrent()<% } else {%> 'en' <% } %>;
             this.doNotMatch = null;
             this.error = null;
             this.errorUserExists = null;
             this.errorEmailExists = null;
-
+<%_ if (enableTranslation) { _%>
+            this.languageService.getCurrent().then(key => {
+                this.registerAccount.langKey = key;
+                this.registerService.save(this.registerAccount).subscribe(() => {
+                    this.success = true;
+                }, this.processError);
+            });
+<%_ } else { _%>
+            this.registerAccount.langKey = 'en';
             this.registerService.save(this.registerAccount).subscribe(() => {
                 this.success = true;
-            }, (response) => {
-                // TODO handle this.logout(); on error
-                this.success = null;
-                if (response.status === 400 && response.data === 'login already in use') {
-                    this.errorUserExists = 'ERROR';
-                } else if (response.status === 400 && response.data === 'e-mail address already in use') {
-                    this.errorEmailExists = 'ERROR';
-                } else {
-                    this.error = 'ERROR';
-                }
-            });
+            }, this.processError);
+<%_ } _%>
         }
     }
 
     openLogin() {
         this.modalRef = this.loginModalService.open();
+    }
+
+    private processError(response) {
+        // TODO handle this.logout(); on error
+        this.success = null;
+        if (response.status === 400 && response.data === 'login already in use') {
+            this.errorUserExists = 'ERROR';
+        } else if (response.status === 400 && response.data === 'e-mail address already in use') {
+            this.errorEmailExists = 'ERROR';
+        } else {
+            this.error = 'ERROR';
+        }
     }
 }

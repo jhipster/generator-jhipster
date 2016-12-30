@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
+import { ProfileService } from '../profiles/profile.service'; // barrel doesn't work here
 import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
@@ -31,6 +31,7 @@ export class NavbarComponent implements OnInit {
         private profileService: ProfileService
     ) {
         this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
+        this.isNavbarCollapsed = true;
     }
 
     ngOnInit() {
