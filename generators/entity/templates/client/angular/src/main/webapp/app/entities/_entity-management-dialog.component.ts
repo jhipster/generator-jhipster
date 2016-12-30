@@ -102,8 +102,13 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
     private onError (error) {
         this.alertService.error(error.message, null, null);
-    }
-<% if (hasManyToMany){ %>
+    }<%
+    for (idx in relationships) {
+        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized; %>
+    track<%- otherEntityNameCapitalized %>ById(index, item: <%- relationships[idx].otherEntityNameCapitalized %>){
+        return item.id;
+    } <% } %>
+    <% if (hasManyToMany){ %>
     getSelected(selectedVals: Array<any>, option: any) {
         if(selectedVals) {
             for (let i = 0; i < selectedVals.length; i++) {
@@ -112,6 +117,5 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
             }
         }
         return option;
-    }
-<% } %>
+    }<% } %>
 }
