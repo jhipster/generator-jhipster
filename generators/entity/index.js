@@ -415,7 +415,7 @@ module.exports = EntityGenerator.extend({
             this.entityFolderName = entityNameSpinalCased;
             this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
-            this.entityServiceFileName = entityNameSpinalCased;
+            this.entityServiceFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityAngularJSName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
             this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
@@ -436,6 +436,7 @@ module.exports = EntityGenerator.extend({
             if (!this.relationships) {
                 this.relationships = [];
             }
+            this.differentRelationships = [];
 
             // Load in-memory data for fields
             this.fields && this.fields.forEach( function (field) {
@@ -588,6 +589,7 @@ module.exports = EntityGenerator.extend({
                 var entityType = relationship.otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
+                    this.differentRelationships.push(relationship);
                 }
             }, this);
 

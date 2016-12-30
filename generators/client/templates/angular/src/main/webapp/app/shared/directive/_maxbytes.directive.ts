@@ -4,16 +4,6 @@ import { NG_VALIDATORS } from '@angular/forms';
 import { forwardRef } from '@angular/core';
 import { numberOfBytes } from './number-of-bytes';
 
-function validateMaxbytesFactory() {
-    return (c: FormControl, maxbytes: number) => {
-        return (c.value || numberOfBytes(c.value) <= maxbytes) ? null : {
-            maxbytes: {
-                valid: false
-            }
-        };
-    };
-}
-
 @Directive({
     selector: '[maxbytes][ngModel]',
     providers: [
@@ -22,12 +12,14 @@ function validateMaxbytesFactory() {
 })
 export class MaxbytesValidator {
     @Input() maxbytes: number;
-    validator: Function;
 
     constructor() {
-        this.validator = validateMaxbytesFactory();
     }
     validate(c: FormControl) {
-        return this.validator(c, this.maxbytes);
+        return (c.value && numberOfBytes(c.value) <= this.maxbytes) ? null : {
+            maxbytes: {
+                valid: false
+            }
+        };
     }
 }

@@ -124,6 +124,7 @@ const files = {
                 // entities
                 'entities/_entity.module.ts',
                 'entities/_entity.state.ts',
+                'entities/_index.ts',
                 // home module
                 'home/_index.ts',
                 'home/_home.component.ts',

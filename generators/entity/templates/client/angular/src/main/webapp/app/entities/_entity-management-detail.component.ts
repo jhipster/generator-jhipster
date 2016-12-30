@@ -1,21 +1,28 @@
-angular
-    .module('<%=angularAppName%>')
-    .controller('<%= entityAngularJSName %>DetailController', <%= entityAngularJSName %>DetailController);
+import { Component, OnInit } from '@angular/core';
 
-<%= entityAngularJSName %>DetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity'<% for (idx in differentTypes) { %>, '<%= differentTypes[idx] %>'<% } %>];
+import { <%= entityClass %> } from './<%= entityFileName %>.model';
+import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 
-function <%= entityAngularJSName %>DetailController($scope, $rootScope, $stateParams, previousState<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
-    var vm = this;
+import { Transition } from 'ui-router-ng2';
 
-    vm.<%= entityInstance %> = entity;
-    vm.previousState = previousState.name;
-    <%_ if (fieldsContainBlob) { _%>
-    vm.byteSize = DataUtils.byteSize;
-    vm.openFile = DataUtils.openFile;
-    <%_ } _%>
+@Component({
+    selector: '<%= entityFileName %>-mgmt-detail',
+    templateUrl: './<%= entityFileName %>-detail.component.html'
+})
+export class <%= entityAngularJSName %>DetailComponent implements OnInit {
 
-    var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
-        vm.<%= entityInstance %> = result;
-    });
-    $scope.$on('$destroy', unsubscribe);
+    <%= entityInstance %>: <%= entityClass %>;
+
+    constructor(private <%= entityInstance %>Service: <%= entityClass %>Service, private trans: Transition) { }
+
+    ngOnInit() {
+        this.load(this.trans.params()['id']);
+    }
+
+    load (id) {
+        this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            this.<%= entityInstance %> = <%= entityInstance %>;
+        });
+    }
+
 }

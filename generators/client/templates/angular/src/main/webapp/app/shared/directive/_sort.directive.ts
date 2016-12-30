@@ -11,14 +11,13 @@ export class <%=jhiPrefixCapitalized%>SortDirective {
 
     constructor() { }
 
-    sort (field) {
+    sort(field) {
         if (field !== this.predicate) {
             this.ascending = true;
         } else {
             this.ascending = !this.ascending;
         }
         this.predicate = field;
-
         this.callback();
     }
 }

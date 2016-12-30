@@ -106,22 +106,123 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
         var entityMenuPath;
         if (this.clientFramework === 'angular1') {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+            jhipsterUtils.rewriteFile({
+                file: entityMenuPath,
+                needle: 'jhipster-needle-add-entity-to-menu',
+                splicable: [`<li ui-sref-active="active">
+                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                                    <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                                </a>
+                            </li>`
+                ]
+            }, this);
         } else {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+            jhipsterUtils.rewriteFile({
+                file: entityMenuPath,
+                needle: 'jhipster-needle-add-entity-to-menu',
+                splicable: [`<li>
+                                <a class="dropdown-item" uiSref="${routerName}" uiSrefActive="active" (click)="collapseNavbar()">
+                                    <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                                    <span ${enableTranslation ? 'jhi-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                                </a>
+                            </li>`
+                ]
+            }, this);
         }
-        jhipsterUtils.rewriteFile({
-            file: entityMenuPath,
-            needle: 'jhipster-needle-add-entity-to-menu',
-            splicable: [`<li ui-sref-active="active">
-                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
-            ]
-        }, this);
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+    }
+};
+/**
+ * Add a new entity in the TS modules file.
+ *
+ * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ */
+Generator.prototype.addEntityToModule = function (entityInstance, entityClass, entityAngularJSName, entityFolderName, entityFileName, enableTranslation) {
+    try {
+        if (this.clientFramework === 'angular1') {
+            return;
+        }
+        var entityPath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
+        var indexPath = CLIENT_MAIN_SRC_DIR + 'app/entities/index.ts';
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}-dialog.component';
+                        export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
+                        export * from './${entityFolderName}/${entityFileName}-detail.component';
+                        export * from './${entityFolderName}/${entityFileName}.component';
+                        export * from './${entityFolderName}/${entityFileName}.state';`
+            ]
+        }, this);
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-model-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}.model';`
+            ]
+        }, this);
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-service-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}.service';`
+            ]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-states',
+            splicable: [`${entityInstance}State,
+                        ${entityInstance}NewState,
+                        ${entityInstance}DetailState,
+                        ${entityInstance}EditState,
+                        ${entityInstance}DeleteState,`
+            ]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-entryComponents',
+            splicable: [`${entityAngularJSName}DialogComponent,
+                        ${entityAngularJSName}DeleteDialogComponent,`
+            ]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-declarations',
+            splicable: [`${entityAngularJSName}Component,
+                        ${entityAngularJSName}DetailComponent,
+                        ${entityAngularJSName}DialogComponent,
+                        ${entityAngularJSName}DeleteDialogComponent,`
+            ]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-providers',
+            splicable: [`${entityClass}Service,`]
+        }, this);
+
+        jhipsterUtils.rewriteFile({
+            file: entityPath,
+            needle: 'jhipster-needle-add-entity-to-module-import',
+            splicable: [`${entityClass}Service,
+                        ${entityAngularJSName}Component,
+                        ${entityAngularJSName}DetailComponent,
+                        ${entityAngularJSName}DialogComponent,
+                        ${entityAngularJSName}DeleteDialogComponent,
+                        ${entityInstance}State,
+                        ${entityInstance}DetailState,
+                        ${entityInstance}NewState,
+                        ${entityInstance}EditState,
+                        ${entityInstance}DeleteState,`
+            ]
+        }, this);
+    } catch (e) {this.log(e);
+        this.log(chalk.yellow('\nUnable to find ') + indexPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance+ entityClass+ entityFolderName+ entityFileName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -1321,7 +1422,7 @@ Generator.prototype.generateKeyStore = function() {
             `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
         , function(code) {
             if (code !== 0) {
-                parent.env.error(chalk.red(`\nFailed to create a KeyStore with \'keytool\'`), code);
+                parent.error('\nFailed to create a KeyStore with \'keytool\'', code);
             } else {
                 parent.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
             }
@@ -1835,4 +1936,13 @@ Generator.prototype.httpGet = function(url, onSuccess, onFail) {
             onSuccess(body);
         });
     }).on('error', onFail);
+};
+
+/**
+ * Function to print a proper array with simple quoted strings
+ *
+ *  @param {array} array - the array to print
+ */
+Generator.prototype.toArrayString = function(array) {
+    return `['${array.join('\',\'')}']`;
 };
