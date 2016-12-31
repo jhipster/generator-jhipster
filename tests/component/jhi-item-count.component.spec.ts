@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, TestBed, async } from '@angular/core/testing';
-import {JhiItemCountComponent} from '../../src/component/jhi-item-count.component';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { JhiItemCountComponent } from '../../src/component/jhi-item-count.component';
 
 
 function getElementHtml(element: ComponentFixture<JhiItemCountComponent>): string {

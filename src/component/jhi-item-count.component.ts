@@ -15,7 +15,6 @@
  */
 import { Component, Input } from '@angular/core';
 
-
 /**
  * A component that will take care of item count statistics of a pagination.
  */

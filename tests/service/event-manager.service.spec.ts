@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { TestBed, inject } from '@angular/core/testing';
 
-import {EventManager} from '../../src/service/event-manager.service';
+import { EventManager } from '../../src/service/event-manager.service';
 
 @Injectable()
 class SpyService {

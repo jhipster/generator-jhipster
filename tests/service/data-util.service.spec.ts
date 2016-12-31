@@ -16,7 +16,7 @@
 
 import { TestBed, inject } from '@angular/core/testing';
 
-import {DataUtils} from '../../src/service/data-util.service';
+import { DataUtils } from '../../src/service/data-util.service';
 
 describe('Data Utils service test', () => {
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { MissingTranslationHandler, MissingTranslationHandlerParams } from 'ng2-translate/ng2-translate';
+import { MissingTranslationHandler, MissingTranslationHandlerParams } from 'ng2-translate';
 import { ConfigHelper } from '../helper';
 
 export class JhiMissingTranslationHandler implements MissingTranslationHandler {
