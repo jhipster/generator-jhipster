@@ -7,7 +7,7 @@ exports.config = {
     specs: [
         './e2e/account/*.spec.ts',
         './e2e/admin/*.spec.ts',
-        './e2e/entities/*.js'
+        './e2e/entities/*.spec.ts'
     ],
 
     capabilities: {

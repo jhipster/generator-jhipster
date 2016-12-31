@@ -44,9 +44,9 @@ describe('account', function () {
 
     it('should login successfully with admin account', function () {
         <%_ if (enableTranslation) { _%>
-        const expect1 = /home.title/;
+        const expect1 = /login.title/;
         <%_ } else { _%>
-        const expect1 = /Welcome, Java Hipster!/;
+        const expect1 = /Sign in/;
         <%_ } _%>
         element.all(by.css('h1')).first().<%- elementGetter %>.then((value) => {
             expect(value).toMatch(expect1);
@@ -61,7 +61,7 @@ describe('account', function () {
         <%_ } else { _%>
         const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
-        element.all(by.css('.alert-success')).getAttribute('jhiTranslate').then((value) => {
+        element.all(by.css('.alert-success')).<%- elementGetter %>.then((value) => {
             expect(value).toMatch(expect2);
         });
     });
