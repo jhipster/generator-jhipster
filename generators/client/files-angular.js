@@ -83,7 +83,7 @@ const files = {
             templates: [
                 '_app.main.ts',
                 '_app.module.ts',
-                '_app.state.ts',
+                { file: '_app.state.ts', method: 'copyJs' },
                 '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
@@ -137,7 +137,7 @@ const files = {
                 'layouts/profiles/_page-ribbon.component.ts',
                 'layouts/main/_main.component.ts',
                 'layouts/main/_main.component.html',
-                'layouts/navbar/_navbar.component.ts',
+                { file: 'layouts/navbar/_navbar.component.ts', method: 'copyJs' },
                 { file: 'layouts/navbar/_navbar.component.html', method: 'copyHtml' },
                 'layouts/footer/_footer.component.ts',
                 { file: 'layouts/footer/_footer.component.html', method: 'copyHtml' },
@@ -170,7 +170,7 @@ const files = {
                 { file: 'account/password/_password.component.html', method: 'copyHtml' },
                 { file: 'account/password/_password.state.ts', method: 'copyJs' },
                 'account/password/_password-strength-bar.component.ts',
-                'account/register/_register.component.ts',
+                { file: 'account/register/_register.component.ts', method: 'copyJs' },
                 'account/register/_register.service.ts',
                 { file: 'account/register/_register.state.ts', method: 'copyJs' },
                 { file: 'account/register/_register.component.html', method: 'copyHtml' },
@@ -182,7 +182,7 @@ const files = {
                 'account/password-reset/finish/_password-reset-finish.component.ts',
                 { file: 'account/password-reset/finish/_password-reset-finish.component.html', method: 'copyHtml' },
                 'account/password-reset/finish/_password-reset-finish.service.ts',
-                'account/settings/_settings.component.ts',
+                { file: 'account/settings/_settings.component.ts', method: 'copyJs' },
                 { file: 'account/settings/_settings.component.html', method: 'copyHtml' },
                 { file: 'account/settings/_settings.state.ts', method: 'copyJs' }
             ]
@@ -308,28 +308,6 @@ const files = {
                 'shared/constants/_pagination.constants.ts',
                 //models
                 'shared/model/_account.model.ts',
-                //pipes
-                'shared/pipe/_keys.pipe.ts',
-                'shared/pipe/_filter.pipe.ts',
-                'shared/pipe/_order-by.pipe.ts',
-                'shared/pipe/_capitalize.pipe.ts',
-                'shared/pipe/_truncate-characters.pipe.ts',
-                'shared/pipe/_truncate-words.pipe.ts',
-                //directives
-                'shared/directive/_sort.directive.ts',
-                'shared/directive/_sort-by.directive.ts',
-                'shared/directive/_show-validation.directive.ts',
-                'shared/directive/_maxbytes.directive.ts',
-                'shared/directive/_minbytes.directive.ts',
-                'shared/directive/_number-of-bytes.ts',
-                //services
-                'shared/service/_date-util.service.ts',
-                'shared/service/_data-util.service.ts',
-                'shared/service/_pagination-util.service.ts',
-                'shared/service/_parse-links.service.ts',
-                'shared/service/_event-manager.service.ts',
-                //components
-                'shared/component/_jhi-item-count.component.ts',
                 //login
                 { file: 'shared/login/_login.component.html', method: 'copyHtml' },
                 'shared/login/_login.service.ts',
@@ -346,12 +324,9 @@ const files = {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: [
-                'shared/language/_jhi-translate.directive.ts',
-                'shared/language/_translate-partial-loader.provider.ts',
                 'shared/language/_language.pipe.ts',
                 'shared/language/_language.constants.ts',
-                'shared/language/_language.service.ts',
-                'shared/language/_jhi-missing-translation.config.ts'
+                'shared/language/_language.helper.ts'
             ]
         }
     ],

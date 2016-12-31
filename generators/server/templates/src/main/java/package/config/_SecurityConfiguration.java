@@ -26,12 +26,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;<% } %>
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 <%_ if (authenticationType == 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 
 import javax.annotation.PostConstruct;
@@ -58,10 +62,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final SessionRegistry sessionRegistry;
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
-    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType == 'session') { %>,
-        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<% } if (authenticationType == 'jwt') { %>,
-            TokenProvider tokenProvider<% } %><% if (clusteredHttpSession == 'hazelcast') { %>, SessionRegistry sessionRegistry<% } %>) {
+    private final CorsFilter corsFilter;
+    <%_ } _%>
+
+    public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService<% if (authenticationType === 'session') { %>,
+        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices<% } if (authenticationType === 'jwt') { %>,
+            TokenProvider tokenProvider<% } %><% if (clusteredHttpSession === 'hazelcast') { %>, SessionRegistry sessionRegistry<% } if (authenticationType !== 'oauth2') { %>,
+        CorsFilter corsFilter<% } %>) {
 
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;
@@ -74,6 +83,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast') { _%>
         this.sessionRegistry = sessionRegistry;
+        <%_ } _%>
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        this.corsFilter = corsFilter;
         <%_ } _%>
     }
 
@@ -140,11 +152,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .sessionManagement()
             .maximumSessions(32) // maximum number of concurrent sessions for one user
             .sessionRegistry(sessionRegistry)
-            .and().and()<% } %><% if (authenticationType == 'session') { %>
+            .and().and()<% } %>
+            <%_ if (authenticationType == 'session') { _%>
             .csrf()
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())<% if (websocket == 'spring-websocket' && authenticationType != 'session') { %>
-            .ignoringAntMatchers("/websocket/**")<% } %>
-        .and()<% } %>
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            <%_ } _%>
+            <%_ if (authenticationType !== 'oauth2') { _%>
+            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+            <%_ } _%>
             .exceptionHandling()
             .authenticationEntryPoint(http401UnauthorizedEntryPoint())<% if (authenticationType == 'session') { %>
         .and()

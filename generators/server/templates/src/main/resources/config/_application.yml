@@ -3,6 +3,9 @@
 #
 # This configuration will be overriden by the Spring profile you use,
 # for example application-dev.yml if you use the "dev" profile.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -89,18 +92,18 @@ spring:
     social:
         # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
         google:
-            clientId: xxx
-            clientSecret: xxx
+            client-id: xxx
+            client-secret: xxx
 
         # see https://developers.facebook.com/docs/facebook-login/v2.2
         facebook:
-            clientId: xxx
-            clientSecret: xxx
+            client-id: xxx
+            client-secret: xxx
 
         # see https://apps.twitter.com/app/
         twitter:
-            clientId: xxx
-            clientSecret: xxx
+            client-id: xxx
+            client-secret: xxx
 
         # jhipster-needle-add-social-configuration
 <%_ } _%>
@@ -116,14 +119,16 @@ server:
 
 # ===================================================================
 # JHipster specific properties
+#
+# Full reference is available at: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 jhipster:
     async:
-        corePoolSize: 2
-        maxPoolSize: 50
-        queueCapacity: 10000
-    #cors: #By default CORS are not enabled. Uncomment to enable.
+        core-pool-size: 2
+        max-pool-size: 50
+        queue-capacity: 10000
+    # By default CORS is disabled. Uncomment to enable.
         #allowed-origins: "*"
         #allowed-methods: GET, PUT, POST, DELETE, OPTIONS
         #allowed-headers: "*"
@@ -133,32 +138,34 @@ jhipster:
     mail:
         from: <%= baseName %>@localhost
     swagger:
-        defaultIncludePattern: /api/.*
+        default-include-pattern: /api/.*
         title: <%=baseName%> API
         description: <%=baseName%> API documentation
         version: 0.0.1
-        termsOfServiceUrl:
-        contactName:
-        contactUrl:
-        contactEmail:
+        terms-of-service-url:
+        contact-name:
+        contact-url:
+        contact-email:
         license:
-        licenseUrl:
+        license-url:
 <%_ if (enableSocialSignIn) { _%>
     social:
         <%_ if (authenticationType == 'jwt') { _%>
-        redirectAfterSignIn: "/#/social-auth"
+        redirect-after-sign-in: "/#/social-auth"
         <%_ } else { _%>
-        redirectAfterSignIn: "/#/home"
+        redirect-after-sign-in: "/#/home"
         <%_ } _%>
 <%_ } _%>
     ribbon:
-        # comma separated list of profiles to show a ribbon on the GUI
-        displayOnActiveProfiles: dev
+        display-on-active-profiles: dev
 
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
 # to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 application:

@@ -1,5 +1,5 @@
 import { TransitionService, Transition } from 'ui-router-ng2';
-import { Principal, StateStorageService, AuthService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from '../../shared';
+import { Principal, StateStorageService, AuthService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from '../../shared';
 
 export function registerTransitionHooks($transitions: TransitionService) {
     $transitions.onStart({}, (transition: Transition) => {
@@ -35,8 +35,8 @@ export function registerTransitionHooks($transitions: TransitionService) {
             titleKey = toState.data.pageTitle;
         }
         <%_ if (enableTranslation) { _%>
-        let languageService = transition.injector().get(JhiLanguageService);
-        languageService.updateTitle(titleKey);
+        let languageHelper = transition.injector().get(JhiLanguageHelper);
+        languageHelper.updateTitle(titleKey);
         <%_ } else { _%>
         window.document.title = titleKey;
         <%_ } _%>

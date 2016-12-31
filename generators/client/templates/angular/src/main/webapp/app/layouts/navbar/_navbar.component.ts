@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { StateService } from 'ui-router-ng2';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { JhiLanguageService } from 'ng-jhipster';
 
-import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
+import { ProfileService } from '../profiles/profile.service'; //FIXME barrel doesnt work here
+import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 
@@ -24,6 +25,7 @@ export class NavbarComponent implements OnInit {
         private $state: StateService,
         private loginService: LoginService,
         <%_ if (enableTranslation) { _%>
+        private languageHelper: JhiLanguageHelper,
         private languageService: JhiLanguageService,
         <%_ } _%>
         private principal: Principal,
@@ -31,11 +33,12 @@ export class NavbarComponent implements OnInit {
         private profileService: ProfileService
     ) {
         this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
+        this.isNavbarCollapsed = true;
     }
 
     ngOnInit() {
         <%_ if (enableTranslation) { _%>
-        this.languageService.getAll().then((languages) => {
+        this.languageHelper.getAll().then((languages) => {
             this.languages = languages;
         });
         <%_ } _%>

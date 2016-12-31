@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { LogsComponent } from './logs.component';
-import { JhiLanguageService } from '../../shared';
 
 export const logsState = {
     name: 'logs',

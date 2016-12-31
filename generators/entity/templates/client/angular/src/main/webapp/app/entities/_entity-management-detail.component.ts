@@ -6,7 +6,7 @@ import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 import { Transition } from 'ui-router-ng2';
 
 @Component({
-    selector: '<%= entityFileName %>-mgmt-detail',
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
 export class <%= entityAngularJSName %>DetailComponent implements OnInit {

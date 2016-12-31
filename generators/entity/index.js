@@ -113,6 +113,7 @@ module.exports = EntityGenerator.extend({
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
+            this.jhiPrefix = this.config.get('jhiPrefix');
             this.testFrameworks = this.config.get('testFrameworks');
             // backward compatibility on testing frameworks
             if (this.testFrameworks === undefined) {
@@ -618,10 +619,10 @@ module.exports = EntityGenerator.extend({
 
     install: function () {
         var injectJsFilesToIndex = function () {
-            this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
+            this.log('\n' + chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n'));
             this.spawnCommand('gulp', ['inject:app']);
         };
-        if (!this.options['skip-install'] && !this.skipClient) {
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
             injectJsFilesToIndex.call(this);
         }
     },

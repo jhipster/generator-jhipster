@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
+import { EventManager, ParseLinks, PaginationUtil<%_ if (fieldsContainBlob) { _%>, DataUtils<% } %> } from 'ng-jhipster';
 
 import { StateService } from 'ui-router-ng2';
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-import { EventManager, AlertService, ITEMS_PER_PAGE, ParseLinks, Principal, PaginationUtil<%_ if (fieldsContainBlob) { _%>, DataUtils<% } %> } from '../../shared';
-import { PaginationConfig } from "../../blocks/config/uib-pagination.config";
+import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
-    selector: '<%= entityFileName %>-mgmt',
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
 export class <%= entityAngularJSName %>Component implements OnInit {
@@ -35,7 +36,7 @@ export class <%= entityAngularJSName %>Component implements OnInit {
     registerChangeIn<%= entityClassPlural %>() {
         this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.loadAll());
     }
-    <% } %>
+    <%_ } _%>
 
     private onError (error) {
         this.alertService.error(error.message, null, null);
@@ -50,5 +51,5 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         }
         return result;
     }
-    <% } } %>
+    <%_ } } _%>
 }
