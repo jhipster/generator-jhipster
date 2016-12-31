@@ -1,13 +1,13 @@
 <div *ngIf="audits">
-    <h2>Audits</h2>
+    <h2 jhiTranslate="audits.title">Audits</h2>
 
     <div class="row">
         <div class="col-md-5">
-            <h4>Filter by date</h4>
+            <h4 jhiTranslate="audits.filter.title">Filter by date</h4>
             <p class="input-group">
-                <span class="input-group-addon">from</span>
+                <span jhiTranslate="audits.filter.from" class="input-group-addon">from</span>
                 <input type="date" class="input-sm form-control" name="start" [(ngModel)]="fromDate" (ngModelChange)="onChangeDate($event)" required/>
-                <span class="input-group-addon">to</span>
+                <span jhiTranslate="audits.filter.to" class="input-group-addon">to</span>
                 <input type="date" class="input-sm form-control" name="end" [(ngModel)]="toDate" (ngModelChange)="onChangeDate($event)" required/>
             </p>
         </div>
@@ -17,10 +17,10 @@
         <table class="table table-condensed table-striped table-bordered">
             <thead>
             <tr>
-                <th (click)="orderProp = 'timestamp'; reverse=!reverse"><span>Date</span></th>
-                <th (click)="orderProp = 'principal'; reverse=!reverse"><span>User</span></th>
-                <th (click)="orderProp = 'type'; reverse=!reverse"><span>State</span></th>
-                <th (click)="orderProp = 'data.message'; reverse=!reverse"><span>Extra data</span></th>
+                <th (click)="orderProp = 'timestamp'; reverse=!reverse"><span jhiTranslate="audits.table.header.date">Date</span></th>
+                <th (click)="orderProp = 'principal'; reverse=!reverse"><span jhiTranslate="audits.table.header.principal">User</span></th>
+                <th (click)="orderProp = 'type'; reverse=!reverse"><span jhiTranslate="audits.table.header.status">State</span></th>
+                <th (click)="orderProp = 'data.message'; reverse=!reverse"><span jhiTranslate="audits.table.header.data">Extra data</span></th>
             </tr>
             </thead>
             <tr *ngFor="let audit of getAudits()">
@@ -29,7 +29,7 @@
                 <td>{{audit.type}}</td>
                 <td>
                     <span ng-show="audit.data.message">{{audit.data.message}}</span>
-                    <span ng-show="audit.data.remoteAddress"><span>Remote Address</span> {{audit.data.remoteAddress}}</span>
+                    <span ng-show="audit.data.remoteAddress"><span jhiTranslate="audits.table.data.remoteAddress">Remote Address</span> {{audit.data.remoteAddress}}</span>
                 </td>
             </tr>
         </table>

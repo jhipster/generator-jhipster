@@ -1,15 +1,15 @@
 <div class="table-responsive" *ngIf="loggers">
-    <h2>Logs</h2>
+    <h2 jhiTranslate="logs.title">Logs</h2>
 
-    <p>There are {{ loggers.length }} loggers.</p>
+    <p jhiTranslate="logs.nbloggers" translateValues="{total: '{{ loggers.length }}'}">There are {{ loggers.length }} loggers.</p>
 
-    <span>Filter</span> <input type="text" [(ngModel)]="filter" class="form-control">
+    <span jhiTranslate="logs.filter">Filter</span> <input type="text" [(ngModel)]="filter" class="form-control">
 
     <table class="table table-condensed table-striped table-bordered">
         <thead>
         <tr title="click to order">
-            <th (click)="orderProp = 'name'; reverse=!reverse"><span>Name</span></th>
-            <th (click)="orderProp = 'level'; reverse=!reverse"><span>Level</span></th>
+            <th (click)="orderProp = 'name'; reverse=!reverse"><span jhiTranslate="logs.table.name">Name</span></th>
+            <th (click)="orderProp = 'level'; reverse=!reverse"><span jhiTranslate="logs.table.level">Level</span></th>
         </tr>
         </thead>
 

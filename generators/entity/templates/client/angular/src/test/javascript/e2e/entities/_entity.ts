@@ -1,15 +1,15 @@
-'use strict';
+import { browser, element, by, $ } from 'protractor';
 
-describe('<%= entityClass %> e2e test', function () {
+describe('<%= entityClass %> e2e test', () => {
 
-    var username = element(by.id('username'));
-    var password = element(by.id('password'));
-    var entityMenu = element(by.id('entity-menu'));
-    var accountMenu = element(by.id('account-menu'));
-    var login = element(by.id('login'));
-    var logout = element(by.id('logout'));
+    const username = element(by.id('username'));
+    const password = element(by.id('password'));
+    const entityMenu = element(by.id('entity-menu'));
+    const accountMenu = element(by.id('account-menu'));
+    const login = element(by.id('login'));
+    const logout = element(by.id('logout'));
 
-    beforeAll(function () {
+    beforeAll(() => {
         browser.get('/');
 
         accountMenu.click();
@@ -20,7 +20,7 @@ describe('<%= entityClass %> e2e test', function () {
         element(by.css('button[type=submit]')).click();
     });
 
-    it('should load <%= entityClassPlural %>', function () {
+    it('should load <%= entityClassPlural %>', () => {
         entityMenu.click();
         element.all(by.css('[ui-sref="<%= entityStateName %>"]')).first().click().then(function() {
             <%_ if (enableTranslation) { _%>
