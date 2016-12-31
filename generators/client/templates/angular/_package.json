@@ -21,9 +21,7 @@
     "angular2-cookie": "1.2.6",
     "core-js": "2.4.1",
     "jquery": "3.1.1",
-    <%_ if (enableTranslation) { _%>
-    "ng2-translate": "4.2.0",
-    <%_ } _%>
+    "ng-jhipster": "0.0.4",
     "ng2-webstorage": "1.4.2",
     "reflect-metadata": "0.1.9",
     "rxjs": "5.0.2",
@@ -116,6 +114,7 @@
     "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
+    "webpack:build": "webpack --config webpack/webpack.dev.js",
     "webpack:dev": "webpack --watch --config webpack/webpack.dev.js",
     "webpack:prod": "webpack -p --config webpack/webpack.prod.js"
   }

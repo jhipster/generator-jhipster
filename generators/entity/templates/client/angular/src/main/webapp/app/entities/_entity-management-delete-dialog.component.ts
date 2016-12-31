@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventManager } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-import { EventManager } from '../../shared/service/event-manager.service';
 
 @Component({
-    selector: '<%= entityFileName %>-mgmt-delete-dialog',
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>-delete-dialog',
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
 })
 export class <%= entityAngularJSName %>DeleteDialogComponent {

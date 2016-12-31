@@ -1,8 +1,8 @@
 <div>
     <h2>
-        <span jhi-translate="userManagement.home.title">Users</span>
+        <span jhiTranslate="userManagement.home.title">Users</span>
         <button class="btn btn-primary float-xs-right" uiSref="user-management.new">
-            <span class="fa fa-plus"></span> <span jhi-translate="userManagement.home.createLabel">Create a new User</span>
+            <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
@@ -10,18 +10,18 @@
         <table class="table table-striped">
             <thead>
             <tr<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>Sort predicate="predicate" ascending="reverse" callback="transition"<% } %>>
-                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="id"<% } %>><span jhi-translate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="fa fa-sort"></span><%_ } _%></th>
-                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="login"<% } %>><span jhi-translate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
-                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="email"<% } %>><span jhi-translate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="fa fa-sort"></span><%_ } _%></th>
+                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="login"<% } %>><span jhiTranslate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
+                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="email"<% } %>><span jhiTranslate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th></th>
                 <%_ if (enableTranslation) { _%>
-                <th <% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="langKey"<% } %>> <span jhi-translate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
+                <th <% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="langKey"<% } %>> <span jhiTranslate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <%_ } _%>
-                <th><span jhi-translate="userManagement.profiles">Profiles</span></th>
+                <th><span jhiTranslate="userManagement.profiles">Profiles</span></th>
                 <%_ if (databaseType !== 'cassandra') { _%>
-                <th <%=jhiPrefix%>SortBy="createdDate"><span jhi-translate="userManagement.createdDate">Created Date</span> <span class="fa fa-sort"></span></th>
-                <th <%=jhiPrefix%>SortBy="lastModifiedBy"><span jhi-translate="userManagement.lastModifiedBy">Last Modified By</span> <span class="fa fa-sort"></span></th>
-                <th <%=jhiPrefix%>SortBy="lastModifiedDate"><span jhi-translate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="fa fa-sort"></span></th>
+                <th <%=jhiPrefix%>SortBy="createdDate"><span jhiTranslate="userManagement.createdDate">Created Date</span> <span class="fa fa-sort"></span></th>
+                <th <%=jhiPrefix%>SortBy="lastModifiedBy"><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span> <span class="fa fa-sort"></span></th>
+                <th <%=jhiPrefix%>SortBy="lastModifiedDate"><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <span class="fa fa-sort"></span></th>
                 <%_ } _%>
                 <th></th>
             </tr>
@@ -33,9 +33,9 @@
                 <td>{{user.email}}</td>
                 <td>
                     <span class="tag tag-danger" (click)="setActive(user, true)" *ngIf="!user.activated"
-                          jhi-translate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
+                          jhiTranslate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
                     <span class="tag tag-success" (click)="setActive(user, false)" *ngIf="user.activated"
-                          jhi-translate="userManagement.activated" style="cursor: pointer;">Activated</span>
+                          jhiTranslate="userManagement.activated" style="cursor: pointer;">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
@@ -53,21 +53,21 @@
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
-                            <span class="hidden-sm-down" jhi-translate="entity.action.view"></span>
+                            <span class="hidden-sm-down" jhiTranslate="entity.action.view"></span>
                         </button>
                         <button type="submit"
                                 uiSref="user-management.edit"
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
-                            <span class="hidden-sm-down" jhi-translate="entity.action.edit"></span>
+                            <span class="hidden-sm-down" jhiTranslate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
                                 uiSref="user-management.delete"
                                 [uiParams]="{ login: user.login }"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="fa fa-remove"></span>
-                            <span class="hidden-sm-down" jhi-translate="entity.action.delete"></span>
+                            <span class="hidden-sm-down" jhiTranslate="entity.action.delete"></span>
                         </button>
                     </div>
                 </td>

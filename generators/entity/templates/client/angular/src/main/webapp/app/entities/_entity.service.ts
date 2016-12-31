@@ -23,19 +23,21 @@ export class <%= entityClass %>Service {
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: DateUtils<% } %>) { }
 
     create(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
-        let copy = Object.assign({},<%= entityInstance %>);
-        <% for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { %>copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
-        <% }%>
-        <% if (fields[idx].fieldType == 'ZonedDateTime') { %>copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <% } }%>
+        let copy = Object.assign({}, <%= entityInstance %>);
+        <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+        copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
+        <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+        copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
+        <%_ } } _%>
         return this.http.post(this.resourceUrl, copy);
     }
 
     update(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
         let copy = Object.assign({},<%= entityInstance %>);
-        <% for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { %>copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));<% }%><% if (fields[idx].fieldType == 'ZonedDateTime') { %>
+        <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+        copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));<% }%><% if (fields[idx].fieldType == 'ZonedDateTime') { %>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
-        <% } }%>
+        <%_ } } _%>
         return this.http.put(this.resourceUrl, copy);
     }
 
@@ -43,11 +45,12 @@ export class <%= entityClass %>Service {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             <%_ if(hasDate) { _%>
             let jsonResponse = res.json();
-            <% for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { %>jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateFromServer(jsonResponse.<%=fields[idx].fieldName%>);<% }%><% if (fields[idx].fieldType == 'ZonedDateTime') { %>
+            <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+            jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateFromServer(jsonResponse.<%=fields[idx].fieldName%>);<% }%><% if (fields[idx].fieldType == 'ZonedDateTime') { %>
             jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils.convertDateTimeFromServer(jsonResponse.<%=fields[idx].fieldName%>);<% } }%>
             return jsonResponse;
             <%_ } else { _%>
-                return res.json();
+            return res.json();
             <%_ } _%>
         });
     }
@@ -65,20 +68,20 @@ export class <%= entityClass %>Service {
 
             options.search = params;
         }
-        //TODO Use Response class from @angular/http when the body field will be accessible directly
+        // TODO Use Response class from @angular/http when the body field will be accessible directly
         return this.http.get(this.resourceUrl, options).map((res: any) => {
             <%_ if(hasDate) { _%>
             let jsonResponse = res.json();
             for(let i = 0; i < jsonResponse.length; i++){
-            <% for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { %>    jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
-            <% }%>
-            <% if (fields[idx].fieldType == 'ZonedDateTime') { %>    jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
-            <% } }%>}
-            res._body = jsonResponse;
-            return res;
-            <%_ } else { _%>
-            return res;
+            <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+                jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
             <%_ } _%>
+            <% if (fields[idx].fieldType == 'ZonedDateTime') { %>    jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
+            <%_ } } _%>
+            }
+            res._body = jsonResponse;
+            <%_ } _%>
+            return res;
         });
     }
 

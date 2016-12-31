@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
-import { JhiLanguageService } from '../../shared';
 
 export const metricsState = {
     name: '<%=jhiPrefix%>-metrics',

@@ -1,8 +1,9 @@
 import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { Register } from './register.service';
-import { LoginModalService<% if (enableTranslation) { %>, JhiLanguageService<% }%> } from '../../shared';
+import { LoginModalService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',

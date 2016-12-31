@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway.component';
-import { JhiLanguageService } from '../../shared';
 
 export const gatewayState = {
     name: 'gateway',

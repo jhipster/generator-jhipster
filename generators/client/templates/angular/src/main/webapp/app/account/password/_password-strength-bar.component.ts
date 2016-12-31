@@ -4,7 +4,7 @@ import {Component, ElementRef, Input, Renderer} from '@angular/core';
     selector: '<%=jhiPrefix%>-password-strength-bar',
     template: `
         <div id="strength">
-            <small<% if (enableTranslation) { %> jhi-translate="global.messages.validate.newpassword.strength"<% } %>>Password strength:</small>
+            <small<% if (enableTranslation) { %> jhiTranslate="global.messages.validate.newpassword.strength"<% } %>>Password strength:</small>
             <ul id="strengthBar">
                 <li class="point"></li>
                 <li class="point"></li>
