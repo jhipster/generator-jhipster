@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>EventManager } from 'ng-jhipster';
+import { EventManager } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 import { AlertService } from '../../shared';
 <%- include('model-class-import-template.ejs'); -%>
 <%- include('service-class-import-template.ejs'); -%>
-
 // TODO replace ng-file-upload dependency by an ng2 depedency
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
@@ -17,9 +16,9 @@ import { AlertService } from '../../shared';
 export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
     <%= entityInstance %>: <%= entityClass %>;
-    languages: any[];
     authorities: any[];
-    isSaving: boolean;<%
+    isSaving: boolean;
+    <%_
     var queries = [];
     var variables = [];
     var hasManyToMany = false;
@@ -53,13 +52,11 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         }
     }
     for (idx in variables) { %>
-    <%- variables[idx] %><% } %>
+    <%- variables[idx] %>
+    <%_ } _%>
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
-        <%_ if (enableTranslation){ _%>
-        private languageService: JhiLanguageService,
-        <%_ } _%>
         private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
         private eventManager: EventManager
@@ -68,12 +65,9 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        <%_ if (enableTranslation){ _%>
-        this.languageService.getAll().then((languages) => {
-            this.languages = languages;
-        });
-        <%_ } _%><% for (idx in queries) { %>
-        <%- queries[idx] %><% } %>
+        <%_ for (idx in queries) { _%>
+        <%- queries[idx] %>
+        <%_ } _%>
     }
 
     clear () {
@@ -93,7 +87,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     }
 
     private onSaveSuccess (result) {
-        this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content:'OK'});
+        this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
