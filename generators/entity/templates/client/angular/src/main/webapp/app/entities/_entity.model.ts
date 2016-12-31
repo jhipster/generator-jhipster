@@ -1,4 +1,4 @@
-<% for (idx in fields) {
+<%_ for (idx in fields) {
     if (fields[idx].fieldIsEnum) { _%>
 const enum <%= fields[idx].fieldType %> {<%
         const enums = fields[idx].fieldValues.split(',');
