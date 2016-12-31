@@ -28,7 +28,7 @@ export class AuditsComponent implements OnInit {
         private parseLinks: ParseLinks,
         @Inject(LOCALE_ID) private locale: string,
         private paginationConfig: PaginationConfig
-    ) { 
+    ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
         this.reverse = false;
@@ -62,7 +62,7 @@ export class AuditsComponent implements OnInit {
     }
 
     previousMonth () {
-        let dateFormat: string = 'yyyy-MM-dd';
+        let dateFormat = 'yyyy-MM-dd';
         let fromDate: Date = new Date();
 
         if (fromDate.getMonth() === 0) {
@@ -75,7 +75,7 @@ export class AuditsComponent implements OnInit {
     }
 
     today () {
-        let dateFormat: string = 'yyyy-MM-dd';
+        let dateFormat = 'yyyy-MM-dd';
         // Today + 1 day - needed if the current day must be included
         let today: Date = new Date();
 

@@ -6,7 +6,7 @@ import { EventManager, PaginationUtil, ParseLinks } from 'ng-jhipster';
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
-import { PaginationConfig } from "../../blocks/config/uib-pagination.config";
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt',
@@ -79,7 +79,7 @@ export class UserMgmtComponent implements OnInit {
 
     loadAll () {
         this.userService.query(<%_ if (databaseType !== 'cassandra') { _%>{
-            page: this.page -1,
+            page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<%_ } _%>).subscribe(
             (res: Response) => this.onSuccess(res.json(), res.headers),

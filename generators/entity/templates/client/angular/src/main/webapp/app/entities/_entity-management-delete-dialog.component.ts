@@ -25,9 +25,8 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
 
     confirmDelete (id) {
         this.<%= entityInstance %>Service.delete(id).subscribe(response => {
-            this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content:'Deleted an <%= entityInstance %>'});
+            this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'Deleted an <%= entityInstance %>'});
             this.activeModal.dismiss(true);
         });
     }
-
 }

@@ -49,7 +49,7 @@ describe('account', () => {
         <%_ } else { _%>
         const expect1 = /Sign in/;
         <%_ } _%>
-        element.all(by.css('h1')).first().<%- elementGetter %>.then((value) => {
+        element.all(by.css('.modal-content h1')).first().<%- elementGetter %>.then((value) => {
             expect(value).toMatch(expect1);
         });
         username.clear();

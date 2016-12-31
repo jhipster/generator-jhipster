@@ -33,7 +33,7 @@ export class <%= entityClass %>Service {
     }
 
     update(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
-        let copy = Object.assign({},<%= entityInstance %>);
+        let copy = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));<% }%><% if (fields[idx].fieldType == 'ZonedDateTime') { %>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
@@ -56,12 +56,12 @@ export class <%= entityClass %>Service {
     }
 
     query(req?: any): Observable<Response> {
-        let options:any = {};
+        let options: any = {};
         if (req) {
             let params: URLSearchParams = new URLSearchParams();
             params.set('page', req.page);
             params.set('size', req.size);
-            if(req.sort){
+            if (req.sort) {
                 params.paramsMap.set('sort', req.sort);
             }
             params.set('filter', req.filter);
@@ -84,7 +84,6 @@ export class <%= entityClass %>Service {
             return res;
         });
     }
-
 
     delete(id: number): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);

@@ -1,4 +1,4 @@
-    currentAccount: any;
+currentAccount: any;
     <%= entityInstancePlural %>: <%= entityClass %>[];
     error: any;
     success: any;
@@ -35,7 +35,7 @@
 
     loadAll () {
         this.<%= entityInstance %>Service.query(<%_ if (databaseType !== 'cassandra') { _%>{
-            page: this.page -1,
+            page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<%_ } _%>).subscribe(
             (res: Response) => this.onSuccess(res.json(), res.headers),
@@ -44,7 +44,7 @@
     }
     <%_ if (databaseType !== 'cassandra') { _%>
     loadPage (page: number) {
-        if(page !== this.previousPage) {
+        if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
         }
