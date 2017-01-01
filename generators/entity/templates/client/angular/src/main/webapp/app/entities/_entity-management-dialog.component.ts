@@ -79,8 +79,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
                 .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
-        } else {<% if (!enableTranslation){ %>
-            this.<%= entityInstance %>.langKey = 'en';<% } %>
+        } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
                 .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
