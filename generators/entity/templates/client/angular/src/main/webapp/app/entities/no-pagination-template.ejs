@@ -16,8 +16,8 @@
         private principal: Principal
     ) {
         <%_ if (fieldsContainBlob) { _%>
-        this.openFile = DataUtils.openFile;
-        this.byteSize = DataUtils.byteSize;
+        this.openFile = dataUtils.openFile;
+        this.byteSize = dataUtils.byteSize;
         <%_ } _%>
     }
 
