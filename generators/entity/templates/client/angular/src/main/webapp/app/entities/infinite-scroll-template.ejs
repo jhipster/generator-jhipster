@@ -114,7 +114,7 @@
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             this.<%= entityInstancePlural %>.push(data[i]);
         }
     }
