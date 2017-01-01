@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Rx';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 <%_ if(hasDate) { _%>
-import { DateUtils } from '../../shared/service/date-util.service';
+import { DateUtils } from 'ng-jhipster';
 <%_ } _%>
 @Injectable()
 export class <%= entityClass %>Service {
