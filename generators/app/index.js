@@ -159,6 +159,9 @@ module.exports = JhipsterGenerator.extend({
             }
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
+            if (this.jhipsterVersion === undefined) {
+                this.jhipsterVersion = packagejs.version;
+            }
             this.clientFramework = this.config.get('clientFramework');
             if (!this.clientFramework) {
                 /* for backward compatibility */
@@ -347,8 +350,7 @@ module.exports = JhipsterGenerator.extend({
                 if (this.clientPackageManager === 'yarn') {
                     this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
                     this.spawnCommand('yarn', ['install']);
-                }
-                else if (this.clientPackageManager === 'npm') {
+                } else if (this.clientPackageManager === 'npm') {
                     this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
                     this.npmInstall();
                 }
