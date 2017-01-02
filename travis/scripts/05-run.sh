@@ -25,7 +25,11 @@ launchCurlOrProtractor() {
 
     if [ "$PROTRACTOR" == 1 ]; then
         echo "[$(date)] Connected to application. Start protractor tests."
-        gulp itest --no-notification
+        if [[ -f "gulpfile.js" ]]; then
+            gulp itest --no-notification
+        elif [[ -f "tsconfig.json" ]]; then
+            yarn run e2e
+        fi
     fi
 }
 

@@ -206,18 +206,23 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     @Bean
-    @ConditionalOnProperty(name = "jhipster.cors.allowed-origins")
     public CorsFilter corsFilter() {
-        log.debug("Registering CORS filter");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
-        source.registerCorsConfiguration("/api/**", config);
-        source.registerCorsConfiguration("/v2/api-docs", config);
-        source.registerCorsConfiguration("/oauth/**", config);
-        <%_ if (applicationType == 'gateway') { _%>
-        source.registerCorsConfiguration("/*/api/**", config);
-        source.registerCorsConfiguration("/*/oauth/**", config);
-        <%_ } _%>
+        if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
+            log.debug("Registering CORS filter");
+            source.registerCorsConfiguration("/api/**", config);
+            source.registerCorsConfiguration("/v2/api-docs", config);
+            <%_ if (authenticationType === 'oauth2') { _%>
+            source.registerCorsConfiguration("/oauth/**", config);
+            <%_ } _%>
+            <%_ if (applicationType === 'gateway') { _%>
+            source.registerCorsConfiguration("/*/api/**", config);
+            <%_ if (authenticationType === 'uaa') { _%>
+            source.registerCorsConfiguration("/*/oauth/**", config);
+            <%_ } _%>
+            <%_ } _%>
+        }
         return new CorsFilter(source);
     }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
 

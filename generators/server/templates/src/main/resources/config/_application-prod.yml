@@ -2,6 +2,9 @@
 # Spring Boot configuration for the "prod" profile.
 #
 # This configuration overrides the application.yml file.
+#
+# More information on profiles: https://jhipster.github.io/profiles/
+# More information on configuration properties: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 # ===================================================================
@@ -9,8 +12,8 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-
 <%_ if (serviceDiscoveryType == 'eureka') { _%>
+
 eureka:
     instance:
         prefer-ip-address: true
@@ -154,12 +157,12 @@ spring:
         password:
     thymeleaf:
         cache: true
-
 <%_ if (databaseType === 'sql') { _%>
+
 liquibase:
     contexts: prod
-
 <%_ } _%>
+
 server:
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa') { _%>
     port: <%= serverPort %>
@@ -173,6 +176,8 @@ server:
 
 # ===================================================================
 # JHipster specific properties
+#
+# Full reference is available at: https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 jhipster:
@@ -190,12 +195,12 @@ jhipster:
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         hazelcast:
-            timeToLiveSeconds: 3600
-            backupCount: 1
+            time-to-live-seconds: 3600
+            backup-count: 1
         <%_ } _%>
         <%_ if (hibernateCache == 'ehcache') { _%>
         ehcache:
-            maxBytesLocalHeap: 256M
+            max-bytes-local-heap: 256M
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType == 'jwt') { _%>
@@ -204,36 +209,37 @@ jhipster:
             jwt:
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
-                tokenValidityInSeconds: 86400
+                token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000
     <%_ } _%>
     <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
     security:
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
-            accessTokenUri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
-            tokenServiceId: <%= uaaBaseName.toLowerCase() %>
+            access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
+            token-service-id: <%= uaaBaseName.toLowerCase() %>
             <%_ } _%>
-            clientId: internal
-            clientSecret: internal
+            client-id: internal
+            client-secret: internal
     <%_ } _%>
     <%_ if (authenticationType == 'oauth2' && databaseType != 'sql') { _%>
     security:
         authentication:
             oauth:
-                clientid: <%= baseName %>app
-                secret: my-secret-token-to-change-in-production
+                client-id: <%= baseName %>app
+                client-secret: my-secret-token-to-change-in-production
                 # Token is valid 30 minutes
-                tokenValidityInSeconds: 1800
+                token-validity-in-seconds: 1800
     <%_ } _%>
 <%_ if (authenticationType == 'session') { _%>
     security:
-        rememberMe:
+        remember-me:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
-        baseUrl: http://my-server-url-to-change # Modify according to your server's URL
+        base-url: http://my-server-url-to-change # Modify according to your server's URL
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite:
@@ -252,7 +258,7 @@ jhipster:
             enabled: false
             host: localhost
             port: 5000
-            queueSize: 512
+            queue-size: 512
     <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
         spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
             enabled: false
@@ -263,6 +269,9 @@ jhipster:
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
 # to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://jhipster.github.io/common-application-properties/
 # ===================================================================
 
 application:

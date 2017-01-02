@@ -1,101 +1,123 @@
-angular
-    .module('<%=angularAppName%>')
-    .controller('<%= entityAngularJSName %>DialogController', <%= entityAngularJSName %>DialogController);
+import { Component, OnInit } from '@angular/core';
+import { Response } from '@angular/http';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventManager } from 'ng-jhipster';
 
-<%= entityAngularJSName %>DialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance'<% if (fieldsContainOwnerOneToOne) { %>, '$q'<% } %><% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>];
+import { <%= entityClass %> } from './<%= entityFileName %>.model';
+import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { AlertService } from '../../shared';
+<%- include('model-class-import-template.ejs'); -%>
+<%- include('service-class-import-template.ejs'); -%>
+// TODO replace ng-file-upload dependency by an ng2 depedency
+@Component({
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
+    templateUrl: './<%= entityFileName %>-dialog.component.html'
+})
+export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
-function <%= entityAngularJSName %>DialogController ($timeout, $scope, $stateParams, $uibModalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
-    var vm = this;
-
-    vm.<%= entityInstance %> = entity;
-    vm.clear = clear;
-    <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-    vm.datePickerOpenStatus = {};
-    vm.openCalendar = openCalendar;
-    <%_ } _%>
-    <%_ if (fieldsContainBlob) { _%>
-    vm.byteSize = DataUtils.byteSize;
-    vm.openFile = DataUtils.openFile;
-    <%_ } _%>
-    vm.save = save;<%
-        var queries = [];
-        for (idx in relationships) {
-            var query;
-            if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
-                query = 'vm.' + relationships[idx].relationshipFieldNamePlural.toLowerCase() + ' = ' + relationships[idx].otherEntityNameCapitalized + ".query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'});"
-            + "\n        $q.all([vm." + entityInstance + ".$promise, vm." + relationships[idx].relationshipFieldNamePlural.toLowerCase() + ".$promise]).then(function() {";
-                if (dto == "no"){
-                    query += "\n            if (!vm." + entityInstance + "." + relationships[idx].relationshipFieldName + " || !vm." + entityInstance + "." + relationships[idx].relationshipFieldName + ".id) {"
-                } else {
-                    query += "\n            if (!vm." + entityInstance + "." + relationships[idx].relationshipFieldName + "Id) {"
-                }
-                query += "\n                return $q.reject();"
-            + "\n            }"
-            + "\n            return " + relationships[idx].otherEntityNameCapitalized + ".get({id : vm." + entityInstance + "." + relationships[idx].relationshipFieldName + (dto == 'no' ? ".id" : "Id") + "}).$promise;"
-            + "\n        }).then(function(" + relationships[idx].relationshipFieldName + ") {"
-            + "\n            vm." + relationships[idx].relationshipFieldNamePlural.toLowerCase() + ".push(" + relationships[idx].relationshipFieldName + ");"
-            + "\n        });";
+    <%= entityInstance %>: <%= entityClass %>;
+    authorities: any[];
+    isSaving: boolean;
+    <%_
+    var queries = [];
+    var variables = [];
+    var hasManyToMany = false;
+    for (idx in relationships) {
+        var query;
+        var variableName;
+        hasManyToMany = hasManyToMany || relationships[idx].relationshipType == 'many-to-many';
+        if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
+            variableName = relationships[idx].relationshipFieldNamePlural.toLowerCase();
+            var relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
+            query  = "this." + relationships[idx].otherEntityName + "Service.query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'}).subscribe((res: Response) => {"
+            if (dto === "no") {
+                query += "\n            if (!" + relationshipFieldName + " || !" + relationshipFieldName + ".id) {"
             } else {
-                query = 'vm.' + relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase() + ' = ' + relationships[idx].otherEntityNameCapitalized + '.query();';
+                query += "\n            if (!" + relationshipFieldName + "Id) {"
             }
-            if (!contains(queries, query)) {
-                queries.push(query);
-            }
-        } %><% for (idx in queries) { %>
-    <%- queries[idx] %><% } %>
-
-    $timeout(function (){
-        angular.element('.form-group:eq(1)>input').focus();
-    });
-
-    function clear () {
-        $uibModalInstance.dismiss('cancel');
-    }
-
-    function save () {
-        vm.isSaving = true;
-        if (vm.<%= entityInstance %>.id !== null) {
-            <%= entityClass %>.update(vm.<%= entityInstance %>, onSaveSuccess, onSaveError);
+            query += "\n                this." + variableName + " = res.json();"
+            query += "\n            } else {"
+            query += "\n                this." + relationships[idx].otherEntityName + "Service.find(" + relationshipFieldName + (dto == 'no' ? ".id" : "Id") + ").subscribe((subRes: Response) => {"
+            query += "\n                    this." + variableName + " = [subRes].concat(res.json());"
+            query += "\n                }, (res: Response) => this.onError(res.json()))"
+            query += "\n            }"
+            query += "\n        }, (res: Response) => this.onError(res.json()));"
         } else {
-            <%= entityClass %>.save(vm.<%= entityInstance %>, onSaveSuccess, onSaveError);
+            variableName = relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase();
+            query = 'this.' + relationships[idx].otherEntityName + 'Service.query().subscribe(';
+            query += '\n            (res: Response) => { this.' + variableName + ' = res.json(); }, (res: Response) => this.onError(res.json()));';
+        }
+        if (!contains(queries, query)) {
+            queries.push(query);
+            variables.push(variableName + ': ' + relationships[idx].otherEntityNameCapitalized + '[];');
         }
     }
+    for (idx in variables) { %>
+    <%- variables[idx] %>
+    <%_ } _%>
+    constructor(
+        public activeModal: NgbActiveModal,
+        private alertService: AlertService,
+        private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
+        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
+        private eventManager: EventManager
+    ) {}
 
-    function onSaveSuccess (result) {
-        $scope.$emit('<%=angularAppName%>:<%= entityInstance %>Update', result);
-        $uibModalInstance.close(result);
-        vm.isSaving = false;
-    }
-
-    function onSaveError () {
-        vm.isSaving = false;
-    }
-
-    <%_ for (idx in fields) {
-        if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
-    vm.datePickerOpenStatus.<%= fields[idx].fieldName %> = false;
-    <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-
-    vm.set<%= fields[idx].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
-        <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>
-        if ($file && $file.$error === 'pattern') {
-            return;
-        }
+    ngOnInit() {
+        this.isSaving = false;
+        this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        <%_ for (idx in queries) { _%>
+        <%- queries[idx] %>
         <%_ } _%>
-        if ($file) {
-            DataUtils.toBase64($file, function(base64Data) {
-                $scope.$apply(function() {
-                    <%= entityInstance %>.<%= fields[idx].fieldName %> = base64Data;
-                    <%= entityInstance %>.<%= fields[idx].fieldName %>ContentType = $file.type;
-                });
-            });
-        }
-    };
-    <%_ } } _%>
+    }
 
-    <%_ if (fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-    function openCalendar (date) {
-        vm.datePickerOpenStatus[date] = true;
+    clear () {
+        this.activeModal.dismiss('cancel');
+    }
+
+    save () {
+        this.isSaving = true;
+        if (this.<%= entityInstance %>.id !== undefined) {
+            this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
+                .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+        } else {
+            this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
+                .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+        }
+    }
+
+    private onSaveSuccess (result) {
+        this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
+        this.isSaving = false;
+        this.activeModal.dismiss(result);
+    }
+
+    private onSaveError (error) {
+        this.isSaving = false;
+        this.onError(error);
+    }
+
+    private onError (error) {
+        this.alertService.error(error.message, null, null);
+    }
+    <%_
+    for (idx in relationships) {
+        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized; _%>
+    track<%- otherEntityNameCapitalized %>ById(index, item: <%- relationships[idx].otherEntityNameCapitalized %>) {
+        return item.id;
+    }
+    <%_ } _%>
+
+    <%_ if (hasManyToMany) { _%>
+    getSelected(selectedVals: Array<any>, option: any) {
+        if (selectedVals) {
+            for (let i = 0; i < selectedVals.length; i++) {
+                if (option.id === selectedVals[i].id) {
+                    return selectedVals[i];
+                }
+            }
+        }
+        return option;
     }
     <%_ } _%>
 }

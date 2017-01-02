@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { SettingsComponent } from './settings.component';
-import { JhiLanguageService } from '../../shared';
 
 export const settingsState = {
     name: 'settings',

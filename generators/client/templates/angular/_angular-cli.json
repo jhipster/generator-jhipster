@@ -15,7 +15,7 @@
       "main": "app/app.main.ts",
       "test": "",
       "tsconfig": "../../../tsconfig.json",
-      "prefix": "app",
+      "prefix": "<%= jhiPrefix %>",
       "mobile": false,
       "styles": [
         "content/css/main.css"

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-
 import { StateService } from 'ui-router-ng2';
+import { EventManager, PaginationUtil, ParseLinks } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { AlertService, EventManager, ITEMS_PER_PAGE, PaginationUtil, ParseLinks, Principal } from '../../shared';
+import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt',
@@ -32,18 +33,20 @@ export class UserMgmtComponent implements OnInit {
         private userService: UserService,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
-        <%_ if (databaseType !== 'cassandra') { _%>
         private principal: Principal,
-        <%_ } _%>
         private $state: StateService,
-        private eventManager: EventManager,
-        private paginationUtil: PaginationUtil
+        private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
+        private paginationUtil: PaginationUtil,
+        private paginationConfig: PaginationConfig
+        <%_ } _%>
     ) {
+        <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = paginationUtil.parsePage($state.params['page']);
         this.previousPage = this.page;
         this.reverse = paginationUtil.parseAscending($state.params['sort']);
         this.predicate = 'id';
+        <%_ } _%>
     }
 
     ngOnInit() {
@@ -75,11 +78,10 @@ export class UserMgmtComponent implements OnInit {
     }
 
     loadAll () {
-        this.userService.query({
-            page: this.page -1,
+        this.userService.query(<%_ if (databaseType !== 'cassandra') { _%>{
+            page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
+            sort: this.sort()}<%_ } _%>).subscribe(
             (res: Response) => this.onSuccess(res.json(), res.headers),
             (res: Response) => this.onError(res.json())
         );

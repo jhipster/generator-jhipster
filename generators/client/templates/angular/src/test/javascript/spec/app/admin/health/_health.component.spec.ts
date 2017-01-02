@@ -1,20 +1,20 @@
 import {ComponentFixture, TestBed, async} from '@angular/core/testing';
 import {MockBackend} from '@angular/http/testing';
 import {Http, BaseRequestOptions} from '@angular/http';
-import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component'
+import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component';
 import {<%=jhiPrefixCapitalized%>HealthService} from '../../../../../../main/webapp/app/admin/health/health.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
-import {TranslatePipe} from 'ng2-translate'
+import {TranslatePipe} from 'ng2-translate';
 <%_ } _%>
 
 describe('Controller Tests', () => {
 
     describe('<%=jhiPrefixCapitalized%>HealthCheckController', () => {
 
-        let comp:<%=jhiPrefixCapitalized%>HealthCheckComponent;
-        let fixture:ComponentFixture<<%=jhiPrefixCapitalized%>HealthCheckComponent>;
-        let service:<%=jhiPrefixCapitalized%>HealthService;
+        let comp: <%=jhiPrefixCapitalized%>HealthCheckComponent;
+        let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>HealthCheckComponent>;
+        let service: <%=jhiPrefixCapitalized%>HealthService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -24,7 +24,7 @@ describe('Controller Tests', () => {
                     BaseRequestOptions,
                     {
                         provide: Http,
-                        useFactory: (backendInstance:MockBackend, defaultOptions:BaseRequestOptions) => {
+                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
                             return new Http(backendInstance, defaultOptions);
                         },
                         deps: [MockBackend, BaseRequestOptions]
@@ -64,14 +64,14 @@ describe('Controller Tests', () => {
 
         describe('transformHealthData', () => {
             it('should flatten empty health data', () => {
-                var data = {};
-                var expected = [];
+                const data = {};
+                const expected = [];
                 expect(service.transformHealthData(data)).toEqual(expected);
             });
         });
 
         it('should flatten health data with no subsystems', () => {
-            var data = {
+            const data = {
                 'status': 'UP',
                 'db': {
                     'status': 'UP',
@@ -83,7 +83,7 @@ describe('Controller Tests', () => {
                     'error': 'mail.a.b.c'
                 }
             };
-            var expected = [
+            const expected = [
                 {
                     'name': 'db',
                     'error': undefined,
@@ -103,7 +103,7 @@ describe('Controller Tests', () => {
         });
 
         it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
-            var data = {
+            const data = {
                 'status': 'UP',
                 'db': {
                     'status': 'UP',
@@ -127,7 +127,7 @@ describe('Controller Tests', () => {
                     }
                 }
             };
-            var expected = [
+            const expected = [
                 {
                     'name': 'db',
                     'error': undefined,
@@ -163,7 +163,7 @@ describe('Controller Tests', () => {
         });
 
         it('should flatten health data with subsystems at level 1, main system has additional information', () => {
-            var data = {
+            const data = {
                 'status': 'UP',
                 'db': {
                     'status': 'UP',
@@ -188,7 +188,7 @@ describe('Controller Tests', () => {
                     }
                 }
             };
-            var expected = [
+            const expected = [
                 {
                     'name': 'db',
                     'error': undefined,
@@ -232,7 +232,7 @@ describe('Controller Tests', () => {
         });
 
         it('should flatten health data with subsystems at level 1, main system has additional error', () => {
-            var data = {
+            const data = {
                 'status': 'UP',
                 'db': {
                     'status': 'UP',
@@ -257,7 +257,7 @@ describe('Controller Tests', () => {
                     }
                 }
             };
-            var expected = [
+            const expected = [
                 {
                     'name': 'db',
                     'error': undefined,

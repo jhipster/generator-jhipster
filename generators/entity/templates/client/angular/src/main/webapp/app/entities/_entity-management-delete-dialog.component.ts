@@ -1,24 +1,32 @@
-angular
-    .module('<%=angularAppName%>')
-    .controller('<%= entityAngularJSName %>DeleteController',<%= entityAngularJSName %>DeleteController);
+import { Component } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventManager } from 'ng-jhipster';
 
-<%= entityAngularJSName %>DeleteController.$inject = ['$uibModalInstance', 'entity', '<%= entityClass %>'];
+import { <%= entityClass %> } from './<%= entityFileName %>.model';
+import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 
-function <%= entityAngularJSName %>DeleteController($uibModalInstance, entity, <%= entityClass %>) {
-    var vm = this;
+@Component({
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>-delete-dialog',
+    templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
+})
+export class <%= entityAngularJSName %>DeleteDialogComponent {
 
-    vm.<%= entityInstance %> = entity;
-    vm.clear = clear;
-    vm.confirmDelete = confirmDelete;
+    <%= entityInstance %>: <%= entityClass %>;
 
-    function clear () {
-        $uibModalInstance.dismiss('cancel');
+    constructor(
+        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        public activeModal: NgbActiveModal,
+        private eventManager: EventManager
+    ) {}
+
+    clear () {
+        this.activeModal.dismiss('cancel');
     }
 
-    function confirmDelete (id) {
-        <%= entityClass %>.delete({id: id},
-            function () {
-                $uibModalInstance.close(true);
-            });
+    confirmDelete (id) {
+        this.<%= entityInstance %>Service.delete(id).subscribe(response => {
+            this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'Deleted an <%= entityInstance %>'});
+            this.activeModal.dismiss(true);
+        });
     }
 }

@@ -12,6 +12,8 @@ import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;<% } %>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (databaseType == 'sql' && authenticationType == 'oauth2') { _%>
@@ -24,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import java.time.LocalDate;
 <%_ } _%>
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.*;<% if (databaseType == 'cassandra') { %>
+import java.util.stream.Collectors;<% } %>
 
 /**
  * Service class for managing users.
@@ -270,14 +273,23 @@ public class UserService {
     }
 
     <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)<%_ } _%>
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    public Page<ManagedUserVM> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(ManagedUserVM::new);
+    }<% } else { // Cassandra %>
+    public List<ManagedUserVM> getAllManagedUsers() {
+        return userRepository.findAll().stream()
+            .map(ManagedUserVM::new)
+            .collect(Collectors.toList());
+    }<% } %>
+
+    <%_ if (databaseType == 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         <%_ if (databaseType == 'sql') { _%>
-        return userRepository.findOneByLogin(login).map(user -> {
-            user.getAuthorities().size();
-            return user;
-        });
+        return userRepository.findOneWithAuthoritiesByLogin(login);
         <%_ } else { // MongoDB and Cassandra _%>
         return userRepository.findOneByLogin(login);
         <%_ } _%>
@@ -287,26 +299,22 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public User getUserWithAuthorities(<%= pkType %> id) {
-        User user = userRepository.findOne(id);
         <%_ if (databaseType == 'sql') { _%>
-        user.getAuthorities().size(); // eagerly load the association
+        return userRepository.findOneWithAuthoritiesById(id);
+        <%_ } else { // MongoDB and Cassandra _%>
+        return userRepository.findOne(id);
         <%_ } _%>
-        return user;
     }
 
     <%_ if (databaseType == 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
     public User getUserWithAuthorities() {
-        Optional<User> optionalUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin());
-        User user = null;
-        if (optionalUser.isPresent()) {
-          user = optionalUser.get();
-          <%_ if (databaseType == 'sql') { _%>
-            user.getAuthorities().size(); // eagerly load the association
-          <%_ } _%>
-         }
-         return user;
+        <%_ if (databaseType == 'sql') { _%>
+        return userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
+        <%_ } else { // MongoDB and Cassandra _%>
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
+        <%_ } _%>
     }
     <%_ if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { _%>
 

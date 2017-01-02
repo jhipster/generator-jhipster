@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
 
-import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from '../../shared';
+import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-settings',
@@ -12,14 +13,19 @@ export class SettingsComponent implements OnInit {
     settingsAccount: any;
     languages: any[];
 
-    constructor(private account: AccountService, private principal: Principal<% if (enableTranslation) { %>, private languageService: JhiLanguageService<% } %>) {}
+    constructor(
+        private account: AccountService,
+        private principal: Principal<% if (enableTranslation) { %>,
+        private languageService: JhiLanguageService,
+        private languageHelper: JhiLanguageHelper<% } %>
+    ) {}
 
     ngOnInit () {
         this.principal.identity().then((account) => {
             this.settingsAccount = this.copyAccount(account);
         });
         <%_ if (enableTranslation) { _%>
-        this.languageService.getAll().then((languages) => {
+        this.languageHelper.getAll().then((languages) => {
             this.languages = languages;
         });
         <%_ } _%>

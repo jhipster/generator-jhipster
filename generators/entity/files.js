@@ -213,7 +213,7 @@ const angularFiles = {
             templates: [
                 {
                     file: 'entities/_entity-management.component.html', method: 'copyHtml', template: true,
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityPluralFileName}.component.html`
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.html`
                 },
                 {
                     file: 'entities/_entity-management-detail.component.html', method: 'copyHtml', template: true,
@@ -230,6 +230,10 @@ const angularFiles = {
                 {
                     file: 'entities/_entity-management.state.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.state.ts`
+                },
+                {
+                    file: 'entities/_entity.model.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.model.ts`
                 },
                 {
                     file: 'entities/_entity-management.component.ts',
@@ -254,24 +258,24 @@ const angularFiles = {
 
             ]
         }
-    ]/*, //TODO enable once test files are migrated
+    ],
     test: [
-        {
+        /*{ // TODO enable once test these files are migrated
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
                 file: 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.controller.spec.js`
             }]
-        },
+        },*/
         {
             condition: generator => generator.protractorTests,
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
-                file: 'e2e/entities/_entity.js',
-                renameTo: generator => `e2e/entities/${generator.entityFileName}.js`
+                file: 'e2e/entities/_entity.spec.ts',
+                renameTo: generator => `e2e/entities/${generator.entityFileName}.spec.ts`
             }]
         }
-    ]*/
+    ]
 };
 
 module.exports = {
@@ -349,6 +353,7 @@ function writeFiles() {
             } else {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
+                this.addEntityToModule(this.entityInstance, this.entityClass, this.entityAngularJSName, this.entityFolderName, this.entityFileName, this.enableTranslation);
             }
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation);

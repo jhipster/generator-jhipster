@@ -15,7 +15,9 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
             const propertiesObject = res.json();
 
             for (let key in propertiesObject) {
-                properties.push(propertiesObject[key]);
+                if (propertiesObject.hasOwnProperty(key)) {
+                    properties.push(propertiesObject[key]);
+                }
             }
 
             return properties.sort((propertyA, propertyB) => {
@@ -32,13 +34,17 @@ export class <%=jhiPrefixCapitalized%>ConfigurationService {
             const propertiesObject = res.json();
 
             for (let key in propertiesObject) {
-                let valsObject = propertiesObject[key];
-                let vals: any[] = [];
+                if (propertiesObject.hasOwnProperty(key)) {
+                    let valsObject = propertiesObject[key];
+                    let vals: any[] = [];
 
-                for (let valKey in valsObject) {
-                    vals.push({key: valKey, val: valsObject[valKey]});
+                    for (let valKey in valsObject) {
+                        if (valsObject.hasOwnProperty(valKey)) {
+                            vals.push({key: valKey, val: valsObject[valKey]});
+                        }
+                    }
+                    properties[key] = vals;
                 }
-                properties[key] = vals;
             }
 
             return properties;

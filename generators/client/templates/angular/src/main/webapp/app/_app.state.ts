@@ -1,5 +1,6 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { NavbarComponent } from './layouts';
-import { AuthService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from './shared';
+import { AuthService } from './shared';
 
 export const appState = {
     name: 'app',

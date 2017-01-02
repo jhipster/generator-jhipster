@@ -3,36 +3,21 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-<%_ if (enableTranslation) { _%>
-import { TranslateModule } from 'ng2-translate/ng2-translate';
-import { createTranslatePartialLoader } from './language/translate-partial-loader.provider';
-<%_ } _%>
+import { NgJhipsterModule } from 'ng-jhipster';
 
 @NgModule({
     imports: [
-        <%_ if (enableTranslation) { _%>
-        TranslateModule.forRoot(createTranslatePartialLoader()),
-        <%_ } _%>
-        NgbModule.forRoot()
-
+        NgbModule.forRoot(),
+        NgJhipsterModule.forRoot({
+            defaultI18nLang: '<%= nativeLanguage %>'
+        })
     ],
     exports: [
         FormsModule,
         HttpModule,
         CommonModule,
-        <%_ if (enableTranslation) { _%>
-        TranslateModule,
-        <%_ } _%>
-        NgbModule
+        NgbModule,
+        NgJhipsterModule
     ]
 })
-export class <%=angular2AppName%>SharedLibsModule {
-    <%_ if (enableTranslation) { _%>
-    /*static forRoot(): ModuleWithProviders {
-        return {
-            ngModule: Angular2TestSharedLibsModule,
-            providers: [TranslateService],
-        };
-    }*/
-    <%_ } _%>
-}
+export class <%=angular2AppName%>SharedLibsModule {}

@@ -113,6 +113,7 @@ module.exports = EntityGenerator.extend({
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
+            this.jhiPrefix = this.config.get('jhiPrefix');
             this.testFrameworks = this.config.get('testFrameworks');
             // backward compatibility on testing frameworks
             if (this.testFrameworks === undefined) {
@@ -415,7 +416,7 @@ module.exports = EntityGenerator.extend({
             this.entityFolderName = entityNameSpinalCased;
             this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
-            this.entityServiceFileName = entityNameSpinalCased;
+            this.entityServiceFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityAngularJSName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
             this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
@@ -436,6 +437,7 @@ module.exports = EntityGenerator.extend({
             if (!this.relationships) {
                 this.relationships = [];
             }
+            this.differentRelationships = [];
 
             // Load in-memory data for fields
             this.fields && this.fields.forEach( function (field) {
@@ -588,6 +590,7 @@ module.exports = EntityGenerator.extend({
                 var entityType = relationship.otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
+                    this.differentRelationships.push(relationship);
                 }
             }, this);
 
@@ -616,10 +619,10 @@ module.exports = EntityGenerator.extend({
 
     install: function () {
         var injectJsFilesToIndex = function () {
-            this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
+            this.log('\n' + chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n'));
             this.spawnCommand('gulp', ['inject:app']);
         };
-        if (!this.options['skip-install'] && !this.skipClient) {
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
             injectJsFilesToIndex.call(this);
         }
     },

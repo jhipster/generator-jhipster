@@ -60,7 +60,7 @@
             }
         })
         .state('<%= entityStateName %>-detail', {
-            parent: 'entity',
+            parent: '<%= entityStateName %>',
             url: '/<%= entityUrl %>/{id}',
             data: {
                 authorities: ['ROLE_USER'],

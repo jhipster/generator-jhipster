@@ -135,8 +135,8 @@ describe('Generator Base', function () {
     describe('writeFilesToDisk', function () {
         describe('when called with default angular client options', function () {
             it('should produce correct files', function () {
-                let files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
-                let generator = {
+                const files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
+                const generator = {
                     useSass: false,
                     enableTranslation: true,
                     authenticationType: 'session',
@@ -144,24 +144,61 @@ describe('Generator Base', function () {
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
-                let out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                const out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
             });
         });
         describe('when called with default angular client options skipping user-management', function () {
             it('should produce correct files', function () {
-                let files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
-                let generator = {
+                const files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
+                const generator = {
                     useSass: false,
                     enableTranslation: true,
                     authenticationType: 'session',
                     skipUserManagement: true,
                     testFrameworks: []
                 };
-                let filesToAssert = expectedFiles.client.sort();
-                let out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                const filesToAssert = expectedFiles.client.sort();
+                const out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
             });
+        });
+    });
+
+    describe('stripMargin', function () {
+        it('should produce correct output without margin', function () {
+            const entityFolderName = 'entityFolderName', entityFileName = 'entityFileName';
+            const content =
+                `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
+                 |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
+                 |export * from './${entityFolderName}/${entityFileName}-detail.component';
+                 |export * from './${entityFolderName}/${entityFileName}.component';
+                 |export * from './${entityFolderName}/${entityFileName}.state';`;
+            const out =
+`export * from './entityFolderName/entityFileName-dialog.component';
+export * from './entityFolderName/entityFileName-delete-dialog.component';
+export * from './entityFolderName/entityFileName-detail.component';
+export * from './entityFolderName/entityFileName.component';
+export * from './entityFolderName/entityFileName.state';`;
+            assert.equal(Generator.prototype.stripMargin(content), out);
+        });
+        it('should produce correct indented output without margin', function () {
+            const routerName = 'routerName', enableTranslation = true, glyphiconName = 'glyphiconName';
+            const content =
+                `|<li ui-sref-active="active">
+                 |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                 |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                 |        <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${routerName}</span>
+                 |    </a>
+                 |</li>`;
+            const out =
+`<li ui-sref-active="active">
+    <a ui-sref="routerName" ng-click="vm.collapseNavbar()">
+        <span class="glyphicon glyphicon-glyphiconName"></span>&nbsp;
+        <span data-translate="global.menu.routerName">routerName</span>
+    </a>
+</li>`;
+            assert.equal(Generator.prototype.stripMargin(content), out);
         });
     });
 });
