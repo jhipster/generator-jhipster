@@ -142,7 +142,7 @@ function askForClient() {
             return (applicationType !== 'microservice' && applicationType !== 'uaa');
         },
         message: function (response) {
-            return getNumberedQuestion('Which *Framework* would you like to use for the client?', applicationType !== 'microservice');
+            return getNumberedQuestion('Which *Framework* would you like to use for the client?', applicationType !== 'microservice' && applicationType !== 'uaa');
         },
         choices: [
             {
