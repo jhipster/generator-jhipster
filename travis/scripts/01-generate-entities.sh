@@ -116,6 +116,11 @@ elif [[ ("$JHIPSTER" != "app-ng2-default") && ("$JHIPSTER" != "app-ng2-jwt") && 
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
+
+elif [[ ("$JHIPSTER" == "app-ng2-default") || ("$JHIPSTER" != "app-ng2-jwt") || ("$JHIPSTER" != "app-ng2-sass-noi18n") ]]; then
+    moveEntity BankAccount
+    moveEntity Label
+    moveEntity Operation
 fi
 
 ls -l "$HOME"/app/.jhipster/

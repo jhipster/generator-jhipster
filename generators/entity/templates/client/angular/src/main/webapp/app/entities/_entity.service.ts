@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Rx';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 <%_ if(hasDate) { _%>
-import { DateUtils } from '../../shared/service/date-util.service';
+import { DateUtils } from 'ng-jhipster';
 <%_ } _%>
 @Injectable()
 export class <%= entityClass %>Service {
@@ -72,12 +72,15 @@ export class <%= entityClass %>Service {
         return this.http.get(this.resourceUrl, options).map((res: any) => {
             <%_ if(hasDate) { _%>
             let jsonResponse = res.json();
-            for(let i = 0; i < jsonResponse.length; i++){
-            <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
+            for (let i = 0; i < jsonResponse.length; i++) {
+            <%_ for (idx in fields) { _%>
+                <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
                 jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
+                <%_ } _%>
+                <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+                jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
+                <%_ } _%>
             <%_ } _%>
-            <% if (fields[idx].fieldType == 'ZonedDateTime') { %>    jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
-            <%_ } } _%>
             }
             res._body = jsonResponse;
             <%_ } _%>
