@@ -13,7 +13,7 @@
             <li class="nav-item" uiSrefActive="active">
                 <a class="nav-link" uiSref="home" (click)="collapseNavbar()">
                     <i class="fa fa-home" aria-hidden="true"></i>
-                    <span jhiTranslate="global.menu.home">Home</span>
+                    <span class="hidden-sm-down" jhiTranslate="global.menu.home">Home</span>
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
@@ -21,7 +21,7 @@
                 <a class="nav-link dropdown-toggle" uiSrefActive="active" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <i class="fa fa-th-list" aria-hidden="true"></i>
-                        <span jhiTranslate="global.menu.entities.main">
+                        <span class="hidden-sm-down" jhiTranslate="global.menu.entities.main">
                             Entities
                         </span>
                         <b class="caret"></b>
@@ -35,7 +35,7 @@
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
                         <i class="fa fa-user-plus" aria-hidden="true"></i>
-                        <span jhiTranslate="global.menu.admin.main">Administration</span>
+                        <span class="hidden-sm-down" jhiTranslate="global.menu.admin.main">Administration</span>
                         <b class="caret"></b>
                     </span>
                 </a>
@@ -114,7 +114,7 @@
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown" *ngIf="languages.length > 1">
                     <span>
                         <i class="fa fa-flag" aria-hidden="true"></i>
-                        <span jhiTranslate="global.menu.language">Language</span>
+                        <span class="hidden-sm-down" jhiTranslate="global.menu.language">Language</span>
                         <b class="caret"></b>
                     </span>
                 </a>
@@ -129,7 +129,7 @@
               <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                     <span *ngIf="!getImageUrl()">
                         <i class="fa fa-user" aria-hidden="true"></i>
-                        <span jhiTranslate="global.menu.account.main">
+                        <span class="hidden-sm-down" jhiTranslate="global.menu.account.main">
                             Account
                         </span>
                         <b class="caret"></b>
