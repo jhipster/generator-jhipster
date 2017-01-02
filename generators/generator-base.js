@@ -550,6 +550,24 @@ Generator.prototype.addNpmDevDependency = function (name, version) {
 };
 
 /**
+ * Add a new script in the "package.json".
+ *
+ * @param {string} name - script name
+ * @param {string} data - script version
+ */
+Generator.prototype.addNpmScript = function (name, data) {
+    var fullPath = 'package.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+            jsonObj.scripts[name] = data;
+        }, this);
+    } catch (e) {
+        this.log(e);
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'npm script (name: ' + name + ', data:' + data + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * Add a new module to the angular application in "app.module.js".
  *
  * @param {string} moduleName - module name

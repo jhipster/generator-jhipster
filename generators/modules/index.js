@@ -83,6 +83,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.addBowerOverride = this.addBowerOverride;
         jhipsterFunc.addNpmDependency = this.addNpmDependency;
         jhipsterFunc.addNpmDevDependency = this.addNpmDevDependency;
+        jhipsterFunc.addNpmScript = this.addNpmScript;
         jhipsterFunc.addMainCSSStyle = this.addMainCSSStyle;
         jhipsterFunc.addMainSCSSStyle = this.addMainSCSSStyle;
         jhipsterFunc.addAngularJsModule = this.addAngularJsModule;
