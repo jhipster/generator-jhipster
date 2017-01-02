@@ -514,6 +514,42 @@ Generator.prototype.addBowerrcParameter = function (key, value) {
 };
 
 /**
+ * Add a new dependency in the "package.json".
+ *
+ * @param {string} name - dependency name
+ * @param {string} version - dependency version
+ */
+Generator.prototype.addNpmDependency = function (name, version) {
+    var fullPath = 'package.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+            jsonObj.dependencies[name] = version;
+        }, this);
+    } catch (e) {
+        this.log(e);
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'npm dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * Add a new devDependency in the "package.json".
+ *
+ * @param {string} name - devDependency name
+ * @param {string} version - devDependency version
+ */
+Generator.prototype.addNpmDevDependency = function (name, version) {
+    var fullPath = 'package.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+            jsonObj.devDependencies[name] = version;
+        }, this);
+    } catch (e) {
+        this.log(e);
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'npm devDependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * Add a new module to the angular application in "app.module.js".
  *
  * @param {string} moduleName - module name
