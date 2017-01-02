@@ -15,11 +15,11 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 export class <%= entityAngularJSName %>Component implements OnInit {
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
     <%- include('pagination-template'); -%>
-    <%_ } else if (pagination === 'infinite-scroll') { %>
+    <%_ } else if (pagination === 'infinite-scroll') { _%>
     <%- include('infinite-scroll-template'); -%>
-    <% } else if (pagination === 'no') { _%>
+    <%_ } else if (pagination === 'no') { _%>
     <%- include('no-pagination-template'); -%>
-    <% } %>
+    <%_ } _%>
     ngOnInit() {
         this.loadAll();
         this.principal.identity().then((account) => {

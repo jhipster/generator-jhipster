@@ -30,7 +30,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
             variableName = relationships[idx].relationshipFieldNamePlural.toLowerCase();
             var relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
             query  = "this." + relationships[idx].otherEntityName + "Service.query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'}).subscribe((res: Response) => {"
-            if (dto == "no"){
+            if (dto === "no") {
                 query += "\n            if (!" + relationshipFieldName + " || !" + relationshipFieldName + ".id) {"
             } else {
                 query += "\n            if (!" + relationshipFieldName + "Id) {"
@@ -44,7 +44,8 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
             query += "\n        }, (res: Response) => this.onError(res.json()));"
         } else {
             variableName = relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase();
-            query = 'this.' + relationships[idx].otherEntityName + 'Service.query().subscribe((res: Response) => {this.' + variableName + ' = res.json()}, (res: Response) => this.onError(res.json()));';
+            query = 'this.' + relationships[idx].otherEntityName + 'Service.query().subscribe(';
+            query += '\n            (res: Response) => { this.' + variableName + ' = res.json(); }, (res: Response) => this.onError(res.json()));';
         }
         if (!contains(queries, query)) {
             queries.push(query);
@@ -79,8 +80,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
                 .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
-        } else {<% if (!enableTranslation){ %>
-            this.<%= entityInstance %>.langKey = 'en';<% } %>
+        } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
                 .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
@@ -103,17 +103,18 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     <%_
     for (idx in relationships) {
         var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized; _%>
-    track<%- otherEntityNameCapitalized %>ById(index, item: <%- relationships[idx].otherEntityNameCapitalized %>){
+    track<%- otherEntityNameCapitalized %>ById(index, item: <%- relationships[idx].otherEntityNameCapitalized %>) {
         return item.id;
     }
     <%_ } _%>
 
-    <%_ if (hasManyToMany){ _%>
+    <%_ if (hasManyToMany) { _%>
     getSelected(selectedVals: Array<any>, option: any) {
-        if(selectedVals) {
+        if (selectedVals) {
             for (let i = 0; i < selectedVals.length; i++) {
-                if (option.id == selectedVals[i].id)
+                if (option.id === selectedVals[i].id) {
                     return selectedVals[i];
+                }
             }
         }
         return option;
