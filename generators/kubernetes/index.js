@@ -89,6 +89,7 @@ module.exports = KubernetesGenerator.extend({
             this.defaultAppsFolders = this.config.get('appsFolders');
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
+            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');
@@ -96,6 +97,8 @@ module.exports = KubernetesGenerator.extend({
             this.kubernetesNamespace = this.config.get('kubernetesNamespace');
 
             this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
+            this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
+            this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
             this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
             this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
             this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
@@ -209,6 +212,7 @@ module.exports = KubernetesGenerator.extend({
             this.config.set('appsFolders', this.appsFolders);
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
+            this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('dockerRepositoryName', this.dockerRepositoryName);
             this.config.set('dockerPushCommand', this.dockerPushCommand);
