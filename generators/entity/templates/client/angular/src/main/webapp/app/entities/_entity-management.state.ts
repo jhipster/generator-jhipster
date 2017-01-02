@@ -75,7 +75,7 @@ export const <%= entityInstance %>State = {
 
 export const <%= entityInstance %>DetailState = {
     name: '<%= entityStateName %>-detail',
-    parent: 'entity',
+    parent: '<%= entityStateName %>',
     url: '/<%= entityUrl %>/:id',
     data: {
         authorities: ['ROLE_USER'],
