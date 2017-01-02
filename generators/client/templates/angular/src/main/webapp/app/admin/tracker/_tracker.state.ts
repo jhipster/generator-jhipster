@@ -26,4 +26,4 @@ export const trackerState = {
     onExit: (trans: Transition) => {
         trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).unsubscribe();
     }
-}
+};
