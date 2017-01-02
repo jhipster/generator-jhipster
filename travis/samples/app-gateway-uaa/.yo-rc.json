@@ -28,6 +28,8 @@
     "languages": [
       "en"
     ],
-  "travis": true
+    "travis": true,
+    "clientPackageManager": "yarn",
+    "clientFramework": "angular1"
   }
 }
