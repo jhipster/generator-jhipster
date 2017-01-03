@@ -86,11 +86,23 @@ if (OperatingSystem.current().isWindows()) {
             classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
         }
     }
-    <%_ if (!skipClient && clientFramework === 'angular1') { _%>
+    <%_ if (!skipClient) { _%>
 
-    // avoid random error and hanging in windows, see https://github.com/jhipster/generator-jhipster/pull/4683
-    gulp {
-        bufferOutput = true
+    // avoid random error and hanging in windows, see https://github.com/jhipster/generator-jhipster/pull/4809
+    tasks.withType(NodeTask) {
+        doLast {
+            println()
+        }
+    }
+    tasks.withType(com.moowork.gradle.node.npm.NpmInstallTask) {
+        doLast {
+            println()
+        }
+    }
+    tasks.withType(com.moowork.gradle.node.yarn.YarnTask) {
+        doLast {
+            println()
+        }
     }
     <%_ } _%>
 } else {
