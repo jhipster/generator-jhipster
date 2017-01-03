@@ -84,7 +84,7 @@
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "string-replace-webpack-plugin": "0.0.4",
     "style-loader": "0.13.1",
-    "to-string-loader": "^1.1.5",
+    "to-string-loader": "1.1.5",
     "tslint": "4.2.0",
     "tslint-loader": "3.3.0",
     "typescript": "2.1.4",
