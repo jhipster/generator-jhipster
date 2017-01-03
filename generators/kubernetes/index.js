@@ -46,7 +46,7 @@ module.exports = KubernetesGenerator.extend({
 
     initializing: {
         sayHello: function() {
-            this.log(chalk.white(chalk.bold('[BETA]') + ' Welcome to the JHipster Kubernetes Generator '));
+            this.log(chalk.white(chalk.bold('⎈') + ' [BETA] Welcome to the JHipster Kubernetes Generator ' + chalk.bold('⎈')));
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
         },
 
@@ -90,6 +90,9 @@ module.exports = KubernetesGenerator.extend({
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            if (this.serviceDiscoveryType === undefined) {
+                this.serviceDiscoveryType = 'eureka';
+            }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');

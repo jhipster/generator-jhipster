@@ -24,7 +24,7 @@ module.exports = DockerComposeGenerator.extend({
 
     initializing: {
         sayHello: function() {
-            this.log(chalk.white('Welcome to the JHipster Docker Compose Sub-Generator '));
+            this.log(chalk.white(chalk.bold('🐳') + '  Welcome to the JHipster Docker Compose Sub-Generator ' + chalk.bold('🐳')));
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
         },
 
