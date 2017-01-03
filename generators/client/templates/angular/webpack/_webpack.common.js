@@ -57,15 +57,29 @@ module.exports = function (options) {
                     exclude: ['./src/main/webapp/index.html']
                 },
                 <%_ if (useSass) { _%>
-                { test: /\.scss$/, loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'] },
-                <%_ } _%>
+                {
+                    test: /\.scss$/,
+                    loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+                    exclude: /vendor\.scss/
+                },
+                {
+                    test: /vendor\.scss$/,
+                    loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+                },
+                <%_ } else { _%>
                 {
                     test: /\.css$/,
+                    loaders: ['to-string-loader', 'css-loader'],
+                    exclude: /vendor\.css/
+                },
+                {
+                    test: /vendor\.css$/,
                     loader: ExtractTextPlugin.extract({
                         fallbackLoader: "style-loader",
                         loader: "css-loader"
                     })
                 },
+                <%_ } _%>
                 {
                     test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
                     loaders: [

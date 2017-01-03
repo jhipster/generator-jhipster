@@ -1,3 +1,4 @@
+
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
@@ -105,7 +106,7 @@ Logo styles
             width: 70px;
             display: inline-block;
             vertical-align: middle;
-            background: url("../images/logo-jhipster.png") no-repeat center center;
+            background: url("../../../content/images/logo-jhipster.png") no-repeat center center;
             background-size: contain;
         }
     }
@@ -119,7 +120,7 @@ Main page styles
     display: inline-block;
     width: 347px;
     height: 497px;
-    background: url("../images/hipster.png") no-repeat center top;
+    background: url("../../../content/images/hipster.png") no-repeat center top;
     background-size: contain;
 }
 
@@ -132,7 +133,7 @@ only screen and (        min-device-pixel-ratio: 2),
 only screen and (                min-resolution: 192dpi),
 only screen and (                min-resolution: 2dppx) {
     .hipster {
-        background: url("../images/hipster2x.png") no-repeat center top;
+        background: url("../../../content/images/hipster2x.png") no-repeat center top;
         background-size: contain;
     }
 }

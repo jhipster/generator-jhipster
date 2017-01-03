@@ -31,7 +31,8 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                'content/css/_main.css',
+                'app/layouts/main/_main.css',
+                'content/css/_vendor.css',
                 { file: 'content/css/_documentation.css', method: 'copy' }
             ]
         }
@@ -41,7 +42,7 @@ const files = {
             condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: [
-                'scss/_main.scss',
+                'app/layouts/main/_main.scss',
                 'scss/_vendor.scss'
             ]
         }
