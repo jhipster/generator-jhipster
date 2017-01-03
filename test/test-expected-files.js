@@ -395,7 +395,8 @@ const expectedFiles = {
     ],
 
     microservice: [
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java'
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
+        'package.json'
     ],
 
     microserviceGradle: [
