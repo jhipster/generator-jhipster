@@ -3,7 +3,7 @@
     <h2><span jhiTranslate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
-    <dl class="dl-horizontal">
+    <dl class="row">
         <%_ for (idx in fields) {
         var fieldName = fields[idx].fieldName;
         var fieldType = fields[idx].fieldType;
