@@ -340,19 +340,21 @@ module.exports = JhipsterGenerator.extend({
 
     end: {
         localInstall: function() {
-            if (this.skipClient && !this.options['skip-install']) {
+            if (this.skipClient) {
                 if (this.otherModules === undefined) {
                     this.otherModules = [];
                 }
                 // Generate a package.json file containing the current version of the generator as dependency
                 this.template('_skipClientApp.package.json', 'package.json', this, {});
 
-                if (this.clientPackageManager === 'yarn') {
-                    this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
-                    this.spawnCommand('yarn', ['install']);
-                } else if (this.clientPackageManager === 'npm') {
-                    this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-                    this.npmInstall();
+                if (!this.options['skip-install']) {
+                    if (this.clientPackageManager === 'yarn') {
+                        this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
+                        this.spawnCommand('yarn', ['install']);
+                    } else if (this.clientPackageManager === 'npm') {
+                        this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                        this.npmInstall();
+                    }
                 }
             }
         },
