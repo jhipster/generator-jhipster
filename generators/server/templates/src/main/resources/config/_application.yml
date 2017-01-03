@@ -25,7 +25,7 @@ ribbon:
     eureka:
         enabled: true
 <%_ } _%>
-<%_ if (applicationType == 'gateway') { _%>
+<%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
 zuul:
     host:
         connect-timeout-millis: 5000
