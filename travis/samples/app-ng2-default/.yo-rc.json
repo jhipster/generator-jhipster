@@ -18,7 +18,6 @@
     "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
     "useSass": false,
     "applicationType": "monolith",
-    "clientFramework": "angular2",
     "testFrameworks": [
       "gatling",
       "protractor"
@@ -30,7 +29,8 @@
       "en"
     ],
     "travis": true,
-    "jhipsterVersion": "3.12.1",
-    "serviceDiscoveryType": false
+    "serviceDiscoveryType": false,
+    "clientPackageManager": "yarn",
+    "clientFramework": "angular2"
   }
 }
