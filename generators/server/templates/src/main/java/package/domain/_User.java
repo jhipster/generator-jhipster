@@ -99,8 +99,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     @Size(max = 256)<% if (databaseType == 'sql') { %>
     @Column(name = "image_url", length = 256)<% } %><% if (databaseType == 'mongodb') { %>
-    @Field("image_url")<% } %><% if (databaseType == 'cassandra') { %>
-    @Column(name = "image_url")<% } %>
+    @Field("image_url")<% } %>
     private String imageUrl;
 
     @Size(max = 20)<% if (databaseType == 'sql') { %>
