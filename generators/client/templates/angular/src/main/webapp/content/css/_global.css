@@ -1,4 +1,3 @@
-
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
@@ -26,17 +25,18 @@ Developement Ribbon
     z-index: 9999;
     pointer-events: none;
     opacity: 0.75;
-    a {
-        color: #fff;
-        display: block;
-        font-weight: 400;
-        margin: 1px 0;
-        padding: 10px 50px;
-        text-align: center;
-        text-decoration: none;
-        text-shadow: 0 0 5px #444;
-        pointer-events: none;
-    }
+}
+
+.ribbon a {
+    color: #fff;
+    display: block;
+    font-weight: 400;
+    margin: 1px 0;
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 0 5px #444;
+    pointer-events: none;
 }
 
 /* ==========================================================================
@@ -60,30 +60,39 @@ Navbar
 .jh-navbar {
     background-color: #353d47;
     padding: .2em 1em;
-    .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
-        background-color: #353d47;
-    }
-    .dropdown-toggle::after {
-        margin-left: 0.15em;
-    }
-    ul.navbar-nav {
-        padding: 0.5em;
-        .nav-item+.nav-item {
-            margin-left: 1.5rem;
-        }
-    }
-    a.nav-link {
-        font-weight: 400;
-    }
-    .jh-navbar-toggler {
-        color: #ccc;
-        font-size: 1.5em;
-        padding: 10px;
-        &:hover {
-            color: #fff;
-        }
-    }
 }
+
+.jh-navbar .dropdown-item.active, .jh-navbar .dropdown-item.active:focus, .jh-navbar .dropdown-item.active:hover {
+    background-color: #353d47;
+}
+
+.jh-navbar .dropdown-toggle::after {
+    margin-left: 0.15em;
+}
+
+.jh-navbar ul.navbar-nav {
+    padding: 0.5em;
+}
+
+.jh-navbar .navbar-nav .nav-item+.nav-item {
+    margin-left: 1.5rem;
+}
+
+.jh-navbar a.nav-link {
+    font-weight: 400;
+}
+
+.jh-navbar .jh-navbar-toggler {
+    color: #ccc;
+    font-size: 1.5em;
+    padding: 10px;
+}
+
+.jh-navbar .jh-navbar-toggler:hover {
+    color: #fff;
+}
+
+
 
 @media screen and (max-width: 992px) {
     .jh-logo-container {
@@ -95,22 +104,28 @@ Navbar
     display: inline-block;
     vertical-align: middle;
 }
+
 /* ==========================================================================
 Logo styles
 ========================================================================== */
-.navbar-brand {
-    &.logo {
-        padding: 5px 15px;
-        .logo-img {
-            height: 45px;
-            width: 70px;
-            display: inline-block;
-            vertical-align: middle;
-            background: url("../../../content/images/logo-jhipster.png") no-repeat center center;
-            background-size: contain;
-        }
-    }
+.navbar-brand.logo {
+    padding: 5px 15px;
 }
+
+.logo .logo-img {
+    height: 45px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 70px;
+}
+
+.logo-img {
+    height: 100%;
+    background: url("../images/logo-jhipster.png") no-repeat center center;
+    background-size: contain;
+    width: 100%;
+}
+
 
 /* ==========================================================================
 Main page styles
@@ -120,7 +135,7 @@ Main page styles
     display: inline-block;
     width: 347px;
     height: 497px;
-    background: url("../../../content/images/hipster.png") no-repeat center top;
+    background: url("../images/hipster.png") no-repeat center top;
     background-size: contain;
 }
 
@@ -133,7 +148,7 @@ only screen and (        min-device-pixel-ratio: 2),
 only screen and (                min-resolution: 192dpi),
 only screen and (                min-resolution: 2dppx) {
     .hipster {
-        background: url("../../../content/images/hipster2x.png") no-repeat center top;
+        background: url("../images/hipster2x.png") no-repeat center top;
         background-size: contain;
     }
 }
@@ -202,7 +217,7 @@ a:hover {
 /* ==========================================================================
 start Password strength bar style
 ========================================================================== */
-ul#strength {
+ul#strengthBar {
     display:inline;
     list-style:none;
     margin:0;
@@ -211,6 +226,9 @@ ul#strength {
     vertical-align:2px;
 }
 
+.point:last {
+    margin:0 !important;
+}
 .point {
     background:#DDD;
     border-radius:2px;
@@ -218,45 +236,46 @@ ul#strength {
     height:5px;
     margin-right:1px;
     width:20px;
-    &:last {
-        margin:0 !important;
-    }
 }
 
 /* ==========================================================================
 Custom alerts for notification
 ========================================================================== */
-.alerts {
-    .alert {
-        text-overflow: ellipsis;
-        pre{
-            background: none;
-            border: none;
-            font: inherit;
-            color: inherit;
-            padding: 0;
-            margin: 0;
-        }
-        .popover pre {
-            font-size: 10px;
-        }
-    }
-    .toast {
-        position: fixed;
-        width: 100%;
-        &.left {
-            left: 5px;
-        }
-        &.right {
-            right: 5px;
-        }
-        &.top {
-            top: 55px;
-        }
-        &.bottom {
-            bottom: 55px;
-        }
-    }
+.alerts .alert{
+    text-overflow: ellipsis;
+}
+.alert pre{
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+}
+
+.alert .popover pre {
+    font-size: 10px;
+}
+
+.alerts .toast {
+    position: fixed;
+    width: 100%;
+}
+
+.alerts .toast.left {
+    left: 5px;
+}
+
+.alerts .toast.right {
+    right: 5px;
+}
+
+.alerts .toast.top {
+    top: 55px;
+}
+
+.alerts .toast.bottom {
+    bottom: 55px;
 }
 
 @media screen and (min-width: 480px) {
@@ -268,32 +287,20 @@ Custom alerts for notification
 /* ==========================================================================
 entity tables helpers
 ========================================================================== */
-
 /* Remove Bootstrap padding from the element
    http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
-@mixin no-padding($side) {
-    @if $side == 'all' {
-        .no-padding {
-            padding: 0 !important;
-        }
-    } @else {
-        .no-padding-#{$side} {
-            padding-#{$side}: 0 !important;
-        }
-    }
-}
-@include no-padding("left");
-@include no-padding("right");
-@include no-padding("top");
-@include no-padding("bottom");
-@include no-padding("all");
+.no-padding-left { padding-left: 0 !important; }
+.no-padding-right { padding-right: 0 !important; }
+.no-padding-top { padding-top: 0 !important; }
+.no-padding-bottom { padding-bottom: 0 !important; }
+.no-padding { padding: 0 !important; }
 
 /* bootstrap 3 input-group 100% width
    http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 .width-min { width: 1% !important; }
 
 /* Makes toolbar not wrap on smaller screens
-   http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
+ http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
 .flex-btn-group-container {
    display: -webkit-flex;
    display: flex;
@@ -303,43 +310,38 @@ entity tables helpers
    justify-content: flex-end;
 }
 
-.jh-table > {
-    tbody > tr > td {
-        /* Align text in td verifically (top aligned by Bootstrap) */
-        vertical-align: middle;
-    }
-    thead > tr > th > {
-        .glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
-            /* less visible sorting icons */
-            opacity: 0.5;
-            &:hover {
-                /* full visible sorting icons and pointer when mouse is over them */
-                opacity: 1;
-                cursor: pointer;
-            }
-        }
-    }
+.jh-table > tbody > tr > td {
+    /* Align text in td verifically (top aligned by Bootstrap) */
+    vertical-align: middle;
+}
+
+.jh-table > thead > tr > th > .glyphicon-sort, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes-alt {
+    /* less visible sorting icons */
+    opacity: 0.5;
+}
+
+.jh-table > thead > tr > th > .glyphicon-sort:hover, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes:hover, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes-alt:hover {
+    /* full visible sorting icons and pointer when mouse is over them */
+    opacity: 1;
+    cursor: pointer;
 }
 
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.row.jh-entity-details > {
-    dd {
-        margin-bottom: 15px;
-    }
+.row.jh-entity-details > dd {
+    margin-bottom: 15px;
 }
 
 @media screen and (min-width: 768px) {
-    .row.jh-entity-details > {
-        dt {
-            margin-bottom: 15px;
-        }
-        dd {
-            border-bottom: 1px solid #eee;
-            padding-left: 180px;
-            margin-left: 0;
-        }
+    .row.jh-entity-details > dt {
+        margin-bottom: 15px;
+    }
+
+    .row.jh-entity-details > dd {
+        border-bottom: 1px solid #eee;
+        padding-left: 180px;
+        margin-left: 0;
     }
 }
 
@@ -362,7 +364,7 @@ ui bootstrap tweaks
 
 <%_ if (enableSocialSignIn) { _%>
 /* ==========================================================================
-Social button
+Social Buttons
 ========================================================================== */
 .jh-btn-social {
     margin-bottom: 5px;
@@ -405,4 +407,4 @@ Social button
 }
 <%_ } _%>
 
-/* jhipster-needle-scss-add-main JHipster will add new css style */
+/* jhipster-needle-css-add-main JHipster will add new css style */

@@ -13,6 +13,11 @@ module.exports = function (options) {
     return {
         entry: {
             'polyfills': './src/main/webapp/app/polyfills',
+            <%_ if (useSass) { _%>
+            'global': './src/main/webapp/scss/global.scss',
+            <%_ } else { _%>
+            'global': './src/main/webapp/content/css/global.css',
+            <%_ } _%>
             'vendor': './src/main/webapp/app/vendor',
             'main': './src/main/webapp/app/app.main'
         },
@@ -60,20 +65,20 @@ module.exports = function (options) {
                 {
                     test: /\.scss$/,
                     loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
-                    exclude: /vendor\.scss/
+                    exclude: /(vendor\.scss|global\.scss)/
                 },
                 {
-                    test: /vendor\.scss$/,
+                    test: /(vendor\.scss|global\.scss)/,
                     loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
                 },
                 <%_ } else { _%>
                 {
                     test: /\.css$/,
                     loaders: ['to-string-loader', 'css-loader'],
-                    exclude: /vendor\.css/
+                    exclude: /(vendor\.css|global\.css)/
                 },
                 {
-                    test: /vendor\.css$/,
+                    test: /(vendor\.css|global\.css)/,
                     loader: ExtractTextPlugin.extract({
                         fallbackLoader: "style-loader",
                         loader: "css-loader"
