@@ -43,7 +43,7 @@
     entities: [],
     relationships: [],
     enums: [],
-    dto: [],
+    dto: {},
     pagination: {},
     service: {},
     microservice: {},
