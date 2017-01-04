@@ -32,6 +32,8 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'content/css/_global.css',
+                'app/layouts/profiles/_page-ribbon.css',
+                'app/layouts/navbar/_navbar.css',
                 'content/css/_vendor.css',
                 { file: 'content/css/_documentation.css', method: 'copy' }
             ]
@@ -43,6 +45,8 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'scss/_global.scss',
+                'app/layouts/profiles/_page-ribbon.scss',
+                'app/layouts/navbar/_navbar.scss',
                 'scss/_vendor.scss'
             ]
         }
