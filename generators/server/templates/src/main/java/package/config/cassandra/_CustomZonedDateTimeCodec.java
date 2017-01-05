@@ -48,7 +48,7 @@ public class CustomZonedDateTimeCodec extends TypeCodec<ZonedDateTime> {
 
     @Override
     public ByteBuffer serialize(ZonedDateTime value, ProtocolVersion protocolVersion) {
-        if (value == null){
+        if (value == null) {
             return null;
         }
         long millis = value.toInstant().toEpochMilli();
@@ -57,7 +57,7 @@ public class CustomZonedDateTimeCodec extends TypeCodec<ZonedDateTime> {
 
     @Override
     public ZonedDateTime deserialize(ByteBuffer bytes, ProtocolVersion protocolVersion) {
-        if (bytes == null || bytes.remaining() == 0){
+        if (bytes == null || bytes.remaining() == 0) {
             return null;
         }
         long millis = bigint().deserializeNoBoxing(bytes, protocolVersion);
@@ -72,7 +72,7 @@ public class CustomZonedDateTimeCodec extends TypeCodec<ZonedDateTime> {
     @Override
     public ZonedDateTime parse(String value) {
             // strip enclosing single quotes, if any
-            if (ParseUtils.isQuoted(value)){
+            if (ParseUtils.isQuoted(value)) {
                 value = ParseUtils.unquote(value);
             }
             if (isLongLiteral(value)) {
