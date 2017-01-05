@@ -29,11 +29,10 @@ const files = {
         // this css file will be overwritten by the sass generated css if sass is enabled
         // but this will avoid errors when running app without running sass task first
         {
+            condition: generator => !generator.useSass,
             path: MAIN_SRC_DIR,
             templates: [
                 'content/css/_global.css',
-                'app/layouts/profiles/_page-ribbon.css',
-                'app/layouts/navbar/_navbar.css',
                 'content/css/_vendor.css',
                 { file: 'content/css/_documentation.css', method: 'copy' }
             ]
@@ -45,8 +44,6 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'scss/_global.scss',
-                'app/layouts/profiles/_page-ribbon.scss',
-                'app/layouts/navbar/_navbar.scss',
                 'scss/_vendor.scss'
             ]
         }
@@ -157,7 +154,23 @@ const files = {
             templates: [
                 'layouts/navbar/_active-menu.directive.ts'
             ]
-        }
+        },
+        {
+            condition: generator => generator.useSass,
+            path: ANGULAR_DIR,
+            templates: [
+                'layouts/profiles/_page-ribbon.scss',
+                'layouts/navbar/_navbar.scss',
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: ANGULAR_DIR,
+            templates: [
+                'layouts/profiles/_page-ribbon.css',
+                'layouts/navbar/_navbar.css',
+            ]
+        },
     ],
     angularAccountModule: [
         {

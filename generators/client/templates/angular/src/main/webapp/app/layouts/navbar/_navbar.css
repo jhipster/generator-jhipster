@@ -1,4 +1,3 @@
-
 /* ==========================================================================
 Navbar
 ========================================================================== */
@@ -10,30 +9,39 @@ Navbar
 .jh-navbar {
     background-color: #353d47;
     padding: .2em 1em;
-    .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
-        background-color: #353d47;
-    }
-    .dropdown-toggle::after {
-        margin-left: 0.15em;
-    }
-    ul.navbar-nav {
-        padding: 0.5em;
-        .nav-item+.nav-item {
-            margin-left: 1.5rem;
-        }
-    }
-    a.nav-link {
-        font-weight: 400;
-    }
-    .jh-navbar-toggler {
-        color: #ccc;
-        font-size: 1.5em;
-        padding: 10px;
-        &:hover {
-            color: #fff;
-        }
-    }
 }
+
+.jh-navbar .dropdown-item.active, .jh-navbar .dropdown-item.active:focus, .jh-navbar .dropdown-item.active:hover {
+    background-color: #353d47;
+}
+
+.jh-navbar .dropdown-toggle::after {
+    margin-left: 0.15em;
+}
+
+.jh-navbar ul.navbar-nav {
+    padding: 0.5em;
+}
+
+.jh-navbar .navbar-nav .nav-item+.nav-item {
+    margin-left: 1.5rem;
+}
+
+.jh-navbar a.nav-link {
+    font-weight: 400;
+}
+
+.jh-navbar .jh-navbar-toggler {
+    color: #ccc;
+    font-size: 1.5em;
+    padding: 10px;
+}
+
+.jh-navbar .jh-navbar-toggler:hover {
+    color: #fff;
+}
+
+
 
 @media screen and (max-width: 992px) {
     .jh-logo-container {
@@ -45,3 +53,4 @@ Navbar
     display: inline-block;
     vertical-align: middle;
 }
+

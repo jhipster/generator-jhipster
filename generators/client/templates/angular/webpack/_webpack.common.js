@@ -79,10 +79,7 @@ module.exports = function (options) {
                 },
                 {
                     test: /(vendor\.css|global\.css)/,
-                    loader: ExtractTextPlugin.extract({
-                        fallbackLoader: "style-loader",
-                        loader: "css-loader"
-                    })
+                    loaders: ['style-loader', 'css-loader']
                 },
                 <%_ } _%>
                 {

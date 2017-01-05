@@ -1,4 +1,3 @@
-
 /* ==========================================================================
 Developement Ribbon
 ========================================================================== */
@@ -18,15 +17,17 @@ Developement Ribbon
     z-index: 9999;
     pointer-events: none;
     opacity: 0.75;
-    a {
-        color: #fff;
-        display: block;
-        font-weight: 400;
-        margin: 1px 0;
-        padding: 10px 50px;
-        text-align: center;
-        text-decoration: none;
-        text-shadow: 0 0 5px #444;
-        pointer-events: none;
-    }
 }
+
+.ribbon a {
+    color: #fff;
+    display: block;
+    font-weight: 400;
+    margin: 1px 0;
+    padding: 10px 50px;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 0 5px #444;
+    pointer-events: none;
+}
+
