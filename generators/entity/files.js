@@ -2,7 +2,8 @@
 
 const _ = require('lodash'),
     randexp = require('randexp'),
-    chalk = require('chalk');
+    chalk = require('chalk'),
+    fs = require('fs');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
@@ -118,7 +119,7 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
                 file: 'package/web/rest/_EntityResourceIntTest.java',
-                options: {'context': {'randexp': randexp, '_': _, 'chalkRed': chalk.red}},
+                options: {'context': {'randexp': randexp, '_': _, 'chalkRed': chalk.red, 'fs': fs, 'SERVER_TEST_SRC_DIR': SERVER_TEST_SRC_DIR}},
                 renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
             }]
         },

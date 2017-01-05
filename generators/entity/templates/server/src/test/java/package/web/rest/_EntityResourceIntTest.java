@@ -64,6 +64,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
 public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+<%_
+    var oldSource = '';
+    try {
+        oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIntTest.java', 'utf8');
+    } catch (e) {}
+_%>                    
     <%_ for (idx in fields) {
     var defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -120,6 +126,17 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
             updatedTextString += "B";
         }
         if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
+            if (oldSource !== '') {
+                // Check for old values
+                var sampleTextStringSearchResult = new RegExp('private static final String ' + defaultValueName + ' = "(.*)";', 'm').exec(oldSource);
+                if (sampleTextStringSearchResult != null) {
+                    sampleTextString = sampleTextStringSearchResult[1];
+                }
+                var updatedTextStringSearchResult = new RegExp('private static final String ' + updatedValueName + ' = "(.*)";', 'm').exec(oldSource);
+                if (updatedTextStringSearchResult != null) {
+                    updatedTextString = updatedTextStringSearchResult[1];
+                }
+            }
             // Generate Strings, using pattern
             try {
                 var sampleTextHigherLength = 100;
