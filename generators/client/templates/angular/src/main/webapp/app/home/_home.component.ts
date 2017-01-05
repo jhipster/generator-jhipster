@@ -7,7 +7,15 @@ import { Account, LoginModalService, Principal } from '../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-home',
-    templateUrl: './home.component.html'
+    templateUrl: './home.component.html',
+    styleUrls: [
+        <%_ if (useSass) { _%>
+        'home.scss'
+        <%_ } else { _%>
+        'home.css'
+        <%_ } _%>
+    ]
+
 })
 export class HomeComponent implements OnInit {
     account: Account;

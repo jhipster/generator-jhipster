@@ -161,6 +161,7 @@ const files = {
             templates: [
                 'layouts/profiles/_page-ribbon.scss',
                 'layouts/navbar/_navbar.scss',
+                'home/_home.scss'
             ]
         },
         {
@@ -169,6 +170,7 @@ const files = {
             templates: [
                 'layouts/profiles/_page-ribbon.css',
                 'layouts/navbar/_navbar.css',
+                'home/_home.css'
             ]
         },
     ],
