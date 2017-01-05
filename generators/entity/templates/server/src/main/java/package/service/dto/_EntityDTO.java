@@ -171,7 +171,7 @@ public class <%= entityClass %>DTO implements Serializable {
 
         <%= entityClass %>DTO <%= entityInstance %>DTO = (<%= entityClass %>DTO) o;
 
-        if ( ! Objects.equals(id, <%= entityInstance %>DTO.id)) return false;
+        if ( ! Objects.equals(id, <%= entityInstance %>DTO.id)){ return false; }
 
         return true;
     }
