@@ -28,8 +28,6 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         <%_ } if (authenticationType === 'oauth2') { _%>
         private $localStorage: LocalStorageService,
         <%_ } _%>
-        private $document: Document,
-        private $window: Window,
         private csrfService: CSRFService
     ) {
         this.connection = this.createConnection();
@@ -39,7 +37,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
     connect () {
         if (this.connectedPromise === null) this.connection = this.createConnection();
         //building absolute path so that websocket doesnt fail when deploying with a context path
-        var loc = this.$window.location;
+        var loc = window.location;
         var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
         <%_ if (authenticationType === 'oauth2') { _%>
         /*jshint camelcase: false */
