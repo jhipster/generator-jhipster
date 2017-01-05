@@ -23,6 +23,10 @@
     ],
     "serverPort": "8080",
     "jhiPrefix": "jhi",
-    "travis": true
+    "travis": true,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "clientPackageManager": "yarn",
+    "clientFramework": "angular1"
   }
 }
