@@ -40,6 +40,7 @@
     "@types/angular-animate": "1.5.6",
     "@types/angular-mocks": "1.5.8",
     "@types/jasmine": "2.5.38",
+    "@types/node": "6.0.45",
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "2.53.33",
     <%_ } _%>
@@ -93,6 +94,7 @@
     "tslint-loader": "3.3.0",
     "typescript": "2.1.4",
     "webpack": "2.2.0-rc.3",
+    "webpack-dev-server": "2.1.0-beta.12",
     "webpack-merge": "2.0.0",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
@@ -119,6 +121,7 @@
     "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
+    "webpack:hmr": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --content-base src/ --port=8090",
     "webpack:build": "webpack --config webpack/webpack.dev.js",
     "webpack:dev": "webpack --watch --config webpack/webpack.dev.js",
     "webpack:prod": "webpack -p --config webpack/webpack.prod.js"

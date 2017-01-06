@@ -6,6 +6,7 @@ const ENV = 'prod';
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
     output: {
+        path: <% if (buildTool === 'gradle') { %>'./build/www'<% } else { %>'./target/www'<% } %>,
         filename: '[hash].[name].bundle.js',
         chunkFilename: '[hash].[id].chunk.js'
     },

@@ -46,28 +46,9 @@ module.exports = function (options) {
             extensions: ['.ts', '.js'],
             modules: ['node_modules']
         },
-        output: {
-            path: './<%= BUILD_DIR %>www',
-            filename: '[name].bundle.js',
-            chunkFilename: '[id].chunk.js'
-        },
-        devServer: {
-            proxy: [{
-                context: [<% if (authenticationType == 'oauth2') { %>
-                    '/oauth',<% } %>
-                    '/api',
-                    '/management',
-                    '/swagger-resources',
-                    '/v2/api-docs',
-                    '/h2-console'
-                ],
-                target: 'http://127.0.0.1:<%= serverPort %>',
-                secure: false
-            }]
-        },
         module: {
+            exprContextCritical: false,
             rules: [
-                { test: /[\/]angular\.js$/, loader: "exports-loader?angular" },
                 { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
                 {
                     test: /\.ts$/,
