@@ -12,7 +12,7 @@
     <div class="voffset2">&nbsp;</div>
     Filter
     <input type="text" [(ngModel)]="threadDumpFilter" class="form-control">
-    <div class="row pad" *ngFor="let entry of threadDump | filter:threadDumpFilter:'lockName' | keys">
+    <div class="row pad" *ngFor="let entry of threadDump | pureFilter:threadDumpFilter:'lockName' | keys">
         <h5><span class="tag" [ngClass]="getTagClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
             <a (click)="entry.show = !entry.show" href="javascript:void(0);">
                <span [hidden]="entry.show" jhiTranslate="metrics.jvm.threads.dump.show">Show StackTrace</span>
