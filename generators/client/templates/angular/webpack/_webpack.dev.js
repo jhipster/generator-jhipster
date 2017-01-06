@@ -38,11 +38,12 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
-            proxy: 'http://localhost:<%= serverPort %>'
+            proxy: 'http://localhost:8090'
         }, {
             reload: false
         }),
         new ExtractTextPlugin('styles.css'),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new webpack.NamedModulesPlugin()
     ]
 });
