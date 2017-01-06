@@ -90,7 +90,6 @@ const files = {
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
                 'blocks/config/_prod.config.ts',
-                'blocks/config/_uib-pager.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
                 //interceptors
                 'blocks/interceptor/_auth-expired.interceptor.ts',
@@ -99,14 +98,6 @@ const files = {
                 'blocks/interceptor/_http.interceptor.ts',
                 'blocks/interceptor/_http.interceptable.ts',
                 'blocks/interceptor/_http.provider.ts'
-            ]
-        },
-        {
-            condition: generator => generator.enableTranslation,
-            path: ANGULAR_DIR,
-            templates: [
-                'blocks/config/_translation.config.ts',
-                'blocks/config/_translation-storage.provider.ts'
             ]
         },
         {
