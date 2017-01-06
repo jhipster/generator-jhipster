@@ -142,7 +142,7 @@ _%>
                 var sampleTextHigherLength = 100;
                 var sampleTextLengthLimit = 1000;
                 var patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
-                if (!patternRegExp.test(sampleTextString)) {
+                if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     var samplePatternTextString = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
                     if (patternRegExp.test(samplePatternTextString.substr(0, sampleTextLength))) {
                         samplePatternTextString = samplePatternTextString.substr(0, sampleTextLength);
@@ -153,9 +153,9 @@ _%>
                     } else if (samplePatternTextString.length > sampleTextLengthLimit) {
                         samplePatternTextString = samplePatternTextString.substr(0, sampleTextLengthLimit);
                     }
-                    sampleTextString = samplePatternTextString.replace(/\\/g, '\\\\');
+                    sampleTextString = samplePatternTextString.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
-                if (!patternRegExp.test(updatedTextString)) {
+                if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     var updatedPatternTextString = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
                     if (patternRegExp.test(updatedPatternTextString.substr(0, sampleTextLength))) {
                         updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextLength);
@@ -166,7 +166,7 @@ _%>
                     } else if (updatedPatternTextString.length > sampleTextLengthLimit) {
                         updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextLengthLimit);
                     }
-                    updatedTextString = updatedPatternTextString.replace(/\\/g, '\\\\');
+                    updatedTextString = updatedPatternTextString.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
             } catch (error) {
                 log(this.chalkRed('Error generating test value for entity "' + entityClass +
@@ -181,8 +181,8 @@ _%>
             }
         }_%>
 
-    private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
+    private static final String <%=defaultValueName %> = "<%-sampleTextString %>";
+    private static final String <%=updatedValueName %> = "<%-updatedTextString %>";
     <%_ } else if (fieldType == 'Integer') { _%>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
