@@ -127,15 +127,18 @@
             <%_ } _%>
             <li ngbDropdown class="nav-item dropdown pointer">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
-                    <span>
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="hidden-sm-down" jhiTranslate="global.menu.account.main">
-                            Account
-                        </span>
-                        <b class="caret"></b>
+                  <span *ngIf="!getImageUrl()">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span class="hidden-sm" jhi-translate="global.menu.account.main">
+                      Account
                     </span>
+                    <b class="caret"></b>
+                  </span>
+                  <span *ngIf="getImageUrl()">
+                      <img [src]="getImageUrl()" class="profile-image img-circle">
+                  </span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
+                <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" uiSref="settings" uiSrefActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-wrench" aria-hidden="true"></i>
