@@ -28,17 +28,25 @@ spec:
         app: <%= app.baseName.toLowerCase() %>
     spec:
       containers:
-      - name: <%= app.baseName.toLowerCase() %>
+      - name: <%= app.baseName.toLowerCase() %>-app
         image: <%= app.targetImageName %>
         imagePullPolicy: IfNotPresent
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         <%_ if (app.applicationType === 'microservice' || app.applicationType === 'gateway') { _%>
+        <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
         - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
           value: http://admin:<%= adminPassword %>@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
         - name: SPRING_CLOUD_CONFIG_URI
           value: http://admin:<%= adminPassword %>@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/config
+        <%_ } _%>
+        <%_ if (app.serviceDiscoveryType === 'consul') { _%>
+        - name: SPRING_CLOUD_CONSUL_HOST
+          value: consul.<%= kubernetesNamespace %>.svc.cluster.local
+        - name: SPRING_CLOUD_CONSUL_PORT
+          value: "8500"
+        <%_ } _%>
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mysql') { _%>
         - name: SPRING_DATASOURCE_URL

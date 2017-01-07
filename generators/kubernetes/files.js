@@ -27,7 +27,15 @@ function writeFiles() {
 
         writeRegistryFiles: function() {
             if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
-            this.template('_jhipster-registry.yml', 'registry/jhipster-registry.yml');
+            if (this.serviceDiscoveryType === 'eureka') {
+                this.template('registry/_jhipster-registry.yml', 'registry/jhipster-registry.yml');
+                this.template('registry/_application-configmap.yml', 'registry/application-configmap.yml');
+            }
+            else if (this.serviceDiscoveryType === 'consul') {
+                this.template('registry/_consul.yml', 'registry/consul.yml');
+                this.template('registry/_consul-config-loader.yml', 'registry/consul-config-loader.yml');
+                this.template('registry/_application-configmap.yml', 'registry/application-configmap.yml');
+            }
         }
     };
 }
