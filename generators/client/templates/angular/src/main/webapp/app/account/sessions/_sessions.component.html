@@ -1,10 +1,10 @@
 <div>
-    <h2 jhi-translate="sessions.title" translate-values="{username: '{{account.login}}'}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
+    <h2 jhiTranslate="sessions.title" translateValues="{username: '{{account.login}}'}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
 
-    <div class="alert alert-success" *ngIf="success" jhi-translate="sessions.messages.success">
+    <div class="alert alert-success" *ngIf="success" jhiTranslate="sessions.messages.success">
         <strong>Session invalidated!</strong>
     </div>
-    <div class="alert alert-danger" *ngIf="error" jhi-translate="sessions.messages.error">
+    <div class="alert alert-danger" *ngIf="error" jhiTranslate="sessions.messages.error">
         <strong>An error has occured!</strong> The session could not be invalidated.
     </div>
 
@@ -12,9 +12,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th jhi-translate="sessions.table.ipaddress">IP Address</th>
-                    <th jhi-translate="sessions.table.useragent">User agent</th>
-                    <th jhi-translate="sessions.table.date">Date</th>
+                    <th jhiTranslate="sessions.table.ipaddress">IP Address</th>
+                    <th jhiTranslate="sessions.table.useragent">User agent</th>
+                    <th jhiTranslate="sessions.table.date">Date</th>
                     <th></th>
                 </tr>
             </thead>
@@ -26,7 +26,7 @@
                     <td>
                         <button type="submit"
                                 class="btn btn-primary"
-                                (click)="invalidate(session.series)" jhi-translate="sessions.table.button">
+                                (click)="invalidate(session.series)" jhiTranslate="sessions.table.button">
                                  Invalidate
                         </button>
                     </td>

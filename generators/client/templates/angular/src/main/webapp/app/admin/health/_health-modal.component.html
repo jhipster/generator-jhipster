@@ -8,13 +8,13 @@
 </div>
 <div class="modal-body pad">
     <div *ngIf="currentHealth.details">
-        <h4 jhi-translate="health.details.properties">Properties</h4>
+        <h4 jhiTranslate="health.details.properties">Properties</h4>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr class="row">
-                        <th class="col-md-6 text-xs-left" jhi-translate="health.details.name">Name</th>
-                        <th class="col-md-6 text-xs-left" jhi-translate="health.details.value">Value</th>
+                        <th class="col-md-6 text-xs-left" jhiTranslate="health.details.name">Name</th>
+                        <th class="col-md-6 text-xs-left" jhiTranslate="health.details.value">Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,7 +27,7 @@
         </div>
     </div>
     <div *ngIf="currentHealth.error">
-        <h4 jhi-translate="health.details.error">Error</h4>
+        <h4 jhiTranslate="health.details.error">Error</h4>
             <pre>{{currentHealth.error}}</pre>
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { Injector } from '@angular/core';
 import { Http, XHRBackend, RequestOptions } from '@angular/http';
-import { HttpInterceptor } from './http.interceptor';
+import { EventManager, HttpInterceptor } from 'ng-jhipster';
+
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
@@ -10,8 +11,6 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 import { AuthExpiredInterceptor } from './auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
 import { NotificationInterceptor } from './notification.interceptor';
-
-import { EventManager } from '../../shared/service/event-manager.service';
 
 export const customHttpProvider = () => ({
     provide: Http,
@@ -40,13 +39,11 @@ export const customHttpProvider = () => ({
             // Other interceptors can be added here
             new ErrorHandlerInterceptor(eventManager),
             new NotificationInterceptor()
-
         ]
     ),
     deps: [
         XHRBackend,
         RequestOptions,
-
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         LocalStorageService,
         SessionStorageService,

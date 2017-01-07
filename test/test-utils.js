@@ -6,7 +6,11 @@ module.exports = {
     getFilesForOptions: getFilesForOptions
 };
 
-function getFilesForOptions(files, options, prefix) {
+function getFilesForOptions(files, options, prefix, excludeFiles) {
     let generator = options;
-    return Generator.prototype.writeFilesToDisk(files, generator, true, prefix);
+    if (excludeFiles === undefined) {
+        return Generator.prototype.writeFilesToDisk(files, generator, true, prefix);
+    }
+    return Generator.prototype.writeFilesToDisk(files, generator, true, prefix)
+        .filter(file => excludeFiles.indexOf(file) === -1);
 }

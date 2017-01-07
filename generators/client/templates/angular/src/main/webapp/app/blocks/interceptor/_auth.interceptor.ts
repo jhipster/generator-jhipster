@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { LocalStorageService, SessionStorageService } from 'ng2-webstorage';
-import { HttpInterceptable } from './http.interceptable';
+import { HttpInterceptable } from 'ng-jhipster';
 
 export class AuthInterceptor extends HttpInterceptable {
 

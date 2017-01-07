@@ -21,13 +21,15 @@
     "angular2-cookie": "1.2.6",
     "core-js": "2.4.1",
     "jquery": "3.1.1",
-    <%_ if (enableTranslation) { _%>
-    "ng2-translate": "4.2.0",
-    <%_ } _%>
+    "ng-jhipster": "0.0.9",
     "ng2-webstorage": "1.4.2",
     "reflect-metadata": "0.1.9",
     "rxjs": "5.0.2",
     "swagger-ui": "2.2.8",
+    <%_ if (websocket == 'spring-websocket') { _%>
+    "sockjs-client": "1.1.1",
+    "webstomp-client": "1.0.3",
+    <%_ } _%>
     "tether": "1.4.0",
     "ui-router-ng2": "1.0.0-beta.3",
     "ui-router-visualizer": "2.0.11",
@@ -38,6 +40,10 @@
     "@types/angular-animate": "1.5.6",
     "@types/angular-mocks": "1.5.8",
     "@types/jasmine": "2.5.38",
+    <%_ if (protractorTests) { _%>
+    "@types/selenium-webdriver": "2.53.33",
+    <%_ } _%>
+    "angular2-infinite-scroll": "0.2.8",
     "angular-cli": "1.0.0-beta.24",
     "angular2-template-loader": "0.6.0",
     "awesome-typescript-loader": "3.0.0-beta.17",
@@ -112,6 +118,7 @@
     "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
+    "webpack:build": "webpack --config webpack/webpack.dev.js",
     "webpack:dev": "webpack --watch --config webpack/webpack.dev.js",
     "webpack:prod": "webpack -p --config webpack/webpack.prod.js"
   }

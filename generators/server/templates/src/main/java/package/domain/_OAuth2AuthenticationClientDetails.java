@@ -24,12 +24,12 @@ public class OAuth2AuthenticationClientDetails extends BaseClientDetails impleme
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
 
         OAuth2AuthenticationClientDetails that = (OAuth2AuthenticationClientDetails) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) { return false; }
 
         return true;
     }

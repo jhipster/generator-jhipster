@@ -14,7 +14,6 @@ const constants = require('../generators/generator-constants'),
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR;
 
-
 describe('JHipster generator', function () {
 
     describe('default configuration', function () {
@@ -865,7 +864,7 @@ describe('JHipster generator', function () {
                 enableTranslation: true,
                 authenticationType: 'session',
                 testFrameworks: []
-            }));
+            }, '', ['package.json']));
         });
     });
 
@@ -900,7 +899,7 @@ describe('JHipster generator', function () {
                 enableTranslation: true,
                 authenticationType: 'session',
                 testFrameworks: []
-            }));
+            },'' , ['package.json']));
             assert.noFile(['gradle/yeoman.gradle']);
         });
     });

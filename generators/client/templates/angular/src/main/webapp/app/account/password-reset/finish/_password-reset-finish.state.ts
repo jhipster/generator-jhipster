@@ -1,5 +1,5 @@
+import { JhiLanguageService } from 'ng-jhipster';
 import { PasswordResetFinishComponent } from './password-reset-finish.component';
-import { JhiLanguageService } from '../../../shared';
 
 export const finishResetState = {
     name: 'finishReset',

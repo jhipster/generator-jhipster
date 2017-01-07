@@ -1,6 +1,8 @@
 import { Transition } from 'ui-router-ng2';
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %><%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
 export const trackerState = {
     name: '<%=jhiPrefix%>-tracker',
@@ -24,4 +26,4 @@ export const trackerState = {
     onExit: (trans: Transition) => {
         trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).unsubscribe();
     }
-}
+};

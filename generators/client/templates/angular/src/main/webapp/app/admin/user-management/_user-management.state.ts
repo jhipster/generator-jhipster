@@ -1,14 +1,13 @@
 import { Transition } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from 'ng-jhipster';
 
-import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
 import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from '../../shared';
 
 export const userMgmtState = {
     name: 'user-management',
@@ -35,8 +34,9 @@ export const userMgmtState = {
     resolve: [
         {
             token: 'pagingParams',
-            deps: [PaginationUtil, '$stateParams', PaginationConfig],
-            resolveFn: (paginationUtil, stateParams) => {
+            deps: [PaginationUtil, Transition],
+            resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
+                const stateParams = trans.params();
                 return {
                     page: paginationUtil.parsePage(stateParams['page']),
                     sort: stateParams['sort'],
@@ -66,7 +66,7 @@ export const userMgmtState = {
 
 export const userMgmtDetailState = {
     name: 'user-management-detail',
-    parent: 'admin',
+    parent: 'user-management',
     url: '/user/:login',
     data: {
         authorities: ['ROLE_ADMIN'],

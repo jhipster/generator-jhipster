@@ -30,10 +30,10 @@ import {
     <%_ if (enableSocialSignIn) { _%>
     SocialRegisterComponent,
     socialRegisterState,
-    <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'jwt') { _%>
     SocialAuthComponent,
     socialAuthState,
-    <%_ } _%>
+        <%_ } _%>
     <%_ } _%>
     accountState
 } from './';
@@ -49,9 +49,9 @@ let ACCOUNT_STATES = [
     sessionsState,
     <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
-    <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'jwt') { _%>
     socialAuthState,
-    <%_ } _%>
+        <%_ } _%>
     socialRegisterState,
     <%_ } _%>
     settingsState
@@ -65,9 +65,9 @@ let ACCOUNT_STATES = [
     declarations: [
         <%_ if (enableSocialSignIn) { _%>
         SocialRegisterComponent,
-        <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt') { _%>
         SocialAuthComponent,
-        <%_ } _%>
+            <%_ } _%>
         <%_ } _%>
         ActivateComponent,
         RegisterComponent,

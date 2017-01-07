@@ -1,9 +1,11 @@
 import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ParseLinks } from 'ng-jhipster';
 
 import { Audit } from './audit.model';
 import { AuditsService } from './audits.service';
-import { ParseLinks, ITEMS_PER_PAGE } from '../../shared';
+import { ITEMS_PER_PAGE } from '../../shared';
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
   selector: '<%=jhiPrefix%>-audit',
@@ -21,7 +23,12 @@ export class AuditsComponent implements OnInit {
     totalItems: number;
     datePipe: DatePipe;
 
-    constructor(private auditsService: AuditsService, private parseLinks: ParseLinks, @Inject(LOCALE_ID) private locale: string) { 
+    constructor(
+        private auditsService: AuditsService,
+        private parseLinks: ParseLinks,
+        @Inject(LOCALE_ID) private locale: string,
+        private paginationConfig: PaginationConfig
+    ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
         this.reverse = false;
@@ -55,7 +62,7 @@ export class AuditsComponent implements OnInit {
     }
 
     previousMonth () {
-        let dateFormat: string = 'yyyy-MM-dd';
+        let dateFormat = 'yyyy-MM-dd';
         let fromDate: Date = new Date();
 
         if (fromDate.getMonth() === 0) {
@@ -68,7 +75,7 @@ export class AuditsComponent implements OnInit {
     }
 
     today () {
-        let dateFormat: string = 'yyyy-MM-dd';
+        let dateFormat = 'yyyy-MM-dd';
         // Today + 1 day - needed if the current day must be included
         let today: Date = new Date();
 
