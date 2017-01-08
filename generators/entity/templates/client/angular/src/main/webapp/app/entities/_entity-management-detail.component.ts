@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Transition } from 'ui-router-ng2';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-
-import { Transition } from 'ui-router-ng2';
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-detail',

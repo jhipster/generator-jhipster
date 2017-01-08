@@ -303,8 +303,6 @@ const files = {
                 'shared/login/_login-modal.service.ts',
                 'shared/login/_login.component.ts',
                 //alert service code
-                'shared/alert/_alert.service.ts',
-                'shared/alert/_alert.provider.ts',
                 'shared/alert/_alert.component.ts',
                 'shared/alert/_alert-error.component.ts'
             ]
@@ -336,8 +334,7 @@ const files = {
             condition: generator => generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth-oauth2.service.ts',
-                'shared/auth/_base64.service.ts'
+                'shared/auth/_auth-oauth2.service.ts'
             ]
         },
         {
