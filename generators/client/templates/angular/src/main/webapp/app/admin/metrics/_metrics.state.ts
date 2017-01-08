@@ -1,7 +1,8 @@
+import { Ng2StateDeclaration } from "ui-router-ng2";
 import { JhiLanguageService } from 'ng-jhipster';
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
 
-export const metricsState = {
+export const metricsState: Ng2StateDeclaration = {
     name: '<%=jhiPrefix%>-metrics',
     parent: 'admin',
     url: '/metrics',

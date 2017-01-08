@@ -1,4 +1,4 @@
-import { Transition } from 'ui-router-ng2';
+import { Transition, Ng2StateDeclaration } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from 'ng-jhipster';
 
@@ -9,7 +9,7 @@ import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.c
 import { User } from './user.model';
 import { UserService } from './user.service';
 
-export const userMgmtState = {
+export const userMgmtState: Ng2StateDeclaration = {
     name: 'user-management',
     parent: 'admin',
     url: '/user-management<%_ if (databaseType !== 'cassandra') { _%>?page&sort<%_ } _%>',
@@ -64,7 +64,7 @@ export const userMgmtState = {
 
 };
 
-export const userMgmtDetailState = {
+export const userMgmtDetailState: Ng2StateDeclaration = {
     name: 'user-management-detail',
     parent: 'user-management',
     url: '/user/:login',
@@ -82,7 +82,7 @@ export const userMgmtDetailState = {
     }]
 };
 
-export const userMgmtNewState = {
+export const userMgmtNewState: Ng2StateDeclaration = {
     name: 'user-management.new',
     url: '/new',
     data: {
@@ -103,7 +103,7 @@ export const userMgmtNewState = {
     }
 };
 
-export const userMgmtEditState = {
+export const userMgmtEditState: Ng2StateDeclaration = {
     name: 'user-management.edit',
     url: '/{login}/edit',
     data: {
@@ -128,7 +128,7 @@ export const userMgmtEditState = {
     }
 };
 
-export const userMgmtDeleteState = {
+export const userMgmtDeleteState: Ng2StateDeclaration = {
     name: 'user-management.delete',
     url: '/{login}/delete',
     data: {

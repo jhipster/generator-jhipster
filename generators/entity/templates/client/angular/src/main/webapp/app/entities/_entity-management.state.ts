@@ -12,7 +12,7 @@ if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
     hasDate = true;
 }
 _%>
-import { Transition } from 'ui-router-ng2';
+import { Transition, Ng2StateDeclaration } from 'ui-router-ng2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { <% if (enableTranslation){ %>JhiLanguageService, <% } %>PaginationUtil } from 'ng-jhipster';
 
@@ -23,7 +23,7 @@ import { <%= entityAngularJSName %>DeleteDialogComponent } from './<%= entityFil
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 
-export const <%= entityInstance %>State = {
+export const <%= entityInstance %>State: Ng2StateDeclaration = {
     name: '<%= entityStateName %>',
     parent: 'entity',
     url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
@@ -73,7 +73,7 @@ export const <%= entityInstance %>State = {
     ]
 };
 
-export const <%= entityInstance %>DetailState = {
+export const <%= entityInstance %>DetailState: Ng2StateDeclaration = {
     name: '<%= entityStateName %>-detail',
     parent: 'entity',
     url: '/<%= entityUrl %>/:id',
@@ -110,7 +110,7 @@ export const <%= entityInstance %>DetailState = {
     ]
 };
 
-export const <%= entityInstance %>NewState = {
+export const <%= entityInstance %>NewState: Ng2StateDeclaration = {
     name: '<%= entityStateName %>.new',
     url: '/new',
     data: {
@@ -131,7 +131,7 @@ export const <%= entityInstance %>NewState = {
     }
 };
 
-export const <%= entityInstance %>EditState = {
+export const <%= entityInstance %>EditState: Ng2StateDeclaration = {
     name: '<%= entityStateName %>.edit',
     url: '/{id}/edit',
     data: {
@@ -170,7 +170,7 @@ export const <%= entityInstance %>EditState = {
     }
 };
 
-export const <%= entityInstance %>DeleteState = {
+export const <%= entityInstance %>DeleteState: Ng2StateDeclaration = {
     name: '<%= entityStateName %>.delete',
     url: '/{id}/delete',
     data: {
