@@ -16,7 +16,7 @@
 
 import { TestBed, inject } from '@angular/core/testing';
 import { Sanitizer } from '@angular/core';
-import { TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate';
 
 import { AlertService } from '../../src/service/alert.service';
 import { ConfigHelper } from '../../src/helper';

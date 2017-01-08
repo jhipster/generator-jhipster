@@ -1,5 +1,5 @@
 import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
-import { TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate';
 import { ConfigHelper } from '../helper';
 
 @Injectable()
