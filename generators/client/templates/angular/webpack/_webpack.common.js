@@ -13,7 +13,28 @@ module.exports = function (options) {
     return {
         entry: {
             'polyfills': './src/main/webapp/app/polyfills',
-            'vendor': './src/main/webapp/app/vendor',
+            'vendor': [
+                './src/main/webapp/app/vendor',
+                '@angular/common',
+                '@angular/compiler',
+                '@angular/core',
+                '@angular/forms',
+                '@angular/http',
+                '@angular/platform-browser',
+                '@angular/platform-browser-dynamic',
+                '@angular/upgrade',
+                '@ng-bootstrap/ng-bootstrap',
+                'angular2-cookie',
+                'jquery',
+                'ng-jhipster',
+                'ng2-webstorage',
+                'rxjs',
+                <%_ if (websocket == 'spring-websocket') { _%>
+                'sockjs-client',
+                'webstomp-client',
+                <%_ } _%>
+                'ui-router-ng2'
+            ],
             'main': './src/main/webapp/app/app.main'
         },
         resolve: {
@@ -88,7 +109,7 @@ module.exports = function (options) {
         },
         plugins: [
             new CommonsChunkPlugin({
-                name: ['polyfills', 'vendor'].reverse()
+                names: ['manifest', 'polyfills', 'vendor'].reverse()
             }),
             new CopyWebpackPlugin([
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
