@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Transition } from 'ui-router-ng2';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-
-import { Transition } from 'ui-router-ng2';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt-detail',

@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core';
 import { Http, XHRBackend, RequestOptions } from '@angular/http';
-import { EventManager, HttpInterceptor } from 'ng-jhipster';
+import { EventManager, InterceptableHttp } from 'ng-jhipster';
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './auth.interceptor';
@@ -26,7 +26,7 @@ export const customHttpProvider = () => ({
         stateStorageService: StateStorageService,
         <%_ } _%>
         eventManager: EventManager
-    ) => new HttpInterceptor(
+    ) => new InterceptableHttp(
         backend,
         defaultOptions,
         [
