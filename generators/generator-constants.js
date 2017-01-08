@@ -17,10 +17,10 @@ const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.2';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v1.3.2';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v1.3.2';
 const DOCKER_CONSUL = 'consul:0.7.2';
-const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.0';
+const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.4.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.5.1';
-const DOCKER_GRAFANA = 'grafana/grafana:4.0.0';
+const DOCKER_GRAFANA = 'grafana/grafana:4.0.2';
 
 // all constants used throughout all generators
 
