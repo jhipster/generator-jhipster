@@ -1,3 +1,4 @@
+import { Ng2StateDeclaration } from "ui-router-ng2";
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
@@ -6,7 +7,7 @@ import { SocialRegisterComponent } from './social-register.component';
 import { SocialAuthComponent } from './social-auth.component';
 <%_ } _%>
 
-export const socialRegisterState = {
+export const socialRegisterState: Ng2StateDeclaration = {
     name: 'social-register',
     parent: 'account',
     url: '/social-register/:provider?{success:boolean}',
@@ -26,7 +27,7 @@ export const socialRegisterState = {
     }]
 };
 <%_ if (authenticationType == 'jwt') { _%>
-export const socialAuthState = {
+export const socialAuthState: Ng2StateDeclaration = {
     name: 'social-auth',
     parent: 'account',
     url: '/social-auth',

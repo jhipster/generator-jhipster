@@ -1,7 +1,8 @@
+import { Ng2StateDeclaration } from 'ui-router-ng2';
 import { JhiLanguageService } from 'ng-jhipster';
 import { ErrorComponent } from './error.component';
 
-export const errorState = {
+export const errorState: Ng2StateDeclaration = {
     name: 'error',
     parent: 'app',
     url: '/error',
@@ -19,7 +20,7 @@ export const errorState = {
     }]
 };
 
-export const accessdeniedState = {
+export const accessdeniedState: Ng2StateDeclaration = {
     name: 'accessdenied',
     parent: 'app',
     url: '/accessdenied',

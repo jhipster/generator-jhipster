@@ -1,7 +1,8 @@
+import { Ng2StateDeclaration } from "ui-router-ng2";
 import { JhiLanguageService } from 'ng-jhipster';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
 
-export const healthState = {
+export const healthState: Ng2StateDeclaration = {
     name: '<%=jhiPrefix%>-health',
     parent: 'admin',
     url: '/health',

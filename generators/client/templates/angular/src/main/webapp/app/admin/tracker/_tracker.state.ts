@@ -1,10 +1,10 @@
-import { Transition } from 'ui-router-ng2';
+import { Transition, Ng2StateDeclaration } from 'ui-router-ng2';
 import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
-export const trackerState = {
+export const trackerState: Ng2StateDeclaration = {
     name: '<%=jhiPrefix%>-tracker',
     parent: 'admin',
     url: '/tracker',

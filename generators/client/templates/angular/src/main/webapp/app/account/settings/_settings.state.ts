@@ -1,7 +1,8 @@
+import { Ng2StateDeclaration } from "ui-router-ng2";
 import { JhiLanguageService } from 'ng-jhipster';
 import { SettingsComponent } from './settings.component';
 
-export const settingsState = {
+export const settingsState: Ng2StateDeclaration = {
     name: 'settings',
     parent: 'account',
     url: '/settings',
