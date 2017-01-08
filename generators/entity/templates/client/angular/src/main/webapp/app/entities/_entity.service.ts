@@ -22,23 +22,27 @@ export class <%= entityClass %>Service {
 
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: DateUtils<% } %>) { }
 
-    create(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
-        let copy = Object.assign({}, <%= entityInstance %>);
+    create(<%= entityInstance %>: <%= entityClass %>): Observable<<%= entityClass %>> {
+        let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
         <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
-        return this.http.post(this.resourceUrl, copy);
+        return this.http.post(this.resourceUrl, copy).map((res: Response) => {
+            return res.json();
+        });
     }
 
-    update(<%= entityInstance %>: <%= entityClass %>): Observable<Response> {
-        let copy = Object.assign({}, <%= entityInstance %>);
+    update(<%= entityInstance %>: <%= entityClass %>): Observable<<%= entityClass %>> {
+        let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));<% }%><% if (fields[idx].fieldType == 'ZonedDateTime') { %>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
-        return this.http.put(this.resourceUrl, copy);
+        return this.http.put(this.resourceUrl, copy).map((res: Response) => {
+            return res.json();
+        });
     }
 
     find(id: number): Observable<<%= entityClass %>> {
