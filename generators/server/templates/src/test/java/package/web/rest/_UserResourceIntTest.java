@@ -66,6 +66,7 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
         user.setEmail("test@test.com");
         user.setFirstName("test");
         user.setLastName("test");
+        user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
         em.persist(user);
         em.flush();
@@ -98,7 +99,7 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
 
     @Test
     public void testGetExistingUserWithAnEmailLogin() throws Exception {
-        User user = userService.createUser("john.doe@localhost.com", "johndoe", "John", "Doe", "john.doe@localhost.com", "en-US");
+        User user = userService.createUser("john.doe@localhost.com", "johndoe", "John", "Doe", "john.doe@localhost.com", "http://placehold.it/50x50", "en-US");
 
         restUserMockMvc.perform(get("/api/users/john.doe@localhost.com")
                 .accept(MediaType.APPLICATION_JSON))
@@ -111,7 +112,7 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
 
     @Test
     public void testDeleteExistingUserWithAnEmailLogin() throws Exception {
-        User user = userService.createUser("john.doe@localhost.com", "johndoe", "John", "Doe", "john.doe@localhost.com", "en-US");
+        User user = userService.createUser("john.doe@localhost.com", "johndoe", "John", "Doe", "john.doe@localhost.com", "http://placehold.it/50x50", "en-US");
 
         restUserMockMvc.perform(delete("/api/users/john.doe@localhost.com")
                 .accept(MediaType.APPLICATION_JSON))

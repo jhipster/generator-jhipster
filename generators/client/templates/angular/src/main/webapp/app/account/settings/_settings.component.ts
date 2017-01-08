@@ -58,7 +58,8 @@ export class SettingsComponent implements OnInit {
             firstName: account.firstName,
             langKey: account.langKey,
             lastName: account.lastName,
-            login: account.login
+            login: account.login,
+            imageUrl: account.imageUrl
         };
     }
 }
