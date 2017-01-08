@@ -121,6 +121,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         user.setFirstName("john");
         user.setLastName("doe");
         user.setEmail("john.doe@jhipster.com");
+        user.setImageUrl("http://placehold.it/50x50");
         user.setAuthorities(authorities);
         when(mockUserService.getUserWithAuthorities()).thenReturn(user);
 
@@ -132,6 +133,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
                 .andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
+                .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
                 .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
     }
 
@@ -155,6 +157,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "Shmoe",                // lastName
             "joe@example.com",      // e-mail
             true,                   // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
             null,                   // createdBy
@@ -184,6 +187,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "One",                  // lastName
             "funky@example.com",    // e-mail
             true,                   // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
             null,                   // createdBy
@@ -213,6 +217,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "Green",            // lastName
             "invalid",          // e-mail <-- invalid
             true,               // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",               // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
             null,               // createdBy
@@ -242,6 +247,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "Green",            // lastName
             "bob@example.com",  // e-mail
             true,               // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",               // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
             null,               // createdBy
@@ -272,6 +278,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "Something",            // lastName
             "alice@example.com",    // e-mail
             true,                   // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
             null,                   // createdBy
@@ -282,7 +289,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
         // Duplicate login, different e-mail
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-            "alicejr@example.com", true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
+            "alicejr@example.com", true, validUser.getLangKey(), validUser.getImageUrl(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
         restMvc.perform(
@@ -314,6 +321,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "Doe",                  // lastName
             "john@example.com",     // e-mail
             true,                   // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
             null,                   // createdBy
@@ -324,7 +332,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
         // Duplicate e-mail, different login
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-            validUser.getEmail(), true, validUser.getLangKey(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
+            validUser.getEmail(), true, validUser.getLangKey(), validUser.getImageUrl(), validUser.getAuthorities()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate()<% } %>);
 
         // Good user
         restMvc.perform(
@@ -355,6 +363,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "Guy",                  // lastName
             "badguy@example.com",   // e-mail
             true,                   // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN))<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
             null,                   // createdBy
@@ -384,6 +393,7 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
             "One",                  // lastName
             "funky@example.com",    // e-mail
             true,                   // activated
+            "http://placehold.it/50x50", //imageUrl
             "<%= nativeLanguage %>",                   // langKey
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );

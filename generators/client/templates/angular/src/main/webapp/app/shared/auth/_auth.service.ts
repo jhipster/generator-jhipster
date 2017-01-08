@@ -25,7 +25,8 @@ export class AuthService {
             let toStateInfo = this.stateStorageService.getDestinationState().destination;
 
             // an authenticated user can't access to login and register pages
-            if (isAuthenticated && toStateInfo.parent === 'account' && (toStateInfo.name === 'login' || toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
+            if (isAuthenticated && toStateInfo.parent === 'account'
+                && (toStateInfo.name === 'login' || toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
                 this.$state.go('home');
             }
 
