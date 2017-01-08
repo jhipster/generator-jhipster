@@ -16,19 +16,12 @@
 
 import { TestBed, inject } from '@angular/core/testing';
 import { Sanitizer } from '@angular/core';
-import { TranslateService } from 'ng2-translate';
 
 import { AlertService } from '../../src/service/alert.service';
 import { ConfigHelper } from '../../src/helper';
 
-class MockTranslateService extends TranslateService {
-    instant(msg, params) {
-        return msg;
-    }
-}
-
 function mockAlertService(sanitizer: Sanitizer) {
-    return new AlertService(sanitizer, new MockTranslateService(null, null, null), false);
+    return new AlertService(sanitizer, false);
 }
 
 ConfigHelper.setModuleConfigOptions({

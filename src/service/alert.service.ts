@@ -9,12 +9,16 @@ export class AlertService {
     private alerts: any[];
     private timeout: number;
     private i18nEnabled: boolean;
+    private translateService: TranslateService;
 
-    constructor(private sanitizer: Sanitizer, private translateService: TranslateService, private toast: boolean) {
+    constructor(private sanitizer: Sanitizer, private toast?: boolean, translateService?: TranslateService) {
         this.i18nEnabled = ConfigHelper.getConfig().i18nEnabled;
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
         this.timeout = 5000; // default timeout
+        if (this.i18nEnabled) {
+            this.translateService = translateService;
+        }
     }
 
     clear() {
