@@ -139,34 +139,15 @@ _%>
             }
             // Generate Strings, using pattern
             try {
-                var sampleTextHigherLength = 100;
-                var sampleTextLengthLimit = 1000;
                 var patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
+                var randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
+                // set infinite repetitionals max range
+                randExp.max = 1;
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                    var samplePatternTextString = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
-                    if (patternRegExp.test(samplePatternTextString.substr(0, sampleTextLength))) {
-                        samplePatternTextString = samplePatternTextString.substr(0, sampleTextLength);
-                    } else if (fields[idx].fieldValidateRulesMaxlength > sampleTextLength) {
-                        samplePatternTextString = samplePatternTextString.substr(0, fields[idx].fieldValidateRulesMaxlength);
-                    } else if (patternRegExp.test(samplePatternTextString.substr(0, sampleTextHigherLength))) {
-                        samplePatternTextString = samplePatternTextString.substr(0, sampleTextHigherLength);
-                    } else if (samplePatternTextString.length > sampleTextLengthLimit) {
-                        samplePatternTextString = samplePatternTextString.substr(0, sampleTextLengthLimit);
-                    }
-                    sampleTextString = samplePatternTextString.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+                    sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
                 if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                    var updatedPatternTextString = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
-                    if (patternRegExp.test(updatedPatternTextString.substr(0, sampleTextLength))) {
-                        updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextLength);
-                    } else if (fields[idx].fieldValidateRulesMaxlength > sampleTextLength) {
-                        updatedPatternTextString = updatedPatternTextString.substr(0, fields[idx].fieldValidateRulesMaxlength);
-                    } else if (patternRegExp.test(updatedPatternTextString.substr(0, sampleTextHigherLength))) {
-                        updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextHigherLength);
-                    } else if (updatedPatternTextString.length > sampleTextLengthLimit) {
-                        updatedPatternTextString = updatedPatternTextString.substr(0, sampleTextLengthLimit);
-                    }
-                    updatedTextString = updatedPatternTextString.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+                    updatedTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
             } catch (error) {
                 log(this.chalkRed('Error generating test value for entity "' + entityClass +
