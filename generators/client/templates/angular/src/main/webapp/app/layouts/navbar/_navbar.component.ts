@@ -10,7 +10,14 @@ import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 
 @Component({
     selector: '<%=jhiPrefix%>-navbar',
-    templateUrl: './navbar.component.html'
+    templateUrl: './navbar.component.html',
+    styleUrls: [
+        <%_ if (useSass) { _%>
+        'navbar.scss'
+        <%_ } else { _%>
+        'navbar.css'
+        <%_ } _%>
+    ]
 })
 export class NavbarComponent implements OnInit {
 

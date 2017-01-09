@@ -13,6 +13,11 @@ module.exports = function (options) {
     return {
         entry: {
             'polyfills': './src/main/webapp/app/polyfills',
+            <%_ if (useSass) { _%>
+            'global': './src/main/webapp/content/scss/global.scss',
+            <%_ } else { _%>
+            'global': './src/main/webapp/content/css/global.css',
+            <%_ } _%>
             'vendor': [
                 './src/main/webapp/app/vendor',
                 '@angular/common',
@@ -78,15 +83,26 @@ module.exports = function (options) {
                     exclude: ['./src/main/webapp/index.html']
                 },
                 <%_ if (useSass) { _%>
-                { test: /\.scss$/, loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'] },
-                <%_ } _%>
+                {
+                    test: /\.scss$/,
+                    loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+                    exclude: /(vendor\.scss|global\.scss)/
+                },
+                {
+                    test: /(vendor\.scss|global\.scss)/,
+                    loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+                },
+                <%_ } else { _%>
                 {
                     test: /\.css$/,
-                    loader: ExtractTextPlugin.extract({
-                        fallbackLoader: "style-loader",
-                        loader: "css-loader"
-                    })
+                    loaders: ['to-string-loader', 'css-loader'],
+                    exclude: /(vendor\.css|global\.css)/
                 },
+                {
+                    test: /(vendor\.css|global\.css)/,
+                    loaders: ['style-loader', 'css-loader']
+                },
+                <%_ } _%>
                 {
                     test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
                     loaders: [

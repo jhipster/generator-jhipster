@@ -7,13 +7,8 @@
 // import 'ng-file-upload';
 
 <%_ if (useSass) { _%>
-import '../scss/vendor.scss';
+import '../content/scss/vendor.scss';
 <%_} else { _%>
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'font-awesome/css/font-awesome.min.css';
+import '../content/css/vendor.css';
 <%_ } _%>
 
-import '../content/css/main.css';
-<%_ if (useSass) { _%>
-// import '../content/css/vendor.css'; TODO check what to do with this
-<%_ } _%>

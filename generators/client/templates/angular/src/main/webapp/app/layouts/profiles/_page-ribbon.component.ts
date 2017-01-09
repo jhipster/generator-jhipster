@@ -4,7 +4,14 @@ import { ProfileInfo } from './profile-info.model';
 
 @Component({
     selector: '<%=jhiPrefix%>-page-ribbon',
-    template: `<div class="ribbon {{cssClass}}"><a href=""<% if (enableTranslation) { %> jhiTranslate="global.ribbon.{{ribbonEnv}}"<% } %>>{{ribbonEnv}}</a></div>`
+    template: `<div class="ribbon {{cssClass}}"><a href=""<% if (enableTranslation) { %> jhiTranslate="global.ribbon.{{ribbonEnv}}"<% } %>>{{ribbonEnv}}</a></div>`,
+    styleUrls: [
+        <%_ if (useSass) { _%>
+        'page-ribbon.scss'
+        <%_ } else { _%>
+        'page-ribbon.css'
+        <%_ } _%>
+    ]
 })
 export class PageRibbonComponent implements OnInit {
 
