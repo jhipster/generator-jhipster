@@ -129,7 +129,9 @@ module.exports = function (options) {
             }),
             new CopyWebpackPlugin([
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
-                { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' }<% if (enableTranslation) { %>,
+                { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
+                { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
+                { from: './src/main/webapp/robots.txt', to: 'robots.txt' }<% if (enableTranslation) { %>,
                 { from: './src/main/webapp/i18n', to: 'i18n' }<% } %>
             ]),
             new webpack.ProvidePlugin({
