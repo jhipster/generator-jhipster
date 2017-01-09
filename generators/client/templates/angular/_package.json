@@ -91,7 +91,7 @@
     "tslint": "4.2.0",
     "tslint-loader": "3.3.0",
     "typescript": "2.1.4",
-    "webpack": "2.2.0-rc.2",
+    "webpack": "2.2.0-rc.3",
     "webpack-merge": "2.0.0",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
