@@ -7,12 +7,12 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 })
 export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
 
-    constructor(private trackerService: <%=jhiPrefixCapitalized%>TrackerService) {}
-
     activities: any[] = [];
 
+    constructor(private trackerService: <%=jhiPrefixCapitalized%>TrackerService) {}
+
     showActivity (activity: any) {
-        let existingActivity: boolean = false;
+        let existingActivity = false;
         for (let index = 0; index < this.activities.length; index++) {
             if (this.activities[index].sessionId === activity.sessionId) {
                 existingActivity = true;

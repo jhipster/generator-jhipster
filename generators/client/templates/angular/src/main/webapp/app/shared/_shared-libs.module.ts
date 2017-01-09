@@ -9,7 +9,10 @@ import { NgJhipsterModule } from 'ng-jhipster';
     imports: [
         NgbModule.forRoot(),
         NgJhipsterModule.forRoot({
+            <%_ if (enableTranslation) { _%>
+            i18nEnabled: true,
             defaultI18nLang: '<%= nativeLanguage %>'
+            <%_ } _%>
         })
     ],
     exports: [

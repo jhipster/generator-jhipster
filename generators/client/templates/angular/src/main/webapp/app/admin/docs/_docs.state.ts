@@ -1,6 +1,7 @@
+import { Ng2StateDeclaration } from "ui-router-ng2";
 import { <%=jhiPrefixCapitalized%>DocsComponent } from './docs.component';
 
-export const docsState = {
+export const docsState: Ng2StateDeclaration = {
     name: 'docs',
     parent: 'admin',
     url: '/docs',

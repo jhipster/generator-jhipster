@@ -92,23 +92,12 @@ const files = {
                 'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_router.config.ts',
                 'blocks/config/_prod.config.ts',
-                'blocks/config/_uib-pager.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
                 //interceptors
                 'blocks/interceptor/_auth-expired.interceptor.ts',
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
-                'blocks/interceptor/_http.interceptor.ts',
-                'blocks/interceptor/_http.interceptable.ts',
                 'blocks/interceptor/_http.provider.ts'
-            ]
-        },
-        {
-            condition: generator => generator.enableTranslation,
-            path: ANGULAR_DIR,
-            templates: [
-                'blocks/config/_translation.config.ts',
-                'blocks/config/_translation-storage.provider.ts'
             ]
         },
         {
@@ -334,8 +323,6 @@ const files = {
                 'shared/login/_login-modal.service.ts',
                 'shared/login/_login.component.ts',
                 //alert service code
-                'shared/alert/_alert.service.ts',
-                'shared/alert/_alert.provider.ts',
                 'shared/alert/_alert.component.ts',
                 'shared/alert/_alert-error.component.ts'
             ]
@@ -367,8 +354,7 @@ const files = {
             condition: generator => generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
             templates: [
-                'shared/auth/_auth-oauth2.service.ts',
-                'shared/auth/_base64.service.ts'
+                'shared/auth/_auth-oauth2.service.ts'
             ]
         },
         {

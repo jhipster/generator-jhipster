@@ -133,7 +133,7 @@ public class UserService {
     }
 
     public User createUser(String login, String password, String firstName, String lastName, String email,
-        String langKey) {
+        String imageUrl, String langKey) {
 
         User newUser = new User();<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
@@ -147,6 +147,7 @@ public class UserService {
         newUser.setFirstName(firstName);
         newUser.setLastName(lastName);
         newUser.setEmail(email);
+        newUser.setImageUrl(imageUrl);
         newUser.setLangKey(langKey);
         // new user is not active
         newUser.setActivated(false);
@@ -168,6 +169,8 @@ public class UserService {
         user.setFirstName(managedUserVM.getFirstName());
         user.setLastName(managedUserVM.getLastName());
         user.setEmail(managedUserVM.getEmail());
+        user.setImageUrl(managedUserVM.getImageUrl());
+
         if (managedUserVM.getLangKey() == null) {
             user.setLangKey("<%= nativeLanguage %>"); // default language
         } else {
@@ -220,6 +223,7 @@ public class UserService {
                 user.setFirstName(userUpdate.getFirstName());
                 user.setLastName(userUpdate.getLastName());
                 user.setEmail(userUpdate.getEmail());
+                user.setImageUrl(userUpdate.getImageUrl());
                 user.setActivated(userUpdate.isActivated());
                 user.setLangKey(userUpdate.getLangKey());
                 <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>

@@ -1,7 +1,8 @@
+import { Ng2StateDeclaration } from "ui-router-ng2";
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionsComponent } from './sessions.component';
 
-export const sessionsState = {
+export const sessionsState: Ng2StateDeclaration = {
     name: 'sessions',
     parent: 'account',
     url: '/sessions',

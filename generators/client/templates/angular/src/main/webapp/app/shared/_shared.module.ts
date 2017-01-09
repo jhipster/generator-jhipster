@@ -7,9 +7,6 @@ import {
     CSRFService,
     AuthService,
     AuthServerProvider,
-    <%_ if (authenticationType === 'oauth2') { _%>
-    Base64,
-    <%_ } _%>
     AccountService,
     StateStorageService,
     LoginService,
@@ -48,9 +45,6 @@ import {
         StateStorageService,
         Principal,
         CSRFService,
-        <%_ if (authenticationType === 'oauth2') { _%>
-        Base64,
-        <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>

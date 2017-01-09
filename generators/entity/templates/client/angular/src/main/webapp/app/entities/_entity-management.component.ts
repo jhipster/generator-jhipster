@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { EventManager, ParseLinks, PaginationUtil<%_ if (fieldsContainBlob) { _%>, DataUtils<% } %> } from 'ng-jhipster';
-
+import { EventManager, ParseLinks, PaginationUtil, AlertService<%_ if (fieldsContainBlob) { _%>, DataUtils<% } %> } from 'ng-jhipster';
 import { StateService } from 'ui-router-ng2';
+
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({

@@ -1,13 +1,10 @@
 export * from './alert/alert.component';
 export * from './alert/alert-error.component';
-export * from './alert/alert.service';
-export * from './alert/alert.provider';
 export * from './auth/csrf.service';
 export * from './auth/state-storage.service';
 export * from './auth/account.service';
 <%_ if (authenticationType === 'oauth2') { _%>
 export * from './auth/auth-oauth2.service';
-export * from './auth/base64.service';
 <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 export * from './auth/auth-jwt.service';
 <%_ } else { _%>

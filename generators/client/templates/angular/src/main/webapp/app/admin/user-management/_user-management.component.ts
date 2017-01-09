@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { StateService } from 'ui-router-ng2';
-import { EventManager, PaginationUtil, ParseLinks } from 'ng-jhipster';
+import { EventManager, PaginationUtil, ParseLinks, AlertService } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({

@@ -291,4 +291,10 @@ Social Buttons
 }
 <%_ } _%>
 
+.navbar .profile-image{
+    margin: -10px 0px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
 /* jhipster-needle-css-add-main JHipster will add new css style */

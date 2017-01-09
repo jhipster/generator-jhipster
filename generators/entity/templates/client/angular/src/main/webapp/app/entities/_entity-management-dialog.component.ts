@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { EventManager, AlertService } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-import { AlertService } from '../../shared';
 <%- include('model-class-import-template.ejs'); -%>
 <%- include('service-class-import-template.ejs'); -%>
 // TODO replace ng-file-upload dependency by an ng2 depedency

@@ -29,6 +29,9 @@
       "en",
       "fr"
     ],
-  "travis": true
+    "travis": true,
+    "serviceDiscoveryType": false,
+    "clientPackageManager": "yarn",
+    "clientFramework": "angular1"
   }
 }
