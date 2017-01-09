@@ -422,7 +422,7 @@ task cleanResources(type: Delete) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.2.1'
+    gradleVersion = '3.3'
 }
 
 task stage(dependsOn: 'bootRepackage') {
