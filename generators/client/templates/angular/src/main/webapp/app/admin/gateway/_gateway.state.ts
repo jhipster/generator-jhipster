@@ -16,6 +16,6 @@ export const gatewayState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['gateway'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['gateway'])
     }]
 }

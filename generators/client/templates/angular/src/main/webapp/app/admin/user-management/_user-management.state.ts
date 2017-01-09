@@ -48,7 +48,7 @@ export const userMgmtState: Ng2StateDeclaration = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(['user-management'])
+            resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['user-management'])
         }<% } %>
 
     ]
@@ -57,7 +57,7 @@ export const userMgmtState: Ng2StateDeclaration = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(['user-management'])
+            resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['user-management'])
         }
     ]
     <%_ } _%>
@@ -78,7 +78,7 @@ export const userMgmtDetailState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['user-management'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['user-management'])
     }]
 };
 

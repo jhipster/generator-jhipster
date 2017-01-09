@@ -16,6 +16,6 @@ export const sessionsState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['sessions'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['sessions'])
     }]
 };

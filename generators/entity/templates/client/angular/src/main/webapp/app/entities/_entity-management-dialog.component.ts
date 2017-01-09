@@ -104,7 +104,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     for (idx in relationships) { _%>
     <%  var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) { %>
-    track<%- otherEntityNameCapitalized -%>ById(index, item: <%- relationships[idx].otherEntityNameCapitalized -%>) {
+    track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityNameCapitalized -%>) {
         return item.id;
     }
     <%_ entitiesSeen.push(otherEntityNameCapitalized); } } _%>

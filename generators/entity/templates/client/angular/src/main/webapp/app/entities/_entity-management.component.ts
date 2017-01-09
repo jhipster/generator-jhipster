@@ -28,7 +28,7 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         this.registerChangeIn<%= entityClassPlural %>();
     }
 
-    trackId (index, item: <%= entityClass %>) {
+    trackId (index: number, item: <%= entityClass %>) {
         return item.id;
     }
 

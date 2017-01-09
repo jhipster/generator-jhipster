@@ -15,6 +15,6 @@ export const requestResetState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['reset'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['reset'])
     }]
 };

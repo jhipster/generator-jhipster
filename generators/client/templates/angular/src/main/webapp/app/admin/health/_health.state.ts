@@ -16,6 +16,6 @@ export const healthState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['health'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['health'])
     }]
 };

@@ -16,6 +16,6 @@ export const logsState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['logs'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['logs'])
     }]
 };

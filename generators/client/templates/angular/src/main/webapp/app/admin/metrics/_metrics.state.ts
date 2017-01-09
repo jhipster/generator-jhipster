@@ -16,6 +16,6 @@ export const metricsState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['metrics'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['metrics'])
     }]
 };

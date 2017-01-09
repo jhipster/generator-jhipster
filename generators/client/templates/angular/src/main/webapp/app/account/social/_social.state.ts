@@ -23,7 +23,7 @@ export const socialRegisterState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['social'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['social'])
     }]
 };
 <%_ if (authenticationType == 'jwt') { _%>

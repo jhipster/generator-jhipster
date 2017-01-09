@@ -16,6 +16,6 @@ export const activateState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['activate'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['activate'])
     }]
 };
