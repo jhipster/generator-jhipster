@@ -46,7 +46,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         }
         // building absolute path so that websocket doesnt fail when deploying with a context path
         const loc = this.$window.location;
-        const url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+        let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
         <%_ if (authenticationType === 'oauth2') { _%>
         /*jshint camelcase: false */
         const authToken = this.$json.stringify(this.$localStorage.retrieve('authenticationToken')).access_token;
