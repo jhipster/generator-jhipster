@@ -43,8 +43,8 @@ const files = {
             condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: [
-                'scss/_global.scss',
-                'scss/_vendor.scss'
+                'content/scss/_global.scss',
+                'content/scss/_vendor.scss',
             ]
         }
     ],

@@ -14,7 +14,7 @@ module.exports = function (options) {
         entry: {
             'polyfills': './src/main/webapp/app/polyfills',
             <%_ if (useSass) { _%>
-            'global': './src/main/webapp/scss/global.scss',
+            'global': './src/main/webapp/content/scss/global.scss',
             <%_ } else { _%>
             'global': './src/main/webapp/content/css/global.css',
             <%_ } _%>
