@@ -16,6 +16,6 @@ export const auditState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['audits'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['audits'])
     }]
 };

@@ -16,6 +16,6 @@ export const registerState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['register'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['register'])
     }]
 };

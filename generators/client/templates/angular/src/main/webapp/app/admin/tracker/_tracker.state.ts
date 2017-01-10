@@ -18,7 +18,7 @@ export const trackerState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['tracker'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['tracker'])
     }],
     onEnter: (trans: Transition) => {
         trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).subscribe();

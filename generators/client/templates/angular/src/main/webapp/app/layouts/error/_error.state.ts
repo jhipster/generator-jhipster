@@ -16,7 +16,7 @@ export const errorState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['error'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['error'])
     }]
 };
 
@@ -33,6 +33,6 @@ export const accessdeniedState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['error'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['error'])
     }]
 };

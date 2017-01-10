@@ -18,6 +18,6 @@ export const settingsState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['settings'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['settings'])
     }]
 };

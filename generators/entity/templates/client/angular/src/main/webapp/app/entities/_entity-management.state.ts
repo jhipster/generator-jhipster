@@ -67,7 +67,7 @@ export const <%= entityInstance %>State: Ng2StateDeclaration = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
+            resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
         }
         <%_ } _%>
     ]
@@ -89,7 +89,7 @@ export const <%= entityInstance %>DetailState: Ng2StateDeclaration = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
+            resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(<%- toArrayString(i18nToLoad) %>)
         },
         <%_ } _%>
         {

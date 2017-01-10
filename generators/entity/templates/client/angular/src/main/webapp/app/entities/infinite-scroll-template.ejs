@@ -1,14 +1,14 @@
 <%= entityInstancePlural %>: <%= entityClass %>[];
     currentAccount: any;
-    itemsPerPage: any;
+    itemsPerPage: number;
     links: any;
     page: any;
     predicate: any;
     queryCount: any;
     reverse: any;
-    totalItems: any;
+    totalItems: number;
     <%_ if (fieldsContainBlob) { _%>
-    byteSize: any;
+    byteSize: number;
     openFile: any;
     <%_ } _%>
 

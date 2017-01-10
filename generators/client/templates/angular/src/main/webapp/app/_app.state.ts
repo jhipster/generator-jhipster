@@ -18,7 +18,7 @@ export const appState: Ng2StateDeclaration = {
         {
             token: 'translate',
             deps: [JhiLanguageService],
-            resolveFn: (languageService) => languageService.setLocations([])
+            resolveFn: (languageService: JhiLanguageService) => languageService.setLocations([])
         }<% } %>
     ]
 };

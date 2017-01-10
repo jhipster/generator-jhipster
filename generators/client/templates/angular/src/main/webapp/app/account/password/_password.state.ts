@@ -16,6 +16,6 @@ export const passwordState: Ng2StateDeclaration = {
     resolve: [{
         token: 'translate',
         deps: [JhiLanguageService],
-        resolveFn: (languageService) => languageService.setLocations(['password'])
+        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['password'])
     }]
 };
