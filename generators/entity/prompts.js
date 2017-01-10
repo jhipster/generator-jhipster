@@ -1114,6 +1114,8 @@ function askForRelationship(done) {
 
             if(props.otherEntityName.toLowerCase() === 'user') {
                 relationship.ownerSide = true;
+                relationship.otherEntityField = 'login';
+                relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
 
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
