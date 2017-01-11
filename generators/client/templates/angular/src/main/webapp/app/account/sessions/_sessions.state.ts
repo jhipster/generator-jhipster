@@ -1,11 +1,27 @@
 import { CanActivate, Routes } from '@angular/router';
 
-import {SessionComponent} from './session.component';
+import {SessionsComponent} from './session.component';
 
+<<<<<<< HEAD
 export const sessionRoute: Routes = [
+=======
+import {Principal} from '../../shared';
+
+@Injectable()
+export class SessionsResolve implements CanActivate {
+
+  constructor(private principal: Principal) {}
+
+  canActivate() {
+    return this.principal.hasAnyAuthority(['ROLE_USER']);
+  }
+}
+
+export const sessionsRoute: Routes = [
+>>>>>>> refactor layout routing and account
   {
     path: 'password',
-    component: SessionComponent,
-    canActivate: [SessionResolve]
+    component: SessionsComponent,
+    canActivate: [SessionsResolve]
   }
 ];

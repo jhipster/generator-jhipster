@@ -20,7 +20,8 @@ export class TrackerResolve implements CanActivate {
 export const trackerRoute: Routes = [
   {
     path: 'jhi-tracker',
-    component: <%=jhiPrefixCapitalized%>TrackerComponent
+    component: <%=jhiPrefixCapitalized%>TrackerComponent,
+    canActivate: [TrackerResolve]
   }
 ];
 

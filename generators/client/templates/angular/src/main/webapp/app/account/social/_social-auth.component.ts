@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { StateService } from 'ui-router-ng2';
+import { Router } from '@angular/router';
+
 import { AuthService, LoginService } from '../../shared';
 import { CookieService } from 'angular2-cookie/core';
 
@@ -13,10 +14,10 @@ export class SocialAuthComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private $state: StateService,
         private Auth: AuthService,
         private loginService: LoginService,
-        private cookieService: CookieService
+        private cookieService: CookieService,
+        private router: Router
     ) {
         <%_ if (enableTranslation) { _%>
         this.languageService.setLocations(['social']);
@@ -30,7 +31,7 @@ export class SocialAuthComponent implements OnInit {
                     this.cookieService.remove('social-authentication');
                     this.Auth.authorize(true);
                  }, () => {
-                    this.$state.go('social-register', {'success': 'false'});
+                    this.router.navigate(['social-register'], {params: {'success': 'false'}});
             });
         }
     }

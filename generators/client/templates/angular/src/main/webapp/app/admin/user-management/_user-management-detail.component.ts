@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Transition } from 'ui-router-ng2';
+import { ActivatedRoute } from '@angular/router';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
@@ -12,10 +12,12 @@ export class UserMgmtDetailComponent implements OnInit {
 
     user: User;
 
-    constructor(private userService: UserService, private trans: Transition) { }
+    constructor(private userService: UserService, private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.load(this.trans.params()['login']);
+        this.route.queryParams.subscribe(params => {
+            this.load(params['login']);
+        });
     }
 
     load (login) {

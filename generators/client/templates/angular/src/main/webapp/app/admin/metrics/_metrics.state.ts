@@ -1,3 +1,6 @@
+import { Injectable } from '@angular/core';
+import { Routes, CanActivate } from '@angular/router';
+
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
 import { Principal } from '../../shared';
 
@@ -15,6 +18,7 @@ export class MetricsResolve implements CanActivate {
 export const metricsRoute: Routes = [
   {
     path: 'jhi-metrics',
-    component: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent
+    component: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
+    canActivate: [MetricsResolve]
   }
 ];

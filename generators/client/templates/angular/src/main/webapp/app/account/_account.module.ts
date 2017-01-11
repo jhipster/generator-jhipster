@@ -12,7 +12,7 @@ import {
     <%_ if (authenticationType === 'session') { _%>
     SessionsService,
     SessionsComponent,
-    sessionsState,
+    sessionsRoute,
     <%_ } _%>
     PasswordStrengthBarComponent,
     RegisterComponent,
@@ -27,8 +27,8 @@ import {
     settingsRoute,
     activateRoute,
     passwordRoute,
-    finishResetRoute,
-    requestResetRoute,
+    passwordResetFinishRoute,
+    passwordResetInitRoute,
     registerRoute,
     <%_ if (enableSocialSignIn) { _%>
     SocialRegisterComponent,
@@ -44,8 +44,8 @@ import {
 let ACCOUNT_ROUTES = [
    ...activateRoute,
    ...passwordRoute,
-   ...finishResetRoute,
-   ...requestResetRoute,
+   ...passwordResetFinishRoute,
+   ...passwordResetInitRoute,
    ...registerRoute,
     <%_ if (authenticationType === 'session') { _%>
    ...sessionsRoute,

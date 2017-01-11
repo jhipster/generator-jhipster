@@ -1,6 +1,7 @@
 import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { PasswordResetFinish } from './password-reset-finish.service';
 import { LoginModalService } from '../../../shared';
@@ -38,7 +39,7 @@ export class PasswordResetFinishComponent implements OnInit {
             this.key = params['key'];
         });
         this.resetAccount = {};
-        this.keyMissing = !this.trans.params() || !this.trans.params()['key'];
+        this.keyMissing = !this.key;
     }
 
     ngAfterViewInit() {

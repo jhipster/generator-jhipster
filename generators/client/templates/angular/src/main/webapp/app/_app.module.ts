@@ -6,16 +6,18 @@ import {RouterModule} from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
+import {JhiLanguageService} from 'ng-jhipster';
+
 import { <%=angular2AppName%>SharedModule } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
 import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
-import { appState, AuthorizeResolve } from './app.state';
-import { HomeComponent, homeRoute } from './home';
-import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
+import { LayoutRoutingModule } from './layouts';
+import { HomeComponent } from './home';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
+
 
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
@@ -26,8 +28,7 @@ import {
     <%_ if (enableTranslation) { _%>
     ActiveMenuDirective,
     <%_ } _%>
-    ErrorComponent,
-    errorRoute
+    ErrorComponent
 } from './layouts';
 
 let BASE_ROUTES = [
@@ -40,7 +41,7 @@ let BASE_ROUTES = [
 @NgModule({
     imports: [
         BrowserModule,
-        RouterModule.forRoot(BASE_ROUTES, { useHash: true })
+        LayoutRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi'}),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
@@ -64,7 +65,7 @@ let BASE_ROUTES = [
         { provide: Document, useValue: document },
         customHttpProvider(),
         PaginationConfig,
-        AuthorizeResolve
+        JhiLanguageService
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })

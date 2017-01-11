@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
         private elementRef: ElementRef,
         private renderer: Renderer) {
         <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(['register']);
+        this.languageService.setLocations(['register']);
         <%_ } _%>
     }
 

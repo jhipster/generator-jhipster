@@ -23,6 +23,7 @@ export class DocsResolve implements CanActivate {
 export const docsRoute: Routes = [
   {
     path: 'docs',
-    component: <%=jhiPrefixCapitalized%>DocsComponent 
+    component: <%=jhiPrefixCapitalized%>DocsComponent,
+    canActivate: [DocsResolve]
   }
 ];

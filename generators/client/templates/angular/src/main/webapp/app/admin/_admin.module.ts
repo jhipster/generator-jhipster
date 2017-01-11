@@ -32,6 +32,7 @@ import {
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerComponent,
     trackerState,
+    TrackerResolve,
     <%_ } _%>
     LogsService,
     adminRoute,
@@ -43,8 +44,16 @@ import {
     <%_ if (!skipUserManagement) { _%>
     userMgmtRoute,
     userMgmtDetailRoute,
+    UserResolvePagingParams,
+    UserResolve,
     <%_ } _%>
-    metricsRoute
+    metricsRoute,
+    AuditsResolve,
+    ConfigurationResolve,
+    DocsResolve,
+    HealthResolve,
+    LogsResolve,
+    MetricsResolve
 } from './';
 
 let ADMIN_STATES = [
@@ -111,7 +120,20 @@ let ADMIN_STATES = [
         <%_ if (applicationType === 'gateway') { _%>
         GatewayRoutesService,
         <%_ } _%>
-        LogsService
+        LogsService,
+        <%_ if (websocket === 'spring-websocket') { _%>
+        TrackerResolve,
+        <%_ } _%>        
+        <%_ if (!skipUserManagement) { _%>
+        UserResolvePagingParams,
+        UserResolve,
+        <%_ } _%>
+        AuditsResolve,
+        ConfigurationResolve,
+        DocsResolve,
+        HealthResolve,
+        LogsResolve,
+        MetricsResolve
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

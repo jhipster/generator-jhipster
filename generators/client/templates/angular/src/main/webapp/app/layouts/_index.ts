@@ -3,9 +3,11 @@ export * from './error/error.state';
 export * from './main/main.component';
 export * from './footer/footer.component';
 export * from './navbar/navbar.component';
+export * from './navbar/navbar.state';
 <%_ if (enableTranslation) { _%>
 export * from './navbar/active-menu.directive';
 <%_ } _%>
 export * from './profiles/page-ribbon.component';
 export * from './profiles/profile.service';
 export * from './profiles/profile-info.model';
+export * from './layout-routing.module';

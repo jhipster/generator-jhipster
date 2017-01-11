@@ -22,7 +22,7 @@ export class SessionsComponent implements OnInit {
         private sessionsService: SessionsService,
         private principal: Principal) {
         <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(['session']);
+        this.jhiLanguageService.setLocations(['sessions']);
         <%_ } _%>
     }
 

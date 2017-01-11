@@ -1,9 +1,11 @@
+import { Routes, CanActivate } from '@angular/router';
+
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
-import { Principal } from '../../shared';
 
 export const healthRoute: Routes = [
   {
     path: 'jhi-health',
-    component: <%=jhiPrefixCapitalized%>HealthCheckComponent
+    component: <%=jhiPrefixCapitalized%>HealthCheckComponent,
+    canActivate: [HealthResolve]
   }
 ];

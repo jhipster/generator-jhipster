@@ -1,4 +1,6 @@
 import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { PasswordResetInit } from './password-reset-init.service';
 
 @Component({
