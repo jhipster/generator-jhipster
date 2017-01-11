@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from 'ui-router-ng2';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager } from 'ng-jhipster';
 
@@ -22,11 +21,17 @@ export class HomeComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private principal: Principal,
-        private $state: StateService,
         private loginModalService: LoginModalService,
         private eventManager: EventManager
-    ) {}
+    ) {
+         <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['home']);
+        <%_ } _%>
+    }
 
     ngOnInit() {
         this.principal.identity().then((account) => {
