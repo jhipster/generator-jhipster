@@ -2,18 +2,18 @@ import { Directive, ElementRef, Input, Renderer, OnInit } from '@angular/core';
 import { Principal } from './principal.service';
 
 @Directive({
-    selector: '[<%=jhiPrefix%>HasAnyAuthority]'
+    selector: '[<%=jhiPrefix%>HasAuthority]'
 })
 export class HasAuthorityDirective implements OnInit {
 
-    @Input() <%=jhiPrefix%>HasAnyAuthority: string;
+    @Input() <%=jhiPrefix%>HasAuthority: string;
     authority: string;
 
     constructor(private principal: Principal, private el: ElementRef, private renderer: Renderer) {
     }
 
     ngOnInit() {
-        this.authority = this.<%=jhiPrefix%>HasAnyAuthority.replace(/\s+/g, '');
+        this.authority = this.<%=jhiPrefix%>HasAuthority.replace(/\s+/g, '');
 
         if (this.authority.length > 0) {
             this.setVisibilityAsync();
