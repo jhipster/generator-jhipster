@@ -96,6 +96,7 @@
     "webpack": "2.2.0-rc.3",
     "webpack-dev-server": "2.2.0-rc.0",
     "webpack-merge": "2.0.0",
+    "write-file-webpack-plugin": "3.4.2",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
     <%_ } _%>
@@ -121,9 +122,8 @@
     "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
-    "webpack:hmr": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --content-base src/ --port=8090",
     "webpack:build": "webpack --config webpack/webpack.dev.js",
-    "webpack:dev": "webpack --watch --config webpack/webpack.dev.js",
+    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --content-base src/ --port=8090",
     "webpack:prod": "webpack -p --config webpack/webpack.prod.js"
   }
 }

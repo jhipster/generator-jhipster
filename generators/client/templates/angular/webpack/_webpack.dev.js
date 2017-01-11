@@ -1,5 +1,7 @@
 const webpack = require('webpack');
+const path = require('path');
 const commonConfig = require('./webpack.common.js');
+const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -7,6 +9,7 @@ const ENV = 'dev';
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
     devServer: {
+        contentBase: './target/www',
         proxy: [{
             context: [<% if (authenticationType == 'oauth2') { %>
                 '/oauth',<% } %>
@@ -21,7 +24,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         }]
     },
     output: {
-        path: <% if (buildTool === 'gradle') { %>'/build/www'<% } else { %>'/target/www'<% } %>,
+        path: path.resolve(<% if (buildTool === 'gradle') { %>'/build/www')<% } else { %>'./target/www')<% } %>,
         filename: '[name].bundle.js',
         chunkFilename: '[id].chunk.js'
     },
@@ -44,6 +47,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         }),
         new ExtractTextPlugin('styles.css'),
         new webpack.NoErrorsPlugin(),
-        new webpack.NamedModulesPlugin()
+        new webpack.NamedModulesPlugin(),
+        new writeFilePlugin()
     ]
 });
