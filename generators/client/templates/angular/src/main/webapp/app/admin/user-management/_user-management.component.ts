@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { UserModalService } from './user-modal.service';
+import { UserDeleteModalService } from './user-modal-delete.service';
+import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -19,6 +22,7 @@ export class UserMgmtComponent implements OnInit {
     users: User[];
     error: any;
     success: any;
+    modalRef: NgbModalRef;
     <%_ if (databaseType !== 'cassandra') { _%>
     links: any;
     totalItems: any;
@@ -41,9 +45,11 @@ export class UserMgmtComponent implements OnInit {
         private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
         private paginationUtil: PaginationUtil,
         private paginationConfig: PaginationConfig,
-        private activatedRoute: ActivatedRoute,
-        private router: Router
         <%_ } _%>
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
+        private userModalService: UserModalService,
+        private userDeleteModalService: UserDeleteModalService
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.activatedRoute.data.subscribe(data => {
@@ -59,11 +65,11 @@ export class UserMgmtComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
+            this.loadAll();
+            this.registerChangeInUsers();
         });
-        this.registerChangeInUsers();
     }
 
     registerChangeInUsers() {
@@ -138,7 +144,20 @@ export class UserMgmtComponent implements OnInit {
         this.users = data;
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.error, error.message, null);
     }
+
+    createUser() {
+        this.modalRef = this.userModalService.open();
+    }
+
+    editUser(login: string) {
+        this.modalRef =  this.userModalService.open(login);
+    }
+
+    deleteUser(login: string) {
+        this.modalRef =  this.userDeleteModalService.open(login);
+    }
+
 }

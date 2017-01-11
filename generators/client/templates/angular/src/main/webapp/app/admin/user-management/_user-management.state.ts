@@ -45,7 +45,7 @@ export const userMgmtRoute: Routes = [
     },
     canActivate: [UserResolve]
   }, {
-    path: 'user/:login',
+    path: 'user',
     component: UserMgmtDetailComponent,
     canActivate: [UserResolve]
   }

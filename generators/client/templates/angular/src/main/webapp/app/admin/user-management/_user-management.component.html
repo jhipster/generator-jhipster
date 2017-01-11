@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span jhiTranslate="userManagement.home.title">Users</span>
-        <button class="btn btn-primary float-xs-right" uiSref="user-management.new">
+        <button class="btn btn-primary float-xs-right" (click)="createUser()">
             <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
@@ -49,22 +49,20 @@
                 <td class="text-xs-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                uiSref="user-management-detail"
+                                routerLink="/user"
                                 [queryParams]="{ login: user.login }"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.view"></span>
                         </button>
                         <button type="submit"
-                                uiSref="user-management.edit"
-                                [queryParams]="{ login: user.login }"
+                                (click)="editUser(user.login)"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
-                                uiSref="user-management.delete"
-                                [queryParams]="{ login: user.login }"
+                                (click)="deleteUser(user.login)"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="fa fa-remove"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.delete"></span>

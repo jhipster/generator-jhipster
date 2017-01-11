@@ -44,6 +44,8 @@ import {
     userMgmtRoute,
     UserResolvePagingParams,
     UserResolve,
+    UserModalService,
+    UserDeleteModalService,
     <%_ } _%>
     metricsRoute,
     AuditsResolve,
@@ -123,6 +125,8 @@ let ADMIN_STATES = [
         <%_ if (!skipUserManagement) { _%>
         UserResolvePagingParams,
         UserResolve,
+        UserModalService,
+        UserDeleteModalService,
         <%_ } _%>
         AuditsResolve,
         ConfigurationResolve,

@@ -38,5 +38,7 @@ export * from './user-management/user-management.component';
 export * from './user-management/user-management.state';
 export * from './user-management/user.service';
 export * from './user-management/user.model';
+export * from './user-management/user-modal.service';
+export * from './user-management/user-modal-delete.service';
 <%_ } _%>
 export * from './admin.state';
