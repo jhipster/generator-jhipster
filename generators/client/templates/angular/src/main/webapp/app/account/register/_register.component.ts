@@ -28,6 +28,9 @@ export class RegisterComponent implements OnInit {
         private registerService: Register,
         private elementRef: ElementRef,
         private renderer: Renderer) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['register']);
+        <%_ } _%>
     }
 
     ngOnInit() {

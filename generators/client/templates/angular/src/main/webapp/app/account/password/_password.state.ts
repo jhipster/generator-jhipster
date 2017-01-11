@@ -6,7 +6,7 @@ import {PasswordComponent} from './password.component';
 import {Principal} from '../../shared';
 
 @Injectable()
-export class PasswordResolve implements CanActivate {
+export class passwordResolve implements CanActivate {
 
   constructor(private principal: Principal) {}
 

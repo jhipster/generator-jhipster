@@ -15,7 +15,16 @@ export class SessionsComponent implements OnInit {
     success: string;
     sessions: Session[];
 
-    constructor(private sessionsService: SessionsService, private principal: Principal) {}
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private sessionsService: SessionsService,
+        private principal: Principal) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['session']);
+        <%_ } _%>
+    }
 
     ngOnInit() {
         this.sessionsService.findAll().subscribe(sessions => this.sessions = sessions);

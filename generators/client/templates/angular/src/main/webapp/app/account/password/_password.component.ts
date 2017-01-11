@@ -16,8 +16,15 @@ export class PasswordComponent implements OnInit {
     password: string;
     confirmPassword: string;
 
-    constructor(private passwordService: Password, private principal: Principal, private jhiLanguageService: JhiLanguageService) {
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private passwordService: Password,
+        private principal: Principal) {
+        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['password']);
+        <%_ } _%>
     }
 
     ngOnInit () {

@@ -1,23 +1,16 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
-import { SettingsComponent } from './settings.component';
+import { Injectable } from '@angular/core';
+import { CanActivate, Routes } from '@angular/router';
 
-export const settingsState: Ng2StateDeclaration = {
-    name: 'settings',
-    parent: 'account',
-    url: '/settings',
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'global.menu.account.settings'
-    },
-    views: {
-        'content@': {
-            component: SettingsComponent
-        }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['settings'])
-    }]
-};
+import {SettingsComponent} from './settings.component';
+
+import {Principal} from '../../shared';
+
+@Injectable()
+export class SettingsResolve implements CanActivate {
+
+  constructor(private principal: Principal) {}
+
+  canActivate() {
+    return this.principal.hasAnyAuthority(['ROLE_USER']);
+  }
+}

@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { UIRouterModule } from 'ui-router-ng2';
+import {RouterModule} from '@angular/router';
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
 
@@ -21,46 +21,48 @@ import {
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
     SettingsComponent,
-    settingsState,
-    activateState,
-    passwordState,
-    finishResetState,
-    requestResetState,
-    registerState,
+    PasswordResolve,
+    SessionsResolve,
+    SettingsResolve,
+    settingsRoute,
+    activateRoute,
+    passwordRoute,
+    finishResetRoute,
+    requestResetRoute,
+    registerRoute,
     <%_ if (enableSocialSignIn) { _%>
     SocialRegisterComponent,
-    socialRegisterState,
+    socialRegisterRoute,
         <%_ if (authenticationType == 'jwt') { _%>
     SocialAuthComponent,
-    socialAuthState,
+    socialAuthRoute,
         <%_ } _%>
     <%_ } _%>
     accountState
 } from './';
 
-let ACCOUNT_STATES = [
-    accountState,
-    activateState,
-    passwordState,
-    finishResetState,
-    requestResetState,
-    registerState,
+let ACCOUNT_ROUTES = [
+   ...activateRoute,
+   ...passwordRoute,
+   ...finishResetRoute,
+   ...requestResetRoute,
+   ...registerRoute,
     <%_ if (authenticationType === 'session') { _%>
-    sessionsState,
+   ...sessionsRoute,
     <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
         <%_ if (authenticationType == 'jwt') { _%>
-    socialAuthState,
+    ...socialAuthRoute,
         <%_ } _%>
-    socialRegisterState,
+   ...socialRegisterRoute,
     <%_ } _%>
-    settingsState
+   ...settingsRoute
 ];
 
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        UIRouterModule.forChild({ states: ACCOUNT_STATES })
+        RouterModule.forRoot(ACCOUNT_ROUTES, { useHash: true })
     ],
     declarations: [
         <%_ if (enableSocialSignIn) { _%>
@@ -88,7 +90,10 @@ let ACCOUNT_STATES = [
         Activate,
         Password,
         PasswordResetInit,
-        PasswordResetFinish
+        PasswordResetFinish,
+        PasswordResolve,
+        SessionsResolve,
+        SettingsResolve
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

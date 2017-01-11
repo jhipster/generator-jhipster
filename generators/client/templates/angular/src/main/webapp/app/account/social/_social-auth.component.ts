@@ -10,11 +10,18 @@ import { CookieService } from 'angular2-cookie/core';
 export class SocialAuthComponent implements OnInit {
 
     constructor (
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private $state: StateService,
         private Auth: AuthService,
         private loginService: LoginService,
         private cookieService: CookieService
-    ) {}
+    ) {
+        <%_ if (enableTranslation) { _%>
+        this.languageService.setLocations(['social']);
+        <%_ } _%>
+    }
 
     ngOnInit() {
         let token = this.cookieService.get('social-authentication')

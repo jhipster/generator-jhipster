@@ -11,7 +11,16 @@ export class PasswordResetInitComponent implements OnInit {
     resetAccount: any;
     success: string;
 
-    constructor(private passwordResetInit: PasswordResetInit, private elementRef: ElementRef, private renderer: Renderer) {}
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private passwordResetInit: PasswordResetInit, 
+        private elementRef: ElementRef, private renderer: Renderer) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['reset']);
+        <%_ } _%>
+    }
 
     ngOnInit() {
         this.resetAccount = {};

@@ -18,12 +18,16 @@ export class ActivateComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private activate: Activate,
         private loginModalService: LoginModalService,
         private trans: Transition,
-        private jhiLanguageService: JhiLanguageService
     ) {
+        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['activate']);
+        <%_ } _%>
     }
 
     ngOnInit () {
