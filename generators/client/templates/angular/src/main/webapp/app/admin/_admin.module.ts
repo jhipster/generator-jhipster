@@ -35,15 +35,13 @@ import {
     TrackerResolve,
     <%_ } _%>
     LogsService,
-    adminRoute,
-    auditRoute,
-    configRoute,
+    auditsRoute,
+    configurationRoute,
     docsRoute,
     healthRoute,
     logsRoute,
     <%_ if (!skipUserManagement) { _%>
     userMgmtRoute,
-    userMgmtDetailRoute,
     UserResolvePagingParams,
     UserResolve,
     <%_ } _%>
@@ -57,9 +55,8 @@ import {
 } from './';
 
 let ADMIN_STATES = [
-    ...adminRoute,
-    ...auditRoute,
-    ...configRoute,
+    ...auditsRoute,
+    ...configurationRoute,
     ...docsRoute,
     ...healthRoute,
     ...logsRoute,
@@ -71,7 +68,6 @@ let ADMIN_STATES = [
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
     ...userMgmtRoute,
-    ...userMgmtDetailRoute,
     <%_ } _%>
     ...metricsRoute
 ];

@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-<<<<<<< HEAD
-import { StateService } from 'ui-router-ng2';
-import { EventManager, PaginationUtil, ParseLinks, AlertService } from 'ng-jhipster';
-=======
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService } from 'ng-jhipster';
->>>>>>> Changed from state to route - admin
 
 import { User } from './user.model';
 import { UserService } from './user.service';
@@ -41,21 +38,23 @@ export class UserMgmtComponent implements OnInit {
         private parseLinks: ParseLinks,
         private alertService: AlertService,
         private principal: Principal,
-        private $state: StateService,
         private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
         private paginationUtil: PaginationUtil,
-        private paginationConfig: PaginationConfig
+        private paginationConfig: PaginationConfig,
+        private activatedRoute: ActivatedRoute,
+        private router: Router
         <%_ } _%>
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = paginationUtil.parsePage($state.params['page']);
-        this.previousPage = this.page;
-        this.reverse = paginationUtil.parseAscending($state.params['sort']);
-        this.predicate = 'id';
+        this.activatedRoute.data.subscribe(data => {
+            this.page = data['pagingParams'].page;
+            this.previousPage = data['pagingParams'].page;
+            this.reverse = data['pagingParams'].reverse;
+            this.predicate = data['pagingParams'].predicate;
+        });
         <%_ } _%>
         <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(['user']);
+        this.jhiLanguageService.setLocations(['user-management']);
         <%_ } _%>
     }
 
@@ -118,10 +117,7 @@ export class UserMgmtComponent implements OnInit {
     }
 
     transition () {
-        this.$state.transitionTo(this.$state.$current, {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        });
+        this.router.navigate(['/user-management', {page: this.page, sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')}]);
     }
     <%_ } _%>
 
