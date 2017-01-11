@@ -29,7 +29,7 @@ if (field.fieldValidate == true) {
         validators.push('maxbytes="' + field.fieldValidateRulesMaxbytes +'"');
     }
     if (rules.indexOf('pattern') != -1) {
-        validators.push('pattern="' + field.fieldValidateRulesPattern + '"');
+        validators.push('pattern="' + field.fieldValidateRulesPattern.replace(/"/g, '&#34;') + '"');
     }
 
     result = validators.join(' ');
