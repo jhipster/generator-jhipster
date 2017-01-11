@@ -3,13 +3,13 @@ import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService } from 'ng-jhipster';
+import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService, AlertService } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { UserModalService } from './user-modal.service';
 import { UserDeleteModalService } from './user-modal-delete.service';
-import { AlertService, ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
