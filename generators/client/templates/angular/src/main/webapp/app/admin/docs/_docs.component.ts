@@ -7,11 +7,8 @@ import { JhiLanguageService } from 'ng-jhipster';
 })
 export class <%=jhiPrefixCapitalized%>DocsComponent {
 	<%_ if (enableTranslation) { _%>
-    	constructor (private jhiLanguageService: JhiLanguageService){
-    		<%_ if (enableTranslation) { _%>
-        	this.jhiLanguageService.setLocations(['docs']);
-        	<%_ } _%>
-    	}    
+    constructor (private jhiLanguageService: JhiLanguageService) {
+    	this.jhiLanguageService.setLocations(['docs']);
+    }
     <%_ } _%>
-	
 }

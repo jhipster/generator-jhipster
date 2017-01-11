@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { EventManager, JhiLanguageService } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
