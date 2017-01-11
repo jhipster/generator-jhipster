@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager } from 'ng-jhipster';
+import { EventManager, JhiLanguageService } from 'ng-jhipster';
 
 import { Account, LoginModalService, Principal } from '../shared';
 
