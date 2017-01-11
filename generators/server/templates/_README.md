@@ -62,7 +62,7 @@ To ensure everything worked, run:
     java -jar target/*.war<% } %><% if (buildTool == 'gradle') { %>
     java -jar build/libs/*.war<% } %>
 
-<% if(!skipClient) { %>Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+<% if(!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
 <% } %>
 Refer to [Using JHipster in production][] for more details.
 
