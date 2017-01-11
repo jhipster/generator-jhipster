@@ -2013,7 +2013,7 @@ Generator.prototype.httpGet = function(url, onSuccess, onFail) {
  *  @param {array} array - the array to print
  */
 Generator.prototype.toArrayString = function(array) {
-    return `['${array.join('\',\'')}']`;
+    return `['${array.join('\', \'')}']`;
 };
 
 /**
