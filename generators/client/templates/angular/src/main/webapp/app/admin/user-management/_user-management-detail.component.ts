@@ -12,7 +12,16 @@ export class UserMgmtDetailComponent implements OnInit {
 
     user: User;
 
-    constructor(private userService: UserService, private route: ActivatedRoute) { }
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private userService: UserService,
+        private route: ActivatedRoute) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['user-management']);
+        <%_ } _%>
+    }
 
     ngOnInit() {
         this.route.queryParams.subscribe(params => {

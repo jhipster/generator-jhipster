@@ -13,7 +13,17 @@ export class UserMgmtDeleteDialogComponent {
 
     user: User;
 
-    constructor(private userService: UserService, public activeModal: NgbActiveModal, private eventManager: EventManager) {}
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private userService: UserService,
+        public activeModal: NgbActiveModal,
+        private eventManager: EventManager) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['user-management']);
+        <%_ } _%>
+    }
 
     clear () {
         this.activeModal.dismiss('cancel');
