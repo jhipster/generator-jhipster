@@ -1,29 +1,32 @@
-import { Transition, Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Injectable } from '@angular/core';
+import { Routes } from '@angular/router';
 
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
+import { <%=jhiPrefixCapitalized%>TrackerService, Principal } from '../../shared';
 
-export const trackerState: Ng2StateDeclaration = {
-    name: '<%=jhiPrefix%>-tracker',
-    parent: 'admin',
-    url: '/tracker',
-    data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'tracker.title'
-    },
-    views: {
-        'content@': { component: <%=jhiPrefixCapitalized%>TrackerComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['tracker'])
-    }],
-    onEnter: (trans: Transition) => {
-        trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).subscribe();
-    },
-    onExit: (trans: Transition) => {
-        trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).unsubscribe();
-    }
-};
+
+@Injectable()
+export class TrackerResolve implements CanActivate {
+
+  constructor(private principal: Principal) {}
+
+  canActivate() {
+      return this.principal.hasAnyAuthority(['ROLE_ADMIN']);
+  }
+
+}
+
+
+export const trackerRoute: Routes = [
+  {
+    path: 'jhi-tracker',
+    component: <%=jhiPrefixCapitalized%>TrackerComponent
+  }
+];
+
+// onEnter: (trans: Transition) => {
+//     trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).subscribe();
+// },
+// onExit: (trans: Transition) => {
+//     trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).unsubscribe();
+// }

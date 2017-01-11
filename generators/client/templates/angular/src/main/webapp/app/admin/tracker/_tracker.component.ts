@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
 
 @Component({
@@ -9,7 +11,15 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
 
     activities: any[] = [];
 
-    constructor(private trackerService: <%=jhiPrefixCapitalized%>TrackerService) {}
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private trackerService: <%=jhiPrefixCapitalized%>TrackerService) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['tracker']);
+        <%_ } _%>
+    }
 
     showActivity (activity: any) {
         let existingActivity = false;

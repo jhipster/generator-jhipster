@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics-modal.component';
 import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
@@ -14,8 +16,16 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     updatingMetrics: boolean = true;
     JCACHE_KEY: string ;
 
-    constructor(private modalService: NgbModal, private metricsService: <%=jhiPrefixCapitalized%>MetricsService) {
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private modalService: NgbModal,
+        private metricsService: <%=jhiPrefixCapitalized%>MetricsService) {
         this.JCACHE_KEY = 'jcache.statistics';
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['metrics']);
+        <%_ } _%>
     }
 
     ngOnInit() {

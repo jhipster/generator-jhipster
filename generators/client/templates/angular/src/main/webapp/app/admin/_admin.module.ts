@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { UIRouterModule } from 'ui-router-ng2';
+import { RouterModule } from '@angular/router';
 import { ParseLinks } from 'ng-jhipster';
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
@@ -34,49 +34,43 @@ import {
     trackerState,
     <%_ } _%>
     LogsService,
-    adminState,
-    auditState,
-    configState,
-    docsState,
-    healthState,
-    logsState,
+    adminRoute,
+    auditRoute,
+    configRoute,
+    docsRoute,
+    healthRoute,
+    logsRoute,
     <%_ if (!skipUserManagement) { _%>
-    userMgmtState,
-    userMgmtDetailState,
-    userMgmtNewState,
-    userMgmtEditState,
-    userMgmtDeleteState,
+    userMgmtRoute,
+    userMgmtDetailRoute,
     <%_ } _%>
-    metricsState
+    metricsRoute
 } from './';
 
 let ADMIN_STATES = [
-    adminState,
-    auditState,
-    configState,
-    docsState,
-    healthState,
-    logsState,
+    ...adminRoute,
+    ...auditRoute,
+    ...configRoute,
+    ...docsRoute,
+    ...healthRoute,
+    ...logsRoute,
     <%_ if (applicationType === 'gateway') { _%>
-    gatewayState,
+    ...gatewayRoute,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
-    trackerState,
+    ...trackerRoute,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
-    userMgmtState,
-    userMgmtDetailState,
-    userMgmtNewState,
-    userMgmtEditState,
-    userMgmtDeleteState,
+    ...userMgmtRoute,
+    ...userMgmtDetailRoute,
     <%_ } _%>
-    metricsState
+    ...metricsRoute
 ];
 
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        UIRouterModule.forChild({ states: ADMIN_STATES })
+        RouterModule.forRoot(ADMIN_STATES, { useHash: true })
     ],
     declarations: [
         AuditsComponent,

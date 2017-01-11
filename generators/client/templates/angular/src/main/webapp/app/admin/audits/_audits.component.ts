@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ParseLinks } from 'ng-jhipster';
+import { ParseLinks, JhiLanguageService} from 'ng-jhipster';
 
 import { Audit } from './audit.model';
 import { AuditsService } from './audits.service';
@@ -24,6 +24,9 @@ export class AuditsComponent implements OnInit {
     datePipe: DatePipe;
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private auditsService: AuditsService,
         private parseLinks: ParseLinks,
         @Inject(LOCALE_ID) private locale: string,
@@ -34,6 +37,9 @@ export class AuditsComponent implements OnInit {
         this.reverse = false;
         this.orderProp = 'timestamp';
         this.datePipe =  new DatePipe(this.locale); // TODO see if there is a better way to inject pipes
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['audits']);
+        <%_ } _%>
     }
 
     getAudits () {

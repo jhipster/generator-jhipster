@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
+<<<<<<< HEAD
 import { StateService } from 'ui-router-ng2';
 import { EventManager, PaginationUtil, ParseLinks, AlertService } from 'ng-jhipster';
+=======
+import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService } from 'ng-jhipster';
+>>>>>>> Changed from state to route - admin
 
 import { User } from './user.model';
 import { UserService } from './user.service';
@@ -30,6 +34,9 @@ export class UserMgmtComponent implements OnInit {
     <%_ } _%>
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private userService: UserService,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
@@ -46,6 +53,9 @@ export class UserMgmtComponent implements OnInit {
         this.previousPage = this.page;
         this.reverse = paginationUtil.parseAscending($state.params['sort']);
         this.predicate = 'id';
+        <%_ } _%>
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['user']);
         <%_ } _%>
     }
 

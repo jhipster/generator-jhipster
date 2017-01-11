@@ -1,21 +1,23 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
 import { AuditsComponent } from './audits.component';
+import { Principal } from '../../shared';
 
-export const auditState: Ng2StateDeclaration = {
-    name: 'audits',
-    parent: 'admin',
-    url: '/audits',
-    data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'audits.title'
-    },
-    views: {
-        'content@': { component: AuditsComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['audits'])
-    }]
-};
+@Injectable()
+export class AuditsResolve implements Resolve<any>, CanActivate {
+
+  constructor(private principal: Principal) {}
+
+  canActivate() {
+      return this.principal.hasAnyAuthority(['ROLE_ADMIN']);
+  }
+
+}
+
+export const auditsRoute: Routes = [
+  {
+    path: 'audits',
+    component: AuditsComponent,
+    resolve: {
+      'translate': AuditsResolve
+    }
+  }
+];

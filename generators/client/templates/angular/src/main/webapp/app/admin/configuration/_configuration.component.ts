@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.service';
 
@@ -14,11 +15,19 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     orderProp: string;
     reverse: boolean;
 
-    constructor(private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService) {
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService
+    ) {
         this.configKeys = [];
         this.filter = '';
         this.orderProp = 'prefix';
         this.reverse = false;
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(['configuration']);
+        <%_ } _%>
     }
 
     keys(dict): Array<string> {
