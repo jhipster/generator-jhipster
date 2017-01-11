@@ -25,7 +25,7 @@ export const appState: Ng2StateDeclaration = {
 };
 =======
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 
 import { NavbarComponent } from './layouts';
 import { AuthService } from './shared';
