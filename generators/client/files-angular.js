@@ -91,12 +91,10 @@ const files = {
             templates: [
                 '_app.main.ts',
                 '_app.module.ts',
-                { file: '_app.state.ts', method: 'copyJs' },
                 '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
                 'blocks/config/_register-transition-hooks.ts',
-                'blocks/config/_router.config.ts',
                 'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
                 //interceptors
@@ -129,11 +127,13 @@ const files = {
                 { file: 'home/_home.component.html', method: 'copyHtml' },
                 // layouts
                 'layouts/_index.ts',
+                'layouts/_layout-routing.module.ts',
                 'layouts/profiles/_profile.service.ts',
                 'layouts/profiles/_profile-info.model.ts',
                 'layouts/profiles/_page-ribbon.component.ts',
                 'layouts/main/_main.component.ts',
                 'layouts/main/_main.component.html',
+                'layouts/navbar/_navbar.state.ts',
                 { file: 'layouts/navbar/_navbar.component.ts', method: 'copyJs' },
                 { file: 'layouts/navbar/_navbar.component.html', method: 'copyHtml' },
                 'layouts/footer/_footer.component.ts',

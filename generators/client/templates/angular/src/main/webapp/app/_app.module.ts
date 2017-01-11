@@ -31,12 +31,6 @@ import {
     ErrorComponent
 } from './layouts';
 
-let BASE_ROUTES = [
-   ...homeRoute,
-   ...navbarRoute,
-   ...errorRoute
-];
-
 
 @NgModule({
     imports: [

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';

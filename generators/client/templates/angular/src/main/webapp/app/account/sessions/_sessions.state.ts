@@ -1,6 +1,6 @@
 import { CanActivate, Routes } from '@angular/router';
 
-import {SessionsComponent} from './session.component';
+import {SessionsComponent} from './sessions.component';
 
 <<<<<<< HEAD
 export const sessionRoute: Routes = [
