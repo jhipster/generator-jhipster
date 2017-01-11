@@ -28,7 +28,7 @@
             </thead>
             <tbody *ngIf ="users">
             <tr *ngFor="let user of users; trackBy: trackIdentity">
-                <td><a uiSref="user-management-detail" [queryParams]="{ login: user.login }">{{user.id}}</a></td>
+                <td><a routerLink="/user" [queryParams]="{ login: user.login }">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>

@@ -20,7 +20,7 @@ export class SessionsResolve implements CanActivate {
 export const sessionsRoute: Routes = [
 >>>>>>> refactor layout routing and account
   {
-    path: 'password',
+    path: 'sessions',
     component: SessionsComponent,
     canActivate: [SessionsResolve]
   }
