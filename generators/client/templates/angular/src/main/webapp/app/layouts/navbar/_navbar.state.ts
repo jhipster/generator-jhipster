@@ -46,9 +46,10 @@ export const navbarRoute: Routes = [
   {
     path: '',
     component: NavbarComponent,
-    resolve: {
-      'authorize': AuthorizeResolve
-    },
+    // TODO : Make this work
+    // resolve: {
+    //  'authorize': AuthorizeResolve
+    // },
     outlet: 'navbar'
   }
 ];
