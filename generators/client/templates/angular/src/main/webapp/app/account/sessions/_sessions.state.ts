@@ -1,21 +1,16 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
-import { SessionsComponent } from './sessions.component';
+import { Injectable } from '@angular/core';
+import { CanActivate, Routes } from '@angular/router';
 
-export const sessionsState: Ng2StateDeclaration = {
-    name: 'sessions',
-    parent: 'account',
-    url: '/sessions',
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'global.menu.account.sessions'
-    },
-    views: {
-        'content@': { component: SessionsComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['sessions'])
-    }]
-};
+import {SessionComponent} from './session.component';
+
+import {Principal} from '../../shared';
+
+@Injectable()
+export class SessionResolve implements CanActivate {
+
+  constructor(private principal: Principal) {}
+
+  canActivate() {
+    return this.principal.hasAnyAuthority(['ROLE_USER']);
+  }
+}

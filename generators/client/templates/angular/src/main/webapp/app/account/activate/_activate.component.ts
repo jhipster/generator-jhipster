@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { Activate } from './activate.service';
 import { LoginModalService } from '../../shared';
 
@@ -18,8 +20,11 @@ export class ActivateComponent implements OnInit {
     constructor(
         private activate: Activate,
         private loginModalService: LoginModalService,
-        private trans: Transition
-    ) {}
+        private trans: Transition,
+        private jhiLanguageService: JhiLanguageService
+    ) {
+        this.jhiLanguageService.setLocations(['activate']);
+    }
 
     ngOnInit () {
         this.activate.get(this.trans.params()['key']).subscribe(() => {
