@@ -24,7 +24,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         }]
     },
     output: {
-        path: path.resolve(<% if (buildTool === 'gradle') { %>'/build/www')<% } else { %>'./target/www')<% } %>,
+        path: path.resolve(<% if (buildTool === 'gradle') { %>'./build/www')<% } else { %>'./target/www')<% } %>,
         filename: '[name].bundle.js',
         chunkFilename: '[id].chunk.js'
     },
