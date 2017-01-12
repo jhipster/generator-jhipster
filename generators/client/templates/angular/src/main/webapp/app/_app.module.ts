@@ -3,7 +3,7 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { JhiLanguageService } from 'ng-jhipster';
@@ -60,7 +60,8 @@ import {
         customHttpProvider(),
         PaginationConfig,
         JhiLanguageService,
-        UserRouteAccessService
+        UserRouteAccessService,
+        Title
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })

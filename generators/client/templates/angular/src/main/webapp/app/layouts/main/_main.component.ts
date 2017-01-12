@@ -12,7 +12,7 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
     constructor(private router: Router, private jhiLanguageService: JhiLanguageHelper) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
-        let title: string = routeSnapshot.data ? routeSnapshot.data['pageTitle'] : '<%= angularAppName %>';
+        let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '<%= angularAppName %>';
         if (routeSnapshot.firstChild) {
             title = this.getPageTitle(routeSnapshot.firstChild) || title;
         }
