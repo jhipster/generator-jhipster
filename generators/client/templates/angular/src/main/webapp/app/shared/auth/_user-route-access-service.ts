@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 
-import {Principal} from '../';
+import { Principal } from '../';
 
 @Injectable()
 export class UserRouteAccessService implements CanActivate {

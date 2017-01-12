@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
-import {JhiLanguageService} from 'ng-jhipster';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
