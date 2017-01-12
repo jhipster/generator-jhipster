@@ -1,24 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Routes, CanActivate } from '@angular/router';
+import { Routes } from '@angular/router';
 
+import { RouteCanActivate } from '../../shared';
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
-import { Principal } from '../../shared';
 
-
-@Injectable()
-export class MetricsResolve implements CanActivate {
-
-  constructor(private principal: Principal) {}
-
-  canActivate() {
-  	return this.principal.identity().then(account => this.principal.hasAnyAuthority(['ROLE_ADMIN']));
-  }
-
-}
 export const metricsRoute: Routes = [
   {
     path: 'jhi-metrics',
     component: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
-    canActivate: [MetricsResolve]
+    data: { 
+      authorities: ['ROLE_ADMIN'] 
+    },
+    canActivate: [RouteCanActivate]
   }
 ];

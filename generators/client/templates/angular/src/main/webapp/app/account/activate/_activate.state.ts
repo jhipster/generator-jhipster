@@ -1,9 +1,15 @@
-import {Routes} from '@angular/router';
-import {ActivateComponent} from './activate.component';
+import { Routes } from '@angular/router';
+
+import { RouteCanActivate } from '../../shared';
+import { ActivateComponent } from './activate.component';
 
 export const activateRoute: Routes = [
   {
     path: 'activate',
-    component: ActivateComponent
+    component: ActivateComponent,
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
   }
 ];

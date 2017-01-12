@@ -1,11 +1,15 @@
-import { Routes, CanActivate } from '@angular/router';
+import { Routes } from '@angular/router';
 
+import { RouteCanActivate } from '../../shared';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
 
 export const configurationRoute: Routes = [
   {
     path: '<%=jhiPrefix%>-configuration',
     component: <%=jhiPrefixCapitalized%>ConfigurationComponent,
-    canActivate: [ConfigurationResolve]
+    data: { 
+      authorities: ['ROLE_ADMIN'] 
+    },
+    canActivate: [RouteCanActivate]
   }
 ];

@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 import {Routes} from '@angular/router';
+=======
+import { Routes } from '@angular/router';
+
+import { RouteCanActivate } from '../../shared';
+>>>>>>> fixes and normalizing the router
 import { SocialRegisterComponent } from './social-register.component';
 <%_ if (authenticationType == 'jwt') { _%>
 import { SocialAuthComponent } from './social-auth.component';
@@ -6,12 +12,20 @@ import { SocialAuthComponent } from './social-auth.component';
 
 export const socialRegisterRoute: Routes= [{
     url: 'social-register/:provider?{success:boolean}',
-    component: SocialRegisterComponent
+    component: SocialRegisterComponent,
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
 }];
 
 <%_ if (authenticationType == 'jwt') { _%>
 export const socialAuthRoute: Routes = [{
         url: 'social-auth',
-        component: SocialAuthComponent
+        component: SocialAuthComponent,
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
 }]
 <%_ } _%>

@@ -1,13 +1,23 @@
-import { ErrorComponent } from './error.component';
 import { Routes } from '@angular/router';
+
+import { RouteCanActivate } from '../../shared';
+import { ErrorComponent } from './error.component';
 
 export const errorRoute: Routes = [
   {
     path: 'error',
-    component: ErrorComponent
+    component: ErrorComponent,
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
   },
   {
     path: 'accessdenied',
-    component: ErrorComponent
+    component: ErrorComponent,
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
   }
 ];

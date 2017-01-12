@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
+import { RouteCanActivate } from '../../shared';
 import { NavbarComponent } from './navbar.component';
 import { AuthService } from '../../shared';
 
@@ -23,6 +23,10 @@ export const navbarRoute: Routes = [
     // resolve: {
     //  'authorize': AuthorizeResolve
     // },
-    outlet: 'navbar'
+    outlet: 'navbar',
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
   }
 ];

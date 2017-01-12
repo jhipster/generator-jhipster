@@ -1,11 +1,15 @@
 import { Routes, CanActivate } from '@angular/router';
 
+import { RouteCanActivate } from '../../shared';
 import { LogsComponent } from './logs.component';
 
 export const logsRoute: Routes = [
   {
     path: 'logs',
     component: LogsComponent,
-    canActivate: [LogsResolve]
+    data: { 
+      authorities: ['ROLE_ADMIN'] 
+    },
+    canActivate: [RouteCanActivate]
   }
 ];

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes, CanActivate } from '@angular/router';
 
+import { RouteCanActivate } from '../../shared';
 import { PaginationUtil } from 'ng-jhipster';
 
 import { UserMgmtComponent } from './user-management.component';
@@ -43,10 +44,16 @@ export const userMgmtRoute: Routes = [
     resolve: {
       'pagingParams': UserResolvePagingParams
     },
-    canActivate: [UserResolve]
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
   }, {
-    path: 'user',
+    path: 'user/:login',
     component: UserMgmtDetailComponent,
-    canActivate: [UserResolve]
+    data: { 
+      authorities: [] 
+    },
+    canActivate: [RouteCanActivate]
   }
 ];

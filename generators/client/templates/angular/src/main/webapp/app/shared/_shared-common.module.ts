@@ -11,7 +11,8 @@ import {
     FindLanguageFromKeyPipe,
     <%_ } _%>
     <%=jhiPrefixCapitalized%>AlertComponent,
-    <%=jhiPrefixCapitalized%>AlertErrorComponent
+    <%=jhiPrefixCapitalized%>AlertErrorComponent,
+    RouteCanActivate
 } from './';
 
 
@@ -40,7 +41,8 @@ export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslatio
             provide: AlertService,
             useFactory: alertServiceProvider,
             deps: [Sanitizer<% if (enableTranslation) { %>, TranslateService<% } %>]
-        }
+        },
+        RouteCanActivate
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,
