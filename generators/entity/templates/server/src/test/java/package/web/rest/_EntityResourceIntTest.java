@@ -64,6 +64,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
 public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+<%_
+    var oldSource = '';
+    try {
+        oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIntTest.java', 'utf8');
+    } catch (e) {}
+_%>                    
     <%_ for (idx in fields) {
     var defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -115,13 +121,49 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         if (fields[idx].fieldValidateRulesMaxlength < sampleTextLength) {
             sampleTextLength = fields[idx].fieldValidateRulesMaxlength;
         }
-        for (var i = 0; i < sampleTextLength; i++ ) {
+        for (var i = 0; i < sampleTextLength; i++) {
             sampleTextString += "A";
             updatedTextString += "B";
+        }
+        if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
+            if (oldSource !== '') {
+                // Check for old values
+                var sampleTextStringSearchResult = new RegExp('private static final String ' + defaultValueName + ' = "(.*)";', 'm').exec(oldSource);
+                if (sampleTextStringSearchResult != null) {
+                    sampleTextString = sampleTextStringSearchResult[1];
+                }
+                var updatedTextStringSearchResult = new RegExp('private static final String ' + updatedValueName + ' = "(.*)";', 'm').exec(oldSource);
+                if (updatedTextStringSearchResult != null) {
+                    updatedTextString = updatedTextStringSearchResult[1];
+                }
+            }
+            // Generate Strings, using pattern
+            try {
+                var patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
+                var randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
+                // set infinite repetitionals max range
+                randExp.max = 1;
+                if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+                    sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+                }
+                if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+                    updatedTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+                }
+            } catch (error) {
+                log(this.chalkRed('Error generating test value for entity "' + entityClass +
+                    '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
+                    '", generating default values for this field. Detailed error message: "' + error.message + '".'));
+            }
+            if (sampleTextString === updatedTextString) {
+                updatedTextString = updatedTextString + "B";
+                log(this.chalkRed('Randomly generated first and second test values for entity "' + entityClass +
+                    '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
+                    '" in file "' + entityClass + 'ResourceIntTest" where equal, added symbol "B" to second value.'));
+            }
         }_%>
 
-    private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
+    private static final String <%=defaultValueName %> = "<%-sampleTextString %>";
+    private static final String <%=updatedValueName %> = "<%-updatedTextString %>";
     <%_ } else if (fieldType == 'Integer') { _%>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;

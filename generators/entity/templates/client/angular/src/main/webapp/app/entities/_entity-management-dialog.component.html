@@ -144,8 +144,8 @@
           <%_ } _%>
           <%_ if (fields[idx].fieldValidateRules.indexOf('pattern') != -1) { _%>
           <small class="form-text text-danger"
-           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.pattern" jhiTranslate="entity.validation.pattern" translateValues="{ pattern: '<%= fields[idx].fieldValidateRulesPattern %>' }">
-            This field should follow pattern "<%= fields[idx].fieldValidateRulesPattern %>".
+           [hidden]="!editForm.controls.<%= fieldName %>?.errors?.pattern" jhiTranslate="entity.validation.pattern" translateValues="{ pattern: '<%= fields[idx].fieldValidateRulesPattern.replace(/"/g, '&#34;') %>' }">
+            This field should follow pattern "<%- fields[idx].fieldValidateRulesPattern.replace(/&/g, '&amp;').replace(/\{/g, '&#123;').replace(/\}/g, '&#125;') %>".
           </small>
             <%_ } _%>
             <%_ if (fieldType == 'Integer' || fieldType == 'Long' || fieldType == 'Float' || fieldType == 'Double' || fieldType == 'BigDecimal') { _%>
