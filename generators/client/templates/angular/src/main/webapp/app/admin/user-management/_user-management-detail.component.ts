@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiLanguageService } from 'ng-jhipster';
 
@@ -9,9 +9,10 @@ import { UserService } from './user.service';
     selector: '<%=jhiPrefix%>-user-mgmt-detail',
     templateUrl: './user-management-detail.component.html'
 })
-export class UserMgmtDetailComponent implements OnInit {
+export class UserMgmtDetailComponent implements OnInit, OnDestroy {
 
     user: User;
+    private subscription: any;
 
     constructor(
         <%_ if (enableTranslation) { _%>
@@ -25,7 +26,7 @@ export class UserMgmtDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(params => {
+        this.subscription = this.route.params.subscribe(params => {
             this.load(params['login']);
         });
     }
@@ -34,6 +35,10 @@ export class UserMgmtDetailComponent implements OnInit {
         this.userService.find(login).subscribe(user => {
             this.user = user;
         });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
 }
