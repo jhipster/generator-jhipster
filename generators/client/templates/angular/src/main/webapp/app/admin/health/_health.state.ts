@@ -7,8 +7,9 @@ export const healthRoute: Routes = [
   {
     path: 'jhi-health',
     component: <%=jhiPrefixCapitalized%>HealthCheckComponent,
-    data: { 
-      authorities: ['ROLE_ADMIN'] 
+    data: {
+      authorities: ['ROLE_ADMIN'],
+      pageTitle: 'health.title'
     },
     canActivate: [UserRouteAccessService]
   }

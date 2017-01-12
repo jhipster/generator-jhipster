@@ -7,8 +7,9 @@ export const logsRoute: Routes = [
   {
     path: 'logs',
     component: LogsComponent,
-    data: { 
-      authorities: ['ROLE_ADMIN'] 
+    data: {
+      authorities: ['ROLE_ADMIN'],
+      pageTitle: 'logs.title'
     },
     canActivate: [UserRouteAccessService]
   }

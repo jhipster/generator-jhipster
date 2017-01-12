@@ -6,19 +6,7 @@ import { LANGUAGES } from './language.constants';
 @Injectable()
 export class JhiLanguageHelper {
 
-    constructor (private translateService: TranslateService) {
-        this.init();
-    }
-
-    init () {
-        // FIXME onTranslationChange may not be required at all
-        this.translateService.onTranslationChange.subscribe((event: TranslationChangeEvent) => {
-            this.updateTitle();
-        });
-        this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-            this.updateTitle();
-        });
-    }
+    constructor (private translateService: TranslateService, private window: Window) { }
 
     getAll(): Promise<any> {
         return Promise.resolve(LANGUAGES);
@@ -32,12 +20,13 @@ export class JhiLanguageHelper {
      * 3. 'global.title'
      */
     updateTitle(titleKey?: string) {
-        // TODO : Proper way to handle this.
-        // if (!titleKey && this.$state.current.data && this.$state.current.data.pageTitle) {
-        //     titleKey = this.$state.current.data.pageTitle;
-        // }
-        // this.translateService.get(titleKey || 'global.title').subscribe(title => {
-        //     window.document.title = title;
-        // });
+        
+        if (!titleKey && this.window.document.title ) {
+            titleKey = this.window.document.title;
+        }
+
+        this.translateService.get(titleKey || 'global.title').subscribe(title => {
+            this.window.document.title = title;
+        });
     }
 }

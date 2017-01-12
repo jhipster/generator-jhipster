@@ -44,15 +44,17 @@ export const userMgmtRoute: Routes = [
     resolve: {
       'pagingParams': UserResolvePagingParams
     },
-    data: { 
-      authorities: [] 
+    data: {
+      authorities: ['ROLE_ADMIN'],
+      pageTitle: 'userManagement.home.title'
     },
     canActivate: [UserRouteAccessService]
   }, {
     path: 'user/:login',
     component: UserMgmtDetailComponent,
-    data: { 
-      authorities: [] 
+    data: {
+      authorities: ['ROLE_ADMIN'],
+      pageTitle: 'userManagement.home.title'
     },
     canActivate: [UserRouteAccessService]
   }

@@ -7,8 +7,9 @@ export const metricsRoute: Routes = [
   {
     path: 'jhi-metrics',
     component: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
-    data: { 
-      authorities: ['ROLE_ADMIN'] 
+    data: {
+      authorities: ['ROLE_ADMIN'],
+      pageTitle: 'metrics.title'
     },
     canActivate: [UserRouteAccessService]
   }

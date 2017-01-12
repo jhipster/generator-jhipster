@@ -7,8 +7,9 @@ export const configurationRoute: Routes = [
   {
     path: '<%=jhiPrefix%>-configuration',
     component: <%=jhiPrefixCapitalized%>ConfigurationComponent,
-    data: { 
-      authorities: ['ROLE_ADMIN'] 
+    data: {
+      authorities: ['ROLE_ADMIN'],
+      pageTitle: 'configuration.title'
     },
     canActivate: [UserRouteAccessService]
   }

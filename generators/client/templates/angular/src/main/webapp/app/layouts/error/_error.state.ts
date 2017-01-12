@@ -7,16 +7,18 @@ export const errorRoute: Routes = [
   {
     path: 'error',
     component: ErrorComponent,
-    data: { 
-      authorities: [] 
+    data: {
+      authorities: [],
+      pageTitle: 'error.title'
     },
     canActivate: [UserRouteAccessService]
   },
   {
     path: 'accessdenied',
     component: ErrorComponent,
-    data: { 
-      authorities: [] 
+    data: {
+      authorities: [],
+      pageTitle: 'error.title'
     },
     canActivate: [UserRouteAccessService]
   }
