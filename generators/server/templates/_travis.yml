@@ -4,7 +4,7 @@ services:
   - docker
 language: java
 node_js:
-  - "6.9.1"
+  - "6.9.4"
 jdk:
   - oraclejdk8
 sudo: false
