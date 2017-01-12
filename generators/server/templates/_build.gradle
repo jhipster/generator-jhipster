@@ -431,7 +431,7 @@ task stage(dependsOn: 'bootRepackage') {
 
 if (project.hasProperty('nodeInstall')) {
     node {
-        version = '6.9.2'
+        version = '6.9.4'
         npmVersion = '3.10.9'
         download = true
     }
