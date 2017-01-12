@@ -1,6 +1,6 @@
 import { Routes, CanActivate } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { LogsComponent } from './logs.component';
 
 export const logsRoute: Routes = [
@@ -10,6 +10,6 @@ export const logsRoute: Routes = [
     data: { 
       authorities: ['ROLE_ADMIN'] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

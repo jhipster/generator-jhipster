@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
 
 export const configurationRoute: Routes = [
@@ -10,6 +10,6 @@ export const configurationRoute: Routes = [
     data: { 
       authorities: ['ROLE_ADMIN'] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

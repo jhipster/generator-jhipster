@@ -47,13 +47,7 @@ import {
     UserModalService,
     UserDeleteModalService,
     <%_ } _%>
-    metricsRoute,
-    AuditsResolve,
-    ConfigurationResolve,
-    DocsResolve,
-    HealthResolve,
-    LogsResolve,
-    MetricsResolve
+    metricsRoute
 } from './';
 
 let ADMIN_STATES = [
@@ -128,12 +122,6 @@ let ADMIN_STATES = [
         UserModalService,
         UserDeleteModalService,
         <%_ } _%>
-        AuditsResolve,
-        ConfigurationResolve,
-        DocsResolve,
-        HealthResolve,
-        LogsResolve,
-        MetricsResolve
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

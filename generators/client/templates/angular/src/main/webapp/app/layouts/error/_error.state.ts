@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { ErrorComponent } from './error.component';
 
 export const errorRoute: Routes = [
@@ -10,7 +10,7 @@ export const errorRoute: Routes = [
     data: { 
       authorities: [] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   },
   {
     path: 'accessdenied',
@@ -18,6 +18,6 @@ export const errorRoute: Routes = [
     data: { 
       authorities: [] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

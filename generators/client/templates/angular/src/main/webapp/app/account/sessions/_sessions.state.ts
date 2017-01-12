@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { SessionsComponent } from './sessions.component';
 
 export const sessionsRoute: Routes = [
@@ -10,6 +10,6 @@ export const sessionsRoute: Routes = [
     data: { 
       authorities: ['ROLE_USER'] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

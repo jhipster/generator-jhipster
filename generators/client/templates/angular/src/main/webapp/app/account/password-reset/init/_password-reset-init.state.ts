@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import { PasswordResetInitComponent } from './password-reset-init.component';
-=======
->>>>>>> fixes and normalizing the router
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../../shared';
 import { PasswordResetInitComponent } from './password-reset-init.component';
 
 export const passwordResetInitRoute: Routes = [
@@ -14,6 +10,6 @@ export const passwordResetInitRoute: Routes = [
     data: { 
       authorities: [] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

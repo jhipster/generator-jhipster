@@ -370,7 +370,7 @@ const files = {
                 'shared/auth/_has-authority.directive.ts',
                 'shared/auth/_has-any-authority.directive.ts',
                 'shared/auth/_account.service.ts',
-                'shared/auth/_route.activate.ts'
+                'shared/auth/_user-route-access-service.ts'
             ]
         },
         {

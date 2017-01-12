@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
 
 export const metricsRoute: Routes = [
@@ -10,6 +10,6 @@ export const metricsRoute: Routes = [
     data: { 
       authorities: ['ROLE_ADMIN'] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

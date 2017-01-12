@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { NavbarComponent } from './navbar.component';
 import { AuthService } from '../../shared';
 
@@ -27,6 +27,6 @@ export const navbarRoute: Routes = [
     data: { 
       authorities: [] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

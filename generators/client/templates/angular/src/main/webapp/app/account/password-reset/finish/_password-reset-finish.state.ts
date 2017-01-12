@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../../shared';
 import { PasswordResetFinishComponent } from './password-reset-finish.component';
 
 export const passwordResetFinishRoute: Routes = [
@@ -10,6 +10,6 @@ export const passwordResetFinishRoute: Routes = [
     data: { 
       authorities: [] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

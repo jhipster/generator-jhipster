@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker.component';
 import { <%=jhiPrefixCapitalized%>TrackerService, Principal } from '../../shared';
 
@@ -11,7 +11,7 @@ export const trackerRoute: Routes = [
     data: { 
       authorities: ['ROLE_ADMIN'] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];
 

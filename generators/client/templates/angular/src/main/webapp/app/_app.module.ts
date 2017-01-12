@@ -2,13 +2,13 @@
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
 import { NgModule } from '@angular/core';
-import {RouterModule} from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import {JhiLanguageService} from 'ng-jhipster';
 
-import { <%=angular2AppName%>SharedModule } from './shared';
+import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
 import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
@@ -59,7 +59,8 @@ import {
         { provide: Document, useValue: document },
         customHttpProvider(),
         PaginationConfig,
-        JhiLanguageService
+        JhiLanguageService,
+        UserRouteAccessService
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })

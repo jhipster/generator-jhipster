@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import {RegisterComponent} from './register.component';
 
 export const registerRoute: Routes = [
@@ -10,6 +10,6 @@ export const registerRoute: Routes = [
     data: { 
       authorities: [] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { RouteCanActivate } from '../../shared';
+import { UserRouteAccessService } from '../../shared';
 import { PasswordComponent } from './password.component';
 
 export const passwordRoute: Routes = [
@@ -10,6 +10,6 @@ export const passwordRoute: Routes = [
     data: { 
       authorities: ['ROLE_USER'] 
     },
-    canActivate: [RouteCanActivate]
+    canActivate: [UserRouteAccessService]
   }
 ];

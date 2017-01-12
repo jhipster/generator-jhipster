@@ -21,9 +21,6 @@ import {
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
     SettingsComponent,
-    PasswordResolve,
-    SessionsResolve,
-    SettingsResolve,
     settingsRoute,
     activateRoute,
     passwordRoute,
@@ -90,10 +87,7 @@ let ACCOUNT_ROUTES = [
         Activate,
         Password,
         PasswordResetInit,
-        PasswordResetFinish,
-        PasswordResolve,
-        SessionsResolve,
-        SettingsResolve
+        PasswordResetFinish
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
