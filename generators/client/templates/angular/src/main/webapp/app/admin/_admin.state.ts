@@ -1,6 +1,4 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-
-export const adminState: Ng2StateDeclaration = {
+export const adminState = {
     name: 'admin',
     abstract: true,
     parent: 'app'

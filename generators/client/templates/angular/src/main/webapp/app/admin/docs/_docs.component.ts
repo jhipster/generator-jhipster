@@ -6,9 +6,9 @@ import { JhiLanguageService } from 'ng-jhipster';
     templateUrl: './docs.component.html'
 })
 export class <%=jhiPrefixCapitalized%>DocsComponent {
-	<%_ if (enableTranslation) { _%>
+    <%_ if (enableTranslation) { _%>
     constructor (private jhiLanguageService: JhiLanguageService) {
-    	this.jhiLanguageService.setLocations(['docs']);
+        this.jhiLanguageService.setLocations(['docs']);
     }
     <%_ } _%>
 }

@@ -24,8 +24,8 @@ export const navbarRoute: Routes = [
     //  'authorize': AuthorizeResolve
     // },
     outlet: 'navbar',
-    data: { 
-      authorities: [] 
+    data: {
+      authorities: []
     },
     canActivate: [UserRouteAccessService]
   }

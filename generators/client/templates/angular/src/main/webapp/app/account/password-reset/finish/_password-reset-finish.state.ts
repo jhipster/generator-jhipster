@@ -7,8 +7,9 @@ export const passwordResetFinishRoute: Routes = [
   {
     path: 'reset/finish',
     component: PasswordResetFinishComponent,
-    data: { 
-      authorities: [] 
+    data: {
+      authorities: [],
+      pageTitle: 'global.menu.account.password'
     },
     canActivate: [UserRouteAccessService]
   }

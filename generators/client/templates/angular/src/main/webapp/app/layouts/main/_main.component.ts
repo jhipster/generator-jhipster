@@ -8,22 +8,22 @@ import { JhiLanguageHelper } from '../../shared';
     templateUrl: './main.component.html'
 })
 export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
+    
+    constructor(private router: Router, private jhiLanguageService: JhiLanguageHelper) {}
 
-	constructor(private router: Router, private jhiLanguageService: JhiLanguageHelper) {}
-
-	private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
-        let title = routeSnapshot.data ? routeSnapshot.data['pageTitle'] : <%= angularAppName %>;
+    private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
+        let title: string = routeSnapshot.data ? routeSnapshot.data['pageTitle'] : '<%= angularAppName %>';
         if (routeSnapshot.firstChild) {
-            title = this.getDeepestTitle(routeSnapshot.firstChild) || title;
+            title = this.getPageTitle(routeSnapshot.firstChild) || title;
         }
         return title;
     }
 
     ngOnInit() {
         this.router.events.subscribe((event) => {
-	        if (event instanceof NavigationEnd) {
-	        	this.jhiLanguageService.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
-	        }
+            if (event instanceof NavigationEnd) {
+                this.jhiLanguageService.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
+            }
         });
     }
 }

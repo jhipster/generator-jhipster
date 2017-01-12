@@ -12,10 +12,10 @@ export class UserRouteAccessService implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot): boolean | Promise<boolean> {
         let authorities: string[] = route.data['authorities'];
 
-        if( authorities.length === 0) {
+        if (authorities.length === 0) {
             return true;
         }
-        
+  
         return this.principal.identity().then(account => {
             let authorized: boolean = this.principal.hasAnyAuthority(authorities);
             if (!authorized) {

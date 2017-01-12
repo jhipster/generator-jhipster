@@ -20,7 +20,7 @@ export class JhiLanguageHelper {
      * 3. 'global.title'
      */
     updateTitle(titleKey?: string) {
-        
+
         if (!titleKey && this.window.document.title ) {
             titleKey = this.window.document.title;
         }
