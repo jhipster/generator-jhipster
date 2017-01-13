@@ -30,6 +30,7 @@ module.exports = function (options) {
                 '@angular/upgrade',
                 '@ng-bootstrap/ng-bootstrap',
                 'angular2-cookie',
+                'angular2-infinite-scroll',
                 'jquery',
                 'ng-jhipster',
                 'ng2-webstorage',

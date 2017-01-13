@@ -8,6 +8,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const ENV = 'dev';
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
+    devtool: 'cheap-module-source-map',
     devServer: {
         contentBase: './target/www',
         proxy: [{
