@@ -288,6 +288,7 @@ module.exports = JhipsterGenerator.extend({
             insight.track('app/clientFramework', this.clientFramework);
             insight.track('app/testFrameworks', this.testFrameworks);
             insight.track('app/otherModules', this.otherModules);
+            insight.track('app/clientPackageManager', this.clientPackageManager);
         },
 
         composeLanguages: function () {
