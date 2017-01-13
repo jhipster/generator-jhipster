@@ -124,8 +124,8 @@
     "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
-    "webpack:build": "webpack --config webpack/webpack.dev.js",
-    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --content-base src/ --port=8090",
+    "webpack:build": "webpack --config webpack/webpack.vendor.js",
+    "webpack:dev": "npm run webpack:build && webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --content-base src/ --port=8090",
     "webpack:prod": "webpack -p --config webpack/webpack.prod.js"
   }
 }
