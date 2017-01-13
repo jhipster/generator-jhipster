@@ -45,27 +45,26 @@ import {
     UserResolvePagingParams,
     UserResolve,
     UserModalService,
-    UserDeleteModalService,
     <%_ } _%>
     metricsRoute
 } from './';
 
 let ADMIN_STATES = [
-    ...auditsRoute,
-    ...configurationRoute,
-    ...docsRoute,
-    ...healthRoute,
-    ...logsRoute,
+    auditsRoute,
+    configurationRoute,
+    docsRoute,
+    healthRoute,
+    logsRoute,
     <%_ if (applicationType === 'gateway') { _%>
-    ...gatewayRoute,
+    gatewayRoute,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
-    ...trackerRoute,
+    trackerRoute,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
     ...userMgmtRoute,
     <%_ } _%>
-    ...metricsRoute
+    metricsRoute
 ];
 
 @NgModule({
@@ -105,7 +104,6 @@ let ADMIN_STATES = [
     ],
     providers: [
         AuditsService,
-        UserService,
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         <%=jhiPrefixCapitalized%>MetricsService,
@@ -117,10 +115,10 @@ let ADMIN_STATES = [
         TrackerResolve,
         <%_ } _%>        
         <%_ if (!skipUserManagement) { _%>
+        UserService,
         UserResolvePagingParams,
         UserResolve,
-        UserModalService,
-        UserDeleteModalService,
+        UserModalService
         <%_ } _%>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]

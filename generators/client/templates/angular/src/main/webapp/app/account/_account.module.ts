@@ -39,21 +39,21 @@ import {
 } from './';
 
 let ACCOUNT_ROUTES = [
-   ...activateRoute,
-   ...passwordRoute,
-   ...passwordResetFinishRoute,
-   ...passwordResetInitRoute,
-   ...registerRoute,
+   activateRoute,
+   passwordRoute,
+   passwordResetFinishRoute,
+   passwordResetInitRoute,
+   registerRoute,
     <%_ if (authenticationType === 'session') { _%>
-   ...sessionsRoute,
+   sessionsRoute,
     <%_ } _%>
     <%_ if (enableSocialSignIn) { _%>
-        <%_ if (authenticationType == 'jwt') { _%>
-    ...socialAuthRoute,
+    <%_ if (authenticationType == 'jwt') { _%>
+    socialAuthRoute,
         <%_ } _%>
-   ...socialRegisterRoute,
+   socialRegisterRoute,
     <%_ } _%>
-   ...settingsRoute
+   settingsRoute
 ];
 
 @NgModule({

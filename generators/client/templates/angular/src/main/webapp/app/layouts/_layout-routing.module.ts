@@ -6,8 +6,8 @@ import { navbarRoute } from './';
 import { errorRoute } from './';
 
 let LAYOUT_ROUTES = [
-    ...homeRoute,
-    ...navbarRoute,
+    homeRoute,
+    navbarRoute,
     ...errorRoute
 ];
 

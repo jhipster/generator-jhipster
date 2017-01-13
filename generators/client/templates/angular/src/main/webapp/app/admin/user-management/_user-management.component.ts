@@ -8,7 +8,8 @@ import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService, AlertServ
 import { User } from './user.model';
 import { UserService } from './user.service';
 import { UserModalService } from './user-modal.service';
-import { UserDeleteModalService } from './user-modal-delete.service';
+import { UserMgmtDialogComponent } from './user-management-dialog.component';
+import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
@@ -48,8 +49,7 @@ export class UserMgmtComponent implements OnInit {
         <%_ } _%>
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private userModalService: UserModalService,
-        private userDeleteModalService: UserDeleteModalService
+        private userModalService: UserModalService
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.activatedRoute.data.subscribe(data => {
@@ -149,15 +149,15 @@ export class UserMgmtComponent implements OnInit {
     }
 
     createUser() {
-        this.modalRef = this.userModalService.open();
+        this.modalRef = this.userModalService.open(UserMgmtDialogComponent);
     }
 
     editUser(login: string) {
-        this.modalRef =  this.userModalService.open(login);
+        this.modalRef =  this.userModalService.open(UserMgmtDialogComponent, login);
     }
 
     deleteUser(login: string) {
-        this.modalRef =  this.userDeleteModalService.open(login);
+        this.modalRef =  this.userModalService.open(UserMgmtDeleteDialogComponent, login);
     }
 
 }

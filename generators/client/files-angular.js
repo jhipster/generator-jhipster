@@ -305,7 +305,6 @@ const files = {
                 'admin/user-management/_user-management-detail.component.ts',
                 'admin/user-management/_user-management-dialog.component.ts',
                 'admin/user-management/_user-management-delete-dialog.component.ts',
-                'admin/user-management/_user-modal-delete.service.ts',
                 'admin/user-management/_user-modal.service.ts',
                 'admin/user-management/_user.model.ts',
                 'admin/user-management/_user.service.ts',

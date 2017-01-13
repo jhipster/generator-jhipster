@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { UserRouteAccessService } from '../../shared';
 import { NavbarComponent } from './navbar.component';
@@ -15,18 +15,16 @@ import { AuthService } from '../../shared';
 //
 // }
 
-export const navbarRoute: Routes = [
-  {
-    path: '',
-    component: NavbarComponent,
-    // TODO : Make this work
-    // resolve: {
-    //  'authorize': AuthorizeResolve
-    // },
-    outlet: 'navbar',
-    data: {
-      authorities: []
-    },
-    canActivate: [UserRouteAccessService]
-  }
-];
+export const navbarRoute: Route = {
+  path: '',
+  component: NavbarComponent,
+  // TODO : Make this work
+  // resolve: {
+  //  'authorize': AuthorizeResolve
+  // },
+  outlet: 'navbar',
+  data: {
+    authorities: []
+  },
+  canActivate: [UserRouteAccessService]
+};

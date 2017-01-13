@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Component } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
@@ -13,22 +13,21 @@ export class UserModalService {
         private userService: UserService
     ) {}
 
-    open (login?: string): NgbModalRef {
+    open (component: Component, login?: string): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (login) {
-            this.userService.find(login).subscribe(user => this.userModalRef(user));
+            this.userService.find(login).subscribe(user => this.userModalRef(component, user));
         } else {
-            return this.userModalRef(new User());
+            return this.userModalRef(component, new User());
         }
     }
 
-
-    userModalRef(user: User): NgbModalRef {
-        let modalRef = this.modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
+    userModalRef(component: Component, user: User): NgbModalRef {
+        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.user = user;
         modalRef.result.then(result => {
             console.log(`Closed with: ${result}`);

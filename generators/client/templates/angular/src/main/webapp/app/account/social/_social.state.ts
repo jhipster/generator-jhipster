@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { UserRouteAccessService } from '../../shared';
 import { SocialRegisterComponent } from './social-register.component';
@@ -6,7 +6,7 @@ import { SocialRegisterComponent } from './social-register.component';
 import { SocialAuthComponent } from './social-auth.component';
 <%_ } _%>
 
-export const socialRegisterRoute: Routes= [{
+export const socialRegisterRoute: Route = {
     url: 'social-register/:provider?{success:boolean}',
     component: SocialRegisterComponent,
     data: {
@@ -14,10 +14,10 @@ export const socialRegisterRoute: Routes= [{
       pageTitle: 'social.register.title'
     },
     canActivate: [UserRouteAccessService]
-}];
+};
 
 <%_ if (authenticationType == 'jwt') { _%>
-export const socialAuthRoute: Routes = [{
+export const socialAuthRoute: Route = {
         url: 'social-auth',
         component: SocialAuthComponent,
     data: {
@@ -25,5 +25,5 @@ export const socialAuthRoute: Routes = [{
       pageTitle: 'social.register.title'
     },
     canActivate: [UserRouteAccessService]
-}]
+};
 <%_ } _%>
