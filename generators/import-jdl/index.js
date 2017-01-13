@@ -30,6 +30,10 @@ module.exports = JDLGenerator.extend({
             this.baseName = this.config.get('baseName');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
             this.skipClient = this.config.get('skipClient');
+            this.clientFramework = this.config.get('clientFramework');
+            if (!this.clientFramework) {
+                this.clientFramework = 'angular1';
+            }
         }
     },
 
@@ -83,7 +87,7 @@ module.exports = JDLGenerator.extend({
             this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
             this.spawnCommand('gulp', ['inject:app']);
         };
-        if (!this.options['skip-install'] && !this.skipClient) {
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
             injectJsFilesToIndex.call(this);
         }
     }

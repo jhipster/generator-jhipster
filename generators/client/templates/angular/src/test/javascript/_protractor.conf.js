@@ -36,11 +36,11 @@ exports.config = {
     onPrepare: function() {
         browser.driver.manage().window().setSize(1280, 1024);
         jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
-            savePath: '<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e',
+            savePath: '<%= BUILD_DIR %>reports/e2e',
             consolidateAll: false
         }));
         jasmine.getEnv().addReporter(new HtmlScreenshotReporter({
-            dest: "<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e/screenshots"
+            dest: "<%= BUILD_DIR %>reports/e2e/screenshots"
         }));
     },
 

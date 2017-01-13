@@ -84,18 +84,13 @@ module.exports = function (config) {
         reporters: ['dots', 'junit', 'progress', 'coverage', 'karma-remap-istanbul'],
 
         // todo: fix me so I work!
-        junitReporter: {<% if (buildTool == 'maven') { %>
-            outputFile: 'target/test-results/karma/TESTS-results.xml'<% } else { %>
-            outputFile: 'build/test-results/karma/TESTS-results.xml'<% } %>
+        junitReporter: {
+            outputFile: '<%= BUILD_DIR %>test-results/karma/TESTS-results.xml'
         },
 
         remapIstanbulReporter: {
             reports: { // eslint-disable-line
-            <%_ if (buildTool == 'maven') { _%>
-                'html': 'target/test-results/coverage',
-            <%_ } else { _%>
-                'html': 'build/test-results/coverage',
-            <%_ } _%>
+                'html': '<%= BUILD_DIR %>test-results/coverage',
                 'text-summary': null
             }
         },

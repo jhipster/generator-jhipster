@@ -4,7 +4,7 @@ sourceSets {
     test {
         scala {
             srcDirs = ['<%= TEST_DIR %>gatling/simulations']
-            output.classesDir = 'target/test-classes'
+            output.classesDir = '<%= BUILD_DIR %>test-classes'
         }
     }
 }

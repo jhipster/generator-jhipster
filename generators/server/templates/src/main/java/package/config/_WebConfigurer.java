@@ -155,7 +155,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         String fullExecutablePath = this.getClass().getResource("").getPath();
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("<% if (buildTool == 'gradle') { %>build/<% } else { %>target/<% } %>");
+        int extractionEndIndex = extractedPath.indexOf("<%= BUILD_DIR %>");
         if(extractionEndIndex <= 0) {
             return "";
         }

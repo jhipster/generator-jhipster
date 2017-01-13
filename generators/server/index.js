@@ -271,10 +271,11 @@ module.exports = JhipsterServerGenerator.extend({
 
             // Make dist dir available in templates
             if (this.buildTool === 'maven') {
-                this.CLIENT_DIST_DIR = 'target/' + constants.CLIENT_DIST_DIR;
+                this.BUILD_DIR = 'target/';
             } else {
-                this.CLIENT_DIST_DIR = 'build/' + constants.CLIENT_DIST_DIR;
+                this.BUILD_DIR = 'build/';
             }
+            this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             // Make documentation URL available in templates
             this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
             this.DOCUMENTATION_ARCHIVE_URL = constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH + 'v' + this.jhipsterVersion;
