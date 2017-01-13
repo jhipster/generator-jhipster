@@ -44,6 +44,7 @@
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "2.53.33",
     <%_ } _%>
+    "add-asset-html-webpack-plugin": "1.0.2",
     "angular2-infinite-scroll": "0.2.8",
     "angular-cli": "1.0.0-beta.24",
     "angular2-template-loader": "0.6.0",

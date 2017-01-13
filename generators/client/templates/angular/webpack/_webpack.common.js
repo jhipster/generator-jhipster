@@ -2,8 +2,9 @@ const webpack = require('webpack');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const path = require('path');
 
 module.exports = function (options) {
     const DATAS = {
@@ -18,29 +19,6 @@ module.exports = function (options) {
             <%_ } else { _%>
             'global': './src/main/webapp/content/css/global.css',
             <%_ } _%>
-            'vendor': [
-                './src/main/webapp/app/vendor',
-                '@angular/common',
-                '@angular/compiler',
-                '@angular/core',
-                '@angular/forms',
-                '@angular/http',
-                '@angular/platform-browser',
-                '@angular/platform-browser-dynamic',
-                '@angular/upgrade',
-                '@ng-bootstrap/ng-bootstrap',
-                'angular2-cookie',
-                'angular2-infinite-scroll',
-                'jquery',
-                'ng-jhipster',
-                'ng2-webstorage',
-                'rxjs',
-                <%_ if (websocket == 'spring-websocket') { _%>
-                'sockjs-client',
-                'webstomp-client',
-                <%_ } _%>
-                'ui-router-ng2'
-            ],
             'main': './src/main/webapp/app/app.main'
         },
         resolve: {
@@ -48,7 +26,6 @@ module.exports = function (options) {
             modules: ['node_modules']
         },
         module: {
-            exprContextCritical: false,
             rules: [
                 { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
                 {
@@ -107,7 +84,11 @@ module.exports = function (options) {
         },
         plugins: [
             new CommonsChunkPlugin({
-                names: ['manifest', 'polyfills', 'vendor'].reverse()
+                names: ['manifest', 'polyfills'].reverse()
+            }),
+            new webpack.DllReferencePlugin({
+                context: './',
+                manifest: require(path.resolve('./target/www/vendor.json')),
             }),
             new CopyWebpackPlugin([
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
@@ -126,6 +107,9 @@ module.exports = function (options) {
                 inject: 'body',
                 data: DATAS
             }),
+            new AddAssetHtmlPlugin([
+                { filepath: path.resolve('./target/www/vendor.dll.js'), includeSourcemap: false }
+            ]),
             new StringReplacePlugin()
         ]
     };

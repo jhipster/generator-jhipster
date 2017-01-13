@@ -15,6 +15,5 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
     plugins: [
         new ExtractTextPlugin('[hash].styles.css'),
         new Visualizer()
-
     ]
 });
