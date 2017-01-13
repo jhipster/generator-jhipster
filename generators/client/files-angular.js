@@ -46,6 +46,12 @@ const files = {
                 'content/scss/_global.scss',
                 'content/scss/_vendor.scss',
             ]
+        },
+        {
+            condition: generator => generator.useSass,
+            templates: [
+                { file: '_postcss.config.js', method: 'copy' }
+            ]
         }
     ],
     image: [
