@@ -170,8 +170,8 @@ public class <%= entityClass %> implements Serializable {
     <%- include relationship_validators -%>
     <%_ }_%>
     @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="ID"))
+               joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="id"),
+               inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="id"))
     <%_     } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
