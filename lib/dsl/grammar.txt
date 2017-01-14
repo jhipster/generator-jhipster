@@ -70,7 +70,11 @@
 start = p:prog { return p; }
 
 prog
-  = SPACE* ed:entityDecl SPACE* p:prog {
+  = SPACE* applicationDeclaration:applicationDecl SPACE* p:prog {
+    parsed.application = applicationDeclaration;
+    return parsed;
+  }
+  / SPACE* ed:entityDecl SPACE* p:prog {
     parsed.entities = addUniqueElements([ed], parsed.entities);
     return parsed;
   }
@@ -123,7 +127,9 @@ prog
 
 // Application Declaration
 applicationDecl
-  = APPLICATION SPACE* '{' SPACE* applicationContent:applicationContentDecl SPACE* '}'
+  = APPLICATION SPACE* '{' SPACE* applicationContent:applicationContentDecl? SPACE* '}' {
+    return applicationContent || parsed.application;
+  }
 
 applicationContentDecl
   = BASE_NAME SPACE* baseName:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
@@ -152,7 +158,7 @@ applicationContentDecl
     parsed.application.devDatabaseType = devDatabaseType.join('');
   }
   / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9] SPACE* applicationContentDecl:applicationContentDecl {
-   parsed.application.prodDatabaseType = prodDatabaseType.join('');
+    parsed.application.prodDatabaseType = prodDatabaseType.join('');
   }
   / ''
 
