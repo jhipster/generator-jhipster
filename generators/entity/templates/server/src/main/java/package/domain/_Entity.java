@@ -177,7 +177,7 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else { _%>
     <%_     if (ownerSide) { _%>
-    @OneToOne
+    @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
     <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
     <%_ }_%>
