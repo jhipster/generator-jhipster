@@ -50,7 +50,9 @@
       websocket: false,
       databaseType: 'sql',
       devDatabaseType: 'h2Memory',
-      prodDatabaseType: 'mysql'
+      prodDatabaseType: 'mysql',
+      useCompass: false,
+      buildTool: 'maven'
     },
     entities: [],
     relationships: [],
@@ -154,11 +156,17 @@ applicationContentDecl
   / DATABASE_TYPE SPACE* databaseType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.databaseType = databaseType.join('');
   }
-  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z0-9] SPACE* applicationContentDecl:applicationContentDecl {
+  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.devDatabaseType = devDatabaseType.join('');
   }
-  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9] SPACE* applicationContentDecl:applicationContentDecl {
+  / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.prodDatabaseType = prodDatabaseType.join('');
+  }
+  / USE_COMPASS SPACE* useCompass:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.useCompass = useCompass;
+  }
+  / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.buildTool = buildTool.join('');
   }
   / ''
 
@@ -399,6 +407,8 @@ WEBSOCKET = 'websocket'
 DATABASE_TYPE = 'databaseType'
 DEV_DATABASE_TYPE = 'devDatabaseType'
 PROD_DATABASE_TYPE = 'prodDatabaseType'
+USE_COMPASS = 'useCompass'
+BUILD_TOOL = 'buildTool'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
