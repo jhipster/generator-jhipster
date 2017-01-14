@@ -1076,7 +1076,7 @@ function askForRelationship(done) {
         },
         {
             when: function (response) {
-                return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
+                return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')) || (response.relationshipType === 'one-to-one' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'))));
             },
             type: 'confirm',
             name: 'relationshipValidate',
