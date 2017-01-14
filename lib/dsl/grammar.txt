@@ -52,7 +52,8 @@
       devDatabaseType: 'h2Memory',
       prodDatabaseType: 'mysql',
       useCompass: false,
-      buildTool: 'maven'
+      buildTool: 'maven',
+      searchEngine: false
     },
     entities: [],
     relationships: [],
@@ -167,6 +168,9 @@ applicationContentDecl
   }
   / BUILD_TOOL SPACE* buildTool:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.buildTool = buildTool.join('');
+  }
+  / SEARCH_ENGINE SPACE* searchEngine:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.searchEngine = searchEngine;
   }
   / ''
 
@@ -409,6 +413,7 @@ DEV_DATABASE_TYPE = 'devDatabaseType'
 PROD_DATABASE_TYPE = 'prodDatabaseType'
 USE_COMPASS = 'useCompass'
 BUILD_TOOL = 'buildTool'
+SEARCH_ENGINE = 'searchEngine'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
