@@ -231,7 +231,21 @@ const files = {
             templates: [
                 'account/social/_social-auth.component.ts'
             ]
-        }
+        },
+        {
+            condition: generator => generator.useSass,
+            path: ANGULAR_DIR,
+            templates: [
+                'account/password/_password-strength-bar.scss'
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: ANGULAR_DIR,
+            templates: [
+                'account/password/_password-strength-bar.css'
+            ]
+        },
     ],
     angularAdminModule: [
         {

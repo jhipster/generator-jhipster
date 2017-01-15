@@ -11,6 +11,13 @@ Navbar
     padding: .2em 1em;
 }
 
+.jh-navbar .profile-image {
+    margin: -10px 0px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
 .jh-navbar .dropdown-item.active, .jh-navbar .dropdown-item.active:focus, .jh-navbar .dropdown-item.active:hover {
     background-color: #353d47;
 }
@@ -54,3 +61,23 @@ Navbar
     vertical-align: middle;
 }
 
+/* ==========================================================================
+Logo styles
+========================================================================== */
+.navbar-brand.logo {
+    padding: 5px 15px;
+}
+
+.logo .logo-img {
+    height: 45px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 70px;
+}
+
+.logo-img {
+    height: 100%;
+    background: url("../../../content/images/logo-jhipster.png") no-repeat center center;
+    background-size: contain;
+    width: 100%;
+}

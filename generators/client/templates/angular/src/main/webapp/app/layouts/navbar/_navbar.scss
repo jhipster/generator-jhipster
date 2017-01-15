@@ -10,6 +10,12 @@ Navbar
 .jh-navbar {
     background-color: #353d47;
     padding: .2em 1em;
+    .profile-image {
+        margin: -10px 0px;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+    }
     .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
         background-color: #353d47;
     }
@@ -44,4 +50,21 @@ Navbar
 .navbar-title {
     display: inline-block;
     vertical-align: middle;
+}
+
+/* ==========================================================================
+Logo styles
+========================================================================== */
+.navbar-brand {
+    &.logo {
+        padding: 5px 15px;
+        .logo-img {
+            height: 45px;
+            width: 70px;
+            display: inline-block;
+            vertical-align: middle;
+            background: url("../../../content/images/logo-jhipster.png") no-repeat center center;
+            background-size: contain;
+        }
+    }
 }

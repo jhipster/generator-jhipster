@@ -17,27 +17,6 @@ Browser Upgrade Prompt
 }
 
 /* ==========================================================================
-Logo styles
-========================================================================== */
-.navbar-brand.logo {
-    padding: 5px 15px;
-}
-
-.logo .logo-img {
-    height: 45px;
-    display: inline-block;
-    vertical-align: middle;
-    width: 70px;
-}
-
-.logo-img {
-    height: 100%;
-    background: url("../images/logo-jhipster.png") no-repeat center center;
-    background-size: contain;
-    width: 100%;
-}
-
-/* ==========================================================================
 Generic styles
 ========================================================================== */
 .card {
@@ -49,6 +28,14 @@ Generic styles
 .error {
     color: white;
     background-color: red;
+}
+
+.form-group.has-error {
+    color: red;
+}
+
+.form-group.has-error input {
+    border-color: red;
 }
 
 .pad {
@@ -96,30 +83,6 @@ a:hover {
 
 .hand {
     cursor: pointer;
-}
-
-/* ==========================================================================
-start Password strength bar style
-========================================================================== */
-ul#strengthBar {
-    display:inline;
-    list-style:none;
-    margin:0;
-    margin-left:15px;
-    padding:0;
-    vertical-align:2px;
-}
-
-.point:last {
-    margin:0 !important;
-}
-.point {
-    background:#DDD;
-    border-radius:2px;
-    display:inline-block;
-    height:5px;
-    margin-right:1px;
-    width:20px;
 }
 
 /* ==========================================================================
@@ -250,6 +213,7 @@ ui bootstrap tweaks
 /* ==========================================================================
 Social Buttons
 ========================================================================== */
+
 .jh-btn-social {
     margin-bottom: 5px;
 }
@@ -290,11 +254,4 @@ Social Buttons
     color: #fff;
 }
 <%_ } _%>
-
-.navbar .profile-image{
-    margin: -10px 0px;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-}
 /* jhipster-needle-css-add-main JHipster will add new css style */
