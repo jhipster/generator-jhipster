@@ -1,4 +1,4 @@
-import { Ng2StateDeclaration } from "ui-router-ng2";
+import { Ng2StateDeclaration } from 'ui-router-ng2';
 import { JhiLanguageService } from 'ng-jhipster';
 import { NavbarComponent } from './layouts';
 import { AuthService } from './shared';
