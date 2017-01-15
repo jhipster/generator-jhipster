@@ -1,4 +1,4 @@
-import { Ng2StateDeclaration } from "ui-router-ng2";
+import { Ng2StateDeclaration } from 'ui-router-ng2';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 <%_ } _%>
