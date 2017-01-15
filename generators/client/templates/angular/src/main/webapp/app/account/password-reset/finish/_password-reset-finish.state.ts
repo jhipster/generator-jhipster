@@ -1,4 +1,4 @@
-import { Ng2StateDeclaration } from "ui-router-ng2";
+import { Ng2StateDeclaration } from 'ui-router-ng2';
 import { JhiLanguageService } from 'ng-jhipster';
 import { PasswordResetFinishComponent } from './password-reset-finish.component';
 

@@ -1,4 +1,4 @@
-import { Ng2StateDeclaration } from "ui-router-ng2";
+import { Ng2StateDeclaration } from 'ui-router-ng2';
 
 export const accountState: Ng2StateDeclaration = {
     name: 'account',
