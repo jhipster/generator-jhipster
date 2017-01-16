@@ -245,21 +245,7 @@ const files = {
             templates: [
                 'account/password/_password-strength-bar.css'
             ]
-        },
-        {
-            condition: generator => generator.useSass,
-            path: ANGULAR_DIR,
-            templates: [
-                'account/password/_password-strength-bar.scss'
-            ]
-        },
-        {
-            condition: generator => !generator.useSass,
-            path: ANGULAR_DIR,
-            templates: [
-                'account/password/_password-strength-bar.css'
-            ]
-        },
+        }
     ],
     angularAdminModule: [
         {
