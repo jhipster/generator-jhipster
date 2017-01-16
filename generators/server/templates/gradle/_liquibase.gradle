@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 configurations {
     liquibase
 }
@@ -6,11 +8,35 @@ dependencies {
     liquibase "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
 }
 
+if (OperatingSystem.current().isWindows()) {
+    task pathingLiquibaseJar(type: Jar) {
+        dependsOn configurations.liquibase
+        appendix = 'pathingLiquibase'
+
+        doFirst {
+            manifest {
+                attributes 'Class-Path':
+                    configurations.liquibase.plus(sourceSets.main.runtimeClasspath)
+                    .collect {
+                        it.toURL().toString().replaceFirst(/file:\/+/, '/')
+                    }.join(' ')
+            }
+        }
+    }
+}
+
 task liquibaseDiffChangelog(dependsOn: compileJava, type: JavaExec) {
     group = "liquibase"
 
-    classpath sourceSets.main.runtimeClasspath
-    classpath configurations.liquibase
+    if (OperatingSystem.current().isWindows()) {
+        dependsOn pathingLiquibaseJar
+        doFirst {
+            classpath = files(pathingLiquibaseJar.archivePath)
+        }
+    } else {
+        classpath configurations.liquibase
+        classpath sourceSets.main.runtimeClasspath
+    }
     main = "liquibase.integration.commandline.Main"
 
     args "--changeLogFile=<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/" + buildTimestamp() +"_changelog.xml"
