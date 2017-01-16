@@ -96,11 +96,13 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Field("lang_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "lang_key")<% } %>
     private String langKey;
+    <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
 
     @Size(max = 256)<% if (databaseType == 'sql') { %>
     @Column(name = "image_url", length = 256)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("image_url")<% } %>
     private String imageUrl;
+    <%_ } _%>
 
     @Size(max = 20)<% if (databaseType == 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
@@ -188,6 +190,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public void setEmail(String email) {
         this.email = email;
     }
+    <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
 
     public String getImageUrl() {
         return imageUrl;
@@ -196,6 +199,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    <%_ } _%>
 
     public boolean getActivated() {
         return activated;
@@ -290,8 +294,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
+            ", email='" + email + '\'' +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+            ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +

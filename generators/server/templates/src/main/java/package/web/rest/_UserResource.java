@@ -8,6 +8,7 @@ import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
+import <%=packageName%>.service.dto.UserDTO;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
@@ -128,7 +129,7 @@ public class UserResource {
     @PutMapping("/users")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<ManagedUserVM> updateUser(@RequestBody ManagedUserVM managedUserVM) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody ManagedUserVM managedUserVM) {
         log.debug("REST request to update User : {}", managedUserVM);
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
@@ -138,7 +139,7 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserVM.getId()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("userManagement", "userexists", "Login already in use")).body(null);
         }
-        final Optional<ManagedUserVM> updatedUser = userService.updateUser(managedUserVM);
+        Optional<UserDTO> updatedUser = userService.updateUser(managedUserVM);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert(<% if(enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + managedUserVM.getLogin()<% } %>, managedUserVM.getLogin()));
@@ -153,16 +154,16 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    public ResponseEntity<List<ManagedUserVM>> getAllUsers(@ApiParam Pageable pageable)
+    public ResponseEntity<List<UserDTO>> getAllUsers(@ApiParam Pageable pageable)
         throws URISyntaxException {
-        final Page<ManagedUserVM> page = userService.getAllManagedUsers(pageable);
+        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }<% } else { // Cassandra %>
-    public ResponseEntity<List<ManagedUserVM>> getAllUsers()
+    public ResponseEntity<List<UserDTO>> getAllUsers()
         throws URISyntaxException {
-        final List<ManagedUserVM> managedUserVMs = userService.getAllManagedUsers();
-        return new ResponseEntity<>(managedUserVMs, HttpStatus.OK);
+        final List<UserDTO> userDTOs = userService.getAllManagedUsers();
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }<% } %>
 
     /**
@@ -173,11 +174,11 @@ public class UserResource {
      */
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
-    public ResponseEntity<ManagedUserVM> getUser(@PathVariable String login) {
+    public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
-                .map(ManagedUserVM::new));
+                .map(UserDTO::new));
     }
 
     /**
