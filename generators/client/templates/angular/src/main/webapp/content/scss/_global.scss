@@ -21,6 +21,18 @@ Browser Upgrade Prompt
 /* ==========================================================================
 Generic styles
 ========================================================================== */
+
+/* Error highlight on input fields */
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid green;
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid red;
+}
+
+/* other generic styles */
+
 .card {
     padding: 30px;
     margin-top: 20px;
@@ -30,15 +42,6 @@ Generic styles
 .error {
     color: white;
     background-color: red;
-}
-
-.form-group {
-    &.has-error {
-        color: red;
-        input {
-            border-color: red;
-        }
-    }
 }
 
 .pad {
