@@ -41,7 +41,7 @@ public class ProfileInfoResource {
         List<String> ribbonProfiles = new ArrayList<>(Arrays.asList(displayOnActiveProfiles));
         List<String> springBootProfiles = Arrays.asList(activeProfiles);
         ribbonProfiles.retainAll(springBootProfiles);
-        if (ribbonProfiles.size() > 0) {
+        if (!ribbonProfiles.isEmpty()) {
             return ribbonProfiles.get(0);
         }
         return null;
