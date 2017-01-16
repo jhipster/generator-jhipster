@@ -62,7 +62,6 @@ public class ManagedUserVM extends UserDTO {
         this.id = id;
     }<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
 
-
     public String getCreatedBy() {
         return createdBy;
     }
