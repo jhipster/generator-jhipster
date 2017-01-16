@@ -7,6 +7,9 @@
     queryCount: any;
     reverse: any;
     totalItems: number;
+    <%_ if (searchEngine == 'elasticsearch') { _%>
+    currentSearch: string;
+    <%_ } _%>
     <%_ if (fieldsContainBlob) { _%>
     byteSize: number;
     openFile: any;
@@ -48,7 +51,7 @@
         );
     <%_ } else { _%>
         if (this.currentSearch) {
-            <%= entityClass %>Search.query({
+            this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
                 page: this.page,
                 size: this.itemsPerPage,
@@ -90,13 +93,12 @@
         this.page = 0;
         this.predicate = 'id';
         this.reverse = true;
-        this.searchQuery = null;
         this.currentSearch = null;
         this.loadAll();
     }
 
     search (searchQuery) {
-        if (!searchQuery){
+        if (!searchQuery) {
             return this.clear();
         }
         this.<%= entityInstancePlural %> = [];
