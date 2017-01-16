@@ -28,9 +28,9 @@ public class ProfileInfoResource {
     }
 
     @GetMapping("/profile-info")
-    public ProfileInfoResponse getActiveProfiles() {
+    public ProfileInfoVM getActiveProfiles() {
         String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
-        return new ProfileInfoResponse(activeProfiles, getRibbonEnv(activeProfiles));
+        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));
     }
 
     private String getRibbonEnv(String[] activeProfiles) {
@@ -50,12 +50,21 @@ public class ProfileInfoResource {
         return null;
     }
 
-    class ProfileInfoResponse {
+    class ProfileInfoVM {
 
-        public String[] activeProfiles;
-        public String ribbonEnv;
+        private String[] activeProfiles;
 
-        ProfileInfoResponse(String[] activeProfiles, String ribbonEnv) {
+        private String ribbonEnv;
+
+        public String[] getActiveProfiles() {
+            return activeProfiles;
+        }
+
+        public String getRibbonEnv() {
+            return ribbonEnv;
+        }
+
+        ProfileInfoVM(String[] activeProfiles, String ribbonEnv) {
             this.activeProfiles = activeProfiles;
             this.ribbonEnv = ribbonEnv;
         }
