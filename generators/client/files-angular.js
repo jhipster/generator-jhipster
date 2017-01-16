@@ -384,7 +384,6 @@ const files = {
                 'shared/auth/_auth-jwt.service.ts'
             ]
         },
-                'spec/app/account/password/_password-strength-bar.component.spec.ts',
         {
             condition: generator => generator.authenticationType === 'session',
             path: ANGULAR_DIR,
