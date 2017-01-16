@@ -24,4 +24,8 @@ export class <%= entityAngularJSName %>DetailComponent implements OnInit {
         });
     }
 
+    previousState() {
+        window.history.back();
+    }
+
 }
