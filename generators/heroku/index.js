@@ -5,7 +5,7 @@ var util = require('util'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
     _ = require('lodash'),
-    glob = require("glob"),
+    glob = require('glob'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants');
