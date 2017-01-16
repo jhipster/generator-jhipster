@@ -5,6 +5,7 @@ var util = require('util'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
     _ = require('lodash'),
+    glob = require("glob"),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants');
@@ -311,12 +312,14 @@ module.exports = HerokuGenerator.extend({
             var done = this.async();
             this.log(chalk.bold('\nDeploying application'));
 
-            var herokuDeployCommand = 'heroku deploy:jar target/*.war';
+            var warFileWildcard = 'target/*.war';
             if (this.buildTool === 'gradle') {
-                herokuDeployCommand = 'heroku deploy:jar build/libs/*.war';
+                warFileWildcard = 'build/libs/*.war';
             }
 
-            herokuDeployCommand += ' --app ' + this.herokuAppName;
+            var files = glob.sync(warFileWildcard, {});
+            var warFile = files[0];
+            var herokuDeployCommand = `heroku deploy:jar ${warFile} --app ${this.herokuAppName}`;
 
             this.log(chalk.bold('\nUploading your application code.\nThis may take ' + chalk.cyan('several minutes') + ' depending on your connection speed...'));
             var child = exec(herokuDeployCommand, function (err, stdout) {
