@@ -246,6 +246,20 @@ const files = {
                 'account/password/_password-strength-bar.css'
             ]
         },
+        {
+            condition: generator => generator.useSass,
+            path: ANGULAR_DIR,
+            templates: [
+                'account/password/_password-strength-bar.scss'
+            ]
+        },
+        {
+            condition: generator => !generator.useSass,
+            path: ANGULAR_DIR,
+            templates: [
+                'account/password/_password-strength-bar.css'
+            ]
+        },
     ],
     angularAdminModule: [
         {
@@ -384,6 +398,7 @@ const files = {
                 'shared/auth/_auth-jwt.service.ts'
             ]
         },
+                'spec/app/account/password/_password-strength-bar.component.spec.ts',
         {
             condition: generator => generator.authenticationType === 'session',
             path: ANGULAR_DIR,
@@ -399,6 +414,7 @@ const files = {
                 '_karma.conf.js',
                 'spec/_entry.ts',
                 'spec/app/account/password/_password-strength-bar.component.spec.ts',
+                'spec/app/account/settings/_settings.controller.spec.js',
                 'spec/app/admin/health/_health.component.spec.ts',
                 'spec/helpers/_spyobject.ts'
             ]
