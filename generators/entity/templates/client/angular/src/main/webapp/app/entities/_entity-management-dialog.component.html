@@ -1,6 +1,6 @@
 
 <% var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; %>
-<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm" <% if (validation) { %> show-validation<% } %>>
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
