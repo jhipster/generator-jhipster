@@ -7,8 +7,6 @@ export const gatewayRoute: Route = {
   path: 'gateway',
   component: <%=jhiPrefixCapitalized%>GatewayComponent,
   data: {
-    authorities: ['ROLE_ADMIN'],
     pageTitle: 'gateway.title'
-  },
-  canActivate: [UserRouteAccessService]
+  }
 };

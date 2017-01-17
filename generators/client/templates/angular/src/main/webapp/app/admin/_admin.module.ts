@@ -5,6 +5,7 @@ import { ParseLinks } from 'ng-jhipster';
 import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import {
+    adminState,
     AuditsComponent,
     <%_ if (!skipUserManagement) { _%>
     UserMgmtComponent,
@@ -27,50 +28,24 @@ import {
     <%_ if (applicationType === 'gateway') { _%>
     GatewayRoutesService,
     <%=jhiPrefixCapitalized%>GatewayComponent,
-    gatewayState,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerComponent,
-    trackerState,
     TrackerResolve,
     <%_ } _%>
     LogsService,
-    auditsRoute,
-    configurationRoute,
-    docsRoute,
-    healthRoute,
-    logsRoute,
     <%_ if (!skipUserManagement) { _%>
-    userMgmtRoute,
     UserResolvePagingParams,
     UserResolve,
-    UserModalService,
+    UserModalService
     <%_ } _%>
-    metricsRoute
 } from './';
 
-let ADMIN_STATES = [
-    auditsRoute,
-    configurationRoute,
-    docsRoute,
-    healthRoute,
-    logsRoute,
-    <%_ if (applicationType === 'gateway') { _%>
-    gatewayRoute,
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
-    trackerRoute,
-    <%_ } _%>
-    <%_ if (!skipUserManagement) { _%>
-    ...userMgmtRoute,
-    <%_ } _%>
-    metricsRoute
-];
 
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        RouterModule.forRoot(ADMIN_STATES, { useHash: true })
+        RouterModule.forRoot(adminState, { useHash: true })
     ],
     declarations: [
         AuditsComponent,

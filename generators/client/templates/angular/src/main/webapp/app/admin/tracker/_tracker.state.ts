@@ -8,10 +8,8 @@ export const trackerRoute: Route = {
   path: 'jhi-tracker',
   component: <%=jhiPrefixCapitalized%>TrackerComponent,
   data: {
-    authorities: ['ROLE_ADMIN'],
     pageTitle: 'tracker.title'
-  },
-  canActivate: [UserRouteAccessService]
+  }
 };
 
 // onEnter: (trans: Transition) => {

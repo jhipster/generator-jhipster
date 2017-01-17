@@ -12,7 +12,6 @@ import {
     <%_ if (authenticationType === 'session') { _%>
     SessionsService,
     SessionsComponent,
-    sessionsRoute,
     <%_ } _%>
     PasswordStrengthBarComponent,
     RegisterComponent,
@@ -21,45 +20,19 @@ import {
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
     SettingsComponent,
-    settingsRoute,
-    activateRoute,
-    passwordRoute,
-    passwordResetFinishRoute,
-    passwordResetInitRoute,
-    registerRoute,
     <%_ if (enableSocialSignIn) { _%>
     SocialRegisterComponent,
-    socialRegisterRoute,
         <%_ if (authenticationType == 'jwt') { _%>
     SocialAuthComponent,
-    socialAuthRoute,
         <%_ } _%>
     <%_ } _%>
     accountState
 } from './';
 
-let ACCOUNT_ROUTES = [
-   activateRoute,
-   passwordRoute,
-   passwordResetFinishRoute,
-   passwordResetInitRoute,
-   registerRoute,
-    <%_ if (authenticationType === 'session') { _%>
-   sessionsRoute,
-    <%_ } _%>
-    <%_ if (enableSocialSignIn) { _%>
-    <%_ if (authenticationType == 'jwt') { _%>
-    socialAuthRoute,
-        <%_ } _%>
-   socialRegisterRoute,
-    <%_ } _%>
-   settingsRoute
-];
-
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        RouterModule.forRoot(ACCOUNT_ROUTES, { useHash: true })
+        RouterModule.forRoot(accountState, { useHash: true })
     ],
     declarations: [
         <%_ if (enableSocialSignIn) { _%>
