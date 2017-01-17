@@ -14,15 +14,19 @@ import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 <%_ if (service == 'no') { _%>
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
-<%_ } } _%><% if (pagination != 'no') { %>
-import io.swagger.annotations.ApiParam;<% } %>
+<%_ } } _%>
+<%_ if (pagination != 'no') { _%>
+import io.swagger.annotations.ApiParam;
+<%_ } _%>
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
+import org.slf4j.LoggerFactory;
+<%_ if (pagination != 'no') { _%>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;<% } %>
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+<%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 <% if (validation) { %>
