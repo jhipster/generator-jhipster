@@ -88,7 +88,7 @@ module.exports = function (options) {
             }),
             new webpack.DllReferencePlugin({
                 context: './',
-                manifest: require(path.resolve('./target/www/vendor.json')),
+                manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json')),
             }),
             new CopyWebpackPlugin([
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },

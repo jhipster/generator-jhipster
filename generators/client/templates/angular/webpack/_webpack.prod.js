@@ -8,7 +8,7 @@ const ENV = 'prod';
 module.exports = webpackMerge(commonConfig({env: ENV}), {
         devtool: 'cheap-module-source-map',
         output: {
-        path: <% if (buildTool === 'gradle') { %>'./build/www'<% } else { %>'./target/www'<% } %>,
+        path: './<%= BUILD_DIR %>www',
         filename: '[hash].[name].bundle.js',
         chunkFilename: '[hash].[id].chunk.js'
     },

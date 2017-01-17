@@ -6,11 +6,18 @@ const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const ENV = 'dev';
+const execSync = require('child_process').execSync;
+const fs = require('fs');
+const ddlPath = './<%= BUILD_DIR %>www/vendor.json';
+
+if (!fs.existsSync(ddlPath)) {
+    execSync('webpack --config webpack/webpack.vendor.js');
+}
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
     devtool: 'cheap-module-source-map',
     devServer: {
-        contentBase: './target/www',
+        contentBase: '.<%= BUILD_DIR %>www',
         proxy: [{
             context: [<% if (authenticationType == 'oauth2') { %>
                 '/oauth',<% } %>
@@ -25,7 +32,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         }]
     },
     output: {
-        path: path.resolve(<% if (buildTool === 'gradle') { %>'./build/www')<% } else { %>'./target/www')<% } %>,
+        path: path.resolve('<%= BUILD_DIR %>www') ,
         filename: '[name].bundle.js',
         chunkFilename: '[id].chunk.js'
     },
@@ -42,7 +49,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
-            proxy: 'http://localhost:8090'
+            proxy: 'http://localhost:9002'
         }, {
             reload: false
         }),

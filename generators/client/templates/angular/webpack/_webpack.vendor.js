@@ -54,13 +54,13 @@ module.exports = {
     },
     output: {
         filename: '[name].dll.js',
-        path: './target/www',
+        path: './<%= BUILD_DIR %>www',
         library: '[name]',
     },
     plugins: [
         new webpack.DllPlugin({
             name: '[name]',
-            path: './target/www/[name].json',
+            path: './<%= BUILD_DIR %>www/[name].json',
         }),
     ]
 };
