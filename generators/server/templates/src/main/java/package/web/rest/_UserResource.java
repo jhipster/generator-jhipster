@@ -99,7 +99,7 @@ public class UserResource {
     @PostMapping("/users")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<?> createUser(@RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
+    public ResponseEntity createUser(@RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserVM);
 
         //Lowercase the user login before comparing with database
