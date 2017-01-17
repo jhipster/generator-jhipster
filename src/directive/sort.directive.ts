@@ -37,7 +37,7 @@ export class JhiSortDirective {
     constructor(el: ElementRef, renderer: Renderer) {
         this.element = el.nativeElement;
         let config = ConfigHelper.getConfig();
-        this.sortIcon = config.sortIconSelector;
+        this.sortIcon = config.sortIcon;
         this.sortAscIcon = config.sortAscIcon;
         this.sortDescIcon = config.sortDescIcon;
         this.sortIconSelector = config.sortIconSelector;
@@ -58,7 +58,8 @@ export class JhiSortDirective {
 
     private resetClasses() {
         let allThIcons = this.element.querySelectorAll(this.sortIconSelector)[0];
-        allThIcons.classList.remove(this.sortAscIcon + ' ' + this.sortDescIcon);
+        allThIcons.classList.remove(this.sortAscIcon);
+        allThIcons.classList.remove(this.sortDescIcon);
         allThIcons.classList.add(this.sortIcon);
     };
 }
