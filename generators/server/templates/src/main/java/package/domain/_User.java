@@ -117,7 +117,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key")<% } %>
     private String resetKey;<%if (databaseType == 'sql') {%>
 
-    @Column(name = "reset_date", nullable = true)
+    @Column(name = "reset_date")
     private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
 
     @Field("reset_date")
