@@ -19,6 +19,7 @@ public class LoggerVM {
 
     @JsonCreator
     public LoggerVM() {
+        // Empty public constructor used by Jackson.
     }
 
     public String getName() {
