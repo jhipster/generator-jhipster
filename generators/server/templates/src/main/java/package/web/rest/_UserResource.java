@@ -63,7 +63,7 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    private final static String ENTITY_NAME = "userManagement";
+    private static final String ENTITY_NAME = "userManagement";
 
     private final UserRepository userRepository;
 
