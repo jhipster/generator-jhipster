@@ -44,6 +44,8 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
+
+    private final static String ENTITY_NAME = "<%= entityInstance %>";
     <% var viaService = service != 'no';
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
@@ -61,10 +63,10 @@ public class <%= entityClass %>Resource {
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("<%= entityInstance %>", "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
         }<%- include('../../common/save_template', {viaService: viaService}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -85,7 +87,7 @@ public class <%= entityClass %>Resource {
             return create<%= entityClass %>(<%= instanceName %>);
         }<%- include('../../common/save_template', {viaService: viaService}); -%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("<%= entityInstance %>", <%= instanceName %>.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
     }
 
@@ -123,7 +125,7 @@ public class <%= entityClass %>Resource {
     @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("<%= entityInstance %>", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
