@@ -27,7 +27,8 @@ export class RegisterComponent implements OnInit {
         private loginModalService: LoginModalService,
         private registerService: Register,
         private elementRef: ElementRef,
-        private renderer: Renderer) {
+        private renderer: Renderer
+    ) {
         <%_ if (enableTranslation) { _%>
         this.languageService.setLocations(['register']);
         <%_ } _%>

@@ -18,7 +18,8 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
         private modalService: NgbModal, 
-        private healthService: <%=jhiPrefixCapitalized%>HealthService) {
+        private healthService: <%=jhiPrefixCapitalized%>HealthService
+    ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['health']);
         <%_ } _%>

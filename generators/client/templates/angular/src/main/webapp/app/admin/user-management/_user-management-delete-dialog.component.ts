@@ -19,7 +19,8 @@ export class UserMgmtDeleteDialogComponent {
         <%_ } _%>
         private userService: UserService,
         public activeModal: NgbActiveModal,
-        private eventManager: EventManager) {
+        private eventManager: EventManager
+    ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['user-management']);
         <%_ } _%>

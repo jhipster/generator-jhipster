@@ -14,7 +14,8 @@ export class SocialRegisterComponent implements OnInit  {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        @Inject('$stateParams') private $stateParams) {
+        @Inject('$stateParams') private $stateParams
+    ) {
         <%_ if (enableTranslation) { _%>
         this.languageService.setLocations(['social']);
         <%_ } _%>

@@ -21,7 +21,8 @@ export class SessionsComponent implements OnInit {
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
         private sessionsService: SessionsService,
-        private principal: Principal) {
+        private principal: Principal
+    ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['sessions']);
         <%_ } _%>

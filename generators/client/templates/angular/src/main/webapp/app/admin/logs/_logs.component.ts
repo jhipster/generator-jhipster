@@ -19,7 +19,8 @@ export class LogsComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private logsService: LogsService ) {
+        private logsService: LogsService
+    ) {
         this.filter = '';
         this.orderProp = 'name';
         this.reverse = false;

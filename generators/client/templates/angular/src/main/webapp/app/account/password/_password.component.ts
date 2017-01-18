@@ -21,7 +21,8 @@ export class PasswordComponent implements OnInit {
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
         private passwordService: Password,
-        private principal: Principal) {
+        private principal: Principal
+    ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['password']);
         <%_ } _%>

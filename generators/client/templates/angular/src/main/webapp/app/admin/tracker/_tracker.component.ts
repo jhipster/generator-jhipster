@@ -15,7 +15,8 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private trackerService: <%=jhiPrefixCapitalized%>TrackerService) {
+        private trackerService: <%=jhiPrefixCapitalized%>TrackerService
+    ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['tracker']);
         <%_ } _%>

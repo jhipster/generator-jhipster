@@ -18,7 +18,8 @@ export class <%=jhiPrefixCapitalized%>GatewayComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private gatewayRoutesService: GatewayRoutesService) {
+        private gatewayRoutesService: GatewayRoutesService
+    ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['gateway']);
         <%_ } _%>
