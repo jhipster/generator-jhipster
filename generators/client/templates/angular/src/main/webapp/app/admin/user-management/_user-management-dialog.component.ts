@@ -63,6 +63,7 @@ export class UserMgmtDialogComponent implements OnInit {
         this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
+        this.router.navigate([{ outlets: { popup: null }}]);
     }
 
     private onSaveError() {

@@ -44,11 +44,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
         var navbarPath;
         if (this.clientFramework === 'angular1') {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
-        } else {
-            navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
-        }
-
-        jhipsterUtils.rewriteFile({
+            jhipsterUtils.rewriteFile({
             file: navbarPath,
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [`<li ui-sref-active="active">
@@ -59,6 +55,22 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
                         </li>`
             ]
         }, this);
+        } else {
+            navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+            jhipsterUtils.rewriteFile({
+            file: navbarPath,
+            needle: 'jhipster-needle-add-element-to-menu',
+            splicable: [`<li routerLinkActive="active">
+                            <a routerLink="${routerName}" routerLinkActive="active" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                            </a>
+                        </li>`
+            ]
+        }, this);
+        }
+
+        
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
@@ -173,17 +185,20 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             splicable: [`export * from './${entityFolderName}/${entityFileName}.service';`
             ]
         }, this);
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-popup-service-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}-popup.service';`
+            ]
+        }, this);
 
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-states',
             splicable: [
                 this.stripMargin(
-                    `|${entityInstance}State,
-                     |    ${entityInstance}NewState,
-                     |    ${entityInstance}DetailState,
-                     |    ${entityInstance}EditState,
-                     |    ${entityInstance}DeleteState,`
+                    `|...${entityInstance}Route,
+                     |    ...${entityInstance}PopupRoute,`
                 )
             ]
         }, this);
@@ -194,7 +209,9 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             splicable: [
                 this.stripMargin(
                     `|${entityAngularJSName}DialogComponent,
-                     |        ${entityAngularJSName}DeleteDialogComponent,`
+                     |        ${entityAngularJSName}PopupComponent,
+                     |        ${entityAngularJSName}DeleteDialogComponent,
+                     |        ${entityAngularJSName}DeletePopupComponent,`
                 )
             ]
         }, this);
@@ -207,7 +224,9 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
                     `|${entityAngularJSName}Component,
                      |        ${entityAngularJSName}DetailComponent,
                      |        ${entityAngularJSName}DialogComponent,
-                     |        ${entityAngularJSName}DeleteDialogComponent,`
+                     |        ${entityAngularJSName}DeleteDialogComponent,
+                     |        ${entityAngularJSName}PopupComponent,
+                     |        ${entityAngularJSName}DeletePopupComponent,`
                 )
             ]
         }, this);
@@ -215,7 +234,12 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-providers',
-            splicable: [`${entityClass}Service,`]
+            splicable: [
+                this.stripMargin(
+                    `|${entityClass}Service,
+                     |        ${entityClass}PopupService,`
+                )
+            ]
         }, this);
 
         jhipsterUtils.rewriteFile({
@@ -223,16 +247,16 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             needle: 'jhipster-needle-add-entity-to-module-import',
             splicable: [
                 this.stripMargin(
-                    `|${entityClass}Service,
+                    `|${entityAngularJSName}Service,
+                     |    ${entityAngularJSName}PopupService,
                      |    ${entityAngularJSName}Component,
                      |    ${entityAngularJSName}DetailComponent,
                      |    ${entityAngularJSName}DialogComponent,
+                     |    ${entityAngularJSName}PopupComponent,
+                     |    ${entityAngularJSName}DeletePopupComponent,
                      |    ${entityAngularJSName}DeleteDialogComponent,
-                     |    ${entityInstance}State,
-                     |    ${entityInstance}DetailState,
-                     |    ${entityInstance}NewState,
-                     |    ${entityInstance}EditState,
-                     |    ${entityInstance}DeleteState,`
+                     |    ${entityInstance}Route,
+                     |    ${entityInstance}PopupRoute,`
                 )
             ]
         }, this);

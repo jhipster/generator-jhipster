@@ -38,7 +38,6 @@ export class UserResolvePagingParams implements Resolve<any> {
   }
 }
 
-
 export const userMgmtRoute: Routes = [
   {
     path: 'user-management',
