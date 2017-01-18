@@ -6,7 +6,7 @@ const Visualizer = require('webpack-visualizer-plugin');
 const ENV = 'prod';
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
-        devtool: 'cheap-module-source-map',
+        devtool: 'source-map',
         output: {
         path: './<%= BUILD_DIR %>www',
         filename: '[hash].[name].bundle.js',
