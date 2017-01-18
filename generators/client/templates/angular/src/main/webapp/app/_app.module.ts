@@ -1,3 +1,4 @@
+import './vendor.ts';
 <%_ if (authenticationType === 'uaa') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>

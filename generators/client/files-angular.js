@@ -21,7 +21,8 @@ const files = {
                 '_angular-cli.json',
                 'webpack/_webpack.common.js',
                 'webpack/_webpack.dev.js',
-                'webpack/_webpack.prod.js'
+                'webpack/_webpack.prod.js',
+                'webpack/_webpack.vendor.js'
             ]
         }
     ],

@@ -40,9 +40,11 @@
     "@types/angular-animate": "1.5.6",
     "@types/angular-mocks": "1.5.8",
     "@types/jasmine": "2.5.38",
+    "@types/node": "6.0.45",
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "2.53.33",
     <%_ } _%>
+    "add-asset-html-webpack-plugin": "1.0.2",
     "angular2-infinite-scroll": "0.2.8",
     "angular-cli": "1.0.0-beta.24",
     "angular2-template-loader": "0.6.0",
@@ -93,7 +95,10 @@
     "tslint-loader": "3.3.0",
     "typescript": "2.1.4",
     "webpack": "2.2.0-rc.3",
+    "webpack-dev-server": "2.2.0-rc.0",
     "webpack-merge": "2.0.0",
+    "webpack-visualizer-plugin": "0.1.9",
+    "write-file-webpack-plugin": "3.4.2",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.17",
     <%_ } _%>
@@ -112,15 +117,17 @@
     "test": "karma start src/test/javascript/karma.conf.js",
     "test:watch": "karma start --watch",
     <%_ if (protractorTests) { _%>
-    "postinstall": "webdriver-manager update",
+    "postinstall": "webdriver-manager update && npm run webpack:build",
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    <%_ } else { _%>
+    "postinstall": "npm run webpack:build",
     <%_ } _%>
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
-    "webpack:build": "webpack --config webpack/webpack.dev.js",
-    "webpack:dev": "webpack --watch --config webpack/webpack.dev.js",
-    "webpack:prod": "webpack -p --config webpack/webpack.prod.js"
+    "webpack:build": "webpack --config webpack/webpack.vendor.js && webpack --config webpack/webpack.dev.js",
+    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9060",
+    "webpack:prod": "webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js"
   }
 }
