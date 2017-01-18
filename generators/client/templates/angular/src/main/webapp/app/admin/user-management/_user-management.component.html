@@ -9,8 +9,8 @@
     <div class="table-responsive" *ngIf="users">
         <table class="table table-striped">
             <thead>
-            <tr<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>Sort predicate="predicate" ascending="reverse" callback="transition"<% } %>>
-                <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="fa fa-sort"></span><%_ } _%></th>
+            <tr<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>Sort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)"<% } %>>
+            <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><%_ if (databaseType !== 'cassandra') { _%> <span class="fa fa-sort"></span><%_ } _%></th>
                 <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="login"<% } %>><span jhiTranslate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th<% if (databaseType !== 'cassandra') { %> <%=jhiPrefix%>SortBy="email"<% } %>><span jhiTranslate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <span class="fa fa-sort"></span><% } %></th>
                 <th></th>

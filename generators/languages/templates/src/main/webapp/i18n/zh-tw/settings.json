@@ -11,20 +11,20 @@
         },
         "messages": {
             "error": {
-                "fail": "<strong>發生錯誤!</strong> 設定無法被儲存.",
-                "emailexists": "<strong>E-mail 已經存在!</strong> 請使用其他E-mail."
+                "fail": "<strong>發生錯誤!</strong> 設定無法儲存。",
+                "emailexists": "<strong>E-mail 已經存在!</strong> 請使用其他 E-mail。"
             },
             "success": "<strong>設定儲存成功!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "您的名字是必填欄位.",
-                    "minlength": "您的名字長度至少要有1個字元",
-                    "maxlength": "您的名字長度不能超過50個字元"
+                    "required": "您的名字是必填欄位。",
+                    "minlength": "您的名字至少要有 1 個字元",
+                    "maxlength": "您的名字不能超過 50 個字元"
                 },
                 "lastname": {
-                    "required": "您的姓氏是必填欄位.",
-                    "minlength": "您的姓氏長度至少要有1個字元",
-                    "maxlength": "您的姓氏長度不能超過50個字元"
+                    "required": "您的姓氏是必填欄位。",
+                    "minlength": "您的姓氏至少要有 1 個字元",
+                    "maxlength": "您的姓氏不能超過 50 個字元"
                 }
             }
         }

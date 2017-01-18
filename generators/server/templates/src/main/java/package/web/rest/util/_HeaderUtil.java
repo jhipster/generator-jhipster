@@ -10,6 +10,10 @@ import org.springframework.http.HttpHeaders;
 public final class HeaderUtil {
 
     private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
+    <%_ if (enableTranslation) { _%>
+
+    private static final String APPLICATION_NAME = "<%= angularAppName %>";
+    <%_ } _%>
 
     private HeaderUtil() {
     }
@@ -21,10 +25,10 @@ public final class HeaderUtil {
         return headers;
     }
 <%
-    if(enableTranslation) {
-        var createdMessage = '"' + angularAppName + '." + entityName + ".created"';
-        var updatedMessage = '"' + angularAppName + '." + entityName + ".updated"';
-        var deletedMessage = '"' + angularAppName + '." + entityName + ".deleted"';
+    if (enableTranslation) {
+        var createdMessage = 'APPLICATION_NAME + "." + entityName + ".created"';
+        var updatedMessage = 'APPLICATION_NAME + "." + entityName + ".updated"';
+        var deletedMessage = 'APPLICATION_NAME + "." + entityName + ".deleted"';
         var errorMessage = '"error." + errorKey';
     } else {
         var createdMessage = '"A new " + entityName + " is created with identifier " + param';

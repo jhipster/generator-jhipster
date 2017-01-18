@@ -19,7 +19,7 @@ import java.util.Date;<% } %>
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
- * @see <%=packageName%>.security.CustomPersistentRememberMeServices
+ * @see <%=packageName%>.security.PersistentTokenRememberMeServices
  */<% if (databaseType == 'sql') { %>
 @Entity
 @Table(name = "jhi_persistent_token")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>

@@ -1,10 +1,10 @@
 # <%= baseName %>
 
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
-<%_ if (applicationType == 'gateway' || applicationType == 'microservice' || applicationType == 'uaa') { _%>
+<%_ if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 
 This is a "<%= applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
-<% if (applicationType == 'uaa') { %>
+<% if (applicationType === 'uaa') { %>
 This is also a JHipster User Account and Authentication (UAA) Server, refer to [Using UAA for Microservice Security][] for details on how to secure JHipster microservices with OAuth2.<% } %>
 <%_ } _%>
 <%_ if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
@@ -23,29 +23,113 @@ To start your application in the dev profile, simply run:
 Before you can build this project, you must install and configure the following dependencies on your machine:
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
+<%_ if (clientPackageManager === 'yarn') { _%>
+2. [Yarn][]: We use Yarn to manage Node dependencies.
+   Depending on your system, you can install Yarn either from source or as a pre-packaged bundle.
+<%_ } _%>
 
-After installing Node, you should be able to run the following command to install development tools (like
-[Bower][] and [BrowserSync][]). You will only need to run this command when dependencies change in package.json.
+After installing Node, you should be able to run the following command to install development tools.
+You will only need to run this command when dependencies change in `package.json`.
 
+<%_ if (clientPackageManager === 'yarn') { _%>
+    yarn install
+<%_ } else { _%>
     npm install
+<%_ } _%>
 
+<%_ if (clientFramework === 'angular2') { _%>
+We use npm scripts and [Webpack][] as our build system.
+<%_ } else { _%>
 We use [Gulp][] as our build system. Install the Gulp command-line tool globally with:
-
+    
+<%_ if (clientPackageManager === 'yarn') { _%>
+    yarn global add gulp-cli
+<%_ } else { _%>
     npm install -g gulp-cli
+<%_ } _%>
+<%_ } _%>
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 <% if (buildTool == 'maven') { %>
     ./mvnw<% } %><% if (buildTool == 'gradle') { %>
     ./gradlew<% } %>
+<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientPackageManager === 'yarn') { _%>
+    yarn run webpack:dev
+
+[Yarn][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+specifying a newer version in `package.json`. You can also run `yarn update` and `yarn install` to manage dependencies.
+Add the `help` flag on any command to see how you can use it. For example, `yarn help update`.
+
+The `yarn run` command will list all of the scripts available to run for this project.
+
+### Managing dependencies
+
+For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
+
+    yarn add --exact leaflet
+
+To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
+
+    yarn add --dev --exact @types/leaflet
+<%_ } else { _%>
+    npm run webpack:dev
+
+Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+specifying a newer version in `package.json`. You can also run `npm update` and `npm install` to manage dependencies.
+Add the `-h` flag on any command to see how you can use it. For example, `npm update -h`.
+
+The `npm run` command will list all of the scripts available to run for this project.
+
+For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
+
+    npm install --save --save-exact leaflet`
+
+To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
+
+    npm install --save-dev --save-exact @types/leaflet
+<%_ } _%>
+
+Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
+
+Edit `src/main/webapp/app/vendor.ts`file:
+~~~
+import 'leaflet/dist/leaflet.js';
+~~~
+
+Edit `src/main/webapp/content/css/vendor.css` file:
+~~~
+@import '~leaflet/dist/leaflet.css';
+~~~
+
+Note: there are still few other things remaining to do for Leaflet that we won't detail here.
+<%_ } else { _%>
     gulp
 
-Bower is used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+[Bower][] is used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in `bower.json`. You can also run `bower update` and `bower install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
 <%_ } _%>
+<%_ } _%>
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+
+<%_ if (clientFramework === 'angular2') { _%>
+### Using angular-cli
+
+You can also use [Angular CLI][] to generate some custom client code.
+
+For example, the following command:
+
+    ng generate component my-component
+
+will generate few files:
+
+   create src/main/webapp/app/my-component/my-component.component.html
+   create src/main/webapp/app/my-component/my-component.component.ts
+   update src/main/webapp/app/app.module.ts
+<%_ } _%>
 
 ## Building for production
 
@@ -76,7 +160,14 @@ To launch your application's tests, run:
 
 Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in `<%= CLIENT_TEST_SRC_DIR %>` and can be run with:
 
+<%_ if (clientFramework === 'angular2') { _%>
+<%_ if (clientPackageManager === 'yarn') { _%>
+    yarn test
+<%_ } else { _%>
+    npm run test
+<%_ } _%><%_ } else { _%>
     gulp test
+<%_ } _%>
 
 <% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
@@ -133,10 +224,18 @@ To set up a CI environment, consult the [Setting up Continuous Integration][] pa
 <% if (testFrameworks.indexOf("gatling") > -1) { %>[Gatling]: http://gatling.io/<% } %>
 <%_ if(!skipClient) {_%>
 [Node.js]: https://nodejs.org/
+[Yarn]: https://yarnpkg.org/
+<%_ if (clientFramework === 'angular2') { _%>
+[Webpack]: https://webpack.github.io/
+[Angular CLI]: https://cli.angular.io/
+<%_ } else { _%>
 [Bower]: http://bower.io/
 [Gulp]: http://gulpjs.com/
+<%_ } _%>
 [BrowserSync]: http://www.browsersync.io/
 [Karma]: http://karma-runner.github.io/
 [Jasmine]: http://jasmine.github.io/2.0/introduction.html
 [Protractor]: https://angular.github.io/protractor/
+[Leaflet]: http://leafletjs.com/
+[DefinitelyTyped]: http://definitelytyped.org/
 <%_ } _%>
