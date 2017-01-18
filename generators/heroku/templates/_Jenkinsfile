@@ -48,8 +48,9 @@ node {
         }
 
     <%_ } _%>
-        stage('packaging') {
-            sh "./mvnw package -Pprod -DskipTests"
+        stage('package and deploy') {
+             // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
+            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
             archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
         }
 
@@ -89,6 +90,11 @@ node {
         stage('packaging') {
             sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall"
             archiveArtifacts artifacts: '**/build/*.war', fingerprint: true
+        }
+
+        stage('deployment') {
+            // Fill with your Heroku API key (get it at https://dashboard.heroku.com/account)
+            sh "HEROKU_API_KEY=\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx\" ./gradlew deployHeroku"
         }
 
 <%_ } _%>
