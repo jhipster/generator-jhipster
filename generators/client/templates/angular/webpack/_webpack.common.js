@@ -108,7 +108,7 @@ module.exports = function (options) {
                 data: DATAS
             }),
             new AddAssetHtmlPlugin([
-                { filepath: path.resolve('./target/www/vendor.dll.js'), includeSourcemap: false }
+                { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
             ]),
             new StringReplacePlugin()
         ]
