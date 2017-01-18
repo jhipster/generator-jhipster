@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
@@ -7,7 +7,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../../shared';
     selector: '<%=jhiPrefix%>-tracker',
     templateUrl: './tracker.component.html'
 })
-export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
+export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDestroy {
 
     activities: any[] = [];
 
@@ -40,9 +40,14 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.trackerService.subscribe();
         this.trackerService.receive().subscribe(activity => {
             this.showActivity(activity);
         });
+    }
+
+    ngOnDestroy() {
+        this.trackerService.unsubscribe();
     }
 
 }

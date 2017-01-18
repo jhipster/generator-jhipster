@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -17,7 +17,7 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
     selector: '<%=jhiPrefix%>-user-mgmt',
     templateUrl: './user-management.component.html'
 })
-export class UserMgmtComponent implements OnInit {
+export class UserMgmtComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     users: User[];
@@ -25,6 +25,7 @@ export class UserMgmtComponent implements OnInit {
     success: any;
     modalRef: NgbModalRef;
     <%_ if (databaseType !== 'cassandra') { _%>
+    routeData: any;
     links: any;
     totalItems: any;
     queryCount: any;
@@ -52,7 +53,7 @@ export class UserMgmtComponent implements OnInit {
         private userModalService: UserModalService
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
-        this.activatedRoute.data.subscribe(data => {
+        this.routeData = this.activatedRoute.data.subscribe(data => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
             this.reverse = data['pagingParams'].reverse;
@@ -70,6 +71,10 @@ export class UserMgmtComponent implements OnInit {
             this.loadAll();
             this.registerChangeInUsers();
         });
+    }
+
+    ngOnDestroy() {
+        this.routeData.unsubscribe();
     }
 
     registerChangeInUsers() {

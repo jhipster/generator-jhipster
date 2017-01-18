@@ -10,8 +10,8 @@ export const socialRegisterRoute: Route = {
     url: 'social-register/:provider?{success:boolean}',
     component: SocialRegisterComponent,
     data: {
-      authorities: [],
-      pageTitle: 'social.register.title'
+        authorities: [],
+        pageTitle: 'social.register.title'
     },
     canActivate: [UserRouteAccessService]
 };
@@ -21,8 +21,8 @@ export const socialAuthRoute: Route = {
         url: 'social-auth',
         component: SocialAuthComponent,
     data: {
-      authorities: [],
-      pageTitle: 'social.register.title'
+        authorities: [],
+        pageTitle: 'social.register.title'
     },
     canActivate: [UserRouteAccessService]
 };

@@ -11,10 +11,3 @@ export const trackerRoute: Route = {
     pageTitle: 'tracker.title'
   }
 };
-
-// onEnter: (trans: Transition) => {
-//     trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).subscribe();
-// },
-// onExit: (trans: Transition) => {
-//     trans.injector().get(<%=jhiPrefixCapitalized%>TrackerService).unsubscribe();
-// }
