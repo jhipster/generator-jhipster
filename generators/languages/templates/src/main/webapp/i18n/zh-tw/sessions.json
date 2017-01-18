@@ -1,15 +1,15 @@
 {
     "sessions": {
-        "title": "[<b>{{username}} 使用中的 Sessions</b>]",
+        "title": "[<b>{{username}} 使用中的工作階段</b>]",
         "table": {
             "ipaddress": "IP 位址",
             "useragent": "使用者代理",
             "date": "日期",
-            "button": "失效"
+            "button": "強制失效"
         },
         "messages": {
-            "success": "<strong>Session 已失效!</strong>",
-            "error": "<strong>錯誤發生!</strong> 無法使 Session 失效."
+            "success": "<strong>工作階段已失效!</strong>",
+            "error": "<strong>發生錯誤!</strong> 無法使工作階段失效。"
         }
     }
 }
