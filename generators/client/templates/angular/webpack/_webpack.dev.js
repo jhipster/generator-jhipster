@@ -15,7 +15,7 @@ if (!fs.existsSync(ddlPath)) {
 }
 
 module.exports = webpackMerge(commonConfig({env: ENV}), {
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'inline-source-map',
     devServer: {
         contentBase: './<%= BUILD_DIR %>www',
         proxy: [{
