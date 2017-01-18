@@ -284,6 +284,7 @@ function askForAdminPassword() {
 
     this.prompt(prompts).then(function(props) {
         this.adminPassword = props.adminPassword;
+        this.adminPasswordBase64 = new Buffer(this.adminPassword).toString('base64');
         done();
     }.bind(this));
 }
