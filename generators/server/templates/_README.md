@@ -56,11 +56,13 @@ auto-refreshes when files change on your hard drive.
     ./gradlew<% } %>
 <%_ if (clientFramework === 'angular2') { _%>
 <%_ if (clientPackageManager === 'yarn') { _%>
-    yarn webpack:dev
+    yarn run webpack:dev
 
 [Yarn][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in `package.json`. You can also run `yarn update` and `yarn install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `yarn help update`.
+
+The `yarn run` command will list all of the scripts available to run for this project.
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
@@ -75,6 +77,8 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in `package.json`. You can also run `npm update` and `npm install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `npm update -h`.
+
+The `npm run` command will list all of the scripts available to run for this project.
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
@@ -96,6 +100,8 @@ Edit `src/main/webapp/content/css/vendor.css` file:
 ~~~
 @import '~leaflet/dist/leaflet.css';
 ~~~
+
+Note: there are still few other things remaining to do for Leaflet that we won't detail here.
 <%_ } else { _%>
     gulp
 
