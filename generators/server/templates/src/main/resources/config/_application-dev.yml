@@ -201,14 +201,14 @@ jhipster:
             app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
-    cache: # Hibernate 2nd level cache, used by CacheConfiguration
+    cache: # Cache configuration
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
-        hazelcast:
+        hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
         <%_ } _%>
         <%_ if (hibernateCache == 'ehcache') { _%>
-        ehcache:
+        ehcache: # Hibernate 2nd level cache
             max-bytes-local-heap: 16M
         <%_ } _%>
     <%_ } _%>

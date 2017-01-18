@@ -222,6 +222,7 @@ dependencies {
     <%_ } _%>
     <%_ if (clusteredHttpSession === 'hazelcast' && hibernateCache != 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast:${hazelcast_version}"
+    compile "com.hazelcast:hazelcast-spring:${hazelcast_version}"
     <%_ } _%>
     <%_ if (clusteredHttpSession === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast-wm:${hazelcast_version}"

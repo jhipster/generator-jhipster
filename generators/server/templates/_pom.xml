@@ -273,6 +273,8 @@
             <artifactId>hazelcast-hibernate52</artifactId>
             <version>${hazelcast-hibernate.version}</version>
         </dependency>
+        <%_ } _%>
+        <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
