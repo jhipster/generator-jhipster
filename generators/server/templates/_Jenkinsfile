@@ -1,38 +1,64 @@
+#!/usr/bin/env groovy
+
 node {
     stage('checkout') {
         checkout scm
     }
 
-<%_ if (applicationType !== 'microservice') { _%>
-    // uncomment these 2 lines and edit the name 'node-4.6.0' according to what you choose in configuration
-    // def nodeHome = tool name: 'node-4.6.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-    // env.PATH = "${nodeHome}/bin:${env.PATH}"
-
-    stage('check tools') {
-        sh "node -v"
-        sh "npm -v"
-        sh "bower -v"
-        sh "gulp -v"
+    stage('check java') {
+        sh "java -version"
     }
 
-    stage('npm install') {
-        sh "npm install"
-    }
-
-<%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
     stage('clean') {
         sh "./mvnw clean"
     }
 
+    <%_ if (applicationType !== 'microservice') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+    stage('install tools') {
+        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.4 -DyarnVersion=v0.18.1"
+    }
+
+    stage('yarn install') {
+        sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn"
+    }
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+    stage('install tools') {
+        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.4 -DnpmVersion=3.10.9"
+    }
+
+    stage('npm install') {
+        sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm"
+    }
+
+        <%_ } _%>
+    <%_ } _%>
     stage('backend tests') {
         try {
             sh "./mvnw test"
         } catch(err) {
             throw err
         } finally {
-            step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+            junit '**/target/surefire-reports/TEST-*.xml'
         }
+    }
+
+    <%_ if (applicationType !== 'microservice') { _%>
+    stage('frontend tests') {
+        try {
+            sh "./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test"
+        } catch(err) {
+            throw err
+        } finally {
+            junit '**/target/test-results/karma/TESTS-*.xml'
+        }
+    }
+
+    <%_ } _%>
+    stage('packaging') {
+        sh "./mvnw package -Pprod -DskipTests"
+        archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
     }
 
 <%_ } else if (buildTool === 'gradle') { _%>
@@ -40,38 +66,49 @@ node {
         sh "./gradlew clean"
     }
 
+    <%_ if (applicationType !== 'microservice') { _%>
+    stage('npm install') {
+        sh "./gradlew npmInstall -PnodeInstall"
+    }
+
+    <%_ } _%>
     stage('backend tests') {
         try {
-            sh "./gradlew test"
+            sh "./gradlew test -PnodeInstall"
         } catch(err) {
             throw err
         } finally {
-            step([$class: 'JUnitResultArchiver', testResults: '**/build/**/TEST-*.xml'])
+            junit '**/build/**/TEST-*.xml'
         }
     }
 
-<%_ } _%>
-<%_ if (applicationType !== 'microservice') { _%>
+    <%_ if (applicationType !== 'microservice') { _%>
     stage('frontend tests') {
         try {
-            sh "gulp test"
+            sh "./gradlew gulp_test -PnodeInstall"
         } catch(err) {
             throw err
         } finally {
-            <%_ if (buildTool === 'maven') { _%>
-            step([$class: 'JUnitResultArchiver', testResults: '**/target/test-results/karma/TESTS-*.xml'])
-            <%_ } else if (buildTool === 'gradle') { _%>
-            step([$class: 'JUnitResultArchiver', testResults: '**/build/test-results/karma/TESTS-*.xml'])
-            <%_ } _%>
+            junit '**/build/test-results/karma/TESTS-*.xml'
         }
     }
 
-<%_ } _%>
+    <%_ } _%>
     stage('packaging') {
-<%_ if (buildTool === 'maven') { _%>
-        sh "./mvnw package -Pprod -DskipTests"
-<%_ } else if (buildTool === 'gradle' ) { _%>
-        sh "./gradlew bootRepackage -Pprod -x test"
-<%_ } _%>
+        sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall"
+        archiveArtifacts artifacts: '**/build/*.war', fingerprint: true
     }
+
+<%_ } _%>
+    // Uncomment the following block to add Sonar analysis.
+    /*stage('quality analysis') {
+        withSonarQubeEnv('Sonar Server') {
+<%_ if (buildTool === 'maven') { _%>
+            sh "./mvnw sonar:sonar"
+<%_ } else if (buildTool === 'gradle' ) { _%>
+            sh "./gradlew sonarqube"
+<%_ } _%>
+        }
+    }*/
+
 }
