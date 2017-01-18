@@ -1,7 +1,7 @@
 {
     "metrics": {
         "title": "應用程式資源監控",
-        "refresh.button": "重整",
+        "refresh.button": "重新整理",
         "updating": "更新中...",
         "jvm": {
             "title": "JVM 資源監控",
@@ -13,30 +13,30 @@
             },
             "threads": {
                 "title": "執行緒",
-                "all": "All",
+                "all": "全部",
                 "runnable": "Runnable",
                 "timedwaiting": "Timed waiting",
                 "waiting": "Waiting",
                 "blocked": "Blocked",
                 "dump": {
-                    "title": "Threads dump",
-                    "id": "Id: ",
-                    "blockedtime": "Blocked Time",
-                    "blockedcount": "Blocked Count",
-                    "waitedtime": "Waited Time",
-                    "waitedcount": "Waited Count",
-                    "lockname": "Lock name",
+                    "title": "Thread 傾印",
+                    "id": "ID: ",
+                    "blockedtime": "Blocked 時間",
+                    "blockedcount": "Blocked 計數",
+                    "waitedtime": "Waited 時間",
+                    "waitedcount": "Waited 計數",
+                    "lockname": "Lock 名稱",
                     "stacktrace": "堆疊追蹤",
                     "show": "顯示",
                     "hide": "隱藏"
                 }
             },
             "gc": {
-                "title": "Garbage collections",
-                "marksweepcount": "Mark Sweep count",
-                "marksweeptime": "Mark Sweep time",
-                "scavengecount": "Scavenge count",
-                "scavengetime": "Scavenge time"
+                "title": "GC 記憶體回收",
+                "marksweepcount": "Mark Sweep 計數",
+                "marksweeptime": "Mark Sweep 時間",
+                "scavengecount": "Scavenge 計數",
+                "scavengetime": "Scavenge 時間"
             },
             "http": {
                 "title": "HTTP 要求 (事件 / 秒)",
@@ -44,7 +44,7 @@
                 "total": "要求總數:",
                 "table": {
                     "code": "狀態碼",
-                    "count": "次數",
+                    "count": "計數",
                     "mean": "平均數",
                     "average": "平均值"
                 },
@@ -77,13 +77,13 @@
             "evictions": "收回計數"
         },
         "datasource": {
-            "usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
-            "name": "Pool usage",
-            "count": "Count",
-            "mean": "Mean",
-            "min": "Min",
-            "max": "Max",
+            "usage": "用量",
+            "title": "DataSource 統計資料 (時間單位為毫秒)",
+            "name": "Pool 用量",
+            "count": "計數",
+            "mean": "平均值",
+            "min": "最小值",
+            "max": "最大值",
             "p50": "p50",
             "p75": "p75",
             "p95": "p95",
