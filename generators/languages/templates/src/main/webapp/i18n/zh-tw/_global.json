@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "您目前使用<strong>過於老舊</strong>的瀏覽器, 建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>讓您有更佳的上網體驗.",
+        "browsehappy": "您的瀏覽器已經<strong>過時</strong>，建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>，以便有更好的體驗。",
         "menu": {
             "home": "首頁",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -21,14 +21,14 @@
             "admin": {
                 "main": "管理",
                 <%_ if (applicationType === 'gateway') { _%>
-                "gateway": "Gateway",
+                "gateway": "閘道",
                 <%_ } _%>
-                "userManagement": "User management",
+                "userManagement": "使用者管理",
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
                 "health": "服務狀態",
                 "configuration": "設定",
-                "logs": "記錄",
+                "logs": "紀錄",
                 "audits": "稽核",
                 "apidocs": "API",
                 "database": "資料庫",
@@ -44,45 +44,45 @@
             "confirmpassword": "新密碼確認",
             "confirmpassword.placeholder": "確認您的新密碼",
             "email": "電子郵件",
-            "email.placeholder": "您的電子郵件"
+            "email.placeholder": "您的電子郵件位址"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "如果您要<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
-                "register": "您還沒有帳號？<a class=\"alert-link\" ng-click=\"vm.register()\">註冊一個新帳號</a>"
+                "authenticated": "如果您要<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>，可以使用預設帳號:<br/>- 管理員 (帳號是 \"admin\"，密碼也是 \"admin\") <br/>- 使用者 (帳號 \"user\"，密碼為 \"user\")。",
+                "register": "還沒有帳號嗎? <a class=\"alert-link\" ng-click=\"vm.register()\">註冊一個吧</a>"
                 <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "如果您要",
                     "link": "登入",
-                    "suffix": ", 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\")."
+                    "suffix": "，可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\")."
                 },
                 "register": {
-                    "noaccount": "您還沒有帳號",
-                    "link": "註冊一個新帳號"
+                    "noaccount": "還沒有帳號嗎?",
+                    "link": "註冊一個吧"
                 }
                 <%_ } _%>
             },
             "error": {
-                "dontmatch" : "您輸入的密碼與密碼確認不符合!"
+                "dontmatch" : "您輸入的兩次密碼不一致!"
             },
             "validate": {
                 "newpassword": {
-                    "required": "您的密碼是必填欄位.",
-                    "minlength": "您的密碼長度至少要有5個字元",
-                    "maxlength": "您的密碼長度不能超過50個字元",
+                    "required": "您的密碼是必填欄位。",
+                    "minlength": "您的密碼長度至少要有 5 個字元",
+                    "maxlength": "您的密碼長度不能超過 50 個字元",
                     "strength": "密碼強度:"
                 },
                 "confirmpassword": {
-                    "required": "您的密碼確認是必填欄位.",
-                    "minlength": "您的密碼確認長度至少要有5個字元",
-                    "maxlength": "您的密碼確認長度不能超過50個字元"
+                    "required": "您的密碼確認是必填欄位。",
+                    "minlength": "您的密碼確認長度至少要有 5 個字元",
+                    "maxlength": "您的密碼確認長度不能超過 50 個字元"
                 },
                 "email": {
-                    "required": "您的電子郵件是必填欄位.",
-                    "invalid": "您的電子郵件格式格式不正確.",
-                    "minlength": "您的電子郵件長度至少要有5個字元",
-                    "maxlength": "您的電子郵件長度不能超過50個字元"
+                    "required": "您的電子郵件是必填欄位。",
+                    "invalid": "您的電子郵件格式格式不正確。",
+                    "minlength": "您的電子郵件長度至少要有 5 個字元",
+                    "maxlength": "您的電子郵件長度不能超過 50 個字元"
                 }
             }
         },
@@ -90,13 +90,13 @@
             "id" : "ID"
         },
         "ribbon": {
-            "dev":"Development"
+            "dev":"開發環境"
         }
     },
     "entity": {
         "action": {
-            "addblob": "新增 blob",
-            "addimage": "新增 image",
+            "addblob": "新增 Blob",
+            "addimage": "新增 Image",
             "back": "返回",
             "cancel": "取消",
             "delete": "刪除",
@@ -110,29 +110,29 @@
             "value": "值"
         },
         "delete": {
-            "title": "確定刪除"
+            "title": "刪除作業確認"
         },
         "validation": {
             "required": "此欄位必須填寫。",
-            "minlength": "此欄位必須有至少 {{min}} 位字符。",
-            "maxlength": "此欄位不能超過 {{max}} 位字符。",
-            "min": "此欄位應超過 {{min}}。",
-            "max": "此欄位不能超過 {{max}}。",
-            "minbytes": "此欄位應超過 {{min}} bytes。",
-            "maxbytes": "此欄位不能超過 {{max}} bytes。",
-            "pattern": "此欄位應滿足格式 {{pattern}}。",
-            "number": "此欄位應為數字。",
+            "minlength": "此欄位至少要有 {{min}} 個字元。",
+            "maxlength": "此欄位不能超過 {{max}} 個字元。",
+            "min": "此欄位不能比 {{min}} 小。",
+            "max": "此欄位不能大於 {{max}}。",
+            "minbytes": "此欄位至少要有 {{min}} 個位元組。",
+            "maxbytes": "此欄位不能超過 {{max}} 個位元組。",
+            "pattern": "此欄位要符合模式 {{pattern}}。",
+            "number": "此欄位只能是數字。",
             "datetimelocal": "此欄位應為日期和時間。"
         }
     },
     "error": {
-        "server.not.reachable": "伺服器無法訪問",
-        "url.not.found": "Not found",
-        "NotNull": "欄位 {{fieldName}} 不能為空！",
-        "Size": "欄位 {{fieldName}} 不符合最小/最大要求！",
-        "userexists": "使用者名稱已被使用！",
-        "emailexists": "電子郵件已被使用！",
-        "idexists": "新實體不能包含ID"
+        "server.not.reachable": "無法連到伺服器",
+        "url.not.found": "找不到",
+        "NotNull": "欄位 {{fieldName}} 不能為空!",
+        "Size": "欄位 {{fieldName}} 不符合大小需求!",
+        "userexists": "使用者名稱已被使用!",
+        "emailexists": "電子郵件位址已被使用!",
+        "idexists": "新實體不能包含 ID"
     },
-    "footer": "這裡是頁尾"
+    "footer": "這裡是您的頁尾"
 }

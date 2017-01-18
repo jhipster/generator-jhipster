@@ -3,15 +3,15 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
-                "createLabel": "Create a new <%= entityClassHumanized %>",
-                "createOrEditLabel": "Create or edit a <%= entityClassHumanized %>",
-                "search": "Search for <%= entityClassHumanized %>"
+                "createLabel": "建立一筆新的 <%= entityClassHumanized %>",
+                "createOrEditLabel": "建立或編輯 <%= entityClassHumanized %>",
+                "search": "搜尋 <%= entityClassHumanized %>"
             },<% if (!microserviceAppName) { %>
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",<% } %>
+            "created": "新的 <%= entityClassHumanized %> 建立成功，識別碼為 {{ param }}",
+            "updated": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 更新成功",
+            "deleted": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 刪除成功",<% } %>
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClassHumanized %> {{ id }}?"
+                "question": "您確定要刪除 <%= entityClassHumanized %> {{ id }} 嗎?"
             },
             "detail": {
                 "title": "<%= entityClassHumanized %>"
@@ -22,9 +22,9 @@
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+            "created": "新的 <%= entityClassHumanized %> 建立成功，識別碼為 {{ param }}",
+            "updated": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 更新成功",
+            "deleted": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 刪除成功"
         }
     }<% } %>
 }

@@ -9,11 +9,11 @@
         },
         "messages": {
             "error": {
-                "authentication": "<strong>登入失敗！</strong> 請檢查您的認證，並重試一次。"
+                "authentication": "<strong>登入失敗!</strong> 請檢查您的憑證再重試一次。"
             }
         },
         "password" : {
-            "forgot": "忘記密碼？"
+            "forgot": "忘記密碼?"
         }
     }
 }

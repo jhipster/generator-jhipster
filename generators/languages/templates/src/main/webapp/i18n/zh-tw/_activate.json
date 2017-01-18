@@ -3,11 +3,11 @@
         "title": "啟用",
         "messages": {
             <%_ if (clientFramework === 'angular1') { _%>
-            "success": "<strong>您的帳號已啟用.</strong> 請 <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>.",
+            "success": "<strong>您的帳號已啟用。</strong> 請 <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>。",
             <%_ } else if (clientFramework === 'angular2') { _%>
-            "success": "<strong>您的帳號已啟用.</strong> 請 ",
+            "success": "<strong>您的帳號已啟用。</strong> 請 ",
             <%_ } _%>
-            "error": "<strong>您的帳號已無法啟用.</strong> 請重新註冊."
+            "error": "<strong>您的帳號無法啟用。</strong> 請重新註冊。"
         }
     }
 }
