@@ -1,5 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Title } from '@angular/platform-browser';
+
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {
     <%=angular2AppName%>SharedLibsModule,
@@ -64,7 +66,8 @@ import {
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         HasAuthorityDirective,
         HasAnyAuthorityDirective,
-        DatePipe
+        DatePipe,
+        Title
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 

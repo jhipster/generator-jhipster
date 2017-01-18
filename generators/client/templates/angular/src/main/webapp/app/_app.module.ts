@@ -3,10 +3,8 @@ import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { BrowserModule, Title } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
-
-import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
@@ -17,7 +15,6 @@ import { LayoutRoutingModule } from './layouts';
 import { HomeComponent } from './home';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-
 
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
@@ -59,9 +56,7 @@ import {
         { provide: Document, useValue: document },
         customHttpProvider(),
         PaginationConfig,
-        JhiLanguageService,
-        UserRouteAccessService,
-        Title
+        UserRouteAccessService
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
