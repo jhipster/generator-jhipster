@@ -64,6 +64,8 @@ Add the `help` flag on any command to see how you can use it. For example, `yarn
 
 The `yarn run` command will list all of the scripts available to run for this project.
 
+### Managing dependencies
+
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
     yarn add --exact leaflet
@@ -112,6 +114,22 @@ Add the `-h` flag on any command to see how you can use it. For example, `bower 
 <%_ } _%>
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+
+<%_ if (clientFramework === 'angular2') { _%>
+### Using angular-cli
+
+You can also use [Angular CLI][] to generate some custom client code.
+
+For example, the following command:
+
+    ng generate component my-component
+
+will generate few files:
+
+   create src/main/webapp/app/my-component/my-component.component.html
+   create src/main/webapp/app/my-component/my-component.component.ts
+   update src/main/webapp/app/app.module.ts
+<%_ } _%>
 
 ## Building for production
 
@@ -209,6 +227,7 @@ To set up a CI environment, consult the [Setting up Continuous Integration][] pa
 [Yarn]: https://yarnpkg.org/
 <%_ if (clientFramework === 'angular2') { _%>
 [Webpack]: https://webpack.github.io/
+[Angular CLI]: https://cli.angular.io/
 <%_ } else { _%>
 [Bower]: http://bower.io/
 [Gulp]: http://gulpjs.com/
