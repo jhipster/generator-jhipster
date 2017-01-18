@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Route } from '@angular/router';
 
 import { NavbarComponent } from './layouts';
-import { AuthService } from './shared';
+/* import { AuthService } from './shared';
 
 @Injectable()
 export class AuthorizeResolve implements Resolve<any> {
@@ -12,7 +12,7 @@ export class AuthorizeResolve implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.authService.authorize();
   }
-}
+} */
 
 export const navbarRoute: Route = {
     path: '',
