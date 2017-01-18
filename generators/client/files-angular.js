@@ -90,6 +90,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 '_app.main.ts',
+                '_app.state.ts',
                 '_app.module.ts',
                 '_app.constants.ts',
                 '_polyfills.ts',
@@ -133,7 +134,6 @@ const files = {
                 'layouts/profiles/_page-ribbon.component.ts',
                 'layouts/main/_main.component.ts',
                 'layouts/main/_main.component.html',
-                'layouts/navbar/_navbar.state.ts',
                 { file: 'layouts/navbar/_navbar.component.ts', method: 'copyJs' },
                 { file: 'layouts/navbar/_navbar.component.html', method: 'copyHtml' },
                 'layouts/footer/_footer.component.ts',

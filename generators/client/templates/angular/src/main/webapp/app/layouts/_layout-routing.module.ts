@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, Resolve } from '@angular/router';
 
 import { homeRoute } from '../home';
-import { navbarRoute } from './';
+import { navbarRoute } from '../app.state';
 import { errorRoute } from './';
 
 let LAYOUT_ROUTES = [
