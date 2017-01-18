@@ -66,7 +66,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(javaDir + 'security/AjaxAuthenticationFailureHandler.java');
         generator.removeFile(javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
         generator.removeFile(javaDir + 'security/AjaxLogoutSuccessHandler.java');
+        generator.removeFile(javaDir + 'security/CustomPersistentRememberMeServices.java');
         generator.removeFile(javaDir + 'security/Http401UnauthorizedEntryPoint.java');
+        generator.removeFile(javaDir + 'security/UserDetailsService.java');
         generator.removeFile(javaDir + 'web/filter/CachingHttpHeadersFilter.java');
         generator.removeFile(javaDir + 'web/filter/package-info.java');
     }

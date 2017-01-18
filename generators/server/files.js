@@ -219,7 +219,7 @@ function writeFiles() {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
             }
 
-            this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/security/_DomainUserDetailsService.java', javaDir + 'security/DomainUserDetailsService.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
 
@@ -254,7 +254,7 @@ function writeFiles() {
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
 
             if (this.authenticationType === 'session') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_PersistentTokenRememberMeServices.java', javaDir + 'security/PersistentTokenRememberMeServices.java', this, {});
             }
 
             if (this.enableSocialSignIn) {
