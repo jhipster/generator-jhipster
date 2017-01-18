@@ -1,30 +1,30 @@
 {
     "userManagement": {
         "home": {
-            "title": "Users",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "title": "Gebruikers",
+            "createLabel": "Creëer een nieuwe gebruiker",
+            "createOrEditLabel": "Creëer of editeer een gebruiker"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "Een nieuwe gebruiker is aangemaakt met id {{ param }}",
+        "updated": "Een gebruiker is geüpdatet met id {{ param }}",
+        "deleted": "Een gebruiker is verwijderd met id {{ param }}",
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "Bent u zeker dat u gebruiker {{ login }} wil verwijderen?"
         },
         "detail": {
-            "title": "User"
+            "title": "Gebruiker"
         },
         "login": "Login",
-        "firstName": "First name",
-        "lastName": "Last name",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
         "email": "Email",
-        "activated": "Activated",
-        "deactivated": "Deactivated",
-        "profiles": "Profiles",
-        "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date"
+        "activated": "Geactiveerd",
+        "deactivated": "Gedeactiveerd",
+        "profiles": "Profielen",
+        "langKey": "Taal",
+        "createdBy": "Aangemaakt door",
+        "createdDate": "Aanmaak datum",
+        "lastModifiedBy": "Laatst aangepast door",
+        "lastModifiedDate": "Laatst aangepast datum"
     }
 }
