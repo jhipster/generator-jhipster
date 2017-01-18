@@ -127,7 +127,7 @@
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
     "webpack:build": "webpack --config webpack/webpack.vendor.js && webpack --config webpack/webpack.dev.js",
-    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9002",
+    "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9060",
     "webpack:prod": "webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js"
   }
 }
