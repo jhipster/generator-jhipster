@@ -14,7 +14,8 @@ import {
     trackerState,
     <%_ } _%>    
     <%_ if (!skipUserManagement) { _%>
-    userMgmtRoute
+    userMgmtRoute,
+    userDialogRoute
     <%_ } _%>
 } from './';
 
@@ -46,4 +47,8 @@ export const adminState: Routes = [{
     },
     canActivate: [UserRouteAccessService],
     children: ADMIN_ROUTES
-}];
+},
+    <%_ if (!skipUserManagement) { _%>
+    ...userDialogRoute
+    <%_ } _%>
+];

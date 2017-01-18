@@ -9,6 +9,8 @@ import {
     AuditsComponent,
     <%_ if (!skipUserManagement) { _%>
     UserMgmtComponent,
+    UserDialogComponent,
+    UserDeleteDialogComponent,
     UserMgmtDetailComponent,
     UserMgmtDialogComponent,
     UserMgmtDeleteDialogComponent,
@@ -51,6 +53,8 @@ import {
         AuditsComponent,
         <%_ if (!skipUserManagement) { _%>
         UserMgmtComponent,
+        UserDialogComponent,
+        UserDeleteDialogComponent,
         UserMgmtDetailComponent,
         UserMgmtDialogComponent,
         UserMgmtDeleteDialogComponent,

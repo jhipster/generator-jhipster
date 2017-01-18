@@ -2,14 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService, AlertService } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
-import { UserModalService } from './user-modal.service';
-import { UserMgmtDialogComponent } from './user-management-dialog.component';
-import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
@@ -23,7 +19,6 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     users: User[];
     error: any;
     success: any;
-    modalRef: NgbModalRef;
     <%_ if (databaseType !== 'cassandra') { _%>
     routeData: any;
     links: any;
@@ -49,8 +44,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private paginationConfig: PaginationConfig,
         <%_ } _%>
         private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private userModalService: UserModalService
+        private router: Router
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -152,17 +146,4 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     private onError(error) {
         this.alertService.error(error.error, error.message, null);
     }
-
-    createUser() {
-        this.modalRef = this.userModalService.open(UserMgmtDialogComponent);
-    }
-
-    editUser(login: string) {
-        this.modalRef =  this.userModalService.open(UserMgmtDialogComponent, login);
-    }
-
-    deleteUser(login: string) {
-        this.modalRef =  this.userModalService.open(UserMgmtDeleteDialogComponent, login);
-    }
-
 }

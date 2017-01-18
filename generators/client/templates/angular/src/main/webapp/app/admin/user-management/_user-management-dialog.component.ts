@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, JhiLanguageService } from 'ng-jhipster';
 
 import { User } from './user.model';
+import { UserModalService } from './user-modal.service';
 import { UserService } from './user.service';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from '../../shared';
@@ -26,7 +29,8 @@ export class UserMgmtDialogComponent implements OnInit {
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
         private userService: UserService,
-        private eventManager: EventManager
+        private eventManager: EventManager,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -42,6 +46,7 @@ export class UserMgmtDialogComponent implements OnInit {
 
     clear() {
         this.activeModal.dismiss('cancel');
+        this.router.navigate([{ outlets: { popup: null }}]);
     }
 
     save() {
@@ -62,5 +67,34 @@ export class UserMgmtDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+}
+
+@Component({
+    selector: '<%=jhiPrefix%>-user-dialog',
+    template: ''
+})
+export class UserDialogComponent implements OnInit, OnDestroy {
+
+    modalRef: NgbModalRef;
+    routeSub: any;
+
+    constructor (
+        private route: ActivatedRoute,
+        private userModalService: UserModalService
+    ) {}
+
+    ngOnInit() {
+        this.routeSub = this.route.params.subscribe(params => {
+            if( params['login'] ) {
+                this.modalRef = this.userModalService.open(UserMgmtDialogComponent, params['login']);    
+            } else {
+                this.modalRef = this.userModalService.open(UserMgmtDialogComponent);
+            }            
+        });
+    }
+
+    ngOnDestroy() {
+        this.routeSub.unsubscribe();
     }
 }
