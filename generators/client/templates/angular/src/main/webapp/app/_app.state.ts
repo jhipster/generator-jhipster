@@ -1,9 +1,5 @@
-import { JhiLanguageService } from 'ng-jhipster';
-import { NavbarComponent } from './layouts';
-import { AuthService } from './shared';
-
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Route } from '@angular/router';
 
 import { NavbarComponent } from './layouts';
 import { AuthService } from './shared';
@@ -16,20 +12,13 @@ export class AuthorizeResolve implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.authService.authorize();
   }
-
-  canActivate() {
-    return true;
-  }
 }
 
-
-export const navbarRoute: Routes = [
-  {
+export const navbarRoute: Route = {
     path: '',
     component: NavbarComponent,
-    resolve: {
-      'authorize': AuthorizeResolve
-    },
+    // resolve: {
+    //   'authorize': AuthorizeResolve
+    // },
     outlet: 'navbar'
-  }
-];
+  };
