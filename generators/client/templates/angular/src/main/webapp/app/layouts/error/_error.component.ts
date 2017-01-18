@@ -15,7 +15,7 @@ export class ErrorComponent implements OnInit {
         <%_ } _%>
     ) {
     	<%_ if (enableTranslation) { _%>
-        this.languageService.setLocations(['navbar']);
+        this.languageService.setLocations(['error']);
         <%_ } _%>
     }
 
