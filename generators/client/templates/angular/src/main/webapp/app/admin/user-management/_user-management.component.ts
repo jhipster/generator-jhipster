@@ -45,7 +45,7 @@ export class UserMgmtComponent implements OnInit {
         this.page = paginationUtil.parsePage($state.params['page']);
         this.previousPage = this.page;
         this.reverse = paginationUtil.parseAscending($state.params['sort']);
-        this.predicate = 'id';
+        this.predicate = paginationUtil.parsePredicate($state.params['sort']);
         <%_ } _%>
     }
 
