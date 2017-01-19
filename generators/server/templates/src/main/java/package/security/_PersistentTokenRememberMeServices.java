@@ -4,6 +4,7 @@ import com.datastax.driver.core.exceptions.DriverException;<%}%>
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.service.util.RandomUtil;
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -13,14 +14,12 @@ import org.springframework.dao.DataAccessException;<%}%>
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<%}%>
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.security.SecureRandom;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import javax.servlet.http.HttpServletResponse;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import java.time.LocalDate;<%}%><% if (databaseType == 'cassandra') { %>
 import java.time.temporal.ChronoUnit;<%}%>
 import java.util.Arrays;<% if (databaseType == 'cassandra') { %>
@@ -60,12 +59,6 @@ public class PersistentTokenRememberMeServices extends
 
     private static final int TOKEN_VALIDITY_SECONDS = 60 * 60 * 24 * TOKEN_VALIDITY_DAYS;
 
-    private static final int DEFAULT_SERIES_LENGTH = 16;
-
-    private static final int DEFAULT_TOKEN_LENGTH = 16;
-
-    private final SecureRandom random;
-
     private final PersistentTokenRepository persistentTokenRepository;
 
     private final UserRepository userRepository;
@@ -75,7 +68,6 @@ public class PersistentTokenRememberMeServices extends
             PersistentTokenRepository persistentTokenRepository, UserRepository userRepository) {
 
         super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
-        this.random = new SecureRandom();
         this.persistentTokenRepository = persistentTokenRepository;
         this.userRepository = userRepository;
     }
@@ -92,7 +84,7 @@ public class PersistentTokenRememberMeServices extends
         log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
         token.setTokenDate(new Date());<%}%>
-        token.setTokenValue(generateTokenData());
+        token.setTokenValue(RandomUtil.generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
@@ -115,13 +107,13 @@ public class PersistentTokenRememberMeServices extends
         log.debug("Creating new persistent login for user {}", login);
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
-            t.setSeries(generateSeriesData());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            t.setSeries(RandomUtil.generateSeriesData());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             t.setUser(u);
-            t.setTokenValue(generateTokenData());
+            t.setTokenValue(RandomUtil.generateTokenData());
             t.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
             t.setLogin(login);
             t.setUserId(u.getId());
-            t.setTokenValue(generateTokenData());
+            t.setTokenValue(RandomUtil.generateTokenData());
             t.setTokenDate(new Date());<% } %>
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
@@ -192,18 +184,6 @@ public class PersistentTokenRememberMeServices extends
             throw new RememberMeAuthenticationException("Remember-me login has expired");
         }
         return token;
-    }
-
-    private String generateSeriesData() {
-        byte[] newSeries = new byte[DEFAULT_SERIES_LENGTH];
-        random.nextBytes(newSeries);
-        return new String(Base64.encode(newSeries));
-    }
-
-    private String generateTokenData() {
-        byte[] newToken = new byte[DEFAULT_TOKEN_LENGTH];
-        random.nextBytes(newToken);
-        return new String(Base64.encode(newToken));
     }
 
     private void addCookie(PersistentToken token, HttpServletRequest request, HttpServletResponse response) {
