@@ -15,7 +15,7 @@ export class UserRouteAccessService implements CanActivate {
         if (authorities.length === 0) {
             return true;
         }
-  
+
         return this.principal.identity().then(account => {
             let authorized: boolean = this.principal.hasAnyAuthority(authorities);
             if (!authorized) {

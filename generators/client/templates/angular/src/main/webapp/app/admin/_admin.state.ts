@@ -26,7 +26,7 @@ let ADMIN_ROUTES = [
     configurationRoute,
     docsRoute,
     healthRoute,
-    logsRoute,    
+    logsRoute,
     <%_ if (applicationType === 'gateway') { _%>
     gatewayRoute,
     <%_ } _%>

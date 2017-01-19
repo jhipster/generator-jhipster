@@ -8,7 +8,7 @@ import { JhiLanguageHelper } from '../../shared';
     templateUrl: './main.component.html'
 })
 export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
-    
+
     constructor(private router: Router, private jhiLanguageService: JhiLanguageHelper) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {

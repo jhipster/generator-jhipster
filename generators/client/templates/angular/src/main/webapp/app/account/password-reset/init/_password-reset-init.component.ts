@@ -17,7 +17,7 @@ export class PasswordResetInitComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private passwordResetInit: PasswordResetInit, 
+        private passwordResetInit: PasswordResetInit,
         private elementRef: ElementRef,
         private renderer: Renderer
     ) {
