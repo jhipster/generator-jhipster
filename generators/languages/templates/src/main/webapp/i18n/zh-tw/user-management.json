@@ -14,14 +14,14 @@
         "detail": {
             "title": "使用者"
         },
-        "login": "帳號名稱",
+        "login": "登入帳號",
         "firstName": "名字",
         "lastName": "姓氏",
         "email": "電子郵件",
         "activated": "已啟用",
         "deactivated": "已停用",
         "profiles": "設定檔",
-        "langKey": "語系",
+        "langKey": "語言",
         "createdBy": "建立者",
         "createdDate": "建立日期",
         "lastModifiedBy": "最近修改者",

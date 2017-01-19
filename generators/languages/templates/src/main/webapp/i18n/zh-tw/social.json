@@ -1,6 +1,6 @@
 {
     "social": {
-        "btnLabel": "以 {{ label }} 登入",
+        "btnLabel": "使用 {{ label }} 登入",
         "register": {
             "title": "透過 {{ label }} 註冊",
             "errorTitle": "使用外部帳號註冊",
