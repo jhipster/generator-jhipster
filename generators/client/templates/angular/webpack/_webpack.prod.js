@@ -14,6 +14,9 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
     },
     plugins: [
         new ExtractTextPlugin('[hash].styles.css'),
-        new Visualizer()
+        new Visualizer({
+            // Webpack statistics in target folder
+            filename: '../stats.html'
+        })
     ]
 });
