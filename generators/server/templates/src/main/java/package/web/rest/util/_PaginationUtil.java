@@ -18,7 +18,7 @@ public final class PaginationUtil {
     private PaginationUtil() {
     }
 
-    public static HttpHeaders generatePaginationHttpHeaders(Page<?> page, String baseUrl)
+    public static HttpHeaders generatePaginationHttpHeaders(Page page, String baseUrl)
         throws URISyntaxException {
 
         HttpHeaders headers = new HttpHeaders();
@@ -47,7 +47,7 @@ public final class PaginationUtil {
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page<?> page, String baseUrl)
+    public static HttpHeaders generateSearchPaginationHttpHeaders(String query, Page page, String baseUrl)
         throws URISyntaxException {
 
         HttpHeaders headers = new HttpHeaders();

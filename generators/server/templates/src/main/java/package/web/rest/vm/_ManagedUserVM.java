@@ -21,6 +21,7 @@ public class ManagedUserVM extends UserDTO {
     private String password;
 
     public ManagedUserVM() {
+        // Empty constructor needed for Jackson.
     }
 
     public ManagedUserVM(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,

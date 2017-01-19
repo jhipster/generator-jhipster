@@ -50,10 +50,10 @@ import java.util.Date;<%}%>
  * couldn't be cleanly extended.
  */
 @Service
-public class CustomPersistentRememberMeServices extends
+public class PersistentTokenRememberMeServices extends
     AbstractRememberMeServices {
 
-    private final Logger log = LoggerFactory.getLogger(CustomPersistentRememberMeServices.class);
+    private final Logger log = LoggerFactory.getLogger(PersistentTokenRememberMeServices.class);
 
     // Token is valid for one month
     private static final int TOKEN_VALIDITY_DAYS = 31;
@@ -70,7 +70,7 @@ public class CustomPersistentRememberMeServices extends
 
     private final UserRepository userRepository;
 
-    public CustomPersistentRememberMeServices(JHipsterProperties jHipsterProperties,
+    public PersistentTokenRememberMeServices(JHipsterProperties jHipsterProperties,
             org.springframework.security.core.userdetails.UserDetailsService userDetailsService,
             PersistentTokenRepository persistentTokenRepository, UserRepository userRepository) {
 

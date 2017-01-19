@@ -1,9 +1,11 @@
+# Consul HA cluster
+#
 # Based on https://github.com/kubernetes/charts/tree/14bee1e456c1789d1ebdfc2dc7e3ae2b9ea930ce/incubator/consul
 # Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
 #
 # By default, Consul and its UI is not accessible from outside the cluster for security reasons
-# You setup temporary access to it on localhost:8500 by running :
-#   kubectl port-forward some-consul-pod 8500
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500
 #
 # To check the state of your Consul cluster :
 #   kubectl exec consul-0 -- sh -c 'consul members'

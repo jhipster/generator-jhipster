@@ -47,6 +47,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private router: Router
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
+        this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe(data => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;

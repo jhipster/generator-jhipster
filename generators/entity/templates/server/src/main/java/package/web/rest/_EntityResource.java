@@ -51,7 +51,7 @@ public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
-    private final static String ENTITY_NAME = "<%= entityInstance %>";
+    private static final String ENTITY_NAME = "<%= entityInstance %>";
     <% var viaService = service != 'no';
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
