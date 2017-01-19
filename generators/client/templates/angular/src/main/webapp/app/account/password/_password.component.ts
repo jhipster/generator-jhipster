@@ -17,15 +17,11 @@ export class PasswordComponent implements OnInit {
     confirmPassword: string;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private passwordService: Password,
         private principal: Principal
     ) {
-        <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(['password']);
-        <%_ } _%>
+        this.jhiLanguageService.setLocations(['password']);        
     }
 
     ngOnInit () {

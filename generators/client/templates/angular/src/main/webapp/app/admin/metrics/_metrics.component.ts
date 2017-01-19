@@ -17,16 +17,12 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     JCACHE_KEY: string ;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private modalService: NgbModal,
         private metricsService: <%=jhiPrefixCapitalized%>MetricsService
     ) {
         this.JCACHE_KEY = 'jcache.statistics';
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['metrics']);
-        <%_ } _%>
     }
 
     ngOnInit() {

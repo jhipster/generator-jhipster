@@ -15,14 +15,10 @@ export class <%=jhiPrefixCapitalized%>GatewayComponent implements OnInit {
     updatingRoutes: Boolean;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private gatewayRoutesService: GatewayRoutesService
     ) {
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['gateway']);
-        <%_ } _%>
     }
 
     ngOnInit () {

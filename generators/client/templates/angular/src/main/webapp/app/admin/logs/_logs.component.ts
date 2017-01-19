@@ -16,17 +16,13 @@ export class LogsComponent implements OnInit {
     reverse: boolean;
 
     constructor (
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private logsService: LogsService
     ) {
         this.filter = '';
         this.orderProp = 'name';
         this.reverse = false;
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['logs']);
-        <%_ } _%>
     }
 
     ngOnInit() {

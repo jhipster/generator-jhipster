@@ -16,18 +16,14 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     reverse: boolean;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService
     ) {
         this.configKeys = [];
         this.filter = '';
         this.orderProp = 'prefix';
         this.reverse = false;
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['configuration']);
-        <%_ } _%>
     }
 
     keys(dict): Array<string> {

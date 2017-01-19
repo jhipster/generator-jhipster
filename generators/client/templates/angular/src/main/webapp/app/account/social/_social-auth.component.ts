@@ -11,17 +11,13 @@ import { CookieService } from 'angular2-cookie/core';
 export class SocialAuthComponent implements OnInit {
 
     constructor (
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private Auth: AuthService,
         private loginService: LoginService,
         private cookieService: CookieService,
         private router: Router
     ) {
-        <%_ if (enableTranslation) { _%>
         this.languageService.setLocations(['social']);
-        <%_ } _%>
     }
 
     ngOnInit() {

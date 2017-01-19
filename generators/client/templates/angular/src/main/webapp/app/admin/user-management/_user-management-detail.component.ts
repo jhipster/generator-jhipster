@@ -15,15 +15,11 @@ export class UserMgmtDetailComponent implements OnInit, OnDestroy {
     private subscription: any;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private userService: UserService,
         private route: ActivatedRoute
     ) {
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['user-management']);
-        <%_ } _%>
     }
 
     ngOnInit() {

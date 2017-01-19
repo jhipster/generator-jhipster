@@ -14,15 +14,11 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     updatingHealth: boolean;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private modalService: NgbModal, 
         private healthService: <%=jhiPrefixCapitalized%>HealthService
     ) {
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['health']);
-        <%_ } _%>
 
     }
 

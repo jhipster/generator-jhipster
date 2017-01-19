@@ -17,15 +17,11 @@ export class SessionsComponent implements OnInit {
     sessions: Session[];
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private sessionsService: SessionsService,
         private principal: Principal
     ) {
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['sessions']);
-        <%_ } _%>
     }
 
     ngOnInit() {

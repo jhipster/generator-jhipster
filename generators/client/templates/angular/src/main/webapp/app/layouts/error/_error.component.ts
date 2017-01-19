@@ -10,13 +10,9 @@ export class ErrorComponent implements OnInit {
     error403: boolean;
 
     constructor(
-    	<%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService
-        <%_ } _%>
     ) {
-    	<%_ if (enableTranslation) { _%>
         this.languageService.setLocations(['error']);
-        <%_ } _%>
     }
 
     ngOnInit() {

@@ -19,9 +19,7 @@ export class SettingsComponent implements OnInit {
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper<% } %>
     ) {
-        <%_ if (enableTranslation) { _%>
         this.languageService.setLocations(['settings']);
-        <%_ } _%>
     }
 
     ngOnInit () {

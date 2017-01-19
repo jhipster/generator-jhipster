@@ -32,9 +32,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     <%_ } _%>
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private userService: UserService,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
@@ -55,9 +53,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             this.predicate = data['pagingParams'].predicate;
         });
         <%_ } _%>
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['user-management']);
-        <%_ } _%>
     }
 
     ngOnInit() {

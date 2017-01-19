@@ -11,14 +11,10 @@ export class SocialRegisterComponent implements OnInit  {
     providerLabel: string;
 
     constructor (
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         @Inject('$stateParams') private $stateParams
     ) {
-        <%_ if (enableTranslation) { _%>
         this.languageService.setLocations(['social']);
-        <%_ } _%>
     }
 
     ngOnInit() {

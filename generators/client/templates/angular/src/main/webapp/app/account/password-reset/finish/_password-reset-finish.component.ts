@@ -21,17 +21,13 @@ export class PasswordResetFinishComponent implements OnInit {
     key: string;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private passwordResetFinish: PasswordResetFinish,
         private loginModalService: LoginModalService,
         private route: ActivatedRoute,
         private elementRef: ElementRef, private renderer: Renderer
     ) {
-        <%_ if (enableTranslation) { _%>
-        this.jhiLanguageService.setLocations(['reset']);
-        <%_ } _%>
+        this.jhiLanguageService.setLocations(['reset']);       
     }
 
     ngOnInit() {

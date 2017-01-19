@@ -12,14 +12,10 @@ export class <%=jhiPrefixCapitalized%>TrackerComponent implements OnInit, OnDest
     activities: any[] = [];
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService
     ) {
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['tracker']);
-        <%_ } _%>
     }
 
     showActivity (activity: any) {

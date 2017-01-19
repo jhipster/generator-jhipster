@@ -17,17 +17,13 @@ export class UserMgmtDeleteDialogComponent {
     user: User;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private userService: UserService,
         public activeModal: NgbActiveModal,
         private eventManager: EventManager,
         private router: Router
     ) {
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['user-management']);
-        <%_ } _%>
     }
 
     clear () {

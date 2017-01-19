@@ -21,16 +21,12 @@ export class HomeComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private principal: Principal,
         private loginModalService: LoginModalService,
         private eventManager: EventManager
     ) {
-         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['home']);
-        <%_ } _%>
     }
 
     ngOnInit() {

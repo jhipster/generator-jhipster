@@ -24,9 +24,7 @@ export class AuditsComponent implements OnInit {
     datePipe: DatePipe;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
-        <%_ } _%>
         private auditsService: AuditsService,
         private parseLinks: ParseLinks,
         @Inject(LOCALE_ID) private locale: string,
@@ -37,9 +35,7 @@ export class AuditsComponent implements OnInit {
         this.reverse = false;
         this.orderProp = 'timestamp';
         this.datePipe =  new DatePipe(this.locale); // TODO see if there is a better way to inject pipes
-        <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['audits']);
-        <%_ } _%>
     }
 
     getAudits () {
