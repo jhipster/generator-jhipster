@@ -24,7 +24,7 @@
                 "gateway": "閘道",
                 <%_ } _%>
                 "userManagement": "使用者管理",
-                "tracker": "追蹤使用者",
+                "tracker": "使用者追蹤",
                 "metrics": "資源監控",
                 "health": "服務狀態",
                 "configuration": "設定",
@@ -34,7 +34,7 @@
                 "database": "資料庫",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
-            "language": "語系"
+            "language": "語言"
         },
         "form": {
             "username": "帳號",
@@ -44,18 +44,18 @@
             "confirmpassword": "新密碼確認",
             "confirmpassword.placeholder": "確認您的新密碼",
             "email": "電子郵件",
-            "email.placeholder": "您的電子郵件位址"
+            "email.placeholder": "您的電子郵件地址"
         },
         "messages": {
             "info": {
                 <%_ if (clientFramework === 'angular1') { _%>
-                "authenticated": "如果您要<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>，可以使用預設帳號:<br/>- 管理員 (帳號是 \"admin\"，密碼也是 \"admin\") <br/>- 使用者 (帳號 \"user\"，密碼為 \"user\")。",
+                "authenticated": "如果您要<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">登入</a>，可以使用預設帳號:<br/>- 管理員 (帳號是 \"admin\"，密碼 \"admin\") <br/>- 使用者 (帳號 \"user\"，密碼是 \"user\")。",
                 "register": "還沒有帳號嗎? <a class=\"alert-link\" ng-click=\"vm.register()\">註冊一個吧</a>"
                 <%_ } else if (clientFramework === 'angular2') { _%>
                 "authenticated": {
                     "prefix": "如果您要",
                     "link": "登入",
-                    "suffix": "，可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\")."
+                    "suffix": "，可以使用預設帳號:<br/>- 管理員 (帳號是 \"admin\"，密碼是 \"admin\") <br/>- 使用者 (帳號 \"user\"，密碼是 \"user\")。"
                 },
                 "register": {
                     "noaccount": "還沒有帳號嗎?",
@@ -69,20 +69,20 @@
             "validate": {
                 "newpassword": {
                     "required": "您的密碼是必填欄位。",
-                    "minlength": "您的密碼長度至少要有 5 個字元",
-                    "maxlength": "您的密碼長度不能超過 50 個字元",
+                    "minlength": "您的密碼長度至少要有 5 個字元。",
+                    "maxlength": "您的密碼長度不能超過 50 個字元。",
                     "strength": "密碼強度:"
                 },
                 "confirmpassword": {
-                    "required": "您的密碼確認是必填欄位。",
-                    "minlength": "您的密碼確認長度至少要有 5 個字元",
-                    "maxlength": "您的密碼確認長度不能超過 50 個字元"
+                    "required": "您的確認密碼是必填欄位。",
+                    "minlength": "您的確認密碼長度至少要有 5 個字元。",
+                    "maxlength": "您的確認密碼長度不能超過 50 個字元。"
                 },
                 "email": {
                     "required": "您的電子郵件是必填欄位。",
-                    "invalid": "您的電子郵件格式格式不正確。",
-                    "minlength": "您的電子郵件長度至少要有 5 個字元",
-                    "maxlength": "您的電子郵件長度不能超過 50 個字元"
+                    "invalid": "您的電子郵件地址格式錯誤。",
+                    "minlength": "您的電子郵件地址長度至少要有 5 個字元。",
+                    "maxlength": "您的電子郵件地址長度不能超過 50 個字元。"
                 }
             }
         },
@@ -96,7 +96,7 @@
     "entity": {
         "action": {
             "addblob": "新增 Blob",
-            "addimage": "新增 Image",
+            "addimage": "新增圖片",
             "back": "返回",
             "cancel": "取消",
             "delete": "刪除",
@@ -106,7 +106,7 @@
             "view": "檢視"
         },
         "detail": {
-            "field": "屬性",
+            "field": "欄位",
             "value": "值"
         },
         "delete": {
@@ -130,8 +130,8 @@
         "url.not.found": "找不到",
         "NotNull": "欄位 {{fieldName}} 不能為空!",
         "Size": "欄位 {{fieldName}} 不符合大小需求!",
-        "userexists": "使用者名稱已被使用!",
-        "emailexists": "電子郵件位址已被使用!",
+        "userexists": "登入帳號名稱已被使用!",
+        "emailexists": "電子郵件地址已被使用!",
         "idexists": "新實體不能包含 ID"
     },
     "footer": "這裡是您的頁尾"

@@ -1,7 +1,7 @@
 {
     "configuration": {
         "title": "設定",
-        "filter": "篩選條件 (依照前置名稱)",
+        "filter": "篩選條件 (依據前置名稱)",
         "table": {
             "prefix": "前置名稱",
             "properties": "屬性"

@@ -3,7 +3,7 @@
         "title": "Java 文青，歡迎!",
         "subtitle": "這裡是您的首頁",
         "logged": {
-            "message": "您目前是用 \"{{username}}\" 帳號登入。"
+            "message": "您目前是用 “{{username}}” 帳號登入。"
         },
         "question": "要是您對 JHipster 有任何疑問，可以到:",
         "link": {

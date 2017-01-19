@@ -1,6 +1,6 @@
 {
     "tracker": {
-        "title": "使用者追蹤器",
+        "title": "使用者追蹤",
         "table": {
             "userlogin": "使用者",
             "ipaddress": "IP 位置",
