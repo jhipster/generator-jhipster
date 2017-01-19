@@ -211,12 +211,11 @@ public class AccountResource {
     @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
-        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
+        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u ->
             persistentTokenRepository.findByUser(u).stream()
                 .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries));<% } else { %>
-                .findAny().ifPresent(persistentToken -> persistentTokenRepository.delete(persistentToken));<% } %>
-        });
+                .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries)));<% } else { %>
+                .findAny().ifPresent(persistentToken -> persistentTokenRepository.delete(persistentToken)));<% } %>
     }<% } %>
 
     /**
