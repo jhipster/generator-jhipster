@@ -80,9 +80,9 @@ public class AccountResource {
         textPlainHeaders.setContentType(MediaType.TEXT_PLAIN);
 
         return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
-            .map(user -> new ResponseEntity("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
+            .map(user -> new ResponseEntity<>("login already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
             .orElseGet(() -> userRepository.findOneByEmail(managedUserVM.getEmail())
-                .map(user -> new ResponseEntity("e-mail address already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
+                .map(user -> new ResponseEntity<>("e-mail address already in use", textPlainHeaders, HttpStatus.BAD_REQUEST))
                 .orElseGet(() -> {
                     User user = userService
                         .createUser(managedUserVM.getLogin(), managedUserVM.getPassword(),
@@ -90,7 +90,7 @@ public class AccountResource {
                             managedUserVM.getEmail().toLowerCase()<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, managedUserVM.getImageUrl()<% } %>, managedUserVM.getLangKey());
 
                     mailService.sendActivationEmail(user);
-                    return new ResponseEntity(HttpStatus.CREATED);
+                    return new ResponseEntity<>(HttpStatus.CREATED);
                 })
         );
     }
@@ -106,7 +106,7 @@ public class AccountResource {
     public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
         return userService.activateRegistration(key)
             .map(user -> new ResponseEntity<String>(HttpStatus.OK))
-            .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
@@ -131,8 +131,8 @@ public class AccountResource {
     @Timed
     public ResponseEntity<UserDTO> getAccount() {
         return Optional.ofNullable(userService.getUserWithAuthorities())
-            .map(user -> new ResponseEntity(new UserDTO(user), HttpStatus.OK))
-            .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+            .map(user -> new ResponseEntity<>(new UserDTO(user), HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
@@ -155,7 +155,7 @@ public class AccountResource {
                     userDTO.getLangKey());
                 return new ResponseEntity<String>(HttpStatus.OK);
             })
-            .orElseGet(() -> new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
@@ -169,10 +169,10 @@ public class AccountResource {
     @Timed
     public ResponseEntity changePassword(@RequestBody String password) {
         if (!checkPasswordLength(password)) {
-            return new ResponseEntity("Incorrect password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
         }
         userService.changePassword(password);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }<% if (authenticationType == 'session') { %>
 
     /**
@@ -185,10 +185,10 @@ public class AccountResource {
     @Timed
     public ResponseEntity<List<PersistentToken>> getCurrentSessions() {
         return userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin())
-            .map(user -> new ResponseEntity(
+            .map(user -> new ResponseEntity<>(
                 persistentTokenRepository.findByUser(user),
                 HttpStatus.OK))
-            .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     /**
@@ -232,8 +232,8 @@ public class AccountResource {
         return userService.requestPasswordReset(mail)
             .map(user -> {
                 mailService.sendPasswordResetMail(user);
-                return new ResponseEntity("e-mail was sent", HttpStatus.OK);
-            }).orElse(new ResponseEntity("e-mail address not registered", HttpStatus.BAD_REQUEST));
+                return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
+            }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
     }
 
     /**
@@ -248,11 +248,11 @@ public class AccountResource {
     @Timed
     public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-            return new ResponseEntity("Incorrect password", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
         }
         return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
               .map(user -> new ResponseEntity<String>(HttpStatus.OK))
-              .orElse(new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+              .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
     private boolean checkPasswordLength(String password) {
