@@ -159,7 +159,7 @@
         <%_ } _%>
         <springfox.version>2.6.1</springfox.version>
         <%_ if (clientPackageManager === 'yarn') { _%>
-        <yarn.version>v0.18.1</yarn.version>
+        <yarn.version>v0.19.1</yarn.version>
         <%_ } _%>
     </properties>
 
