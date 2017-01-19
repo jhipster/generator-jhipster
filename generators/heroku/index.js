@@ -277,10 +277,19 @@ module.exports = HerokuGenerator.extend({
             this.template('_bootstrap-heroku.yml', constants.SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
             this.template('_application-heroku.yml', constants.SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
             this.template('_Procfile', 'Procfile');
+            if (this.buildTool === 'gradle') {
+                this.template('_heroku.gradle', 'gradle/heroku.gradle');
+            }
 
             this.conflicter.resolve(function (err) {
                 done();
             });
+        },
+
+        addHerokuBuildPlugin: function () {
+            if (this.buildTool !== 'gradle') return;
+            this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '0.2.0');
+            this.applyFromGradleScript('gradle/heroku');
         }
     },
 

@@ -1,0 +1,56 @@
+machine:
+    services:
+        - docker
+    java:
+        version: oraclejdk8
+    node:
+        version: 4.5.0
+dependencies:
+    cache_directories:
+        <%_ if (!skipClient) { _%>
+        - node
+        - node_modules
+        <%_ } _%>
+        <%_ if (buildTool === 'maven') { _%>
+        - ~/.m2
+        <%_ } else if (buildTool === 'gradle') { _%>
+        - ~/.gradle
+        <%_ } _%>
+    <%_ if (!skipClient) { _%>
+    override:
+        - npm install -g npm
+        - npm install -g bower gulp
+        - node -v
+        - npm -v
+        - bower -v
+        - gulp -v
+        - java -version
+        - npm install
+    <%_ } else { _%>
+    override:
+        - java -version
+    <%_ } _%>
+test:
+    override:
+<%_ if (buildTool === 'maven') { _%>
+        - ./mvnw clean
+        - ./mvnw test
+<%_ } else if (buildTool === 'gradle') { _%>
+        - ./gradlew clean
+        - ./gradlew test --no-daemon
+<%_ } _%>
+<%_ if (!skipClient) { _%>
+        - gulp test
+<%_ } _%>
+<%_ if (buildTool === 'maven') { _%>
+    <%_ if (integrations.includes('heroku')) { _%>
+        - HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+    <%_ } else { _%>
+        - ./mvnw package -Pprod -DskipTests
+    <%_ } _%>
+<%_ } else if (buildTool === 'gradle') { _%>
+        - ./gradlew bootRepackage -Pprod -x test --no-daemon
+    <%_ if (integrations.includes('heroku')) { _%>
+        - HEROKU_API_KEY="<%= herokuApiKey %>" ./gradlew deployHeroku --no-daemon
+    <%_ } _%>
+<%_ } _%>
