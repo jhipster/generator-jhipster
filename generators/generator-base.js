@@ -1775,7 +1775,6 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     this.copyI18nFilesByName(_this, webappDir, 'register.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'sessions.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'settings.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'reset.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'user-management.json', lang);
 
     // tracker.json for Websocket
@@ -1791,6 +1790,7 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     _this.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`, this, {});
     _this.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`, this, {});
     _this.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`, this, {});
+    _this.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`, this, {});
 
 
 };
