@@ -81,7 +81,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
             this.stompClient.disconnect();
             this.stompClient = null;
         }
-        if (this.subscription !== null) {
+        if (this.subscription) {
             this.subscription.unsubscribe();
             this.subscription = null;
         }
