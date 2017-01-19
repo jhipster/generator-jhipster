@@ -59,17 +59,17 @@ export const userMgmtRoute: Routes = [
 
 export const userDialogRoute: Routes = [
   {
-    path: 'new',
+    path: 'user-new',
     component: UserDialogComponent,
     outlet: 'popup'
   },
   {
-    path: 'edit/:login',
+    path: 'user-edit/:login',
     component: UserDialogComponent,
     outlet: 'popup'
   },
   {
-    path: 'delete/:login',
+    path: 'user-delete/:login',
     component: UserDeleteDialogComponent,
     outlet: 'popup'
   }
