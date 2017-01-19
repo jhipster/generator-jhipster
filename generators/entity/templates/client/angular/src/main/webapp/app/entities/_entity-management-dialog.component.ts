@@ -101,15 +101,17 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     }
     <%_
     var entitiesSeen = [];
-    for (idx in relationships) { _%>
-    <%  var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) { %>
+    for (idx in relationships) {
+        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+            if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
+    _%>
+
     track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityNameCapitalized -%>) {
         return item.id;
     }
     <%_ entitiesSeen.push(otherEntityNameCapitalized); } } _%>
-
     <%_ if (hasManyToMany) { _%>
+
     getSelected(selectedVals: Array<any>, option: any) {
         if (selectedVals) {
             for (let i = 0; i < selectedVals.length; i++) {
