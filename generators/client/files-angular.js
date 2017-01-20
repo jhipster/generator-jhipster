@@ -399,8 +399,8 @@ const files = {
             templates: [
                 '_karma.conf.js',
                 'spec/_entry.ts',
+                'spec/app/account/password/_password.component.spec.ts',
                 'spec/app/account/password/_password-strength-bar.component.spec.ts',
-                'spec/app/account/settings/_settings.controller.spec.js',
                 'spec/app/admin/health/_health.component.spec.ts',
                 'spec/helpers/_spyobject.ts'
             ]
