@@ -14,6 +14,7 @@
     "@angular/http": "2.4.1",
     "@angular/platform-browser": "2.4.1",
     "@angular/platform-browser-dynamic": "2.4.1",
+    "@angular/router": "3.4.2",
     "@angular/upgrade": "2.4.1",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.15",
     "bootstrap": "4.0.0-alpha.5",

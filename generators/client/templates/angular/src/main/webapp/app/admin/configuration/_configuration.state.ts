@@ -1,21 +1,12 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Route } from '@angular/router';
+
+import { UserRouteAccessService } from '../../shared';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
 
-export const configState: Ng2StateDeclaration = {
-    name: '<%=jhiPrefix%>-configuration',
-    parent: 'admin',
-    url: '/configuration',
-    data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'configuration.title'
-    },
-    views: {
-        'content@': { component: <%=jhiPrefixCapitalized%>ConfigurationComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['configuration'])
-    }]
+export const configurationRoute: Route = {
+  path: '<%=jhiPrefix%>-configuration',
+  component: <%=jhiPrefixCapitalized%>ConfigurationComponent,
+  data: {
+    pageTitle: 'configuration.title'
+  }
 };

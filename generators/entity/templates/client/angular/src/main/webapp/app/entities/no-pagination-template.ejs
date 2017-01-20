@@ -1,3 +1,11 @@
+<%_
+var i18nToLoad = [entityInstance];
+for (var idx in fields) {
+    if (fields[idx].fieldIsEnum == true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+_%>
 <%= entityInstancePlural %>: <%= entityClass %>[];
     currentAccount: any;
     searchQuery: any;
@@ -7,6 +15,9 @@
     <%_ } _%>
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private <%= entityInstance %>Service: <%= entityClass %>Service,
         private alertService: AlertService,
         <%_ if (fieldsContainBlob) { _%>
@@ -18,6 +29,9 @@
         <%_ if (fieldsContainBlob) { _%>
         this.openFile = dataUtils.openFile;
         this.byteSize = dataUtils.byteSize;
+        <%_ } _%>
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
         <%_ } _%>
     }
 

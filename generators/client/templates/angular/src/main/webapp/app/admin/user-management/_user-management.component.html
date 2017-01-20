@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span jhiTranslate="userManagement.home.title">Users</span>
-        <button class="btn btn-primary float-xs-right" uiSref="user-management.new">
+        <button class="btn btn-primary float-xs-right" [routerLink]="['/', { outlets: { popup: ['user-new'] } }]">
             <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
@@ -28,7 +28,7 @@
             </thead>
             <tbody *ngIf ="users">
             <tr *ngFor="let user of users; trackBy: trackIdentity">
-                <td><a uiSref="user-management-detail" [uiParams]="{ login: user.login }">{{user.id}}</a></td>
+                <td><a [routerLink]="['../user', user.login]">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
@@ -49,22 +49,19 @@
                 <td class="text-xs-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                uiSref="user-management-detail"
-                                [uiParams]="{ login: user.login }"
+                                [routerLink]="['../user', user.login]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.view"></span>
                         </button>
                         <button type="submit"
-                                uiSref="user-management.edit"
-                                [uiParams]="{ login: user.login }"
+                                [routerLink]="['/', { outlets: { popup: 'user-edit/'+ user.login } }]"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
-                                uiSref="user-management.delete"
-                                [uiParams]="{ login: user.login }"
+                                [routerLink]="['/', { outlets: { popup: 'user-delete/'+ user.login } }]"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="fa fa-remove"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.delete"></span>

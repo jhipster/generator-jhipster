@@ -1,38 +1,25 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Routes } from '@angular/router';
+
+import { UserRouteAccessService } from '../../shared';
 import { ErrorComponent } from './error.component';
 
-export const errorState: Ng2StateDeclaration = {
-    name: 'error',
-    parent: 'app',
-    url: '/error',
+export const errorRoute: Routes = [
+  {
+    path: 'error',
+    component: ErrorComponent,
     data: {
-        authorities: [],
-        pageTitle: 'error.title'
+      authorities: [],
+      pageTitle: 'error.title'
     },
-    views: {
-        'content@': { component: ErrorComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['error'])
-    }]
-};
-
-export const accessdeniedState: Ng2StateDeclaration = {
-    name: 'accessdenied',
-    parent: 'app',
-    url: '/accessdenied',
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: 'accessdenied',
+    component: ErrorComponent,
     data: {
-        authorities: []
+      authorities: [],
+      pageTitle: 'error.title'
     },
-    views: {
-        'content@': { component: ErrorComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['error'])
-    }]
-};
+    canActivate: [UserRouteAccessService]
+  }
+];

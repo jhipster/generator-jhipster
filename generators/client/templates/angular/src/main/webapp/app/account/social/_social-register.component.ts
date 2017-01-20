@@ -10,7 +10,12 @@ export class SocialRegisterComponent implements OnInit  {
     @Input() provider: string;
     providerLabel: string;
 
-    constructor (@Inject('$stateParams') private $stateParams) {}
+    constructor (
+        private jhiLanguageService: JhiLanguageService,
+        @Inject('$stateParams') private $stateParams
+    ) {
+        this.languageService.setLocations(['social']);
+    }
 
     ngOnInit() {
         this.success = this.$stateParams.success;

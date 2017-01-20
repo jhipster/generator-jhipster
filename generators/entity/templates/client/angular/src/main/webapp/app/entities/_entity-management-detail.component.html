@@ -86,7 +86,7 @@
     </button>
 
     <button type="button"
-            uiSref="<%= entityStateName %>.edit" [uiParams]="{ id: <%= entityInstance %>.id }"
+            [routerLink]="['/', { outlets: { popup: '<%= entityInstance %>-edit/'+ <%= entityInstance %>.id } }]"
             class="btn btn-primary">
         <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
     </button>
