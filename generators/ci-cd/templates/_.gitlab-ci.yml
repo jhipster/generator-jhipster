@@ -1,0 +1,145 @@
+<%_ if (integrations.includes('docker')) { _%>
+image: openjdk:8
+<%_ } _%>
+
+<%_ if (buildTool == 'gradle') { _%>
+cache:
+    key: "$CI_BUILD_REF_NAME"
+    paths:
+        - node_modules
+        - .gradle/wrapper
+        - .gradle/caches
+<%_ } _%>
+<%_ if (buildTool == 'maven') { _%>
+cache:
+    key: "$CI_BUILD_REF_NAME"
+    paths:
+        - node_modules
+        - .maven
+<%_ } _%>
+stages:
+    - build
+    - test
+    - package
+    - release
+    - deploy
+
+<%_ if (buildTool == 'gradle') { _%>
+before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    <%_ if (!skipClient) { _%>
+    - ./gradlew npmInstall -PnodeInstall --no-daemon
+    <%_ } _%>
+
+gradle-build:
+    stage: build
+    script:
+        - ./gradlew compileJava -x check --no-daemon
+    <%_ if (!skipClient) { _%>
+gulp-build:
+    stage: build
+    script:
+        - ./gradlew gulp_build -PnodeInstall --no-daemon
+    <%_ } _%>
+gradle-test:
+    stage: test
+    script:
+        - ./gradlew check --no-daemon
+    artifacts:
+        paths:
+            - build/reports/tests/*
+    <%_ if (testFrameworks.includes('gatling')) { _%>
+gatling-test:
+    stage: test
+    allow_failure: true
+    script:
+        - ./gradlew gatlingRun -x cleanResources --no-daemon
+    before_script:
+        <%_ if (!skipClient) { _%>
+        - ./gradlew npmInstall -PnodeInstall --no-daemon
+        <%_ } _%>
+        - ./gradlew bootRun &
+    artifacts:
+        paths:
+            - build/reports/gatling/*
+    <%_ } _%>
+gradle-repackage:
+    stage: package
+    script:
+        - ./gradlew bootRepackage -Pprod -x check --no-daemon
+    artifacts:
+        paths:
+            - build/libs/*.war
+    <%_ if (integrations.includes('heroku')) { _%>
+gradle-deploy:
+    stage: deploy
+    script:
+        - HEROKU_API_KEY="<%= herokuApiKey %>" ./gradlew deployHeroku --no-daemon
+    <%_ } _%>
+<%_ } _%>
+<%_ if (buildTool == 'maven') { _%>
+before_script:
+    - export MAVEN_USER_HOME=`pwd`/.maven
+    <%_ if (!skipClient) { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.4 -DyarnVersion=v0.18.1
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.4 -DnpmVersion=3.10.9
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:npm
+        <%_ } _%>
+    <%_ } _%>
+
+maven-build:
+    stage: build
+    script: ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
+
+    <%_ if (!skipClient) { _%>
+gulp-build:
+    stage: build
+    script:
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=build
+    <%_ } _%>
+maven-test:
+    stage: test
+    script:
+        - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        paths:
+            - target/surefire-reports/*
+    <%_ if (testFrameworks.includes('gatling')) { _%>
+gatling-test:
+    stage: test
+    allow_failure: true
+    script:
+        - ./mvnw gatling:execute -Dmaven.repo.local=$MAVEN_USER_HOME
+    before_script:
+        <%_ if (!skipClient) { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.4 -DyarnVersion=v0.18.1
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn
+            <%_ } else if (clientPackageManager === 'npm') { _%>
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.4 -DnpmVersion=3.10.9
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:npm
+            <%_ } _%>
+        <%_ } _%>
+        - ./mvnw &
+    artifacts:
+        paths:
+            - target/gatling/*
+    <%_ } _%>
+    <%_ if (integrations.includes('heroku')) { _%>
+maven-deploy:
+    stage: deploy
+     script:
+        - HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+    <%_ } else { _%>
+maven-package:
+    stage: package
+    script:
+        - ./mvnw package -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+    <%_ } _%>
+    artifacts:
+        paths:
+            - target/*.war
+<%_ } _%>
