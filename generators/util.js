@@ -107,8 +107,6 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
                 break;
             case 'js' :
                 body = replaceTitle(body, _this, template);
-                body = replaceConstructorImport(body, _this, template);
-                body = replaceConstructorSetting(body, _this, template);
                 break;
             }
             _this.write(dest, body);
@@ -136,32 +134,6 @@ function replaceTitle(body, _this, template) {
         var keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
 
         body = body.replace(target, keyValue !== undefined ? keyValue : _this.baseName);
-    }
-
-    return body;
-}
-
-function replaceConstructorImport(body, _this, template) {
-    var re = /([\s]*private\s[a-zA-Z0-9]*LanguageService\s?\:\s?[a-zA-Z0-9]*LanguageService\s?,[\s]*)/g;
-    var match;
-
-    while ((match = re.exec(body)) !== null) {
-        // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
-        var key = match[0];
-        body = body.replace(key, '\n\t\t');
-    }
-
-    return body;
-}
-
-function replaceConstructorSetting(body, _this, template) {
-    var re = /([\s]*this\.[a-zA-Z0-9]*LanguageService\.setLocations\(\[[\'|\"][a-zA-Z0-9-_]*[\'|\"]\]\)\;[\s]*)/g
-    var match;
-
-    while ((match = re.exec(body)) !== null) {
-        // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
-        var key = match[0];
-        body = body.replace(key, '');
     }
 
     return body;

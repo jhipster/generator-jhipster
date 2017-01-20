@@ -15,7 +15,7 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
 
     constructor(
         <%_ if (enableTranslation) { _%>
-        private jhiLanguageService: JhiLanguageHelper,
+        private jhiLanguageHelper: JhiLanguageHelper,
         <%_ } else { _%>
         private titleService: Title,
         <%_ } _%>
@@ -34,7 +34,7 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 <%_ if (enableTranslation) { _%>
-                this.jhiLanguageService.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
+                this.jhiLanguageHelper.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
                 <%_ } else { _%>
                  this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
                 <%_ } _%>

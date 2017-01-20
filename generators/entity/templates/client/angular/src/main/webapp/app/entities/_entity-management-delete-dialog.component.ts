@@ -10,7 +10,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, JhiLanguageService } from 'ng-jhipster';
+import { EventManager<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';

@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService, JhiLanguageService } from 'ng-jhipster';
+import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -166,9 +166,9 @@ export class <%= entityAngularJSName %>PopupComponent implements OnInit, OnDestr
             if ( params['id'] ) {
                 this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent, params['id']);
             } else {
-                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent);    
+                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent);
             }
-            
+
         });
     }
 

@@ -8,9 +8,9 @@ for (var idx in fields) {
 _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
-
+<%_ } _%>
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 
