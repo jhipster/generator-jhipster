@@ -23,14 +23,27 @@ launchCurlOrProtractor() {
         exit 1
     fi
 
-    if [ "$PROTRACTOR" == 1 ]; then
-        echo "[$(date)] Connected to application. Start protractor tests."
+    if [ "$PROTRACTOR" != 1 ]; then
+        exit 0
+    fi
+
+    retryCount=0
+    maxRetry=2
+    until [ "$retryCount" -ge "$maxRetry" ]
+    do
+        result=0
         if [[ -f "gulpfile.js" ]]; then
             gulp itest --no-notification
         elif [[ -f "tsconfig.json" ]]; then
             yarn run e2e
         fi
-    fi
+        result=$?
+        [ $result -eq 0 ] && break
+        retryCount=$((retryCount+1))
+        echo "e2e tests failed... retryCount =" $retryCount "/" $maxRetry
+        sleep 15
+    done
+    exit $result
 }
 
 #-------------------------------------------------------------------------------
