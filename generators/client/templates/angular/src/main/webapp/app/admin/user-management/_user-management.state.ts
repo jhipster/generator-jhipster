@@ -1,154 +1,76 @@
-import { Transition, Ng2StateDeclaration } from 'ui-router-ng2';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>PaginationUtil } from 'ng-jhipster';
+import { Injectable } from '@angular/core';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes, CanActivate } from '@angular/router';
+
+import { UserRouteAccessService } from '../../shared';
+import { PaginationUtil } from 'ng-jhipster';
 
 import { UserMgmtComponent } from './user-management.component';
 import { UserMgmtDetailComponent } from './user-management-detail.component';
-import { UserMgmtDialogComponent } from './user-management-dialog.component';
-import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
-import { User } from './user.model';
-import { UserService } from './user.service';
+import { UserDialogComponent } from './user-management-dialog.component';
+import { UserDeleteDialogComponent } from './user-management-delete-dialog.component';
 
-export const userMgmtState: Ng2StateDeclaration = {
-    name: 'user-management',
-    parent: 'admin',
-    url: '/user-management<%_ if (databaseType !== 'cassandra') { _%>?page&sort<%_ } _%>',
+import { Principal } from '../../shared';
+
+
+@Injectable()
+export class UserResolve implements CanActivate {
+
+  constructor(private principal: Principal) { }
+
+  canActivate() {
+    return this.principal.identity().then(account => this.principal.hasAnyAuthority(['ROLE_ADMIN']));
+  }
+}
+
+@Injectable()
+export class UserResolvePagingParams implements Resolve<any> {
+
+  constructor(private paginationUtil: PaginationUtil) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
+    return {
+        page: this.paginationUtil.parsePage('1'),
+        sort: 'asc',
+        predicate: this.paginationUtil.parsePredicate('id,asc'),
+        ascending: this.paginationUtil.parseAscending('id,asc')
+    };
+  }
+}
+
+export const userMgmtRoute: Routes = [
+  {
+    path: 'user-management',
+    component: UserMgmtComponent,
+    resolve: {
+      'pagingParams': UserResolvePagingParams
+    },
     data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'userManagement.home.title'
-    },
-    views: {
-        'content@': { component: UserMgmtComponent }
-    },
-    <%_ if (databaseType !== 'cassandra') { _%>
-    params: {
-        page: {
-            value: '1',
-            squash: true
-        },
-        sort: {
-            value: 'id,asc',
-            squash: true
-        }
-    },
-    resolve: [
-        {
-            token: 'pagingParams',
-            deps: [PaginationUtil, Transition],
-            resolveFn: (paginationUtil: PaginationUtil, trans: Transition) => {
-                const stateParams = trans.params();
-                return {
-                    page: paginationUtil.parsePage(stateParams['page']),
-                    sort: stateParams['sort'],
-                    predicate: paginationUtil.parsePredicate(stateParams['sort']),
-                    ascending: paginationUtil.parseAscending(stateParams['sort'])
-                };
-            }
-        }<% if (enableTranslation) { %>,
-        {
-            token: 'translate',
-            deps: [JhiLanguageService],
-            resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['user-management'])
-        }<% } %>
-
-    ]
-    <%_ } else { _%>
-    resolve: [
-        {
-            token: 'translate',
-            deps: [JhiLanguageService],
-            resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['user-management'])
-        }
-    ]
-    <%_ } _%>
-
-};
-
-export const userMgmtDetailState: Ng2StateDeclaration = {
-    name: 'user-management-detail',
-    parent: 'user-management',
-    url: '/user/:login',
-    data: {
-        authorities: ['ROLE_ADMIN'],
-        pageTitle: 'userManagement.detail.title'
-    },
-    views: {
-        'content@': { component: UserMgmtDetailComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['user-management'])
-    }]
-};
-
-export const userMgmtNewState: Ng2StateDeclaration = {
-    name: 'user-management.new',
-    url: '/new',
-    data: {
-        authorities: ['ROLE_ADMIN']
-    },
-    onEnter: (trans: Transition) => {
-        let $state = trans.router.stateService;
-        let modalService = trans.injector().get(NgbModal);
-        const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.user = new User();
-        modalRef.result.then((result) => {
-            console.log(`Closed with: ${result}`);
-            $state.go('user-management', null, { reload: true });
-        }, (reason) => {
-            console.log(`Dismissed ${reason}`);
-            $state.go('user-management');
-        });
+      pageTitle: 'userManagement.home.title'
     }
-};
-
-export const userMgmtEditState: Ng2StateDeclaration = {
-    name: 'user-management.edit',
-    url: '/{login}/edit',
+  }, {
+    path: 'user/:login',
+    component: UserMgmtDetailComponent,
     data: {
-        authorities: ['ROLE_ADMIN']
-    },
-    onEnter: (trans: Transition) => {
-        let $state = trans.router.stateService;
-        let modalService = trans.injector().get(NgbModal);
-        let userService: UserService = trans.injector().get(UserService);
-        let login = trans.params()['login'];
-        userService.find(login).subscribe(user => {
-            const modalRef  = modalService.open(UserMgmtDialogComponent, { size: 'lg', backdrop: 'static'});
-            modalRef.componentInstance.user = user;
-            modalRef.result.then((result) => {
-                console.log(`Closed with: ${result}`);
-                $state.go('user-management', null, { reload: true });
-            }, (reason) => {
-                console.log(`Dismissed ${reason}`);
-                $state.go('user-management');
-            });
-        });
+      pageTitle: 'userManagement.home.title'
     }
-};
+  }
+];
 
-export const userMgmtDeleteState: Ng2StateDeclaration = {
-    name: 'user-management.delete',
-    url: '/{login}/delete',
-    data: {
-        authorities: ['ROLE_ADMIN']
-    },
-    onEnter: (trans: Transition) => {
-        let $state = trans.router.stateService;
-        let modalService = trans.injector().get(NgbModal);
-        let userService: UserService = trans.injector().get(UserService);
-        let login = trans.params()['login'];
-        userService.find(login).subscribe(user => {
-            const modalRef  = modalService.open(UserMgmtDeleteDialogComponent, { size: 'md'});
-            modalRef.componentInstance.user = user;
-            modalRef.result.then((result) => {
-                console.log(`Closed with: ${result}`);
-                $state.go('user-management', null, { reload: true });
-            }, (reason) => {
-                console.log(`Dismissed ${reason}`);
-                $state.go('user-management');
-            });
-        });
-    }
-};
+export const userDialogRoute: Routes = [
+  {
+    path: 'user-new',
+    component: UserDialogComponent,
+    outlet: 'popup'
+  },
+  {
+    path: 'user-edit/:login',
+    component: UserDialogComponent,
+    outlet: 'popup'
+  },
+  {
+    path: 'user-delete/:login',
+    component: UserDeleteDialogComponent,
+    outlet: 'popup'
+  }
+];

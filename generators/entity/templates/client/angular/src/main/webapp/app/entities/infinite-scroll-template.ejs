@@ -16,6 +16,9 @@
     <%_ } _%>
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private <%= entityInstance %>Service: <%= entityClass %>Service,
         private alertService: AlertService,
         <%_ if (fieldsContainBlob) { _%>

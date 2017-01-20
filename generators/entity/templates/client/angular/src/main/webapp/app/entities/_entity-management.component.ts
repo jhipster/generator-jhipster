@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { EventManager, ParseLinks, PaginationUtil, AlertService<%_ if (fieldsContainBlob) { _%>, DataUtils<% } %> } from 'ng-jhipster';
-import { StateService } from 'ui-router-ng2';
+
+import { EventManager, ParseLinks, PaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Response } from '@angular/http';
-import { StateService } from 'ui-router-ng2';
-import { EventManager, PaginationUtil, ParseLinks, AlertService } from 'ng-jhipster';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService, AlertService } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
@@ -12,13 +13,14 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
     selector: '<%=jhiPrefix%>-user-mgmt',
     templateUrl: './user-management.component.html'
 })
-export class UserMgmtComponent implements OnInit {
+export class UserMgmtComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     users: User[];
     error: any;
     success: any;
     <%_ if (databaseType !== 'cassandra') { _%>
+    routeData: any;
     links: any;
     totalItems: any;
     queryCount: any;
@@ -30,31 +32,40 @@ export class UserMgmtComponent implements OnInit {
     <%_ } _%>
 
     constructor(
+        private jhiLanguageService: JhiLanguageService,
         private userService: UserService,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
         private principal: Principal,
-        private $state: StateService,
         private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
         private paginationUtil: PaginationUtil,
-        private paginationConfig: PaginationConfig
+        private paginationConfig: PaginationConfig,
         <%_ } _%>
+        private activatedRoute: ActivatedRoute,
+        private router: Router
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = paginationUtil.parsePage($state.params['page']);
-        this.previousPage = this.page;
-        this.reverse = paginationUtil.parseAscending($state.params['sort']);
-        this.predicate = paginationUtil.parsePredicate($state.params['sort']);
+        this.routeData = this.activatedRoute.data.subscribe(data => {
+            this.page = data['pagingParams'].page;
+            this.previousPage = data['pagingParams'].page;
+            this.reverse = data['pagingParams'].reverse;
+            this.predicate = data['pagingParams'].predicate;
+        });
         <%_ } _%>
+        this.jhiLanguageService.setLocations(['user-management']);
     }
 
     ngOnInit() {
-        this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
+            this.loadAll();
+            this.registerChangeInUsers();
         });
-        this.registerChangeInUsers();
+    }
+
+    ngOnDestroy() {
+        this.routeData.unsubscribe();
     }
 
     registerChangeInUsers() {
@@ -108,10 +119,7 @@ export class UserMgmtComponent implements OnInit {
     }
 
     transition () {
-        this.$state.transitionTo(this.$state.$current, {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        });
+        this.router.navigate(['/user-management', {page: this.page, sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')}]);
     }
     <%_ } _%>
 
@@ -132,7 +140,7 @@ export class UserMgmtComponent implements OnInit {
         this.users = data;
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.error, error.message, null);
     }
 }

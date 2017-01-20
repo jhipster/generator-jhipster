@@ -1,25 +1,13 @@
 import { Injectable } from '@angular/core';
-import { TranslateService, TranslationChangeEvent, LangChangeEvent } from 'ng2-translate';
-import { StateService } from 'ui-router-ng2';
+import { Title }     from '@angular/platform-browser';
+import { TranslateService, TranslationChangeEvent, LangChangeEvent } from 'ng2-translate/ng2-translate';
 
 import { LANGUAGES } from './language.constants';
 
 @Injectable()
 export class JhiLanguageHelper {
 
-    constructor (private translateService: TranslateService, private $state: StateService) {
-        this.init();
-    }
-
-    init () {
-        // FIXME onTranslationChange may not be required at all
-        this.translateService.onTranslationChange.subscribe((event: TranslationChangeEvent) => {
-            this.updateTitle();
-        });
-        this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-            this.updateTitle();
-        });
-    }
+    constructor (private translateService: TranslateService, private titleService: Title ) { }
 
     getAll(): Promise<any> {
         return Promise.resolve(LANGUAGES);
@@ -33,11 +21,13 @@ export class JhiLanguageHelper {
      * 3. 'global.title'
      */
     updateTitle(titleKey?: string) {
-        if (!titleKey && this.$state.current.data && this.$state.current.data.pageTitle) {
-            titleKey = this.$state.current.data.pageTitle;
+
+        if (!titleKey && this.titleService.getTitle() ) {
+            titleKey = this.titleService.getTitle();
         }
+
         this.translateService.get(titleKey || 'global.title').subscribe(title => {
-            window.document.title = title;
+            this.titleService.setTitle(title);
         });
     }
 }

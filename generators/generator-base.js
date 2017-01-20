@@ -44,21 +44,33 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
         var navbarPath;
         if (this.clientFramework === 'angular1') {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+            jhipsterUtils.rewriteFile({
+                file: navbarPath,
+                needle: 'jhipster-needle-add-element-to-menu',
+                splicable: [`<li ui-sref-active="active">
+                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                    <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                </a>
+                            </li>`
+                ]
+            }, this);
         } else {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+            jhipsterUtils.rewriteFile({
+                file: navbarPath,
+                needle: 'jhipster-needle-add-element-to-menu',
+                splicable: [`<li routerLinkActive="active">
+                                <a routerLink="${routerName}" routerLinkActive="active" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                    <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                </a>
+                            </li>`
+                ]
+            }, this);
         }
 
-        jhipsterUtils.rewriteFile({
-            file: navbarPath,
-            needle: 'jhipster-needle-add-element-to-menu',
-            splicable: [`<li ui-sref-active="active">
-                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
-            ]
-        }, this);
+
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
@@ -173,17 +185,20 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             splicable: [`export * from './${entityFolderName}/${entityFileName}.service';`
             ]
         }, this);
+        jhipsterUtils.rewriteFile({
+            file: indexPath,
+            needle: 'jhipster-needle-add-entity-to-index-popup-service-export',
+            splicable: [`export * from './${entityFolderName}/${entityFileName}-popup.service';`
+            ]
+        }, this);
 
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-states',
             splicable: [
                 this.stripMargin(
-                    `|${entityInstance}State,
-                     |    ${entityInstance}NewState,
-                     |    ${entityInstance}DetailState,
-                     |    ${entityInstance}EditState,
-                     |    ${entityInstance}DeleteState,`
+                    `|...${entityInstance}Route,
+                     |    ...${entityInstance}PopupRoute,`
                 )
             ]
         }, this);
@@ -194,7 +209,9 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             splicable: [
                 this.stripMargin(
                     `|${entityAngularJSName}DialogComponent,
-                     |        ${entityAngularJSName}DeleteDialogComponent,`
+                     |        ${entityAngularJSName}PopupComponent,
+                     |        ${entityAngularJSName}DeleteDialogComponent,
+                     |        ${entityAngularJSName}DeletePopupComponent,`
                 )
             ]
         }, this);
@@ -207,7 +224,9 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
                     `|${entityAngularJSName}Component,
                      |        ${entityAngularJSName}DetailComponent,
                      |        ${entityAngularJSName}DialogComponent,
-                     |        ${entityAngularJSName}DeleteDialogComponent,`
+                     |        ${entityAngularJSName}DeleteDialogComponent,
+                     |        ${entityAngularJSName}PopupComponent,
+                     |        ${entityAngularJSName}DeletePopupComponent,`
                 )
             ]
         }, this);
@@ -215,7 +234,12 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         jhipsterUtils.rewriteFile({
             file: entityPath,
             needle: 'jhipster-needle-add-entity-to-module-providers',
-            splicable: [`${entityClass}Service,`]
+            splicable: [
+                this.stripMargin(
+                    `|${entityClass}Service,
+                     |        ${entityClass}PopupService,`
+                )
+            ]
         }, this);
 
         jhipsterUtils.rewriteFile({
@@ -223,16 +247,16 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             needle: 'jhipster-needle-add-entity-to-module-import',
             splicable: [
                 this.stripMargin(
-                    `|${entityClass}Service,
+                    `|${entityAngularJSName}Service,
+                     |    ${entityAngularJSName}PopupService,
                      |    ${entityAngularJSName}Component,
                      |    ${entityAngularJSName}DetailComponent,
                      |    ${entityAngularJSName}DialogComponent,
+                     |    ${entityAngularJSName}PopupComponent,
+                     |    ${entityAngularJSName}DeletePopupComponent,
                      |    ${entityAngularJSName}DeleteDialogComponent,
-                     |    ${entityInstance}State,
-                     |    ${entityInstance}DetailState,
-                     |    ${entityInstance}NewState,
-                     |    ${entityInstance}EditState,
-                     |    ${entityInstance}DeleteState,`
+                     |    ${entityInstance}Route,
+                     |    ${entityInstance}PopupRoute,`
                 )
             ]
         }, this);
@@ -1083,16 +1107,25 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
 
     var _this = generator || this;
     var _opt = opt || {};
-    var regex;
+    let regex;
     switch (action) {
     case 'stripHtml' :
-        regex = /( (data-t|jhiT)ranslate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")|( translate(-v|V)alues\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
-        //looks for something like data-translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+        regex= new RegExp([
+            /( (data-t|jhiT)ranslate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")/,                    // data-translate or jhiTranslate
+            /( translate(-v|V)alues\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")/,    // translate-values or translateValues
+            /( translate-compile)/,                                                         // translate-compile
+            /( translate-value-max\="[0-9\{\}\(\)\|]*")/,                                   // translate-value-max
+        ].map(r => r.source).join('|'), 'g');
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
     case 'stripJs' :
-        regex = /(\,[\s]*(resolve)\:[\s]*[\[]?[\{][\s]*(translatePartialLoader|token: 'translate')[\[]?[\'a-zA-Z0-9\$\,\(\)\{\.\<\%\=\-\>\;\s\:\[\]]*(\;[\s]*\}\][\s]*\}|\)[\s]*\}\]))|(import\s\{\s?[a-zA-Z0-9\=\<\>\%]*LanguageService\s?\}\sfrom\s[\"|\']ng-jhipster[\"|\']\;)/g;
-        //looks for something like translatePartialLoader: [*] or token: 'translate'
+        regex= new RegExp([
+            /(\,[\s]*(resolve)\:[\s]*[\{][\s]*(translatePartialLoader)[\'a-zA-Z0-9\$\,\(\)\{\.\<\%\=\-\>\;\s\:\[\]]*(\;[\s]*\}\][\s]*\}))/, // ng1 resolve block
+            /(import\s\{\s?JhiLanguageService\s?\}\sfrom\s[\"|\']ng-jhipster[\"|\']\;)/,       // ng2 import jhiLanguageService
+            /(\,?\s?JhiLanguageService\,?\s?)/,                                                          // ng2 import jhiLanguageService
+            /([\s]*private\s[a-zA-Z0-9]*(L|l)anguageService\s?\:\s?JhiLanguageService\s?,[\s]*)/,          // ng2 jhiLanguageService constructor argument
+            /([\s]*this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'|\"][a-zA-Z0-9-_]*[\'|\"]\]\)\;[\s]*)/,// jhiLanguageService invocations
+        ].map(r => r.source).join('|'), 'g');
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
     case 'copy' :

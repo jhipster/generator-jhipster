@@ -3,18 +3,17 @@ import './vendor.ts';
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } %>
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { UIRouterModule } from 'ui-router-ng2';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
-import { <%=angular2AppName%>SharedModule } from './shared';
+import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
 import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 
-import { appState } from './app.state';
-import { HomeComponent, homeState } from './home';
-import { <%=jhiPrefixCapitalized%>RouterConfig } from './blocks/config/router.config';
+import { LayoutRoutingModule } from './layouts';
+import { HomeComponent } from './home';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
@@ -27,26 +26,14 @@ import {
     <%_ if (enableTranslation) { _%>
     ActiveMenuDirective,
     <%_ } _%>
-    ErrorComponent,
-    errorState,
-    accessdeniedState
+    ErrorComponent
 } from './layouts';
 
-let routerConfig = {
-    configClass: <%=jhiPrefixCapitalized%>RouterConfig,
-    useHash: true,
-    states: [
-        appState,
-        homeState,
-        errorState,
-        accessdeniedState
-    ]
-};
 
 @NgModule({
     imports: [
         BrowserModule,
-        UIRouterModule.forRoot(routerConfig),
+        LayoutRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi'}),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
@@ -69,7 +56,8 @@ let routerConfig = {
         { provide: Window, useValue: window },
         { provide: Document, useValue: document },
         customHttpProvider(),
-        PaginationConfig
+        PaginationConfig,
+        UserRouteAccessService
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })

@@ -1,4 +1,6 @@
 import { NgModule, Sanitizer } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from 'ng2-translate';
 <%_ } _%>
@@ -40,7 +42,8 @@ export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslatio
             provide: AlertService,
             useFactory: alertServiceProvider,
             deps: [Sanitizer<% if (enableTranslation) { %>, TranslateService<% } %>]
-        }
+        },
+        Title
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,

@@ -1,23 +1,14 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Route } from '@angular/router';
+
+import { UserRouteAccessService } from '../../shared';
 import { SettingsComponent } from './settings.component';
 
-export const settingsState: Ng2StateDeclaration = {
-    name: 'settings',
-    parent: 'account',
-    url: '/settings',
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'global.menu.account.settings'
-    },
-    views: {
-        'content@': {
-            component: SettingsComponent
-        }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['settings'])
-    }]
+export const settingsRoute: Route = {
+  path: 'settings',
+  component: SettingsComponent,
+  data: {
+    authorities: ['ROLE_USER'],
+    pageTitle: 'global.menu.account.settings'
+  },
+  canActivate: [UserRouteAccessService]
 };

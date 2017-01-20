@@ -21,13 +21,13 @@ export class RegisterComponent implements OnInit {
     modalRef: NgbModalRef;
 
     constructor(
-        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
-        <%_ } _%>
         private loginModalService: LoginModalService,
         private registerService: Register,
         private elementRef: ElementRef,
-        private renderer: Renderer) {
+        private renderer: Renderer
+    ) {
+        this.languageService.setLocations(['register']);
     }
 
     ngOnInit() {

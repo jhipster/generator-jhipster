@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { Log } from './log.model';
 import { LogsService } from './logs.service';
@@ -14,10 +15,14 @@ export class LogsComponent implements OnInit {
     orderProp: string;
     reverse: boolean;
 
-    constructor ( private logsService: LogsService ) {
+    constructor (
+        private jhiLanguageService: JhiLanguageService,
+        private logsService: LogsService
+    ) {
         this.filter = '';
         this.orderProp = 'name';
         this.reverse = false;
+        this.jhiLanguageService.setLocations(['logs']);
     }
 
     ngOnInit() {

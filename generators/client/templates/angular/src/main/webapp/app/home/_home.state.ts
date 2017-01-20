@@ -1,20 +1,13 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
-import { HomeComponent } from './home.component';
+import { Route } from '@angular/router';
 
-export const homeState: Ng2StateDeclaration = {
-    name: 'home',
-    parent: 'app',
-    url: '/',
-    data: {
-        authorities: []
-    },
-    views: {
-        'content@': { component: HomeComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['home'])
-    }]
+import { UserRouteAccessService } from '../shared';
+import { HomeComponent } from './';
+
+export const homeRoute: Route = {
+  path: '',
+  component: HomeComponent,
+  data: {
+    authorities: []
+  },
+  canActivate: [UserRouteAccessService]
 };

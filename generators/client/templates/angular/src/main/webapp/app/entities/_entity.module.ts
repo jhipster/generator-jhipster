@@ -1,15 +1,14 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { UIRouterModule } from 'ui-router-ng2';
+import { RouterModule } from '@angular/router';
+
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
 import {
-    entityState,
     /* jhipster-needle-add-entity-to-module-import - JHipster will add entity classes here */
 } from './';
 
 let ENTITY_STATES = [
-    entityState,
     /* jhipster-needle-add-entity-to-module-states - JHipster will add entity state vars here */
 ];
 
@@ -17,7 +16,7 @@ let ENTITY_STATES = [
     imports: [
         <%=angular2AppName%>SharedModule,
         InfiniteScrollModule,
-        UIRouterModule.forChild({ states: ENTITY_STATES })
+        RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
     declarations: [
         /* jhipster-needle-add-entity-to-module-declarations - JHipster will add entity component classes here */

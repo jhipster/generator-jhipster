@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StateService } from 'ui-router-ng2';
+import { Router } from '@angular/router';
 
 import { LoginModalService } from '../login/login-modal.service';
 import { Principal } from './principal.service';
@@ -10,9 +10,9 @@ export class AuthService {
 
     constructor(
         private principal: Principal,
-        private $state: StateService,
         private stateStorageService: StateStorageService,
         private loginModalService: LoginModalService,
+        private router: Router
     ) {}
 
     authorize (force) {
@@ -25,9 +25,8 @@ export class AuthService {
             let toStateInfo = this.stateStorageService.getDestinationState().destination;
 
             // an authenticated user can't access to login and register pages
-            if (isAuthenticated && toStateInfo.parent === 'account'
-                && (toStateInfo.name === 'login' || toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
-                this.$state.go('home');
+            if (isAuthenticated && toStateInfo.parent === 'account' && (toStateInfo.name === 'login' || toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
+                this.router.navigate(['']);
             }
 
             // recover and clear previousState after external login redirect (e.g. oauth2)
@@ -35,7 +34,7 @@ export class AuthService {
             let previousState = this.stateStorageService.getPreviousState();
             if (isAuthenticated && !fromStateInfo.name && previousState) {
                 this.stateStorageService.resetPreviousState();
-                this.$state.go(previousState.name, previousState.params);
+                this.router.navigate([previousState.name], { queryParams:  previousState.params  });
             }
 
             if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0 &&
@@ -43,14 +42,14 @@ export class AuthService {
 
                 if (isAuthenticated) {
                     // user is signed in but not authorized for desired state
-                    this.$state.go('accessdenied');
+                    this.router.navigate(['accessdenied']);
                 } else {
                     // user is not authenticated. Show the state they wanted before you
                     // send them to the login service, so you can return them when you're done
                     let toStateParamsInfo = this.stateStorageService.getDestinationState().params;
                     this.stateStorageService.storePreviousState(toStateInfo.name, toStateParamsInfo);
                     // now, send them to the signin state so they can log in
-                    this.$state.go('accessdenied').then(() => {
+                    this.router.navigate(['accessdenied']).then(() => {
                         this.loginModalService.open();
                     });
                 }

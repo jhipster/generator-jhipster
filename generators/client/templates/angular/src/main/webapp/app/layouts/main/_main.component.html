@@ -1,6 +1,11 @@
 <<%=jhiPrefix%>-page-ribbon></<%=jhiPrefix%>-page-ribbon>
-<div ui-view="navbar"></div>
+<div>
+    <router-outlet name="navbar"></router-outlet>
+</div>
 <div class="container-fluid">
-    <div class="card" ui-view="content"></div>
+    <div class="card">
+        <router-outlet></router-outlet>
+        <router-outlet name="popup"></router-outlet>
+    </div>
     <<%=jhiPrefix%>-footer></<%=jhiPrefix%>-footer>
 </div>
