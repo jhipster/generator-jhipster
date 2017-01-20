@@ -38,11 +38,11 @@ export class AuditsComponent implements OnInit {
         this.jhiLanguageService.setLocations(['audits']);
     }
 
-    getAudits () {
+    getAudits() {
         return this.sortAudits(this.audits);
     }
 
-    loadPage (page: number) {
+    loadPage(page: number) {
         this.page = page;
         this.onChangeDate();
     }
@@ -53,7 +53,7 @@ export class AuditsComponent implements OnInit {
         this.onChangeDate();
     }
 
-    onChangeDate () {
+    onChangeDate() {
         this.auditsService.query({page: this.page - 1, size: this.itemsPerPage,
             fromDate: this.fromDate, toDate: this.toDate}).subscribe(res => {
 
@@ -63,7 +63,7 @@ export class AuditsComponent implements OnInit {
         });
     }
 
-    previousMonth () {
+    previousMonth() {
         let dateFormat = 'yyyy-MM-dd';
         let fromDate: Date = new Date();
 
@@ -76,7 +76,7 @@ export class AuditsComponent implements OnInit {
         this.fromDate = this.datePipe.transform(fromDate, dateFormat);
     }
 
-    today () {
+    today() {
         let dateFormat = 'yyyy-MM-dd';
         // Today + 1 day - needed if the current day must be included
         let today: Date = new Date();
