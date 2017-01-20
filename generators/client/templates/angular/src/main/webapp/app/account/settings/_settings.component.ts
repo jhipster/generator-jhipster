@@ -18,7 +18,9 @@ export class SettingsComponent implements OnInit {
         private principal: Principal<% if (enableTranslation) { %>,
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper<% } %>
-    ) {}
+    ) {
+        this.languageService.setLocations(['settings']);
+    }
 
     ngOnInit () {
         this.principal.identity().then((account) => {

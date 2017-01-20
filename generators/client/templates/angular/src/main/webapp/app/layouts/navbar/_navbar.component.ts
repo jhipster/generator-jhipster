@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from 'ui-router-ng2';
+import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 
@@ -29,7 +29,6 @@ export class NavbarComponent implements OnInit {
     version: string;
 
     constructor(
-        private $state: StateService,
         private loginService: LoginService,
         <%_ if (enableTranslation) { _%>
         private languageHelper: JhiLanguageHelper,
@@ -37,10 +36,14 @@ export class NavbarComponent implements OnInit {
         <%_ } _%>
         private principal: Principal,
         private loginModalService: LoginModalService,
-        private profileService: ProfileService
+        private profileService: ProfileService,
+        private router: Router
     ) {
         this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
+        <%_ if (enableTranslation) { _%>
+        this.languageService.addLocation('home');
+        <%_ } _%>
     }
 
     ngOnInit() {
@@ -77,7 +80,7 @@ export class NavbarComponent implements OnInit {
     logout() {
         this.collapseNavbar();
         this.loginService.logout();
-        this.$state.go('home');
+        this.router.navigate(['']);
     }
 
     toggleNavbar() {

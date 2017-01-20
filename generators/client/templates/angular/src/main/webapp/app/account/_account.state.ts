@@ -1,7 +1,44 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
+import { Routes, CanActivate } from '@angular/router';
 
-export const accountState: Ng2StateDeclaration = {
-    name: 'account',
-    abstract: true,
-    parent: 'app'
-};
+import { UserRouteAccessService } from '../shared';
+
+import {
+    activateRoute,
+    passwordRoute,
+    passwordResetFinishRoute,
+    passwordResetInitRoute,
+    registerRoute,
+    <%_ if (authenticationType === 'session') { _%>
+    sessionsRoute,
+    <%_ } _%>
+    <%_ if (enableSocialSignIn) { _%>
+    socialRegisterRoute,
+        <%_ if (authenticationType == 'jwt') { _%>
+    socialAuthRoute,
+        <%_ } _%>
+    <%_ } _%>
+    settingsRoute
+} from './';
+
+let ACCOUNT_ROUTES = [
+   activateRoute,
+   passwordRoute,
+   passwordResetFinishRoute,
+   passwordResetInitRoute,
+   registerRoute,
+    <%_ if (authenticationType === 'session') { _%>
+   sessionsRoute,
+    <%_ } _%>
+    <%_ if (enableSocialSignIn) { _%>
+    <%_ if (authenticationType == 'jwt') { _%>
+    socialAuthRoute,
+    <%_ } _%>
+   socialRegisterRoute,
+    <%_ } _%>
+   settingsRoute
+];
+
+export const accountState: Routes = [{
+    path: '',
+    children: ACCOUNT_ROUTES
+}];

@@ -1,13 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+<%_
+var i18nToLoad = [entityInstance];
+for (var idx in fields) {
+    if (fields[idx].fieldIsEnum == true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+_%>
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService } from 'ng-jhipster';
+
+import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
+import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 <%- include('model-class-import-template.ejs'); -%>
 <%- include('service-class-import-template.ejs'); -%>
 // TODO replace ng-file-upload dependency by an ng2 depedency
+// TODO Find a better way to format dates so that it works with NgbDatePicker
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'
@@ -55,12 +67,20 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     <%- variables[idx] %>
     <%_ } _%>
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         public activeModal: NgbActiveModal,
         private alertService: AlertService,
         private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
-        private eventManager: EventManager
-    ) {}
+        private eventManager: EventManager,
+        private router: Router
+    ) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
+        <%_ } _%>
+    }
 
     ngOnInit() {
         this.isSaving = false;
@@ -72,6 +92,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
     clear () {
         this.activeModal.dismiss('cancel');
+        this.router.navigate([{ outlets: { popup: null }}]);
     }
 
     save () {
@@ -89,6 +110,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
+        this.router.navigate([{ outlets: { popup: null }}]);
     }
 
     private onSaveError (error) {
@@ -123,4 +145,34 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         return option;
     }
     <%_ } _%>
+}
+
+@Component({
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>-popup',
+    template: ''
+})
+export class <%= entityAngularJSName %>PopupComponent implements OnInit, OnDestroy {
+
+    modalRef: NgbModalRef;
+    routeSub: any;
+
+    constructor (
+        private route: ActivatedRoute,
+        private <%= entityInstance %>PopupService: <%= entityClass %>PopupService
+    ) {}
+
+    ngOnInit() {
+        this.routeSub = this.route.params.subscribe(params => {
+            if ( params['id'] ) {
+                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent, params['id']);
+            } else {
+                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent);
+            }
+
+        });
+    }
+
+    ngOnDestroy() {
+        this.routeSub.unsubscribe();
+    }
 }
