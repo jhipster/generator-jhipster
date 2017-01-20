@@ -29,7 +29,6 @@ public interface UserMapper {
     <%_ if ((authenticationType == 'session') && (databaseType == 'sql')) { _%>
     @Mapping(target = "persistentTokens", ignore = true)
     <%_ } } _%>
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "activationKey", ignore = true)
     @Mapping(target = "resetKey", ignore = true)
     @Mapping(target = "resetDate", ignore = true)
