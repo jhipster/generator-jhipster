@@ -96,6 +96,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
             this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
             this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+            this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
             this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
             this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
