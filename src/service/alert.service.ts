@@ -23,7 +23,7 @@ export class AlertOptions {
     params: any;
     timeout: number;
     toast: boolean;
-    position: string;
+    position?: string;
     scoped?: boolean;
     close?: (alerts: Alert[]) => void;
 }
