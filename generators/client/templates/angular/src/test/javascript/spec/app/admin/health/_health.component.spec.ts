@@ -4,7 +4,6 @@ import {Http, BaseRequestOptions} from '@angular/http';
 import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component';
 import {<%=jhiPrefixCapitalized%>HealthService} from '../../../../../../main/webapp/app/admin/health/health.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {<%=jhiPrefixCapitalized%>TranslateComponent} from 'ng-jhipster'
 <%_ if (enableTranslation) { _%>
 import {TranslatePipe} from 'ng2-translate';
 <%_ } _%>
