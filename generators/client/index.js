@@ -367,7 +367,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         let logMsg =
             'Start your Webpack development server with:' +
-            '\n ' + chalk.yellow.bold(this.clientPackageManager + ' run webpack:dev') +
+            '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
             '\n';
 
         if (this.clientFramework === 'angular1') {
