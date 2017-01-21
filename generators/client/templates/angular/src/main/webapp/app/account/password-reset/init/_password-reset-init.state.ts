@@ -1,20 +1,14 @@
-import { Ng2StateDeclaration } from 'ui-router-ng2';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Route } from '@angular/router';
+
+import { UserRouteAccessService } from '../../../shared';
 import { PasswordResetInitComponent } from './password-reset-init.component';
 
-export const requestResetState: Ng2StateDeclaration = {
-    name: 'requestReset',
-    parent: 'account',
-    url: '/reset/request',
-    data: {
-        authorities: []
-    },
-    views: {
-        'content@': { component: PasswordResetInitComponent }
-    },
-    resolve: [{
-        token: 'translate',
-        deps: [JhiLanguageService],
-        resolveFn: (languageService: JhiLanguageService) => languageService.setLocations(['reset'])
-    }]
+export const passwordResetInitRoute: Route = {
+  path: 'reset/request',
+  component: PasswordResetInitComponent,
+  data: {
+    authorities: [],
+    pageTitle: 'global.menu.account.password'
+  },
+  canActivate: [UserRouteAccessService]
 };

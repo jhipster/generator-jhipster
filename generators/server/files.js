@@ -61,6 +61,9 @@ function writeFiles() {
             if (this.prodDatabaseType === 'mssql') {
                 this.template(DOCKER_DIR + '_mssql.yml', DOCKER_DIR + 'mssql.yml', this, {});
             }
+            if (this.prodDatabaseType === 'oracle') {
+                this.template(DOCKER_DIR + '_oracle.yml', DOCKER_DIR + 'oracle.yml', this, {});
+            }
             if (this.applicationType === 'gateway' || this.prodDatabaseType === 'cassandra') {
                 // docker-compose files
                 this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});

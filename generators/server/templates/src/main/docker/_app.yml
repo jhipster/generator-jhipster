@@ -27,6 +27,9 @@ services:
         <%_ if (prodDatabaseType == 'mssql') { _%>
             - <%= baseName.toLowerCase() %>-mssql:mssql
         <%_ } _%>
+        <%_ if (prodDatabaseType == 'oracle') { _%>
+            - <%= baseName.toLowerCase() %>-oracle:oracle
+        <%_ } _%>
         <%_ if (prodDatabaseType == 'cassandra') { _%>
             - <%= baseName.toLowerCase() %>-cassandra:cassandra
         <%_ } _%>
@@ -66,6 +69,9 @@ services:
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mssql') { _%>
             - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssql:1433;database=jhitest
+            <%_ } _%>
+            <%_ if (prodDatabaseType == 'oracle') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@localhost:1521:<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mongodb') { _%>
             - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017

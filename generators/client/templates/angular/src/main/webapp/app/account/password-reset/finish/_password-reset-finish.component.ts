@@ -1,10 +1,10 @@
 import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { PasswordResetFinish } from './password-reset-finish.service';
 import { LoginModalService } from '../../../shared';
-
-import { Transition } from 'ui-router-ng2';
 
 @Component({
     selector: '<%=jhiPrefix%>-password-reset-finish',
@@ -18,16 +18,24 @@ export class PasswordResetFinishComponent implements OnInit {
     resetAccount: any;
     success: string;
     modalRef: NgbModalRef;
+    key: string;
 
-    constructor(private passwordResetFinish: PasswordResetFinish,
+    constructor(
+        private jhiLanguageService: JhiLanguageService,
+        private passwordResetFinish: PasswordResetFinish,
         private loginModalService: LoginModalService,
-        private trans: Transition,
+        private route: ActivatedRoute,
         private elementRef: ElementRef, private renderer: Renderer
-    ) {}
+    ) {
+        this.jhiLanguageService.setLocations(['reset']);
+    }
 
     ngOnInit() {
+        this.route.queryParams.subscribe(params => {
+            this.key = params['key'];
+        });
         this.resetAccount = {};
-        this.keyMissing = !this.trans.params() || !this.trans.params()['key'];
+        this.keyMissing = !this.key;
     }
 
     ngAfterViewInit() {
@@ -42,7 +50,7 @@ export class PasswordResetFinishComponent implements OnInit {
         if (this.resetAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.passwordResetFinish.save({key: this.trans.params()['key'], newPassword: this.resetAccount.password}).subscribe(() => {
+            this.passwordResetFinish.save({key: this.key, newPassword: this.resetAccount.password}).subscribe(() => {
                 this.success = 'OK';
             }, () => {
                 this.success = null;

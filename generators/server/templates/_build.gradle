@@ -404,8 +404,8 @@ dependencies {
     testCompile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
-    runtime fileTree(dir: 'lib', include: '*.jar')
+    // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
+    compile "com.oracle.jdbc:ojdbc7:${oracle_driver_java_version}"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"

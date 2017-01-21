@@ -1,3 +1,12 @@
+<%_
+var i18nToLoad = [entityInstance];
+for (var idx in fields) {
+    if (fields[idx].fieldIsEnum == true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+_%>
+
 currentAccount: any;
     <%= entityInstancePlural %>: <%= entityClass %>[];
     error: any;
@@ -6,6 +15,7 @@ currentAccount: any;
     currentSearch: string;
     <%_ } _%>
     <%_ if (databaseType !== 'cassandra') { _%>
+    routeData: any;
     links: any;
     totalItems: any;
     queryCount: any;
@@ -17,6 +27,9 @@ currentAccount: any;
     <%_ } _%>
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
         private <%= entityInstance %>Service: <%= entityClass %>Service,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
@@ -28,18 +41,23 @@ currentAccount: any;
         <%_ } _%>
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = paginationUtil.parsePage($state.params['page']);
-        this.previousPage = this.page;
-        this.reverse = paginationUtil.parseAscending($state.params['sort']);
-        this.predicate = paginationUtil.parsePredicate($state.params['sort']);
+        this.routeData = this.activatedRoute.data.subscribe(data => {
+            this.itemsPerPage = ITEMS_PER_PAGE;
+            this.page = data['pagingParams'].page;
+            this.previousPage = data['pagingParams'].page;
+            this.reverse = data['pagingParams'].reverse;
+            this.predicate = data['pagingParams'].predicate;
+            <%_ if (searchEngine == 'elasticsearch') { _%>
+            this.currentSearch = data['pagingParams'].search;
+            <%_ } _%>
+        });
         <%_ } _%>
-        <%_ if (searchEngine == 'elasticsearch') { _%>
-        this.currentSearch = $state.params['search'];
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
         <%_ } _%>
     }
 
-    loadAll () {
+    loadAll() {
         <%_ if (searchEngine == 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
@@ -67,33 +85,33 @@ currentAccount: any;
             this.transition();
         }
     }
-    transition () {
-        this.$state.transitionTo(this.$state.$current, {
+    transition() {
+        this.router.navigate(['/<%= entityUrl %>', {
             page: this.page,
             size: this.itemsPerPage,
             <%_ if (searchEngine == 'elasticsearch') { _%>
             search: this.currentSearch,
             <%_ } _%>
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        });
+        }]);
     }
 
-    clear () {
+    clear() {
         this.page = 0;
-        this.$state.transitionTo(this.$state.$current, {
+        this.router.navigate(['/<%= entityUrl %>', {
             page: this.page,
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        });
+        }]);
     }
     <%_ } _%>
     <%_ if(searchEngine === 'elasticsearch') { _%>
     search (query: string) {
         this.page = 0;
-        this.$state.transitionTo(this.$state.$current, {
+        this.router.navigate(['/<%= entityUrl %>', {
             search: query,
             page: this.page,
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        });
+        }]);
     }
     <%_ } _%>
     private onSuccess (data, headers) {

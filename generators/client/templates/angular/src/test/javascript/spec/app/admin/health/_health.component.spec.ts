@@ -5,7 +5,7 @@ import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../m
 import {<%=jhiPrefixCapitalized%>HealthService} from '../../../../../../main/webapp/app/admin/health/health.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
-import {TranslatePipe} from 'ng2-translate';
+import { TranslatePipe } from 'ng2-translate';
 <%_ } _%>
 
 describe('Controller Tests', () => {
