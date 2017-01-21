@@ -1,6 +1,9 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ParseLinks } from 'ng-jhipster';
+<%_ if (websocket === 'spring-websocket') { _%>
+import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tracker.service';
+<%_ } _%>
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
 
@@ -33,7 +36,6 @@ import {
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerComponent,
-    TrackerResolve,
     <%_ } _%>
     LogsService,
     <%_ if (!skipUserManagement) { _%>
@@ -91,8 +93,8 @@ import {
         <%_ } _%>
         LogsService,
         <%_ if (websocket === 'spring-websocket') { _%>
-        TrackerResolve,
-        <%_ } _%>        
+        <%=jhiPrefixCapitalized%>TrackerService,
+        <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
         UserService,
         UserResolvePagingParams,
