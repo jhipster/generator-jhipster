@@ -413,7 +413,7 @@ function askForField(done) {
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (!skipServer && jhiCore.isReservedFieldName(input, prodDatabaseType)) {
-                    return `Your field name cannot contain a Java, AngularJS or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
+                    return `Your field name cannot contain a Java, Angular or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
@@ -1070,7 +1070,7 @@ function askForRelationship(done) {
             type: 'input',
             name: 'otherEntityField',
             message: function (response) {
-                return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?';
+                return 'When you display this relationship with Angular, which field from \'' + response.otherEntityName + '\' do you want to use?';
             },
             default: 'id'
         },
