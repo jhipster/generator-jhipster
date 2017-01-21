@@ -72,7 +72,7 @@ describe('account', () => {
 
     it('should be able to update settings', () => {
         accountMenu.click();
-        element(by.css('[uisref="settings"]')).click();
+        element(by.css('[routerLink="settings"]')).click();
 
         <%_ if (enableTranslation) { _%>
         const expect1 = /settings.title/;
@@ -96,7 +96,7 @@ describe('account', () => {
 
     it('should be able to update password', () => {
         accountMenu.click();
-        element(by.css('[uisref="password"]')).click();
+        element(by.css('[routerLink="password"]')).click();
 
         <%_ if (enableTranslation) { _%>
         const expect1 = /password.title/;
@@ -129,7 +129,7 @@ describe('account', () => {
         element(by.css('button[type=submit]')).click();
 
         accountMenu.click();
-        element(by.css('[uisref="password"]')).click();
+        element(by.css('[routerLink="password"]')).click();
         // change back to default
         password.clear();
         password.sendKeys('admin');
