@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { EventManager, ParseLinks, PaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
