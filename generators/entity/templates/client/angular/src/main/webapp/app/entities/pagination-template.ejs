@@ -57,7 +57,7 @@ currentAccount: any;
         <%_ } _%>
     }
 
-    loadAll () {
+    loadAll() {
         <%_ if (searchEngine == 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
@@ -85,7 +85,7 @@ currentAccount: any;
             this.transition();
         }
     }
-    transition () {
+    transition() {
         this.router.navigate(['/<%= entityUrl %>', {
             page: this.page,
             size: this.itemsPerPage,
@@ -96,7 +96,7 @@ currentAccount: any;
         }]);
     }
 
-    clear () {
+    clear() {
         this.page = 0;
         this.router.navigate(['/<%= entityUrl %>', {
             page: this.page,

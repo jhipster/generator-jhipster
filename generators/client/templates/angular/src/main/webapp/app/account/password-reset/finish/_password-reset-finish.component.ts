@@ -27,7 +27,7 @@ export class PasswordResetFinishComponent implements OnInit {
         private route: ActivatedRoute,
         private elementRef: ElementRef, private renderer: Renderer
     ) {
-        this.jhiLanguageService.setLocations(['reset']);       
+        this.jhiLanguageService.setLocations(['reset']);
     }
 
     ngOnInit() {

@@ -15,7 +15,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
 
     constructor(
         private jhiLanguageService: JhiLanguageService,
-        private modalService: NgbModal, 
+        private modalService: NgbModal,
         private healthService: <%=jhiPrefixCapitalized%>HealthService
     ) {
         this.jhiLanguageService.setLocations(['health']);
