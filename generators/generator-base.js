@@ -38,11 +38,12 @@ util.inherits(Generator, yeoman.Base);
  * @param {string} routerName - The name of the AngularJS router that is added to the menu.
  * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
  * @param {boolean} enableTranslation - If translations are enabled or not
+ * @param {string} clientFramework - The name of the client framework
  */
-Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
+Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation, clientFramework) {
     try {
         var navbarPath;
-        if (this.clientFramework === 'angular1') {
+        if (clientFramework === 'angular1') {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
             jhipsterUtils.rewriteFile({
                 file: navbarPath,
@@ -82,11 +83,12 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  * @param {string} routerName - The name of the AngularJS router that is added to the admin menu.
  * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
  * @param {boolean} enableTranslation - If translations are enabled or not
+ * @param {string} clientFramework - The name of the client framework
  */
-Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
+Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation, clientFramework) {
     try {
         var navbarAdminPath;
-        if (this.clientFramework === 'angular1') {
+        if (clientFramework === 'angular1') {
             navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
             navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
@@ -112,11 +114,12 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  *
  * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
  * @param {boolean} enableTranslation - If translations are enabled or not
+ * @param {string} clientFramework - The name of the client framework
  */
-Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
+Generator.prototype.addEntityToMenu = function (routerName, enableTranslation, clientFramework) {
     try {
         var entityMenuPath;
-        if (this.clientFramework === 'angular1') {
+        if (clientFramework === 'angular1') {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
             jhipsterUtils.rewriteFile({
                 file: entityMenuPath,
@@ -152,10 +155,11 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
  *
  * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
  * @param {boolean} enableTranslation - If translations are enabled or not
+ * @param {string} clientFramework - The name of the client framework
  */
-Generator.prototype.addEntityToModule = function (entityInstance, entityClass, entityAngularJSName, entityFolderName, entityFileName, enableTranslation) {
+Generator.prototype.addEntityToModule = function (entityInstance, entityClass, entityAngularJSName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
     try {
-        if (this.clientFramework === 'angular1') {
+        if (clientFramework === 'angular1') {
             return;
         }
         var entityPath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
@@ -737,11 +741,12 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
  * @param {string} buttonColor - color of the social button. ex: '#3b5998'
  * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
+ * @param {string} clientFramework - The name of the client framework
  */
-Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
+Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor, clientFramework) {
     var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
     var loginfullPath, registerfullPath;
-    if (this.clientFramework === 'angular1') {
+    if (clientFramework === 'angular1') {
         loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
         registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
     } else {
