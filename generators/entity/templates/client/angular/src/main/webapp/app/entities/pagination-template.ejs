@@ -34,7 +34,8 @@ currentAccount: any;
         private parseLinks: ParseLinks,
         private alertService: AlertService,
         private principal: Principal,
-        private $state: StateService,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
         private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
         private paginationUtil: PaginationUtil,
         private paginationConfig: PaginationConfig
