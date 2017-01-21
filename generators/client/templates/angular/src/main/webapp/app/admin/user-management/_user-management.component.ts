@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { EventManager, PaginationUtil, ParseLinks, JhiLanguageService, AlertService } from 'ng-jhipster';
+import { EventManager, PaginationUtil, ParseLinks, AlertService, JhiLanguageService } from 'ng-jhipster';
 
 import { User } from './user.model';
 import { UserService } from './user.service';
