@@ -135,7 +135,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
                 file: entityMenuPath,
                 needle: 'jhipster-needle-add-entity-to-menu',
                 splicable: [`<li uiSrefActive="active">
-                        <a class="dropdown-item" uiSref="${routerName}" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="${routerName}" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
                             <span ${enableTranslation ? 'jhiTranslate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
                         </a>
