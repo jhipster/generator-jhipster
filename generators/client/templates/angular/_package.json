@@ -15,8 +15,8 @@
     "@angular/platform-browser": "2.4.4",
     "@angular/platform-browser-dynamic": "2.4.4",
     "@angular/router": "3.4.4",
-    "@angular/upgrade": "2.4.4",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.15",
+    "angular2-infinite-scroll": "0.2.9",
     "bootstrap": "4.0.0-alpha.5",
     "font-awesome": "4.7.0",
     "angular2-cookie": "1.2.6",
@@ -32,8 +32,6 @@
     "webstomp-client": "1.0.3",
     <%_ } _%>
     "tether": "1.4.0",
-    "ui-router-ng2": "1.0.0-beta.3",
-    "ui-router-visualizer": "2.0.11",
     "zone.js": "0.7.6"
   },
   "devDependencies": {
@@ -46,7 +44,6 @@
     "@types/selenium-webdriver": "2.53.33",
     <%_ } _%>
     "add-asset-html-webpack-plugin": "1.0.2",
-    "angular2-infinite-scroll": "0.2.9",
     "angular-cli": "1.0.0-beta.26",
     "angular2-template-loader": "0.6.0",
     "awesome-typescript-loader": "3.0.0-beta.18",
@@ -58,7 +55,7 @@
     "del": "2.2.2",
     "event-stream": "3.3.4",
     "exports-loader": "0.6.3",
-    "extract-text-webpack-plugin": "2.0.0-beta.4",
+    "extract-text-webpack-plugin": "2.0.0-beta.5",
     "file-loader": "0.9.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-webpack-plugin": "2.26.0",

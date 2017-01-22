@@ -120,7 +120,6 @@ const files = {
             templates: [
                 // entities
                 'entities/_index.ts',
-                'entities/_entity.state.ts',
                 'entities/_entity.module.ts',
                 // home module
                 'home/_index.ts',

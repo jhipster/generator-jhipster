@@ -10,19 +10,18 @@ module.exports = {
             '@angular/http',
             '@angular/platform-browser',
             '@angular/platform-browser-dynamic',
-            '@angular/upgrade',
+            '@angular/router',
             '@ng-bootstrap/ng-bootstrap',
             'angular2-cookie',
             'angular2-infinite-scroll',
             'jquery',
             'ng-jhipster',
             'ng2-webstorage',
-            'rxjs',
             <%_ if (websocket == 'spring-websocket') { _%>
             'sockjs-client',
             'webstomp-client',
             <%_ } _%>
-            'ui-router-ng2'
+            'rxjs'
         ],
     },
     resolve: {
