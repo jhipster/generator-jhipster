@@ -131,6 +131,7 @@ module.exports = EntityGenerator.extend({
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
             this.angularAppName = this.getAngularAppName();
+            this.angular2AppName = this.getAngular2AppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
             this.microserviceAppName = '';

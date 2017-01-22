@@ -241,7 +241,8 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             splicable: [
                 this.stripMargin(
                     `|${entityClass}Service,
-                     |        ${entityClass}PopupService,`
+                     |        ${entityClass}PopupService,
+                     |    ${entityAngularJSName}ResolvePagingParams,`
                 )
             ]
         }, this);
@@ -259,6 +260,7 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
                      |    ${entityAngularJSName}PopupComponent,
                      |    ${entityAngularJSName}DeletePopupComponent,
                      |    ${entityAngularJSName}DeleteDialogComponent,
+                     |    ${entityAngularJSName}ResolvePagingParams,
                      |    ${entityInstance}Route,
                      |    ${entityInstance}PopupRoute,`
                 )
@@ -1581,6 +1583,13 @@ Generator.prototype.checkForNewVersion = function () {
  */
 Generator.prototype.getAngularAppName = function () {
     return _.camelCase(this.baseName, true) + (this.baseName.endsWith('App') ? '' : 'App');
+};
+
+/**
+ * get the angular 2 app name for the app.
+ */
+Generator.prototype.getAngular2AppName = function () {
+    return _.upperFirst(_.camelCase(this.baseName, true));
 };
 
 /**
