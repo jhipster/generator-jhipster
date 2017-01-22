@@ -9,8 +9,8 @@ import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
-import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
+/* jhipster-needle-add-entity-module-import - JHipster will add entity modules here */
 
 import { LayoutRoutingModule } from './layouts';
 import { HomeComponent } from './home';
@@ -37,8 +37,8 @@ import {
         Ng2Webstorage.forRoot({ prefix: 'jhi'}),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
-        <%=angular2AppName%>EntityModule,
-        <%=angular2AppName%>AccountModule
+        <%=angular2AppName%>AccountModule,
+        /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,

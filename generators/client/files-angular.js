@@ -125,7 +125,6 @@ const files = {
             templates: [
                 // entities
                 'entities/_index.ts',
-                'entities/_entity.module.ts',
                 // home module
                 'home/_index.ts',
                 { file: 'home/_home.state.ts', method: 'copyJs' },

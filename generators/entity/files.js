@@ -232,6 +232,14 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.html`
                 },
                 {
+                    file: 'entities/_index.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/index.ts`
+                },
+                {
+                    file: 'entities/_entity-management.module.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`
+                },
+                {
                     file: 'entities/_entity-management.state.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.state.ts`
                 },
@@ -353,7 +361,7 @@ function writeFiles() {
         },
 
         writeClientFiles: function () {
-            if (this.skipClient) return;
+            if (this.skipClient) return;            
 
             if (this.clientFramework === 'angular1') {
                 // write client side files for angular 1.x
