@@ -7,7 +7,9 @@ import { LANGUAGES } from './language.constants';
 @Injectable()
 export class JhiLanguageHelper {
 
-    constructor (private translateService: TranslateService, private titleService: Title ) { }
+    constructor (private translateService: TranslateService, private titleService: Title ) {
+        this.init();
+    }
 
     getAll(): Promise<any> {
         return Promise.resolve(LANGUAGES);
@@ -29,5 +31,15 @@ export class JhiLanguageHelper {
         this.translateService.get(titleKey || 'global.title').subscribe(title => {
             this.titleService.setTitle(title);
         });
+    }
+
+    private init () {
+        // TODO fix this part
+        // this.translateService.onTranslationChange.subscribe((event: TranslationChangeEvent) => {
+        //     this.updateTitle();
+        // });
+        // this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+        //     this.updateTitle();
+        // });
     }
 }

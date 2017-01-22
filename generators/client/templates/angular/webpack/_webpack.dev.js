@@ -54,7 +54,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
             reload: false
         }),
         new ExtractTextPlugin('styles.css'),
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin(),
         new writeFilePlugin()
     ]
