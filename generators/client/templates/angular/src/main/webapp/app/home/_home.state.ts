@@ -7,7 +7,8 @@ export const homeRoute: Route = {
   path: '',
   component: HomeComponent,
   data: {
-    authorities: []
+    authorities: [],
+    pageTitle: 'home.title'
   },
   canActivate: [UserRouteAccessService]
 };
