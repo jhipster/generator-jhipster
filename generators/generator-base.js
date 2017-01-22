@@ -162,8 +162,10 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         if (clientFramework === 'angular1') {
             return;
         }
-        var entityPath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
+        var appName = this.getAngular2AppName();
+        var appModulePath = CLIENT_MAIN_SRC_DIR + 'app/app.module.ts';
         var indexPath = CLIENT_MAIN_SRC_DIR + 'app/entities/index.ts';
+
         jhipsterUtils.rewriteFile({
             file: indexPath,
             needle: 'jhipster-needle-add-entity-to-index-export',
@@ -197,77 +199,27 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         }, this);
 
         jhipsterUtils.rewriteFile({
-            file: entityPath,
-            needle: 'jhipster-needle-add-entity-to-module-states',
+            file: appModulePath,
+            needle: 'jhipster-needle-add-entity-module-import',
             splicable: [
                 this.stripMargin(
-                    `|...${entityInstance}Route,
-                     |    ...${entityInstance}PopupRoute,`
+                    `|import \{ ${appName}${entityAngularJSName}Module \} from \'./entities/${entityFolderName}/${entityFileName}.module\';`
+//                    '|import ${appName}${entityAngularJSName}Module  from \'./entities/${entityAngularJSName}/${entityAngularJSName}.module\';'
                 )
             ]
         }, this);
 
         jhipsterUtils.rewriteFile({
-            file: entityPath,
-            needle: 'jhipster-needle-add-entity-to-module-entryComponents',
+            file: appModulePath,
+            needle: 'jhipster-needle-add-entity-module',
             splicable: [
                 this.stripMargin(
-                    `|${entityAngularJSName}DialogComponent,
-                     |        ${entityAngularJSName}PopupComponent,
-                     |        ${entityAngularJSName}DeleteDialogComponent,
-                     |        ${entityAngularJSName}DeletePopupComponent,`
-                )
-            ]
-        }, this);
-
-        jhipsterUtils.rewriteFile({
-            file: entityPath,
-            needle: 'jhipster-needle-add-entity-to-module-declarations',
-            splicable: [
-                this.stripMargin(
-                    `|${entityAngularJSName}Component,
-                     |        ${entityAngularJSName}DetailComponent,
-                     |        ${entityAngularJSName}DialogComponent,
-                     |        ${entityAngularJSName}DeleteDialogComponent,
-                     |        ${entityAngularJSName}PopupComponent,
-                     |        ${entityAngularJSName}DeletePopupComponent,`
-                )
-            ]
-        }, this);
-
-        jhipsterUtils.rewriteFile({
-            file: entityPath,
-            needle: 'jhipster-needle-add-entity-to-module-providers',
-            splicable: [
-                this.stripMargin(
-                    `|${entityClass}Service,
-                     |        ${entityClass}PopupService,
-                     |    ${entityAngularJSName}ResolvePagingParams,`
-                )
-            ]
-        }, this);
-
-        jhipsterUtils.rewriteFile({
-            file: entityPath,
-            needle: 'jhipster-needle-add-entity-to-module-import',
-            splicable: [
-                this.stripMargin(
-                    `|${entityAngularJSName}Service,
-                     |    ${entityAngularJSName}PopupService,
-                     |    ${entityAngularJSName}Component,
-                     |    ${entityAngularJSName}DetailComponent,
-                     |    ${entityAngularJSName}DialogComponent,
-                     |    ${entityAngularJSName}PopupComponent,
-                     |    ${entityAngularJSName}DeletePopupComponent,
-                     |    ${entityAngularJSName}DeleteDialogComponent,
-                     |    ${entityAngularJSName}ResolvePagingParams,
-                     |    ${entityInstance}Route,
-                     |    ${entityInstance}PopupRoute,`
+                    `|${appName}${entityAngularJSName}Module,`
                 )
             ]
         }, this);
     } catch (e) {this.log(e);
-        this.log(chalk.yellow('\nUnable to find ') + indexPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance+ entityClass+ entityFolderName+ entityFileName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + appModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance+ entityClass+ entityFolderName+ entityFileName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
