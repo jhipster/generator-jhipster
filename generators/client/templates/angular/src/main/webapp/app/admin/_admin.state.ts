@@ -11,8 +11,8 @@ import {
     gatewayState,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
-    trackerState,
-    <%_ } _%>    
+    trackerRoute,
+    <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
     userMgmtRoute,
     userDialogRoute
