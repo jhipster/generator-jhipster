@@ -28,7 +28,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     it('should load <%= entityClassPlural %>', () => {
         entityMenu.click();
-        element.all(by.css('[uisref="<%= entityStateName %>"]')).first().click().then(() => {
+        element.all(by.css('[routerLink="<%= entityStateName %>"]')).first().click().then(() => {
             <%_ if (enableTranslation) { _%>
             const expectVal = /<%= angularAppName %>.<%= entityTranslationKey %>.home.title/;
             <%_ } else { _%>
@@ -41,7 +41,7 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
     it('should load create <%= entityClass %> dialog', function () {
-        element(by.css('[uisref="<%= entityStateName %>.new"]')).click().then(() => {
+        element(by.css('[routerLink="<%= entityStateName %>/new"]')).click().then(() => {
             <%_ if (enableTranslation) { _%>
             const expectVal = /<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel/;
             <%_ } else { _%>

@@ -1,7 +1,7 @@
 <div>
     <%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
     <h2><span jhiTranslate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></span>
-        <button class="btn btn-primary float-xs-right" [routerLink]="['/', { outlets: { popup: ['<%= entityInstance %>-new'] } }]">
+        <button class="btn btn-primary float-xs-right" [routerLink]="['/', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
             <span class="fa fa-plus"></span>
             <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> jhiTranslate="<%= keyPrefix %>home.createLabel">
             Create new <%= entityClassHumanized %>
@@ -126,19 +126,19 @@
                 <td class="text-xs-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id ]" 
+                                [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="hidden-xs hidden-sm" jhiTranslate="entity.action.view"></span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: '<%= entityInstance %>-edit/'+ <%= entityInstance %>.id } }]"
+                                [routerLink]="['/', { outlets: { popup: '<%= entityUrl %>/'+ <%= entityInstance %>.id + '/edit'} }]"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="hidden-xs hidden-sm" jhiTranslate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: '<%= entityInstance %>-delete/'+ <%= entityInstance %>.id } }]"
+                                [routerLink]="['/', { outlets: { popup: '<%= entityUrl %>/'+ <%= entityInstance %>.id + '/delete'} }]"
                                 class="btn btn-danger btn-sm">
                             <span class="fa fa-remove"></span>
                             <span class="hidden-xs hidden-sm" jhiTranslate="entity.action.delete"></span>

@@ -67,7 +67,7 @@ export const <%= entityInstance %>Route: Routes = [
 
 export const <%= entityInstance %>PopupRoute: Routes = [
   {
-    path: '<%= entityInstance %>-new',
+    path: '<%= entityUrl %>-new',
     component: <%= entityAngularJSName %>PopupComponent,
     data: {
         authorities: ['ROLE_USER'],
@@ -76,7 +76,7 @@ export const <%= entityInstance %>PopupRoute: Routes = [
     outlet: 'popup'
   },
   {
-    path: '<%= entityInstance %>-edit/:id',
+    path: '<%= entityUrl %>/:id/edit',
     component: <%= entityAngularJSName %>PopupComponent,
     data: {
         authorities: ['ROLE_USER'],
@@ -85,7 +85,7 @@ export const <%= entityInstance %>PopupRoute: Routes = [
     outlet: 'popup'
   },
   {
-    path: '<%= entityInstance %>-delete/:id',
+    path: '<%= entityUrl %>/:id/delete',
     component: <%= entityAngularJSName %>DeletePopupComponent,
     data: {
         authorities: ['ROLE_USER'],
