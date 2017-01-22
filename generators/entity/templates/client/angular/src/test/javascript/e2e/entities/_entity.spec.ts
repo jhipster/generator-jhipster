@@ -41,7 +41,7 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
     it('should load create <%= entityClass %> dialog', function () {
-        element(by.css('[routerLink="<%= entityStateName %>/new"]')).click().then(() => {
+        element(by.css('button.create-<%= entityUrl %>"]')).click().then(() => {
             <%_ if (enableTranslation) { _%>
             const expectVal = /<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel/;
             <%_ } else { _%>
