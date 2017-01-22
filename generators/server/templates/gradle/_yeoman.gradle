@@ -11,10 +11,10 @@ task bower(type: NodeTask) {
 if (!project.hasProperty('nodeInstall')) {
     bower.dependsOn yarn_install
 } else {
-    bower.dependsOn npmInstall
+    bower.dependsOn npm_install
 }
 <%_ } else if (clientPackageManager === 'npm') { _%>
-bower.dependsOn npmInstall
+bower.dependsOn npm_install
 <%_ } _%>
 processResources.dependsOn bower
 bower.onlyIf { !project.hasProperty('skipBower') }

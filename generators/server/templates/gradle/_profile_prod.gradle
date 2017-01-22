@@ -33,11 +33,11 @@ task gulpBuildWithOpts(type: GulpTask) {
     args = ["build", "--no-notification"]
 }
     <%_ } else { _%>
-task webpack(type: NodeTask, dependsOn: 'npmInstall') {
-    script = project.file('node_modules/webpack/bin/webpack.js')
-    args = ["-p", "--config", "webpack/webpack.prod.js"]
+task webpack(type: NpmTask, dependsOn: '<%= clientPackageManager %>_install') {
+    args = ["run", "webpack:prod"]
 }
     <%_ } _%>
+
 war {
     webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }
@@ -62,17 +62,17 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-    <%_ if (clientPackageManager === 'yarn') { _%>
+    <%_ if (clientFramework === 'angular1') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
 // Workaround for https://github.com/srs/gradle-node-plugin/issues/134 doesn't work with yarn
 if (!project.hasProperty('nodeInstall')) {
     gulpBuildWithOpts.dependsOn yarn_install
 } else {
-    gulpBuildWithOpts.dependsOn npmInstall
+    gulpBuildWithOpts.dependsOn npm_install
 }
-    <%_ } else if (clientPackageManager === 'npm') { _%>
-gulpBuildWithOpts.dependsOn npmInstall
-    <%_ } _%>
-    <%_ if (clientFramework === 'angular1') { _%>
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+gulpBuildWithOpts.dependsOn npm_install
+        <%_ } _%>
 gulpBuildWithOpts.dependsOn bower
 processResources.dependsOn gulpBuildWithOpts
 test.dependsOn gulp_test

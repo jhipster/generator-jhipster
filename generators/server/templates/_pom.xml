@@ -1222,37 +1222,14 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <version>${frontend-maven-plugin.version}</version>
                         <executions>
-                            <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
-                                <id>install node and yarn</id>
+                                <id>webpack build dev</id>
                                 <goals>
-                                    <goal>install-node-and-yarn</goal>
-                                </goals>
-                                <configuration>
-                                    <nodeVersion>${node.version}</nodeVersion>
-                                    <yarnVersion>${yarn.version}</yarnVersion>
-                                </configuration>
-                            </execution>
-                            <%_ } else if (clientPackageManager === 'npm') { _%>
-                            <execution>
-                                <id>install node and npm</id>
-                                <goals>
-                                    <goal>install-node-and-npm</goal>
-                                </goals>
-                                <configuration>
-                                    <nodeVersion>${node.version}</nodeVersion>
-                                    <npmVersion>${npm.version}</npmVersion>
-                                </configuration>
-                            </execution>
-                            <%_ } _%>
-                            <execution>
-                                <id>webpack build</id>
-                                <goals>
-                                    <goal>webpack</goal>
+                                    <goal><%= clientPackageManager %></goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>--config webpack/webpack.dev.js</arguments>
+                                    <arguments>run webpack:build:dev</arguments>
                                 </configuration>
                             </execution>
                         </executions>
@@ -1414,13 +1391,13 @@
                             <%_ } _%>
                             <%_ if (clientFramework === 'angular2') { _%>
                             <execution>
-                                <id>webpack build</id>
+                                <id>webpack build prod</id>
                                 <goals>
-                                    <goal>webpack</goal>
+                                    <goal><%= clientPackageManager %></goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>-p --config webpack/webpack.prod.js</arguments>
+                                    <arguments>run webpack:prod</arguments>
                                 </configuration>
                             </execution>
                             <%_ } _%>

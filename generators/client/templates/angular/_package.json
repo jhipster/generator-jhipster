@@ -111,21 +111,22 @@
     "node": "^4.3"
   },
   "scripts": {
-    "start": "npm run webpack:dev",
-    "test": "karma start src/test/javascript/karma.conf.js",
-    "test:watch": "karma start --watch",
-    <%_ if (protractorTests) { _%>
-    "postinstall": "webdriver-manager update && npm run webpack:build",
-    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    <%_ } else { _%>
-    "postinstall": "npm run webpack:build",
-    <%_ } _%>
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
     "lint:fix": "tslint src/main/webapp/app/**/*.ts --fix --force",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "start": "npm run webpack:dev",
     "webpack:build": "webpack --config webpack/webpack.vendor.js && webpack --config webpack/webpack.dev.js",
+    "webpack:build:dev": "webpack --config webpack/webpack.dev.js",
     "webpack:dev": "webpack-dev-server --config webpack/webpack.dev.js  --progress --inline --hot --profile --port=9060",
-    "webpack:prod": "webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js"
+    "webpack:prod": "npm test && webpack -p --config webpack/webpack.vendor.js && webpack -p --config webpack/webpack.prod.js",
+    "test": "npm run lint && karma start src/test/javascript/karma.conf.js",
+    "test:watch": "karma start --watch",
+    <%_ if (protractorTests) { _%>
+    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    "postinstall": "webdriver-manager update && npm run webpack:build"
+    <%_ } else { _%>
+    "postinstall": "npm run webpack:build"
+    <%_ } _%>
   }
 }

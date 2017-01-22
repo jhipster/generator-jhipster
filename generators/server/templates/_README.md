@@ -1,5 +1,16 @@
 # <%= baseName %>
-
+<%_
+let clientPackageMngrName = 'Npm';
+let clientPackageMngrAddGlobal = 'install -g';
+let clientPackageMngrAdd = 'install --save --save-exact';
+let clientPackageMngrAddDev = 'install --save-dev --save-exact';
+if (clientPackageManager === 'yarn') {
+    clientPackageMngrname = 'Yarn';
+    clientPackageMngrAddGlobal = 'global add';
+    clientPackageMngrAdd = 'add --exact';
+    clientPackageMngrAddDev = 'add --dev --exact';
+}
+_%>
 This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
 <%_ if (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 
@@ -31,22 +42,15 @@ Before you can build this project, you must install and configure the following 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in `package.json`.
 
-<%_ if (clientPackageManager === 'yarn') { _%>
-    yarn install
-<%_ } else { _%>
-    npm install
-<%_ } _%>
+    <%= clientPackageManager %> install
 
 <%_ if (clientFramework === 'angular2') { _%>
 We use npm scripts and [Webpack][] as our build system.
+
 <%_ } else { _%>
 We use [Gulp][] as our build system. Install the Gulp command-line tool globally with:
-    
-<%_ if (clientPackageManager === 'yarn') { _%>
-    yarn global add gulp-cli
-<%_ } else { _%>
-    npm install -g gulp-cli
-<%_ } _%>
+
+    <%= clientPackageManager %> <%= clientPackageMngrAddGlobal %> gulp-cli
 <%_ } _%>
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
@@ -55,41 +59,23 @@ auto-refreshes when files change on your hard drive.
     ./mvnw<% } %><% if (buildTool == 'gradle') { %>
     ./gradlew<% } %>
 <%_ if (clientFramework === 'angular2') { _%>
-<%_ if (clientPackageManager === 'yarn') { _%>
-    yarn run webpack:dev
+    <%= clientPackageManager %> start
 
-[Yarn][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in `package.json`. You can also run `yarn update` and `yarn install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `yarn help update`.
+[<%= clientPackageMngrName %>][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+specifying a newer version in `package.json`. You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
+Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
-The `yarn run` command will list all of the scripts available to run for this project.
+The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
 
 ### Managing dependencies
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
-    yarn add --exact leaflet
+    <%= clientPackageManager %> <%= clientPackageMngrAdd %> leaflet
 
 To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
-    yarn add --dev --exact @types/leaflet
-<%_ } else { _%>
-    npm run webpack:dev
-
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in `package.json`. You can also run `npm update` and `npm install` to manage dependencies.
-Add the `-h` flag on any command to see how you can use it. For example, `npm update -h`.
-
-The `npm run` command will list all of the scripts available to run for this project.
-
-For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
-
-    npm install --save --save-exact leaflet`
-
-To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
-
-    npm install --save-dev --save-exact @types/leaflet
-<%_ } _%>
+    <%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 
@@ -161,17 +147,14 @@ To launch your application's tests, run:
 Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in `<%= CLIENT_TEST_SRC_DIR %>` and can be run with:
 
 <%_ if (clientFramework === 'angular2') { _%>
-<%_ if (clientPackageManager === 'yarn') { _%>
-    yarn test
+    <%= clientPackageManager %> test
 <%_ } else { _%>
-    npm run test
-<%_ } _%><%_ } else { _%>
     gulp test
 <%_ } _%>
 
-<% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
+<% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
-<% } %><% if (testFrameworks.indexOf("gatling") > -1) { %>### Other tests
+<% } %><% if (gatlingTests) { %>### Other tests
 
 Performance tests are run by [Gatling][] and written in Scala. They're located in `src/test/gatling` and can be run with:
 

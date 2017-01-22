@@ -31,15 +31,11 @@ task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
 }
     <%_ } else { _%>
-task webpack(type: NodeTask, dependsOn: 'npmInstall') {
-    if (OperatingSystem.current().isWindows()) {
-      script = project.file('node_modules/webpack/bin/webpack.js')
-    } else {
-      script = project.file('node_modules/.bin/webpack')
-    }
-    args = ["--config", "webpack/webpack.dev.js"]
+task webpack(type: NpmTask) {
+    args = ["run", "webpack:build:dev"]
 }
     <%_ } _%>
+
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
 }
