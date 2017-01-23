@@ -43,7 +43,7 @@ export class <%= entityAngularJSName %>ResolvePagingParams implements Resolve<an
 
 export const <%= entityInstance %>Route: Routes = [
   {
-    path: '<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
+    path: '<%= entityUrl %>',
     component: <%= entityAngularJSName %>Component,
     <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
     resolve: {
