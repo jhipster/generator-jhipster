@@ -39,8 +39,10 @@ module.exports = HerokuGenerator.extend({
         if (this.herokuAppName) {
             exec('heroku apps:info --json', function (err, stdout) {
                 if (err) {
+                    this.config.set('herokuAppName', null);
                     this.abort = true;
-                    this.log.error(err);
+                    this.log.error(`Could not find app: ${chalk.cyan(this.herokuAppName)}`);
+                    this.log.error('Run the generator again to create a new app.');
                 } else {
                     var json = JSON.parse(stdout);
                     this.herokuAppName = json['app']['name'];
