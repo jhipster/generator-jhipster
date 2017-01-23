@@ -2,7 +2,9 @@
 
 const expect = require('chai').expect,
     fail = expect.fail,
-    formatComment = require('../../../lib/utils/format_utils').formatComment;
+    FormatUtils = require('../../../lib/utils/format_utils'),
+    formatComment = FormatUtils.formatComment,
+    dateFormatForLiquibase = FormatUtils.dateFormatForLiquibase;
 
 describe('FormatUtils', function() {
   describe('::formatComment', function() {
@@ -65,6 +67,90 @@ describe('FormatUtils', function() {
         it('returns ' + buildTestTitle(expectedResult3), function() {
           expect(formatComment(multiLineComment3)).to.eq(expectedResult3);
         });
+      });
+    });
+  });
+  describe('::dateFormatForLiquibase', () => {
+    describe('when passing both arguments', () => {
+      it('uses the increment with the passed date', () => {
+        const now = new Date();
+        const increment = 1000042;
+        const result =
+          dateFormatForLiquibase({ date: now, increment: increment });
+        now.setSeconds(now.getUTCSeconds() + increment);
+        const now_utc = new Date(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate(),
+          now.getUTCHours(),
+          now.getUTCMinutes(),
+          now.getUTCSeconds());
+        const year = `${now_utc.getFullYear()}`;
+        let month = `${now_utc.getMonth() + 1}`;
+        if (month.length === 1) {
+          month = `0${month}`;
+        }
+        let day = `${now_utc.getDate()}`;
+        if (day.length === 1) {
+          day = `0${day}`;
+        }
+        let hour = `${now_utc.getHours()}`;
+        if (hour.length === 1) {
+          hour = `0${hour}`;
+        }
+        let minute = `${now_utc.getMinutes()}`;
+        if (minute.length === 1) {
+          minute = `0${minute}`;
+        }
+        let second = `${now_utc.getSeconds()}`;
+        if (second.length === 1) {
+          second = `0${second}`;
+        }
+        expect(
+          result
+        ).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+      });
+    });
+    describe('when not passing the date', () => {
+      it('does not fail', () => {
+        expect(dateFormatForLiquibase().length).to.equal(14);
+      });
+    });
+    describe('when not passing the increment', () => {
+      it('formats the current time for liquibase with no increment', () => {
+        const now = new Date();
+        const result = dateFormatForLiquibase({ date: now });
+        const now_utc = new Date(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate(),
+          now.getUTCHours(),
+          now.getUTCMinutes(),
+          now.getUTCSeconds());
+        const year = `${now_utc.getFullYear()}`;
+        let month = `${now_utc.getMonth() + 1}`;
+        if (month.length === 1) {
+          month = `0${month}`;
+        }
+        let day = `${now_utc.getDate()}`;
+        if (day.length === 1) {
+          day = `0${day}`;
+        }
+        let hour = `${now_utc.getHours()}`;
+        if (hour.length === 1) {
+          hour = `0${hour}`;
+        }
+        let minute = `${now_utc.getMinutes()}`;
+        if (minute.length === 1) {
+          minute = `0${minute}`;
+        }
+        let second = `${(now_utc.getSeconds()) % 60}`;
+        if (second.length === 1) {
+          second = `0${second}`;
+        }
+        expect(
+          result
+        ).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
       });
     });
   });
