@@ -28,12 +28,12 @@ export class UserResolvePagingParams implements Resolve<any> {
   constructor(private paginationUtil: PaginationUtil) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-
-    return {
-        page: this.paginationUtil.parsePage('1'),
-        sort: 'asc',
-        predicate: this.paginationUtil.parsePredicate('id,asc'),
-        ascending: this.paginationUtil.parseAscending('id,asc')
+      let page = route.params['page'] ? route.params['page'] : '1';
+      let sort = route.params['sort'] ? route.params['sort'] : 'id,asc';
+      return {
+          page: this.paginationUtil.parsePage(page),
+          predicate: this.paginationUtil.parsePredicate(sort),
+          ascending: this.paginationUtil.parseAscending(sort)
     };
   }
 }

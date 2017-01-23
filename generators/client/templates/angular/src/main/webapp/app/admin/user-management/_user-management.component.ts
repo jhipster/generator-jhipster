@@ -49,7 +49,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         this.routeData = this.activatedRoute.data.subscribe(data => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
-            this.reverse = data['pagingParams'].reverse;
+            this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
         });
         <%_ } _%>
@@ -120,6 +120,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
 
     transition () {
         this.router.navigate(['/user-management', {page: this.page, sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')}]);
+        this.loadAll();
     }
     <%_ } _%>
 

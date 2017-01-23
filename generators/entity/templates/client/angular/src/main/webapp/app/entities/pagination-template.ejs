@@ -42,11 +42,11 @@ currentAccount: any;
         <%_ } _%>
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
+        this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe(data => {
-            this.itemsPerPage = ITEMS_PER_PAGE;
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
-            this.reverse = data['pagingParams'].reverse;
+            this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
             <%_ if (searchEngine == 'elasticsearch') { _%>
             this.currentSearch = data['pagingParams'].search;
@@ -95,6 +95,7 @@ currentAccount: any;
             <%_ } _%>
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         }]);
+        this.loadAll();
     }
 
     clear() {
