@@ -1224,37 +1224,27 @@
                         <executions>
                             <%_ if (clientPackageManager === 'yarn') { _%>
                             <execution>
-                                  <id>install node and yarn</id>
-                                  <goals>
-                                      <goal>install-node-and-yarn</goal>
-                                  </goals>
-                                  <configuration>
-                                      <nodeVersion>${node.version}</nodeVersion>
-                                      <yarnVersion>${yarn.version}</yarnVersion>
-                                  </configuration>
-                              </execution>
-                              <%_ } else if (clientPackageManager === 'npm') { _%>
-                              <execution>
-                                  <id>install node and npm</id>
-                                  <goals>
-                                      <goal>install-node-and-npm</goal>
-                                  </goals>
-                                  <configuration>
-                                      <nodeVersion>${node.version}</nodeVersion>
-                                      <npmVersion>${npm.version}</npmVersion>
-                                  </configuration>
-                              </execution>
-                            <%_ } _%>
-                            <execution>
-                                <id>webpack build dev</id>
+                                <id>install node and yarn</id>
                                 <goals>
-                                    <goal><%= clientPackageManager %></goal>
+                                    <goal>install-node-and-yarn</goal>
                                 </goals>
-                                <phase>generate-resources</phase>
                                 <configuration>
-                                    <arguments>run webpack:build:dev</arguments>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <yarnVersion>${yarn.version}</yarnVersion>
                                 </configuration>
                             </execution>
+                            <%_ } else if (clientPackageManager === 'npm') { _%>
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>${node.version}</nodeVersion>
+                                    <npmVersion>${npm.version}</npmVersion>
+                                </configuration>
+                            </execution>
+                            <%_ } _%>
                         </executions>
                     </plugin>
                     <%_ } _%>
