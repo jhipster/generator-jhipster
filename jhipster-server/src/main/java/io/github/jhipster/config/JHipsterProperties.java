@@ -54,6 +54,8 @@ public class JHipsterProperties {
 
     private final Ribbon ribbon = new Ribbon();
 
+    private final Registry registry = new Registry();
+
     public Async getAsync() {
         return async;
     }
@@ -68,6 +70,10 @@ public class JHipsterProperties {
 
     public Mail getMail() {
         return mail;
+    }
+
+    public Registry getRegistry() {
+        return registry;
     }
 
     public Security getSecurity() {
@@ -760,6 +766,19 @@ public class JHipsterProperties {
 
         public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
             this.displayOnActiveProfiles = displayOnActiveProfiles;
+        }
+    }
+
+    private static class Registry {
+
+        private String password;
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
     }
 }
