@@ -29,3 +29,9 @@ spring:
                 max-interval: 2000
                 max-attempts: 100
       <%_ } _%>
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
+
+jhipster:
+    registry:
+        password: admin
+<%_ } _%>

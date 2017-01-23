@@ -267,10 +267,6 @@ jhipster:
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
     <%_ } _%>
-    <%_ if (serviceDiscoveryType == 'eureka') { _%>
-    registry:
-        password: admin
-    <%_ } _%>
 
 # ===================================================================
 # Application specific properties
