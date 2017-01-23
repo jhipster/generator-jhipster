@@ -24,7 +24,7 @@ eureka:
         registerWithEureka: true
         fetchRegistry: true
         serviceUrl:
-            defaultZone: http://admin:admin@localhost:8761/eureka/
+            defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
 spring:
@@ -283,6 +283,10 @@ jhipster:
         spectator-metrics: # Reports Spectator Circuit Breaker metrics in the logs
             enabled: false
             # edit spring.metrics.export.delay-millis to set report frequency
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType == 'eureka') { _%>
+    registry:
+        password: admin
     <%_ } _%>
 
 # ===================================================================
