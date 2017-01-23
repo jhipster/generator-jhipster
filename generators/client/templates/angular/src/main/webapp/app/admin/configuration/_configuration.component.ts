@@ -27,7 +27,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     }
 
     keys(dict): Array<string> {
-        return Object.keys(dict);
+        return (dict === undefined) ? [] : Object.keys(dict);
     }
 
     ngOnInit() {
@@ -35,7 +35,9 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
             this.configuration = configuration;
 
             for (let config of configuration) {
-                this.configKeys.push(Object.keys(config.properties));
+                if (config.properties !== undefined) {
+                    this.configKeys.push(Object.keys(config.properties));
+                }
             }
         });
 
