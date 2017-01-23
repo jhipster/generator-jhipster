@@ -19,11 +19,11 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
         private jhiLanguageService: JhiLanguageService,
         private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService
     ) {
+        this.jhiLanguageService.setLocations(['configuration']);
         this.configKeys = [];
         this.filter = '';
         this.orderProp = 'prefix';
         this.reverse = false;
-        this.jhiLanguageService.setLocations(['configuration']);
     }
 
     keys(dict): Array<string> {

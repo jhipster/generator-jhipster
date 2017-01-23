@@ -30,13 +30,13 @@ export class AuditsComponent implements OnInit {
         @Inject(LOCALE_ID) private locale: string,
         private paginationConfig: PaginationConfig
     ) {
+        this.jhiLanguageService.setLocations(['audits']);
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.page = 1;
         this.reverse = false;
         this.orderProp = 'timestamp';
         // TODO see if there is a better way to inject pipes
         this.datePipe =  new DatePipe(this.locale);
-        this.jhiLanguageService.setLocations(['audits']);
     }
 
     getAudits() {
