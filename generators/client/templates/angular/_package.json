@@ -35,9 +35,6 @@
     "zone.js": "0.7.6"
   },
   "devDependencies": {
-    "@types/angular": "1.6.2",
-    "@types/angular-animate": "1.5.6",
-    "@types/angular-mocks": "1.5.8",
     "@types/jasmine": "2.5.41",
     "@types/node": "7.0.1",
     <%_ if (protractorTests) { _%>
