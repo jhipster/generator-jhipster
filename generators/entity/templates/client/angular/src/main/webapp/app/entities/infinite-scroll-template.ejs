@@ -1,4 +1,13 @@
-<%= entityInstancePlural %>: <%= entityClass %>[];
+<%_
+var i18nToLoad = [entityInstance];
+for (var idx in fields) {
+    if (fields[idx].fieldIsEnum == true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+_%>
+
+    <%= entityInstancePlural %>: <%= entityClass %>[];
     currentAccount: any;
     itemsPerPage: number;
     links: any;
@@ -39,6 +48,9 @@
         <%_ if (fieldsContainBlob) { _%>
         this.openFile = dataUtils.openFile;
         this.byteSize = dataUtils.byteSize;
+        <%_ } _%>
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
         <%_ } _%>
     }
 
