@@ -7,7 +7,7 @@ import { SocialAuthComponent } from './social-auth.component';
 <%_ } _%>
 
 export const socialRegisterRoute: Route = {
-    url: 'social-register/:provider?{success:boolean}',
+    path: 'social-register/:provider?{success:boolean}',
     component: SocialRegisterComponent,
     data: {
         authorities: [],
@@ -18,8 +18,8 @@ export const socialRegisterRoute: Route = {
 
 <%_ if (authenticationType == 'jwt') { _%>
 export const socialAuthRoute: Route = {
-        url: 'social-auth',
-        component: SocialAuthComponent,
+    path: 'social-auth',
+    component: SocialAuthComponent,
     data: {
         authorities: [],
         pageTitle: 'social.register.title'

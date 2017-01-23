@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
@@ -13,7 +14,7 @@ export class SocialRegisterComponent implements OnInit  {
     constructor (
         private jhiLanguageService: JhiLanguageService
     ) {
-        this.languageService.setLocations(['social']);
+        this.jhiLanguageService.setLocations(['social']);
     }
 
     ngOnInit() {
