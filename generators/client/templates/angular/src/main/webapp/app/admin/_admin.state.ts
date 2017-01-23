@@ -8,7 +8,7 @@ import {
     logsRoute,
     metricsRoute,
     <%_ if (applicationType === 'gateway') { _%>
-    gatewayState,
+    gatewayRoute,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerRoute,
