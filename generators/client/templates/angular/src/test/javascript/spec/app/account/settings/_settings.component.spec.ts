@@ -2,9 +2,12 @@ import {ComponentFixture, TestBed, async, inject} from '@angular/core/testing';
 import {MockBackend} from '@angular/http/testing';
 import {Http, BaseRequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Rx';
-import {<%=jhiPrefixCapitalized%>LanguageService} from 'ng-jhipster';
-import {Principal, AccountService, <%=jhiPrefixCapitalized%>LanguageHelper} from '../../../../../../main/webapp/app/shared';
+import {Principal, AccountService} from '../../../../../../main/webapp/app/shared';
 import {SettingsComponent} from "../../../../../../main/webapp/app/account/settings/settings.component";
+<% if (enableTranslation) { %>
+import {<%=jhiPrefixCapitalized%>LanguageHelper} from '../../../../../../main/webapp/app/shared';
+<%_ } _%>
+import {<%=jhiPrefixCapitalized%>LanguageService} from 'ng-jhipster';
 import {MockLanguageService} from "../../../helpers/language.service";
 import {MockAccountService} from "../../../helpers/account.service";
 import {MockPrincipal} from "../../../helpers/principal.service";
@@ -49,13 +52,15 @@ describe('Component Tests', () => {
                         },
                         deps: [MockBackend, BaseRequestOptions]
                     },
-                    {
-                        provide: <%=jhiPrefixCapitalized%>LanguageService,
-                        useClass: MockLanguageService
-                    },
+                    <% if (enableTranslation) { %>
                     {
                         provide: <%=jhiPrefixCapitalized%>LanguageHelper,
                         useValue: null
+                    },
+                    <%_ } _%>
+                    {
+                        provide: <%=jhiPrefixCapitalized%>LanguageService,
+                        useClass: MockLanguageService
                     }]
             }).overrideComponent(SettingsComponent, {
                 set: {
