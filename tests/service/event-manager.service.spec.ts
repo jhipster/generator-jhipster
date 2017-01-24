@@ -41,6 +41,12 @@ describe('Event Manager test', () => {
             });
         });
 
+        it('should not fail when nosubscriber and broadcasting', inject([EventManager],
+            (eventManager: EventManager) => {
+            expect(eventManager.observer).toBeUndefined();
+            eventManager.broadcast({ name: 'modifier', content: 'modified something'});
+        }));
+
         it('should create an observable and callback when broadcasted', inject([EventManager, SpyService],
             (eventManager: EventManager, spyService: SpyService) => {
             expect(spyService.called).toBeFalsy();

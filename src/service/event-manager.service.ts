@@ -36,7 +36,9 @@ export class EventManager {
      * Method to broadcast the event to observer
      */
     broadcast(event) {
-        this.observer.next(event);
+        if (this.observer != null) {
+            this.observer.next(event);
+        }
     }
 
     /**
@@ -50,7 +52,7 @@ export class EventManager {
     }
 
     /**
-     * Method to unsubscribe the subscribion
+     * Method to unsubscribe the subscription
      */
     destroy(subscriber: Subscription) {
         subscriber.unsubscribe();
