@@ -193,8 +193,8 @@
             <%_ } _%>
         </dependencies>
     </dependencyManagement>
-
 <%_ } _%>
+
     <dependencies>
         <dependency>
             <groupId>io.github.jhipster</groupId>
@@ -1197,26 +1197,11 @@
                 </dependency>
             </dependencies>
         </profile>
+        <%_ if (!skipClient && clientFramework === 'angular2') { _%>
         <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-undertow</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-devtools</artifactId>
-                    <version>1.4.2.RELEASE</version>
-                    <optional>true</optional>
-                </dependency>
-            </dependencies>
+            <id>webpack</id>
             <build>
                 <plugins>
-                    <%_ if (!skipClient && clientFramework === 'angular2') { _%>
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
@@ -1245,9 +1230,41 @@
                                 </configuration>
                             </execution>
                             <%_ } _%>
+                            <execution>
+                                <id>webpack build dev</id>
+                                <goals>
+                                    <goal><%= clientPackageManager %></goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <arguments>run webpack:build:dev</arguments>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
-                    <%_ } _%>
+                </plugins>
+            </build>
+        </profile>
+        <%_ } _%>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <version>1.4.2.RELEASE</version>
+                    <optional>true</optional>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
