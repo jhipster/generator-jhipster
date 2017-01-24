@@ -1,16 +1,16 @@
 import {ComponentFixture, TestBed, async} from '@angular/core/testing';
 import {MockBackend} from '@angular/http/testing';
 import {Http, BaseRequestOptions} from '@angular/http';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {<%=jhiPrefixCapitalized%>LanguageService} from 'ng-jhipster';
 import {<%=jhiPrefixCapitalized%>HealthCheckComponent} from '../../../../../../main/webapp/app/admin/health/health.component';
 import {<%=jhiPrefixCapitalized%>HealthService} from '../../../../../../main/webapp/app/admin/health/health.service';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-<%_ if (enableTranslation) { _%>
-import { TranslatePipe } from 'ng2-translate';
-<%_ } _%>
+import {MockLanguageService} from "../../../helpers/language.service";
 
-describe('Controller Tests', () => {
 
-    describe('<%=jhiPrefixCapitalized%>HealthCheckController', () => {
+describe('Component Tests', () => {
+
+    describe('<%=jhiPrefixCapitalized%>HealthCheckComponent', () => {
 
         let comp: <%=jhiPrefixCapitalized%>HealthCheckComponent;
         let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>HealthCheckComponent>;
@@ -18,7 +18,7 @@ describe('Controller Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent<%_ if (enableTranslation) { _%>, TranslatePipe<%_ } _%>],
+                declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent],
                 providers: [
                     MockBackend,
                     BaseRequestOptions,
@@ -33,12 +33,18 @@ describe('Controller Tests', () => {
                     {
                         provide: NgbModal,
                         useValue: null
+                    },
+                    {
+                        provide: <%=jhiPrefixCapitalized%>LanguageService,
+                        useClass: MockLanguageService
                     }
                 ]
             })
-            .overrideComponent(<%=jhiPrefixCapitalized%>HealthCheckComponent, {set: {
-                template: ''
-            }})
+            .overrideComponent(JhiHealthCheckComponent, {
+                set: {
+                    template: ''
+                }
+            })
             .compileComponents();
         }));
 
