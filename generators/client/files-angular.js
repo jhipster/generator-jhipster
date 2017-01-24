@@ -408,6 +408,13 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.websocket === 'spring-websocket',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/helpers/_tracker.service.ts'
+            ]
+        },
+        {
             condition: generator => generator.protractorTests,
             path: TEST_SRC_DIR,
             templates: [
