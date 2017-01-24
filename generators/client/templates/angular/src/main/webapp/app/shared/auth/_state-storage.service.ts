@@ -24,21 +24,20 @@ export class StateStorageService {
         return this.$sessionStorage.retrieve('destinationState');
     }
 
-    // Migrate to ng-router or remove
-    // storeDestinationState(destinationState: StateDeclaration, destinationStateParams, fromState: StateDeclaration) {
-    //     let destinationInfo = {
-    //         'destination': {
-    //             'name': destinationState.name,
-    //             'data': destinationState.data,
-    //             'parent': destinationState.parent
-    //         },
-    //         'params': destinationStateParams,
-    //         'from': {
-    //             'name': fromState.name,
-    //             'data': fromState.data,
-    //             'parent': fromState.parent
-    //          }
-    //     };
-    //     this.$sessionStorage.store('destinationState', destinationInfo);
-    // }
+    storeDestinationState(destinationState, destinationStateParams, fromState) {
+        let destinationInfo = {
+            'destination': {
+                'name': destinationState.name,
+                'data': destinationState.data,
+               // 'parent': destinationState.parent
+            },
+            'params': destinationStateParams,
+            'from': {
+                'name': fromState.name,
+                 // 'data': fromState.data,
+                 // 'parent': fromState.parent
+             }
+        };
+        this.$sessionStorage.store('destinationState', destinationInfo);
+    }
 }

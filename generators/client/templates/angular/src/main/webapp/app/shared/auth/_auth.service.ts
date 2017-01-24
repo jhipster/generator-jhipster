@@ -23,11 +23,12 @@ export class AuthService {
         function authThen () {
             let isAuthenticated = this.principal.isAuthenticated();
             let toStateInfo = this.stateStorageService.getDestinationState().destination;
+            let canActivate = true;
 
             // an authenticated user can't access to login and register pages
-            if (isAuthenticated && toStateInfo.parent === 'account' &&
-                (toStateInfo.name === 'login' || toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
+            if (isAuthenticated && (toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
                 this.router.navigate(['']);
+                canActivate = false;
             }
 
             // recover and clear previousState after external login redirect (e.g. oauth2)
@@ -36,6 +37,7 @@ export class AuthService {
             if (isAuthenticated && !fromStateInfo.name && previousState) {
                 this.stateStorageService.resetPreviousState();
                 this.router.navigate([previousState.name], { queryParams:  previousState.params  });
+                canActivate = false;
             }
 
             if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0 &&
@@ -44,7 +46,9 @@ export class AuthService {
                 if (isAuthenticated) {
                     // user is signed in but not authorized for desired state
                     this.router.navigate(['accessdenied']);
+                    canActivate = false;
                 } else {
+                    canActivate = false;
                     // user is not authenticated. Show the state they wanted before you
                     // send them to the login service, so you can return them when you're done
                     let toStateParamsInfo = this.stateStorageService.getDestinationState().params;
@@ -55,6 +59,7 @@ export class AuthService {
                     });
                 }
             }
+            return canActivate;
         }
     }
 }

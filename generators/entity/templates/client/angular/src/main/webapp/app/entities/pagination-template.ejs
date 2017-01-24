@@ -87,14 +87,16 @@ currentAccount: any;
         }
     }
     transition() {
-        this.router.navigate(['/<%= entityUrl %>', {
-            page: this.page,
-            size: this.itemsPerPage,
-            <%_ if (searchEngine == 'elasticsearch') { _%>
-            search: this.currentSearch,
-            <%_ } _%>
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        }]);
+        this.router.navigate(['/<%= entityUrl %>'], {queryParams: {
+            {
+                page: this.page,
+                size: this.itemsPerPage,
+                <%_ if (searchEngine == 'elasticsearch') { _%>
+                search: this.currentSearch,
+                <%_ } _%>
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }
+        });
         this.loadAll();
     }
 

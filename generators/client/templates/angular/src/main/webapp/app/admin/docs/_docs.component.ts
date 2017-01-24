@@ -9,6 +9,6 @@ export class <%=jhiPrefixCapitalized%>DocsComponent {
     constructor (
         private jhiLanguageService: JhiLanguageService
     ) {
-        this.jhiLanguageService.setLocations(['docs']);
+        this.jhiLanguageService.setLocations([]);
     }
 }
