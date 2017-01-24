@@ -102,10 +102,9 @@ module.exports = function (options) {
                 jQuery: "jquery"
             }),
             new HtmlWebpackPlugin({
-                template: './src/main/webapp/index.ejs',
+                template: './src/main/webapp/index.html',
                 chunksSortMode: 'dependency',
-                inject: 'body',
-                data: DATAS
+                inject: 'body'
             }),
             new AddAssetHtmlPlugin([
                 { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
