@@ -164,9 +164,11 @@ export class <%= entityAngularJSName %>PopupComponent implements OnInit, OnDestr
     ngOnInit() {
         this.routeSub = this.route.params.subscribe(params => {
             if ( params['id'] ) {
-                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent, params['id']);
+                this.modalRef = this.<%= entityInstance %>PopupService
+                    .open(<%= entityAngularJSName %>DialogComponent, params['id']);
             } else {
-                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent);
+                this.modalRef = this.<%= entityInstance %>PopupService
+                    .open(<%= entityAngularJSName %>DialogComponent);
             }
 
         });
