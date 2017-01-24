@@ -268,7 +268,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_client_token"
-            constraintName="fk_oauth_client_token_user_name"
+            constraintName="fk_oauth_client_token_username"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
@@ -286,7 +286,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_access_token"
-            constraintName="fk_oauth_access_token_user_name"
+            constraintName="fk_oauth_access_token_username"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
