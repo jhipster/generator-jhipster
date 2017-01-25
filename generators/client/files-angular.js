@@ -81,8 +81,7 @@ const files = {
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
                 { file: '_404.html', method: 'copy' },
-                //since we use webpack-html-plugin to process the ejs later we need to use `<# #>` for ejs which needs to processed by generator
-                { file: '_index.ejs', method: 'template', options: { delimiter: '#' }}
+                { file: '_index.html', method: 'template'}
             ]
         }
     ],

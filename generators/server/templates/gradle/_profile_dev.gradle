@@ -31,7 +31,7 @@ task gulpConstantDev(type: GulpTask) {
     args = ["ngconstant:dev", "--no-notification"]
 }
     <%_ } else { _%>
-task webpack(type: NpmTask) {
+task webpack(type: NpmTask, dependsOn: '<%= clientPackageManager %>_install') {
     args = ["run", "webpack:build:dev"]
 }
     <%_ } _%>
@@ -64,5 +64,6 @@ processResources {
 processResources.dependsOn gulpConstantDev
     <%_ } else { _%>
 processResources.dependsOn webpack
+webpack.onlyIf { project.hasProperty('webpack') }
     <%_ } _%>
 <%_ } _%>

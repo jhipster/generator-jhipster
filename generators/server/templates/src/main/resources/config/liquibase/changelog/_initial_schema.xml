@@ -254,8 +254,8 @@
             <column name="authorities" type="varchar(255)"/>
             <column name="access_token_validity" type="INT"/>
             <column name="refresh_token_validity" type="INT"/>
-            <column name="additional_information" type="VARCHAR(4096)"/>
-            <column name="autoapprove" type="VARCHAR(4096)"/>
+            <column name="additional_information" type="VARCHAR(4000)"/>
+            <column name="autoapprove" type="VARCHAR(4000)"/>
         </createTable>
 
         <createTable tableName="oauth_client_token">
@@ -268,7 +268,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_client_token"
-            constraintName="fk_oauth_client_token_user_name"
+            constraintName="fk_oauth_client_token_username"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
@@ -286,7 +286,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_access_token"
-            constraintName="fk_oauth_access_token_user_name"
+            constraintName="fk_oauth_access_token_username"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
