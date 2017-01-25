@@ -16,10 +16,9 @@ describe('ESLint', () => {
 });
 
 function generateTest(result) {
-  const {filePath, messages} = result;
-  it(`validates ${filePath}`, function () {
-    if (messages.length > 0) {
-      fail(formatMessages(messages));
+  it(`validates ${result.filePath}`, function () {
+    if (result.messages.length > 0) {
+      fail(formatMessages(result.messages));
     }
   });
 }
