@@ -1,7 +1,7 @@
 'use strict';
 
 const expect = require('chai').expect,
-    Set = require('../../../../lib/utils/objects/set');
+  Set = require('../../../../lib/utils/objects/set');
 
 describe('Set', function () {
   describe('::new', function () {
@@ -267,7 +267,7 @@ describe('Set', function () {
   });
   describe('#join', function () {
     describe('when not passing a delimiter', function () {
-      it('uses the comma', function() {
+      it('uses the comma', function () {
         var mySet = new Set();
         var array = [1, 2, 3, 4, 5, 6];
         mySet.addArrayElements(array);
@@ -275,7 +275,7 @@ describe('Set', function () {
       });
     });
     describe('when passing a delimiter', function () {
-      it('uses it', function() {
+      it('uses it', function () {
         var mySet = new Set();
         var array = [1, 2, 3, 4, 5, 6];
         mySet.addArrayElements(array);

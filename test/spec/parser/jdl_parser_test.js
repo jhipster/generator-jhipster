@@ -1,20 +1,20 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
-    JDLParser = require('../../../lib/parser/jdl_parser'),
-    JDLEntity = require('../../../lib/core/jdl_entity'),
-    JDLEnum = require('../../../lib/core/jdl_enum'),
-    JDLField = require('../../../lib/core/jdl_field'),
-    JDLValidation = require('../../../lib/core/jdl_validation'),
-    JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
-    JDLBinaryOption = require('../../../lib/core/jdl_binary_option'),
-    FieldTypes = require('../../../lib/core/jhipster/field_types').SQL_TYPES,
-    Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS,
-    UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
-    BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
-    BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+  fail = expect.fail,
+  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles,
+  JDLParser = require('../../../lib/parser/jdl_parser'),
+  JDLEntity = require('../../../lib/core/jdl_entity'),
+  JDLEnum = require('../../../lib/core/jdl_enum'),
+  JDLField = require('../../../lib/core/jdl_field'),
+  JDLValidation = require('../../../lib/core/jdl_validation'),
+  JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
+  JDLBinaryOption = require('../../../lib/core/jdl_binary_option'),
+  FieldTypes = require('../../../lib/core/jhipster/field_types').SQL_TYPES,
+  Validations = require('../../../lib/core/jhipster/validations').VALIDATIONS,
+  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
+  BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
+  BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('JDLParser', function () {
   describe('::parse', function () {
@@ -64,7 +64,10 @@ describe('JDLParser', function () {
             name: 'Department',
             tableName: 'Department',
             fields: {
-              departmentId: new JDLField({name: 'departmentId', type: FieldTypes.LONG}),
+              departmentId: new JDLField({
+                name: 'departmentId',
+                type: FieldTypes.LONG
+              }),
               departmentName: new JDLField({
                 name: 'departmentName',
                 type: FieldTypes.STRING,
@@ -76,8 +79,14 @@ describe('JDLParser', function () {
             name: 'JobHistory',
             tableName: 'JobHistory',
             fields: {
-              startDate: new JDLField({name: 'startDate', type: FieldTypes.ZONED_DATE_TIME}),
-              endDate: new JDLField({name: 'endDate', type: FieldTypes.ZONED_DATE_TIME}),
+              startDate: new JDLField({
+                name: 'startDate',
+                type: FieldTypes.ZONED_DATE_TIME
+              }),
+              endDate: new JDLField({
+                name: 'endDate',
+                type: FieldTypes.ZONED_DATE_TIME
+              }),
               language: new JDLField({name: 'language', type: 'Language'})
             },
             comment: 'JobHistory comment.'
@@ -95,13 +104,25 @@ describe('JDLParser', function () {
                 name: 'jobTitle',
                 type: FieldTypes.STRING,
                 validations: {
-                  minlength: new JDLValidation({name: Validations.MINLENGTH, value: 5}),
-                  maxlength: new JDLValidation({name: Validations.MAXLENGTH, value: 25})
+                  minlength: new JDLValidation({
+                    name: Validations.MINLENGTH,
+                    value: 5
+                  }),
+                  maxlength: new JDLValidation({
+                    name: Validations.MAXLENGTH,
+                    value: 25
+                  })
                 }
               }),
               jobType: new JDLField({name: 'jobType', type: 'JobType'}),
-              minSalary: new JDLField({name: 'minSalary', type: FieldTypes.LONG}),
-              maxSalary: new JDLField({name: 'maxSalary', type: FieldTypes.LONG})
+              minSalary: new JDLField({
+                name: 'minSalary',
+                type: FieldTypes.LONG
+              }),
+              maxSalary: new JDLField({
+                name: 'maxSalary',
+                type: FieldTypes.LONG
+              })
             }
           }));
           expect(content.options).to.deep.eq([
@@ -249,7 +270,7 @@ describe('JDLParser', function () {
         var content = JDLParser.parse(input, 'sql');
         it('adds it correctly', function () {
           expect(content.options).to.deep.eq([
-              new JDLUnaryOption({
+            new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A']
             })
@@ -257,7 +278,7 @@ describe('JDLParser', function () {
           input = parseFromFiles(['./test/test_files/fluent_methods2.jdl']);
           content = JDLParser.parse(input, 'sql');
           expect(content.options).to.deep.eq([
-              new JDLUnaryOption({
+            new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,
               entityNames: ['*'],
               excludedNames: ['A']
@@ -265,32 +286,42 @@ describe('JDLParser', function () {
           ]);
         });
       });
-      describe('when having following comments', function() {
+      describe('when having following comments', function () {
         var input = parseFromFiles(['./test/test_files/following_comments.jdl']);
         var content = JDLParser.parse(input, 'sql');
-        it('accepts them', function() {
+        it('accepts them', function () {
           expect(content.entities.A.fields.name.comment).to.eq('abc');
           expect(content.entities.A.fields.thing.comment).to.eq('def');
           expect(content.entities.A.fields.another.comment).to.eq('ghi');
         });
-        describe('when having both forms of comments', function() {
-          it('only accepts the one defined first', function() {
+        describe('when having both forms of comments', function () {
+          it('only accepts the one defined first', function () {
             expect(content.entities.B.fields.name.comment).to.eq('xyz');
           });
         });
-        describe('when using commas', function() {
-          it('assigns the comment to the next field', function() {
+        describe('when using commas', function () {
+          it('assigns the comment to the next field', function () {
             expect(content.entities.C.fields.name.comment).to.be.undefined;
             expect(content.entities.C.fields.thing.comment).to.eq('abc');
           });
         });
       });
-      describe('when parsing another complex JDL file', function() {
+      describe('when parsing another complex JDL file', function () {
         var input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
         var content = JDLParser.parse(input, 'sql');
-        it('parses it', function() {
-          expect(content.entities.A).to.deep.eq({ name: 'A', tableName: 'A', fields: {}, comment: undefined });
-          expect(content.entities.B).to.deep.eq({ name: 'B', tableName: 'B', fields: {}, comment: undefined });
+        it('parses it', function () {
+          expect(content.entities.A).to.deep.eq({
+            name: 'A',
+            tableName: 'A',
+            fields: {},
+            comment: undefined
+          });
+          expect(content.entities.B).to.deep.eq({
+            name: 'B',
+            tableName: 'B',
+            fields: {},
+            comment: undefined
+          });
           expect(content.entities.C).to.deep.eq({
             name: 'C',
             tableName: 'C',
@@ -341,7 +372,12 @@ describe('JDLParser', function () {
             },
             comment: undefined
           });
-          expect(content.entities.E).to.deep.eq({ name: 'E', tableName: 'E', fields: {}, comment: undefined });
+          expect(content.entities.E).to.deep.eq({
+            name: 'E',
+            tableName: 'E',
+            fields: {},
+            comment: undefined
+          });
           expect(content.entities.F).to.deep.eq({
             name: 'F',
             tableName: 'F',
@@ -425,10 +461,10 @@ describe('JDLParser', function () {
           expect(content.options[6].value).to.eq('pagination');
         });
       });
-      describe('when having two consecutive comments for fields', function() {
+      describe('when having two consecutive comments for fields', function () {
         var input = parseFromFiles(['./test/test_files/field_comments.jdl']);
         var content = JDLParser.parse(input, 'sql');
-        it('assigns them correctly', function() {
+        it('assigns them correctly', function () {
           expect(content.entities.TestEntity.fields).to.deep.eq({
             first: {
               name: 'first',

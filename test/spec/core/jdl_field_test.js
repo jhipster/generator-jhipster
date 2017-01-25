@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    JDLField = require('../../../lib/core/jdl_field'),
-    JDLValidation = require('../../../lib/core/jdl_validation'),
-    VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
+  fail = expect.fail,
+  JDLField = require('../../../lib/core/jdl_field'),
+  JDLValidation = require('../../../lib/core/jdl_validation'),
+  VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 
 describe('JDLField', function () {
   describe('::new', function () {
@@ -71,13 +71,13 @@ describe('JDLField', function () {
       describe('because its validations are invalid', function () {
         it('returns false', function () {
           expect(
-              JDLField.isValid({
-                name: 'myField',
-                type: 'String',
-                validations: [{
-                  value: 42
-                }]
-              })
+            JDLField.isValid({
+              name: 'myField',
+              type: 'String',
+              validations: [{
+                value: 42
+              }]
+            })
           ).to.be.false;
         });
       });
@@ -143,7 +143,7 @@ describe('JDLField', function () {
         };
         var field = new JDLField(args);
         expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n`
-            + `${args.name} ${args.type}`);
+          + `${args.name} ${args.type}`);
       });
     });
     describe('with everything', function () {
@@ -159,8 +159,8 @@ describe('JDLField', function () {
         };
         var field = new JDLField(args);
         expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n`
-            + `${args.name} ${args.type} ${args.validations[0].name} `
-            + `${args.validations[1].name}(${args.validations[1].value})`);
+          + `${args.name} ${args.type} ${args.validations[0].name} `
+          + `${args.validations[1].name}(${args.validations[1].value})`);
       });
     });
   });

@@ -1,12 +1,11 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fs = require('fs'),
-    fail = expect.fail,
-    parseFromDir = require('../../../lib/reader/json_reader').parseFromDir,
-    UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
+  fail = expect.fail,
+  parseFromDir = require('../../../lib/reader/json_reader').parseFromDir,
+  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
 
-describe('::parseFromDir', function() {
+describe('::parseFromDir', function () {
   describe('when passing invalid parameters', function () {
     describe('such as nil', function () {
       it('throws an error', function () {
@@ -14,7 +13,7 @@ describe('::parseFromDir', function() {
           parseFromDir(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException')
+          expect(error.name).to.eq('IllegalArgumentException');
         }
       });
     });
@@ -24,7 +23,7 @@ describe('::parseFromDir', function() {
           parseFromDir('../../test_files/invalid_file.txt');
           fail();
         } catch (error) {
-          expect(error.name).to.eq('WrongDirException')
+          expect(error.name).to.eq('WrongDirException');
         }
       });
     });
@@ -34,7 +33,7 @@ describe('::parseFromDir', function() {
           parseFromDir('nodir');
           fail();
         } catch (error) {
-          expect(error.name).to.eq('WrongDirException')
+          expect(error.name).to.eq('WrongDirException');
         }
       });
     });

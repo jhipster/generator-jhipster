@@ -1,8 +1,8 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    JDLEnum = require('../../../lib/core/jdl_enum');
+  fail = expect.fail,
+  JDLEnum = require('../../../lib/core/jdl_enum');
 
 describe('JDLEnum', function () {
   describe('::new', function () {
@@ -10,6 +10,7 @@ describe('JDLEnum', function () {
       it('fails', function () {
         try {
           new JDLEnum();
+          fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
@@ -19,6 +20,7 @@ describe('JDLEnum', function () {
       it('fails', function () {
         try {
           new JDLEnum({values: ['ABC'], comment: 'My enumeration.'});
+          fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
@@ -36,6 +38,7 @@ describe('JDLEnum', function () {
       it('fails', function () {
         try {
           jdlEnum.addValue(null);
+          fail();
         } catch (error) {
           expect(error.name).to.eq('NullPointerException');
         }
@@ -49,9 +52,9 @@ describe('JDLEnum', function () {
     });
   });
   describe('::isValid', function () {
-    describe('when validating an invalid object', function() {
-      describe('with no name', function() {
-        it('returns false', function() {
+    describe('when validating an invalid object', function () {
+      describe('with no name', function () {
+        it('returns false', function () {
           expect(JDLEnum.isValid({values: ['A', 'B']})).to.be.false;
         });
       });
@@ -66,7 +69,7 @@ describe('JDLEnum', function () {
         comment: 'The language enumeration.'
       });
       expect(jdlEnum.toString()).to.eq(
-          `/**
+        `/**
  * ${jdlEnum.comment}
  */
 enum ${jdlEnum.name} {

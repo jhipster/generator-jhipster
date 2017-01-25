@@ -1,8 +1,8 @@
 'use strict';
 
 const expect = require('chai').expect,
-    RELATIONSHIP_TYPES = require('../../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
-    exists = require('../../../../lib/core/jhipster/relationship_types').exists;
+  RELATIONSHIP_TYPES = require('../../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
+  exists = require('../../../../lib/core/jhipster/relationship_types').exists;
 
 describe('RELATIONSHIP_TYPES', function () {
   describe('::exists', function () {

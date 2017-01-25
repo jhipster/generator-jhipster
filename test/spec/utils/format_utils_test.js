@@ -1,14 +1,13 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    FormatUtils = require('../../../lib/utils/format_utils'),
-    formatComment = FormatUtils.formatComment,
-    dateFormatForLiquibase = FormatUtils.dateFormatForLiquibase;
+  FormatUtils = require('../../../lib/utils/format_utils'),
+  formatComment = FormatUtils.formatComment,
+  dateFormatForLiquibase = FormatUtils.dateFormatForLiquibase;
 
-describe('FormatUtils', function() {
-  describe('::formatComment', function() {
-    describe('when the comment is in the one-line form', function() {
+describe('FormatUtils', function () {
+  describe('::formatComment', function () {
+    describe('when the comment is in the one-line form', function () {
       var oneLineComment1 = ' comment ';
       var oneLineComment2 = 'comment';
       var oneLineComment3 = ' * a one line comment. ';
@@ -18,34 +17,34 @@ describe('FormatUtils', function() {
       var expectedResult2 = 'a one line comment.';
       var expectedResult3 = 'multi word\tcomment';
 
-      describe(buildTestTitle(oneLineComment1), function() {
-        it('returns ' + buildTestTitle(expectedResult1), function() {
+      describe(buildTestTitle(oneLineComment1), function () {
+        it('returns ' + buildTestTitle(expectedResult1), function () {
           expect(formatComment(oneLineComment1)).to.eq(expectedResult1);
         });
       });
-      describe(buildTestTitle(oneLineComment2), function() {
-        it('returns ' + buildTestTitle(expectedResult1), function() {
+      describe(buildTestTitle(oneLineComment2), function () {
+        it('returns ' + buildTestTitle(expectedResult1), function () {
           expect(formatComment(oneLineComment2)).to.eq(expectedResult1);
         });
       });
-      describe(buildTestTitle(oneLineComment3), function() {
-        it('returns ' + buildTestTitle(expectedResult2), function() {
+      describe(buildTestTitle(oneLineComment3), function () {
+        it('returns ' + buildTestTitle(expectedResult2), function () {
           expect(formatComment(oneLineComment3)).to.eq(expectedResult2);
         });
       });
-      describe(buildTestTitle(oneLineComment4), function() {
-        it('returns ' + buildTestTitle(expectedResult3), function() {
+      describe(buildTestTitle(oneLineComment4), function () {
+        it('returns ' + buildTestTitle(expectedResult3), function () {
           expect(formatComment(oneLineComment4)).to.eq(expectedResult3);
         });
       });
-      describe(buildTestTitle(oneLineComment5), function() {
-        it('returns ' + buildTestTitle(expectedResult3), function() {
+      describe(buildTestTitle(oneLineComment5), function () {
+        it('returns ' + buildTestTitle(expectedResult3), function () {
           expect(formatComment(oneLineComment5)).to.eq(expectedResult3);
         });
       });
     });
 
-    describe('when the comment is in the multi-line form', function() {
+    describe('when the comment is in the multi-line form', function () {
       var multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
       var multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
       var multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
@@ -53,18 +52,18 @@ describe('FormatUtils', function() {
       var expectedResult2 = '<p>first line of comment</p><br/>\n*<p>second line</p>';
       var expectedResult3 = 'abcde\nfghij\nnothing';
 
-      describe(buildTestTitle(multiLineComment1), function() {
-        it('returns ' + buildTestTitle(expectedResult1), function() {
+      describe(buildTestTitle(multiLineComment1), function () {
+        it('returns ' + buildTestTitle(expectedResult1), function () {
           expect(formatComment(multiLineComment1)).to.eq(expectedResult1);
         });
       });
-      describe(buildTestTitle(multiLineComment2), function() {
-        it('returns ' + buildTestTitle(expectedResult2), function() {
+      describe(buildTestTitle(multiLineComment2), function () {
+        it('returns ' + buildTestTitle(expectedResult2), function () {
           expect(formatComment(multiLineComment2)).to.eq(expectedResult2);
         });
       });
-      describe(buildTestTitle(multiLineComment3), function() {
-        it('returns ' + buildTestTitle(expectedResult3), function() {
+      describe(buildTestTitle(multiLineComment3), function () {
+        it('returns ' + buildTestTitle(expectedResult3), function () {
           expect(formatComment(multiLineComment3)).to.eq(expectedResult3);
         });
       });
@@ -76,7 +75,7 @@ describe('FormatUtils', function() {
         const now = new Date();
         const increment = 1000042;
         const result =
-          dateFormatForLiquibase({ date: now, increment: increment });
+          dateFormatForLiquibase({date: now, increment: increment});
         now.setSeconds(now.getUTCSeconds() + increment);
         const now_utc = new Date(
           now.getUTCFullYear(),
@@ -119,7 +118,7 @@ describe('FormatUtils', function() {
     describe('when not passing the increment', () => {
       it('formats the current time for liquibase with no increment', () => {
         const now = new Date();
-        const result = dateFormatForLiquibase({ date: now });
+        const result = dateFormatForLiquibase({date: now});
         const now_utc = new Date(
           now.getUTCFullYear(),
           now.getUTCMonth(),
@@ -157,5 +156,5 @@ describe('FormatUtils', function() {
 });
 
 function buildTestTitle(comment) {
-  return  `'${comment}'`;
+  return `'${comment}'`;
 }

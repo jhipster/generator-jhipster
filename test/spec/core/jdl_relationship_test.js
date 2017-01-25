@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    JDLEntity = require('../../../lib/core/jdl_entity'),
-    JDLRelationship = require('../../../lib/core/jdl_relationship'),
-    RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES;
+  fail = expect.fail,
+  JDLEntity = require('../../../lib/core/jdl_entity'),
+  JDLRelationship = require('../../../lib/core/jdl_relationship'),
+  RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES;
 
 describe('JDLRelationship', function () {
   describe('::new', function () {
@@ -113,12 +113,12 @@ describe('JDLRelationship', function () {
       describe('because the entities are invalid', function () {
         it('returns false', function () {
           expect(
-              JDLRelationship.isValid({
-                from: {},
-                to: {name: 'Valid', tableName: 't_valid', fields: []},
-                type: RELATIONSHIP_TYPES.MANY_TO_MANY,
-                injectedFieldInFrom: 'something'
-              })
+            JDLRelationship.isValid({
+              from: {},
+              to: {name: 'Valid', tableName: 't_valid', fields: []},
+              type: RELATIONSHIP_TYPES.MANY_TO_MANY,
+              injectedFieldInFrom: 'something'
+            })
           ).to.be.false;
           expect(JDLRelationship.isValid({
             to: {},
@@ -131,23 +131,23 @@ describe('JDLRelationship', function () {
       describe('because the type is invalid', function () {
         it('returns false', function () {
           expect(
-              JDLRelationship.isValid({
-                from: {name: 'Valid2', tableName: 't_valid2', fields: []},
-                to: {name: 'Valid', tableName: 't_valid', fields: []},
-                type: 'WRONG',
-                injectedFieldInFrom: 'something'
-              })
+            JDLRelationship.isValid({
+              from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+              to: {name: 'Valid', tableName: 't_valid', fields: []},
+              type: 'WRONG',
+              injectedFieldInFrom: 'something'
+            })
           ).to.be.false;
         });
       });
       describe('because it lacks an injected field', function () {
         it('returns false', function () {
           expect(
-              JDLRelationship.isValid({
-                from: {name: 'Valid2', tableName: 't_valid2', fields: []},
-                to: {name: 'Valid', tableName: 't_valid', fields: []},
-                type: RELATIONSHIP_TYPES.MANY_TO_MANY
-              })
+            JDLRelationship.isValid({
+              from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+              to: {name: 'Valid', tableName: 't_valid', fields: []},
+              type: RELATIONSHIP_TYPES.MANY_TO_MANY
+            })
           ).to.be.false;
         });
       });
@@ -155,12 +155,12 @@ describe('JDLRelationship', function () {
     describe('when passing a valid object', function () {
       it('returns true', function () {
         expect(
-            JDLRelationship.isValid({
-              from: {name: 'Valid2', tableName: 't_valid2', fields: []},
-              to: {name: 'Valid', tableName: 't_valid', fields: []},
-              type: RELATIONSHIP_TYPES.MANY_TO_MANY,
-              injectedFieldInFrom: 'something'
-            })
+          JDLRelationship.isValid({
+            from: {name: 'Valid2', tableName: 't_valid2', fields: []},
+            to: {name: 'Valid', tableName: 't_valid', fields: []},
+            type: RELATIONSHIP_TYPES.MANY_TO_MANY,
+            injectedFieldInFrom: 'something'
+          })
         ).to.be.true;
       });
     });
@@ -288,7 +288,7 @@ describe('JDLRelationship', function () {
           injectedFieldInFrom: 'b'
         });
         expect(relationship.toString()).to.eq(
-            `relationship ${relationship.type} {
+          `relationship ${relationship.type} {
   ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
 }`
         );
@@ -305,7 +305,7 @@ describe('JDLRelationship', function () {
           commentInTo: 'Some other comment.'
         });
         expect(relationship.toString()).to.eq(
-            `relationship ${relationship.type} {
+          `relationship ${relationship.type} {
   /**
    * ${relationship.commentInFrom}
    */
@@ -328,7 +328,7 @@ describe('JDLRelationship', function () {
           commentInFrom: 'Some comment.'
         });
         expect(relationship.toString()).to.eq(
-            `relationship ${relationship.type} {
+          `relationship ${relationship.type} {
   /**
    * ${relationship.commentInFrom}
    */
@@ -347,7 +347,7 @@ describe('JDLRelationship', function () {
           commentInTo: 'Some other comment.'
         });
         expect(relationship.toString()).to.eq(
-            `relationship ${relationship.type} {
+          `relationship ${relationship.type} {
   ${relationship.from.name}{${relationship.injectedFieldInFrom}} to
   /**
    * ${relationship.commentInTo}
@@ -366,7 +366,7 @@ describe('JDLRelationship', function () {
           injectedFieldInFrom: 'b'
         });
         expect(relationship.toString()).to.eq(
-            `relationship ${relationship.type} {
+          `relationship ${relationship.type} {
   ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
 }`
         );
@@ -382,7 +382,7 @@ describe('JDLRelationship', function () {
           injectedFieldInTo: 'a(id)'
         });
         expect(relationship.toString()).to.eq(
-            `relationship ${relationship.type} {
+          `relationship ${relationship.type} {
   ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}{${relationship.injectedFieldInTo}}
 }`
         );

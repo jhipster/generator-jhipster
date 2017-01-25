@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
-    JDLEntity = require('../../../lib/core/jdl_entity'),
-    UNARY_OPTIONS = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
+  fail = expect.fail,
+  JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
+  JDLEntity = require('../../../lib/core/jdl_entity'),
+  UNARY_OPTIONS = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
 
 describe('JDLUnaryOption', function () {
   describe('::new', function () {
@@ -71,11 +71,11 @@ describe('JDLUnaryOption', function () {
       it('returns true', function () {
         var emptyOption = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         expect(
-            JDLUnaryOption.isValid({
-              name: UNARY_OPTIONS.SKIP_CLIENT,
-              entityNames: emptyOption.entityNames,
-              excludedNames: emptyOption.excludedNames
-            })
+          JDLUnaryOption.isValid({
+            name: UNARY_OPTIONS.SKIP_CLIENT,
+            entityNames: emptyOption.entityNames,
+            excludedNames: emptyOption.excludedNames
+          })
         ).to.be.true;
       });
     });

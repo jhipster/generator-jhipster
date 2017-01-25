@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fs = require('fs'),
-    fail = expect.fail,
-    parse = require('../../../lib/reader/jdl_reader').parse,
-    parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+  fs = require('fs'),
+  fail = expect.fail,
+  parse = require('../../../lib/reader/jdl_reader').parse,
+  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::parse', function () {
   describe('when passing invalid parameters', function () {
@@ -14,7 +14,7 @@ describe('::parse', function () {
           parse(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException')
+          expect(error.name).to.eq('IllegalArgumentException');
         }
       });
     });
@@ -24,7 +24,7 @@ describe('::parse', function () {
           parse('');
           fail();
         } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException')
+          expect(error.name).to.eq('IllegalArgumentException');
         }
       });
     });
@@ -39,7 +39,7 @@ describe('::parse', function () {
     });
   });
 });
-describe('::parseFromFiles', function() {
+describe('::parseFromFiles', function () {
   describe('when passing invalid parameters', function () {
     describe('such as nil', function () {
       it('throws an error', function () {
@@ -47,7 +47,7 @@ describe('::parseFromFiles', function() {
           parseFromFiles(null);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException')
+          expect(error.name).to.eq('IllegalArgumentException');
         }
       });
     });
@@ -57,7 +57,7 @@ describe('::parseFromFiles', function() {
           parseFromFiles([]);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException')
+          expect(error.name).to.eq('IllegalArgumentException');
         }
       });
     });
@@ -67,7 +67,7 @@ describe('::parseFromFiles', function() {
           parseFromFiles(['../../test_files/invalid_file.txt']);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('WrongFileException')
+          expect(error.name).to.eq('WrongFileException');
         }
       });
     });
@@ -77,7 +77,7 @@ describe('::parseFromFiles', function() {
           parseFromFiles(['nofile.jh']);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('WrongFileException')
+          expect(error.name).to.eq('WrongFileException');
         }
       });
     });
@@ -87,7 +87,7 @@ describe('::parseFromFiles', function() {
           parseFromFiles(['../../test_files/folder.jdl']);
           fail();
         } catch (error) {
-          expect(error.name).to.eq('WrongFileException')
+          expect(error.name).to.eq('WrongFileException');
         }
       });
     });
@@ -99,20 +99,20 @@ describe('::parseFromFiles', function() {
         expect(content).not.to.be.null;
       });
     });
-    describe('when reading more than one JDL file', function() {
+    describe('when reading more than one JDL file', function () {
       var content = parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
       it('reads them', function () {
         expect(content).not.to.be.null;
       });
     });
-    describe('when reading a complex JDL file', function() {
+    describe('when reading a complex JDL file', function () {
       var content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       it('reads them', function () {
         expect(content).not.to.be.null;
       });
     });
-    describe('when having multiple internal JDL comments', function() {
-      it('ignores them and does not fail', function() {
+    describe('when having multiple internal JDL comments', function () {
+      it('ignores them and does not fail', function () {
         try {
           parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
         } catch (error) {

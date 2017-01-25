@@ -1,20 +1,18 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    BINARY_OPTIONS = require('../../../lib/core/jhipster/binary_options'),
-    UNARY_OPTIONS = require('../../../lib/core/jhipster/unary_options'),
-    RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types'),
-    VALIDATIONS = require('../../../lib/core/jhipster/validations'),
-    JDLObject = require('../../../lib/core/jdl_object'),
-    JDLEntity = require('../../../lib/core/jdl_entity'),
-    JDLField = require('../../../lib/core/jdl_field'),
-    JDLValidation = require('../../../lib/core/jdl_validation'),
-    JDLEnum = require('../../../lib/core/jdl_enum'),
-    JDLRelationship = require('../../../lib/core/jdl_relationship'),
-    JDLRelationships = require('../../../lib/core/jdl_relationships'),
-    JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
-    JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
+  fail = expect.fail,
+  BINARY_OPTIONS = require('../../../lib/core/jhipster/binary_options'),
+  UNARY_OPTIONS = require('../../../lib/core/jhipster/unary_options'),
+  RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types'),
+  JDLObject = require('../../../lib/core/jdl_object'),
+  JDLEntity = require('../../../lib/core/jdl_entity'),
+  JDLField = require('../../../lib/core/jdl_field'),
+  JDLValidation = require('../../../lib/core/jdl_validation'),
+  JDLEnum = require('../../../lib/core/jdl_enum'),
+  JDLRelationship = require('../../../lib/core/jdl_relationship'),
+  JDLUnaryOption = require('../../../lib/core/jdl_unary_option'),
+  JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 
 describe('JDLObject', function () {
   describe('#addEntity', function () {
@@ -44,7 +42,11 @@ describe('JDLObject', function () {
     describe('when adding a valid entity', function () {
       it('works', function () {
         var object = new JDLObject();
-        var entity = new JDLEntity({name: 'Valid', tableName: 't_valid', fields: []});
+        var entity = new JDLEntity({
+          name: 'Valid',
+          tableName: 't_valid',
+          fields: []
+        });
         object.addEntity(entity);
         expect(object.entities[entity.name]).to.deep.eq(entity);
       });
@@ -52,9 +54,17 @@ describe('JDLObject', function () {
     describe('when adding an entity with the same name', function () {
       it('replaces the former one', function () {
         var object = new JDLObject();
-        var entity = new JDLEntity({name: 'Valid', tableName: 't_valid', fields: []});
+        var entity = new JDLEntity({
+          name: 'Valid',
+          tableName: 't_valid',
+          fields: []
+        });
         object.addEntity(entity);
-        var entity2 = new JDLEntity({name: 'Valid', tableName: 't_valid2', fields: []});
+        var entity2 = new JDLEntity({
+          name: 'Valid',
+          tableName: 't_valid2',
+          fields: []
+        });
         object.addEntity(entity2);
         expect(object.entities[entity.name]).to.deep.eq(entity2);
       });
@@ -165,7 +175,10 @@ describe('JDLObject', function () {
           expect(error.name).to.eq('InvalidObjectException');
         }
         try {
-          object.addOption({name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT, type: 'WrongType'});
+          object.addOption({
+            name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT,
+            type: 'WrongType'
+          });
           fail();
         } catch (error) {
           expect(error.name).to.eq('InvalidObjectException');
@@ -210,7 +223,7 @@ describe('JDLObject', function () {
       option2.addEntity(entityB);
       object.addOption(option2);
       expect(object.toString()).to.eq(
-          `${entityA.toString()}
+        `${entityA.toString()}
 ${entityB.toString()}
 ${enumObject.toString()}
 

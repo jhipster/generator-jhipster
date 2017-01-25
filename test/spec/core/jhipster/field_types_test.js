@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    FieldTypes = require('../../../../lib/core/jhipster/field_types'),
-    Validations = require('../../../../lib/core/jhipster/validations').VALIDATIONS,
-    JDLEnum = require('../../../../lib/core/jdl_enum');
+  fail = expect.fail,
+  FieldTypes = require('../../../../lib/core/jhipster/field_types'),
+  Validations = require('../../../../lib/core/jhipster/validations').VALIDATIONS,
+  JDLEnum = require('../../../../lib/core/jdl_enum');
 
 describe('FieldTypes', function () {
   describe('::isSQLType', function () {

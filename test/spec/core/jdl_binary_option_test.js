@@ -1,11 +1,11 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    JDLBinaryOption = require('../../../lib/core/jdl_binary_option'),
-    JDLEntity = require('../../../lib/core/jdl_entity'),
-    BINARY_OPTIONS = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
-    BINARY_OPTION_VALUES = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+  fail = expect.fail,
+  JDLBinaryOption = require('../../../lib/core/jdl_binary_option'),
+  JDLEntity = require('../../../lib/core/jdl_entity'),
+  BINARY_OPTIONS = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
+  BINARY_OPTION_VALUES = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('JDLBinaryOption', function () {
   describe('::new', function () {
@@ -41,7 +41,10 @@ describe('JDLBinaryOption', function () {
     });
     describe('when passing a name and a value', function () {
       it('creates the option', function () {
-        var option = new JDLBinaryOption({name: BINARY_OPTIONS.DTO, value: BINARY_OPTION_VALUES.dto.MAPSTRUCT});
+        var option = new JDLBinaryOption({
+          name: BINARY_OPTIONS.DTO,
+          value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
+        });
         expect(option).not.to.be.null;
         expect(option.name).to.eq(BINARY_OPTIONS.DTO);
         expect(option.value).to.eq(BINARY_OPTION_VALUES.dto.MAPSTRUCT);
@@ -83,14 +86,17 @@ describe('JDLBinaryOption', function () {
     });
     describe('when passing an object with a name, entity names and excluded names', function () {
       it('returns true', function () {
-        var emptyOption = new JDLBinaryOption({name: BINARY_OPTIONS.DTO, value: BINARY_OPTION_VALUES.dto.MAPSTRUCT});
+        var emptyOption = new JDLBinaryOption({
+          name: BINARY_OPTIONS.DTO,
+          value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
+        });
         expect(
-            JDLBinaryOption.isValid({
-              name: BINARY_OPTIONS.DTO,
-              value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
-              entityNames: emptyOption.entityNames,
-              excludedNames: emptyOption.excludedNames
-            })
+          JDLBinaryOption.isValid({
+            name: BINARY_OPTIONS.DTO,
+            value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
+            entityNames: emptyOption.entityNames,
+            excludedNames: emptyOption.excludedNames
+          })
         ).to.be.true;
       });
     });

@@ -1,0 +1,19 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["off", "single"],
+    "semi": ["error", "always"],
+    "no-use-before-define": [2, "nofunc"],
+    "no-unused-vars": [2, {"vars": "local", "args": "none"}],
+    "no-multi-str": 2,
+    "no-irregular-whitespace": 2,
+    "no-console": ["off"]
+  }
+}

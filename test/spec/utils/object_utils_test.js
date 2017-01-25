@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    merge = require('../../../lib/utils/object_utils').merge,
-    values = require('../../../lib/utils/object_utils').values,
-    areEntitiesEqual = require('../../../lib/utils/object_utils').areEntitiesEqual;
+  fail = expect.fail,
+  merge = require('../../../lib/utils/object_utils').merge,
+  values = require('../../../lib/utils/object_utils').values,
+  areEntitiesEqual = require('../../../lib/utils/object_utils').areEntitiesEqual;
 
 describe('ObjectUtils', function () {
   describe('::merge', function () {
@@ -37,21 +37,21 @@ describe('ObjectUtils', function () {
       });
       it('returns the merged object by merging the second into the first', function () {
         expect(
-            merge(object1, object2)
+          merge(object1, object2)
         ).to.deep.equal({a: 1, b: 3, c: 4});
 
         expect(
-            merge(object2, object1)
+          merge(object2, object1)
         ).to.deep.equal({a: 1, b: 2, c: 4});
       });
 
       it('does not modify any of the two objects', function () {
         merge(object1, object2);
         expect(
-            object1
+          object1
         ).to.deep.equal({a: 1, b: 2});
         expect(
-            object2
+          object2
         ).to.deep.equal({b: 3, c: 4});
       });
     });
@@ -80,7 +80,10 @@ describe('ObjectUtils', function () {
           b: 'A string',
           c: [1, 2, 3, 4, 5],
           d: {d1: '', d2: 'something'}
-        })).to.deep.eq([42, 'A string', [1, 2, 3, 4, 5], {d1: '', d2: 'something'}]);
+        })).to.deep.eq([42, 'A string', [1, 2, 3, 4, 5], {
+          d1: '',
+          d2: 'something'
+        }]);
       });
     });
   });
@@ -232,7 +235,7 @@ describe('ObjectUtils', function () {
             ]
           };
           expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
-          var firstObject = {
+          firstObject = {
             fields: [],
             relationships: [
               {
@@ -245,7 +248,7 @@ describe('ObjectUtils', function () {
               }
             ]
           };
-          var secondObject = {
+          secondObject = {
             fields: [],
             relationships: []
           };
@@ -396,7 +399,7 @@ describe('ObjectUtils', function () {
             ]
           };
           expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
-        })
+        });
       });
       describe('as they do not possess the same number of relationships', function () {
         it('returns false', function () {
@@ -595,10 +598,10 @@ describe('ObjectUtils', function () {
             service: 'no'
           };
           expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
-        })
+        });
       });
-      describe('as they do not have the same comments', function() {
-        it('returns false', function() {
+      describe('as they do not have the same comments', function () {
+        it('returns false', function () {
           var firstObject = {
             javadoc: 'My first comment',
             fields: [

@@ -8,6 +8,8 @@
     "DSL"
   ],
   "scripts": {
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "test": "./node_modules/mocha/bin/mocha test",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test -- -t 5000",
     "peg-parse": "./node_modules/pegjs/bin/pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt"

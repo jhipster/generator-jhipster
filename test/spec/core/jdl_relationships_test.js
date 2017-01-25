@@ -1,11 +1,11 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    JDLEntity = require('../../../lib/core/jdl_entity'),
-    JDLRelationship = require('../../../lib/core/jdl_relationship'),
-    RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
-    JDLRelationships = require('../../../lib/core/jdl_relationships');
+  fail = expect.fail,
+  JDLEntity = require('../../../lib/core/jdl_entity'),
+  JDLRelationship = require('../../../lib/core/jdl_relationship'),
+  RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
+  JDLRelationships = require('../../../lib/core/jdl_relationships');
 
 describe('JDLRelationships', function () {
   describe('#add', function () {
@@ -14,11 +14,13 @@ describe('JDLRelationships', function () {
         it('fails', function () {
           try {
             new JDLRelationships().add(null);
+            fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
           }
           try {
             new JDLRelationships().add(undefined);
+            fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
           }
@@ -31,6 +33,7 @@ describe('JDLRelationships', function () {
               to: {name: 'A'},
               from: {name: 'B'}
             });
+            fail();
           } catch (error) {
             expect(error.name).to.eq('InvalidObjectException');
           }
@@ -65,8 +68,8 @@ describe('JDLRelationships', function () {
       });
     });
   });
-  describe('#toArray', function() {
-    it('returns the list of each relationship', function() {
+  describe('#toArray', function () {
+    it('returns the list of each relationship', function () {
       var relationships = new JDLRelationships();
       var relationship1 = new JDLRelationship({
         from: new JDLEntity({

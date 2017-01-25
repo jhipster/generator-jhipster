@@ -1,8 +1,8 @@
 'use strict';
 
 const expect = require('chai').expect,
-    UNARY_OPTIONS = require('../../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
-    exists = require('../../../../lib/core/jhipster/unary_options').exists;
+  UNARY_OPTIONS = require('../../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
+  exists = require('../../../../lib/core/jhipster/unary_options').exists;
 
 describe('UNARY_OPTIONS', function () {
   describe('::exists', function () {

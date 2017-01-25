@@ -1,8 +1,7 @@
 'use strict';
 
 const expect = require('chai').expect,
-    buildException = require('../../../lib/exceptions/exception_factory').buildException,
-    exceptions = require('../../../lib/exceptions/exception_factory').exceptions;
+  buildException = require('../../../lib/exceptions/exception_factory').buildException;
 
 describe('ExceptionFactory', function () {
   describe('::buildException', function () {
@@ -14,6 +13,7 @@ describe('ExceptionFactory', function () {
       try {
         throw new buildException('Working', null);
       } catch (error) {
+        expect(error.name).to.be.defined;
       }
     });
     describe('when only passing a name', function () {
@@ -24,7 +24,7 @@ describe('ExceptionFactory', function () {
         expect(exception1.message).to.be.empty;
         expect(exception2.name).to.eq('WorkingException');
         expect(exception2.message).to.be.empty;
-      })
+      });
     });
     describe('when only passing a message', function () {
       it("just adds the suffix and keeps the message", function () {
@@ -34,7 +34,7 @@ describe('ExceptionFactory', function () {
         expect(exception1.message).to.eq('The message');
         expect(exception2.name).to.eq('Exception');
         expect(exception2.message).to.eq('The message');
-      })
+      });
     });
     describe('when passing in a name and a message', function () {
       it('keeps both', function () {

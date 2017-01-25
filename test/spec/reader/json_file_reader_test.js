@@ -1,10 +1,10 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    toFilePath = require('../../../lib/reader/json_file_reader').toFilePath,
-    doesfileExist = require('../../../lib/reader/json_file_reader').doesfileExist,
-    readEntityJSON = require('../../../lib/reader/json_file_reader').readEntityJSON;
+  fail = expect.fail,
+  toFilePath = require('../../../lib/reader/json_file_reader').toFilePath,
+  doesfileExist = require('../../../lib/reader/json_file_reader').doesfileExist,
+  readEntityJSON = require('../../../lib/reader/json_file_reader').readEntityJSON;
 
 describe('JSONFileReader', function () {
   describe('::readEntityJSON', function () {
@@ -53,21 +53,22 @@ describe('JSONFileReader', function () {
     describe('when passing a valid entity name', function () {
       var content = readEntityJSON('test/test_files/MyEntity.json');
       it('reads the file', function () {
-        expect(content).to.deep.eq({
-              "relationships": [],
-              "fields": [
-                {
-                  "fieldName": "myField",
-                  "fieldType": "String"
-                }
-              ],
-              "changelogDate": "20160705183933",
-              "dto": "no",
-              "service": "no",
-              "entityTableName": "my_entity",
-              "pagination": "no"
-            }
-        )
+        expect(content).to.deep.eq(
+          {
+            "relationships": [],
+            "fields": [
+              {
+                "fieldName": "myField",
+                "fieldType": "String"
+              }
+            ],
+            "changelogDate": "20160705183933",
+            "dto": "no",
+            "service": "no",
+            "entityTableName": "my_entity",
+            "pagination": "no"
+          }
+        );
       });
     });
   });
@@ -96,14 +97,16 @@ describe('JSONFileReader', function () {
       describe('with a valid entity name', function () {
         it('returns the path', function () {
           let name = 'MyEntity';
-          expect(toFilePath(name)).to.eq(`.jhipster/${name}.json`)
+          expect(toFilePath(name)).to.eq(`.jhipster/${name}.json`);
         });
       });
       describe('with a valid entity name with the first letter lowercase', function () {
         it('returns the path, with the first letter upper-cased', function () {
           let expectedFirstLetter = 'M';
           let name = 'myEntity';
-          expect(toFilePath(name)).to.eq(`.jhipster/${expectedFirstLetter}${name.slice(1, name.length)}.json`)
+          expect(
+            toFilePath(name)
+          ).to.eq(`.jhipster/${expectedFirstLetter}${name.slice(1, name.length)}.json`);
         });
       });
     });

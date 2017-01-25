@@ -1,11 +1,12 @@
 'use strict';
 
 const expect = require('chai').expect,
-    Reader = require('../../../lib/reader/json_file_reader'),
-    Parser = require('../../../lib/parser/json_parser'),
-    UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
-    BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
-    BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
+  fail = expect.fail,
+  Reader = require('../../../lib/reader/json_file_reader'),
+  Parser = require('../../../lib/parser/json_parser'),
+  UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS,
+  BinaryOptions = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
+  BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('::parse', function () {
   var entities = {
@@ -52,56 +53,56 @@ describe('::parse', function () {
       expect(
         content.options.filter(
           option =>
-            option.name === BinaryOptions.DTO &&
-            option.value === BinaryOptionValues.dto.MAPSTRUCT &&
-            option.entityNames.has('Employee')
+          option.name === BinaryOptions.DTO &&
+          option.value === BinaryOptionValues.dto.MAPSTRUCT &&
+          option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
         content.options.filter(
           option =>
-            option.name === BinaryOptions.PAGINATION &&
-            option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
-            option.entityNames.has('Employee')
+          option.name === BinaryOptions.PAGINATION &&
+          option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
+          option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
         content.options.filter(
           option =>
-            option.name === BinaryOptions.SERVICE &&
-            option.value === BinaryOptionValues.service.SERVICE_CLASS &&
-            option.entityNames.has('Employee')
+          option.name === BinaryOptions.SERVICE &&
+          option.value === BinaryOptionValues.service.SERVICE_CLASS &&
+          option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
         content.options.filter(
           option =>
-            option.name === BinaryOptions.SEARCH_ENGINE &&
-            option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
-            option.entityNames.has('Employee')
+          option.name === BinaryOptions.SEARCH_ENGINE &&
+          option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
+          option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
         content.options.filter(
           option =>
-            option.name === BinaryOptions.MICROSERVICE &&
-            option.value === 'mymicroservice' &&
-            option.entityNames.has('Employee')
+          option.name === BinaryOptions.MICROSERVICE &&
+          option.value === 'mymicroservice' &&
+          option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
         content.options.filter(
           option =>
-            option.name === BinaryOptions.ANGULAR_SUFFIX &&
-            option.value === 'myentities' &&
-            option.entityNames.has('Employee')
+          option.name === BinaryOptions.ANGULAR_SUFFIX &&
+          option.value === 'myentities' &&
+          option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
       expect(
         content.options.filter(
           option =>
-            option.name === UnaryOptions.NO_FLUENT_METHOD &&
-            option.entityNames.has('Employee')
+          option.name === UnaryOptions.NO_FLUENT_METHOD &&
+          option.entityNames.has('Employee')
         ).length
       ).to.eq(1);
     });
@@ -199,7 +200,7 @@ describe('::parse', function () {
             });
             fail();
           } catch (error) {
-            expect(error.name).to.eq('IllegalNameException')
+            expect(error.name).to.eq('IllegalNameException');
           }
         });
       });
