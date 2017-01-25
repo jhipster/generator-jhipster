@@ -51,7 +51,7 @@ module.exports = function (options) {
                     test: /(vendor\.scss|global\.scss)/,
                     loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
                 },
-                <%_ } else { _%>
+                <%_ } _%>
                 {
                     test: /\.css$/,
                     loaders: ['to-string-loader', 'css-loader'],
@@ -61,7 +61,6 @@ module.exports = function (options) {
                     test: /(vendor\.css|global\.css)/,
                     loaders: ['style-loader', 'css-loader']
                 },
-                <%_ } _%>
                 {
                     test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
                     loaders: [
