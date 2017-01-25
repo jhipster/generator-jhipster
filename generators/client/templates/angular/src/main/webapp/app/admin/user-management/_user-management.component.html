@@ -56,12 +56,14 @@
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'user-management/'+ user.login + '/edit'} }]"
+                                replaceUrl="true"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.edit"></span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'user-management/'+ user.login + '/delete'} }]"
+                                replaceUrl="true"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login==user.login">
                             <span class="fa fa-remove"></span>
                             <span class="hidden-sm-down" jhiTranslate="entity.action.delete"></span>
