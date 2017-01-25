@@ -121,7 +121,7 @@ export class AlertService {
     }
 
     closeAlert(id: number, extAlerts?: Alert[]): any {
-        let thisAlerts: Alert[] = extAlerts ? extAlerts : this.alerts;
+        let thisAlerts: Alert[] = (extAlerts && extAlerts.length > 0) ? extAlerts : this.alerts;
         return this.closeAlertByIndex(thisAlerts.map(e => e.id).indexOf(id), thisAlerts);
     }
 

@@ -37,7 +37,15 @@ describe('Alert service test', () => {
                     provide: AlertService, useFactory: mockAlertService, deps: [Sanitizer]
                 }]
             });
+            // Make sure we can install mock clock
+            jasmine.clock().uninstall();
+            jasmine.clock().install();
         });
+
+        afterEach(() => {
+            jasmine.clock().uninstall();
+        });
+
 
         it('should produce a proper alert object and fetch it', inject([AlertService], (service: AlertService) => {
             expect(service.addAlert({
@@ -116,6 +124,16 @@ describe('Alert service test', () => {
                 msg: 'Hello Jhipster info',
                 id: 0
             }));
+        }));
+
+        it('should close an alert on timeout correctly', inject([AlertService], (service: AlertService) => {
+            service.info('Hello Jhipster info');
+
+            expect(service.get().length).toBe(1);
+
+            jasmine.clock().tick(6000); // increment clock 6000 ms.
+
+            expect(service.get().length).toBe(0);
         }));
 
         it('should clear alerts', inject([AlertService], (service: AlertService) => {
