@@ -36,11 +36,13 @@ spec:
           value: prod
         <%_ if (app.applicationType === 'microservice' || app.applicationType === 'gateway') { _%>
         <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
-        # This must contain a list of all Eureka server replicas for registry HA to work correctly
-        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-          value: http://admin:<%= adminPassword %>@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:<%= adminPassword %>@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
         - name: SPRING_CLOUD_CONFIG_URI
-          value: http://admin:<%= adminPassword %>@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/config
+          value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/config
+        - name: JHIPSTER_REGISTRY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: registry-secret
+              key: registry-admin-password
         <%_ } _%>
         <%_ if (app.serviceDiscoveryType === 'consul') { _%>
         - name: SPRING_CLOUD_CONSUL_HOST

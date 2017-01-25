@@ -7,7 +7,7 @@ spring:
       <%_ if (serviceDiscoveryType === 'eureka') { _%>
         config:
             fail-fast: true
-            uri: http://admin:admin@localhost:8761/config
+            uri: http://admin:${jhipster.registry.password}@localhost:8761/config
             # name of the config server's property source (file.yml) that we want to use
             name: <%= baseName %>
             profile: dev # profile(s) of the property source
@@ -21,3 +21,9 @@ spring:
                 format: yaml
                 profile-separator: "-"
       <%_ } _%>
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
+
+jhipster:
+    registry:
+        password: admin
+<%_ } _%>

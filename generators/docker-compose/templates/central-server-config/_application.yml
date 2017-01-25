@@ -23,5 +23,5 @@ jhipster:
 eureka:
     client:
         serviceUrl:
-            defaultZone: http://admin:<%= adminPassword %>@registry:8761/eureka/
+            defaultZone: http://admin:${jhipster.registry.password}@registry:8761/eureka/
 <%_ } _%>
