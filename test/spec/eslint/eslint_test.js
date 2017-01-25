@@ -12,7 +12,9 @@ const engine = new CLIEngine({
 const results = engine.executeOnFiles(paths).results;
 
 describe('ESLint', () => {
-  results.forEach((result) => generateTest(result));
+  for (let i = 0; i < results.length; i++) {
+    generateTest(results[i]);
+  }
 });
 
 function generateTest(result) {
