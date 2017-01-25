@@ -40,7 +40,7 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
 
     clear () {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}]);
+        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     confirmDelete (id: number) {
@@ -49,7 +49,7 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
                 name: '<%= entityInstance %>ListModification',
                 content: 'Deleted an <%= entityInstance %>'
             });
-            this.router.navigate([{ outlets: { popup: null }}]);
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.activeModal.dismiss(true);
         });
     }
