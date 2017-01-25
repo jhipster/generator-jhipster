@@ -4,7 +4,7 @@ const fail = require('chai').expect,
   glob = require('glob'),
   CLIEngine = require('eslint').CLIEngine;
 
-const paths = glob.sync('./+(lib|module|test)/**/*.js');
+const paths = glob.sync('./+(lib|module|scripts|test)/**/*.js');
 const engine = new CLIEngine({
   envs: ['node', 'mocha'],
   useEslintrc: true
