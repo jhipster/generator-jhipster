@@ -1,12 +1,12 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fs = require('fs'),
-    fail = expect.fail,
-    Exporter = require('../../../lib/export/json_exporter'),
-    JDLParser = require('../../../lib/parser/jdl_parser'),
-    EntityParser = require('../../../lib/parser/entity_parser'),
-    parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
+  fs = require('fs'),
+  fail = expect.fail,
+  Exporter = require('../../../lib/export/json_exporter'),
+  JDLParser = require('../../../lib/parser/jdl_parser'),
+  EntityParser = require('../../../lib/parser/entity_parser'),
+  parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
 describe('::exportToJSON', function () {
   describe('when passing invalid parameters', function () {
@@ -16,7 +16,7 @@ describe('::exportToJSON', function () {
           Exporter.exportToJSON();
           fail();
         } catch (error) {
-          expect(error.name).to.eq('NullPointerException')
+          expect(error.name).to.eq('NullPointerException');
         }
       });
     });
@@ -24,11 +24,13 @@ describe('::exportToJSON', function () {
   describe('when passing valid arguments', function () {
     describe('when exporting JDL to entity json for SQL type', function () {
       var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
+      var content = EntityParser.parse({
+        jdlObject: JDLParser.parse(input, 'sql'),
+        databaseType: 'sql'
+      });
       Exporter.exportToJSON(content);
       var department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
       var jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
-      var job = JSON.parse(fs.readFileSync('.jhipster/Job.json', {encoding: 'utf-8'}));
       it('exports it', function () {
         expect(fs.statSync('.jhipster/Department.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/JobHistory.json').isFile()).to.be.true;
@@ -127,28 +129,32 @@ describe('::exportToJSON', function () {
     });
     describe('when exporting JDL to entity json for an existing entity', function () {
       var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
-      var content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
-      it('exports it with same changeLogDate', function () {
+      var content = EntityParser.parse({
+        jdlObject: JDLParser.parse(input, 'sql'),
+        databaseType: 'sql'
+      });
+      it('exports it with same changeLogDate', function (done) {
         Exporter.exportToJSON(content);
         expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
         var changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
-        this.timeout(3000);
-        // hack to introduce a 1 second delay
-        // http://stackoverflow.com/questions/14249506/how-can-i-wait-in-node-js-javascript-l-need-to-pause-for-a-period-of-time#answer-37575602
-        var waitTill = new Date(new Date().getTime() + 1 * 1000);
-        while(waitTill > new Date()){}
-        input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
-        content = EntityParser.parse({jdlObject: JDLParser.parse(input, 'sql'), databaseType: 'sql'});
-        Exporter.exportToJSON(content, true);
-        expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
-        var newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
-        expect(newChangeLogDate).to.eq(changeLogDate);
-        // clean up the mess...
-        fs.unlinkSync('.jhipster/A.json');
-        fs.unlinkSync('.jhipster/B.json');
-        fs.unlinkSync('.jhipster/C.json');
-        fs.unlinkSync('.jhipster/D.json');
-        fs.rmdirSync('.jhipster');
+        setTimeout(() => {
+          input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
+          content = EntityParser.parse({
+            jdlObject: JDLParser.parse(input, 'sql'),
+            databaseType: 'sql'
+          });
+          Exporter.exportToJSON(content, true);
+          expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
+          var newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
+          expect(newChangeLogDate).to.eq(changeLogDate);
+          // clean up the mess...
+          fs.unlinkSync('.jhipster/A.json');
+          fs.unlinkSync('.jhipster/B.json');
+          fs.unlinkSync('.jhipster/C.json');
+          fs.unlinkSync('.jhipster/D.json');
+          fs.rmdirSync('.jhipster');
+          done();
+        }, 1000);
       });
     });
   });
