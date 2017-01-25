@@ -14,9 +14,9 @@
             <%_ if (searchEngine == 'elasticsearch') { _%>
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
-                    <div class="input-group pull-right" >
+                    <div class="input-group pull-right">
                         <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
-                        <span  class="input-group-btn width-min" >
+                        <span  class="input-group-btn width-min">
                             <button class="btn btn-info" (click)="search(currentSearch)">
                                 <span class="fa fa-search"></span>
                             </button>
@@ -54,7 +54,7 @@
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0"<% } %>>
             <tr *ngFor="let <%=entityInstance %> of <%=entityInstancePlural %> ;trackBy: trackId">
-                <td><a [routerLink]="['../<%= entityInstance %>', <%= entityInstance %>.id ]" >{{<%=entityInstance %>.id}}</a></td>
+                <td><a [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id ]">{{<%=entityInstance %>.id}}</a></td>
                 <%_ for (idx in fields) {
                 var fieldName = fields[idx].fieldName;
                 var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
@@ -110,13 +110,13 @@
                     <%_ } else { _%>
                         <%_ if (relationshipType == 'many-to-many') { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
-                            <a class="form-control-static" [routerLink]="['../<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id ]" >{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{last ? '' : ', '}}
+                            <a class="form-control-static" [routerLink]="['../<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id ]">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{last ? '' : ', '}}
                         </span>
                         <%_ } else { _%>
                             <%_ if (dto == 'no') { _%>
-                    <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %> ]" >{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
+                    <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %> ]">{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
                             <%_ } else { _%>
-                    <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %> ]" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                    <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %> ]">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
                             <%_ } _%>
                         <%_ } _%>
                     <%_ } _%>
