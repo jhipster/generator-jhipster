@@ -46,7 +46,7 @@ export class UserMgmtDialogComponent implements OnInit {
 
     clear() {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}]);
+        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     save() {
@@ -63,7 +63,7 @@ export class UserMgmtDialogComponent implements OnInit {
         this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
-        this.router.navigate([{ outlets: { popup: null }}]);
+        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     private onSaveError() {

@@ -19,13 +19,20 @@ export class <%= entityClass %>PopupService {
         this.isOpen = true;
 
         if (id) {
-            this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>));
+            this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> =>
+                this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>));
         } else {
             return this.<%= entityInstance %>ModalRef(component, new <%= entityClass %>());
         }
     }
 
+    <%_ if (entityInstance.length <= 30) { _%>
     <%= entityInstance %>ModalRef(component: Component, <%= entityInstance %>: <%= entityClass %>): NgbModalRef {
+    <%_ } else { _%>
+        <%= entityInstance %>ModalRef(component: Component,
+            <%= entityInstance %>: <%= entityClass %>): NgbModalRef {
+
+    <%_ } _%>
         let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
         modalRef.result.then(result => {

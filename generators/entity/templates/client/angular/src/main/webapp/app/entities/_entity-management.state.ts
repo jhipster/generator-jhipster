@@ -21,7 +21,12 @@ import { PaginationUtil } from 'ng-jhipster';
 import { <%= entityAngularJSName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularJSName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 import { <%= entityAngularJSName %>PopupComponent } from './<%= entityFileName %>-dialog.component';
+<%_ if (entityFileName.length <= 30) { _%>
 import { <%= entityAngularJSName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
+<%_ } else { _%>
+import { <%= entityAngularJSName %>DeletePopupComponent }
+    from './<%= entityFileName %>-delete-dialog.component';
+<%_ } _%>
 
 import { Principal } from '../../shared';
 

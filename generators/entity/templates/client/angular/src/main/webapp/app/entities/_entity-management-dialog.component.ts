@@ -92,7 +92,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
     clear () {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}]);
+        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     save () {
@@ -110,7 +110,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
-        this.router.navigate([{ outlets: { popup: null }}]);
+        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     private onSaveError (error) {
@@ -164,9 +164,11 @@ export class <%= entityAngularJSName %>PopupComponent implements OnInit, OnDestr
     ngOnInit() {
         this.routeSub = this.route.params.subscribe(params => {
             if ( params['id'] ) {
-                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent, params['id']);
+                this.modalRef = this.<%= entityInstance %>PopupService
+                    .open(<%= entityAngularJSName %>DialogComponent, params['id']);
             } else {
-                this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DialogComponent);
+                this.modalRef = this.<%= entityInstance %>PopupService
+                    .open(<%= entityAngularJSName %>DialogComponent);
             }
 
         });
