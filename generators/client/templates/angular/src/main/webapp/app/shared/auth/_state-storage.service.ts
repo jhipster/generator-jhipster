@@ -25,6 +25,7 @@ export class StateStorageService {
     }
 
     storeDestinationState(destinationState, destinationStateParams, fromState) {
+        //TODO Find a way to access parent and parent data from JhiMainComponent
         let destinationInfo = {
             'destination': {
                 'name': destinationState.name,
