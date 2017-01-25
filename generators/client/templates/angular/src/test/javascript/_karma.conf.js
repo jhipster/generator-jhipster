@@ -57,7 +57,7 @@ module.exports = function (config) {
                     {
                         test: /\.scss$/,
                         loaders: ['to-string-loader', 'css-loader', 'sass-loader']
-                    }
+                    },
                     <%_ } _%>
                     {
                         test: /src\/main\/webapp\/.+\.ts$/,
