@@ -25,18 +25,14 @@ export class StateStorageService {
     }
 
     storeDestinationState(destinationState, destinationStateParams, fromState) {
-        //TODO Find a way to access parent and parent data from JhiMainComponent
         let destinationInfo = {
             'destination': {
                 'name': destinationState.name,
                 'data': destinationState.data,
-               // 'parent': destinationState.parent
             },
             'params': destinationStateParams,
             'from': {
                 'name': fromState.name,
-                 // 'data': fromState.data,
-                 // 'parent': fromState.parent
              }
         };
         this.$sessionStorage.store('destinationState', destinationInfo);
