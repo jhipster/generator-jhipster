@@ -114,9 +114,13 @@
                         </span>
                         <%_ } else { _%>
                             <%_ if (dto == 'no') { _%>
-                    <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %> ]">{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
-                            <%_ } else { _%>
-                    <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %> ]">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                    <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
+                        <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %> ]" >{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
+                    </div>
+                        <%_ } else { _%>
+                    <div *ngIf="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
+                        <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %> ]" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                    </div>
                             <%_ } _%>
                         <%_ } _%>
                     <%_ } _%>
