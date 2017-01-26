@@ -15,10 +15,10 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: registry-admin-password
+  name: registry-secret
 type: Opaque
 data:
-  admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
+  registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
 ---
 apiVersion: v1
 kind: Service
@@ -69,8 +69,8 @@ spec:
         - name: SECURITY_USER_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: registry-admin-password
-              key: admin-password
+              name: registry-secret
+              key: registry-admin-password
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
           value: my-secret-token-to-change-in-production
         - name: EUREKA_CLIENT_FETCH_REGISTRY

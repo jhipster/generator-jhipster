@@ -22,10 +22,17 @@ export class <%= entityClass %>Service {
 
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: DateUtils<% } %>) { }
 
+    <%_ if (entityClass.length <= 30) { _%>
     create(<%= entityInstance %>: <%= entityClass %>): Observable<<%= entityClass %>> {
+    <%_ } else { _%>
+    create(<%= entityInstance %>: <%= entityClass %>):
+        Observable<<%= entityClass %>> {
+
+    <%_ } _%>
         let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
+        copy.<%=fields[idx].fieldName%> = this.dateUtils
+            .convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
         <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
@@ -34,10 +41,17 @@ export class <%= entityClass %>Service {
         });
     }
 
+    <%_ if (entityClass.length <= 30) { _%>
     update(<%= entityInstance %>: <%= entityClass %>): Observable<<%= entityClass %>> {
+    <%_ } else { _%>
+    update(<%= entityInstance %>: <%= entityClass %>):
+        Observable<<%= entityClass %>> {
+
+    <%_ } _%>
         let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
-        copy.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
+        copy.<%=fields[idx].fieldName%> = this.dateUtils
+            .convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
         <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { %>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
@@ -51,8 +65,13 @@ export class <%= entityClass %>Service {
             <%_ if(hasDate) { _%>
             let jsonResponse = res.json();
             <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
-            jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateFromServer(jsonResponse.<%=fields[idx].fieldName%>);<% }%><% if (fields[idx].fieldType == 'ZonedDateTime') { %>
-            jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils.convertDateTimeFromServer(jsonResponse.<%=fields[idx].fieldName%>);<% } }%>
+            jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils
+                .convertLocalDateFromServer(jsonResponse.<%=fields[idx].fieldName%>);
+            <%_ } _%>
+            <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+            jsonResponse.<%=fields[idx].fieldName%> = this.dateUtils
+                .convertDateTimeFromServer(jsonResponse.<%=fields[idx].fieldName%>);
+            <%_ } } _%>
             return jsonResponse;
             <%_ } else { _%>
             return res.json();
@@ -66,10 +85,12 @@ export class <%= entityClass %>Service {
         for (let i = 0; i < jsonResponse.length; i++) {
         <%_ for (idx in fields) { _%>
             <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
-            jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertLocalDateFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
+            jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils
+                .convertLocalDateFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
             <%_ } _%>
             <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
-            jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils.convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
+            jsonResponse[i].<%=fields[idx].fieldName%> = this.dateUtils
+                .convertDateTimeFromServer(jsonResponse[i].<%=fields[idx].fieldName%>);
             <%_ } _%>
         <%_ } _%>
         }

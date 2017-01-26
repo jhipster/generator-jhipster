@@ -200,26 +200,8 @@ module.exports = DockerComposeGenerator.extend({
                 }
 
                 if (this.serviceDiscoveryType === 'eureka') {
-                    // Re-configure the JHipster Registry if it is already configured
-                    var spring_cloud_config_uri_configured = false;
-                    yamlConfig.environment.forEach(function (env, index, envArr) {
-
-                        if (env.startsWith('SPRING_CLOUD_CONFIG_URI')) {
-                            envArr[index] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
-                                this.adminPassword + '@registry:8761/config';
-                            spring_cloud_config_uri_configured = true;
-                        }
-                    }, this);
-                    // Configure the JHipster Registry if it is not already configured
-                    if (!spring_cloud_config_uri_configured) {
-                        yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
-                            this.adminPassword + '@registry:8761/config');
-                    }
-                }
-                // Configure the JHipster Registry if it is not already configured
-                if (!spring_cloud_config_uri_configured && appConfig.applicationType !== 'monolith') {
-                    yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
-                        this.adminPassword + '@registry:8761/config');
+                    // Set the JHipster Registry password
+                    yamlConfig.environment.push('JHIPSTER_REGISTRY_PASSWORD=' + this.adminPassword);
                 }
 
                 parentConfiguration[lowercaseBaseName + '-app'] = yamlConfig;

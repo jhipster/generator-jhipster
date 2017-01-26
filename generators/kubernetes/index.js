@@ -245,7 +245,7 @@ module.exports = KubernetesGenerator.extend({
         }
 
         this.log('\nYou can deploy all your apps by running: ');
-        if (this.gatewayNb >= 1) {
+        if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log('  ' + chalk.cyan('kubectl apply -f registry'));
         }
         for (i = 0; i < this.appsFolders.length; i++) {

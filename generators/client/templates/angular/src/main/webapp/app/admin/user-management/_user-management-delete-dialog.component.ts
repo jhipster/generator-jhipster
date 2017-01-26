@@ -28,7 +28,7 @@ export class UserMgmtDeleteDialogComponent {
 
     clear () {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}]);
+        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     confirmDelete (login) {
@@ -36,7 +36,7 @@ export class UserMgmtDeleteDialogComponent {
             this.eventManager.broadcast({ name: 'userListModification',
                 content: 'Deleted a user'});
             this.activeModal.dismiss(true);
-            this.router.navigate([{ outlets: { popup: null }}]);
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
         });
     }
 

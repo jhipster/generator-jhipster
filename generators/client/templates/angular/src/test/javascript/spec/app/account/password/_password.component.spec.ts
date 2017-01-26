@@ -2,26 +2,25 @@ import {ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import {MockBackend} from '@angular/http/testing';
 import {Http, BaseRequestOptions} from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import {<%=jhiPrefixCapitalized%>LanguageService} from "ng-jhipster";
 import {PasswordComponent} from '../../../../../../main/webapp/app/account/password/password.component';
 import {Password} from '../../../../../../main/webapp/app/account/password/password.service';
 import {Principal} from "../../../../../../main/webapp/app/shared/auth/principal.service";
 import {AccountService} from "../../../../../../main/webapp/app/shared/auth/account.service";
+import {MockLanguageService} from "../../../helpers/language.service";
 <%_ if (websocket === 'spring-websocket') { _%>
 import {<%=jhiPrefixCapitalized%>TrackerService} from "../../../../../../main/webapp/app/shared/tracker/tracker.service";
-
-export class MockTrackerService {
-    connect() {}
-}
+import {MockTrackerService} from "../../../helpers/tracker.service";
 <%_ } _%>
 
 
-describe('Controller Tests', () => {
+describe('Component Tests', () => {
 
-    describe('PasswordController', () => {
+    describe('PasswordComponent', () => {
 
         let comp:PasswordComponent;
         let fixture:ComponentFixture<PasswordComponent>;
-        let service:AccountService;
+        let service:Password;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -42,6 +41,10 @@ describe('Controller Tests', () => {
                             return new Http(backendInstance, defaultOptions);
                         },
                         deps: [MockBackend, BaseRequestOptions]
+                    },
+                    {
+                        provide: <%=jhiPrefixCapitalized%>LanguageService,
+                        useClass: MockLanguageService
                     },
                     Password]
             }).overrideComponent(PasswordComponent, {

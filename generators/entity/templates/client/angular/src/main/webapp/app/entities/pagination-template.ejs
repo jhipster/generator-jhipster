@@ -11,7 +11,7 @@ currentAccount: any;
     <%= entityInstancePlural %>: <%= entityClass %>[];
     error: any;
     success: any;
-    <%_ if (searchEngine == 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
     <%_ } _%>
     <%_ if (databaseType !== 'cassandra') { _%>
@@ -48,10 +48,10 @@ currentAccount: any;
             this.previousPage = data['pagingParams'].page;
             this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
-            <%_ if (searchEngine == 'elasticsearch') { _%>
-            this.currentSearch = data['pagingParams'].search;
-            <%_ } _%>
         });
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        this.currentSearch = activatedRoute.snapshot.params['search'] ? activatedRoute.snapshot.params['search'] : '';
+        <%_ } _%>
         <%_ } _%>
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
@@ -59,7 +59,7 @@ currentAccount: any;
     }
 
     loadAll() {
-        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <%_ if (searchEngine === 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -102,20 +102,29 @@ currentAccount: any;
 
     clear() {
         this.page = 0;
+        <%_ if(searchEngine === 'elasticsearch') { _%>
+        this.currentSearch = '';
+        <%_ } _%>
         this.router.navigate(['/<%= entityUrl %>', {
             page: this.page,
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         }]);
+        this.loadAll();
     }
     <%_ } _%>
     <%_ if(searchEngine === 'elasticsearch') { _%>
-    search (query: string) {
+    search (query) {
+        if (!query) {
+            return this.clear();
+        }
         this.page = 0;
+        this.currentSearch = query;
         this.router.navigate(['/<%= entityUrl %>', {
-            search: query,
+            search: this.currentSearch,
             page: this.page,
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         }]);
+        this.loadAll();
     }
     <%_ } _%>
     private onSuccess (data, headers) {

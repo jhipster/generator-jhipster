@@ -40,13 +40,16 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
 
     clear () {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}]);
+        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     confirmDelete (id: number) {
         this.<%= entityInstance %>Service.delete(id).subscribe(response => {
-            this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'Deleted an <%= entityInstance %>'});
-            this.router.navigate([{ outlets: { popup: null }}]);
+            this.eventManager.broadcast({
+                name: '<%= entityInstance %>ListModification',
+                content: 'Deleted an <%= entityInstance %>'
+            });
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.activeModal.dismiss(true);
         });
     }
@@ -68,7 +71,8 @@ export class <%= entityAngularJSName %>DeletePopupComponent implements OnInit, O
 
     ngOnInit() {
         this.routeSub = this.route.params.subscribe(params => {
-            this.modalRef = this.<%= entityInstance %>PopupService.open(<%= entityAngularJSName %>DeleteDialogComponent, params['id']);
+            this.modalRef = this.<%= entityInstance %>PopupService
+                .open(<%= entityAngularJSName %>DeleteDialogComponent, params['id']);
         });
     }
 

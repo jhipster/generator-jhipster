@@ -53,6 +53,12 @@ module.exports = function (config) {
                         test: /\.async\.(html|css)$/,
                         loaders: ['file?name=[name].[hash].[ext]', 'extract']
                     },
+                    <%_ if (useSass) { _%>
+                    {
+                        test: /\.scss$/,
+                        loaders: ['to-string-loader', 'css-loader', 'sass-loader']
+                    },
+                    <%_ } _%>
                     {
                         test: /src\/main\/webapp\/.+\.ts$/,
                         enforce: 'post',
