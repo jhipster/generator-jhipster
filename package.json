@@ -10,6 +10,7 @@
   "scripts": {
     "lint": "./node_modules/eslint/bin/eslint.js .",
     "lint-fix": "./node_modules/eslint/bin/eslint.js . --fix",
+    "check-dependencies": "node ./scripts/check_dependencies.js",
     "test": "./node_modules/mocha/bin/mocha test",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha test -- -t 5000",
     "peg-parse": "./node_modules/pegjs/bin/pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt"
