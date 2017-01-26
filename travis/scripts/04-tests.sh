@@ -12,7 +12,7 @@ fi
 #-------------------------------------------------------------------------------
 # Launch UAA tests
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     cd "$HOME"/uaa
     ./mvnw test
 fi
