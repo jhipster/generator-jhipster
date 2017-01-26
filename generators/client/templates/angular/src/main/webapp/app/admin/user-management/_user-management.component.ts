@@ -37,7 +37,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private parseLinks: ParseLinks,
         private alertService: AlertService,
         private principal: Principal,
-        private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
+        private eventManager: EventManager,<%_ if (databaseType !== 'cassandra') { _%>
         private paginationUtil: PaginationUtil,
         private paginationConfig: PaginationConfig,
         <%_ } _%>
@@ -65,7 +65,9 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        <%_ if (databaseType !== 'cassandra') { _%>
         this.routeData.unsubscribe();
+        <%_ } _%>
     }
 
     registerChangeInUsers() {
@@ -127,8 +129,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         });
         this.loadAll();
     }
-    <%_ } _%>
 
+    <%_ } _%>
     private onSuccess(data, headers) {
         // hide anonymous user from user management: it's a required user for Spring Security
         let hiddenUsersSize = 0;
