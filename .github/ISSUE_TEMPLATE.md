@@ -1,10 +1,12 @@
 <!--
 > Please follow the issue template below for bug reports and queries.
 > Bug reports or queries opened without any of these info will be **closed** without any explanation.
-> For feature requests, label the title with [FEATURE] and explain your use case and ideas clearly below, you can remove sections which are not relevant.
-> For bug reports your `.yo-rc.json` file is mandatory else we will close the issue.
-> You can run `yo jhipster:info` in your project folder to get most of the required info
 -->
+
+- [ ] For bug reports run `yo jhipster:info` in your project folder and copy paste the info after the **Suggest a Fix** section or fill the below template manually.
+- [ ] For feature requests, label the title with [FEATURE] and explain your use case and ideas clearly below, you can remove sections which are not relevant.
+- [ ] Remove sensitive info if any
+- [ ] Make sure the first checkbox is followed(checked) for bug reports else the issue will be closed :smiling_imp:
 
 ##### **Overview of the issue**
 
@@ -30,7 +32,7 @@
 
 ##### **JHipster Version(s)**
 
-<!-- to provide all information we need, you can use: yo jhipster:info -->
+<!-- to provide all information we need, you can run `yo jhipster:info` in the project root folder -->
 <!-- which version of JHipster are you using, is it a regression? -->
 
 ##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**
