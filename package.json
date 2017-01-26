@@ -37,12 +37,12 @@
     "lodash": "4.17.2"
   },
   "devDependencies": {
-    "eslint": "3.14.1",
-    "pegjs": "0.10.0",
-    "mocha": "3.2.0",
     "chai": "3.5.0",
+    "eslint": "3.14.1",
     "istanbul": "0.4.5",
-    "mocha-clean": "1.0.0"
+    "mocha": "3.2.0",
+    "mocha-clean": "1.0.0",
+    "pegjs": "0.10.0"
   },
   "peerDependencies": {},
   "engines": {
