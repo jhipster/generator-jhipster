@@ -50,7 +50,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
             query += "\n            } else {"
             query += "\n                this." + relationships[idx].otherEntityName + "Service.find(" + relationshipFieldName + (dto == 'no' ? ".id" : "Id") + ").subscribe((subRes: Response) => {"
             query += "\n                    this." + variableName + " = [subRes].concat(res.json());"
-            query += "\n                }, (res: Response) => this.onError(res.json()))"
+            query += "\n                }, (subRes: Response) => this.onError(subRes.json()));"
             query += "\n            }"
             query += "\n        }, (res: Response) => this.onError(res.json()));"
         } else {

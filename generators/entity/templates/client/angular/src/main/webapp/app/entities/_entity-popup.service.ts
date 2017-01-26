@@ -29,9 +29,8 @@ export class <%= entityClass %>PopupService {
     <%_ if (entityInstance.length <= 30) { _%>
     <%= entityInstance %>ModalRef(component: Component, <%= entityInstance %>: <%= entityClass %>): NgbModalRef {
     <%_ } else { _%>
-        <%= entityInstance %>ModalRef(component: Component,
-            <%= entityInstance %>: <%= entityClass %>): NgbModalRef {
-
+    <%= entityInstance %>ModalRef(component: Component,
+        <%= entityInstance %>: <%= entityClass %>): NgbModalRef {
     <%_ } _%>
         let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
