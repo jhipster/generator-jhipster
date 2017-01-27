@@ -80,12 +80,12 @@ fi
 if [ "$RUN_APP" == 1 ]; then
     if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
         cd "$HOME"/uaa
-        java -jar target/*.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS &
+        java -jar target/*.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS --spring.jpa.show-sql=false &
         sleep 80
     fi
 
     cd "$HOME"/app
-    java -jar app.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS &
+    java -jar app.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS --spring.jpa.show-sql=false &
     sleep 40
 
     if [[ ("$JHIPSTER" != 'app-microservice-eureka') && ("$JHIPSTER" != 'app-microservice-consul') ]]; then
