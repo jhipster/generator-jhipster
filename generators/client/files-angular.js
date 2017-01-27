@@ -123,8 +123,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                // entities
-                'entities/_index.ts',
                 // home module
                 'home/_index.ts',
                 { file: 'home/_home.state.ts', method: 'copyJs' },

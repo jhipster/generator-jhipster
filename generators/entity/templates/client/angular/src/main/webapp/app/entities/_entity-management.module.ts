@@ -4,6 +4,12 @@ import { RouterModule } from '@angular/router';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { <%= angular2AppName %>SharedModule } from '../../shared';
+<%_ for (var rel of differentRelationships) {
+        let modulePath = rel.otherEntityStateName + '/' + rel.otherEntityStateName + '.module'; 
+_%> 
+import { <%= rel.otherEntityModuleName %> } from '../<%= modulePath %>';
+<%_ } _%>
+
 import {
     <%= entityClass %>Service,
     <%= entityClass %>PopupService,
@@ -28,6 +34,9 @@ let ENTITY_STATES = [
 @NgModule({
     imports: [
         <%= angular2AppName %>SharedModule,
+<%_ for (var rel of differentRelationships) { _%> 
+        <%= rel.otherEntityModuleName %>,
+<%_ } _%>
         InfiniteScrollModule,
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],

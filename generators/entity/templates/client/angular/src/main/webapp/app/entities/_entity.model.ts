@@ -8,7 +8,7 @@ const enum <%= fields[idx].fieldType %> {<%
 };
 <%_ } } _%>
 <%_ if (dto == "no") {%>
-<%- include('model-class-import-template.ejs'); -%>
+<%- include('other-entity-import-template.ejs'); -%>
 <%_ }
 var variables = [];
 var tsKeyType;

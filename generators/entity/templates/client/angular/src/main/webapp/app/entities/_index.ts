@@ -6,5 +6,6 @@ export * from './<%= entityFileName %>-delete-dialog.component';
 export * from './<%= entityFileName %>-detail.component';
 export * from './<%= entityFileName %>.component';
 export * from './<%= entityFileName %>.state';
+export * from './<%= entityFileName %>.module';
 
 
