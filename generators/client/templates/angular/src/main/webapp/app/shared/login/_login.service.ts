@@ -8,7 +8,7 @@ import { Principal } from '../auth/principal.service';
 import { AuthServerProvider } from '../auth/auth-oauth2.service';
 <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
-<%_ } else { _%>
+<%_ } else if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../auth/auth-session.service';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
@@ -26,7 +26,9 @@ export class LoginService {
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
+        <%_ if (!skipServer) { _%>
         private authServerProvider: AuthServerProvider
+        <%_ } _%>
     ) {}
 
     login (credentials, callback?) {

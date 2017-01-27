@@ -7,7 +7,7 @@ export * from './auth/account.service';
 export * from './auth/auth-oauth2.service';
 <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 export * from './auth/auth-jwt.service';
-<%_ } else { _%>
+<%_ } else if (authenticationType === 'session') { _%>
 export * from './auth/auth-session.service';
 <%_ } _%>
 export * from './auth/auth.service';
