@@ -336,8 +336,8 @@ dependencies {
     compile "io.jsonwebtoken:jjwt:${jjwt_version}"
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
-    compile group: 'org.springframework.security', name: 'spring-security-jwt'
+    compile "org.springframework.security.oauth:spring-security-oauth2:${spring_security_oauth2_version}"
+    compile "org.springframework.security:spring-security-jwt"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "com.github.mongobee:mongobee:${mongobee_version}"
@@ -382,7 +382,7 @@ dependencies {
     testCompile "info.cukes:cucumber-spring:${cucumber_version}"
     <%_ } _%>
     testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.springframework.security:spring-security-test"
+    testCompile "org.springframework.security:spring-security-test:${spring_security_version}"
     testCompile "org.springframework.boot:spring-boot-test"
     testCompile "org.assertj:assertj-core:${assertj_core_version}"
     testCompile "junit:junit"
