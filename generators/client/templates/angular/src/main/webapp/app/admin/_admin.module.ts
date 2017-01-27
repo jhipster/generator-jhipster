@@ -26,7 +26,6 @@ import {
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
     AuditsService,
-    UserService,
     <%=jhiPrefixCapitalized%>ConfigurationService,
     <%=jhiPrefixCapitalized%>HealthService,
     <%=jhiPrefixCapitalized%>MetricsService,
@@ -39,6 +38,7 @@ import {
     <%_ } _%>
     LogsService,
     <%_ if (!skipUserManagement) { _%>
+    UserService,
     UserResolvePagingParams,
     UserResolve,
     UserModalService
