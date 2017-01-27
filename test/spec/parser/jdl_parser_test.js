@@ -512,7 +512,7 @@ describe('JDLParser', function () {
           });
         });
       });
-      describe.only('when having constants', function () {
+      describe('when having constants', function () {
         const input = parseFromFiles(['./test/test_files/constants.jdl']);
         const content = JDLParser.parse(input, 'sql');
         it("assigns the constants' value when needed", function () {
