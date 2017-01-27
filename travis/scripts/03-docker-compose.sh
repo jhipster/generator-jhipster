@@ -4,10 +4,10 @@
 # Start docker container
 #-------------------------------------------------------------------------------
 cd "$HOME"/app
-if [[ ("$JHIPSTER" == 'app-cassandra') && (-a src/main/docker/cassandra.yml) ]]; then
+if [[ ("$JHIPSTER" == 'app-ng2-cassandra') && (-a src/main/docker/cassandra.yml) ]]; then
     docker-compose -f src/main/docker/cassandra.yml up -d
 
-elif [[ ("$JHIPSTER" == 'app-mongodb') && (-a src/main/docker/mongodb.yml) ]]; then
+elif [[ ("$JHIPSTER" == 'app-ng2-mongodb') && (-a src/main/docker/mongodb.yml) ]]; then
     docker-compose -f src/main/docker/mongodb.yml up -d
 
 elif [[ ("$JHIPSTER" == 'app-mysql') && (-a src/main/docker/mysql.yml) ]]; then
@@ -29,17 +29,17 @@ elif [[ ("$JHIPSTER" == 'app-mariadb-kafka') ]]; then
       docker-compose -f src/main/docker/mariadb.yml up -d
     fi
 
-elif [[ ("$JHIPSTER" == 'app-gateway-eureka') || ("$JHIPSTER" == 'app-microservice-eureka') ]]; then
+elif [[ ("$JHIPSTER" == 'app-ng2-gateway-eureka') || ("$JHIPSTER" == 'app-microservice-eureka') ]]; then
     if [ -a src/main/docker/jhipster-registry.yml ]; then
         docker-compose -f src/main/docker/jhipster-registry.yml up -d
     fi
 
-elif [[ ("$JHIPSTER" == 'app-gateway-consul') || ("$JHIPSTER" == 'app-microservice-consul') ]]; then
+elif [[ ("$JHIPSTER" == 'app-ng2-gateway-consul') || ("$JHIPSTER" == 'app-microservice-consul') ]]; then
     if [ -a src/main/docker/consul.yml ]; then
         docker-compose -f src/main/docker/consul.yml up -d
     fi
 
-elif [[ "$JHIPSTER" == 'app-gateway-uaa' ]]; then
+elif [[ "$JHIPSTER" == 'app-ng2-gateway-uaa' ]]; then
     if [ -a src/main/docker/jhipster-registry.yml ]; then
         docker-compose -f src/main/docker/jhipster-registry.yml up -d
     fi

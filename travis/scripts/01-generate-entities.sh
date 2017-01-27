@@ -13,7 +13,7 @@ moveEntity() {
 #-------------------------------------------------------------------------------
 rm -Rf "$HOME"/app
 mkdir -p "$HOME"/app/.jhipster/
-if [ "$JHIPSTER" == "app-mongodb" ]; then
+if [ "$JHIPSTER" == "app-ng2-mongodb" ]; then
     moveEntity MongoBankAccount
 
     moveEntity FieldTestEntity
@@ -24,7 +24,7 @@ if [ "$JHIPSTER" == "app-mongodb" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [ "$JHIPSTER" == "app-cassandra" ]; then
+elif [ "$JHIPSTER" == "app-ng2-cassandra" ]; then
     moveEntity CassBankAccount
 
     moveEntity CassTestEntity
@@ -83,7 +83,7 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
 
-elif [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+elif [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity
     moveEntity FieldTestServiceClassEntity

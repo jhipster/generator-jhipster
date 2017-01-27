@@ -1,16 +1,16 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "travisCassandra",
+    "baseName": "travisOauth2",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
-    "authenticationType": "session",
-    "hibernateCache": "no",
+    "authenticationType": "oauth2",
+    "hibernateCache": "ehcache",
     "clusteredHttpSession": false,
     "websocket": false,
-    "databaseType": "cassandra",
-    "devDatabaseType": "cassandra",
-    "prodDatabaseType": "cassandra",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
     "searchEngine": false,
     "useSass": false,
     "buildTool": "maven",
@@ -21,7 +21,6 @@
       "fr"
     ],
     "enableSocialSignIn": false,
-    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
       "gatling"
     ],
@@ -31,6 +30,6 @@
     "messageBroker": false,
     "serviceDiscoveryType": false,
     "clientPackageManager": "yarn",
-    "clientFramework": "angular1"
+    "clientFramework": "angular2"
   }
 }

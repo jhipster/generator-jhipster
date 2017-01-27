@@ -49,7 +49,7 @@ launchCurlOrProtractor() {
 #-------------------------------------------------------------------------------
 # Package UAA
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     cd "$HOME"/uaa
     ./mvnw package -DskipTests=true -P"$PROFILE"
 fi
@@ -78,7 +78,7 @@ fi
 # Run the application
 #-------------------------------------------------------------------------------
 if [ "$RUN_APP" == 1 ]; then
-    if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+    if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
         cd "$HOME"/uaa
         java -jar target/*.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS &
         sleep 80

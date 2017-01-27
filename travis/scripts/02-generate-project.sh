@@ -9,7 +9,7 @@ mv "$JHIPSTER_TRAVIS"/configstore/*.json "$HOME"/.config/configstore/
 #-------------------------------------------------------------------------------
 # Generate the project with yo jhipster
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     mkdir -p "$HOME"/uaa
     mv -f "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$HOME"/uaa/
     cd "$HOME"/uaa
