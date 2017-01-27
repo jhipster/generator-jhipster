@@ -512,6 +512,59 @@ describe('JDLParser', function () {
           });
         });
       });
+      describe.only('when having constants', function () {
+        const input = parseFromFiles(['./test/test_files/constants.jdl']);
+        const content = JDLParser.parse(input, 'sql');
+        it("assigns the constants' value when needed", function () {
+          expect(content.entities.A.fields).to.deep.eq({
+            name: {
+              name: 'name',
+              comment: undefined,
+              type: 'String',
+              validations: {
+                minlength: {
+                  name: 'minlength',
+                  value: 1
+                },
+                maxlength: {
+                  name: 'maxlength',
+                  value: 42
+                }
+              }
+            },
+            content: {
+              name: 'content',
+              comment: undefined,
+              type: 'TextBlob',
+              validations: {
+                minbytes: {
+                  name: 'minbytes',
+                  value: 20
+                },
+                maxbytes: {
+                  name: 'maxbytes',
+                  value: 40
+                }
+              }
+            },
+            count: {
+              name: 'count',
+              comment: undefined,
+              type: 'Integer',
+              validations: {
+                min: {
+                  name: 'min',
+                  value: 0
+                },
+                max: {
+                  name: 'max',
+                  value: 41
+                }
+              }
+            }
+          });
+        });
+      });
     });
   });
 });
