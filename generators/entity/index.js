@@ -571,6 +571,9 @@ module.exports = EntityGenerator.extend({
                 if (_.isUndefined(relationship.otherEntityStateName)) {
                     relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
                 }
+                if (_.isUndefined(relationship.otherEntityModuleName)) {
+                    relationship.otherEntityModuleName = this.angular2AppName + relationship.otherEntityNameCapitalized + 'Module';
+                }
                 // Load in-memory data for root
                 if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {
                     this.fieldsContainOwnerManyToMany = true;
