@@ -164,39 +164,6 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
         }
         var appName = this.getAngular2AppName();
         var appModulePath = CLIENT_MAIN_SRC_DIR + 'app/app.module.ts';
-        var indexPath = CLIENT_MAIN_SRC_DIR + 'app/entities/index.ts';
-
-        jhipsterUtils.rewriteFile({
-            file: indexPath,
-            needle: 'jhipster-needle-add-entity-to-index-export',
-            splicable: [
-                this.stripMargin(
-                    `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
-                     |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
-                     |export * from './${entityFolderName}/${entityFileName}-detail.component';
-                     |export * from './${entityFolderName}/${entityFileName}.component';
-                     |export * from './${entityFolderName}/${entityFileName}.state';`
-                )
-            ]
-        }, this);
-        jhipsterUtils.rewriteFile({
-            file: indexPath,
-            needle: 'jhipster-needle-add-entity-to-index-model-export',
-            splicable: [`export * from './${entityFolderName}/${entityFileName}.model';`
-            ]
-        }, this);
-        jhipsterUtils.rewriteFile({
-            file: indexPath,
-            needle: 'jhipster-needle-add-entity-to-index-service-export',
-            splicable: [`export * from './${entityFolderName}/${entityFileName}.service';`
-            ]
-        }, this);
-        jhipsterUtils.rewriteFile({
-            file: indexPath,
-            needle: 'jhipster-needle-add-entity-to-index-popup-service-export',
-            splicable: [`export * from './${entityFolderName}/${entityFileName}-popup.service';`
-            ]
-        }, this);
 
         jhipsterUtils.rewriteFile({
             file: appModulePath,
@@ -204,7 +171,6 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             splicable: [
                 this.stripMargin(
                     `|import \{ ${appName}${entityAngularJSName}Module \} from \'./entities/${entityFolderName}/${entityFileName}.module\';`
-//                    '|import ${appName}${entityAngularJSName}Module  from \'./entities/${entityAngularJSName}/${entityAngularJSName}.module\';'
                 )
             ]
         }, this);
