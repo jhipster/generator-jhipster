@@ -16,8 +16,7 @@ import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageSe
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-<%- include('model-class-import-template.ejs'); -%>
-<%- include('service-class-import-template.ejs'); -%>
+<%- include('other-entity-import-template.ejs'); -%>
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
 @Component({
