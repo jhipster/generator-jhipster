@@ -16,7 +16,7 @@ if (OperatingSystem.current().isWindows()) {
         doFirst {
             manifest {
                 attributes 'Class-Path':
-                    configurations.liquibase.plus(sourceSets.main.runtimeClasspath)
+                    sourceSets.main.runtimeClasspath.plus(configurations.liquibase)
                     .collect {
                         it.toURL().toString().replaceFirst(/file:\/+/, '/')
                     }.join(' ')
@@ -34,8 +34,8 @@ task liquibaseDiffChangelog(dependsOn: compileJava, type: JavaExec) {
             classpath = files(pathingLiquibaseJar.archivePath)
         }
     } else {
-        classpath configurations.liquibase
         classpath sourceSets.main.runtimeClasspath
+        classpath configurations.liquibase
     }
     main = "liquibase.integration.commandline.Main"
 
