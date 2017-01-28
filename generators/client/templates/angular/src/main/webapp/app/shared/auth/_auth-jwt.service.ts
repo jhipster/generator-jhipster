@@ -24,13 +24,13 @@ export class AuthServerProvider {
 
         let headers = new Headers ({
             'Content-Type': 'application/x-www-form-urlencoded',
-            "Authorization" : "Basic d2ViX2FwcDo="
+            'Authorization' : 'Basic d2ViX2FwcDo='
         });
 
         return this.http.post('<%= uaaBaseName.toLowerCase() %>/oauth/token', data, {
             headers: headers
         }).map((resp) => {
-            let accessToken = resp.json()["access_token"];
+            let accessToken = resp.json()['access_token'];
             if (accessToken) {
                 this.storeAuthenticationToken(accessToken, credentials.rememberMe);
             }
