@@ -41,24 +41,25 @@ export function interceptableFactory(
             new ErrorHandlerInterceptor(eventManager),
             new NotificationInterceptor()
         ]
-    )
+    );
 };
 
 export function customHttpProvider() {
     return {
         provide: Http,
         useFactory: interceptableFactory,
-    deps: [
-        XHRBackend,
-        RequestOptions,
-        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        LocalStorageService,
-        SessionStorageService,
-        Injector,
-        <%_ } if (authenticationType === 'session') { _%>
-        Injector,
-        StateStorageService,
-        <%_ } _%>
-        EventManager
-    ]
-}};
+        deps: [
+            XHRBackend,
+            RequestOptions,
+            <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+            LocalStorageService,
+            SessionStorageService,
+            Injector,
+            <%_ } if (authenticationType === 'session') { _%>
+            Injector,
+            StateStorageService,
+            <%_ } _%>
+            EventManager
+        ]
+    };
+};
