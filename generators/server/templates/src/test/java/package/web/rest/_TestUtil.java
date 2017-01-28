@@ -108,7 +108,7 @@ public class TestUtil {
     /**
      * Verifies the equals/hashcode contract on the domain object.
      */
-    public static void equalsVerifier(Class clazz<% if (databaseType == 'sql') { %>, JpaRepository jpaRepository<% } else if (databaseType == 'mongodb') { %>, MongoRepository mongoRepository<% } %>) throws Exception {
+    public static void equalsVerifier(Class clazz) throws Exception {
         Object domainObject1 = clazz.getConstructor().newInstance();
         assertThat(domainObject1.toString()).isNotNull();
         assertThat(domainObject1).isEqualTo(domainObject1);
@@ -119,23 +119,9 @@ public class TestUtil {
         // Test with an instance of the same class
         Object domainObject2 = clazz.getConstructor().newInstance();
         assertThat(domainObject1).isNotEqualTo(domainObject2);
-        <%_ if (databaseType == 'sql') { _%>
+        <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
         // HashCodes are equals because the objects are not persisted yet
         assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());
-        // Save the instances with JPA, the hashCodes should be different as the ID has been created
-        jpaRepository.saveAndFlush(domainObject1);
-        jpaRepository.saveAndFlush(domainObject2);
-        assertThat(domainObject1).isNotEqualTo(domainObject2);
-        assertThat(domainObject1.hashCode()).isNotEqualTo(domainObject2.hashCode());
-        <%_ } _%>
-        <%_ if (databaseType == 'mongodb') { _%>
-        // HashCodes are equals because the objects are not persisted yet
-        assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());
-        // Save the instances with MongoDB, the hashCodes should be different as the ID has been created
-        mongoRepository.save(domainObject1);
-        mongoRepository.save(domainObject2);
-        assertThat(domainObject1).isNotEqualTo(domainObject2);
-        assertThat(domainObject1.hashCode()).isNotEqualTo(domainObject2.hashCode());
         <%_ } _%>
     }
 }

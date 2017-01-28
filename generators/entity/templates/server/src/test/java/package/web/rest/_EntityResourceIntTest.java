@@ -564,6 +564,6 @@ _%>
 
     @Test
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(<%= entityClass %>.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, <%= entityInstance %>Repository<% } %>);
+        TestUtil.equalsVerifier(<%= entityClass %>.class);
     }
 }
