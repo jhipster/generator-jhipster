@@ -323,11 +323,11 @@ dependencies {
     compile ("org.springframework:spring-context-support") {
         exclude(module: 'quartz')
     }
-    compile "org.springframework.security:spring-security-config:${spring_security_version}"
-    compile "org.springframework.security:spring-security-data:${spring_security_version}"
-    compile "org.springframework.security:spring-security-web:${spring_security_version}"
+    compile "org.springframework.security:spring-security-config"
+    compile "org.springframework.security:spring-security-data"
+    compile "org.springframework.security:spring-security-web"
     <%_ if (websocket === 'spring-websocket') { _%>
-    compile "org.springframework.security:spring-security-messaging:${spring_security_version}"
+    compile "org.springframework.security:spring-security-messaging"
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     compile "org.springframework.security.oauth:spring-security-oauth2:${spring_security_oauth2_version}"
@@ -382,7 +382,7 @@ dependencies {
     testCompile "info.cukes:cucumber-spring:${cucumber_version}"
     <%_ } _%>
     testCompile "org.springframework.boot:spring-boot-starter-test"
-    testCompile "org.springframework.security:spring-security-test:${spring_security_version}"
+    testCompile "org.springframework.security:spring-security-test"
     testCompile "org.springframework.boot:spring-boot-test"
     testCompile "org.assertj:assertj-core:${assertj_core_version}"
     testCompile "junit:junit"

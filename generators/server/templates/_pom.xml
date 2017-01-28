@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.4.3.RELEASE</version>
+        <version>1.4.4.RELEASE</version>
         <relativePath />
     </parent>
 
@@ -75,7 +75,7 @@
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
-        <jhipster.server.version>0.0.10</jhipster.server.version>
+        <jhipster.server.version>0.0.11</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
@@ -153,7 +153,6 @@
         <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
         <spring-cloud.version>Brixton.SR7</spring-cloud.version>
         <%_ } _%>
-        <spring-security.version>4.2.1.RELEASE</spring-security.version>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth2.version>2.0.12.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
@@ -1259,7 +1258,6 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
-                    <version>1.4.2.RELEASE</version>
                     <optional>true</optional>
                 </dependency>
             </dependencies>
@@ -1462,7 +1460,6 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
-                    <version>1.4.2.RELEASE</version>
                     <optional>true</optional>
                 </dependency>
             </dependencies>
