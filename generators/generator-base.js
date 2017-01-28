@@ -163,20 +163,20 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             return;
         }
         var appName = this.getAngular2AppName();
-        var appModulePath = CLIENT_MAIN_SRC_DIR + 'app/app.module.ts';
+        var entityModulePath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
 
         jhipsterUtils.rewriteFile({
-            file: appModulePath,
+            file: entityModulePath,
             needle: 'jhipster-needle-add-entity-module-import',
             splicable: [
                 this.stripMargin(
-                    `|import \{ ${appName}${entityAngularJSName}Module \} from \'./entities/${entityFolderName}/${entityFileName}.module\';`
+                    `|import \{ ${appName}${entityAngularJSName}Module \} from \'./${entityFolderName}/${entityFileName}.module\';`
                 )
             ]
         }, this);
 
         jhipsterUtils.rewriteFile({
-            file: appModulePath,
+            file: entityModulePath,
             needle: 'jhipster-needle-add-entity-module',
             splicable: [
                 this.stripMargin(
@@ -185,7 +185,7 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             ]
         }, this);
     } catch (e) {this.log(e);
-        this.log(chalk.yellow('\nUnable to find ') + appModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance+ entityClass+ entityFolderName+ entityFileName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + entityModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance+ entityClass+ entityFolderName+ entityFileName + ' ' + chalk.yellow('not added to ' + entityModulePath + '.\n'));
     }
 };
 
