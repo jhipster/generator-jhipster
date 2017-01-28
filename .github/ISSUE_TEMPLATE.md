@@ -1,7 +1,5 @@
-<!--
-Please follow the issue template below for bug reports and feature requests.
-Tickets opened without any of these informations will be **closed** without any explanation.
--->
+- Please follow the issue template below for bug reports and feature requests.
+- Tickets opened without any of these informations will be **closed** without any explanation.
 
 ##### **Overview of the issue**
 
