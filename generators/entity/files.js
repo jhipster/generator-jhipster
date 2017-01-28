@@ -361,7 +361,7 @@ function writeFiles() {
         },
 
         writeClientFiles: function () {
-            if (this.skipClient) return;            
+            if (this.skipClient) return;
 
             if (this.clientFramework === 'angular1') {
                 // write client side files for angular 1.x
