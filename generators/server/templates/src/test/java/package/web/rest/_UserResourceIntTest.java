@@ -25,6 +25,7 @@ import javax.persistence.EntityManager;<% } %>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 <%_ } _%>
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -123,4 +124,13 @@ public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends
         userRepository.delete(user);
     }
     <%_ } _%>
+
+    @Test
+    public void equalsVerifier() throws Exception {
+        User userA = new User();
+        userA.setLogin("AAA");
+        User userB = new User();
+        userB.setLogin("BBB");
+        assertThat(userA).isNotEqualTo(userB);
+    }
 }
