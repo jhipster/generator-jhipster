@@ -357,7 +357,7 @@ function writeFiles() {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/cassandra/_package-info.java', javaDir + 'config/cassandra/package-info.java', this, {});
             }
             if (this.searchEngine === 'elasticsearch') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ElasticsearchConfiguration.java', javaDir + 'config/ElasticsearchConfiguration.java', this, {});
             }
             if (this.messageBroker === 'kafka') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MessagingConfiguration.java', javaDir + 'config/MessagingConfiguration.java', this, {});
@@ -480,7 +480,7 @@ function writeFiles() {
                 mkdirp(TEST_DIR + 'features/');
             }
 
-            // Create ElasticSearch test files
+            // Create Elasticsearch test files
             if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_IndexReinitializer.java', testDir + 'config/elasticsearch/IndexReinitializer.java', this, {});
             }

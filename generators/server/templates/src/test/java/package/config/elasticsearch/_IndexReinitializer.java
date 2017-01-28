@@ -23,6 +23,6 @@ public class IndexReinitializer {
         long t = currentTimeMillis();
         elasticsearchTemplate.deleteIndex("_all");
         t = currentTimeMillis() - t;
-        logger.debug("ElasticSearch indexes reset in {} ms", t);
+        logger.debug("Elasticsearch indexes reset in {} ms", t);
     }
 }

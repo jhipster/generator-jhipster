@@ -50,6 +50,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir) {
         generator.removeFile(javaDir + 'async/package-info.java');
         generator.removeFile(javaDir + 'config/jHipsterProperties.java');
         generator.removeFile(javaDir + 'config/LoadBalancedResourceDetails.java');
+        generator.removeFile(javaDir + 'config/ElasticSearchConfiguration.java');
         generator.removeFile(javaDir + 'config/apidoc/package-info.java');
         generator.removeFile(javaDir + 'config/apidoc/PageableParameterBuilderPlugin.java');
         generator.removeFile(javaDir + 'config/apidoc/SwaggerConfiguration.java');

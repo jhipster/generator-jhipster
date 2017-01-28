@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-public class ElasticSearchConfiguration {
+public class ElasticsearchConfiguration {
 
     @Bean
     public ElasticsearchTemplate elasticsearchTemplate(Client client, Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder) {
