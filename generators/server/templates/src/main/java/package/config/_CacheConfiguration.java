@@ -16,13 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-<%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+<%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 <%_ } _%><%_ if (hibernateCache == 'hazelcast' || hibernateCache == 'no') { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
-<%_ if (hibernateCache == 'hazelcast' && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+<%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 <%_ } _%>
