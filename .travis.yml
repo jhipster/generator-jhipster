@@ -34,9 +34,9 @@ env:
     - JHIPSTER=app-ng2-cassandra
     - JHIPSTER=app-ng2-mongodb
     - JHIPSTER=app-ng2-oauth2
-    - JHIPSTER=app-gradle PROTRACTOR=1
+    - JHIPSTER=app-ng2-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=app-psql-es-noi18n PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=app-gradle PROTRACTOR=1
     - JHIPSTER=app-hazelcast-cucumber
     - JHIPSTER=app-mariadb-kafka
     - JHIPSTER=app-jwt
