@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Vytvořit <%= entityClassHumanized %>",
-                "createOrEditLabel": "Vytvořit nebo upravit <%= entityClassHumanized %>",
-                "search": "Vyhledat <%= entityClassHumanized %>"
+                "createOrEditLabel": "Vytvořit nebo upravit <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Vyhledat <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "Byl vytvořen potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }}",
             "updated": "Potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }} byl upravený.",

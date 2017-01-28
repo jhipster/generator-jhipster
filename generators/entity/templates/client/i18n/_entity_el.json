@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Δημιουργήστε ένα νέο <%= entityClassHumanized %>",
-                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityClassHumanized %>",
-                "search": "Αναζήτηση για <%= entityClassHumanized %>"
+                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Αναζήτηση για <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "Ένα νέο <%= entityClassHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
             "updated": "Ένα <%= entityClassHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
