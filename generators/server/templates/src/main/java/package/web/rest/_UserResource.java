@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
-import java.util.stream.Collectors;<% if (searchEngine == 'elasticsearch') { %>
+import java.util.*;<% if (searchEngine == 'elasticsearch') { %>
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
