@@ -45,7 +45,7 @@ elif [[ ("$JHIPSTER" == "app-microservice-eureka") || ("$JHIPSTER" == "app-micro
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]; then
+elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-ng2-psql-es-noi18n") ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation

@@ -71,6 +71,9 @@
     <logger name="sun.rmi" level="WARN"/><% if (databaseType == 'sql') { %>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <logger name="sun.net.www" level="INFO"/>
+    <%_ } _%>
     <logger name="sun.rmi.transport" level="WARN"/>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">

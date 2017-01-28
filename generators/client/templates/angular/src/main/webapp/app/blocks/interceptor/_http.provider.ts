@@ -14,21 +14,20 @@ import { AuthExpiredInterceptor } from './auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from './errorhandler.interceptor';
 import { NotificationInterceptor } from './notification.interceptor';
 
-export const customHttpProvider = () => ({
-    provide: Http,
-    useFactory: (
-        backend: XHRBackend,
-        defaultOptions: RequestOptions,
-        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        localStorage: LocalStorageService,
-        sessionStorage: SessionStorageService,
-        injector: Injector,
-        <%_ } if (authenticationType === 'session') { _%>
-        injector: Injector,
-        stateStorageService: StateStorageService,
-        <%_ } _%>
-        eventManager: EventManager
-    ) => new InterceptableHttp(
+export function interceptableFactory(
+    backend: XHRBackend,
+    defaultOptions: RequestOptions,
+    <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+    localStorage: LocalStorageService,
+    sessionStorage: SessionStorageService,
+    injector: Injector,
+    <%_ } if (authenticationType === 'session') { _%>
+    injector: Injector,
+    stateStorageService: StateStorageService,
+    <%_ } _%>
+    eventManager: EventManager
+) {
+    return new InterceptableHttp(
         backend,
         defaultOptions,
         [
@@ -42,18 +41,25 @@ export const customHttpProvider = () => ({
             new ErrorHandlerInterceptor(eventManager),
             new NotificationInterceptor()
         ]
-    ),
-    deps: [
-        XHRBackend,
-        RequestOptions,
-        <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        LocalStorageService,
-        SessionStorageService,
-        Injector,
-        <%_ } if (authenticationType === 'session') { _%>
-        Injector,
-        StateStorageService,
-        <%_ } _%>
-        EventManager
-    ]
-});
+    );
+};
+
+export function customHttpProvider() {
+    return {
+        provide: Http,
+        useFactory: interceptableFactory,
+        deps: [
+            XHRBackend,
+            RequestOptions,
+            <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+            LocalStorageService,
+            SessionStorageService,
+            Injector,
+            <%_ } if (authenticationType === 'session') { _%>
+            Injector,
+            StateStorageService,
+            <%_ } _%>
+            EventManager
+        ]
+    };
+};

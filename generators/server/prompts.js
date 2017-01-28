@@ -514,7 +514,7 @@ function askForOptionalItems() {
     if (this.databaseType === 'sql') {
         choices.push(
             {
-                name: 'Search engine using ElasticSearch',
+                name: 'Search engine using Elasticsearch',
                 value: 'searchEngine:elasticsearch'
             }
         );

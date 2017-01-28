@@ -336,7 +336,7 @@ _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ }} if (searchEngine == 'elasticsearch') { _%>
 
-        // Validate the <%= entityClass %> in ElasticSearch
+        // Validate the <%= entityClass %> in Elasticsearch
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
         <%_ } _%>
@@ -486,7 +486,7 @@ _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } } if (searchEngine == 'elasticsearch') { _%>
 
-        // Validate the <%= entityClass %> in ElasticSearch
+        // Validate the <%= entityClass %> in Elasticsearch
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
         <%_ } _%>
@@ -529,7 +529,7 @@ _%>
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());<% if (searchEngine == 'elasticsearch') { %>
 
-        // Validate ElasticSearch is empty
+        // Validate Elasticsearch is empty
         boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
         assertThat(<%= entityInstance %>ExistsInEs).isFalse();<% } %>
 
