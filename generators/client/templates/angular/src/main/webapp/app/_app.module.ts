@@ -34,7 +34,7 @@ import {
     imports: [
         BrowserModule,
         LayoutRoutingModule,
-        Ng2Webstorage.forRoot({ prefix: 'jhi'}),
+        Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
         <%=angular2AppName%>SharedModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>EntityModule,
