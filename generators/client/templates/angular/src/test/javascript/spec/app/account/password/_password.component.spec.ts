@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing'
 import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { <%=jhiPrefixCapitalized%>LanguageService } from 'ng-jhipster';
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { PasswordComponent } from '../../../../../../main/webapp/app/account/password/password.component';
 import { Password } from '../../../../../../main/webapp/app/account/password/password.service';
 import { Principal } from '../../../../../../main/webapp/app/shared/auth/principal.service';

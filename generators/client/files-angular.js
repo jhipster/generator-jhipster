@@ -412,7 +412,8 @@ const files = {
                 'spec/helpers/_spyobject.ts',
                 'spec/helpers/_language.service.ts',
                 'spec/helpers/_account.service.ts',
-                'spec/helpers/_principal.service.ts'
+                'spec/helpers/_principal.service.ts',
+                'spec/helpers/_activated-route.service.ts'
             ]
         },
         {

@@ -1,10 +1,10 @@
 import { SpyObject } from './spyobject';
-import { <%=jhiPrefixCapitalized%>LanguageService } from 'ng-jhipster';
+import { JhiLanguageService } from 'ng-jhipster';
 
 export class MockLanguageService extends SpyObject {
 
     constructor() {
-        super(<%=jhiPrefixCapitalized%>LanguageService);
+        super(JhiLanguageService);
     }
 
     init() {}

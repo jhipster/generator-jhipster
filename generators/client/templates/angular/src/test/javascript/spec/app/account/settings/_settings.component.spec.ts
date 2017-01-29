@@ -2,12 +2,13 @@ import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing'
 import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
-import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
-<% if (enableTranslation) { %>
+import { JhiLanguageService } from 'ng-jhipster';
+
+<%_ if (enableTranslation) { _%>
 import { <%=jhiPrefixCapitalized%>LanguageHelper } from '../../../../../../main/webapp/app/shared';
 <%_ } _%>
-import { <%=jhiPrefixCapitalized%>LanguageService } from 'ng-jhipster';
+import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
+import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
 import { MockLanguageService } from '../../../helpers/language.service';
 import { MockAccountService } from '../../../helpers/account.service';
 import { MockPrincipal } from '../../../helpers/principal.service';
