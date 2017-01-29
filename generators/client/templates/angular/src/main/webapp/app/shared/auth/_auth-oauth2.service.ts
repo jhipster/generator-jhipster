@@ -52,9 +52,10 @@ export class AuthServerProvider {
         <%_ if (websocket === 'spring-websocket') { _%>
         this.trackerService.disconnect();
         <%_ } _%>
-        return this.http.post('api/logout', {}).map((response: Response) => {
+        return new Observable(observer => {
+            this.http.post('api/logout', {});
             this.$localStorage.clear('authenticationToken');
-            return response;
+            observer.complete();
         });
     }
 }
