@@ -4,7 +4,7 @@ import { UserRouteAccessService } from '../../shared';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
 
 export const healthRoute: Route = {
-  path: 'jhi-health',
+  path: '<%=jhiPrefix%>-health',
   component: <%=jhiPrefixCapitalized%>HealthCheckComponent,
   data: {
     pageTitle: 'health.title'

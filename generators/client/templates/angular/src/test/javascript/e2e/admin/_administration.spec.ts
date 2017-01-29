@@ -43,7 +43,7 @@ describe('administration', () => {
     });
 
     it('should load metrics', () => {
-        element(by.css('[routerLink="jhi-metrics"]')).click();
+        element(by.css('[routerLink="<%=jhiPrefix%>-metrics"]')).click();
         <%_ if (enableTranslation) { _%>
         const expect1 = /metrics.title/;
         <%_ } else { _%>
@@ -55,7 +55,7 @@ describe('administration', () => {
     });
 
     it('should load health', () => {
-        element(by.css('[routerLink="jhi-health"]')).click();
+        element(by.css('[routerLink="<%=jhiPrefix%>-health"]')).click();
         <%_ if (enableTranslation) { _%>
         const expect1 = /health.title/;
         <%_ } else { _%>
@@ -67,7 +67,7 @@ describe('administration', () => {
     });
 
     it('should load configuration', () => {
-        element(by.css('[routerLink="jhi-configuration"]')).click();
+        element(by.css('[routerLink="<%=jhiPrefix%>-configuration"]')).click();
         <%_ if (enableTranslation) { _%>
         const expect1 = /configuration.title/;
         <%_ } else { _%>
