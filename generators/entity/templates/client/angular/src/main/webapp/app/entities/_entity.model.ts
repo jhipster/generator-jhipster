@@ -7,9 +7,11 @@ const enum <%= fields[idx].fieldType %> {<%
 
 };
 <%_ } } _%>
-<%_ if (dto == "no") {%>
-<%- include('model-class-import-template.ejs'); -%>
+<%_ if (dto == "no") {
+       for (var rel of differentRelationships) { _%>
+import { <%= rel.otherEntityNameCapitalized %> } from '../../<%= rel.otherEntityModulePath %>';
 <%_ }
+}
 var variables = [];
 var tsKeyType;
 if (pkType == 'String') {

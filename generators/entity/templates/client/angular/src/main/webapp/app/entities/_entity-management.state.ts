@@ -30,6 +30,7 @@ import { <%= entityAngularJSName %>DeletePopupComponent }
 
 import { Principal } from '../../shared';
 
+<%_ if (pagination == 'pagination' || pagination == 'pager') { _%>
 @Injectable()
 export class <%= entityAngularJSName %>ResolvePagingParams implements Resolve<any> {
 
@@ -45,6 +46,7 @@ export class <%= entityAngularJSName %>ResolvePagingParams implements Resolve<an
     };
   }
 }
+<%_ } _%>
 
 export const <%= entityInstance %>Route: Routes = [
   {
