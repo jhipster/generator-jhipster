@@ -4,9 +4,10 @@ import { RouterModule } from '@angular/router';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { <%= angular2AppName %>SharedModule } from '../../shared';
-<%_ for (var rel of differentRelationships) { _%> 
-import { <%= rel.otherEntityModuleName %> } from '../../<%= rel.otherEntityModulePath %>';
-<%_ } _%>
+<%_ for (var rel of differentRelationships) { 
+       if (rel.otherEntityNameCapitalized === 'User') { _%> 
+import { <%= angular2AppName + 'AdminModule' %> } from '../../admin/admin.module';
+<%_ }} _%>
 
 import {
     <%= entityClass %>Service,
@@ -32,9 +33,10 @@ let ENTITY_STATES = [
 @NgModule({
     imports: [
         <%= angular2AppName %>SharedModule,
-<%_ for (var rel of differentRelationships) { _%> 
-        <%= rel.otherEntityModuleName %>,
-<%_ } _%>
+        <%_ for (var rel of differentRelationships) { 
+              if (rel.otherEntityNameCapitalized === 'User') { _%> 
+        <%= angular2AppName + 'AdminModule' %>,
+        <%_ }} %>
         InfiniteScrollModule,
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
