@@ -1,5 +1,6 @@
 package <%=packageName%>.service.dto;
-<% if (fieldsContainLocalDate == true) { %>
+
+<%_ if (fieldsContainLocalDate == true) { _%>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.ZonedDateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
@@ -11,8 +12,9 @@ import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %><% if (fieldsContainBlob && databaseType === 'sql') { %>
 import javax.persistence.Lob;<% } %>
-<% for (idx in fields) { if (fields[idx].fieldIsEnum == true) { %>
-import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;<% } } %>
+<%_ for (idx in fields) { if (fields[idx].fieldIsEnum == true) { _%>
+import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
+<%_ } } _%>
 
 /**
  * A DTO for the <%= entityClass %> entity.
@@ -22,7 +24,6 @@ public class <%= entityClass %>DTO implements Serializable {
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     private UUID id;<% } %>
-
     <%_ for (idx in fields) {
         var fieldValidate = fields[idx].fieldValidate;
         var fieldValidateRules = fields[idx].fieldValidateRules;
@@ -35,8 +36,9 @@ public class <%= entityClass %>DTO implements Serializable {
         var fieldValidateRulesPatternJava = fields[idx].fieldValidateRulesPatternJava;
         var fieldType = fields[idx].fieldType;
         var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        var fieldName = fields[idx].fieldName;
-        if (fieldValidate == true) {
+        var fieldName = fields[idx].fieldName;_%>
+
+    <%_ if (fieldValidate == true) {
             var required = false;
             if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
                 required = true;
@@ -50,7 +52,7 @@ public class <%= entityClass %>DTO implements Serializable {
     private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>
     private String <%= fieldName %>;
-    <%_ } %>
+    <%_ } _%>
     <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
     private String <%= fieldName %>ContentType;
         <%_ } _%>
@@ -62,13 +64,14 @@ public class <%= entityClass %>DTO implements Serializable {
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
-        ownerSide = relationships[idx].ownerSide; %><% if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
+        ownerSide = relationships[idx].ownerSide; _%>
+    <%_ if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
     private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
     private Long <%= relationshipFieldName %>Id;
-    <% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
+    <%_ if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { _%>
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
@@ -149,7 +152,7 @@ public class <%= entityClass %>DTO implements Serializable {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } _%>
-<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
+    <%_ if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { _%>
 
     public String get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() {
         return <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
