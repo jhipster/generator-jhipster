@@ -9,9 +9,9 @@ import { JhiLanguageService, DateUtils } from 'ng-jhipster';
 
 import { MockLanguageService } from '../../../helpers/language.service';
 import { MockActivatedRoute } from '../../../helpers/activated-route.service';
-import { <%= entityAngularJSName %>DetailComponent } from '../../../../../../main/webapp/app/entities/bank-account/bank-account-detail.component';
-import { <%= entityClass %>Service } from '../../../../../../main/webapp/app/entities/bank-account/bank-account.service';
-import { <%= entityClass %> } from '../../../../../../main/webapp/app/entities/bank-account/bank-account.model';
+import { <%= entityAngularJSName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
+import { <%= entityClass %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityClass %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
 
 describe('Component Tests', () => {
 
