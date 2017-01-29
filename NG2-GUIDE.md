@@ -41,7 +41,7 @@ yo jhipster
 
 You should see your changes reflected in the generated project.
 
-### Generate an AngularJS 2 application
+### Generate an Angular 2 application
 
 Create a new directory and `cd` into it. Now run
 ```
@@ -77,7 +77,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * Generators TypeScript files **must follow** the tslint configuration defined at the project root.
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
 * AngularJS files **must follow** [John Papa's Angular 1 style guide] (https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
-* AngularJS 2 TypeScript files **must follow** [John Papa's Angular 2 style guide] (https://angular.io/docs/ts/latest/guide/style-guide.html).
+* Angular 2 TypeScript files **must follow** [John Papa's Angular 2 style guide] (https://angular.io/docs/ts/latest/guide/style-guide.html).
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 

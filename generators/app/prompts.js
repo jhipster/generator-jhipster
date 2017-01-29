@@ -147,7 +147,7 @@ function askForClient() {
         choices: [
             {
                 value: 'angular1',
-                name: 'Angular 1.x'
+                name: 'AngularJS 1.x'
             },
             {
                 value: 'angular2',
@@ -160,7 +160,6 @@ function askForClient() {
         done();
     }.bind(this));
 }
-
 
 function askForMoreModules() {
     if (this.existingProject) {
