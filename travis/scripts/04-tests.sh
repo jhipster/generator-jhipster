@@ -22,9 +22,13 @@ fi
 #-------------------------------------------------------------------------------
 cd "$HOME"/app
 if [ -f "mvnw" ]; then
-    ./mvnw test -Dspring.jpa.show-sql=false
+    ./mvnw test \
+        -Dlogging.level.io.github.jhipster.sample=INFO \
+        -Dlogging.level.io.github.jhipster.travis=INFO
 elif [ -f "gradlew" ]; then
-    ./gradlew test -Dspring.jpa.show-sql=false
+    ./gradlew test \
+        -Dlogging.level.io.github.jhipster.sample=INFO \
+        -Dlogging.level.io.github.jhipster.travis=INFO
 fi
 if [ -f "gulpfile.js" ]; then
     gulp test --no-notification
