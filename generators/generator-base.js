@@ -1890,6 +1890,28 @@ Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
     }
 };
 
+Generator.prototype.updateLanguagesInLanguageConstantNG2 = function (languages) {
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/shared/language/language.constants.ts';
+    try {
+        var content = 'export const LANGUAGES: string[] = [\n';
+        for (var i = 0, len = languages.length; i < len; i++) {
+            var language = languages[i];
+            content += '    \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
+        }
+        content +=
+            '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
+            '];';
+
+        jhipsterUtils.replaceContent({
+            file: fullPath,
+            pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
+            content: content
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+    }
+};
+
 Generator.prototype.insight = function () {
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
