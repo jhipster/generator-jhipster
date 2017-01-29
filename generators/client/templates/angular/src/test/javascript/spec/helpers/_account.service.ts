@@ -1,5 +1,5 @@
-import {SpyObject} from "./spyobject";
-import {AccountService} from "../../../../main/webapp/app/shared/auth/account.service";
+import { SpyObject } from './spyobject';
+import { AccountService } from '../../../../main/webapp/app/shared/auth/account.service';
 import Spy = jasmine.Spy;
 
 export class MockAccountService extends SpyObject {
@@ -8,8 +8,8 @@ export class MockAccountService extends SpyObject {
     saveSpy: Spy;
     fakeResponse: any;
 
-    constructor(){
-        super(AccountService)
+    constructor() {
+        super(AccountService);
 
         this.fakeResponse = null;
         this.getSpy = this.spy('get').andReturn(this);

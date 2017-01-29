@@ -268,13 +268,13 @@ const angularFiles = {
         }
     ],
     test: [
-        /*{ // TODO enable once test these files are migrated
+        {
             path: CLIENT_TEST_SRC_DIR,
             templates: [{
-                file: 'spec/app/entities/_entity-management-detail.controller.spec.js',
-                renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.controller.spec.js`
+                file: 'spec/app/entities/_entity-management-detail.component.spec.ts',
+                renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`
             }]
-        },*/
+        },
         {
             condition: generator => generator.protractorTests,
             path: CLIENT_TEST_SRC_DIR,

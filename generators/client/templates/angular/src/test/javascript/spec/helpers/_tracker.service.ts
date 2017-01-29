@@ -1,13 +1,11 @@
-import {SpyObject} from "./spyobject";
-import {<%=jhiPrefixCapitalized%>TrackerService} from "../../../../main/webapp/app/shared/tracker/tracker.service";
+import { SpyObject } from './spyobject';
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../main/webapp/app/shared/tracker/tracker.service';
 
 export class MockTrackerService extends SpyObject {
 
     constructor() {
-        super(<%=jhiPrefixCapitalized%>TrackerService)
+        super(<%=jhiPrefixCapitalized%>TrackerService);
     }
 
-    connect () {
-
-    }
+    connect () {}
 }
