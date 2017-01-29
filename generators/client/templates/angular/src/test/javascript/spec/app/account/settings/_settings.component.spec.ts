@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { JhiLanguageService } from 'ng-jhipster';
 
 <%_ if (enableTranslation) { _%>
-import { <%=jhiPrefixCapitalized%>LanguageHelper } from '../../../../../../main/webapp/app/shared';
+import { JhiLanguageHelper } from '../../../../../../main/webapp/app/shared';
 <%_ } _%>
 import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
 import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
@@ -56,12 +56,12 @@ describe('Component Tests', () => {
                     },
                     <%_ if (enableTranslation) { _%>
                     {
-                        provide: <%=jhiPrefixCapitalized%>LanguageHelper,
+                        provide: JhiLanguageHelper,
                         useValue: null
                     },
                     <%_ } _%>
                     {
-                        provide: <%=jhiPrefixCapitalized%>LanguageService,
+                        provide: JhiLanguageService,
                         useClass: MockLanguageService
                     }
                 ]

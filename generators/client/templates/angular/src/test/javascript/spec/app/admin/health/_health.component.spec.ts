@@ -36,12 +36,12 @@ describe('Component Tests', () => {
                         useValue: null
                     },
                     {
-                        provide: <%=jhiPrefixCapitalized%>LanguageService,
+                        provide: JhiLanguageService,
                         useClass: MockLanguageService
                     }
                 ]
             })
-            .overrideComponent(JhiHealthCheckComponent, {
+            .overrideComponent(<%=jhiPrefixCapitalized%>HealthCheckComponent, {
                 set: {
                     template: ''
                 }

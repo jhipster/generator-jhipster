@@ -45,7 +45,7 @@ describe('Component Tests', () => {
                         deps: [MockBackend, BaseRequestOptions]
                     },
                     {
-                        provide: <%=jhiPrefixCapitalized%>LanguageService,
+                        provide: JhiLanguageService,
                         useClass: MockLanguageService
                     },
                     Password
