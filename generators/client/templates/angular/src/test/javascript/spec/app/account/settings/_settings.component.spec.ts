@@ -2,14 +2,14 @@ import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing'
 import { MockBackend } from '@angular/http/testing';
 import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 
-<%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from '../../../../../../main/webapp/app/shared';
+import { MockLanguageService } from '../../../helpers/language.service';
 <%_ } _%>
 import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
 import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
-import { MockLanguageService } from '../../../helpers/language.service';
 import { MockAccountService } from '../../../helpers/account.service';
 import { MockPrincipal } from '../../../helpers/principal.service';
 <%_ if (websocket === 'spring-websocket') { _%>
@@ -47,22 +47,22 @@ describe('Component Tests', () => {
                     },
                     <%_ } _%>
                     BaseRequestOptions,
+                    <%_ if (enableTranslation) { _%>
+                    {
+                        provide: JhiLanguageHelper,
+                        useValue: null
+                    },
+                    {
+                        provide: JhiLanguageService,
+                        useClass: MockLanguageService
+                    },
+                    <%_ } _%>
                     {
                         provide: Http,
                         useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
                             return new Http(backendInstance, defaultOptions);
                         },
                         deps: [MockBackend, BaseRequestOptions]
-                    },
-                    <%_ if (enableTranslation) { _%>
-                    {
-                        provide: JhiLanguageHelper,
-                        useValue: null
-                    },
-                    <%_ } _%>
-                    {
-                        provide: JhiLanguageService,
-                        useClass: MockLanguageService
                     }
                 ]
             }).overrideComponent(SettingsComponent, {
