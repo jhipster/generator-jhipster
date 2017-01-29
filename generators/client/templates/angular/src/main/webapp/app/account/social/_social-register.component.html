@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <h1 *ngIf="success" jhiTranslate="social.register.title" translateValues="{ label: providerLabel }">Registration with</h1>
+            <h1 *ngIf="success" jhiTranslate="social.register.title" translateValues="{ label: '{{providerLabel}}' }">Registration with</h1>
             <h1 *ngIf="error" jhiTranslate="social.register.errorTitle">Registration</h1>
 
             <div class="alert alert-success" *ngIf="success" jhiTranslate="social.register.messages.success">
@@ -14,8 +14,9 @@
 
             <<%=jhiPrefix%>-social *ngIf="success" provider="{{ provider }}"></<%=jhiPrefix%>-social>
             <br/>
-            <div class="alert alert-warning" jhiTranslate="global.messages.info.authenticated">
-                If you want to <a class="alert-link" href="#/login">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+            <div class="alert alert-warning">
+                <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>
+                <a class="alert-link" (click)="openLogin()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><span jhiTranslate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
             </div>
         </div>
     </div>
