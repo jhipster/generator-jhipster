@@ -374,6 +374,31 @@ function askForPagination() {
             default: 0
         }
     ];
+    // TODO this should be removed when https://github.com/jhipster/generator-jhipster/issues/5007 is done
+    if (this.clientFramework === 'angular2') {
+        prompts = [
+            {
+                type: 'list',
+                name: 'pagination',
+                message: 'Do you want pagination on your entity?',
+                choices: [
+                    {
+                        value: 'no',
+                        name: 'No'
+                    },
+                    {
+                        value: 'pagination',
+                        name: 'Yes, with pagination links'
+                    },
+                    {
+                        value: 'infinite-scroll',
+                        name: 'Yes, with infinite scroll'
+                    }
+                ],
+                default: 0
+            }
+        ];
+    }
     this.prompt(prompts).then(function (props) {
         this.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
