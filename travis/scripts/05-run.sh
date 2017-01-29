@@ -83,7 +83,7 @@ if [ "$RUN_APP" == 1 ]; then
         java -jar target/*.war \
             --spring.profiles.active="$PROFILE" \
             --logging.level.io.github.jhipster.sample=INFO \
-            --logging.level.io.github.jhipster.travis=INFO
+            --logging.level.io.github.jhipster.travis=INFO &
         sleep 80
     fi
 
@@ -91,7 +91,7 @@ if [ "$RUN_APP" == 1 ]; then
     java -jar app.war \
         --spring.profiles.active="$PROFILE" \
         --logging.level.io.github.jhipster.sample=INFO \
-        --logging.level.io.github.jhipster.travis=INFO
+        --logging.level.io.github.jhipster.travis=INFO &
     sleep 40
 
     if [[ ("$JHIPSTER" != 'app-microservice-eureka') && ("$JHIPSTER" != 'app-microservice-consul') ]]; then
