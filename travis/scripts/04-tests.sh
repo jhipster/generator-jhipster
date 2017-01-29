@@ -23,12 +23,12 @@ fi
 cd "$HOME"/app
 if [ -f "mvnw" ]; then
     ./mvnw test \
-        -Dlogging.level.io.github.jhipster.sample=INFO \
-        -Dlogging.level.io.github.jhipster.travis=INFO
+        -Dlogging.level.io.github.jhipster.sample=ERROR \
+        -Dlogging.level.io.github.jhipster.travis=ERROR
 elif [ -f "gradlew" ]; then
     ./gradlew test \
-        -Dlogging.level.io.github.jhipster.sample=INFO \
-        -Dlogging.level.io.github.jhipster.travis=INFO
+        -Dlogging.level.io.github.jhipster.sample=ERROR \
+        -Dlogging.level.io.github.jhipster.travis=ERROR
 fi
 if [ -f "gulpfile.js" ]; then
     gulp test --no-notification
