@@ -5,9 +5,11 @@ import { OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import { JhiLanguageService, DateUtils } from 'ng-jhipster';
-
+import { DateUtils } from 'ng-jhipster';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
 import { MockLanguageService } from '../../../helpers/language.service';
+<%_ } _%>
 import { MockActivatedRoute } from '../../../helpers/activated-route.service';
 import { <%= entityAngularJSName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityClass %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
@@ -39,10 +41,12 @@ describe('Component Tests', () => {
                         },
                         deps: [MockBackend, BaseRequestOptions]
                     },
+                    <%_ if (enableTranslation) { _%>
                     {
                         provide: JhiLanguageService,
                         useClass: MockLanguageService
                     },
+                    <%_ } _%>
                     <%= entityClass %>Service
                 ]
             }).overrideComponent(<%= entityAngularJSName %>DetailComponent, {
