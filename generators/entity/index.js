@@ -572,7 +572,13 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
                 }
                 if (_.isUndefined(relationship.otherEntityModuleName)) {
-                    relationship.otherEntityModuleName = this.angular2AppName + relationship.otherEntityNameCapitalized + 'Module';
+                    if (relationship.otherEntityNameCapitalized !== 'User') {
+                        relationship.otherEntityModuleName = this.angular2AppName + relationship.otherEntityNameCapitalized + 'Module';
+                        relationship.otherEntityModulePath = 'entities/' + relationship.otherEntityStateName;
+                    } else {
+                        relationship.otherEntityModuleName = this.angular2AppName + 'AdminModule';
+                        relationship.otherEntityModulePath = 'admin';
+                    }
                 }
                 // Load in-memory data for root
                 if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {

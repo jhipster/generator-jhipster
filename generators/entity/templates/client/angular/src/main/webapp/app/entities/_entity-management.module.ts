@@ -4,10 +4,8 @@ import { RouterModule } from '@angular/router';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 import { <%= angular2AppName %>SharedModule } from '../../shared';
-<%_ for (var rel of differentRelationships) {
-        let modulePath = rel.otherEntityStateName + '/' + rel.otherEntityStateName + '.module'; 
-_%> 
-import { <%= rel.otherEntityModuleName %> } from '../<%= modulePath %>';
+<%_ for (var rel of differentRelationships) { _%> 
+import { <%= rel.otherEntityModuleName %> } from '../../<%= rel.otherEntityModulePath %>';
 <%_ } _%>
 
 import {
