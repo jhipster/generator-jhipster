@@ -41,3 +41,4 @@ export * from './user-management/user.model';
 export * from './user-management/user-modal.service';
 <%_ } _%>
 export * from './admin.state';
+export * from './admin.module';
