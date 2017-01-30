@@ -3,7 +3,12 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-
+<%_
+var hasDate = false;
+if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
+    hasDate = true;
+}
+_%>
 @Injectable()
 export class <%= entityClass %>PopupService {
     private isOpen = false;
@@ -19,8 +24,22 @@ export class <%= entityClass %>PopupService {
         this.isOpen = true;
 
         if (id) {
-            this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> =>
-                this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>));
+            this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+                <%_ if (hasDate) { _%>
+                    <%_ for (idx in fields) { _%>
+                        <%_ if (fields[idx].fieldType == 'LocalDate' || fields[idx].fieldType == 'ZonedDateTime') { _%>
+                if (<%= entityInstance %>.<%=fields[idx].fieldName%>) {
+                    <%= entityInstance %>.<%=fields[idx].fieldName%> = {
+                        year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
+                        month: <%= entityInstance %>.<%=fields[idx].fieldName%>.getMonth() + 1,
+                        day: <%= entityInstance %>.<%=fields[idx].fieldName%>.getDate()
+                    };
+                }
+                        <%_ } _%>
+                    <%_ } _%>
+                <%_ } _%>
+                this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>);
+            });
         } else {
             return this.<%= entityInstance %>ModalRef(component, new <%= entityClass %>());
         }
