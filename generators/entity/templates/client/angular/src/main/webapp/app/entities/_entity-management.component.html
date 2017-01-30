@@ -97,7 +97,7 @@
                 <td>
                     <%_ if (otherEntityName == 'user') { _%>
                         <%_ if (relationshipType == 'many-to-many') { _%>
-                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
+                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{last ? '' : ', '}}
                         </span>
                         <%_ } else { _%>
@@ -109,7 +109,7 @@
                         <%_ } _%>
                     <%_ } else { _%>
                         <%_ if (relationshipType == 'many-to-many') { _%>
-                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
+                    <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
                             <a class="form-control-static" [routerLink]="['../<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id ]">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{last ? '' : ', '}}
                         </span>
                         <%_ } else { _%>
