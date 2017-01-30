@@ -19,8 +19,9 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
     devServer: {
         contentBase: './<%= BUILD_DIR %>www',
         proxy: [{
-            context: [<% if (authenticationType == 'oauth2') { %>
-                '/oauth',<% } %>
+            context: [<% if (authenticationType === 'oauth2') { %>
+                '/oauth',<% } %><% if (authenticationType === 'uaa') { %>
+                '/uaa',<% } %>
                 '/api',
                 '/management',
                 '/swagger-resources',

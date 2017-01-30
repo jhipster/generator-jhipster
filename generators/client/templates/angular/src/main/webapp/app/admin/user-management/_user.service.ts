@@ -9,15 +9,15 @@ export class UserService {
     constructor(private http: Http) { }
 
     create(user: User): Observable<Response> {
-        return this.http.post(<% if (authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users`<%} else { %>`api/users`<% } %>, user);
+        return this.http.post(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users`, user);
     }
 
     update(user: User): Observable<Response> {
-        return this.http.put(<% if (authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users`<%} else { %>`api/users`<% } %>, user);
+        return this.http.put(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users`, user);
     }
 
     find(login: string): Observable<User> {
-        return this.http.get(<% if (authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users/${login}`<%} else { %>`api/users/${login}`<% } %>).map((res: Response) => res.json());
+        return this.http.get(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users/${login}`).map((res: Response) => res.json());
     }
 
     query(req?: any): Observable<Response> {
@@ -35,10 +35,10 @@ export class UserService {
             search: params
         };
 
-        return this.http.get('api/users', options);
+        return this.http.get(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users`, options);
     }
 
     delete(login: string): Observable<Response> {
-        return this.http.delete(<% if (authenticationType === 'uaa') { %>`<%= uaaBaseName.toLowerCase() %>/api/users/${login}`<%} else { %>`api/users/${login}`<% } %>);
+        return this.http.delete(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users/${login}`);
     }
 }
