@@ -61,7 +61,7 @@
     "yeoman-test": "1.4.0"
   },
   "engines": {
-    "node": ">=4.4.0",
+    "node": ">=6.9.0",
     "npm": ">=2.14.2"
   },
   "license": "Apache-2.0"
