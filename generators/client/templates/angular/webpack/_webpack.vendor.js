@@ -22,7 +22,7 @@ module.exports = {
             'webstomp-client',
             <%_ } _%>
             'rxjs'
-        ],
+        ]
     },
     resolve: {
         extensions: ['.ts', '.js'],
@@ -48,18 +48,18 @@ module.exports = {
                     'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
                     'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
                 ]
-            },
+            }
         ]
     },
     output: {
         filename: '[name].dll.js',
         path: './<%= BUILD_DIR %>www',
-        library: '[name]',
+        library: '[name]'
     },
     plugins: [
         new webpack.DllPlugin({
             name: '[name]',
-            path: './<%= BUILD_DIR %>www/[name].json',
-        }),
+            path: './<%= BUILD_DIR %>www/[name].json'
+        })
     ]
 };
