@@ -68,12 +68,12 @@ function askForServerSideOpts() {
                     name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                 },
                 {
-                    value: 'oauth2',
-                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
-                },
-                {
                     value: 'jwt',
                     name: 'JWT authentication (stateless, with a token)'
+                },
+                {
+                    value: 'oauth2',
+                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
                 }
             ],
             default: 0
