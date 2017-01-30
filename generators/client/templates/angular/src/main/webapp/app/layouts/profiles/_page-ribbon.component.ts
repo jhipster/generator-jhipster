@@ -27,7 +27,11 @@ export class PageRibbonComponent implements OnInit {
         this.profileService.getProfileInfo().subscribe(profileInfo => {
             this.profileInfo = profileInfo;
             this.ribbonEnv = profileInfo.ribbonEnv;
-            this.cssClass = profileInfo.ribbonEnv;
+            if (profileInfo.inProduction) {
+                this.cssClass = 'hidden';
+            } else {
+                this.cssClass = '';
+            }
         });
     }
 }
