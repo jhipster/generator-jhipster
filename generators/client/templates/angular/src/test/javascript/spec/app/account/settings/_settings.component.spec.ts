@@ -6,15 +6,15 @@ import { Observable } from 'rxjs/Rx';
 import { JhiLanguageService } from 'ng-jhipster';
 
 import { JhiLanguageHelper } from '../../../../../../main/webapp/app/shared';
-import { MockLanguageService } from '../../../helpers/language.service';
+import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
 import { Principal, AccountService } from '../../../../../../main/webapp/app/shared';
 import { SettingsComponent } from '../../../../../../main/webapp/app/account/settings/settings.component';
-import { MockAccountService } from '../../../helpers/account.service';
-import { MockPrincipal } from '../../../helpers/principal.service';
+import { MockAccountService } from '../../../helpers/mock-account.service';
+import { MockPrincipal } from '../../../helpers/mock-principal.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../../../main/webapp/app/shared/tracker/tracker.service';
-import { MockTrackerService } from '../../../helpers/tracker.service';
+import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 
 

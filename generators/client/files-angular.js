@@ -410,24 +410,23 @@ const files = {
                 'spec/app/account/settings/_settings.component.spec.ts',
                 'spec/app/admin/health/_health.component.spec.ts',
                 'spec/helpers/_spyobject.ts',
-                'spec/helpers/_account.service.ts',
-                'spec/helpers/_principal.service.ts',
-                'spec/helpers/_activated-route.service.ts',
-                'spec/helpers/_routes.ts'
+                'spec/helpers/_mock-account.service.ts',
+                'spec/helpers/_mock-principal.service.ts',
+                'spec/helpers/_mock-route.service.ts'
             ]
         },
         {
             condition: generator => generator.enableTranslation,
             path: TEST_SRC_DIR,
             templates: [
-                'spec/helpers/_language.service.ts'
+                'spec/helpers/_mock-language.service.ts'
             ]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/helpers/_tracker.service.ts'
+                'spec/helpers/_mock-tracker.service.ts'
             ]
         },
         {

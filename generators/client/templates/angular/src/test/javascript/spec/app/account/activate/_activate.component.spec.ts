@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/language.service';
+import { MockLanguageService } from '../../../helpers/mock-language.service';
 <% } %>
+import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { LoginModalService } from '../../../../../../main/webapp/app/shared';
-import { MockActivatedRoute } from '../../../helpers/routes';
 import { Activate } from '../../../../../../main/webapp/app/account/activate/activate.service';
 import { ActivateComponent } from '../../../../../../main/webapp/app/account/activate/activate.component';
 
@@ -20,8 +20,6 @@ describe('Component Tests', () => {
         let comp: ActivateComponent;
 
         beforeEach(async(() => {
-            let mockActivatedRoute = new MockActivatedRoute({'key': 'ABC123'});
-
             TestBed.configureTestingModule({
                 declarations: [ActivateComponent],
                 providers: [MockBackend,
@@ -39,10 +37,10 @@ describe('Component Tests', () => {
                         provide: JhiLanguageService,
                         useClass: MockLanguageService
                     },
-                    <% } %>
+                    <%_ } _%>
                     {
                         provide: ActivatedRoute,
-                        useValue: mockActivatedRoute
+                        useValue: new MockActivatedRoute({'key': 'ABC123'})
                     },
                     {
                         provide: LoginModalService,
