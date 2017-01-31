@@ -105,7 +105,7 @@
     "yargs": "6.6.0"
   },
   "engines": {
-    "node": "^4.3"
+    "node": ">=6.9.0"
   },
   "scripts": {
     "lint": "tslint src/main/webapp/app/**/*.ts --force",
