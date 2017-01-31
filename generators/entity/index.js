@@ -574,10 +574,10 @@ module.exports = EntityGenerator.extend({
                 if (_.isUndefined(relationship.otherEntityModuleName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {
                         relationship.otherEntityModuleName = this.angular2AppName + relationship.otherEntityNameCapitalized + 'Module';
-                        relationship.otherEntityModulePath = 'entities/' + relationship.otherEntityStateName;
+                        relationship.otherEntityModulePath = _.kebabCase(_.lowerFirst(relationship.otherEntityName));
                     } else {
-                        relationship.otherEntityModuleName = this.angular2AppName + 'AdminModule';
-                        relationship.otherEntityModulePath = 'admin';
+                        relationship.otherEntityModuleName = this.angular2AppName + 'SharedModule';
+                        relationship.otherEntityModulePath = '../shared';
                     }
                 }
                 // Load in-memory data for root

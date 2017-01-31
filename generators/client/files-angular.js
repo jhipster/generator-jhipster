@@ -306,7 +306,6 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/user-management/_user-management.route.ts', method: 'copyJs' },
-                'admin/user-management/_user.model.ts',
                 { file: 'admin/user-management/_user-management.component.ts', method: 'copyJs' },
                 { file: 'admin/user-management/_user-management.component.html', method: 'copyHtml' },
                 { file: 'admin/user-management/_user-management-detail.component.ts', method: 'copyJs' },
@@ -315,8 +314,7 @@ const files = {
                 { file: 'admin/user-management/_user-management-dialog.component.html', method: 'copyHtml' },
                 { file: 'admin/user-management/_user-management-delete-dialog.component.ts', method: 'copyJs' },
                 { file: 'admin/user-management/_user-management-delete-dialog.component.html', method: 'copyHtml' },
-                'admin/user-management/_user-modal.service.ts',
-                'admin/user-management/_user.service.ts'
+                'admin/user-management/_user-modal.service.ts'
             ]
         },
         {
@@ -341,7 +339,7 @@ const files = {
                 'shared/_shared-common.module.ts',
                 'shared/constants/_pagination.constants.ts',
                 //models
-                'shared/model/_account.model.ts',
+                'shared/user/_account.model.ts',
                 //login
                 'shared/login/_login.component.ts',
                 { file: 'shared/login/_login.component.html', method: 'copyHtml' },
@@ -359,6 +357,14 @@ const files = {
                 'shared/language/_language.pipe.ts',
                 'shared/language/_language.constants.ts',
                 'shared/language/_language.helper.ts'
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: ANGULAR_DIR,
+            templates: [
+                'shared/user/_user.model.ts',
+                'shared/user/_user.service.ts'
             ]
         }
     ],
