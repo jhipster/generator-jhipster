@@ -4,7 +4,7 @@ import { ProfileInfo } from './profile-info.model';
 
 @Component({
     selector: '<%=jhiPrefix%>-page-ribbon',
-    template: `<div class="ribbon" *ngIf="!inProduction"><a href=""<% if (enableTranslation) { %> jhiTranslate="global.ribbon.{{ribbonEnv}}"<% } %>>{{ribbonEnv}}</a></div>`,
+    template: `<div class="ribbon" *ngIf="ribbonEnv"><a href=""<% if (enableTranslation) { %> jhiTranslate="global.ribbon.{{ribbonEnv}}"<% } %>>{{ribbonEnv}}</a></div>`,
     styleUrls: [
         <%_ if (useSass) { _%>
         'page-ribbon.scss'
@@ -17,7 +17,6 @@ export class PageRibbonComponent implements OnInit {
 
     profileInfo: ProfileInfo;
     ribbonEnv: string;
-    inProduction: boolean;
 
     constructor(private profileService: ProfileService) {}
 
@@ -25,7 +24,6 @@ export class PageRibbonComponent implements OnInit {
         this.profileService.getProfileInfo().subscribe(profileInfo => {
             this.profileInfo = profileInfo;
             this.ribbonEnv = profileInfo.ribbonEnv;
-            this.inProduction = profileInfo.inProduction;
         });
     }
 }

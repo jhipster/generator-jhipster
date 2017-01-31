@@ -31,6 +31,7 @@
     "travis": true,
     "serviceDiscoveryType": false,
     "clientPackageManager": "yarn",
+    "jhipsterVersion": "3.12.2",
     "clientFramework": "angular2"
   }
 }
