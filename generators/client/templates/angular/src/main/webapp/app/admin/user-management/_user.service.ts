@@ -6,18 +6,20 @@ import { User } from './user.model';
 
 @Injectable()
 export class UserService {
+    private resourceUrl = '<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users';
+
     constructor(private http: Http) { }
 
     create(user: User): Observable<Response> {
-        return this.http.post(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users`, user);
+        return this.http.post(this.resourceUrl, user);
     }
 
     update(user: User): Observable<Response> {
-        return this.http.put(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users`, user);
+        return this.http.put(this.resourceUrl, user);
     }
 
     find(login: string): Observable<User> {
-        return this.http.get(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users/${login}`).map((res: Response) => res.json());
+        return this.http.get(`${this.resourceUrl}/${login}`).map((res: Response) => res.json());
     }
 
     query(req?: any): Observable<Response> {
@@ -35,10 +37,10 @@ export class UserService {
             search: params
         };
 
-        return this.http.get(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users`, options);
+        return this.http.get(this.resourceUrl, options);
     }
 
     delete(login: string): Observable<Response> {
-        return this.http.delete(`<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>api/users/${login}`);
+        return this.http.delete(`${this.resourceUrl}/${login}`);
     }
 }
