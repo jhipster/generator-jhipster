@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JhiLanguageService } from 'ng-jhipster';
 
-import { User } from './user.model';
-import { UserService } from './user.service';
+import { User, UserService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt-detail',

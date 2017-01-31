@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
+import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 
 @NgModule({
     imports: [
@@ -13,14 +14,16 @@ import { NgJhipsterModule } from 'ng-jhipster';
             i18nEnabled: true,
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
-        })
+        }),
+        InfiniteScrollModule
     ],
     exports: [
         FormsModule,
         HttpModule,
         CommonModule,
         NgbModule,
-        NgJhipsterModule
+        NgJhipsterModule,
+        InfiniteScrollModule
     ]
 })
 export class <%=angular2AppName%>SharedLibsModule {}

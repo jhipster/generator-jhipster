@@ -38,7 +38,6 @@ import {
     <%_ } _%>
     LogsService,
     <%_ if (!skipUserManagement) { _%>
-    UserService,
     UserResolvePagingParams,
     UserResolve,
     UserModalService
@@ -96,7 +95,6 @@ import {
         <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
-        UserService,
         UserResolvePagingParams,
         UserResolve,
         UserModalService

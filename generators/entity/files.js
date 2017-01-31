@@ -240,8 +240,8 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`
                 },
                 {
-                    file: 'entities/_entity-management.state.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.state.ts`
+                    file: 'entities/_entity-management.route.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.route.ts`
                 },
                 {
                     file: 'entities/_entity.model.ts',

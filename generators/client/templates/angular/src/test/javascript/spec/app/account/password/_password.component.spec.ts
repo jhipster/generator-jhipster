@@ -4,7 +4,7 @@ import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/language.service';
+import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
 import { PasswordComponent } from '../../../../../../main/webapp/app/account/password/password.component';
 import { Password } from '../../../../../../main/webapp/app/account/password/password.service';
@@ -12,7 +12,7 @@ import { Principal } from '../../../../../../main/webapp/app/shared/auth/princip
 import { AccountService } from '../../../../../../main/webapp/app/shared/auth/account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../../../../../../main/webapp/app/shared/tracker/tracker.service';
-import { MockTrackerService } from '../../../helpers/tracker.service';
+import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 
 

@@ -8,9 +8,9 @@ import { Observable } from 'rxjs/Rx';
 import { DateUtils } from 'ng-jhipster';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/language.service';
+import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
-import { MockActivatedRoute } from '../../../helpers/activated-route.service';
+import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { <%= entityAngularJSName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityClass %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityClass %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -32,7 +32,7 @@ describe('Component Tests', () => {
                     DatePipe,
                     {
                         provide: ActivatedRoute,
-                        useClass: MockActivatedRoute
+                        useValue: new MockActivatedRoute({id: 123})
                     },
                     {
                         provide: Http,
@@ -72,7 +72,7 @@ describe('Component Tests', () => {
             comp.ngOnInit();
 
             // THEN
-            expect(service.find).toHaveBeenCalledWith('entityId');
+            expect(service.find).toHaveBeenCalledWith(123);
             expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: 10}));
             });
         });

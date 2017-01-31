@@ -4,12 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, JhiLanguageService } from 'ng-jhipster';
 
-import { User } from './user.model';
 import { UserModalService } from './user-modal.service';
-import { UserService } from './user.service';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from '../../shared';
-<%_ }_%>
+import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt-dialog',
