@@ -1,12 +1,10 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { InfiniteScrollModule } from 'angular2-infinite-scroll';
-
 import { <%= angular2AppName %>SharedModule } from '../../shared';
-<%_ for (var rel of differentRelationships) { 
-       if (rel.otherEntityNameCapitalized === 'User') { _%> 
-import { <%= angular2AppName + 'AdminModule' %> } from '../../admin/admin.module';
+<%_ for (var rel of differentRelationships) {
+       if (rel.otherEntityNameCapitalized === 'User') { _%>
+import { <%= angular2AppName %>AdminModule } from '../../admin/admin.module';
 <%_ }} _%>
 
 import {
@@ -33,11 +31,10 @@ let ENTITY_STATES = [
 @NgModule({
     imports: [
         <%= angular2AppName %>SharedModule,
-        <%_ for (var rel of differentRelationships) { 
-              if (rel.otherEntityNameCapitalized === 'User') { _%> 
-        <%= angular2AppName + 'AdminModule' %>,
-        <%_ }} %>
-        InfiniteScrollModule,
+        <%_ for (var rel of differentRelationships) {
+              if (rel.otherEntityNameCapitalized === 'User') { _%>
+        <%= angular2AppName %>AdminModule,
+        <%_ }} _%>
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
     declarations: [
@@ -65,4 +62,3 @@ let ENTITY_STATES = [
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class <%= angular2AppName %><%= entityClass %>Module {}
-

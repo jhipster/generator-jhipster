@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
 
 import { EventManager, ParseLinks, PaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
@@ -13,7 +14,7 @@ import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
     selector: '<%= jhiPrefix %>-<%= entityFileName %>',
     templateUrl: './<%= entityFileName %>.component.html'
 })
-export class <%= entityAngularJSName %>Component implements OnInit {
+export class <%= entityAngularJSName %>Component implements OnInit, OnDestroy {
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 <%- include('pagination-template'); -%>
     <%_ } else if (pagination === 'infinite-scroll') { _%>
@@ -29,22 +30,24 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         this.registerChangeIn<%= entityClassPlural %>();
     }
 
+    ngOnDestroy() {
+        this.eventManager.destroy(this.eventSubscriber);
+    }
+
     trackId (index: number, item: <%= entityClass %>) {
         return item.id;
     }
 
-    <%_ if (pagination !== 'infinite-scroll') { _%>
+    <%_ let eventCallBack = 'this.loadAll()';
+    if (pagination === 'infinite-scroll') {
+        eventCallBack = 'this.reset()';
+    } _%>
     registerChangeIn<%= entityClassPlural %>() {
-        this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => <%= eventCallBack %>);
     }
-    <%_ } _%>
 
-    private onError (error) {
-        this.alertService.error(error.message, null, null);
-    }
     <%_ if (pagination !== 'no') { _%>
-    <%_ if (databaseType !== 'cassandra') { _%>
-
+        <%_ if (databaseType !== 'cassandra') { _%>
     sort () {
         let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
@@ -52,5 +55,29 @@ export class <%= entityAngularJSName %>Component implements OnInit {
         }
         return result;
     }
-    <%_ } } _%>
+
+        <%_ } _%>
+        <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+    private onSuccess (data, headers) {
+        <%_ if (databaseType !== 'cassandra') { _%>
+        this.links = this.parseLinks.parse(headers.get('link'));
+        this.totalItems = headers.get('X-Total-Count');
+        this.queryCount = this.totalItems;
+        // this.page = pagingParams.page;
+        <%_ } _%>
+        this.<%= entityInstancePlural %> = data;
+    }
+        <%_ } else if (pagination === 'infinite-scroll') { _%>
+    private onSuccess(data, headers) {
+        this.links = this.parseLinks.parse(headers.get('link'));
+        this.totalItems = headers.get('X-Total-Count');
+        for (let i = 0; i < data.length; i++) {
+            this.<%= entityInstancePlural %>.push(data[i]);
+        }
+    }
+    <%_ }} _%>
+
+    private onError (error) {
+        this.alertService.error(error.message, null, null);
+    }
 }

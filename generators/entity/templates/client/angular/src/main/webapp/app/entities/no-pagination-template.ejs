@@ -8,6 +8,7 @@ for (var idx in fields) {
 _%>
 <%= entityInstancePlural %>: <%= entityClass %>[];
     currentAccount: any;
+    eventSubscriber: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
     <%_ } _%>

@@ -41,4 +41,3 @@ export * from './user-management/user.model';
 export * from './user-management/user-modal.service';
 <%_ } _%>
 export * from './admin.route';
-export * from './admin.module';
