@@ -528,6 +528,23 @@ function askForOptionalItems() {
             }
         );
     }
+    if (applicationType === 'monolith') {
+        if (this.hibernateCache === 'hazelcast') {
+            choices.push(
+                {
+                    name: 'Service Discovery and Configuration using JHipster Registry (important for scaling Hazelcast)',
+                    value: 'serviceDiscoveryType:eureka'
+                }
+            );
+        } else {
+            choices.push(
+                {
+                    name: 'Service Discovery and Configuration using JHipster Registry',
+                    value: 'serviceDiscoveryType:eureka'
+                }
+            );
+        }
+    }
     if (applicationType === 'monolith' || applicationType === 'gateway') {
         choices.push(
             {

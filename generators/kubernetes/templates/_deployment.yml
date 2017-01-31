@@ -34,7 +34,6 @@ spec:
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
-        <%_ if (app.applicationType === 'microservice' || app.applicationType === 'gateway') { _%>
         <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
         - name: SPRING_CLOUD_CONFIG_URI
           value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/config
@@ -49,7 +48,6 @@ spec:
           value: consul.<%= kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-        <%_ } _%>
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mysql') { _%>
         - name: SPRING_DATASOURCE_URL

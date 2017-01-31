@@ -81,8 +81,7 @@ function writeFiles() {
             if (this.messageBroker === 'kafka') {
                 this.template(DOCKER_DIR + '_kafka.yml', DOCKER_DIR + 'kafka.yml', this, {});
             }
-
-            if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
+            if (this.serviceDiscoveryType) {
                 this.template(DOCKER_DIR + 'config/_README.md', DOCKER_DIR + 'central-server-config/README.md',this, {});
 
                 if (this.serviceDiscoveryType === 'consul') {
@@ -90,7 +89,6 @@ function writeFiles() {
                     this.copy(DOCKER_DIR + 'config/git2consul.json', DOCKER_DIR + 'config/git2consul.json');
                     this.copy(DOCKER_DIR + 'config/consul-config/application.yml', DOCKER_DIR + 'central-server-config/application.yml');
                 }
-
                 if (this.serviceDiscoveryType === 'eureka') {
                     this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
                     this.copy(DOCKER_DIR + 'config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');

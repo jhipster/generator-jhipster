@@ -94,7 +94,7 @@ module.exports = DockerComposeGenerator.extend({
             this.useKafka = false;
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
-                this.serviceDiscoveryType = 'eureka';
+                this.serviceDiscoveryType = false;
             }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
