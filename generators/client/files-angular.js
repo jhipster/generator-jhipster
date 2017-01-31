@@ -404,6 +404,7 @@ const files = {
             templates: [
                 '_karma.conf.js',
                 'spec/_entry.ts',
+                'spec/app/account/activate/_activate.component.spec.ts',
                 'spec/app/account/password/_password.component.spec.ts',
                 'spec/app/account/password/_password-strength-bar.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
@@ -411,7 +412,8 @@ const files = {
                 'spec/helpers/_spyobject.ts',
                 'spec/helpers/_account.service.ts',
                 'spec/helpers/_principal.service.ts',
-                'spec/helpers/_activated-route.service.ts'
+                'spec/helpers/_activated-route.service.ts',
+                'spec/helpers/_routes.ts'
             ]
         },
         {
