@@ -413,7 +413,6 @@ const files = {
                 'spec/helpers/_account.service.ts',
                 'spec/helpers/_principal.service.ts',
                 'spec/helpers/_activated-route.service.ts',
-                'spec/helpers/_activate.service.ts',
                 'spec/helpers/_routes.ts'
             ]
         },
