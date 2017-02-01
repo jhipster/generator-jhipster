@@ -30,7 +30,13 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
             ],
             target: 'http://127.0.0.1:<%= serverPort %>',
             secure: false
-        }]
+        }<% if (websocket === 'spring-websocket') { %>,{
+            context: [
+                '/websocket'
+            ],
+            target: 'ws://127.0.0.1:<%= serverPort %>',
+            ws: true
+        }<% } %>]
     },
     output: {
         path: path.resolve('<%= BUILD_DIR %>www') ,
