@@ -2,8 +2,7 @@ import { Injectable, Component } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { UserMgmtDialogComponent } from './user-management-dialog.component';
-import { User } from './user.model';
-import { UserService } from './user.service';
+import { User, UserService } from '../../shared';
 
 @Injectable()
 export class UserModalService {

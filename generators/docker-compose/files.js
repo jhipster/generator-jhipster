@@ -11,26 +11,26 @@ function writeFiles() {
         },
 
         writeRegistryFiles: function() {
-            if(this.gatewayNb === 0 && this.microserviceNb === 0) return;
-            if(this.serviceDiscoveryType === 'eureka'){
+            if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
+            if (this.serviceDiscoveryType === 'eureka') {
                 this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
             }
-            if(this.serviceDiscoveryType === 'consul'){
+            if (this.serviceDiscoveryType === 'consul') {
                 this.template('_consul.yml', 'consul.yml');
             }
-            if(this.serviceDiscoveryType){
+            if (this.serviceDiscoveryType) {
                 this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
             }
         },
 
         writeKafkaFiles: function() {
-            if(!this.useKafka) return;
+            if (!this.useKafka) return;
 
             this.template('_kafka.yml', 'kafka.yml');
         },
 
         writeElkFiles: function() {
-            if(this.monitoring !== 'elk') return;
+            if (this.monitoring !== 'elk') return;
 
             this.copy('_jhipster-console.yml', 'jhipster-console.yml');
             this.copy('log-conf/_logstash.conf', 'log-conf/logstash.conf');
@@ -38,7 +38,7 @@ function writeFiles() {
         },
 
         writePrometheusFiles: function() {
-            if(this.monitoring !== 'prometheus') return;
+            if (this.monitoring !== 'prometheus') return;
 
             // Generate a list of target apps to monitor for the prometheus config
             var appsToMonitor = [];

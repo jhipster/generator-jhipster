@@ -9,7 +9,7 @@ const enum <%= fields[idx].fieldType %> {<%
 <%_ } } _%>
 <%_ if (dto == "no") {
        for (var rel of differentRelationships) { _%>
-import { <%= rel.otherEntityNameCapitalized %> } from '../../<%= rel.otherEntityModulePath %>';
+import { <%= rel.otherEntityNameCapitalized %> } from '../<%= rel.otherEntityModulePath %>';
 <%_ }
 }
 var variables = [];

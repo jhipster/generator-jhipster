@@ -16,8 +16,8 @@ import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageSe
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-<%_ for (var rel of differentRelationships) { _%> 
-import { <%= rel.otherEntityNameCapitalized %>, <%= rel.otherEntityNameCapitalized %>Service } from '../../<%= rel.otherEntityModulePath %>';
+<%_ for (var rel of differentRelationships) { _%>
+import { <%= rel.otherEntityNameCapitalized %>, <%= rel.otherEntityNameCapitalized %>Service } from '../<%= rel.otherEntityModulePath %>';
 <%_ } _%>
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
@@ -68,10 +68,10 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     <%- variables[idx] %>
     <%_ } _%>
     constructor(
+        public activeModal: NgbActiveModal,
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        public activeModal: NgbActiveModal,
         private alertService: AlertService,
         private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
