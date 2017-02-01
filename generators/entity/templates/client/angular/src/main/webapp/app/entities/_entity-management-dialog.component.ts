@@ -19,8 +19,10 @@ import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 <%_ for (var rel of differentRelationships) { _%>
 import { <%= rel.otherEntityNameCapitalized %>, <%= rel.otherEntityNameCapitalized %>Service } from '../<%= rel.otherEntityModulePath %>';
 <%_ } _%>
+<%_
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
+_%>
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'

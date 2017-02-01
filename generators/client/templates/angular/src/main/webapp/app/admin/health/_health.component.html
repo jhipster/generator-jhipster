@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let health of healthData">
-                    <!-- TODO: Add translation for service name -->
+                    <%_ // TODO: Add translation for service name _%>
                     <td><% if (enableTranslation) { %>{{'health.indicator.' + baseName(health.name) | translate}}<% } else { %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{subSystemName(health.name)}}</td>
                     <td class="text-xs-center">
                         <span class="tag" [ngClass]="getTagClass(health.status)" jhiTranslate="{{'health.status.' + health.status}}">

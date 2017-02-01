@@ -10,7 +10,7 @@ import { CSRFService } from '../auth/csrf.service';
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
 
-// TODO find a better way to import these libs here
+<%_ // TODO find a better way to import these libs here _%>
 import SockJS = require('sockjs-client');
 import Stomp = require('webstomp-client');
 

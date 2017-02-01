@@ -95,7 +95,6 @@ const files = {
                 '_app.constants.ts',
                 '_polyfills.ts',
                 '_vendor.ts',
-                'blocks/config/_register-transition-hooks.ts',
                 'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
                 //interceptors

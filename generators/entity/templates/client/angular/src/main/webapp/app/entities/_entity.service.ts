@@ -81,7 +81,7 @@ export class <%= entityClass %>Service {
 
     query(req?: any): Observable<Response> {
         let options = this.createRequestOption(req);
-        // TODO Use Response class from @angular/http when the body field will be accessible directly
+        <%_ // TODO Use Response class from @angular/http when the body field will be accessible  directly _%>
         return this.http.get(this.resourceUrl, options)
             <%_ if(hasDate) { _%>
             .map((res: any) => this.convertResponse(res))
