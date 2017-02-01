@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
+import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
@@ -72,6 +72,13 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
+<<<<<<< 4fb25994f20813cd8d0eda4faaac15479614bb05
+=======
+        <%_ if (fieldsContainBlob) { _%>
+        private dataUtils: DataUtils,
+        <%_ } _%>
+        public activeModal: NgbActiveModal,
+>>>>>>> Migrate file BLOB field for entity
         private alertService: AlertService,
         private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
@@ -90,7 +97,32 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         <%- queries[idx] %>
         <%_ } _%>
     }
+    <%_ if (fieldsContainBlob) { _%>
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
 
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+    <%_ } _%>
+    <%_ for (idx in fields) {
+        if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+    set<%= fields[idx].fieldNameCapitalized %>($event, <%= entityInstance %>) {
+        if ($event.target.files && $event.target.files[0]) {
+            let $file = $event.target.files[0];
+            <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>
+                if (!/^image\//.test($file.type)) {
+                    return;
+                }
+                <%_ } _%>
+            this.dataUtils.toBase64($file, function(base64Data) {
+                <%= entityInstance %>.<%= fields[idx].fieldName %> = base64Data;
+                <%= entityInstance %>.<%= fields[idx].fieldName %>ContentType = $file.type;
+            });
+        }
+    }
+    <%_ } } _%>
     clear () {
         this.activeModal.dismiss('cancel');
         this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });

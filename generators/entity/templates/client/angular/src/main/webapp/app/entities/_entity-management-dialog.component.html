@@ -49,7 +49,7 @@
             <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             <div>
                 <%_ if (fieldTypeBlobContent == 'image') { _%>
-                <img src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 100px;" *ngIf="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
+                <img [src]="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 100px;" *ngIf="<%= entityInstance %>.<%= fieldName %>" alt="<%=entityInstance %> image"/>
                 <%_ } _%>
                 <div *ngIf="<%= entityInstance %>.<%= fieldName %>" class="form-text text-danger clearfix">
                     <%_ if (fieldTypeBlobContent == 'any') { _%>
@@ -63,10 +63,7 @@
                         <span class="fa fa-times"></span>
                     </button>
                 </div>
-                <button type="button" ngf-select class="btn btn-default btn-block"
-                        ngf-change="set<%=fieldNameCapitalized %>($file, <%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %> jhiTranslate="entity.action.addblob"<% } %>>
-                <% if (fieldTypeBlobContent == 'image') { %>Add image<% } else { %>Add blob<% } %>
-                </button>
+                <input type="file" (change)="set<%=fieldNameCapitalized %>($event, <%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %> jhiTranslate="entity.action.addblob"<% } %>/>
             </div>
             <%_ } _%>
             <%_ if (fieldType == 'LocalDate') { _%>
