@@ -72,13 +72,9 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-<<<<<<< 4fb25994f20813cd8d0eda4faaac15479614bb05
-=======
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: DataUtils,
         <%_ } _%>
-        public activeModal: NgbActiveModal,
->>>>>>> Migrate file BLOB field for entity
         private alertService: AlertService,
         private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
