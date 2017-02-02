@@ -10,6 +10,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+<%_ } else if (fieldsContainBlob) { _%>
+import { DataUtils } from 'ng-jhipster';
 <%_ } _%>
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
