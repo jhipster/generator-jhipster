@@ -74,6 +74,11 @@ export class Principal {
             this.authenticationState.next(this._identity);
             return this._identity;
         }).catch(err => {
+            <%_ if (websocket === 'spring-websocket') { _%>
+            if (this.trackerService.stompClient && this.trackerService.stompClient.connected) {
+                this.trackerService.disconnect();
+            }
+            <%_ } _%>
             this._identity = null;
             this.authenticated = false;
             this.authenticationState.next(this._identity);
