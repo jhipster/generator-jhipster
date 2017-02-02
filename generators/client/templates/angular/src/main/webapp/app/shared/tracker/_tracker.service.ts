@@ -1,13 +1,13 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Observer, Subscription } from 'rxjs/Rx';
-<%_ if (authenticationType === 'oauth2') { _%>
-import { LocalStorageService } from 'ng2-webstorage';
-<%_ } _%>
 
 import { CSRFService } from '../auth/csrf.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import { AuthServerProvider } from '../auth/auth-oauth2.service';
 <%_ } _%>
 
 // TODO find a better way to import these libs here
@@ -27,10 +27,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
 
     constructor(
         private router: Router,
-        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         private authServerProvider: AuthServerProvider,
-        <%_ } if (authenticationType === 'oauth2') { _%>
-        private $localStorage: LocalStorageService,
         <%_ } _%>
         private $document: Document,
         private $window: Window,
@@ -47,12 +45,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         // building absolute path so that websocket doesnt fail when deploying with a context path
         const loc = this.$window.location;
         let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
-        <%_ if (authenticationType === 'oauth2') { _%>
-        /*jshint camelcase: false */
-        const authToken = this.$json.stringify(this.$localStorage.retrieve('authenticationToken')).access_token;
-        url += '?access_token=' + authToken;
-        <%_ } if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        const authToken = this.authServerProvider.getToken();
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+        const authToken = this.authServerProvider.getToken()<% if (authenticationType === 'oauth2') { %>.access_token<% } %>;
         if (authToken) {
             url += '?access_token=' + authToken;
         }
