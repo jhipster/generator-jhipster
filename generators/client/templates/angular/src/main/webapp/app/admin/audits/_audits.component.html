@@ -36,6 +36,6 @@
     </div>
     <div class="text-xs-center" *ngIf="audits">
         <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-        <ngb-pagination size="sm" [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage"(click)="loadPage(page)"></ngb-pagination>
+        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
     </div>
 </div>
