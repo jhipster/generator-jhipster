@@ -3,7 +3,7 @@
     <h2><span jhiTranslate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></span>
         <button class="btn btn-primary float-xs-right create-<%= entityUrl %>" [routerLink]="['/', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
             <span class="fa fa-plus"></span>
-            <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> jhiTranslate="<%= keyPrefix %>home.createLabel">
+            <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= keyPrefix %>home.createLabel">
             Create new <%= entityClassHumanized %>
             </span>
         </button></h2>
