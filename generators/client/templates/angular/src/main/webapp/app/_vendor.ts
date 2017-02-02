@@ -1,3 +1,4 @@
+/* tslint:disable */
 <%_ if (useSass) { _%>
 import '../content/scss/vendor.scss';
 <%_} else { _%>
