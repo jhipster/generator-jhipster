@@ -30,11 +30,11 @@ export class HasAuthorityDirective implements OnInit {
     }
 
     private setVisible () {
-        this.renderer.setElementClass(this.el.nativeElement, 'invisible', false);
+        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', false);
     }
 
     private setHidden () {
-        this.renderer.setElementClass(this.el.nativeElement, 'invisible', true);
+        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', true);
     }
 
     private setVisibilityAsync () {
