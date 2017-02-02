@@ -37,6 +37,17 @@ export class <%= entityAngularJSName %>Component implements OnInit, OnDestroy {
         return item.id;
     }
 
+
+
+    <%_ if (fieldsContainBlob) { _%>
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+    <%_ } _%>
     <%_ let eventCallBack = 'this.loadAll()';
     if (pagination === 'infinite-scroll') {
         eventCallBack = 'this.reset()';
