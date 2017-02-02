@@ -46,6 +46,11 @@ module.exports = HerokuGenerator.extend({
                 } else {
                     var json = JSON.parse(stdout);
                     this.herokuAppName = json['app']['name'];
+                    if (json['dynos'].length > 0) {
+                        this.dynoSize = json['dynos'][0]['size'];
+                    } else {
+                        this.dynoSize = 'Free';
+                    }
                     this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
                     this.herokuAppExists = true;
                     this.config.set('herokuAppName', this.herokuAppName);
@@ -170,6 +175,7 @@ module.exports = HerokuGenerator.extend({
                                 herokuCreateCmd = 'heroku git:remote --app ' + this.herokuAppName;
                             } else {
                                 herokuCreateCmd = 'heroku create ' + regionParams;
+                                this.dynoSize = 'Free';
 
                                 // Extract from "Created random-app-name-1234... done"
                                 getHerokuAppName = function(def, stdout) { return stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp')); };
@@ -226,7 +232,7 @@ module.exports = HerokuGenerator.extend({
             }
 
             this.log(chalk.bold('\nProvisioning addons'));
-            exec(`heroku addons:create ${dbAddOn}`, {}, function (err, stdout, stderr) {
+            exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {}, function (err, stdout, stderr) {
                 if (err) {
                     this.log('No new addons created');
                 } else {
