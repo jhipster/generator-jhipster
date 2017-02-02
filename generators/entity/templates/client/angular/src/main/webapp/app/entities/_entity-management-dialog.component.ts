@@ -101,24 +101,20 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     openFile(contentType, field) {
         return this.dataUtils.openFile(contentType, field);
     }
-    <%_ } _%>
-    <%_ for (idx in fields) {
-        if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-    set<%= fields[idx].fieldNameCapitalized %>($event, <%= entityInstance %>) {
+
+    setFileData($event, <%= entityInstance %>, field, isImage) {
         if ($event.target.files && $event.target.files[0]) {
             let $file = $event.target.files[0];
-            <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>
-                if (!/^image\//.test($file.type)) {
-                    return;
-                }
-                <%_ } _%>
-            this.dataUtils.toBase64($file, function(base64Data) {
-                <%= entityInstance %>.<%= fields[idx].fieldName %> = base64Data;
-                <%= entityInstance %>.<%= fields[idx].fieldName %>ContentType = $file.type;
+            if (isImage && !/^image\//.test($file.type)) {
+                return;
+            }
+            this.dataUtils.toBase64($file, (base64Data) => {
+                <%= entityInstance %>[field] = base64Data;
+                <%= entityInstance %>[`${field}ContentType`] = $file.type;
             });
         }
     }
-    <%_ } } _%>
+   <%_ } _%>
     clear () {
         this.activeModal.dismiss('cancel');
         this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });

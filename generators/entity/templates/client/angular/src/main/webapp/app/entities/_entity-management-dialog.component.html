@@ -34,7 +34,7 @@
         } else if ((fieldType == 'byte[]' || fieldType == 'ByteBuffer') && fieldTypeBlobContent != 'text') {
         fieldInputType = 'hidden';
         } _%>
-        <div class="form-group"<% if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="set<%=fieldNameCapitalized %>($file, <%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
+        <div class="form-group">
             <label class="form-control-label" jhiTranslate="<%= translationKey %>" for="field_<%= fieldName %>"><%= fieldNameHumanized %></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>" <% if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
@@ -63,7 +63,7 @@
                         <span class="fa fa-times"></span>
                     </button>
                 </div>
-                <input type="file" (change)="set<%=fieldNameCapitalized %>($event, <%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %> jhiTranslate="entity.action.addblob"<% } %>/>
+                <input type="file" (change)="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent == 'image') { %>true)" accept="image/*" jhiTranslate="entity.action.addimage"<% } else { %>false)" jhiTranslate="entity.action.addblob"<% } %>/>
             </div>
             <%_ } _%>
             <%_ if (fieldType == 'LocalDate') { _%>
