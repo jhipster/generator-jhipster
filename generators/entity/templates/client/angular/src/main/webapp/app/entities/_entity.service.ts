@@ -32,7 +32,7 @@ export class <%= entityClass %>Service {
         let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
+            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
@@ -51,7 +51,7 @@ export class <%= entityClass %>Service {
         let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
+            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { %>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
