@@ -22,11 +22,11 @@ export class HasAnyAuthorityDirective implements OnInit {
     }
 
     private setVisible () {
-        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', false);
+        this.renderer.setElementClass(this.el.nativeElement, 'invisible', false);
     }
 
     private setHidden () {
-        this.renderer.setElementClass(this.el.nativeElement, 'hidden-xs-up', true);
+        this.renderer.setElementClass(this.el.nativeElement, 'invisible', true);
     }
 
     private setVisibilitySync () {
