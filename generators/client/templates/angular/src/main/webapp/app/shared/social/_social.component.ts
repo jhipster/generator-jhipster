@@ -21,7 +21,7 @@ export class <%=jhiPrefixCapitalized%>SocialComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.languageService.addLocation('social');
+        this.languageService.setLocations(['social']);
         this.label = this.provider.charAt(0).toUpperCase() + this.provider.slice(1);
         this.providerSetting = this.socialService.getProviderSetting(this.provider);
         this.providerURL = this.socialService.getProviderURL(this.provider);
