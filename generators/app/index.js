@@ -6,7 +6,8 @@ var util = require('util'),
     cleanup = require('../cleanup'),
     prompts = require('./prompts'),
     packagejs = require('../../package.json'),
-    exec = require('child_process').exec;
+    exec = require('child_process').exec,
+    semver = require('semver');
 
 var JhipsterGenerator = generators.Base.extend({});
 
@@ -115,11 +116,9 @@ module.exports = JhipsterGenerator.extend({
                 if (err) {
                     this.warning('Node is not found on your computer.');
                 } else {
-                    var nodeVersionMajor = stdout.split('.')[0].replace(/v/g, '');
-                    var nodeVersionMinor = stdout.split('.')[1];
-                    var nodeVersion = stdout.replace(/\n/g, '');
-                    if (nodeVersionMajor < 6 || (nodeVersionMajor >= 6 && nodeVersionMinor < 9)) {
-                        this.warning('Your node version is too old (' + nodeVersion + '). You should use at least Node ' + chalk.bold('v6.9.0+'));
+                    var nodeVersion = semver.clean(stdout);
+                    if (semver.lt(nodeVersion, '6.9.0')) {
+                        this.warning('Your node version is too old (v' + nodeVersion + '). You should use at least Node ' + chalk.bold('v6.9.0+'));
                     }
                 }
                 done();
