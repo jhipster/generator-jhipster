@@ -118,7 +118,7 @@ module.exports = JhipsterGenerator.extend({
                     var nodeVersionMajor = stdout.split('.')[0].replace(/v/g, '');
                     var nodeVersionMinor = stdout.split('.')[1];
                     var nodeVersion = stdout.replace(/\n/g, '');
-                    if (nodeVersionMajor < 6 || (nodeVersionMajor >= 6 && nodeVersionMinor < 9)) {
+                    if (nodeVersionMajor < 6 || (nodeVersionMajor == 6 && nodeVersionMinor < 9)) {
                         this.warning('Your node version is too old (' + nodeVersion + '). You should use at least Node ' + chalk.bold('v6.9.0+'));
                     }
                 }
