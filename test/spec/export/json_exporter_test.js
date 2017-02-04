@@ -8,10 +8,10 @@ const expect = require('chai').expect,
   EntityParser = require('../../../lib/parser/entity_parser'),
   parseFromFiles = require('../../../lib/reader/jdl_reader').parseFromFiles;
 
-describe('::exportToJSON', function () {
-  describe('when passing invalid parameters', function () {
-    describe('such as undefined', function () {
-      it('throws an error', function () {
+describe('::exportToJSON', () => {
+  describe('when passing invalid parameters', () => {
+    describe('such as undefined', () => {
+      it('throws an error', () => {
         try {
           Exporter.exportToJSON();
           fail();
@@ -21,8 +21,8 @@ describe('::exportToJSON', function () {
       });
     });
   });
-  describe('when passing valid arguments', function () {
-    describe('when exporting JDL to entity json for SQL type', function () {
+  describe('when passing valid arguments', () => {
+    describe('when exporting JDL to entity json for SQL type', () => {
       var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       var content = EntityParser.parse({
         jdlObject: JDLParser.parse(input, 'sql'),
@@ -31,7 +31,7 @@ describe('::exportToJSON', function () {
       Exporter.exportToJSON(content);
       var department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
       var jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
-      it('exports it', function () {
+      it('exports it', () => {
         expect(fs.statSync('.jhipster/Department.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/JobHistory.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/Job.json').isFile()).to.be.true;
@@ -127,7 +127,7 @@ describe('::exportToJSON', function () {
         fs.rmdirSync('.jhipster');
       });
     });
-    describe('when exporting JDL to entity json for an existing entity', function () {
+    describe('when exporting JDL to entity json for an existing entity', () => {
       var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       var content = EntityParser.parse({
         jdlObject: JDLParser.parse(input, 'sql'),

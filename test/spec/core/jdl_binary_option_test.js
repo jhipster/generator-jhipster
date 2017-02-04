@@ -7,10 +7,10 @@ const expect = require('chai').expect,
   BINARY_OPTIONS = require('../../../lib/core/jhipster/binary_options').BINARY_OPTIONS,
   BINARY_OPTION_VALUES = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
-describe('JDLBinaryOption', function () {
-  describe('::new', function () {
-    describe('when passing no argument', function () {
-      it('fails', function () {
+describe('JDLBinaryOption', () => {
+  describe('::new', () => {
+    describe('when passing no argument', () => {
+      it('fails', () => {
         try {
           new JDLBinaryOption();
           fail();
@@ -19,8 +19,8 @@ describe('JDLBinaryOption', function () {
         }
       });
     });
-    describe('when passing an invalid name', function () {
-      it('fails', function () {
+    describe('when passing an invalid name', () => {
+      it('fails', () => {
         try {
           new JDLBinaryOption({name: 'IsNotAnOption'});
           fail();
@@ -29,8 +29,8 @@ describe('JDLBinaryOption', function () {
         }
       });
     });
-    describe('when passing a name but no value', function () {
-      it('fails', function () {
+    describe('when passing a name but no value', () => {
+      it('fails', () => {
         try {
           new JDLBinaryOption({name: BINARY_OPTIONS.DTO});
           fail();
@@ -39,8 +39,8 @@ describe('JDLBinaryOption', function () {
         }
       });
     });
-    describe('when passing a name and a value', function () {
-      it('creates the option', function () {
+    describe('when passing a name and a value', () => {
+      it('creates the option', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -50,8 +50,8 @@ describe('JDLBinaryOption', function () {
         expect(option.value).to.eq(BINARY_OPTION_VALUES.dto.MAPSTRUCT);
       });
     });
-    describe('when passing a list of entity names and excluded names with some of them being repeated', function () {
-      it('removes the dupes', function () {
+    describe('when passing a list of entity names and excluded names with some of them being repeated', () => {
+      it('removes the dupes', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
@@ -68,24 +68,24 @@ describe('JDLBinaryOption', function () {
       });
     });
   });
-  describe('::isValid', function () {
-    describe('when passing a nil object', function () {
-      it('returns false', function () {
+  describe('::isValid', () => {
+    describe('when passing a nil object', () => {
+      it('returns false', () => {
         expect(JDLBinaryOption.isValid()).to.be.false;
       });
     });
-    describe('when passing an object with no name', function () {
-      it('returns false', function () {
+    describe('when passing an object with no name', () => {
+      it('returns false', () => {
         expect(JDLBinaryOption.isValid({})).to.be.false;
       });
     });
-    describe('when passing an object with a name', function () {
-      it('returns false', function () {
+    describe('when passing an object with a name', () => {
+      it('returns false', () => {
         expect(JDLBinaryOption.isValid({name: BINARY_OPTIONS.DTO})).to.be.false;
       });
     });
-    describe('when passing an object with a name, entity names and excluded names', function () {
-      it('returns true', function () {
+    describe('when passing an object with a name, entity names and excluded names', () => {
+      it('returns true', () => {
         var emptyOption = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -101,9 +101,9 @@ describe('JDLBinaryOption', function () {
       });
     });
   });
-  describe('#addEntity', function () {
-    describe('when passing a nil entity', function () {
-      it('fails', function () {
+  describe('#addEntity', () => {
+    describe('when passing a nil entity', () => {
+      it('fails', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -116,8 +116,8 @@ describe('JDLBinaryOption', function () {
         }
       });
     });
-    describe('when passing an invalid entity', function () {
-      it('fails', function () {
+    describe('when passing an invalid entity', () => {
+      it('fails', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -130,8 +130,8 @@ describe('JDLBinaryOption', function () {
         }
       });
     });
-    describe("when passing a valid entity that hasn't been added yet", function () {
-      it('returns true', function () {
+    describe("when passing a valid entity that hasn't been added yet", () => {
+      it('returns true', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -141,8 +141,8 @@ describe('JDLBinaryOption', function () {
         expect(option.entityNames.size()).to.eq(1);
       });
     });
-    describe('when passing a valid entity that has already been added', function () {
-      it('returns false', function () {
+    describe('when passing a valid entity that has already been added', () => {
+      it('returns false', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -153,8 +153,8 @@ describe('JDLBinaryOption', function () {
         expect(option.entityNames.size()).to.eq(1);
       });
     });
-    describe('when passing an excluded entity', function () {
-      it('returns false', function () {
+    describe('when passing an excluded entity', () => {
+      it('returns false', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -165,9 +165,9 @@ describe('JDLBinaryOption', function () {
       });
     });
   });
-  describe('#excludeEntity', function () {
-    describe('when passing a nil entity', function () {
-      it('fails', function () {
+  describe('#excludeEntity', () => {
+    describe('when passing a nil entity', () => {
+      it('fails', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -180,8 +180,8 @@ describe('JDLBinaryOption', function () {
         }
       });
     });
-    describe('when passing an invalid entity', function () {
-      it('fails', function () {
+    describe('when passing an invalid entity', () => {
+      it('fails', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -194,8 +194,8 @@ describe('JDLBinaryOption', function () {
         }
       });
     });
-    describe("when passing a valid entity that hasn't been excluded yet", function () {
-      it('returns true', function () {
+    describe("when passing a valid entity that hasn't been excluded yet", () => {
+      it('returns true', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -205,8 +205,8 @@ describe('JDLBinaryOption', function () {
         expect(option.excludedNames.size()).to.eq(1);
       });
     });
-    describe('when passing a valid entity that has already been excluded', function () {
-      it('returns false', function () {
+    describe('when passing a valid entity that has already been excluded', () => {
+      it('returns false', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -217,8 +217,8 @@ describe('JDLBinaryOption', function () {
         expect(option.excludedNames.size()).to.eq(1);
       });
     });
-    describe('when passing an added entity', function () {
-      it('returns false', function () {
+    describe('when passing an added entity', () => {
+      it('returns false', () => {
         var option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
@@ -229,8 +229,8 @@ describe('JDLBinaryOption', function () {
       });
     });
   });
-  describe('#toString', function () {
-    it('stringifies the option', function () {
+  describe('#toString', () => {
+    it('stringifies the option', () => {
       var option = new JDLBinaryOption({
         name: BINARY_OPTIONS.DTO,
         value: BINARY_OPTION_VALUES.dto.MAPSTRUCT

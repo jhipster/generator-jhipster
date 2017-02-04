@@ -5,10 +5,10 @@ const expect = require('chai').expect,
   parseFromDir = require('../../../lib/reader/json_reader').parseFromDir,
   UnaryOptions = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
 
-describe('::parseFromDir', function () {
-  describe('when passing invalid parameters', function () {
-    describe('such as nil', function () {
-      it('throws an error', function () {
+describe('::parseFromDir', () => {
+  describe('when passing invalid parameters', () => {
+    describe('such as nil', () => {
+      it('throws an error', () => {
         try {
           parseFromDir(null);
           fail();
@@ -17,8 +17,8 @@ describe('::parseFromDir', function () {
         }
       });
     });
-    describe("such as a file", function () {
-      it('throws an error', function () {
+    describe("such as a file", () => {
+      it('throws an error', () => {
         try {
           parseFromDir('../../test_files/invalid_file.txt');
           fail();
@@ -27,8 +27,8 @@ describe('::parseFromDir', function () {
         }
       });
     });
-    describe('such as a dir that does not exist', function () {
-      it('throws an error', function () {
+    describe('such as a dir that does not exist', () => {
+      it('throws an error', () => {
         try {
           parseFromDir('nodir');
           fail();
@@ -38,10 +38,10 @@ describe('::parseFromDir', function () {
       });
     });
   });
-  describe('when passing valid arguments', function () {
-    describe('when reading a jhipster app dir', function () {
+  describe('when passing valid arguments', () => {
+    describe('when reading a jhipster app dir', () => {
       var content = parseFromDir('./test/test_files/jhipster_app');
-      it('reads it', function () {
+      it('reads it', () => {
         expect(content.entities.Country).not.to.be.undefined;
         expect(content.entities.Department).not.to.be.undefined;
         expect(content.entities.Employee).not.to.be.undefined;

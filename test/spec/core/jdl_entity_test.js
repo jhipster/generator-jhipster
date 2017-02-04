@@ -6,10 +6,10 @@ const expect = require('chai').expect,
   JDLField = require('../../../lib/core/jdl_field'),
   JDLValidation = require('../../../lib/core/jdl_validation');
 
-describe('JDLEntity', function () {
-  describe('::new', function () {
-    describe('when not passing any argument', function () {
-      it('fails', function () {
+describe('JDLEntity', () => {
+  describe('::new', () => {
+    describe('when not passing any argument', () => {
+      it('fails', () => {
         try {
           new JDLEntity();
           fail();
@@ -18,8 +18,8 @@ describe('JDLEntity', function () {
         }
       });
     });
-    describe('when not passing the name', function () {
-      it('fails', function () {
+    describe('when not passing the name', () => {
+      it('fails', () => {
         try {
           new JDLEntity({name: null, comment: 'My entity'});
           fail();
@@ -28,14 +28,14 @@ describe('JDLEntity', function () {
         }
       });
     });
-    describe('when not passing the table name', function () {
-      it('uses the names as value', function () {
+    describe('when not passing the table name', () => {
+      it('uses the names as value', () => {
         var entity = new JDLEntity({name: 'Abc'});
         expect(entity.tableName).to.eq('Abc');
       });
     });
-    describe('when passing arguments', function () {
-      it('creates a new instance', function () {
+    describe('when passing arguments', () => {
+      it('creates a new instance', () => {
         var args = {
           name: 'Abc',
           tableName: 'String',
@@ -55,30 +55,30 @@ describe('JDLEntity', function () {
       });
     });
   });
-  describe('::isValid', function () {
-    describe('when checking the validity of an invalid object', function () {
-      describe('because it is nil or invalid', function () {
-        it('returns false', function () {
+  describe('::isValid', () => {
+    describe('when checking the validity of an invalid object', () => {
+      describe('because it is nil or invalid', () => {
+        it('returns false', () => {
           expect(JDLEntity.isValid(null)).to.be.false;
           expect(JDLEntity.isValid(undefined)).to.be.false;
         });
       });
-      describe('without a name attribute', function () {
-        it('returns false', function () {
+      describe('without a name attribute', () => {
+        it('returns false', () => {
           expect(
             JDLEntity.isValid({tableName: 'Something', fields: []})
           ).to.be.false;
         });
       });
-      describe('without a table name', function () {
-        it('returns false', function () {
+      describe('without a table name', () => {
+        it('returns false', () => {
           expect(
             JDLEntity.isValid({name: 'Something', fields: []})
           ).to.be.false;
         });
       });
-      describe('because its fields are invalid', function () {
-        it('returns false', function () {
+      describe('because its fields are invalid', () => {
+        it('returns false', () => {
           expect(
             JDLEntity.isValid({
               name: 'Something', tableName: 't_something', fields: [{
@@ -91,17 +91,17 @@ describe('JDLEntity', function () {
         });
       });
     });
-    describe('when checking the validity of a valid object', function () {
-      it('returns true', function () {
+    describe('when checking the validity of a valid object', () => {
+      it('returns true', () => {
         expect(
           JDLEntity.isValid({name: 'Valid', tableName: 't_valid', fields: []})
         ).to.be.true;
       });
     });
   });
-  describe('#addField', function () {
-    describe('when adding an invalid field', function () {
-      it('fails', function () {
+  describe('#addField', () => {
+    describe('when adding an invalid field', () => {
+      it('fails', () => {
         var entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String'
@@ -120,8 +120,8 @@ describe('JDLEntity', function () {
         }
       });
     });
-    describe('when adding a valid field', function () {
-      it('works', function () {
+    describe('when adding a valid field', () => {
+      it('works', () => {
         var entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String'
@@ -132,9 +132,9 @@ describe('JDLEntity', function () {
       });
     });
   });
-  describe('#toString', function () {
-    describe('without a comment', function () {
-      it('stringifies its content', function () {
+  describe('#toString', () => {
+    describe('without a comment', () => {
+      it('stringifies its content', () => {
         var args = {
           name: 'Abc',
           tableName: 'String'
@@ -143,8 +143,8 @@ describe('JDLEntity', function () {
         expect(entity.toString()).to.eq(`entity ${args.name} (${args.tableName})`);
       });
     });
-    describe('without fields', function () {
-      it('stringifies its content', function () {
+    describe('without fields', () => {
+      it('stringifies its content', () => {
         var args = {
           name: 'Abc',
           tableName: 'String',
@@ -159,8 +159,8 @@ entity ${args.name} (${args.tableName})`
         );
       });
     });
-    describe('with fields', function () {
-      it('stringifies its content', function () {
+    describe('with fields', () => {
+      it('stringifies its content', () => {
         var entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String',

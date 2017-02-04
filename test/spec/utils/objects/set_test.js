@@ -3,23 +3,23 @@
 const expect = require('chai').expect,
   Set = require('../../../../lib/utils/objects/set');
 
-describe('Set', function () {
-  describe('::new', function () {
-    describe('with no arg', function () {
-      it('creates a new Set', function () {
+describe('Set', () => {
+  describe('::new', () => {
+    describe('with no arg', () => {
+      it('creates a new Set', () => {
         new Set();
       });
     });
-    describe('with an array', function () {
-      it("creates a Set with the array's elements", function () {
+    describe('with an array', () => {
+      it("creates a Set with the array's elements", () => {
         var set = new Set([1, 2, 3, 4]);
         expect(set.size()).to.eq(4);
       });
     });
   });
-  describe('#add', function () {
-    describe('when trying to add a nil element', function () {
-      it('fails', function () {
+  describe('#add', () => {
+    describe('when trying to add a nil element', () => {
+      it('fails', () => {
         var mySet = new Set();
         try {
           mySet.add(null);
@@ -28,16 +28,16 @@ describe('Set', function () {
         }
       });
     });
-    describe('when trying to add a new element', function () {
-      it('returns true', function () {
+    describe('when trying to add a new element', () => {
+      it('returns true', () => {
         var mySet = new Set();
         var result = mySet.add('Abc');
         expect(result).to.be.true;
         expect(mySet.size()).to.eq(1);
       });
     });
-    describe('when trying to add an existing element', function () {
-      it('returns false', function () {
+    describe('when trying to add an existing element', () => {
+      it('returns false', () => {
         var mySet = new Set();
         mySet.add('Abc');
         var result = mySet.add('Abc');
@@ -46,9 +46,9 @@ describe('Set', function () {
       });
     });
   });
-  describe('#addArrayElements', function () {
-    describe('when trying to add elements from a nil array', function () {
-      it('fails', function () {
+  describe('#addArrayElements', () => {
+    describe('when trying to add elements from a nil array', () => {
+      it('fails', () => {
         var mySet = new Set();
         try {
           mySet.addArrayElements(null);
@@ -57,9 +57,9 @@ describe('Set', function () {
         }
       });
     });
-    describe("when trying to add an array's elements", function () {
-      describe('but every element already exists in the Set', function () {
-        it('returns false', function () {
+    describe("when trying to add an array's elements", () => {
+      describe('but every element already exists in the Set', () => {
+        it('returns false', () => {
           var mySet = new Set();
           mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
           var result = mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
@@ -67,8 +67,8 @@ describe('Set', function () {
           expect(mySet.size()).to.eq(6);
         });
       });
-      describe('and at least one element is not already in the Set', function () {
-        it('returns true', function () {
+      describe('and at least one element is not already in the Set', () => {
+        it('returns true', () => {
           var mySet = new Set();
           mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
           var result = mySet.addArrayElements([1, 2, 3, 4, 5, 6, 7]);
@@ -78,9 +78,9 @@ describe('Set', function () {
       });
     });
   });
-  describe('#addSetElements', function () {
-    describe('when passing a nil Set', function () {
-      it('fails', function () {
+  describe('#addSetElements', () => {
+    describe('when passing a nil Set', () => {
+      it('fails', () => {
         var mySet = new Set();
         try {
           mySet.addSetElements(null);
@@ -89,8 +89,8 @@ describe('Set', function () {
         }
       });
     });
-    describe('when passing an empty Set', function () {
-      it("doesn't change the Set and returns false", function () {
+    describe('when passing an empty Set', () => {
+      it("doesn't change the Set and returns false", () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var myOtherSet = new Set();
@@ -99,8 +99,8 @@ describe('Set', function () {
         expect(mySet.size()).to.eq(6);
       });
     });
-    describe('when passing a Set containing already present elements', function () {
-      it("doesn't change the Set and returns false", function () {
+    describe('when passing a Set containing already present elements', () => {
+      it("doesn't change the Set and returns false", () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var myOtherSet = new Set();
@@ -110,8 +110,8 @@ describe('Set', function () {
         expect(mySet.size()).to.eq(6);
       });
     });
-    describe('when passing a Set having at least one new element', function () {
-      it('changes the Set and returns true', function () {
+    describe('when passing a Set having at least one new element', () => {
+      it('changes the Set and returns true', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var myOtherSet = new Set();
@@ -122,9 +122,9 @@ describe('Set', function () {
       });
     });
   });
-  describe('#remove', function () {
-    describe('when asking to remove a nil element', function () {
-      it('returns false', function () {
+  describe('#remove', () => {
+    describe('when asking to remove a nil element', () => {
+      it('returns false', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var result = mySet.remove(null);
@@ -132,8 +132,8 @@ describe('Set', function () {
         expect(mySet.size()).to.eq(6);
       });
     });
-    describe('when asking to remove an element that is not present', function () {
-      it('returns false', function () {
+    describe('when asking to remove an element that is not present', () => {
+      it('returns false', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var result = mySet.remove(42);
@@ -141,8 +141,8 @@ describe('Set', function () {
         expect(mySet.size()).to.eq(6);
       });
     });
-    describe('when asking to remove a present element', function () {
-      it('returns true', function () {
+    describe('when asking to remove a present element', () => {
+      it('returns true', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var result = mySet.remove(3);
@@ -151,9 +151,9 @@ describe('Set', function () {
       });
     });
   });
-  describe('#forEach', function () {
-    describe('when passing a nil function', function () {
-      it('fails', function () {
+  describe('#forEach', () => {
+    describe('when passing a nil function', () => {
+      it('fails', () => {
         var mySet = new Set();
         try {
           mySet.forEach(null);
@@ -162,8 +162,8 @@ describe('Set', function () {
         }
       });
     });
-    describe('when passing a valid function', function () {
-      it('executes it for each element', function () {
+    describe('when passing a valid function', () => {
+      it('executes it for each element', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var array = [];
@@ -174,9 +174,9 @@ describe('Set', function () {
       });
     });
   });
-  describe('#filter', function () {
-    describe('when passing a nil function', function () {
-      it('fails', function () {
+  describe('#filter', () => {
+    describe('when passing a nil function', () => {
+      it('fails', () => {
         var mySet = new Set();
         try {
           mySet.filter(null);
@@ -185,8 +185,8 @@ describe('Set', function () {
         }
       });
     });
-    describe('when passing a valid function', function () {
-      it('executes it for each element and returns the new Set', function () {
+    describe('when passing a valid function', () => {
+      it('executes it for each element and returns the new Set', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var myNewSet = mySet.filter(function (element) {
@@ -200,9 +200,9 @@ describe('Set', function () {
       });
     });
   });
-  describe('#map', function () {
-    describe('when passing a nil function', function () {
-      it('fails', function () {
+  describe('#map', () => {
+    describe('when passing a nil function', () => {
+      it('fails', () => {
         var mySet = new Set();
         try {
           mySet.map(null);
@@ -211,8 +211,8 @@ describe('Set', function () {
         }
       });
     });
-    describe('when passing a valid function', function () {
-      it('executes it for each element and returns the new Set', function () {
+    describe('when passing a valid function', () => {
+      it('executes it for each element and returns the new Set', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         var myNewSet = mySet.map(function (element) {
@@ -226,56 +226,56 @@ describe('Set', function () {
       });
     });
   });
-  describe('#has', function () {
-    describe('when passing a nil object', function () {
-      it('returns false', function () {
+  describe('#has', () => {
+    describe('when passing a nil object', () => {
+      it('returns false', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         expect(mySet.has(null)).to.be.false;
         expect(mySet.has(undefined)).to.be.false;
       });
     });
-    describe('when passing an object that is not present', function () {
-      it('returns false', function () {
+    describe('when passing an object that is not present', () => {
+      it('returns false', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         expect(mySet.has(42)).to.be.false;
       });
     });
-    describe('when passing a present object', function () {
-      it('returns true', function () {
+    describe('when passing a present object', () => {
+      it('returns true', () => {
         var mySet = new Set();
         mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
         expect(mySet.has(4)).to.be.true;
       });
     });
   });
-  describe('#clear', function () {
-    it('clears the Set', function () {
+  describe('#clear', () => {
+    it('clears the Set', () => {
       var mySet = new Set();
       mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
       mySet.clear();
       expect(mySet.size()).to.eq(0);
     });
   });
-  describe('#size', function () {
-    it('returns the size of the Set', function () {
+  describe('#size', () => {
+    it('returns the size of the Set', () => {
       var mySet = new Set();
       mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
       expect(mySet.size()).to.eq(6);
     });
   });
-  describe('#join', function () {
-    describe('when not passing a delimiter', function () {
-      it('uses the comma', function () {
+  describe('#join', () => {
+    describe('when not passing a delimiter', () => {
+      it('uses the comma', () => {
         var mySet = new Set();
         var array = [1, 2, 3, 4, 5, 6];
         mySet.addArrayElements(array);
         expect(mySet.join()).to.eq(array.join(','));
       });
     });
-    describe('when passing a delimiter', function () {
-      it('uses it', function () {
+    describe('when passing a delimiter', () => {
+      it('uses it', () => {
         var mySet = new Set();
         var array = [1, 2, 3, 4, 5, 6];
         mySet.addArrayElements(array);
@@ -283,8 +283,8 @@ describe('Set', function () {
       });
     });
   });
-  describe('#toString', function () {
-    it('returns the stringified form of the Set', function () {
+  describe('#toString', () => {
+    it('returns the stringified form of the Set', () => {
       var mySet = new Set();
       mySet.addArrayElements([1, 2, 3, 4, 5, 6]);
       expect(mySet.toString()).to.eq('[1,2,3,4,5,6]');

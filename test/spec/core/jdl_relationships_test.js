@@ -7,11 +7,11 @@ const expect = require('chai').expect,
   RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
   JDLRelationships = require('../../../lib/core/jdl_relationships');
 
-describe('JDLRelationships', function () {
-  describe('#add', function () {
-    describe('when passing an invalid relationship', function () {
-      describe('because it is nil', function () {
-        it('fails', function () {
+describe('JDLRelationships', () => {
+  describe('#add', () => {
+    describe('when passing an invalid relationship', () => {
+      describe('because it is nil', () => {
+        it('fails', () => {
           try {
             new JDLRelationships().add(null);
             fail();
@@ -26,8 +26,8 @@ describe('JDLRelationships', function () {
           }
         });
       });
-      describe('because it is invalid', function () {
-        it('fails', function () {
+      describe('because it is invalid', () => {
+        it('fails', () => {
           try {
             new JDLRelationships().add({
               to: {name: 'A'},
@@ -40,8 +40,8 @@ describe('JDLRelationships', function () {
         });
       });
     });
-    describe('when passing a valid relationship', function () {
-      it('succeeds', function () {
+    describe('when passing a valid relationship', () => {
+      it('succeeds', () => {
         var relationships = new JDLRelationships();
         relationships.add(new JDLRelationship({
           from: new JDLEntity({
@@ -68,8 +68,8 @@ describe('JDLRelationships', function () {
       });
     });
   });
-  describe('#toArray', function () {
-    it('returns the list of each relationship', function () {
+  describe('#toArray', () => {
+    it('returns the list of each relationship', () => {
       var relationships = new JDLRelationships();
       var relationship1 = new JDLRelationship({
         from: new JDLEntity({
@@ -97,9 +97,9 @@ describe('JDLRelationships', function () {
       expect(array).to.deep.eq([relationship1, relationship2]);
     });
   });
-  describe('#toString', function () {
-    describe('when having one relationship per type', function () {
-      it('uses the standard string form', function () {
+  describe('#toString', () => {
+    describe('when having one relationship per type', () => {
+      it('uses the standard string form', () => {
         var relationships = new JDLRelationships();
         var oto = new JDLRelationship({
           from: new JDLEntity({
@@ -131,8 +131,8 @@ relationship ${otm.type} {
 }`);
       });
     });
-    describe('when having more than one relationship per type', function () {
-      it('uses the new string form', function () {
+    describe('when having more than one relationship per type', () => {
+      it('uses the new string form', () => {
         var relationships = new JDLRelationships();
         var oto1 = new JDLRelationship({
           from: new JDLEntity({

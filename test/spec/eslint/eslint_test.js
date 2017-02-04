@@ -18,7 +18,7 @@ describe('ESLint', () => {
 });
 
 function generateTest(result) {
-  it(`validates ${result.filePath}`, function () {
+  it(`validates ${result.filePath}`, () => {
     if (result.messages.length > 0) {
       fail(formatMessages(result.messages));
     }

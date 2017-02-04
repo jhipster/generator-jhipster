@@ -6,10 +6,10 @@ const expect = require('chai').expect,
   JDLRelationship = require('../../../lib/core/jdl_relationship'),
   RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES;
 
-describe('JDLRelationship', function () {
-  describe('::new', function () {
-    describe('when not passing at least one injected field', function () {
-      it('fails', function () {
+describe('JDLRelationship', () => {
+  describe('::new', () => {
+    describe('when not passing at least one injected field', () => {
+      it('fails', () => {
         try {
           new JDLRelationship({
             from: new JDLEntity({
@@ -26,8 +26,8 @@ describe('JDLRelationship', function () {
         }
       });
     });
-    describe('when having invalid entities as source and/or destination', function () {
-      it('fails', function () {
+    describe('when having invalid entities as source and/or destination', () => {
+      it('fails', () => {
         try {
           new JDLRelationship({
             from: {},
@@ -64,8 +64,8 @@ describe('JDLRelationship', function () {
         }
       });
     });
-    describe('when passing an invalid type', function () {
-      it('fails', function () {
+    describe('when passing an invalid type', () => {
+      it('fails', () => {
         try {
           new JDLRelationship({
             from: new JDLEntity({
@@ -83,8 +83,8 @@ describe('JDLRelationship', function () {
         }
       });
     });
-    describe('when passing valid args', function () {
-      it('succeeds', function () {
+    describe('when passing valid args', () => {
+      it('succeeds', () => {
         var relationship = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
@@ -102,16 +102,16 @@ describe('JDLRelationship', function () {
       });
     });
   });
-  describe('::isValid', function () {
-    describe('when checking the validity of an invalid object', function () {
-      describe('because it is nil or invalid', function () {
-        it('returns false', function () {
+  describe('::isValid', () => {
+    describe('when checking the validity of an invalid object', () => {
+      describe('because it is nil or invalid', () => {
+        it('returns false', () => {
           expect(JDLRelationship.isValid(null)).to.be.false;
           expect(JDLRelationship.isValid(undefined)).to.be.false;
         });
       });
-      describe('because the entities are invalid', function () {
-        it('returns false', function () {
+      describe('because the entities are invalid', () => {
+        it('returns false', () => {
           expect(
             JDLRelationship.isValid({
               from: {},
@@ -128,8 +128,8 @@ describe('JDLRelationship', function () {
           })).to.be.false;
         });
       });
-      describe('because the type is invalid', function () {
-        it('returns false', function () {
+      describe('because the type is invalid', () => {
+        it('returns false', () => {
           expect(
             JDLRelationship.isValid({
               from: {name: 'Valid2', tableName: 't_valid2', fields: []},
@@ -140,8 +140,8 @@ describe('JDLRelationship', function () {
           ).to.be.false;
         });
       });
-      describe('because it lacks an injected field', function () {
-        it('returns false', function () {
+      describe('because it lacks an injected field', () => {
+        it('returns false', () => {
           expect(
             JDLRelationship.isValid({
               from: {name: 'Valid2', tableName: 't_valid2', fields: []},
@@ -152,8 +152,8 @@ describe('JDLRelationship', function () {
         });
       });
     });
-    describe('when passing a valid object', function () {
-      it('returns true', function () {
+    describe('when passing a valid object', () => {
+      it('returns true', () => {
         expect(
           JDLRelationship.isValid({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
@@ -165,10 +165,10 @@ describe('JDLRelationship', function () {
       });
     });
   });
-  describe('#validate', function () {
-    describe('when passing an incorrect relationship', function () {
-      describe('because it is invalid', function () {
-        it('fails', function () {
+  describe('#validate', () => {
+    describe('when passing an incorrect relationship', () => {
+      describe('because it is invalid', () => {
+        it('fails', () => {
           var relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
@@ -184,8 +184,8 @@ describe('JDLRelationship', function () {
           }
         });
       });
-      describe("because the type doesn't exist", function () {
-        it('fails', function () {
+      describe("because the type doesn't exist", () => {
+        it('fails', () => {
           var relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
@@ -201,8 +201,8 @@ describe('JDLRelationship', function () {
           }
         });
       });
-      describe('because the source entity is not in a One-to-One', function () {
-        it('fails', function () {
+      describe('because the source entity is not in a One-to-One', () => {
+        it('fails', () => {
           var relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
@@ -217,8 +217,8 @@ describe('JDLRelationship', function () {
           }
         });
       });
-      describe('because one of the injected fields is not present in a One-to-Many (not bidirectional)', function () {
-        it('just adds the missing side', function () {
+      describe('because one of the injected fields is not present in a One-to-Many (not bidirectional)', () => {
+        it('just adds the missing side', () => {
           var relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
@@ -232,8 +232,8 @@ describe('JDLRelationship', function () {
           expect(relationship.injectedFieldInFrom).to.eq('valid');
         });
       });
-      describe('because both the sides are present in a Many-to-One (not unidirectional)', function () {
-        it('fails', function () {
+      describe('because both the sides are present in a Many-to-One (not unidirectional)', () => {
+        it('fails', () => {
           var relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
@@ -249,8 +249,8 @@ describe('JDLRelationship', function () {
           }
         });
       });
-      describe('because one of the sides is not present in a Many-to-Many (not bidirectional)', function () {
-        it('fails', function () {
+      describe('because one of the sides is not present in a Many-to-Many (not bidirectional)', () => {
+        it('fails', () => {
           var relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
@@ -267,8 +267,8 @@ describe('JDLRelationship', function () {
       });
     });
   });
-  describe('#getId', function () {
-    it('returns an unique representation of the relationship', function () {
+  describe('#getId', () => {
+    it('returns an unique representation of the relationship', () => {
       var relationship = new JDLRelationship({
         from: new JDLEntity({name: 'A'}),
         to: new JDLEntity({name: 'B'}),
@@ -278,9 +278,9 @@ describe('JDLRelationship', function () {
       expect(relationship.getId()).to.eq(`${relationship.type}_${relationship.from.name}{${relationship.injectedFieldInFrom}}_${relationship.to.name}`);
     });
   });
-  describe('#toString', function () {
-    describe('without any comment', function () {
-      it('stringifies the relationship', function () {
+  describe('#toString', () => {
+    describe('without any comment', () => {
+      it('stringifies the relationship', () => {
         var relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
@@ -294,8 +294,8 @@ describe('JDLRelationship', function () {
         );
       });
     });
-    describe('with comments for both sides', function () {
-      it('stringifies the relationship', function () {
+    describe('with comments for both sides', () => {
+      it('stringifies the relationship', () => {
         var relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
@@ -318,8 +318,8 @@ describe('JDLRelationship', function () {
         );
       });
     });
-    describe('with a comment for the source side', function () {
-      it('stringifies the relationship', function () {
+    describe('with a comment for the source side', () => {
+      it('stringifies the relationship', () => {
         var relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
@@ -337,8 +337,8 @@ describe('JDLRelationship', function () {
         );
       });
     });
-    describe('with a comment for the destination side', function () {
-      it('stringifies the relationship', function () {
+    describe('with a comment for the destination side', () => {
+      it('stringifies the relationship', () => {
         var relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
@@ -357,8 +357,8 @@ describe('JDLRelationship', function () {
         );
       });
     });
-    describe('with only one injected field', function () {
-      it('stringifies the relationship', function () {
+    describe('with only one injected field', () => {
+      it('stringifies the relationship', () => {
         var relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
@@ -372,8 +372,8 @@ describe('JDLRelationship', function () {
         );
       });
     });
-    describe('with both injected fields', function () {
-      it('stringifies the relationship', function () {
+    describe('with both injected fields', () => {
+      it('stringifies the relationship', () => {
         var relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),

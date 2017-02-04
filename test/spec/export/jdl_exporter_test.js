@@ -10,10 +10,10 @@ const expect = require('chai').expect,
   EntityParser = require('../../../lib/parser/entity_parser'),
   parseFromDir = require('../../../lib/reader/json_reader').parseFromDir;
 
-describe('::exportToJDL', function () {
-  describe('when passing invalid parameters', function () {
-    describe('such as undefined', function () {
-      it('throws an error', function () {
+describe('::exportToJDL', () => {
+  describe('when passing invalid parameters', () => {
+    describe('such as undefined', () => {
+      it('throws an error', () => {
         try {
           Exporter.exportToJDL();
           fail();
@@ -23,8 +23,8 @@ describe('::exportToJDL', function () {
       });
     });
   });
-  describe('when passing valid arguments', function () {
-    describe('when exporting json to entity JDL', function () {
+  describe('when passing valid arguments', () => {
+    describe('when exporting json to entity JDL', () => {
       var jdl = parseFromDir('./test/test_files/jhipster_app');
       Exporter.exportToJDL(jdl);
       var input = JDLReader.parseFromFiles(['./jhipster-jdl.jh']);
@@ -45,7 +45,7 @@ describe('::exportToJDL', function () {
         entities_before[entityName].relationships.sort((r1, r2) => (r1.relationshipName < r2.relationshipName) - (r1.relationshipName > r2.relationshipName));
         entities_after[entityName].relationships.sort((r1, r2) => (r1.relationshipName < r2.relationshipName) - (r1.relationshipName > r2.relationshipName));
       }
-      it('exports it', function () {
+      it('exports it', () => {
         expect(fs.statSync('./jhipster-jdl.jh').isFile()).to.be.true;
         expect(entities_after).to.deep.eq(entities_before);
         // clean up the mess...

@@ -6,10 +6,10 @@ const expect = require('chai').expect,
   JDLValidation = require('../../../lib/core/jdl_validation'),
   VALIDATIONS = require('../../../lib/core/jhipster/validations').VALIDATIONS;
 
-describe('JDLField', function () {
-  describe('::new', function () {
-    describe('when not passing any argument', function () {
-      it('fails', function () {
+describe('JDLField', () => {
+  describe('::new', () => {
+    describe('when not passing any argument', () => {
+      it('fails', () => {
         try {
           new JDLField();
           fail();
@@ -18,8 +18,8 @@ describe('JDLField', function () {
         }
       });
     });
-    describe('when not passing the name or the type', function () {
-      it('fails', function () {
+    describe('when not passing the name or the type', () => {
+      it('fails', () => {
         try {
           new JDLField({name: null, type: 'String'});
           fail();
@@ -34,8 +34,8 @@ describe('JDLField', function () {
         }
       });
     });
-    describe('when passing arguments', function () {
-      it('creates a new instance', function () {
+    describe('when passing arguments', () => {
+      it('creates a new instance', () => {
         var args = {
           name: 'abc',
           type: 'String',
@@ -50,26 +50,26 @@ describe('JDLField', function () {
       });
     });
   });
-  describe('::isValid', function () {
-    describe('when checking the validity of an invalid object', function () {
-      describe('because it is nil or undefined', function () {
-        it('returns false', function () {
+  describe('::isValid', () => {
+    describe('when checking the validity of an invalid object', () => {
+      describe('because it is nil or undefined', () => {
+        it('returns false', () => {
           expect(JDLField.isValid(null)).to.be.false;
           expect(JDLField.isValid(undefined)).to.be.false;
         });
       });
-      describe('without a name attribute', function () {
-        it('returns false', function () {
+      describe('without a name attribute', () => {
+        it('returns false', () => {
           expect(JDLField.isValid({type: 'String'})).to.be.false;
         });
       });
-      describe('without a type attribute', function () {
-        it('returns false', function () {
+      describe('without a type attribute', () => {
+        it('returns false', () => {
           expect(JDLField.isValid({name: 'myField'})).to.be.false;
         });
       });
-      describe('because its validations are invalid', function () {
-        it('returns false', function () {
+      describe('because its validations are invalid', () => {
+        it('returns false', () => {
           expect(
             JDLField.isValid({
               name: 'myField',
@@ -82,15 +82,15 @@ describe('JDLField', function () {
         });
       });
     });
-    describe('when checking the validity of a valid object', function () {
-      it('returns true', function () {
+    describe('when checking the validity of a valid object', () => {
+      it('returns true', () => {
         expect(JDLField.isValid({name: 'myField', type: 'String'})).to.be.true;
       });
     });
   });
-  describe('#addValidation', function () {
-    describe('when adding an invalid validation', function () {
-      it('fails', function () {
+  describe('#addValidation', () => {
+    describe('when adding an invalid validation', () => {
+      it('fails', () => {
         var field = new JDLField({
           name: 'abc',
           type: 'String',
@@ -110,8 +110,8 @@ describe('JDLField', function () {
         }
       });
     });
-    describe('when adding a valid validation', function () {
-      it('works', function () {
+    describe('when adding a valid validation', () => {
+      it('works', () => {
         var field = new JDLField({
           name: 'abc',
           type: 'String',
@@ -123,9 +123,9 @@ describe('JDLField', function () {
       });
     });
   });
-  describe('#toString', function () {
-    describe('without comment', function () {
-      it('stringifies the fields', function () {
+  describe('#toString', () => {
+    describe('without comment', () => {
+      it('stringifies the fields', () => {
         var args = {
           name: 'abc',
           type: 'String'
@@ -134,8 +134,8 @@ describe('JDLField', function () {
         expect(field.toString()).to.eq(`${args.name} ${args.type}`);
       });
     });
-    describe('without any validation', function () {
-      it('stringifies the fields', function () {
+    describe('without any validation', () => {
+      it('stringifies the fields', () => {
         var args = {
           name: 'abc',
           type: 'String',
@@ -146,8 +146,8 @@ describe('JDLField', function () {
           + `${args.name} ${args.type}`);
       });
     });
-    describe('with everything', function () {
-      it('stringifies the field', function () {
+    describe('with everything', () => {
+      it('stringifies the field', () => {
         var args = {
           name: 'abc',
           type: 'String',

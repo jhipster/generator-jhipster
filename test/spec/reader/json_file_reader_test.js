@@ -6,11 +6,11 @@ const expect = require('chai').expect,
   doesfileExist = require('../../../lib/reader/json_file_reader').doesfileExist,
   readEntityJSON = require('../../../lib/reader/json_file_reader').readEntityJSON;
 
-describe('JSONFileReader', function () {
-  describe('::readEntityJSON', function () {
-    describe('when passing an invalid argument', function () {
-      describe('because it is nil', function () {
-        it('fails', function () {
+describe('JSONFileReader', () => {
+  describe('::readEntityJSON', () => {
+    describe('when passing an invalid argument', () => {
+      describe('because it is nil', () => {
+        it('fails', () => {
           try {
             readEntityJSON();
             fail();
@@ -19,8 +19,8 @@ describe('JSONFileReader', function () {
           }
         });
       });
-      describe('because it is empty', function () {
-        it('fails', function () {
+      describe('because it is empty', () => {
+        it('fails', () => {
           try {
             readEntityJSON('');
             fail();
@@ -29,8 +29,8 @@ describe('JSONFileReader', function () {
           }
         });
       });
-      describe('because the file does not exist', function () {
-        it('fails', function () {
+      describe('because the file does not exist', () => {
+        it('fails', () => {
           try {
             readEntityJSON('test/test_files/WrongFile.json');
             fail();
@@ -39,8 +39,8 @@ describe('JSONFileReader', function () {
           }
         });
       });
-      describe('because the file is a folder', function () {
-        it('fails', function () {
+      describe('because the file is a folder', () => {
+        it('fails', () => {
           try {
             readEntityJSON('test/test_files/');
             fail();
@@ -50,9 +50,9 @@ describe('JSONFileReader', function () {
         });
       });
     });
-    describe('when passing a valid entity name', function () {
+    describe('when passing a valid entity name', () => {
       var content = readEntityJSON('test/test_files/MyEntity.json');
-      it('reads the file', function () {
+      it('reads the file', () => {
         expect(content).to.deep.eq(
           {
             "relationships": [],
@@ -72,10 +72,10 @@ describe('JSONFileReader', function () {
       });
     });
   });
-  describe('::toFilePath', function () {
-    describe('when converting an entity name to a path', function () {
-      describe('with a nil entity name', function () {
-        it('fails', function () {
+  describe('::toFilePath', () => {
+    describe('when converting an entity name to a path', () => {
+      describe('with a nil entity name', () => {
+        it('fails', () => {
           try {
             toFilePath();
             fail();
@@ -84,8 +84,8 @@ describe('JSONFileReader', function () {
           }
         });
       });
-      describe('with an empty entity name', function () {
-        it('fails', function () {
+      describe('with an empty entity name', () => {
+        it('fails', () => {
           try {
             toFilePath('');
             fail();
@@ -94,14 +94,14 @@ describe('JSONFileReader', function () {
           }
         });
       });
-      describe('with a valid entity name', function () {
-        it('returns the path', function () {
+      describe('with a valid entity name', () => {
+        it('returns the path', () => {
           let name = 'MyEntity';
           expect(toFilePath(name)).to.eq(`.jhipster/${name}.json`);
         });
       });
-      describe('with a valid entity name with the first letter lowercase', function () {
-        it('returns the path, with the first letter upper-cased', function () {
+      describe('with a valid entity name with the first letter lowercase', () => {
+        it('returns the path, with the first letter upper-cased', () => {
           let expectedFirstLetter = 'M';
           let name = 'myEntity';
           expect(
@@ -111,20 +111,20 @@ describe('JSONFileReader', function () {
       });
     });
   });
-  describe('::doesfileExist', function () {
-    describe('when checking a file path', function () {
-      describe('with a nil file path', function () {
-        it('return false', function () {
+  describe('::doesfileExist', () => {
+    describe('when checking a file path', () => {
+      describe('with a nil file path', () => {
+        it('return false', () => {
           expect(doesfileExist()).to.be.false;
         });
       });
-      describe('with an invalid file path', function () {
-        it('return false', function () {
+      describe('with an invalid file path', () => {
+        it('return false', () => {
           expect(doesfileExist('someInvalidPath')).to.be.false;
         });
       });
-      describe('with a valid file path', function () {
-        it('return true', function () {
+      describe('with a valid file path', () => {
+        it('return true', () => {
           expect(doesfileExist(`./test/test_files/MyEntity.json`)).to.be.true;
         });
       });

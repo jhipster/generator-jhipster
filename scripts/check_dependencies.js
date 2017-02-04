@@ -19,6 +19,7 @@ outDatedCommand.stdout.on('data', (data) => {
   const dependenciesToUpdate = Object.keys(dependencies).sort();
   if (dependenciesToUpdate.length === 0) {
     console.info(chalk.green('There is no dependency to update.'));
+    process.exit(0);
   }
   console.info(`There ${dependenciesToUpdate.length === 1 ? 'is' : 'are'} ${dependenciesToUpdate.length} dependenc${dependenciesToUpdate.length === 1 ? 'y' : 'ies'} to update:`);
   for (let dependency of dependenciesToUpdate) {

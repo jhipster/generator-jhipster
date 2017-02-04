@@ -6,10 +6,10 @@ const expect = require('chai').expect,
   JDLEntity = require('../../../lib/core/jdl_entity'),
   UNARY_OPTIONS = require('../../../lib/core/jhipster/unary_options').UNARY_OPTIONS;
 
-describe('JDLUnaryOption', function () {
-  describe('::new', function () {
-    describe('when passing no argument', function () {
-      it('fails', function () {
+describe('JDLUnaryOption', () => {
+  describe('::new', () => {
+    describe('when passing no argument', () => {
+      it('fails', () => {
         try {
           new JDLUnaryOption();
           fail();
@@ -18,8 +18,8 @@ describe('JDLUnaryOption', function () {
         }
       });
     });
-    describe('when passing an invalid name', function () {
-      it('fails', function () {
+    describe('when passing an invalid name', () => {
+      it('fails', () => {
         try {
           new JDLUnaryOption({name: 'IsNotAnOption'});
           fail();
@@ -28,14 +28,14 @@ describe('JDLUnaryOption', function () {
         }
       });
     });
-    describe('when passing a name at least', function () {
-      it('creates an option', function () {
+    describe('when passing a name at least', () => {
+      it('creates an option', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         expect(option.name).to.eq(UNARY_OPTIONS.SKIP_CLIENT);
       });
     });
-    describe('when passing a list of entity names and excluded names with some of them being repeated', function () {
-      it('removes the dupes', function () {
+    describe('when passing a list of entity names and excluded names with some of them being repeated', () => {
+      it('removes the dupes', () => {
         var option = new JDLUnaryOption({
           name: UNARY_OPTIONS.SKIP_CLIENT,
           entityNames: ['A', 'B', 'C', 'A'],
@@ -51,24 +51,24 @@ describe('JDLUnaryOption', function () {
       });
     });
   });
-  describe('::isValid', function () {
-    describe('when passing a nil object', function () {
-      it('returns false', function () {
+  describe('::isValid', () => {
+    describe('when passing a nil object', () => {
+      it('returns false', () => {
         expect(JDLUnaryOption.isValid()).to.be.false;
       });
     });
-    describe('when passing an object with no name', function () {
-      it('returns false', function () {
+    describe('when passing an object with no name', () => {
+      it('returns false', () => {
         expect(JDLUnaryOption.isValid({})).to.be.false;
       });
     });
-    describe('when passing an object with a name', function () {
-      it('returns false', function () {
+    describe('when passing an object with a name', () => {
+      it('returns false', () => {
         expect(JDLUnaryOption.isValid({name: UNARY_OPTIONS.SKIP_CLIENT})).to.be.false;
       });
     });
-    describe('when passing an object with a name, entity names and excluded names', function () {
-      it('returns true', function () {
+    describe('when passing an object with a name, entity names and excluded names', () => {
+      it('returns true', () => {
         var emptyOption = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         expect(
           JDLUnaryOption.isValid({
@@ -80,9 +80,9 @@ describe('JDLUnaryOption', function () {
       });
     });
   });
-  describe('#addEntity', function () {
-    describe('when passing a nil entity', function () {
-      it('fails', function () {
+  describe('#addEntity', () => {
+    describe('when passing a nil entity', () => {
+      it('fails', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         try {
           option.addEntity(null);
@@ -92,8 +92,8 @@ describe('JDLUnaryOption', function () {
         }
       });
     });
-    describe('when passing an invalid entity', function () {
-      it('fails', function () {
+    describe('when passing an invalid entity', () => {
+      it('fails', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         try {
           option.addEntity({});
@@ -103,16 +103,16 @@ describe('JDLUnaryOption', function () {
         }
       });
     });
-    describe("when passing a valid entity that hasn't been added yet", function () {
-      it('returns true', function () {
+    describe("when passing a valid entity that hasn't been added yet", () => {
+      it('returns true', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         var result = option.addEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.true;
         expect(option.entityNames.size()).to.eq(1);
       });
     });
-    describe('when passing a valid entity that has already been added', function () {
-      it('returns false', function () {
+    describe('when passing a valid entity that has already been added', () => {
+      it('returns false', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         option.addEntity(new JDLEntity({name: 'A'}));
         var result = option.addEntity(new JDLEntity({name: 'A'}));
@@ -120,8 +120,8 @@ describe('JDLUnaryOption', function () {
         expect(option.entityNames.size()).to.eq(1);
       });
     });
-    describe('when passing an excluded entity', function () {
-      it('returns false', function () {
+    describe('when passing an excluded entity', () => {
+      it('returns false', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         option.addEntity(new JDLEntity({name: 'A'}));
         var result = option.excludeEntity(new JDLEntity({name: 'A'}));
@@ -129,9 +129,9 @@ describe('JDLUnaryOption', function () {
       });
     });
   });
-  describe('#excludeEntity', function () {
-    describe('when passing a nil entity', function () {
-      it('fails', function () {
+  describe('#excludeEntity', () => {
+    describe('when passing a nil entity', () => {
+      it('fails', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         try {
           option.excludeEntity(null);
@@ -141,8 +141,8 @@ describe('JDLUnaryOption', function () {
         }
       });
     });
-    describe('when passing an invalid entity', function () {
-      it('fails', function () {
+    describe('when passing an invalid entity', () => {
+      it('fails', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         try {
           option.excludeEntity({});
@@ -152,16 +152,16 @@ describe('JDLUnaryOption', function () {
         }
       });
     });
-    describe("when passing a valid entity that hasn't been excluded yet", function () {
-      it('returns true', function () {
+    describe("when passing a valid entity that hasn't been excluded yet", () => {
+      it('returns true', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         var result = option.excludeEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.true;
         expect(option.excludedNames.size()).to.eq(1);
       });
     });
-    describe('when passing a valid entity that has already been excluded', function () {
-      it('returns false', function () {
+    describe('when passing a valid entity that has already been excluded', () => {
+      it('returns false', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         option.excludeEntity(new JDLEntity({name: 'A'}));
         var result = option.excludeEntity(new JDLEntity({name: 'A'}));
@@ -169,8 +169,8 @@ describe('JDLUnaryOption', function () {
         expect(option.excludedNames.size()).to.eq(1);
       });
     });
-    describe('when passing an added entity', function () {
-      it('returns false', function () {
+    describe('when passing an added entity', () => {
+      it('returns false', () => {
         var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
         option.excludeEntity(new JDLEntity({name: 'A'}));
         var result = option.addEntity(new JDLEntity({name: 'A'}));
@@ -178,8 +178,8 @@ describe('JDLUnaryOption', function () {
       });
     });
   });
-  describe('#toString', function () {
-    it('stringifies the option', function () {
+  describe('#toString', () => {
+    it('stringifies the option', () => {
       var option = new JDLUnaryOption({name: UNARY_OPTIONS.SKIP_CLIENT});
       expect(option.toString()).to.eq(`${UNARY_OPTIONS.SKIP_CLIENT} for *`);
       option.addEntity(new JDLEntity({name: 'D'}));
