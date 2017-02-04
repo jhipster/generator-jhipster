@@ -18,7 +18,7 @@ describe('JDLObject', () => {
   describe('#addEntity', () => {
     describe('when adding an invalid entity', () => {
       it('fails', () => {
-        var object = new JDLObject();
+        const object = new JDLObject();
         try {
           object.addEntity(null);
           fail();
@@ -41,8 +41,8 @@ describe('JDLObject', () => {
     });
     describe('when adding a valid entity', () => {
       it('works', () => {
-        var object = new JDLObject();
-        var entity = new JDLEntity({
+        const object = new JDLObject();
+        const entity = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid',
           fields: []
@@ -53,14 +53,14 @@ describe('JDLObject', () => {
     });
     describe('when adding an entity with the same name', () => {
       it('replaces the former one', () => {
-        var object = new JDLObject();
-        var entity = new JDLEntity({
+        const object = new JDLObject();
+        const entity = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid',
           fields: []
         });
         object.addEntity(entity);
-        var entity2 = new JDLEntity({
+        const entity2 = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid2',
           fields: []
@@ -73,7 +73,7 @@ describe('JDLObject', () => {
   describe('#addEnum', () => {
     describe('when adding an invalid enum', () => {
       it('fails', () => {
-        var object = new JDLObject();
+        const object = new JDLObject();
         try {
           object.addEnum(null);
           fail();
@@ -90,18 +90,18 @@ describe('JDLObject', () => {
     });
     describe('when adding a valid enum', () => {
       it('works', () => {
-        var object = new JDLObject();
-        var enumObject = new JDLEnum({name: 'Valid'});
+        const object = new JDLObject();
+        const enumObject = new JDLEnum({name: 'Valid'});
         object.addEnum(enumObject);
         expect(object.enums[enumObject.name]).to.deep.eq(enumObject);
       });
     });
     describe('when adding an enum with the same name', () => {
       it('replaces the old one', () => {
-        var object = new JDLObject();
-        var enumObject = new JDLEnum({name: 'Valid'});
+        const object = new JDLObject();
+        const enumObject = new JDLEnum({name: 'Valid'});
         object.addEnum(enumObject);
-        var enumObject2 = new JDLEnum({name: 'Valid', values: ['A', 'B']});
+        const enumObject2 = new JDLEnum({name: 'Valid', values: ['A', 'B']});
         object.addEnum(enumObject2);
         expect(object.enums[enumObject.name]).to.deep.eq(enumObject2);
       });
@@ -110,7 +110,7 @@ describe('JDLObject', () => {
   describe('#addRelationship', () => {
     describe('when adding an invalid relationship', () => {
       it('fails', () => {
-        var object = new JDLObject();
+        const object = new JDLObject();
         try {
           object.addRelationship(null);
           fail();
@@ -132,8 +132,8 @@ describe('JDLObject', () => {
     });
     describe('when adding a valid relationship', () => {
       it('works', () => {
-        var object = new JDLObject();
-        var relationship = new JDLRelationship({
+        const object = new JDLObject();
+        const relationship = new JDLRelationship({
           from: {name: 'Valid2', tableName: 't_valid2', fields: []},
           to: {name: 'Valid', tableName: 't_valid', fields: []},
           type: RELATIONSHIP_TYPES.RELATIONSHIP_TYPES.MANY_TO_MANY,
@@ -145,8 +145,8 @@ describe('JDLObject', () => {
     });
     describe('when adding twice the same relationship', () => {
       it("doesn't do anything", () => {
-        var object = new JDLObject();
-        var relationship = new JDLRelationship({
+        const object = new JDLObject();
+        const relationship = new JDLRelationship({
           from: {name: 'Valid2', tableName: 't_valid2', fields: []},
           to: {name: 'Valid', tableName: 't_valid', fields: []},
           type: RELATIONSHIP_TYPES.RELATIONSHIP_TYPES.MANY_TO_MANY,
@@ -161,7 +161,7 @@ describe('JDLObject', () => {
   describe('#addOption', () => {
     describe('when adding an invalid option', () => {
       it('fails', () => {
-        var object = new JDLObject();
+        const object = new JDLObject();
         try {
           object.addOption(null);
           fail();
@@ -187,25 +187,25 @@ describe('JDLObject', () => {
     });
     describe('when adding a valid option', () => {
       it('works', () => {
-        var object = new JDLObject();
-        var emptyOption = new JDLUnaryOption({name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT});
+        const object = new JDLObject();
+        const emptyOption = new JDLUnaryOption({name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT});
         object.addOption(emptyOption);
       });
     });
   });
   describe('#toString', () => {
     it('stringifies the JDL object', () => {
-      var object = new JDLObject();
-      var entityA = new JDLEntity({name: 'EntityA', tableName: 't_entity_a'});
-      var field = new JDLField({name: 'myField', type: 'String'});
+      const object = new JDLObject();
+      const entityA = new JDLEntity({name: 'EntityA', tableName: 't_entity_a'});
+      const field = new JDLField({name: 'myField', type: 'String'});
       field.addValidation(new JDLValidation());
       entityA.addField(field);
       object.addEntity(entityA);
-      var entityB = new JDLEntity({name: 'EntityB', tableName: 't_entity_b'});
+      const entityB = new JDLEntity({name: 'EntityB', tableName: 't_entity_b'});
       object.addEntity(entityB);
-      var enumObject = new JDLEnum({name: 'MyEnum', values: ['A', 'B']});
+      const enumObject = new JDLEnum({name: 'MyEnum', values: ['A', 'B']});
       object.addEnum(enumObject);
-      var relationship = new JDLRelationship({
+      const relationship = new JDLRelationship({
         from: entityA,
         to: entityB,
         type: RELATIONSHIP_TYPES.RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -213,10 +213,10 @@ describe('JDLObject', () => {
         injectedFieldInTo: 'entityA(myField)'
       });
       object.addRelationship(relationship);
-      var option = new JDLUnaryOption({name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT});
+      const option = new JDLUnaryOption({name: UNARY_OPTIONS.UNARY_OPTIONS.SKIP_CLIENT});
       option.excludeEntity(entityA);
       object.addOption(option);
-      var option2 = new JDLBinaryOption({
+      const option2 = new JDLBinaryOption({
         name: BINARY_OPTIONS.BINARY_OPTIONS.DTO,
         value: BINARY_OPTIONS.BINARY_OPTION_VALUES.dto.MAPSTRUCT
       });

@@ -41,7 +41,7 @@ describe('JDLBinaryOption', () => {
     });
     describe('when passing a name and a value', () => {
       it('creates the option', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
@@ -52,7 +52,7 @@ describe('JDLBinaryOption', () => {
     });
     describe('when passing a list of entity names and excluded names with some of them being repeated', () => {
       it('removes the dupes', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT,
           entityNames: ['A', 'B', 'C', 'A'],
@@ -86,7 +86,7 @@ describe('JDLBinaryOption', () => {
     });
     describe('when passing an object with a name, entity names and excluded names', () => {
       it('returns true', () => {
-        var emptyOption = new JDLBinaryOption({
+        const emptyOption = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
@@ -104,7 +104,7 @@ describe('JDLBinaryOption', () => {
   describe('#addEntity', () => {
     describe('when passing a nil entity', () => {
       it('fails', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
@@ -118,7 +118,7 @@ describe('JDLBinaryOption', () => {
     });
     describe('when passing an invalid entity', () => {
       it('fails', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
@@ -132,35 +132,35 @@ describe('JDLBinaryOption', () => {
     });
     describe("when passing a valid entity that hasn't been added yet", () => {
       it('returns true', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
-        var result = option.addEntity(new JDLEntity({name: 'A'}));
+        const result = option.addEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.true;
         expect(option.entityNames.size()).to.eq(1);
       });
     });
     describe('when passing a valid entity that has already been added', () => {
       it('returns false', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
         option.addEntity(new JDLEntity({name: 'A'}));
-        var result = option.addEntity(new JDLEntity({name: 'A'}));
+        const result = option.addEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.false;
         expect(option.entityNames.size()).to.eq(1);
       });
     });
     describe('when passing an excluded entity', () => {
       it('returns false', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
         option.addEntity(new JDLEntity({name: 'A'}));
-        var result = option.excludeEntity(new JDLEntity({name: 'A'}));
+        const result = option.excludeEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.false;
       });
     });
@@ -168,7 +168,7 @@ describe('JDLBinaryOption', () => {
   describe('#excludeEntity', () => {
     describe('when passing a nil entity', () => {
       it('fails', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
@@ -182,7 +182,7 @@ describe('JDLBinaryOption', () => {
     });
     describe('when passing an invalid entity', () => {
       it('fails', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
@@ -196,42 +196,42 @@ describe('JDLBinaryOption', () => {
     });
     describe("when passing a valid entity that hasn't been excluded yet", () => {
       it('returns true', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
-        var result = option.excludeEntity(new JDLEntity({name: 'A'}));
+        const result = option.excludeEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.true;
         expect(option.excludedNames.size()).to.eq(1);
       });
     });
     describe('when passing a valid entity that has already been excluded', () => {
       it('returns false', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
         option.excludeEntity(new JDLEntity({name: 'A'}));
-        var result = option.excludeEntity(new JDLEntity({name: 'A'}));
+        const result = option.excludeEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.false;
         expect(option.excludedNames.size()).to.eq(1);
       });
     });
     describe('when passing an added entity', () => {
       it('returns false', () => {
-        var option = new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BINARY_OPTIONS.DTO,
           value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
         });
         option.excludeEntity(new JDLEntity({name: 'A'}));
-        var result = option.addEntity(new JDLEntity({name: 'A'}));
+        const result = option.addEntity(new JDLEntity({name: 'A'}));
         expect(result).to.be.false;
       });
     });
   });
   describe('#toString', () => {
     it('stringifies the option', () => {
-      var option = new JDLBinaryOption({
+      let option = new JDLBinaryOption({
         name: BINARY_OPTIONS.DTO,
         value: BINARY_OPTION_VALUES.dto.MAPSTRUCT
       });

@@ -42,7 +42,7 @@ describe('JDLRelationships', () => {
     });
     describe('when passing a valid relationship', () => {
       it('succeeds', () => {
-        var relationships = new JDLRelationships();
+        const relationships = new JDLRelationships();
         relationships.add(new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
@@ -70,8 +70,8 @@ describe('JDLRelationships', () => {
   });
   describe('#toArray', () => {
     it('returns the list of each relationship', () => {
-      var relationships = new JDLRelationships();
-      var relationship1 = new JDLRelationship({
+      const relationships = new JDLRelationships();
+      const relationship1 = new JDLRelationship({
         from: new JDLEntity({
           name: 'Abc'
         }),
@@ -81,7 +81,7 @@ describe('JDLRelationships', () => {
         injectedFieldInFrom: 'something',
         type: RELATIONSHIP_TYPES.ONE_TO_ONE
       });
-      var relationship2 = new JDLRelationship({
+      const relationship2 = new JDLRelationship({
         from: new JDLEntity({
           name: 'Abc2'
         }),
@@ -93,15 +93,15 @@ describe('JDLRelationships', () => {
       });
       relationships.add(relationship1);
       relationships.add(relationship2);
-      var array = relationships.toArray();
+      const array = relationships.toArray();
       expect(array).to.deep.eq([relationship1, relationship2]);
     });
   });
   describe('#toString', () => {
     describe('when having one relationship per type', () => {
       it('uses the standard string form', () => {
-        var relationships = new JDLRelationships();
-        var oto = new JDLRelationship({
+        const relationships = new JDLRelationships();
+        const oto = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
           }),
@@ -111,7 +111,7 @@ describe('JDLRelationships', () => {
           injectedFieldInFrom: 'something',
           type: RELATIONSHIP_TYPES.ONE_TO_ONE
         });
-        var otm = new JDLRelationship({
+        const otm = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
           }),
@@ -133,8 +133,8 @@ relationship ${otm.type} {
     });
     describe('when having more than one relationship per type', () => {
       it('uses the new string form', () => {
-        var relationships = new JDLRelationships();
-        var oto1 = new JDLRelationship({
+        const relationships = new JDLRelationships();
+        const oto1 = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
           }),
@@ -144,7 +144,7 @@ relationship ${otm.type} {
           injectedFieldInFrom: 'something',
           type: RELATIONSHIP_TYPES.ONE_TO_ONE
         });
-        var oto2 = new JDLRelationship({
+        const oto2 = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc2'
           }),

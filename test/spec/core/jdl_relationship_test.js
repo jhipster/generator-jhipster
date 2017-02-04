@@ -85,7 +85,7 @@ describe('JDLRelationship', () => {
     });
     describe('when passing valid args', () => {
       it('succeeds', () => {
-        var relationship = new JDLRelationship({
+        const relationship = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
           }),
@@ -169,7 +169,7 @@ describe('JDLRelationship', () => {
     describe('when passing an incorrect relationship', () => {
       describe('because it is invalid', () => {
         it('fails', () => {
-          var relationship = new JDLRelationship({
+          const relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
             type: RELATIONSHIP_TYPES.MANY_TO_MANY,
@@ -186,7 +186,7 @@ describe('JDLRelationship', () => {
       });
       describe("because the type doesn't exist", () => {
         it('fails', () => {
-          var relationship = new JDLRelationship({
+          const relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
             type: RELATIONSHIP_TYPES.MANY_TO_MANY,
@@ -203,7 +203,7 @@ describe('JDLRelationship', () => {
       });
       describe('because the source entity is not in a One-to-One', () => {
         it('fails', () => {
-          var relationship = new JDLRelationship({
+          const relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
             type: RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -219,7 +219,7 @@ describe('JDLRelationship', () => {
       });
       describe('because one of the injected fields is not present in a One-to-Many (not bidirectional)', () => {
         it('just adds the missing side', () => {
-          var relationship = new JDLRelationship({
+          const relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
             type: RELATIONSHIP_TYPES.ONE_TO_MANY,
@@ -234,7 +234,7 @@ describe('JDLRelationship', () => {
       });
       describe('because both the sides are present in a Many-to-One (not unidirectional)', () => {
         it('fails', () => {
-          var relationship = new JDLRelationship({
+          const relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
             type: RELATIONSHIP_TYPES.MANY_TO_ONE,
@@ -251,7 +251,7 @@ describe('JDLRelationship', () => {
       });
       describe('because one of the sides is not present in a Many-to-Many (not bidirectional)', () => {
         it('fails', () => {
-          var relationship = new JDLRelationship({
+          const relationship = new JDLRelationship({
             from: {name: 'Valid2', tableName: 't_valid2', fields: []},
             to: {name: 'Valid', tableName: 't_valid', fields: []},
             type: RELATIONSHIP_TYPES.MANY_TO_MANY,
@@ -269,7 +269,7 @@ describe('JDLRelationship', () => {
   });
   describe('#getId', () => {
     it('returns an unique representation of the relationship', () => {
-      var relationship = new JDLRelationship({
+      const relationship = new JDLRelationship({
         from: new JDLEntity({name: 'A'}),
         to: new JDLEntity({name: 'B'}),
         type: RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -281,7 +281,7 @@ describe('JDLRelationship', () => {
   describe('#toString', () => {
     describe('without any comment', () => {
       it('stringifies the relationship', () => {
-        var relationship = new JDLRelationship({
+        const relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
           type: RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -296,7 +296,7 @@ describe('JDLRelationship', () => {
     });
     describe('with comments for both sides', () => {
       it('stringifies the relationship', () => {
-        var relationship = new JDLRelationship({
+        const relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
           type: RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -320,7 +320,7 @@ describe('JDLRelationship', () => {
     });
     describe('with a comment for the source side', () => {
       it('stringifies the relationship', () => {
-        var relationship = new JDLRelationship({
+        const relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
           type: RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -339,7 +339,7 @@ describe('JDLRelationship', () => {
     });
     describe('with a comment for the destination side', () => {
       it('stringifies the relationship', () => {
-        var relationship = new JDLRelationship({
+        const relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
           type: RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -359,7 +359,7 @@ describe('JDLRelationship', () => {
     });
     describe('with only one injected field', () => {
       it('stringifies the relationship', () => {
-        var relationship = new JDLRelationship({
+        const relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
           type: RELATIONSHIP_TYPES.ONE_TO_ONE,
@@ -374,7 +374,7 @@ describe('JDLRelationship', () => {
     });
     describe('with both injected fields', () => {
       it('stringifies the relationship', () => {
-        var relationship = new JDLRelationship({
+        const relationship = new JDLRelationship({
           from: new JDLEntity({name: 'A'}),
           to: new JDLEntity({name: 'B'}),
           type: RELATIONSHIP_TYPES.ONE_TO_ONE,

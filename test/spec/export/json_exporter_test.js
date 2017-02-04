@@ -23,14 +23,14 @@ describe('::exportToJSON', () => {
   });
   describe('when passing valid arguments', () => {
     describe('when exporting JDL to entity json for SQL type', () => {
-      var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-      var content = EntityParser.parse({
+      const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+      const content = EntityParser.parse({
         jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
       Exporter.exportToJSON(content);
-      var department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
-      var jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
+      const department = JSON.parse(fs.readFileSync('.jhipster/Department.json', {encoding: 'utf-8'}));
+      const jobHistory = JSON.parse(fs.readFileSync('.jhipster/JobHistory.json', {encoding: 'utf-8'}));
       it('exports it', () => {
         expect(fs.statSync('.jhipster/Department.json').isFile()).to.be.true;
         expect(fs.statSync('.jhipster/JobHistory.json').isFile()).to.be.true;
@@ -128,15 +128,15 @@ describe('::exportToJSON', () => {
       });
     });
     describe('when exporting JDL to entity json for an existing entity', () => {
-      var input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
-      var content = EntityParser.parse({
+      let input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
+      let content = EntityParser.parse({
         jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
       it('exports it with same changeLogDate', function (done) {
         Exporter.exportToJSON(content);
         expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
-        var changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
+        const changeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
         setTimeout(() => {
           input = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
           content = EntityParser.parse({
@@ -145,7 +145,7 @@ describe('::exportToJSON', () => {
           });
           Exporter.exportToJSON(content, true);
           expect(fs.statSync('.jhipster/A.json').isFile()).to.be.true;
-          var newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
+          const newChangeLogDate = JSON.parse(fs.readFileSync('.jhipster/A.json', {encoding: 'utf-8'})).changelogDate;
           expect(newChangeLogDate).to.eq(changeLogDate);
           // clean up the mess...
           fs.unlinkSync('.jhipster/A.json');

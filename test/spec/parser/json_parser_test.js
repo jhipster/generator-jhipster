@@ -9,7 +9,7 @@ const expect = require('chai').expect,
   BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').BINARY_OPTION_VALUES;
 
 describe('::parse', () => {
-  var entities = {
+  const entities = {
     Employee: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json'),
     Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json'),
     Department: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
@@ -20,7 +20,7 @@ describe('::parse', () => {
     Task: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Task.json')
   };
   entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
-  var content = Parser.parseEntities(entities);
+  const content = Parser.parseEntities(entities);
   describe('when parsing a JSON entity to JDL', () => {
     it('parses entity javadoc', () => {
       expect(content.entities.Employee.comment).eq('The Employee entity.');
@@ -135,12 +135,12 @@ describe('::parse', () => {
       ).to.be.undefined;
     });
     it('parses comments in relationships for owned', () => {
-      var entities = {
+      const entities = {
         'Department': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Department.json'),
         'Employee': Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Employee.json')
       };
       entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
-      var content = Parser.parseEntities(entities);
+      const content = Parser.parseEntities(entities);
       expect(
         content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom
       ).to.be.undefined;
@@ -167,8 +167,8 @@ describe('::parse', () => {
   });
 
   describe('when parsing app config file to JDL', () => {
-    var yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
-    var content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
+    const yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
+    const content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
     it('parses server options', () => {
       expect(content.options.filter(
         option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
@@ -183,10 +183,10 @@ describe('::parse', () => {
   describe('when parsing entities with relationships to User', () => {
     describe('when skipUserManagement flag is not set', () => {
       describe('when there is no User.json entity', () => {
-        var entities = {
+        const entities = {
           Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json')
         };
-        var content = Parser.parseEntities(entities);
+        const content = Parser.parseEntities(entities);
         it('parses relationships to the JHipster managed User entity', () => {
           expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{user}_User');
         });
@@ -206,14 +206,14 @@ describe('::parse', () => {
       });
     });
     describe('when skipUserManagement flag is set', () => {
-      var entities = {
+      const entities = {
         Country: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Country.json'),
         User: Reader.readEntityJSON('./test/test_files/jhipster_app/.jhipster/Region.json')
       };
       entities.User.relationships[0].otherEntityRelationshipName = 'user';
-      var yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
+      const yoRcJson = Reader.readEntityJSON('./test/test_files/jhipster_app/.yo-rc.json');
       yoRcJson['generator-jhipster'].skipUserManagement = true;
-      var content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
+      const content = Parser.parseServerOptions(yoRcJson['generator-jhipster']);
       Parser.parseEntities(entities, content);
       it('parses the User.json entity if skipUserManagement flag is set', () => {
         expect(content.entities.Country).not.to.be.undefined;

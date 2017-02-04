@@ -56,8 +56,8 @@ describe('JDLParser', () => {
     });
     describe('when passing valid args', () => {
       describe('with no error', () => {
-        var input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-        var content = JDLParser.parse(input, 'mysql');
+        const input = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+        const content = JDLParser.parse(input, 'mysql');
         it('builds a JDLObject', () => {
           expect(content).not.to.be.null;
           expect(content.entities.Department).to.deep.eq(new JDLEntity({
@@ -164,16 +164,16 @@ describe('JDLParser', () => {
         });
       });
       describe('with a required relationship', () => {
-        var input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
-        var content = JDLParser.parse(input, 'sql');
+        const input = parseFromFiles(['./test/test_files/required_relationships.jdl']);
+        const content = JDLParser.parse(input, 'sql');
         it('adds it', () => {
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInFromRequired).to.be.true;
           expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
         });
       });
       describe("with a field name 'id'", () => {
-        var input = parseFromFiles(['./test/test_files/id_field.jdl']);
-        var content = JDLParser.parse(input, 'sql');
+        const input = parseFromFiles(['./test/test_files/id_field.jdl']);
+        const content = JDLParser.parse(input, 'sql');
         it("doesn't add it", () => {
           expect(content.entities.A).to.deep.eq(new JDLEntity({
             name: 'A',
@@ -185,7 +185,7 @@ describe('JDLParser', () => {
         });
       });
       describe('with an invalid field type', () => {
-        var input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
+        const input = parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         it('fails', () => {
           try {
             JDLParser.parse(input, 'sql');
@@ -196,7 +196,7 @@ describe('JDLParser', () => {
         });
       });
       describe('with an unexistent validation for a field type', () => {
-        var input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
+        const input = parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
         it('fails', () => {
           try {
             JDLParser.parse(input, 'sql');
@@ -207,7 +207,7 @@ describe('JDLParser', () => {
         });
       });
       describe('with entities that do not exist for a relationship', () => {
-        var input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
+        const input = parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
         it('fails', () => {
           try {
             JDLParser.parse(input, 'sql');
@@ -218,7 +218,7 @@ describe('JDLParser', () => {
         });
       });
       describe('with User entity as from for a relationship', () => {
-        var input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
+        const input = parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
         it('fails', () => {
           try {
             JDLParser.parse(input, 'sql');
@@ -229,15 +229,15 @@ describe('JDLParser', () => {
         });
       });
       describe('with User entity as to for a relationship', () => {
-        var input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
-        var content = JDLParser.parse(input, 'sql');
+        const input = parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
+        const content = JDLParser.parse(input, 'sql');
         it('is processed', () => {
           expect(content.relationships.relationships.ManyToOne['ManyToOne_A{user}_User{a}'].to.name).to.eq('User');
           expect(content.relationships.relationships.OneToOne['OneToOne_B{user}_User'].to.name).to.eq('User');
         });
       });
       describe('with an invalid option', () => {
-        var input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
+        const input = parseFromFiles(['./test/test_files/invalid_option.jdl']);
         it('fails', () => {
           try {
             JDLParser.parse(input, 'sql');
@@ -248,9 +248,9 @@ describe('JDLParser', () => {
         });
       });
       describe('with a required enum', () => {
-        var input = parseFromFiles(['./test/test_files/enum.jdl']);
-        var content = JDLParser.parse(input, 'sql');
-        var enumField = new JDLField({
+        const input = parseFromFiles(['./test/test_files/enum.jdl']);
+        const content = JDLParser.parse(input, 'sql');
+        const enumField = new JDLField({
           name: 'sourceType',
           type: 'MyEnum'
         });
@@ -266,8 +266,8 @@ describe('JDLParser', () => {
         });
       });
       describe('when using the noFluentMethods option', () => {
-        var input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-        var content = JDLParser.parse(input, 'sql');
+        let input = parseFromFiles(['./test/test_files/fluent_methods.jdl']);
+        let content = JDLParser.parse(input, 'sql');
         it('adds it correctly', () => {
           expect(content.options).to.deep.eq([
             new JDLUnaryOption({
@@ -287,8 +287,8 @@ describe('JDLParser', () => {
         });
       });
       describe('when having following comments', () => {
-        var input = parseFromFiles(['./test/test_files/following_comments.jdl']);
-        var content = JDLParser.parse(input, 'sql');
+        const input = parseFromFiles(['./test/test_files/following_comments.jdl']);
+        const content = JDLParser.parse(input, 'sql');
         it('accepts them', () => {
           expect(content.entities.A.fields.name.comment).to.eq('abc');
           expect(content.entities.A.fields.thing.comment).to.eq('def');
@@ -307,8 +307,8 @@ describe('JDLParser', () => {
         });
       });
       describe('when parsing another complex JDL file', () => {
-        var input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
-        var content = JDLParser.parse(input, 'sql');
+        const input = parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
+        const content = JDLParser.parse(input, 'sql');
         it('parses it', () => {
           expect(content.entities.A).to.deep.eq({
             name: 'A',
@@ -462,8 +462,8 @@ describe('JDLParser', () => {
         });
       });
       describe('when having two consecutive comments for fields', () => {
-        var input = parseFromFiles(['./test/test_files/field_comments.jdl']);
-        var content = JDLParser.parse(input, 'sql');
+        const input = parseFromFiles(['./test/test_files/field_comments.jdl']);
+        const content = JDLParser.parse(input, 'sql');
         it('assigns them correctly', () => {
           expect(content.entities.TestEntity.fields).to.deep.eq({
             first: {

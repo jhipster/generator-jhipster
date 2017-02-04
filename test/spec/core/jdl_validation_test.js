@@ -8,14 +8,14 @@ describe('JDLValidation', () => {
   describe('::new', () => {
     describe('when not passing any argument', () => {
       it("defaults on the 'required' validation", () => {
-        var validation = new JDLValidation();
+        const validation = new JDLValidation();
         expect(validation.name).to.eq('required');
         expect(validation.value).to.eq('');
       });
     });
     describe('when passing arguments', () => {
       it('uses them', () => {
-        var validation = new JDLValidation({
+        const validation = new JDLValidation({
           name: 'min',
           value: 42
         });
@@ -61,17 +61,17 @@ describe('JDLValidation', () => {
   describe('#toString', () => {
     describe('with no value', () => {
       it('stringifies its content', () => {
-        var validation = new JDLValidation();
+        const validation = new JDLValidation();
         expect(validation.toString()).to.eq('required');
       });
     });
     describe('with a value', () => {
       it('stringifies its content', () => {
-        var args = {
+        const args = {
           name: 'min',
           value: 42
         };
-        var validation = new JDLValidation(args);
+        const validation = new JDLValidation(args);
         expect(validation.toString()).to.eq(`${args.name}(${args.value})`);
       });
     });

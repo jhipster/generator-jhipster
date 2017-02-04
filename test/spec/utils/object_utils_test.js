@@ -8,12 +8,12 @@ const expect = require('chai').expect,
 
 describe('ObjectUtils', () => {
   describe('::merge', () => {
-    var object1 = {
+    const object1 = {
       a: 1,
       b: 2
     };
 
-    var object2 = {
+    const object2 = {
       b: 3,
       c: 4
     };
@@ -21,16 +21,16 @@ describe('ObjectUtils', () => {
     describe('when merging two object', () => {
       describe('with the first being nil or empty', () => {
         it('returns the second', () => {
-          var merged1 = merge(null, {a: 1});
-          var merged2 = merge({}, {a: 1});
+          const merged1 = merge(null, {a: 1});
+          const merged2 = merge({}, {a: 1});
           expect(merged1).to.deep.eq({a: 1});
           expect(merged2).to.deep.eq({a: 1});
         });
       });
       describe('with the second being nil or empty', () => {
         it('returns the first', () => {
-          var merged1 = merge({a: 1}, null);
-          var merged2 = merge({a: 1}, null);
+          const merged1 = merge({a: 1}, null);
+          const merged2 = merge({a: 1}, null);
           expect(merged1).to.deep.eq({a: 1});
           expect(merged2).to.deep.eq({a: 1});
         });
@@ -91,11 +91,11 @@ describe('ObjectUtils', () => {
     describe('when comparing two equal objects', () => {
       describe('as they are empty', () => {
         it('returns true', () => {
-          var firstEmptyObject = {
+          const firstEmptyObject = {
             fields: [],
             relationships: []
           };
-          var secondEmptyObject = {
+          const secondEmptyObject = {
             fields: [],
             relationships: []
           };
@@ -104,7 +104,7 @@ describe('ObjectUtils', () => {
       });
       describe('they have no fields, but only relationships', () => {
         it('returns true', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [],
             relationships: [
               {
@@ -117,7 +117,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          var secondObject = {
+          const secondObject = {
             fields: [],
             relationships: [
               {
@@ -135,7 +135,7 @@ describe('ObjectUtils', () => {
       });
       describe('they have fields but no relationships', () => {
         it('returns true', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [
               {
                 id: 1,
@@ -148,7 +148,7 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -166,7 +166,7 @@ describe('ObjectUtils', () => {
       });
       describe('they have both fields and relationships', () => {
         it('returns true', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [
               {
                 id: 1,
@@ -188,7 +188,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -217,11 +217,11 @@ describe('ObjectUtils', () => {
     describe('when comparing two unequal objects', () => {
       describe('as one of them is not empty, the other is', () => {
         it('returns false', () => {
-          var firstObject = {
+          let firstObject = {
             fields: [],
             relationships: []
           };
-          var secondObject = {
+          let secondObject = {
             fields: [],
             relationships: [
               {
@@ -257,7 +257,7 @@ describe('ObjectUtils', () => {
       });
       describe('as both of them have different fields', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [
               {
                 id: 1,
@@ -270,7 +270,7 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -288,7 +288,7 @@ describe('ObjectUtils', () => {
       });
       describe('as both of them have different relationships', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [
               {
                 id: 1,
@@ -306,7 +306,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -329,7 +329,7 @@ describe('ObjectUtils', () => {
       });
       describe('as they do not possess the same number of fields', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [],
             relationships: [
               {
@@ -338,7 +338,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -361,7 +361,7 @@ describe('ObjectUtils', () => {
       });
       describe('as they do not have the same number of keys in fields', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [
               {
                 id: 1,
@@ -380,7 +380,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -403,7 +403,7 @@ describe('ObjectUtils', () => {
       });
       describe('as they do not possess the same number of relationships', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [
               {
                 id: 1,
@@ -421,7 +421,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -447,7 +447,7 @@ describe('ObjectUtils', () => {
         });
         describe('as they do not have the same number of fields in a relationship', () => {
           it('returns false', () => {
-            var firstObject = {
+            const firstObject = {
               fields: [
                 {
                   id: 1,
@@ -465,7 +465,7 @@ describe('ObjectUtils', () => {
                 }
               ]
             };
-            var secondObject = {
+            const secondObject = {
               fields: [
                 {
                   id: 1,
@@ -490,7 +490,7 @@ describe('ObjectUtils', () => {
       });
       describe('as they do not have the options', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             fields: [
               {
                 id: 1,
@@ -515,7 +515,7 @@ describe('ObjectUtils', () => {
             pagination: 'pager',
             service: 'no'
           };
-          var secondObject = {
+          const secondObject = {
             fields: [
               {
                 id: 1,
@@ -545,7 +545,7 @@ describe('ObjectUtils', () => {
       });
       describe('as they do not have the same table name', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             entityTableName: 'first',
             fields: [
               {
@@ -571,7 +571,7 @@ describe('ObjectUtils', () => {
             pagination: 'pager',
             service: 'no'
           };
-          var secondObject = {
+          const secondObject = {
             entityTableName: 'second',
             fields: [
               {
@@ -602,7 +602,7 @@ describe('ObjectUtils', () => {
       });
       describe('as they do not have the same comments', () => {
         it('returns false', () => {
-          var firstObject = {
+          const firstObject = {
             javadoc: 'My first comment',
             fields: [
               {
@@ -628,7 +628,7 @@ describe('ObjectUtils', () => {
             pagination: 'pager',
             service: 'no'
           };
-          var secondObject = {
+          const secondObject = {
             javadoc: 'My Second Comment',
             fields: [
               {

@@ -25,14 +25,14 @@ describe('::exportToJDL', () => {
   });
   describe('when passing valid arguments', () => {
     describe('when exporting json to entity JDL', () => {
-      var jdl = parseFromDir('./test/test_files/jhipster_app');
+      const jdl = parseFromDir('./test/test_files/jhipster_app');
       Exporter.exportToJDL(jdl);
-      var input = JDLReader.parseFromFiles(['./jhipster-jdl.jh']);
-      var entities_after = EntityParser.parse({
+      const input = JDLReader.parseFromFiles(['./jhipster-jdl.jh']);
+      const entities_after = EntityParser.parse({
         jdlObject: JDLParser.parse(input, 'sql'),
         databaseType: 'sql'
       });
-      var entities_before = {};
+      const entities_before = {};
       for (let entityName of ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task']) {
         entities_before[entityName] = readEntityJSON('./test/test_files/jhipster_app/.jhipster/' + entityName + '.json');
         entities_before[entityName].changelogDate = entities_after[entityName].changelogDate;

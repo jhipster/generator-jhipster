@@ -30,13 +30,13 @@ describe('JDLEntity', () => {
     });
     describe('when not passing the table name', () => {
       it('uses the names as value', () => {
-        var entity = new JDLEntity({name: 'Abc'});
+        const entity = new JDLEntity({name: 'Abc'});
         expect(entity.tableName).to.eq('Abc');
       });
     });
     describe('when passing arguments', () => {
       it('creates a new instance', () => {
-        var args = {
+        const args = {
           name: 'Abc',
           tableName: 'String',
           comment: 'comment',
@@ -47,7 +47,7 @@ describe('JDLEntity', () => {
             validations: [new JDLValidation()]
           })]
         };
-        var entity = new JDLEntity(args);
+        const entity = new JDLEntity(args);
         expect(entity.name).to.eq(args.name);
         expect(entity.tableName).to.eq(args.tableName);
         expect(entity.comment).to.eq(args.comment);
@@ -102,7 +102,7 @@ describe('JDLEntity', () => {
   describe('#addField', () => {
     describe('when adding an invalid field', () => {
       it('fails', () => {
-        var entity = new JDLEntity({
+        const entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String'
         });
@@ -122,11 +122,11 @@ describe('JDLEntity', () => {
     });
     describe('when adding a valid field', () => {
       it('works', () => {
-        var entity = new JDLEntity({
+        const entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String'
         });
-        var validField = new JDLField({name: 'myField', type: 'String'});
+        const validField = new JDLField({name: 'myField', type: 'String'});
         entity.addField(validField);
         expect(entity.fields).to.deep.eq({myField: validField});
       });
@@ -135,22 +135,22 @@ describe('JDLEntity', () => {
   describe('#toString', () => {
     describe('without a comment', () => {
       it('stringifies its content', () => {
-        var args = {
+        const args = {
           name: 'Abc',
           tableName: 'String'
         };
-        var entity = new JDLEntity(args);
+        const entity = new JDLEntity(args);
         expect(entity.toString()).to.eq(`entity ${args.name} (${args.tableName})`);
       });
     });
     describe('without fields', () => {
       it('stringifies its content', () => {
-        var args = {
+        const args = {
           name: 'Abc',
           tableName: 'String',
           comment: 'comment'
         };
-        var entity = new JDLEntity(args);
+        const entity = new JDLEntity(args);
         expect(entity.toString()).to.eq(
           `/**
  * ${args.comment}
@@ -161,18 +161,18 @@ entity ${args.name} (${args.tableName})`
     });
     describe('with fields', () => {
       it('stringifies its content', () => {
-        var entity = new JDLEntity({
+        const entity = new JDLEntity({
           name: 'Abc',
           tableName: 'String',
           comment: 'Entity comment'
         });
-        var field1 = new JDLField({
+        const field1 = new JDLField({
           name: 'myField',
           type: 'Integer',
           comment: 'Field comment',
           validations: [new JDLValidation()]
         });
-        var field2 = new JDLField({
+        const field2 = new JDLField({
           name: 'myOtherField',
           type: 'Long'
         });

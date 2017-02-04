@@ -8,14 +8,14 @@ const expect = require('chai').expect,
 describe('FormatUtils', () => {
   describe('::formatComment', () => {
     describe('when the comment is in the one-line form', () => {
-      var oneLineComment1 = ' comment ';
-      var oneLineComment2 = 'comment';
-      var oneLineComment3 = ' * a one line comment. ';
-      var oneLineComment4 = ' multi word\tcomment ';
-      var oneLineComment5 = 'multi word\tcomment';
-      var expectedResult1 = 'comment';
-      var expectedResult2 = 'a one line comment.';
-      var expectedResult3 = 'multi word\tcomment';
+      const oneLineComment1 = ' comment ';
+      const oneLineComment2 = 'comment';
+      const oneLineComment3 = ' * a one line comment. ';
+      const oneLineComment4 = ' multi word\tcomment ';
+      const oneLineComment5 = 'multi word\tcomment';
+      const expectedResult1 = 'comment';
+      const expectedResult2 = 'a one line comment.';
+      const expectedResult3 = 'multi word\tcomment';
 
       describe(buildTestTitle(oneLineComment1), () => {
         it('returns ' + buildTestTitle(expectedResult1), () => {
@@ -45,12 +45,12 @@ describe('FormatUtils', () => {
     });
 
     describe('when the comment is in the multi-line form', () => {
-      var multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
-      var multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
-      var multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
-      var expectedResult1 = '<p>first line of comment</p><br/>\n<p>second line</p>';
-      var expectedResult2 = '<p>first line of comment</p><br/>\n*<p>second line</p>';
-      var expectedResult3 = 'abcde\nfghij\nnothing';
+      const multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
+      const multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
+      const multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
+      const expectedResult1 = '<p>first line of comment</p><br/>\n<p>second line</p>';
+      const expectedResult2 = '<p>first line of comment</p><br/>\n*<p>second line</p>';
+      const expectedResult3 = 'abcde\nfghij\nnothing';
 
       describe(buildTestTitle(multiLineComment1), () => {
         it('returns ' + buildTestTitle(expectedResult1), () => {

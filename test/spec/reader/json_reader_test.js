@@ -40,7 +40,7 @@ describe('::parseFromDir', () => {
   });
   describe('when passing valid arguments', () => {
     describe('when reading a jhipster app dir', () => {
-      var content = parseFromDir('./test/test_files/jhipster_app');
+      const content = parseFromDir('./test/test_files/jhipster_app');
       it('reads it', () => {
         expect(content.entities.Country).not.to.be.undefined;
         expect(content.entities.Department).not.to.be.undefined;

@@ -36,13 +36,13 @@ describe('JDLField', () => {
     });
     describe('when passing arguments', () => {
       it('creates a new instance', () => {
-        var args = {
+        const args = {
           name: 'abc',
           type: 'String',
           comment: 'comment',
           validations: [new JDLValidation()]
         };
-        var field = new JDLField(args);
+        const field = new JDLField(args);
         expect(field.name).to.eq(args.name);
         expect(field.type).to.eq(args.type);
         expect(field.comment).to.eq(args.comment);
@@ -91,7 +91,7 @@ describe('JDLField', () => {
   describe('#addValidation', () => {
     describe('when adding an invalid validation', () => {
       it('fails', () => {
-        var field = new JDLField({
+        const field = new JDLField({
           name: 'abc',
           type: 'String',
           comment: 'comment'
@@ -112,12 +112,12 @@ describe('JDLField', () => {
     });
     describe('when adding a valid validation', () => {
       it('works', () => {
-        var field = new JDLField({
+        const field = new JDLField({
           name: 'abc',
           type: 'String',
           comment: 'comment'
         });
-        var validation = {name: VALIDATIONS.MIN, value: 42};
+        const validation = {name: VALIDATIONS.MIN, value: 42};
         field.addValidation(validation);
         expect(field.validations).to.deep.eq({min: validation});
       });
@@ -126,29 +126,29 @@ describe('JDLField', () => {
   describe('#toString', () => {
     describe('without comment', () => {
       it('stringifies the fields', () => {
-        var args = {
+        const args = {
           name: 'abc',
           type: 'String'
         };
-        var field = new JDLField(args);
+        const field = new JDLField(args);
         expect(field.toString()).to.eq(`${args.name} ${args.type}`);
       });
     });
     describe('without any validation', () => {
       it('stringifies the fields', () => {
-        var args = {
+        const args = {
           name: 'abc',
           type: 'String',
           comment: 'comment'
         };
-        var field = new JDLField(args);
+        const field = new JDLField(args);
         expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n`
           + `${args.name} ${args.type}`);
       });
     });
     describe('with everything', () => {
       it('stringifies the field', () => {
-        var args = {
+        const args = {
           name: 'abc',
           type: 'String',
           comment: 'comment',
@@ -157,7 +157,7 @@ describe('JDLField', () => {
             value: 42
           })]
         };
-        var field = new JDLField(args);
+        const field = new JDLField(args);
         expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n`
           + `${args.name} ${args.type} ${args.validations[0].name} `
           + `${args.validations[1].name}(${args.validations[1].value})`);

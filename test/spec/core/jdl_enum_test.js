@@ -33,7 +33,7 @@ describe('JDLEnum', () => {
     });
   });
   describe('#addValue', () => {
-    var jdlEnum = new JDLEnum({name: 'MyEnum'});
+    const jdlEnum = new JDLEnum({name: 'MyEnum'});
     describe('when not passing a value', () => {
       it('fails', () => {
         try {
@@ -62,8 +62,8 @@ describe('JDLEnum', () => {
   });
   describe('#toString', () => {
     it('stringifies the enum', () => {
-      var values = ['FRENCH', 'ENGLISH', 'ICELANDIC'];
-      var jdlEnum = new JDLEnum({
+      const values = ['FRENCH', 'ENGLISH', 'ICELANDIC'];
+      const jdlEnum = new JDLEnum({
         name: 'Language',
         values: values,
         comment: 'The language enumeration.'

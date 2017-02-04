@@ -31,8 +31,8 @@ describe('::parse', () => {
   });
   describe('when passing valid arguments', () => {
     describe('when reading JDL content', () => {
-      var input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
-      var content = parse(input);
+      const input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
+      const content = parse(input);
       it('reads it', () => {
         expect(content).not.to.be.null;
       });
@@ -94,19 +94,19 @@ describe('::parseFromFiles', () => {
   });
   describe('when passing valid arguments', () => {
     describe('when reading a single JDL file', () => {
-      var content = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
+      const content = parseFromFiles(['./test/test_files/valid_jdl.jdl']);
       it('reads it', () => {
         expect(content).not.to.be.null;
       });
     });
     describe('when reading more than one JDL file', () => {
-      var content = parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
+      const content = parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
       it('reads them', () => {
         expect(content).not.to.be.null;
       });
     });
     describe('when reading a complex JDL file', () => {
-      var content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+      const content = parseFromFiles(['./test/test_files/complex_jdl.jdl']);
       it('reads them', () => {
         expect(content).not.to.be.null;
       });
