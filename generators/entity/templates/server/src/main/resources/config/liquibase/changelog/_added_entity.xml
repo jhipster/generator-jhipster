@@ -11,7 +11,7 @@
     <property name="now" value="sysdate" dbms="oracle"/>
     <property name="now" value="GETDATE()" dbms="mssql"/>
 
-    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle,mssql"/>
+    <property name="autoIncrement" value="true" dbms="mysql,mariadb"/>
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
     <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
