@@ -348,7 +348,10 @@ module.exports = JhipsterClientGenerator.extend({
 
         if (!this.options['skip-install']) {
             if (this.clientPackageManager === 'yarn') {
-                this.spawnCommandSync('yarn');
+                var result = this.spawnCommandSync('yarn');
+                if (result.status !== 0) {
+                    this.error('yarn install failed.');
+                }
                 if (this.clientFramework === 'angular1') {
                     this.spawnCommandSync('bower', ['install']);
                 }
