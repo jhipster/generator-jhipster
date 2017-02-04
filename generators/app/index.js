@@ -117,8 +117,9 @@ module.exports = JhipsterGenerator.extend({
                     this.warning('Node is not found on your computer.');
                 } else {
                     var nodeVersion = semver.clean(stdout);
-                    if (semver.lt(nodeVersion, '6.9.0')) {
-                        this.warning('Your node version is too old (v' + nodeVersion + '). You should use at least Node ' + chalk.bold('v6.9.0+'));
+                    var nodeFromPackageJson = packagejs.engines.node;
+                    if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
+                        this.warning('Your NodeJS version is too old (' + nodeVersion + '). You should use at least NodeJS ' + chalk.bold(nodeFromPackageJson));
                     }
                 }
                 done();
