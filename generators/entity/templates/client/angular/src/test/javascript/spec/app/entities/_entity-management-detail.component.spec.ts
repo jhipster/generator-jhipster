@@ -11,20 +11,20 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
-import { <%= entityAngularJSName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
-import { <%= entityAngularJSName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularJSName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
+import { <%= entityAngularName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
+import { <%= entityAngularName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
 
 describe('Component Tests', () => {
 
-    describe('<%= entityAngularJSName %> Management Detail Component', () => {
-        let comp: <%= entityAngularJSName %>DetailComponent;
-        let fixture: ComponentFixture<<%= entityAngularJSName %>DetailComponent>;
-        let service: <%= entityAngularJSName %>Service;
+    describe('<%= entityAngularName %> Management Detail Component', () => {
+        let comp: <%= entityAngularName %>DetailComponent;
+        let fixture: ComponentFixture<<%= entityAngularName %>DetailComponent>;
+        let service: <%= entityAngularName %>Service;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                declarations: [<%= entityAngularJSName %>DetailComponent],
+                declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
                     MockBackend,
                     BaseRequestOptions,
@@ -48,9 +48,9 @@ describe('Component Tests', () => {
                         useClass: MockLanguageService
                     },
                     <%_ } _%>
-                    <%= entityAngularJSName %>Service
+                    <%= entityAngularName %>Service
                 ]
-            }).overrideComponent(<%= entityAngularJSName %>DetailComponent, {
+            }).overrideComponent(<%= entityAngularName %>DetailComponent, {
                 set: {
                     template: ''
                 }
@@ -58,16 +58,16 @@ describe('Component Tests', () => {
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(<%= entityAngularJSName %>DetailComponent);
+            fixture = TestBed.createComponent(<%= entityAngularName %>DetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(<%= entityAngularJSName %>Service);
+            service = fixture.debugElement.injector.get(<%= entityAngularName %>Service);
         });
 
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
             // GIVEN
-            spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularJSName %>(<%_
+            spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularName %>(<%_
             if (databaseType == 'sql') { %>10<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>'aaa'<% } %>)));
 
             // WHEN

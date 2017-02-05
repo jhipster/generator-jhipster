@@ -157,7 +157,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation, c
  * @param {boolean} enableTranslation - If translations are enabled or not
  * @param {string} clientFramework - The name of the client framework
  */
-Generator.prototype.addEntityToModule = function (entityInstance, entityClass, entityAngularJSName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
+Generator.prototype.addEntityToModule = function (entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
     try {
         if (clientFramework === 'angular1') {
             return;
@@ -170,7 +170,7 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             needle: 'jhipster-needle-add-entity-module-import',
             splicable: [
                 this.stripMargin(
-                    `|import \{ ${appName}${entityAngularJSName}Module \} from \'./${entityFolderName}/${entityFileName}.module\';`
+                    `|import \{ ${appName}${entityAngularName}Module \} from \'./${entityFolderName}/${entityFileName}.module\';`
                 )
             ]
         }, this);
@@ -180,7 +180,7 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
             needle: 'jhipster-needle-add-entity-module',
             splicable: [
                 this.stripMargin(
-                    `|${appName}${entityAngularJSName}Module,`
+                    `|${appName}${entityAngularName}Module,`
                 )
             ]
         }, this);

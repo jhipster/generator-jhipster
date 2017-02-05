@@ -418,7 +418,7 @@ module.exports = EntityGenerator.extend({
             this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityAngularJSName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
+            this.entityAngularName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
             this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityTranslationKey = this.entityInstance;
@@ -560,8 +560,8 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                 }
 
-                if (_.isUndefined(relationship.otherEntityAngularJSName)) {
-                    relationship.otherEntityAngularJSName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
+                if (_.isUndefined(relationship.otherentityAngularName)) {
+                    relationship.otherentityAngularName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
                 }
 
                 if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {

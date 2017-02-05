@@ -23,7 +23,7 @@ describe('Controller Tests', function() {
                 '<%= differentTypes[idx] %>': Mock<%= differentTypes[idx] %><% } %>
             };
             createController = function() {
-                $injector.get('$controller')("<%= entityAngularJSName %>DetailController", locals);
+                $injector.get('$controller')("<%= entityAngularName %>DetailController", locals);
             };
         }));
 

@@ -8,7 +8,7 @@ for (var idx in fields) {
 _%>
 
 currentAccount: any;
-    <%= entityInstancePlural %>: <%= entityAngularJSName %>[];
+    <%= entityInstancePlural %>: <%= entityAngularName %>[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -31,7 +31,7 @@ currentAccount: any;
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityAngularJSName %>Service,
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
         private principal: Principal,

@@ -13,16 +13,16 @@ import { JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } fr
 <%_ } else if (fieldsContainBlob) { _%>
 import { DataUtils } from 'ng-jhipster';
 <%_ } _%>
-import { <%= entityAngularJSName %> } from './<%= entityFileName %>.model';
-import { <%= entityAngularJSName %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
-export class <%= entityAngularJSName %>DetailComponent implements OnInit, OnDestroy {
+export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestroy {
 
-    <%= entityInstance %>: <%= entityAngularJSName %>;
+    <%= entityInstance %>: <%= entityAngularName %>;
     private subscription: any;
 
     constructor(
@@ -32,7 +32,7 @@ export class <%= entityAngularJSName %>DetailComponent implements OnInit, OnDest
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: DataUtils,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityAngularJSName %>Service,
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private route: ActivatedRoute
     ) {
         <%_ if (enableTranslation) { _%>
