@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 
 import { PasswordResetInit } from './password-reset-init.service';
@@ -7,7 +7,7 @@ import { PasswordResetInit } from './password-reset-init.service';
     selector: '<%=jhiPrefix%>-password-reset-init',
     templateUrl: './password-reset-init.component.html'
 })
-export class PasswordResetInitComponent implements OnInit {
+export class PasswordResetInitComponent implements OnInit, AfterViewInit {
     error: string;
     errorEmailNotExists: string;
     resetAccount: any;
