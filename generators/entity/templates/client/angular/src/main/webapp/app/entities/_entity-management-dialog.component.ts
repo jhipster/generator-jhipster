@@ -17,7 +17,7 @@ import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_ for (var rel of differentRelationships) { _%>
-import { <%= rel.otherentityAngularName %>, <%= rel.otherentityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
+import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
 <%_ } _%>
 <%_
 // TODO replace ng-file-upload dependency by an ng2 depedency
@@ -63,7 +63,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         }
         if (!contains(queries, query)) {
             queries.push(query);
-            variables.push(variableName + ': ' + relationships[idx].otherentityAngularName + '[];');
+            variables.push(variableName + ': ' + relationships[idx].otherEntityAngularName + '[];');
         }
     }
     for (idx in variables) { %>
@@ -79,7 +79,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         <%_ } _%>
         private alertService: AlertService,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {%>
-        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherentityAngularName %>Service,<% } %>
+        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% } %>
         private eventManager: EventManager,
         private router: Router
     ) {
@@ -155,7 +155,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
     _%>
 
-    track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherentityAngularName -%>) {
+    track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityAngularName -%>) {
         return item.id;
     }
     <%_ entitiesSeen.push(otherEntityNameCapitalized); } } _%>
