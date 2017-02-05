@@ -42,10 +42,12 @@
                     <div *ngFor="let authority of user.authorities">
                         <span class="tag tag-info">{{ authority }}</span>
                     </div>
-                </td><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                </td>
+                <%_ if (databaseType !== 'cassandra') { _%>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{user.lastModifiedBy}}</td>
-                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
+                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                <%_ } _%>
                 <td class="text-xs-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

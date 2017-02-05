@@ -146,12 +146,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return applicationType === 'microservice';
+                return applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway');
             },
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', applicationType === 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway'));
             },
             choices: [
                 {
@@ -175,12 +175,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return response.enableSocialSignIn;
+                return response.authenticationType === 'oauth2' && !response.databaseType;
             },
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.enableSocialSignIn);
+                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.databaseType);
             },
             choices: [
                 {
@@ -196,33 +196,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice';
+                return !response.databaseType;
             },
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
-            },
-            choices: [
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice';
-            },
-            type: 'list',
-            name: 'databaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', !response.databaseType);
             },
             choices: [
                 {
