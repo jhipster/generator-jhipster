@@ -1,6 +1,9 @@
 import { Injectable, Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+<%_ if (fieldsContainZonedDateTime) { _%>
+import { DatePipe } from '@angular/common';
+<%_ } _%>
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 <%_
@@ -13,7 +16,11 @@ _%>
 export class <%= entityClass %>PopupService {
     private isOpen = false;
     constructor (
+        <%_ if (fieldsContainZonedDateTime) { _%>
+        private datePipe: DatePipe,
+        <%_ } _%>
         private modalService: NgbModal,
+        private router: Router,
         private <%= entityInstance %>Service: <%= entityClass %>Service
     ) {}
 
@@ -27,7 +34,7 @@ export class <%= entityClass %>PopupService {
             this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
                 <%_ if (hasDate) { _%>
                     <%_ for (idx in fields) { _%>
-                        <%_ if (fields[idx].fieldType == 'LocalDate' || fields[idx].fieldType == 'ZonedDateTime') { _%>
+                        <%_ if (fields[idx].fieldType == 'LocalDate') { _%>
                 if (<%= entityInstance %>.<%=fields[idx].fieldName%>) {
                     <%= entityInstance %>.<%=fields[idx].fieldName%> = {
                         year: <%= entityInstance %>.<%=fields[idx].fieldName%>.getFullYear(),
@@ -36,7 +43,10 @@ export class <%= entityClass %>PopupService {
                     };
                 }
                         <%_ } _%>
-                    <%_ } _%>
+                        <%_ if (fields[idx].fieldType == 'ZonedDateTime') { _%>
+                <%= entityInstance %>.<%=fields[idx].fieldName%> = this.datePipe.transform(<%= entityInstance %>.<%=fields[idx].fieldName%>, 'yyyy-MM-ddThh:mm');
+                        <%_ } _%>
+                <%_ } _%>
                 <%_ } _%>
                 this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>);
             });
@@ -55,9 +65,11 @@ export class <%= entityClass %>PopupService {
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
         modalRef.result.then(result => {
             console.log(`Closed with: ${result}`);
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {
             console.log(`Dismissed ${reason}`);
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         });
         return modalRef;

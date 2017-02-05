@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 import { JhiLanguageService } from 'ng-jhipster';
@@ -10,7 +10,7 @@ import { LoginModalService } from '../../../shared';
     selector: '<%=jhiPrefix%>-password-reset-finish',
     templateUrl: './password-reset-finish.component.html'
 })
-export class PasswordResetFinishComponent implements OnInit {
+export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
     confirmPassword: string;
     doNotMatch: string;
     error: string;

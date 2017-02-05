@@ -31,6 +31,7 @@ module.exports = HerokuGenerator.extend({
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
         this.herokuAppName = this.config.get('herokuAppName');
+        this.dynoSize = 'Free';
     },
 
     prompting: function () {
@@ -46,6 +47,9 @@ module.exports = HerokuGenerator.extend({
                 } else {
                     var json = JSON.parse(stdout);
                     this.herokuAppName = json['app']['name'];
+                    if (json['dynos'].length > 0) {
+                        this.dynoSize = json['dynos'][0]['size'];
+                    }
                     this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
                     this.herokuAppExists = true;
                     this.config.set('herokuAppName', this.herokuAppName);
@@ -226,7 +230,7 @@ module.exports = HerokuGenerator.extend({
             }
 
             this.log(chalk.bold('\nProvisioning addons'));
-            exec(`heroku addons:create ${dbAddOn}`, {}, function (err, stdout, stderr) {
+            exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, {}, function (err, stdout, stderr) {
                 if (err) {
                     this.log('No new addons created');
                 } else {

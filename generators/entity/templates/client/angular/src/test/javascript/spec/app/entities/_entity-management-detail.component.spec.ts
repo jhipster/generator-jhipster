@@ -5,12 +5,12 @@ import { OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
-import { DateUtils } from 'ng-jhipster';
+import { DateUtils, DataUtils } from 'ng-jhipster';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/language.service';
+import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
-import { MockActivatedRoute } from '../../../helpers/activated-route.service';
+import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { <%= entityAngularJSName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityClass %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityClass %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
@@ -29,10 +29,11 @@ describe('Component Tests', () => {
                     MockBackend,
                     BaseRequestOptions,
                     DateUtils,
+                    DataUtils,
                     DatePipe,
                     {
                         provide: ActivatedRoute,
-                        useClass: MockActivatedRoute
+                        useValue: new MockActivatedRoute({id: 123})
                     },
                     {
                         provide: Http,
@@ -66,14 +67,16 @@ describe('Component Tests', () => {
         describe('OnInit', () => {
             it('Should call load all on init', () => {
             // GIVEN
-            spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityClass %>(10)));
+            spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityClass %>(<%_
+            if (databaseType == 'sql') { %>10<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>'aaa'<% } %>)));
 
             // WHEN
             comp.ngOnInit();
 
             // THEN
-            expect(service.find).toHaveBeenCalledWith('entityId');
-            expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: 10}));
+            expect(service.find).toHaveBeenCalledWith(123);
+            expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%_
+            if (databaseType == 'sql') { %>10<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>'aaa'<% } %>}));
             });
         });
     });

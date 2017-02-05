@@ -4,7 +4,7 @@ import { Http, BaseRequestOptions } from '@angular/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/language.service';
+import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
 import { <%=jhiPrefixCapitalized%>HealthService } from '../../../../../../main/webapp/app/admin/health/health.service';

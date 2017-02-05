@@ -1,15 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, JhiLanguageService } from 'ng-jhipster';
 
-import { User } from './user.model';
 import { UserModalService } from './user-modal.service';
-import { UserService } from './user.service';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from '../../shared';
-<%_ }_%>
+import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-user-mgmt-dialog',
@@ -29,8 +25,7 @@ export class UserMgmtDialogComponent implements OnInit {
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
         private userService: UserService,
-        private eventManager: EventManager,
-        private router: Router
+        private eventManager: EventManager
     ) {}
 
     ngOnInit() {
@@ -46,7 +41,6 @@ export class UserMgmtDialogComponent implements OnInit {
 
     clear() {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     save() {
@@ -63,7 +57,6 @@ export class UserMgmtDialogComponent implements OnInit {
         this.eventManager.broadcast({ name: 'userListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
-        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     private onSaveError() {

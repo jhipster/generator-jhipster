@@ -30,7 +30,13 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
             ],
             target: 'http://127.0.0.1:<%= serverPort %>',
             secure: false
-        }]
+        }<% if (websocket === 'spring-websocket') { %>,{
+            context: [
+                '/websocket'
+            ],
+            target: 'ws://127.0.0.1:<%= serverPort %>',
+            ws: true
+        }<% } %>]
     },
     output: {
         path: path.resolve('<%= BUILD_DIR %>www') ,
@@ -43,7 +49,7 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
             loaders: [
                 'tslint-loader'
             ],
-            exclude: ['node_modules', /reflect-metadata\/Reflect\.ts/]
+            exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
         }]
     },
     plugins: [
@@ -57,6 +63,9 @@ module.exports = webpackMerge(commonConfig({env: ENV}), {
         new ExtractTextPlugin('styles.css'),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin(),
-        new writeFilePlugin()
+        new writeFilePlugin(),
+        new webpack.WatchIgnorePlugin([
+            path.resolve('./src/test'),
+        ])
     ]
 });

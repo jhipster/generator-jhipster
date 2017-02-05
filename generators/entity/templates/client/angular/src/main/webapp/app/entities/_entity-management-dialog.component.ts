@@ -7,20 +7,22 @@ for (var idx in fields) {
 }
 _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
+import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
-<%_ for (var rel of differentRelationships) { _%> 
-import { <%= rel.otherEntityNameCapitalized %>, <%= rel.otherEntityNameCapitalized %>Service } from '../../<%= rel.otherEntityModulePath %>';
+<%_ for (var rel of differentRelationships) { _%>
+import { <%= rel.otherEntityNameCapitalized %>, <%= rel.otherEntityNameCapitalized %>Service } from '../<%= rel.otherEntityModulePath %>';
 <%_ } _%>
+<%_
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
+_%>
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'
@@ -68,15 +70,17 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
     <%- variables[idx] %>
     <%_ } _%>
     constructor(
+        public activeModal: NgbActiveModal,
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        public activeModal: NgbActiveModal,
+        <%_ if (fieldsContainBlob) { _%>
+        private dataUtils: DataUtils,
+        <%_ } _%>
         private alertService: AlertService,
         private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
-        private eventManager: EventManager,
-        private router: Router
+        private eventManager: EventManager
     ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
@@ -90,28 +94,47 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         <%- queries[idx] %>
         <%_ } _%>
     }
+    <%_ if (fieldsContainBlob) { _%>
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
 
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
+    setFileData($event, <%= entityInstance %>, field, isImage) {
+        if ($event.target.files && $event.target.files[0]) {
+            let $file = $event.target.files[0];
+            if (isImage && !/^image\//.test($file.type)) {
+                return;
+            }
+            this.dataUtils.toBase64($file, (base64Data) => {
+                <%= entityInstance %>[field] = base64Data;
+                <%= entityInstance %>[`${field}ContentType`] = $file.type;
+            });
+        }
+    }
+   <%_ } _%>
     clear () {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     save () {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
-                .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityClass %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
-                .subscribe((res: Response) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityClass %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 
-    private onSaveSuccess (result) {
+    private onSaveSuccess (result: <%= entityClass %>) {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
-        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     private onSaveError (error) {

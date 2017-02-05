@@ -75,7 +75,7 @@
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <jcache.version>1.0.0</jcache.version>
         <%_ } _%>
-        <jhipster.server.version>0.0.11</jhipster.server.version>
+        <jhipster.server.version>1.0.0</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
@@ -102,9 +102,9 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <metrics-spring.version>3.1.3</metrics-spring.version>
-        <node.version>v6.9.4</node.version>
+        <node.version>v6.9.5</node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
-        <npm.version>3.10.9</npm.version>
+        <npm.version>4.1.2</npm.version>
         <%_ } _%>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>

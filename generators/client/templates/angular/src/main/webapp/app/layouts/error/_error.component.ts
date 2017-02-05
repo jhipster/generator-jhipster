@@ -16,6 +16,6 @@ export class ErrorComponent implements OnInit {
     }
 
     ngOnInit() {
-        // TODO need to see how the error message can be passed here
+        <%_ // TODO need to see how the error message can be passed here _%>
     }
 }

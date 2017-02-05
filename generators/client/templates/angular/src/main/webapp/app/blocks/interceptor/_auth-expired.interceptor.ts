@@ -55,7 +55,7 @@ export class AuthExpiredInterceptor extends HttpInterceptor {
         let self = this;
 
         return <Observable<Response>> observable.catch((error) => {
-            // TODO this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach.. this needs to be updated
+            <%_ // TODO this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach.. this needs to be updated _%>
             if (error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
                 let authServerProvider = self.injector.get(AuthServerProvider);
                 let destination = this.stateStorageService.getDestinationState();

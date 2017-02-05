@@ -6,7 +6,8 @@ var util = require('util'),
     cleanup = require('../cleanup'),
     prompts = require('./prompts'),
     packagejs = require('../../package.json'),
-    exec = require('child_process').exec;
+    exec = require('child_process').exec,
+    semver = require('semver');
 
 var JhipsterGenerator = generators.Base.extend({});
 
@@ -102,6 +103,23 @@ module.exports = JhipsterGenerator.extend({
                     var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                     if (!javaVersion.match(/1\.8/)) {
                         this.warning('Java 8 is not found on your computer. Your Java version is: ' + chalk.yellow(javaVersion));
+                    }
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkNode: function () {
+            if (this.skipChecks || this.skipServer) return;
+            var done = this.async();
+            exec('node -v', function (err, stdout, stderr) {
+                if (err) {
+                    this.warning('NodeJS is not found on your system.');
+                } else {
+                    var nodeVersion = semver.clean(stdout);
+                    var nodeFromPackageJson = packagejs.engines.node;
+                    if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
+                        this.warning('Your NodeJS version is too old (' + nodeVersion + '). You should use at least NodeJS ' + chalk.bold(nodeFromPackageJson));
                     }
                 }
                 done();

@@ -11,6 +11,7 @@ currentAccount: any;
     <%= entityInstancePlural %>: <%= entityClass %>[];
     error: any;
     success: any;
+    eventSubscriber: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
     <%_ } _%>
@@ -35,6 +36,9 @@ currentAccount: any;
         private alertService: AlertService,
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
+        <%_ if (fieldsContainBlob) { _%>
+        private dataUtils: DataUtils,
+        <%_ } _%>
         private router: Router,
         private eventManager: EventManager<%_ if (databaseType !== 'cassandra') { _%>,
         private paginationUtil: PaginationUtil,
@@ -127,12 +131,3 @@ currentAccount: any;
         this.loadAll();
     }
     <%_ } _%>
-    private onSuccess (data, headers) {
-        <%_ if (databaseType !== 'cassandra') { _%>
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
-        this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
-        <%_ } _%>
-        this.<%= entityInstancePlural %> = data;
-    }

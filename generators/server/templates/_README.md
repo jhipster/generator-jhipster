@@ -5,7 +5,7 @@ let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 if (clientPackageManager === 'yarn') {
-    clientPackageMngrname = 'Yarn';
+    clientPackageMngrName = 'Yarn';
     clientPackageMngrAddGlobal = 'global add';
     clientPackageMngrAdd = 'add --exact';
     clientPackageMngrAddDev = 'add --dev --exact';
@@ -45,7 +45,7 @@ You will only need to run this command when dependencies change in `package.json
     <%= clientPackageManager %> install
 
 <%_ if (clientFramework === 'angular2') { _%>
-We use npm scripts and [Webpack][] as our build system.
+We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
 <%_ } else { _%>
 We use [Gulp][] as our build system. Install the Gulp command-line tool globally with:

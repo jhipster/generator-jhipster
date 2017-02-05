@@ -9,7 +9,9 @@ _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
+import { JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+<%_ } else if (fieldsContainBlob) { _%>
+import { DataUtils } from 'ng-jhipster';
 <%_ } _%>
 import { <%= entityClass %> } from './<%= entityFileName %>.model';
 import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
@@ -26,6 +28,9 @@ export class <%= entityAngularJSName %>DetailComponent implements OnInit, OnDest
     constructor(
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        <%_ if (fieldsContainBlob) { _%>
+        private dataUtils: DataUtils,
         <%_ } _%>
         private <%= entityInstance %>Service: <%= entityClass %>Service,
         private route: ActivatedRoute
@@ -46,7 +51,15 @@ export class <%= entityAngularJSName %>DetailComponent implements OnInit, OnDest
             this.<%= entityInstance %> = <%= entityInstance %>;
         });
     }
+    <%_ if (fieldsContainBlob) { _%>
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
 
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+    <%_ } _%>
     previousState() {
         window.history.back();
     }

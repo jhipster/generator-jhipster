@@ -9,6 +9,7 @@ _%>
 
     <%= entityInstancePlural %>: <%= entityClass %>[];
     currentAccount: any;
+    eventSubscriber: Subscription;
     itemsPerPage: number;
     links: any;
     page: any;
@@ -18,10 +19,6 @@ _%>
     totalItems: number;
     <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
-    <%_ } _%>
-    <%_ if (fieldsContainBlob) { _%>
-    byteSize: any;
-    openFile: any;
     <%_ } _%>
 
     constructor(
@@ -48,10 +45,6 @@ _%>
         };
         this.predicate = 'id';
         this.reverse = true;
-        <%_ if (fieldsContainBlob) { _%>
-        this.openFile = dataUtils.openFile;
-        this.byteSize = dataUtils.byteSize;
-        <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.currentSearch = activatedRoute.snapshot.params['search'] ? activatedRoute.snapshot.params['search'] : '';
         <%_ } _%>
@@ -124,17 +117,3 @@ _%>
         this.loadAll();
     }
     <%_ } _%>
-
-    private onSuccess(data, headers) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
-        for (let i = 0; i < data.length; i++) {
-            this.<%= entityInstancePlural %>.push(data[i]);
-        }
-    }
-
-    registerChangeIn<%= entityClassPlural %>() {
-        this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => {
-            this.reset();
-        });
-    }

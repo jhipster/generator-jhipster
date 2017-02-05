@@ -161,22 +161,6 @@ entity tables helpers
    justify-content: flex-end;
 }
 
-.jh-table > tbody > tr > td {
-    /* Align text in td verifically (top aligned by Bootstrap) */
-    vertical-align: middle;
-}
-
-.jh-table > thead > tr > th > .glyphicon-sort, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes-alt {
-    /* less visible sorting icons */
-    opacity: 0.5;
-}
-
-.jh-table > thead > tr > th > .glyphicon-sort:hover, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes:hover, .jh-table > thead > tr > th > .glyphicon-sort-by-attributes-alt:hover {
-    /* full visible sorting icons and pointer when mouse is over them */
-    opacity: 1;
-    cursor: pointer;
-}
-
 /* ==========================================================================
 entity detail page css
 ========================================================================== */

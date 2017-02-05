@@ -11,6 +11,9 @@ import {
     AuthServerProvider,
     <%_ } _%>
     AccountService,
+    <%_ if (!skipUserManagement) { _%>
+    UserService,
+    <%_ } _%>
     StateStorageService,
     LoginService,
     LoginModalService,
@@ -58,6 +61,9 @@ import {
         SocialService,
         <%_ } _%>
         AuthService,
+        <%_ if (!skipUserManagement) { _%>
+        UserService,
+        <%_ } _%>
         DatePipe
     ],
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],

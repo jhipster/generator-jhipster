@@ -15,9 +15,9 @@ import { DateUtils } from 'ng-jhipster';
 @Injectable()
 export class <%= entityClass %>Service {
 
-    private resourceUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/<%= entityApiUrl %>';
+    private resourceUrl = '<% if (applicationType == 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
     <%_ if(searchEngine === 'elasticsearch') { _%>
-    private resourceSearchUrl: string = <% if (applicationType == 'gateway' && locals.microserviceName) {%> '<%= microserviceName.toLowerCase() %>/' +<% } %> 'api/_search/<%= entityApiUrl %>';
+    private resourceSearchUrl = '<% if (applicationType == 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: DateUtils<% } %>) { }
@@ -32,7 +32,7 @@ export class <%= entityClass %>Service {
         let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
+            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
@@ -51,7 +51,7 @@ export class <%= entityClass %>Service {
         let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
-            .convertLocalDateToServer(this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>));
+            .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } if (fields[idx].fieldType == 'ZonedDateTime') { %>
         copy.<%=fields[idx].fieldName%> = this.dateUtils.toDate(<%= entityInstance %>.<%=fields[idx].fieldName%>);
         <%_ } } _%>
@@ -79,7 +79,32 @@ export class <%= entityClass %>Service {
         });
     }
 
-<%_ if(hasDate) { _%>
+    query(req?: any): Observable<Response> {
+        let options = this.createRequestOption(req);
+        <%_ // TODO Use Response class from @angular/http when the body field will be accessible  directly _%>
+        return this.http.get(this.resourceUrl, options)
+            <%_ if(hasDate) { _%>
+            .map((res: any) => this.convertResponse(res))
+            <%_ } _%>
+        ;
+    }
+
+    delete(id: number): Observable<Response> {
+        return this.http.delete(`${this.resourceUrl}/${id}`);
+    }
+
+    <%_ if(searchEngine === 'elasticsearch') { _%>
+    search(req?: any): Observable<Response> {
+        let options = this.createRequestOption(req);
+        return this.http.get(this.resourceSearchUrl, options)
+            <%_ if(hasDate) { _%>
+            .map((res: any) => this.convertResponse(res))
+            <%_ } _%>
+        ;
+    }
+    <%_ } _%>
+
+    <%_ if(hasDate) { _%>
     private convertResponse(res: any): any {
         let jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {
@@ -97,7 +122,7 @@ export class <%= entityClass %>Service {
         res._body = jsonResponse;
         return res;
     }
-<%_ } _%>
+    <%_ } _%>
 
     private createRequestOption(req?: any): BaseRequestOptions {
         let options: BaseRequestOptions = new BaseRequestOptions();
@@ -114,29 +139,4 @@ export class <%= entityClass %>Service {
         }
         return options;
     }
-
-    query(req?: any): Observable<Response> {
-        let options = this.createRequestOption(req);
-        // TODO Use Response class from @angular/http when the body field will be accessible directly
-        return this.http.get(this.resourceUrl, options)
-            <%_ if(hasDate) { _%>
-            .map((res: any) => { return this.convertResponse(res); })
-            <%_ } _%>
-        ;
-    }
-
-    delete(id: number): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
-    }
-
-    <%_ if(searchEngine === 'elasticsearch') { _%>
-    search(req?: any): Observable<Response> {
-        let options = this.createRequestOption(req);
-        return this.http.get(`${this.resourceSearchUrl}`, options)
-            <%_ if(hasDate) { _%>
-            .map((res: any) => { return this.convertResponse(res); })
-            <%_ } _%>
-        ;
-    }
-    <%_ } _%>
 }

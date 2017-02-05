@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiLanguageService } from 'ng-jhipster';
 
@@ -9,7 +9,7 @@ import { LoginModalService } from '../../shared';
     selector: '<%=jhiPrefix%>-register',
     templateUrl: './register.component.html'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, AfterViewInit {
 
     confirmPassword: string;
     doNotMatch: string;
@@ -52,13 +52,13 @@ export class RegisterComponent implements OnInit {
                 this.registerAccount.langKey = key;
                 this.registerService.save(this.registerAccount).subscribe(() => {
                     this.success = true;
-                }, this.processError);
+                }, (response) => this.processError(response));
             });
 <%_ } else { _%>
             this.registerAccount.langKey = 'en';
             this.registerService.save(this.registerAccount).subscribe(() => {
                 this.success = true;
-            }, this.processError);
+            }, (response) => this.processError(response));
 <%_ } _%>
         }
     }
@@ -68,11 +68,11 @@ export class RegisterComponent implements OnInit {
     }
 
     private processError(response) {
-        // TODO handle this.logout(); on error
+        <%_ // TODO handle this.logout(); on error _%>
         this.success = null;
-        if (response.status === 400 && response.data === 'login already in use') {
+        if (response.status === 400 && response._body === 'login already in use') {
             this.errorUserExists = 'ERROR';
-        } else if (response.status === 400 && response.data === 'e-mail address already in use') {
+        } else if (response.status === 400 && response._body === 'e-mail address already in use') {
             this.errorEmailExists = 'ERROR';
         } else {
             this.error = 'ERROR';
