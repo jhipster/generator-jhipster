@@ -560,6 +560,10 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                 }
 
+                if (_.isUndefined(relationship.otherEntityAngularJSName)) {
+                    relationship.otherEntityAngularJSName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
+                }
+
                 if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {
                     relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
                 }

@@ -51,7 +51,7 @@ for (idx in relationships) {
     }
     variables.push(fieldName + '?: ' + fieldType);
 }_%>
-export class <%= entityClass %> {
+export class <%= entityAngularJSName %> {
     constructor(<% for (idx in variables) { %>
         public <%- variables[idx] %>,<% } %>
     ) { }

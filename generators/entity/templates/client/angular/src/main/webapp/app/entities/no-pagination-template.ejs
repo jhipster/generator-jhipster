@@ -6,7 +6,7 @@ for (var idx in fields) {
     }
 }
 _%>
-<%= entityInstancePlural %>: <%= entityClass %>[];
+<%= entityInstancePlural %>: <%= entityAngularJSName %>[];
     currentAccount: any;
     eventSubscriber: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -17,7 +17,7 @@ _%>
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        private <%= entityInstance %>Service: <%= entityAngularJSName %>Service,
         private alertService: AlertService,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: DataUtils,

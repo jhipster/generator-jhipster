@@ -13,11 +13,11 @@ import { Response } from '@angular/http';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageService<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
-import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
-import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularJSName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularJSName %>PopupService } from './<%= entityFileName %>-popup.service';
+import { <%= entityAngularJSName %>Service } from './<%= entityFileName %>.service';
 <%_ for (var rel of differentRelationships) { _%>
-import { <%= rel.otherEntityNameCapitalized %>, <%= rel.otherEntityNameCapitalized %>Service } from '../<%= rel.otherEntityModulePath %>';
+import { <%= rel.otherEntityAngularJSName %>, <%= rel.otherEntityAngularJSName%>Service } from '../<%= rel.otherEntityModulePath %>';
 <%_ } _%>
 <%_
 // TODO replace ng-file-upload dependency by an ng2 depedency
@@ -29,7 +29,7 @@ _%>
 })
 export class <%= entityAngularJSName %>DialogComponent implements OnInit {
 
-    <%= entityInstance %>: <%= entityClass %>;
+    <%= entityInstance %>: <%= entityAngularJSName %>;
     authorities: any[];
     isSaving: boolean;
     <%_
@@ -63,7 +63,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         }
         if (!contains(queries, query)) {
             queries.push(query);
-            variables.push(variableName + ': ' + relationships[idx].otherEntityNameCapitalized + '[];');
+            variables.push(variableName + ': ' + relationships[idx].otherEntityAngularJSName + '[];');
         }
     }
     for (idx in variables) { %>
@@ -78,8 +78,8 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         private dataUtils: DataUtils,
         <%_ } _%>
         private alertService: AlertService,
-        private <%= entityInstance %>Service: <%= entityClass %>Service,<% for (idx in differentRelationships) {%>
-        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityNameCapitalized %>Service,<% } %>
+        private <%= entityInstance %>Service: <%= entityAngularJSName %>Service,<% for (idx in differentRelationships) {%>
+        private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularJSName %>Service,<% } %>
         private eventManager: EventManager,
         private router: Router
     ) {
@@ -126,14 +126,14 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         this.isSaving = true;
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityClass %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityAngularJSName %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityClass %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityAngularJSName %>) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 
-    private onSaveSuccess (result: <%= entityClass %>) {
+    private onSaveSuccess (result: <%= entityAngularJSName %>) {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
@@ -155,7 +155,7 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
             if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
     _%>
 
-    track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityNameCapitalized -%>) {
+    track<%- otherEntityNameCapitalized -%>ById(index: number, item: <%- relationships[idx].otherEntityAngularJSName -%>) {
         return item.id;
     }
     <%_ entitiesSeen.push(otherEntityNameCapitalized); } } _%>
@@ -185,7 +185,7 @@ export class <%= entityAngularJSName %>PopupComponent implements OnInit, OnDestr
 
     constructor (
         private route: ActivatedRoute,
-        private <%= entityInstance %>PopupService: <%= entityClass %>PopupService
+        private <%= entityInstance %>PopupService: <%= entityAngularJSName %>PopupService
     ) {}
 
     ngOnInit() {

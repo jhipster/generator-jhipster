@@ -3,8 +3,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainZonedDateTime) { _%>
 import { DatePipe } from '@angular/common';
 <%_ } _%>
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
-import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularJSName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularJSName %>Service } from './<%= entityFileName %>.service';
 <%_
 var hasDate = false;
 if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
@@ -12,14 +12,14 @@ if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
 }
 _%>
 @Injectable()
-export class <%= entityClass %>PopupService {
+export class <%= entityAngularJSName %>PopupService {
     private isOpen = false;
     constructor (
         <%_ if (fieldsContainZonedDateTime) { _%>
         private datePipe: DatePipe,
         <%_ } _%>
         private modalService: NgbModal,
-        private <%= entityInstance %>Service: <%= entityClass %>Service
+        private <%= entityInstance %>Service: <%= entityAngularJSName %>Service
     ) {}
 
     open (component: Component, id?: number | any): NgbModalRef {
@@ -49,15 +49,15 @@ export class <%= entityClass %>PopupService {
                 this.<%= entityInstance %>ModalRef(component, <%= entityInstance %>);
             });
         } else {
-            return this.<%= entityInstance %>ModalRef(component, new <%= entityClass %>());
+            return this.<%= entityInstance %>ModalRef(component, new <%= entityAngularJSName %>());
         }
     }
 
     <%_ if (entityInstance.length <= 30) { _%>
-    <%= entityInstance %>ModalRef(component: Component, <%= entityInstance %>: <%= entityClass %>): NgbModalRef {
+    <%= entityInstance %>ModalRef(component: Component, <%= entityInstance %>: <%= entityAngularJSName %>): NgbModalRef {
     <%_ } else { _%>
     <%= entityInstance %>ModalRef(component: Component,
-        <%= entityInstance %>: <%= entityClass %>): NgbModalRef {
+        <%= entityInstance %>: <%= entityAngularJSName %>): NgbModalRef {
     <%_ } _%>
         let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;

@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil<% if (enableTranslation) { %>, JhiLanguageService<% } %>, AlertService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
-import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularJSName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularJSName %>Service } from './<%= entityFileName %>.service';
 import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
@@ -33,7 +33,7 @@ export class <%= entityAngularJSName %>Component implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: <%= entityClass %>) {
+    trackId (index: number, item: <%= entityAngularJSName %>) {
         return item.id;
     }
 

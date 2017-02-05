@@ -8,18 +8,18 @@ import { <%= angular2AppName %>AdminModule } from '../../admin/admin.module';
 <%_ }} _%>
 
 import {
-    <%= entityClass %>Service,
-    <%= entityClass %>PopupService,
-    <%= entityClass %>Component,
-    <%= entityClass %>DetailComponent,
-    <%= entityClass %>DialogComponent,
-    <%= entityClass %>PopupComponent,
-    <%= entityClass %>DeletePopupComponent,
-    <%= entityClass %>DeleteDialogComponent,
+    <%= entityAngularJSName %>Service,
+    <%= entityAngularJSName %>PopupService,
+    <%= entityAngularJSName %>Component,
+    <%= entityAngularJSName %>DetailComponent,
+    <%= entityAngularJSName %>DialogComponent,
+    <%= entityAngularJSName %>PopupComponent,
+    <%= entityAngularJSName %>DeletePopupComponent,
+    <%= entityAngularJSName %>DeleteDialogComponent,
     <%= entityInstance %>Route,
     <%= entityInstance %>PopupRoute,
     <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-    <%= entityClass %>ResolvePagingParams,
+    <%= entityAngularJSName %>ResolvePagingParams,
     <%_ } _%>
 } from './';
 
@@ -38,27 +38,27 @@ let ENTITY_STATES = [
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
     declarations: [
-        <%= entityClass %>Component,
-        <%= entityClass %>DetailComponent,
-        <%= entityClass %>DialogComponent,
-        <%= entityClass %>DeleteDialogComponent,
-        <%= entityClass %>PopupComponent,
-        <%= entityClass %>DeletePopupComponent,
+        <%= entityAngularJSName %>Component,
+        <%= entityAngularJSName %>DetailComponent,
+        <%= entityAngularJSName %>DialogComponent,
+        <%= entityAngularJSName %>DeleteDialogComponent,
+        <%= entityAngularJSName %>PopupComponent,
+        <%= entityAngularJSName %>DeletePopupComponent,
     ],
     entryComponents: [
-        <%= entityClass %>Component,
-        <%= entityClass %>DialogComponent,
-        <%= entityClass %>PopupComponent,
-        <%= entityClass %>DeleteDialogComponent,
-        <%= entityClass %>DeletePopupComponent,
+        <%= entityAngularJSName %>Component,
+        <%= entityAngularJSName %>DialogComponent,
+        <%= entityAngularJSName %>PopupComponent,
+        <%= entityAngularJSName %>DeleteDialogComponent,
+        <%= entityAngularJSName %>DeletePopupComponent,
     ],
     providers: [
-        <%= entityClass %>Service,
-        <%= entityClass %>PopupService,
+        <%= entityAngularJSName %>Service,
+        <%= entityAngularJSName %>PopupService,
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-        <%= entityClass %>ResolvePagingParams,
+        <%= entityAngularJSName %>ResolvePagingParams,
         <%_ } _%>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%= angular2AppName %><%= entityClass %>Module {}
+export class <%= angular2AppName %><%= entityAngularJSName %>Module {}

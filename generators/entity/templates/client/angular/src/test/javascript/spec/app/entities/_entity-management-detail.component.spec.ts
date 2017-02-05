@@ -12,15 +12,15 @@ import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { <%= entityAngularJSName %>DetailComponent } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
-import { <%= entityClass %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityClass %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
+import { <%= entityAngularJSName %>Service } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
+import { <%= entityAngularJSName %> } from '../../../../../../main/webapp/app/entities/<%= entityFolderName %>/<%= entityFileName %>.model';
 
 describe('Component Tests', () => {
 
-    describe('<%= entityClass %> Management Detail Component', () => {
+    describe('<%= entityAngularJSName %> Management Detail Component', () => {
         let comp: <%= entityAngularJSName %>DetailComponent;
         let fixture: ComponentFixture<<%= entityAngularJSName %>DetailComponent>;
-        let service: <%= entityClass %>Service;
+        let service: <%= entityAngularJSName %>Service;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
@@ -48,7 +48,7 @@ describe('Component Tests', () => {
                         useClass: MockLanguageService
                     },
                     <%_ } _%>
-                    <%= entityClass %>Service
+                    <%= entityAngularJSName %>Service
                 ]
             }).overrideComponent(<%= entityAngularJSName %>DetailComponent, {
                 set: {
@@ -60,14 +60,14 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(<%= entityAngularJSName %>DetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(<%= entityClass %>Service);
+            service = fixture.debugElement.injector.get(<%= entityAngularJSName %>Service);
         });
 
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
             // GIVEN
-            spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityClass %>(<%_
+            spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularJSName %>(<%_
             if (databaseType == 'sql') { %>10<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>'aaa'<% } %>)));
 
             // WHEN

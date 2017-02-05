@@ -12,9 +12,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
 
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
-import { <%= entityClass %>PopupService } from './<%= entityFileName %>-popup.service';
-import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
+import { <%= entityAngularJSName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularJSName %>PopupService } from './<%= entityFileName %>-popup.service';
+import { <%= entityAngularJSName %>Service } from './<%= entityFileName %>.service';
 
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-delete-dialog',
@@ -22,13 +22,13 @@ import { <%= entityClass %>Service } from './<%= entityFileName %>.service';
 })
 export class <%= entityAngularJSName %>DeleteDialogComponent {
 
-    <%= entityInstance %>: <%= entityClass %>;
+    <%= entityInstance %>: <%= entityAngularJSName %>;
 
     constructor(
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
-        private <%= entityInstance %>Service: <%= entityClass %>Service,
+        private <%= entityInstance %>Service: <%= entityAngularJSName %>Service,
         public activeModal: NgbActiveModal,
         private eventManager: EventManager,
         private router: Router
@@ -66,7 +66,7 @@ export class <%= entityAngularJSName %>DeletePopupComponent implements OnInit, O
 
     constructor (
         private route: ActivatedRoute,
-        private <%= entityInstance %>PopupService: <%= entityClass %>PopupService
+        private <%= entityInstance %>PopupService: <%= entityAngularJSName %>PopupService
     ) {}
 
     ngOnInit() {
