@@ -1,4 +1,5 @@
 import { Injectable, Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (fieldsContainZonedDateTime) { _%>
 import { DatePipe } from '@angular/common';
@@ -19,6 +20,7 @@ export class <%= entityClass %>PopupService {
         private datePipe: DatePipe,
         <%_ } _%>
         private modalService: NgbModal,
+        private router: Router,
         private <%= entityInstance %>Service: <%= entityClass %>Service
     ) {}
 
@@ -63,9 +65,11 @@ export class <%= entityClass %>PopupService {
         modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
         modalRef.result.then(result => {
             console.log(`Closed with: ${result}`);
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {
             console.log(`Dismissed ${reason}`);
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         });
         return modalRef;

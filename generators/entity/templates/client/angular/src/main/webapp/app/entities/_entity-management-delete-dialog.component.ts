@@ -7,7 +7,7 @@ for (var idx in fields) {
 }
 _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from 'ng-jhipster';
@@ -30,8 +30,7 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
         <%_ } _%>
         private <%= entityInstance %>Service: <%= entityClass %>Service,
         public activeModal: NgbActiveModal,
-        private eventManager: EventManager,
-        private router: Router
+        private eventManager: EventManager
     ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
@@ -40,7 +39,6 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
 
     clear () {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     confirmDelete (id: number) {
@@ -49,7 +47,6 @@ export class <%= entityAngularJSName %>DeleteDialogComponent {
                 name: '<%= entityInstance %>ListModification',
                 content: 'Deleted an <%= entityInstance %>'
             });
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.activeModal.dismiss(true);
         });
     }
