@@ -114,7 +114,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('node -v', function (err, stdout, stderr) {
                 if (err) {
-                    this.warning('Node is not found on your computer.');
+                    this.warning('NodeJS is not found on your system.');
                 } else {
                     var nodeVersion = semver.clean(stdout);
                     var nodeFromPackageJson = packagejs.engines.node;
