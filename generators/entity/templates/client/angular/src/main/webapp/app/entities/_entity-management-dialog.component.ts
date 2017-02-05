@@ -7,7 +7,7 @@ for (var idx in fields) {
 }
 _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -80,8 +80,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         private alertService: AlertService,
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,<% for (idx in differentRelationships) {%>
         private <%= differentRelationships[idx].otherEntityName %>Service: <%= differentRelationships[idx].otherEntityAngularName %>Service,<% } %>
-        private eventManager: EventManager,
-        private router: Router
+        private eventManager: EventManager
     ) {
         <%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
@@ -119,7 +118,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
    <%_ } _%>
     clear () {
         this.activeModal.dismiss('cancel');
-        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     save () {
@@ -137,7 +135,6 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.eventManager.broadcast({ name: '<%= entityInstance %>ListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
-        this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
     }
 
     private onSaveError (error) {
