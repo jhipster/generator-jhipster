@@ -60,6 +60,8 @@
     "jasmine-core": "2.5.2",
     <%_ if (protractorTests) { _%>
     "jasmine-reporters": "2.2.0",
+    <%_ } if (enableTranslation) { _%>
+    "json-loader": "0.5.4",
     <%_ } _%>
     "karma": "1.4.0",
     "karma-chrome-launcher": "2.0.0",

@@ -22,6 +22,9 @@ module.exports = function (options) {
             'main': './src/main/webapp/app/app.main'
         },
         resolve: {
+            alias: {
+                webapp: path.resolve('./src/main/webapp')
+            },
             extensions: ['.ts', '.js'],
             modules: ['node_modules']
         },
@@ -35,7 +38,11 @@ module.exports = function (options) {
                         'awesome-typescript-loader'
                     ],
                     exclude: ['node_modules/generator-jhipster']
-                },
+                }<%_ if (enableTranslation) { _%>,
+                {
+                    test: /\.json$/,
+                    loaders: ['json-loader']
+                }<%_ } _%>,
                 {
                     test: /\.html$/,
                     loader: 'raw-loader',
@@ -93,8 +100,7 @@ module.exports = function (options) {
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
                 { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
                 { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
-                { from: './src/main/webapp/robots.txt', to: 'robots.txt' }<% if (enableTranslation) { %>,
-                { from: './src/main/webapp/i18n', to: 'i18n' }<% } %>
+                { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
             ]),
             new webpack.ProvidePlugin({
                 $: "jquery",
