@@ -239,37 +239,6 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    _loadOtherEntityJson: function(entityName) {
-        var result = {};
-        var fileData = null;
-        result.filename = this.jhipsterConfigDirectory + '/' + entityName + '.json';
-        try {
-            fileData = this.fs.readJSON(result.filename);
-        } catch (err) {
-            this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
-        }
-        result.relationships = fileData.relationships;
-        result.fields = fileData.fields;
-        result.changelogDate = fileData.changelogDate;
-        result.dto = fileData.dto;
-        result.service = fileData.service;
-        result.fluentMethods = fileData.fluentMethods;
-        result.pagination = fileData.pagination;
-        result.searchEngine = fileData.searchEngine || result.searchEngine;
-        result.javadoc = fileData.javadoc;
-        result.fieldNamesUnderscored = [];
-        result.fieldNameChoices = [];
-        result.fields && result.fields.forEach(function (field) {
-            result.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
-            result.fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
-        });
-
-        if (fileData.angularJSSuffix !== undefined){
-            result.entityAngularJSSuffix = fileData.angularJSSuffix;
-        }
-        return result;
-    },
-
     _getMicroserviceAppName: function () {
         return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
     },
@@ -594,8 +563,7 @@ module.exports = EntityGenerator.extend({
 
                 if (_.isUndefined(relationship.otherEntityAngularName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {
-                        var otherEntityJson = this._loadOtherEntityJson(relationship.otherEntityNameCapitalized);
-                        var otherEntityAngularSuffix = (otherEntityJson.entityAngularJSSuffix !== undefined) ? otherEntityJson.entityAngularJSSuffix : '';
+                        var otherEntityAngularSuffix = this.getEntityProperty(relationship.otherEntityNameCapitalized, 'angularJSSuffix') || '';
                         relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(otherEntityAngularSuffix));
                     } else {
                         relationship.otherEntityAngularName = 'User';
