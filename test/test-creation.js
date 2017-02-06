@@ -993,8 +993,7 @@ describe('JHipster generator', function () {
                     'languages': ['fr'],
                     'buildTool': 'maven',
                     'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'serviceDiscoveryType' : 'eureka'
+                    'serverSideOptions' : ['serviceDiscoveryType:eureka']
                 })
                 .on('end', done);
         });

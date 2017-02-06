@@ -299,7 +299,7 @@ function writeFiles() {
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway' && this.applicationType !== 'uaa') return;
+            if (!this.serviceDiscoveryType) return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
@@ -448,8 +448,7 @@ function writeFiles() {
             if (this.applicationType === 'gateway'){
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
-
-            if (this.applicationType === 'gateway' || this.applicationType === 'microservice'  || this.applicationType === 'uaa'){
+            if (this.serviceDiscoveryType) {
                 this.template(SERVER_TEST_RES_DIR + 'config/_bootstrap.yml', SERVER_TEST_RES_DIR + 'config/bootstrap.yml', this, {});
             }
 

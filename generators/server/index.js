@@ -130,10 +130,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.messageBroker = false;
             }
 
-            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
-                this.serviceDiscoveryType = this.applicationType !== 'monolith' ? 'eureka' : false;
+                this.serviceDiscoveryType = false;
             }
+
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';
@@ -219,6 +220,11 @@ module.exports = JhipsterServerGenerator.extend({
                 // If social sign in is not defined, it is disabled by default
                 if (this.enableSocialSignIn === undefined) {
                     this.enableSocialSignIn = false;
+                }
+
+                // If the service discovery is not defined, it is disabled by default
+                if (this.serviceDiscoveryType === undefined) {
+                    this.serviceDiscoveryType = false;
                 }
 
                 // If translation is not defined, it is enabled by default

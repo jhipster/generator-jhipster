@@ -90,9 +90,6 @@ module.exports = KubernetesGenerator.extend({
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
             this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-            if (this.serviceDiscoveryType === undefined) {
-                this.serviceDiscoveryType = false;
-            }
             this.adminPassword = this.config.get('adminPassword');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.dockerRepositoryName = this.config.get('dockerRepositoryName');

@@ -528,7 +528,7 @@ function askForOptionalItems() {
             }
         );
     }
-    if (applicationType === 'monolith') {
+    if (applicationType === 'monolith' && this.authenticationType === 'jwt') {
         if (this.hibernateCache === 'hazelcast') {
             choices.push(
                 {
@@ -577,6 +577,10 @@ function askForOptionalItems() {
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
+            // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
+            if (!this.serviceDiscoveryType) {
+                this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
+            }
             done();
         }.bind(this));
     } else {

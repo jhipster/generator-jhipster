@@ -37,14 +37,14 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
+<%_ if (serviceDiscoveryType || messageBroker === 'kafka') { _%>
 dependencyManagement {
   imports {
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
-    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:' + spring_cloud_stream_version
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType) { _%>
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
     <%_ } _%>
   }
 }
