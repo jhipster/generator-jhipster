@@ -2,7 +2,7 @@
     <h2>
         <span jhiTranslate="userManagement.detail.title">User</span> [<b>{{user.login}}</b>]
     </h2>
-    <dl class="row">
+    <dl class="row jh-entity-details">
         <dt><span jhiTranslate="userManagement.login">Login</span></dt>
         <dd>
             <span>{{user.login}}</span>
@@ -32,7 +32,9 @@
         <dt><span jhiTranslate="userManagement.profiles">Profiles</span></dt>
         <dd>
             <ul class="list-unstyled">
-                <li *ngFor="let authority of user.authorities"><span>{{authority}}</span></li>
+                <li *ngFor="let authority of user.authorities">
+                    <span class="tag tag-info">{{authority}}</span>
+                </li>
             </ul>
         </dd>
     </dl>
