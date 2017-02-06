@@ -1,16 +1,22 @@
 <div>
-    <h2><span data-translate="userManagement.detail.title">User</span> "{{vm.user.login}}"</h2>
+    <h2>
+        <span data-translate="userManagement.detail.title">User</span> [<b>{{vm.user.login}}</b>]
+    </h2>
     <dl class="row jh-entity-details">
         <dt><span data-translate="userManagement.login">Login</span></dt>
-        <dd><span>{{vm.user.login}}</span></dd>
+        <dd>
+            <span>{{vm.user.login}}</span>
+            <span class="label label-danger" ng-show="!vm.user.activated"
+                  data-translate="userManagement.deactivated">Deactivated</span>
+            <span class="label label-success" ng-show="vm.user.activated"
+                  data-translate="userManagement.activated">Activated</span>
+        </dd>
         <dt><span data-translate="userManagement.firstName">First Name</span></dt>
         <dd>{{vm.user.firstName}}</dd>
         <dt><span data-translate="userManagement.lastName">Last Name</span></dt>
         <dd>{{vm.user.lastName}}</dd>
         <dt><span data-translate="userManagement.email">Email</span></dt>
         <dd>{{vm.user.email}}</dd>
-        <dt><span data-translate="userManagement.activated">Activated</span></dt>
-        <dd>{{vm.user.activated}}</dd>
         <%_ if (enableTranslation) { _%>
         <dt><span data-translate="userManagement.langKey">Lang Key</span></dt>
         <dd>{{vm.user.langKey}}</dd>
