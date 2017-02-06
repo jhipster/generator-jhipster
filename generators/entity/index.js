@@ -420,8 +420,8 @@ module.exports = EntityGenerator.extend({
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityAngularName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
-            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityStateName = _.kebabCase(this.entityAngularName);
+            this.entityUrl = this.entityStateName;
             this.entityTranslationKey = this.entityInstance;
             this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
@@ -579,7 +579,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
-                    relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
+                    relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
                 }
                 if (_.isUndefined(relationship.otherEntityModuleName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {
