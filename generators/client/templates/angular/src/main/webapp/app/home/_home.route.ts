@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { UserRouteAccessService } from '../shared';
 import { HomeComponent } from './';
 
-export const homeRoute: Route = {
+export const HOME_ROUTE: Route = {
   path: '',
   component: HomeComponent,
   data: {
