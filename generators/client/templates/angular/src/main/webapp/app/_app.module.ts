@@ -8,12 +8,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { <%=angular2AppName%>SharedModule, UserRouteAccessService } from './shared';
+import { <%=angular2AppName%>HomeModule } from './home/home.module';
 import { <%=angular2AppName%>AdminModule } from './admin/admin.module';
 import { <%=angular2AppName%>AccountModule } from './account/account.module';
 import { <%=angular2AppName%>EntityModule } from './entities/entity.module';
 
 import { LayoutRoutingModule } from './layouts';
-import { HomeComponent } from './home';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
@@ -36,13 +36,13 @@ import {
         LayoutRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
         <%=angular2AppName%>SharedModule,
+        <%=angular2AppName%>HomeModule,
         <%=angular2AppName%>AdminModule,
         <%=angular2AppName%>AccountModule,
         <%=angular2AppName%>EntityModule
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
-        HomeComponent,
         NavbarComponent,
         ErrorComponent,
         PageRibbonComponent,

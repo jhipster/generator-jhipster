@@ -126,6 +126,7 @@ const files = {
                 'entities/_entity.module.ts',
                 // home module
                 'home/_index.ts',
+                { file: 'home/_home.module.ts', method: 'copyJs' },
                 { file: 'home/_home.route.ts', method: 'copyJs' },
                 { file: 'home/_home.component.ts', method: 'copyJs' },
                 { file: 'home/_home.component.html', method: 'copyHtml' },
