@@ -18,6 +18,6 @@ export class AuditsService  {
             search: params
         };
 
-        return this.http.get('management/audits', options);
+        return this.http.get('<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>management/audits', options);
     }
 }
