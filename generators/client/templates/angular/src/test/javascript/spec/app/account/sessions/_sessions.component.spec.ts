@@ -36,10 +36,12 @@ describe('Component Tests', () => {
                         },
                         deps: [MockBackend, BaseRequestOptions]
                     },
+                    <%_ if (enableTranslation) { _%>
                     {
                         provide: JhiLanguageService,
                         useClass: MockLanguageService
                     },
+                    <%_ } _%>
                     {
                         provide: Principal,
                         useClass: MockPrincipal
