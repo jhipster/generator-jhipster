@@ -412,6 +412,7 @@ const files = {
                 'spec/app/account/activate/_activate.component.spec.ts',
                 'spec/app/account/password/_password.component.spec.ts',
                 'spec/app/account/password/_password-strength-bar.component.spec.ts',
+                'spec/app/account/password-reset/init/_password-reset-init.component.spec.ts',
                 'spec/app/account/register/_register.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
                 'spec/app/admin/health/_health.component.spec.ts',
