@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { MockLanguageService } from '../../../helpers/mock-language.service';
-<% } %>
+<%_ } _%>
 import { Session } from '../../../../../../main/webapp/app/account/sessions/session.model';
 import { SessionsComponent } from '../../../../../../main/webapp/app/account/sessions/sessions.component';
 import { SessionsService } from '../../../../../../main/webapp/app/account/sessions/sessions.service';
