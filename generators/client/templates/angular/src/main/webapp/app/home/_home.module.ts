@@ -2,14 +2,14 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ParseLinks } from 'ng-jhipster';
 
-import { ParattSharedModule } from '../shared';
+import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import { HOME_ROUTES, HomeComponent } from './';
 
 
 @NgModule({
     imports: [
-        ParattSharedModule,
+        <%=angular2AppName%>SharedModule,
         RouterModule.forRoot(HOME_ROUTES, { useHash: true })
     ],
     declarations: [
