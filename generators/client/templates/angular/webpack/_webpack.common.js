@@ -41,7 +41,8 @@ module.exports = function (options) {
                 }<%_ if (enableTranslation) { _%>,
                 {
                     test: /\.json$/,
-                    loaders: ['json-loader']
+                    loaders: ['json-loader'],
+                    include: path.resolve('./src/main/webapp/i18n')
                 }<%_ } _%>,
                 {
                     test: /\.html$/,
