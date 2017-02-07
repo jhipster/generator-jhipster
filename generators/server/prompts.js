@@ -264,7 +264,7 @@ function askForServerSideOpts() {
                 },
                 {
                     value: 'oracle',
-                    name: 'Oracle - Warning! The Oracle JDBC driver (ojdbc) is not bundled because it is not Open Source. Please follow our documentation to install it manually.'
+                    name: 'Oracle (Please follow our documentation to use the Oracle proprietary driver)'
                 },
                 {
                     value: 'mssql',
