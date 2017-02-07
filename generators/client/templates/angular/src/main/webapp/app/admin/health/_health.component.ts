@@ -45,7 +45,7 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
             this.healthData = this.healthService.transformHealthData(health);
             this.updatingHealth = false;
         }, error => {
-            if (error.status == 503) {
+            if (error.status === 503) {
                 this.healthData = this.healthService.transformHealthData(error.json());
                 this.updatingHealth = false;
             }
