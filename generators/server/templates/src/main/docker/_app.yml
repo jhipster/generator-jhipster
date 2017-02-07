@@ -9,44 +9,6 @@ version: '2'
 services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
-        <%_ if (prodDatabaseType == 'mysql' || prodDatabaseType == 'mariadb' || prodDatabaseType == 'postgresql' || prodDatabaseType == 'mongodb' || prodDatabaseType == 'mssql' || applicationType == 'gateway' || prodDatabaseType == 'cassandra' || searchEngine == 'elasticsearch' || applicationType == 'microservice' || applicationType == 'gateway') { _%>
-        external_links:
-        <%_ } _%>
-        <%_ if (prodDatabaseType == 'mysql') { _%>
-            - <%= baseName.toLowerCase() %>-mysql:mysql
-        <%_ } _%>
-        <%_ if (prodDatabaseType == 'mariadb') { _%>
-            - <%= baseName.toLowerCase() %>-mariadb:mariadb
-        <%_ } _%>
-        <%_ if (prodDatabaseType == 'postgresql') { _%>
-            - <%= baseName.toLowerCase() %>-postgresql:postgresql
-        <%_ } _%>
-        <%_ if (prodDatabaseType == 'mongodb') { _%>
-            - <%= baseName.toLowerCase() %>-mongodb:mongodb
-        <%_ } _%>
-        <%_ if (prodDatabaseType == 'mssql') { _%>
-            - <%= baseName.toLowerCase() %>-mssql:mssql
-        <%_ } _%>
-        <%_ if (prodDatabaseType == 'oracle') { _%>
-            - <%= baseName.toLowerCase() %>-oracle:oracle
-        <%_ } _%>
-        <%_ if (prodDatabaseType == 'cassandra') { _%>
-            - <%= baseName.toLowerCase() %>-cassandra:cassandra
-        <%_ } _%>
-        <%_ if (applicationType == 'gateway' && prodDatabaseType != 'cassandra') { _%>
-            # Uncomment to have Cassandra working with the gateway
-            # - <%= baseName.toLowerCase() %>-cassandra:cassandra
-        <%_ } _%>
-        <%_ if (searchEngine == 'elasticsearch') { _%>
-            - <%= baseName.toLowerCase() %>-elasticsearch:elasticsearch
-        <%_ } _%>
-        <%_ if (messageBroker == 'kafka') { _%>
-            - kafka:kafka
-            - zookeeper:zookeeper
-        <%_ } _%>
-        <%_ if (serviceDiscoveryType == 'eureka') { _%>
-            - jhipster-registry:registry
-        <%_ } _%>
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
             <%_ if (serviceDiscoveryType == 'consul') { _%>
@@ -54,29 +16,29 @@ services:
             - SPRING_CLOUD_CONSUL_PORT=8500
             <%_ } _%>
             <%_ if (serviceDiscoveryType == 'eureka') { _%>
-            - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@registry:8761/config
+            - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mysql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mariadb') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/<%= baseName.toLowerCase() %>
+            - SPRING_DATASOURCE_URL=jdbc:mariadb://<%= baseName.toLowerCase() %>-mariadb:3306/<%= baseName.toLowerCase() %>
             <%_ } _%>
             <%_ if (prodDatabaseType == 'postgresql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/<%= baseName %>
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://<%= baseName.toLowerCase() %>-postgresql:5432/<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mssql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssql:1433;database=jhitest
+            - SPRING_DATASOURCE_URL=jdbc:sqlserver://<%= baseName.toLowerCase() %>-mssql:1433;database=jhitest
             <%_ } _%>
             <%_ if (prodDatabaseType == 'oracle') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@localhost:1521:<%= baseName %>
+            - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<%= baseName.toLowerCase() %>-oracle:1521:<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType == 'mongodb') { _%>
-            - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017
+            - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
             <%_ if (applicationType == 'gateway' || prodDatabaseType == 'cassandra') { _%>
-            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra
+            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
             - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
                 <%_ } else { _%>
@@ -86,7 +48,7 @@ services:
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
             <%_ } _%>
             <%_ if (searchEngine == 'elasticsearch') { _%>
-            - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
+            - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=<%= baseName.toLowerCase() %>-elasticsearch:9300
             <%_ } _%>
             <%_ if (messageBroker == 'kafka') { _%>
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
@@ -133,16 +95,12 @@ services:
             service: <%= baseName.toLowerCase() %>-cassandra
     <%= baseName.toLowerCase() %>-cassandra-node:
         image: <%= DOCKER_CASSANDRA %>
-        links:
-            - <%= baseName.toLowerCase() %>-cassandra:seed
         environment:
-            - CASSANDRA_SEEDS=seed
+            - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
     <%= baseName.toLowerCase() %>-cassandra-migration:
         extends:
             file: cassandra-migration.yml
             service: <%= baseName.toLowerCase() %>-cassandra-migration
-        links:
-            - <%= baseName.toLowerCase() %>-cassandra
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     <%_ } _%>

@@ -1,12 +1,10 @@
 version: '2'
 services:
     zookeeper:
-        container_name: zookeeper
         image: <%= DOCKER_ZOOKEEPER %>
         ports:
           - 2181:2181
     kafka:
-        container_name: kafka
         image: <%= DOCKER_KAFKA %>
         environment:
             KAFKA_ADVERTISED_HOST_NAME: localhost

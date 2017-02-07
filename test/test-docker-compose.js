@@ -50,6 +50,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.dockercompose);
         });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
+        });
     });
 
     describe('only one microservice', function () {
@@ -72,6 +80,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
         it('creates expected default files', function () {
             assert.file(expectedFiles.dockercompose);
+        });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
@@ -96,6 +112,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
         it('creates expected default files', function () {
             assert.file(expectedFiles.dockercompose);
+        });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
@@ -124,6 +148,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         it('creates expected elk files', function () {
             assert.file(expectedFiles.elk);
         });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
+        });
     });
 
     describe('gateway and one microservice, with prometheus', function () {
@@ -150,6 +182,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
         it('creates expected prometheus files', function () {
             assert.file(expectedFiles.prometheus);
+        });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
@@ -180,6 +220,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         it('creates expected elk files', function () {
             assert.file(expectedFiles.elk);
         });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
+        });
     });
 
     describe('gateway and multi microservices, with elk', function () {
@@ -209,6 +257,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
         it('creates expected elk files', function () {
             assert.file(expectedFiles.elk);
+        });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 
@@ -241,6 +297,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         it('creates expected elk files', function () {
             assert.file(expectedFiles.elk);
         });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
+        });
     });
 
     describe('gateway and 1 microservice, with Cassandra cluster', function () {
@@ -268,6 +332,14 @@ describe('JHipster Docker Compose Sub Generator', function () {
         it('creates expected elk files', function () {
             assert.file(expectedFiles.elk);
         });
+        it('creates jhipster-registry content', function () {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
+        });
     });
 
     describe('monolith', function () {
@@ -290,6 +362,11 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
         it('creates expected default files', function () {
             assert.file(expectedFiles.monolith);
+        });
+        it('creates compose file without container_name, external_links, links', function () {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
 });

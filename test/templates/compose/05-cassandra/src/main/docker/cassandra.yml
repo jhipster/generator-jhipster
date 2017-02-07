@@ -1,7 +1,6 @@
 version: '2'
 services:
     mscassandra-cassandra:
-        container_name: mscassandra-cassandra
         image: cassandra:2.2.5
         # volumes:
         #     - ~/volumes/jhipster/mscassandra/cassandra/:/var/lib/cassandra/data
@@ -12,9 +11,6 @@ services:
             - 9042:9042
             - 9160:9160
     mscassandra-cassandra-migration:
-        container_name: mscassandra-cassandra-migration
-        links:
-            - mscassandra-cassandra
         environment:
             - CASSANDRA_CONTACT_POINT=mscassandra-cassandra
             - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql

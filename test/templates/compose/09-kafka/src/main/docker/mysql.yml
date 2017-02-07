@@ -1,7 +1,6 @@
 version: '2'
 services:
     samplekafka-mysql:
-        container_name: samplekafka-mysql
         image: mysql:5.7.13
         # volumes:
         #     - ~/volumes/jhipster/sampleKafka/mysql/:/var/lib/mysql/

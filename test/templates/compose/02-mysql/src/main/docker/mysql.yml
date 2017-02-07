@@ -1,7 +1,6 @@
 version: '2'
 services:
     msmysql-mysql:
-        container_name: msmysql-mysql
         image: mysql:5.7.11
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/
