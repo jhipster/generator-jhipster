@@ -7,8 +7,7 @@ const util = require('util'),
     scriptBase = require('../generator-base'),
     writeFiles = require('./files').writeFiles,
     packagejs = require('../../package.json'),
-    crypto = require('crypto'),
-    mkdirp = require('mkdirp');
+    crypto = require('crypto');
 
 var JhipsterServerGenerator = generators.Base.extend({});
 
