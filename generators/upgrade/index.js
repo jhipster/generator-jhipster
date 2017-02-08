@@ -23,7 +23,7 @@ module.exports = UpgradeGenerator.extend({
 
     initializing: {
         displayLogo: function () {
-            this.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator '));
+            this.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
             this.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
         },
 
@@ -224,7 +224,7 @@ module.exports = UpgradeGenerator.extend({
         updateJhipster: function() {
             this.log(chalk.yellow('Updating ' + GENERATOR_JHIPSTER + '. This might take some time...'));
             var done = this.async();
-            shelljs.exec('npm install ' + GENERATOR_JHIPSTER, {silent:true}, function (code, msg, err) {
+            shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + this.latestVersion, {silent:true}, function (code, msg, err) {
                 if (code === 0) this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
                 else this.error('Something went wrong while updating generator! ' + msg + ' ' + err);
                 done();
