@@ -75,7 +75,7 @@ target/
 # Gradle
 ######################
 .gradle/
-build/
+/build/
 
 ######################
 # Package Files
@@ -110,7 +110,6 @@ Desktop.ini
 ######################
 # Directories
 ######################
-/build/
 /bin/
 /deploy/
 
