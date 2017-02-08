@@ -412,6 +412,8 @@ const files = {
                 'spec/app/account/activate/_activate.component.spec.ts',
                 'spec/app/account/password/_password.component.spec.ts',
                 'spec/app/account/password/_password-strength-bar.component.spec.ts',
+                'spec/app/account/password-reset/init/_password-reset-init.component.spec.ts',
+                'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.ts',
                 'spec/app/account/register/_register.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
                 'spec/app/admin/health/_health.component.spec.ts',
@@ -419,6 +421,13 @@ const files = {
                 'spec/helpers/_mock-account.service.ts',
                 'spec/helpers/_mock-principal.service.ts',
                 'spec/helpers/_mock-route.service.ts'
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'session',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/account/sessions/_sessions.component.spec.ts',
             ]
         },
         {
