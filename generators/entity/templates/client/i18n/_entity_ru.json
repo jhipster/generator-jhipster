@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
                 "createLabel": "Создать новый <%= entityClassHumanized %>",
-                "createOrEditLabel": "Создать или отредактировать <%= entityClassHumanized %>",
-                "search": "Найти <%= entityClassHumanized %>"
+                "createOrEditLabel": "Создать или отредактировать <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Найти <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "Новый <%= entityClassHumanized %> создан с идентификатором {{ param }}",
             "updated": "<%= entityClassHumanized %> обновлен с идентификатором {{ param }}",
