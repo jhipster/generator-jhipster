@@ -1,0 +1,136 @@
+version: '2'
+services:
+<%_ if (enableRancherLoadBalancing && hasFrontApp) { _%>
+    lb:
+      image: rancher/load-balancer-service
+      ports:
+        # Listen on public port 80 and direct traffic to private port 8080 of the service
+        - 80:8080
+      links:
+        # Target services in the same stack will be listed as a link
+        - <%= frontAppName %>:<%= frontAppName %>
+<%_ } _%>
+<%_ for(var i = 0; i < appConfigs.length; i++) { _%>
+<%- appsYaml[i] %>
+<%_ } _%>
+<%_ if (useKafka) { _%>
+    zookeeper:
+        container_name: zookeeper
+        image: <%= DOCKER_ZOOKEEPER %>
+    kafka:
+        container_name: kafka
+        image: <%= DOCKER_KAFKA %>
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: kafka
+            KAFKA_ADVERTISED_PORT: 9092
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_CREATE_TOPICS: "topic-jhipster:1:1"
+        #ports:
+        #    - 9092:9092  # Uncomment to make Kafka available externally
+<%_ } _%>
+<%_ if (serviceDiscoveryType == 'eureka') { _%>
+    jhipster-registry:
+        container_name: jhipster-registry
+        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        volumes:
+        #    - ./central-server-config:/central-config
+        # By default the JHipster Registry runs with the "prod" and "native"
+        # Spring profiles.
+        # "native" profile means the filesystem is used to store data, see
+        # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+        environment:
+            - SPRING_PROFILES_ACTIVE=dev,native
+            - SECURITY_USER_PASSWORD=<%= adminPassword %>
+            <%_ if (monitoring === 'elk') { _%>
+            - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
+            - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash
+            - JHIPSTER_METRICS_LOGS_ENABLED=true
+            - JHIPSTER_METRICS_LOGS_REPORTFREQUENCY=60
+            <%_ } _%>
+            <%_ if (monitoring === 'prometheus') { _%>
+            - JHIPSTER_METRICS_PROMETHEUS_ENABLED=true
+            - JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics
+            <%_ } _%>
+            - GIT_URI=https://github.com/jhipster/jhipster-registry/
+            - GIT_SEARCH_PATHS=central-config
+        ports:
+            - 8761:8761
+<%_ } _%>
+<%_ if (serviceDiscoveryType == 'consul') { _%>
+    consul:
+        image: <%= DOCKER_CONSUL %>
+        ports:
+            - 8300:8300
+            - 8500:8500
+            - 8600:8600
+        command: consul agent -dev -ui -client 0.0.0.0
+    consul-config-loader:
+        image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+        volumes:
+        #    - ./central-server-config:/config
+        environment:
+            - INIT_SLEEP_SECONDS=5
+            - CONSUL_URL=consul
+            - CONSUL_PORT=8500
+<%_ } _%>
+<%_ if (monitoring === 'elk') { _%>
+    jhipster-elasticsearch:
+        image: <%= DOCKER_JHIPSTER_ELASTICSEARCH %>
+        ports:
+            - 9200:9200
+            - 9300:9300
+        # Uncomment this section to have elasticsearch data persisted to a volume
+        #volumes:
+        #   - ./log-data:/usr/share/elasticsearch/data
+    jhipster-logstash:
+        image: <%= DOCKER_JHIPSTER_LOGSTASH %>
+        command: logstash -f /conf/logstash.conf
+        ports:
+            - 5000:5000/udp
+        # Uncomment this section to have logstash config loaded from a volume
+        #volumes:
+        #    - ./log-conf/:/conf
+    jhipster-console:
+        image: <%= DOCKER_JHIPSTER_CONSOLE %>
+        ports:
+            - 5601:5601
+<%_ } _%>
+<%_ if (monitoring === 'prometheus') { _%>
+    prometheus:
+        image: <%= DOCKER_PROMETHEUS %>
+        container_name: prometheus
+        volumes:
+        - ./prometheus-conf/:/etc/prometheus/
+        - prometheus_data:/prometheus
+        command:
+        - '-config.file=/etc/prometheus/prometheus.yml'
+        - '-storage.local.path=/prometheus'
+        - '-alertmanager.url=http://alertmanager:9093'
+        expose:
+        - 9090
+        ports:
+        - 9090:9090
+    alertmanager:
+        image: <%= DOCKER_PROMETHEUS_ALERTMANAGER %>
+        ports:
+        - 9093:9093
+        volumes:
+        - ./alertmanager-conf/:/etc/alertmanager/
+        command:
+        - '-config.file=/etc/alertmanager/config.yml'
+        - '-storage.path=/alertmanager'
+    grafana:
+        image: <%= DOCKER_GRAFANA %>
+        ports:
+        - 3000:3000
+        volumes:
+        - grafana_data:/var/lib/grafana
+        environment:
+        - GF_SECURITY_ADMIN_PASSWORD=jhipster
+        - GF_USERS_ALLOW_SIGN_UP=false
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
+<%_ } _%>
