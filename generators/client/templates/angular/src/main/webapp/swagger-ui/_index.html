@@ -93,11 +93,6 @@
                             "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
-                <% if (authenticationType === 'xauth') { %>
-                    var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken")).token;
-                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-Auth-Token", authToken, "header");
-                    window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <% } %>
                 <% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
