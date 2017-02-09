@@ -55,7 +55,8 @@
       buildTool: 'maven',
       searchEngine: false,
       enableTranslation: true,
-      applicationType: 'monolith'
+      applicationType: 'monolith',
+      testFrameworks: ['gatling', 'protactor']
     },
     constants: {},
     entities: [],
@@ -82,6 +83,7 @@ prog
   }
   / SPACE* applicationDeclaration:applicationDecl SPACE* p:prog {
     parsed.application = applicationDeclaration;
+    return parsed;
   }
   / SPACE* ed:entityDecl SPACE* p:prog {
     parsed.entities = addUniqueElements([ed], parsed.entities);
@@ -182,7 +184,16 @@ applicationContentDecl
     parsed.application.enableTranslation = enableTranslation;
   }
   / APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.applicationType = applicationType;
+    parsed.application.applicationType = applicationType.join('');
+  }
+  / TEST_FRAMEWORK SPACE* testFrameworks:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.testFrameworks = [];
+    const results = testFrameworks.join('').split(',');
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].trim().length !== 0) {
+        parsed.application.testFrameworks.push(results[i].trim());
+      }
+    }
   }
   / ''
 
@@ -437,6 +448,7 @@ BUILD_TOOL = 'buildTool'
 SEARCH_ENGINE = 'searchEngine'
 ENABLE_TRANSLATION = 'enableTranslation'
 APPLICATION_TYPE = 'applicationType'
+TEST_FRAMEWORK = 'testFrameworks'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
