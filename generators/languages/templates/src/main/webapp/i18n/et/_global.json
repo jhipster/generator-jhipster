@@ -126,7 +126,7 @@
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
+        "internalServerError": "Serveri sisemine viga",
         "server.not.reachable": "Server pole kättesaadav",
         "url.not.found": "Ei leitud",
         "NotNull": "Väli {{ fieldName }} ei tohi olla tühi!",
