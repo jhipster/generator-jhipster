@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "சர்வரை அடைய முடியவில்லை",
         "url.not.found": "Not found",
         "NotNull": "களம் {{fieldName}} காலியாக இருக்க கூடாது!",
