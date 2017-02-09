@@ -1,9 +1,9 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    camelCase = require('../../../lib/utils/string_utils').camelCase,
-    isNilOrEmpty = require('../../../lib/utils/string_utils').isNilOrEmpty;
+  fail = expect.fail,
+  camelCase = require('../../../lib/utils/string_utils').camelCase,
+  isNilOrEmpty = require('../../../lib/utils/string_utils').isNilOrEmpty;
 
 describe('StringUtils', () => {
   describe('::camelCase', () => {

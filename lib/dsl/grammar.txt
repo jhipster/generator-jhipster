@@ -55,6 +55,7 @@
       buildTool: 'maven',
       searchEngine: false
     },
+    constants: {},
     entities: [],
     relationships: [],
     enums: [],
@@ -73,9 +74,12 @@
 start = p:prog { return p; }
 
 prog
-  = SPACE* applicationDeclaration:applicationDecl SPACE* p:prog {
-    parsed.application = applicationDeclaration;
+  = SPACE* constantDecl:constantDecl SPACE* p:prog {
+    parsed.constants[constantDecl.name] = constantDecl.value;
     return parsed;
+  }
+  / SPACE* applicationDeclaration:applicationDecl SPACE* p:prog {
+    parsed.application = applicationDeclaration;
   }
   / SPACE* ed:entityDecl SPACE* p:prog {
     parsed.entities = addUniqueElements([ed], parsed.entities);
@@ -177,6 +181,9 @@ applicationContentDecl
 booleanChoice
   = TRUE { return true; }
   / FALSE { return false; }
+
+constantDecl
+  = name:CONSTANT_NAME SPACE* '=' SPACE* value:INTEGER { return { name: name, value: value }; }
 
 //Entities
 entityDecl
@@ -385,11 +392,17 @@ type = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 validation
   = REQUIRED { return { key: 'required', value: '' }; }
   / MINLENGTH SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'minlength', value: int }; }
+  / MINLENGTH SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'minlength', value: constantName, constant: true }; }
   / MAXLENGTH SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'maxlength', value: int }; }
+  / MAXLENGTH SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'maxlength', value: constantName, constant: true }; }
   / MINBYTES SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'minbytes', value: int }; }
+  / MINBYTES SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'minbytes', value: constantName, constant: true }; }
   / MAXBYTES SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'maxbytes', value: int }; }
-  / MAX SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'max', value: int };}
+  / MAXBYTES SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'maxbytes', value: constantName, constant: true }; }
   / MIN SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'min', value: int };}
+  / MIN SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'min', value: constantName, constant: true };}
+  / MAX SPACE* '(' SPACE* int:INTEGER SPACE* ')' { return { key: 'max', value: int };}
+  / MAX SPACE* '(' SPACE* constantName:CONSTANT_NAME SPACE* ')' { return { key: 'max', value: constantName, constant: true };}
   / PATTERN SPACE* '('  APOSTROPHE regex:REGEX APOSTROPHE SPACE* ')' { return { key: 'pattern', value: regex }; }
 
 // Comments
@@ -454,6 +467,7 @@ ENUMNAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }
 ENUMPROP = underscore:[_]*head:[A-Z0-9]tail:[A-Z0-9_]* {
     return `${underscore.join('')}${head}${tail.join('')}`;
   }
+CONSTANT_NAME = name:[A-Z_]+ { return name.join(''); }
 INTEGER = negative:'-'?int:[0-9]+ { return parseInt(`${(negative ? negative : '') + int.join('')}`, 10); }
 INJECTED_FIELD_NAME = head:[a-zA-Z]tail:[A-z0-9()]* { return `${head}${tail.join('')}`; }
 ENTITY_NAME = head:[A-Z]tail:[A-z0-9]* { return `${head}${tail.join('')}`; }

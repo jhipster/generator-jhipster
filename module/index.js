@@ -1,34 +1,37 @@
 'use strict';
 
 const BINARY_OPTIONS = require('../lib/core/jhipster/binary_options'),
-    UNARY_OPTIONS = require('../lib/core/jhipster/unary_options'),
-    RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types'),
-    FIELD_TYPES = require('../lib/core/jhipster/field_types'),
-    VALIDATIONS = require('../lib/core/jhipster/validations'),
-    DATABASE_TYPES = require('../lib/core/jhipster/database_types'),
-    JDLReader = require('../lib/reader/jdl_reader'),
-    JsonReader = require('../lib/reader/json_reader'),
-    convertToJDL = require('../lib/parser/jdl_parser').parse,
-    convertToJHipsterJSON = require('../lib/parser/entity_parser').parse,
-    JsonParser = require('../lib/parser/json_parser'),
-    JDLObject = require('../lib/core/jdl_object'),
-    JDLEntity = require('../lib/core/jdl_entity'),
-    JDLField = require('../lib/core/jdl_field'),
-    JDLValidation = require('../lib/core/jdl_validation'),
-    JDLEnum = require('../lib/core/jdl_enum'),
-    JDLRelationship = require('../lib/core/jdl_relationship'),
-    JDLRelationships = require('../lib/core/jdl_relationships'),
-    JDLUnaryOption = require('../lib/core/jdl_unary_option'),
-    JDLBinaryOption = require('../lib/core/jdl_binary_option'),
-    exportToJSON = require('../lib/export/json_exporter').exportToJSON,
-    createJHipsterJSONFolder = require('../lib/export/json_exporter').createJHipsterJSONFolder,
-    exportToJDL = require('../lib/export/jdl_exporter').exportToJDL,
-    toFilePath = require('../lib/reader/json_file_reader').toFilePath,
-    readEntityJSON = require('../lib/reader/json_file_reader').readEntityJSON,
-    ReservedKeywords = require('../lib/core/jhipster/reserved_keywords'),
-    ObjectUtils = require('../lib/utils/object_utils'),
-    StringUtils = require('../lib/utils/string_utils'),
-    Set = require('../lib/utils/objects/set');
+  UNARY_OPTIONS = require('../lib/core/jhipster/unary_options'),
+  RELATIONSHIP_TYPES = require('../lib/core/jhipster/relationship_types'),
+  FIELD_TYPES = require('../lib/core/jhipster/field_types'),
+  VALIDATIONS = require('../lib/core/jhipster/validations'),
+  DATABASE_TYPES = require('../lib/core/jhipster/database_types'),
+  JDLReader = require('../lib/reader/jdl_reader'),
+  JsonReader = require('../lib/reader/json_reader'),
+  convertToJDL = require('../lib/parser/jdl_parser').parse,
+  convertToJHipsterJSON = require('../lib/parser/entity_parser').parse,
+  JsonParser = require('../lib/parser/json_parser'),
+  JDLObject = require('../lib/core/jdl_object'),
+  JDLEntity = require('../lib/core/jdl_entity'),
+  JDLField = require('../lib/core/jdl_field'),
+  JDLValidation = require('../lib/core/jdl_validation'),
+  JDLEnum = require('../lib/core/jdl_enum'),
+  JDLRelationship = require('../lib/core/jdl_relationship'),
+  JDLRelationships = require('../lib/core/jdl_relationships'),
+  JDLUnaryOption = require('../lib/core/jdl_unary_option'),
+  JDLBinaryOption = require('../lib/core/jdl_binary_option'),
+  JSONExporter = require('../lib/export/json_exporter'),
+  exportToJSON = JSONExporter.exportToJSON,
+  createJHipsterJSONFolder = JSONExporter.createJHipsterJSONFolder,
+  exportToJDL = require('../lib/export/jdl_exporter').exportToJDL,
+  JSONFileReader = require('../lib/reader/json_file_reader'),
+  toFilePath = JSONFileReader.toFilePath,
+  readEntityJSON = JSONFileReader.readEntityJSON,
+  ReservedKeywords = require('../lib/core/jhipster/reserved_keywords'),
+  ObjectUtils = require('../lib/utils/object_utils'),
+  FormatUtils = require('../lib/utils/format_utils'),
+  StringUtils = require('../lib/utils/string_utils'),
+  Set = require('../lib/utils/objects/set');
 
 module.exports = {
   /* JHipster notions */
@@ -77,5 +80,6 @@ module.exports = {
   /* Objects */
   Set: Set,
   /* Utils */
-  camelCase: StringUtils.camelCase
+  camelCase: StringUtils.camelCase,
+  dateFormatForLiquibase: FormatUtils.dateFormatForLiquibase
 };

@@ -1,15 +1,15 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    FieldTypes = require('../../../../lib/core/jhipster/field_types'),
-    Validations = require('../../../../lib/core/jhipster/validations').VALIDATIONS,
-    JDLEnum = require('../../../../lib/core/jdl_enum');
+  fail = expect.fail,
+  FieldTypes = require('../../../../lib/core/jhipster/field_types'),
+  Validations = require('../../../../lib/core/jhipster/validations').VALIDATIONS,
+  JDLEnum = require('../../../../lib/core/jdl_enum');
 
-describe('FieldTypes', function () {
-  describe('::isSQLType', function () {
-    describe('when passing an invalid argument', function () {
-      it('fails', function () {
+describe('FieldTypes', () => {
+  describe('::isSQLType', () => {
+    describe('when passing an invalid argument', () => {
+      it('fails', () => {
         try {
           FieldTypes.isSQLType(null);
           fail();
@@ -30,25 +30,25 @@ describe('FieldTypes', function () {
         }
       });
     });
-    describe('when passing a false type', function () {
-      it('returns false', function () {
+    describe('when passing a false type', () => {
+      it('returns false', () => {
         expect(FieldTypes.isSQLType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
       });
     });
-    describe('when passing a valid type', function () {
-      it('returns true', function () {
+    describe('when passing a valid type', () => {
+      it('returns true', () => {
         expect(FieldTypes.isSQLType(FieldTypes.SQL_TYPES.BIG_DECIMAL)).to.be.true;
       });
     });
-    describe('when passing an enum', function () {
-      it('returns true', function () {
+    describe('when passing an enum', () => {
+      it('returns true', () => {
         expect(FieldTypes.isSQLType(new JDLEnum({name: 'MyEnum'}))).to.be.true;
       });
     });
   });
-  describe('::isMongoDBType', function () {
-    describe('when passing an invalid argument', function () {
-      it('fails', function () {
+  describe('::isMongoDBType', () => {
+    describe('when passing an invalid argument', () => {
+      it('fails', () => {
         try {
           FieldTypes.isMongoDBType(null);
           fail();
@@ -69,25 +69,25 @@ describe('FieldTypes', function () {
         }
       });
     });
-    describe('when passing a false type', function () {
-      it('returns false', function () {
+    describe('when passing a false type', () => {
+      it('returns false', () => {
         expect(FieldTypes.isMongoDBType(FieldTypes.CASSANDRA_TYPES.UUID)).to.be.false;
       });
     });
-    describe('when passing a valid type', function () {
-      it('returns true', function () {
+    describe('when passing a valid type', () => {
+      it('returns true', () => {
         expect(FieldTypes.isMongoDBType(FieldTypes.MONGODB_TYPES.BIG_DECIMAL)).to.be.true;
       });
     });
-    describe('when passing an enum', function () {
-      it('returns true', function () {
+    describe('when passing an enum', () => {
+      it('returns true', () => {
         expect(FieldTypes.isMongoDBType(new JDLEnum({name: 'MyEnum'}))).to.be.true;
       });
     });
   });
-  describe('::isCassandraType', function () {
-    describe('when passing an invalid argument', function () {
-      it('fails', function () {
+  describe('::isCassandraType', () => {
+    describe('when passing an invalid argument', () => {
+      it('fails', () => {
         try {
           FieldTypes.isCassandraType(null);
           fail();
@@ -108,25 +108,25 @@ describe('FieldTypes', function () {
         }
       });
     });
-    describe('when passing a false type', function () {
-      it('returns false', function () {
+    describe('when passing a false type', () => {
+      it('returns false', () => {
         expect(FieldTypes.isCassandraType(FieldTypes.SQL_TYPES.LOCAL_DATE)).to.be.false;
       });
     });
-    describe('when passing a valid type', function () {
-      it('returns true', function () {
+    describe('when passing a valid type', () => {
+      it('returns true', () => {
         expect(FieldTypes.isCassandraType(FieldTypes.CASSANDRA_TYPES.BIG_DECIMAL)).to.be.true;
       });
     });
-    describe('when passing an enum', function () {
-      it('returns false', function () {
+    describe('when passing an enum', () => {
+      it('returns false', () => {
         expect(FieldTypes.isCassandraType(new JDLEnum({name: 'MyEnum'}))).to.be.false;
       });
     });
   });
-  describe('::getIsType', function () {
-    describe('when passing an invalid argument', function () {
-      it('fails', function () {
+  describe('::getIsType', () => {
+    describe('when passing an invalid argument', () => {
+      it('fails', () => {
         try {
           FieldTypes.getIsType(null);
           fail();
@@ -134,7 +134,7 @@ describe('FieldTypes', function () {
           expect(error.name).to.eq('NullPointerException');
         }
         try {
-          FieldTypes.getIsType(null, function () {
+          FieldTypes.getIsType(null, () => {
             //do nothing
           });
           fail();
@@ -143,22 +143,22 @@ describe('FieldTypes', function () {
         }
       });
     });
-    describe('when passing a valid argument without callback', function () {
-      it('returns isType', function () {
+    describe('when passing a valid argument without callback', () => {
+      it('returns isType', () => {
         expect(FieldTypes.getIsType('mysql')).to.eq(FieldTypes.isSQLType);
       });
     });
-    describe('when passing a valid argument and callback', function () {
-      it('returns true', function () {
-        expect(FieldTypes.getIsType('sql', function () {
+    describe('when passing a valid argument and callback', () => {
+      it('returns true', () => {
+        expect(FieldTypes.getIsType('sql', () => {
           //do nothing
         })).to.eq(FieldTypes.isSQLType);
       });
     });
   });
-  describe('::hasValidation', function () {
-    describe('when passing an invalid argument', function () {
-      it('fails', function () {
+  describe('::hasValidation', () => {
+    describe('when passing an invalid argument', () => {
+      it('fails', () => {
         try {
           FieldTypes.hasValidation(null, null);
           fail();
@@ -179,13 +179,13 @@ describe('FieldTypes', function () {
         }
       });
     });
-    describe('when passing a false argument', function () {
-      it('returns false', function () {
+    describe('when passing a false argument', () => {
+      it('returns false', () => {
         expect(FieldTypes.hasValidation(FieldTypes.CASSANDRA_TYPES.BIG_DECIMAL, Validations.PATTERN)).to.be.false;
       });
     });
-    describe('when passing a valid argument', function () {
-      it('returns true', function () {
+    describe('when passing a valid argument', () => {
+      it('returns true', () => {
         expect(FieldTypes.hasValidation(FieldTypes.CASSANDRA_TYPES.BIG_DECIMAL, Validations.MIN)).to.be.true;
       });
     });

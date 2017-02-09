@@ -1,45 +1,48 @@
 'use strict';
 
 const expect = require('chai').expect,
-    fail = expect.fail,
-    JDLEntity = require('../../../lib/core/jdl_entity'),
-    JDLRelationship = require('../../../lib/core/jdl_relationship'),
-    RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
-    JDLRelationships = require('../../../lib/core/jdl_relationships');
+  fail = expect.fail,
+  JDLEntity = require('../../../lib/core/jdl_entity'),
+  JDLRelationship = require('../../../lib/core/jdl_relationship'),
+  RELATIONSHIP_TYPES = require('../../../lib/core/jhipster/relationship_types').RELATIONSHIP_TYPES,
+  JDLRelationships = require('../../../lib/core/jdl_relationships');
 
-describe('JDLRelationships', function () {
-  describe('#add', function () {
-    describe('when passing an invalid relationship', function () {
-      describe('because it is nil', function () {
-        it('fails', function () {
+describe('JDLRelationships', () => {
+  describe('#add', () => {
+    describe('when passing an invalid relationship', () => {
+      describe('because it is nil', () => {
+        it('fails', () => {
           try {
             new JDLRelationships().add(null);
+            fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
           }
           try {
             new JDLRelationships().add(undefined);
+            fail();
           } catch (error) {
             expect(error.name).to.eq('NullPointerException');
           }
         });
       });
-      describe('because it is invalid', function () {
-        it('fails', function () {
+      describe('because it is invalid', () => {
+        it('fails', () => {
           try {
             new JDLRelationships().add({
               to: {name: 'A'},
               from: {name: 'B'}
             });
+            fail();
           } catch (error) {
             expect(error.name).to.eq('InvalidObjectException');
           }
         });
       });
     });
-    describe('when passing a valid relationship', function () {
-      it('succeeds', function () {
-        var relationships = new JDLRelationships();
+    describe('when passing a valid relationship', () => {
+      it('succeeds', () => {
+        const relationships = new JDLRelationships();
         relationships.add(new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
@@ -65,10 +68,10 @@ describe('JDLRelationships', function () {
       });
     });
   });
-  describe('#toArray', function() {
-    it('returns the list of each relationship', function() {
-      var relationships = new JDLRelationships();
-      var relationship1 = new JDLRelationship({
+  describe('#toArray', () => {
+    it('returns the list of each relationship', () => {
+      const relationships = new JDLRelationships();
+      const relationship1 = new JDLRelationship({
         from: new JDLEntity({
           name: 'Abc'
         }),
@@ -78,7 +81,7 @@ describe('JDLRelationships', function () {
         injectedFieldInFrom: 'something',
         type: RELATIONSHIP_TYPES.ONE_TO_ONE
       });
-      var relationship2 = new JDLRelationship({
+      const relationship2 = new JDLRelationship({
         from: new JDLEntity({
           name: 'Abc2'
         }),
@@ -90,15 +93,15 @@ describe('JDLRelationships', function () {
       });
       relationships.add(relationship1);
       relationships.add(relationship2);
-      var array = relationships.toArray();
+      const array = relationships.toArray();
       expect(array).to.deep.eq([relationship1, relationship2]);
     });
   });
-  describe('#toString', function () {
-    describe('when having one relationship per type', function () {
-      it('uses the standard string form', function () {
-        var relationships = new JDLRelationships();
-        var oto = new JDLRelationship({
+  describe('#toString', () => {
+    describe('when having one relationship per type', () => {
+      it('uses the standard string form', () => {
+        const relationships = new JDLRelationships();
+        const oto = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
           }),
@@ -108,7 +111,7 @@ describe('JDLRelationships', function () {
           injectedFieldInFrom: 'something',
           type: RELATIONSHIP_TYPES.ONE_TO_ONE
         });
-        var otm = new JDLRelationship({
+        const otm = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
           }),
@@ -128,10 +131,10 @@ relationship ${otm.type} {
 }`);
       });
     });
-    describe('when having more than one relationship per type', function () {
-      it('uses the new string form', function () {
-        var relationships = new JDLRelationships();
-        var oto1 = new JDLRelationship({
+    describe('when having more than one relationship per type', () => {
+      it('uses the new string form', () => {
+        const relationships = new JDLRelationships();
+        const oto1 = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc'
           }),
@@ -141,7 +144,7 @@ relationship ${otm.type} {
           injectedFieldInFrom: 'something',
           type: RELATIONSHIP_TYPES.ONE_TO_ONE
         });
-        var oto2 = new JDLRelationship({
+        const oto2 = new JDLRelationship({
           from: new JDLEntity({
             name: 'Abc2'
           }),
