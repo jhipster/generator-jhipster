@@ -1,14 +1,14 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ParattSharedModule } from '../shared';
+import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
 
 
 @NgModule({
     imports: [
-        ParattSharedModule,
+        <%=angular2AppName%>SharedModule,
         RouterModule.forRoot([ HOME_ROUTE ], { useHash: true })
     ],
     declarations: [
