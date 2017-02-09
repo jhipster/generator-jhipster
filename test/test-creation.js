@@ -7,13 +7,13 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const getFilesForOptions = require('./test-utils').getFilesForOptions;
 const expectedFiles = require('./test-expected-files');
+const shouldBeV3DockerfileCompatible = require('./test-docker-compose').shouldBeV3DockerfileCompatible;
 
 const constants = require('../generators/generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    TEST_DIR = constants.TEST_DIR,
-    DOCKER_DIR = constants.DOCKER_DIR;
+    TEST_DIR = constants.TEST_DIR;
 
 describe('JHipster generator', function () {
 
@@ -68,14 +68,7 @@ describe('JHipster generator', function () {
         it('contains install-node-and-yarn in pom.xml', function () {
             assert.fileContent('pom.xml', /install-node-and-yarn/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-            assert.noFileContent(DOCKER_DIR + 'mysql.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'mysql.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'mysql.yml', /links:/);
-        });
+        shouldBeV3DockerfileCompatible('mysql');
     });
 
     describe('default configuration with angular2', function () {
@@ -206,14 +199,7 @@ describe('JHipster generator', function () {
                 testFrameworks: []
             }));
         });
-        it('creates compose file without container_name, external_links, links', function () {
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-            assert.noFileContent(DOCKER_DIR + 'mariadb.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'mariadb.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'mariadb.yml', /links:/);
-        });
+        shouldBeV3DockerfileCompatible('mariadb');
     });
 
     describe('default gradle configuration', function () {
@@ -441,14 +427,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.postgresql);
             assert.file(expectedFiles.elasticsearch);
         });
-        it('creates compose file without container_name, external_links, links', function () {
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-            assert.noFileContent(DOCKER_DIR + 'postgresql.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'postgresql.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'postgresql.yml', /links:/);
-        });
+        shouldBeV3DockerfileCompatible('postgresql');
     });
 
     describe('mongodb', function () {
@@ -480,14 +459,7 @@ describe('JHipster generator', function () {
         it('creates expected files with "MongoDB"', function () {
             assert.file(expectedFiles.mongodb);
         });
-        it('creates compose file without container_name, external_links, links', function () {
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-            assert.noFileContent(DOCKER_DIR + 'mongodb.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'mongodb.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'mongodb.yml', /links:/);
-        });
+        shouldBeV3DockerfileCompatible('mongodb');
     });
 
     describe('mssql', function () {
@@ -521,14 +493,7 @@ describe('JHipster generator', function () {
             assert.fileContent('pom.xml', /mssql-jdbc/);
             assert.fileContent(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', /identityInsertEnabled/);
         });
-        it('creates compose file without container_name, external_links, links', function () {
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-            assert.noFileContent(DOCKER_DIR + 'mssql.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'mssql.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'mssql.yml', /links:/);
-        });
+        shouldBeV3DockerfileCompatible('mssql');
     });
 
     describe('cassandra', function () {
@@ -560,14 +525,7 @@ describe('JHipster generator', function () {
         it('creates expected files with "Cassandra"', function () {
             assert.file(expectedFiles.cassandra);
         });
-        it('creates compose file without container_name, external_links, links', function () {
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-            assert.noFileContent(DOCKER_DIR + 'cassandra.yml', /container_name:/);
-            assert.noFileContent(DOCKER_DIR + 'cassandra.yml', /external_links:/);
-            assert.noFileContent(DOCKER_DIR + 'cassandra.yml', /links:/);
-        });
+        shouldBeV3DockerfileCompatible('cassandra');
     });
 
     describe('cassandra no i18n', function () {
