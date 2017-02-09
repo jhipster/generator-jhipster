@@ -26,7 +26,6 @@ function writeFiles() {
         },
 
         writeRegistryFiles: function() {
-            if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
             if (this.serviceDiscoveryType === 'eureka') {
                 this.template('registry/_jhipster-registry.yml', 'registry/jhipster-registry.yml');
                 this.template('registry/_application-configmap.yml', 'registry/application-configmap.yml');

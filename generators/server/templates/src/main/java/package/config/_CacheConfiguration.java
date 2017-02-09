@@ -16,13 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-<%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+<%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 <%_ } _%><%_ if (hibernateCache == 'hazelcast' || hibernateCache == 'no') { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
-<%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+<%_ if (serviceDiscoveryType) { _%>
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 <%_ } _%>
@@ -51,7 +51,7 @@ public class CacheConfiguration {
     <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
 
     private final Environment env;
-        <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+        <%_ if (serviceDiscoveryType) { _%>
 
     private final DiscoveryClient discoveryClient;
 
@@ -67,10 +67,10 @@ public class CacheConfiguration {
         <%_ } _%>
     <%_ } _%>
 
-    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { %>, DiscoveryClient discoveryClient, ServerProperties serverProperties<% } } %><% if (hibernateCache == 'ehcache') { %>CacheManager cacheManager<% if (clusteredHttpSession == 'hazelcast') { %>, Environment env<% } } %>) {
+    public CacheConfiguration(<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>Environment env<% if (serviceDiscoveryType) { %>, DiscoveryClient discoveryClient, ServerProperties serverProperties<% } } %><% if (hibernateCache == 'ehcache') { %>CacheManager cacheManager<% if (clusteredHttpSession == 'hazelcast') { %>, Environment env<% } } %>) {
         <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
         this.env = env;
-            <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+            <%_ if (serviceDiscoveryType) { _%>
         this.discoveryClient = discoveryClient;
         this.serverProperties = serverProperties;
             <%_ } _%>
@@ -102,7 +102,7 @@ public class CacheConfiguration {
         log.debug("Configuring Hazelcast");
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
-        <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway')) { _%>
+        <%_ if (serviceDiscoveryType) { _%>
         // The serviceId is by default the application's name, see Spring Boot's eureka.instance.appname property
         String serviceId = discoveryClient.getLocalServiceInstance().getServiceId();
         log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
+<%_ } _%>
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -14,9 +16,13 @@ export class SocialRegisterComponent implements OnInit  {
 
     constructor (
         private route: ActivatedRoute,
-        private jhiLanguageService: JhiLanguageService
+<%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+<%_ } _%>
     ) {
+<%_ if (enableTranslation) { _%>
         this.jhiLanguageService.setLocations(['social']);
+<%_ } _%>
     }
 
     ngOnInit() {

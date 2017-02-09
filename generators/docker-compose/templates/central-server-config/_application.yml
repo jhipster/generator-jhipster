@@ -19,7 +19,7 @@ jhipster:
             reportFrequency: 60 # in seconds
 <%_ } _%>
 
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
         serviceUrl:

@@ -81,8 +81,7 @@ function writeFiles() {
             if (this.messageBroker === 'kafka') {
                 this.template(DOCKER_DIR + '_kafka.yml', DOCKER_DIR + 'kafka.yml', this, {});
             }
-
-            if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
+            if (this.serviceDiscoveryType) {
                 this.template(DOCKER_DIR + 'config/_README.md', DOCKER_DIR + 'central-server-config/README.md',this, {});
 
                 if (this.serviceDiscoveryType === 'consul') {
@@ -90,7 +89,6 @@ function writeFiles() {
                     this.copy(DOCKER_DIR + 'config/git2consul.json', DOCKER_DIR + 'config/git2consul.json');
                     this.copy(DOCKER_DIR + 'config/consul-config/application.yml', DOCKER_DIR + 'central-server-config/application.yml');
                 }
-
                 if (this.serviceDiscoveryType === 'eureka') {
                     this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
                     this.copy(DOCKER_DIR + 'config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
@@ -301,7 +299,7 @@ function writeFiles() {
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway' && this.applicationType !== 'uaa') return;
+            if (!this.serviceDiscoveryType) return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
@@ -450,8 +448,7 @@ function writeFiles() {
             if (this.applicationType === 'gateway'){
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
-
-            if (this.applicationType === 'gateway' || this.applicationType === 'microservice'  || this.applicationType === 'uaa'){
+            if (this.serviceDiscoveryType) {
                 this.template(SERVER_TEST_RES_DIR + 'config/_bootstrap.yml', SERVER_TEST_RES_DIR + 'config/bootstrap.yml', this, {});
             }
 
