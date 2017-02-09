@@ -53,7 +53,8 @@
       prodDatabaseType: 'mysql',
       useCompass: false,
       buildTool: 'maven',
-      searchEngine: false
+      searchEngine: false,
+      enableTranslation: true
     },
     constants: {},
     entities: [],
@@ -175,6 +176,9 @@ applicationContentDecl
   }
   / SEARCH_ENGINE SPACE* searchEngine:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.searchEngine = searchEngine;
+  }
+  / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.enableTranslation = enableTranslation;
   }
   / ''
 
@@ -427,6 +431,7 @@ PROD_DATABASE_TYPE = 'prodDatabaseType'
 USE_COMPASS = 'useCompass'
 BUILD_TOOL = 'buildTool'
 SEARCH_ENGINE = 'searchEngine'
+ENABLE_TRANSLATION = 'enableTranslation'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
