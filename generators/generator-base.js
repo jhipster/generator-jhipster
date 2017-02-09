@@ -1049,7 +1049,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
             /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s[\"|\']ng-jhipster[\"|\']\;)/,       // ng2 import jhiLanguageService
             /(\,?\s?JhiLanguageService\,?\s?)/,                                                          // ng2 import jhiLanguageService
             /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?\:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
-            /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'|\"][a-zA-Z0-9-_]*[\'|\"]\]\)\;[\s]*)/,// jhiLanguageService invocations
+            /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'\"a-zA-Z0-9\-_,\s]+\]\)\;[\s]*)/,// jhiLanguageService invocations
         ].map(r => r.source).join('|'), 'g');
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
