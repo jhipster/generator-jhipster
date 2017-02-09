@@ -56,7 +56,8 @@
       searchEngine: false,
       enableTranslation: true,
       applicationType: 'monolith',
-      testFrameworks: ['gatling', 'protactor']
+      testFrameworks: ['gatling', 'protactor'],
+      languages: ['en']
     },
     constants: {},
     entities: [],
@@ -192,6 +193,15 @@ applicationContentDecl
     for (let i = 0; i < results.length; i++) {
       if (results[i].trim().length !== 0) {
         parsed.application.testFrameworks.push(results[i].trim());
+      }
+    }
+  }
+  / LANGUAGES SPACE* languages:[a-z, ]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.languages = [];
+    const results = languages.join('').split(',');
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].trim().length !== 0) {
+        parsed.application.languages.push(results[i].trim());
       }
     }
   }
@@ -449,6 +459,7 @@ SEARCH_ENGINE = 'searchEngine'
 ENABLE_TRANSLATION = 'enableTranslation'
 APPLICATION_TYPE = 'applicationType'
 TEST_FRAMEWORK = 'testFrameworks'
+LANGUAGES = 'languages'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
