@@ -54,7 +54,8 @@
       useCompass: false,
       buildTool: 'maven',
       searchEngine: false,
-      enableTranslation: true
+      enableTranslation: true,
+      applicationType: 'monolith'
     },
     constants: {},
     entities: [],
@@ -179,6 +180,9 @@ applicationContentDecl
   }
   / ENABLE_TRANSLATION SPACE* enableTranslation:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.enableTranslation = enableTranslation;
+  }
+  / APPLICATION_TYPE SPACE* applicationType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.applicationType = applicationType;
   }
   / ''
 
@@ -432,6 +436,7 @@ USE_COMPASS = 'useCompass'
 BUILD_TOOL = 'buildTool'
 SEARCH_ENGINE = 'searchEngine'
 ENABLE_TRANSLATION = 'enableTranslation'
+APPLICATION_TYPE = 'applicationType'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
