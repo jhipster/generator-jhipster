@@ -70,7 +70,7 @@
         <!-- Spring social -->
         <httpclient.version>4.5.1</httpclient.version>
         <%_ } _%>
-        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <java.version>1.<%= javaVersion %></java.version>
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <jcache.version>1.0.0</jcache.version>
@@ -150,7 +150,7 @@
         <%_ if (messageBroker === 'kafka') { _%>
         <spring-cloud-stream.version>Brooklyn.RELEASE</spring-cloud-stream.version>
         <%_ } _%>
-        <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+        <%_ if (serviceDiscoveryType) { _%>
         <spring-cloud.version>Brixton.SR7</spring-cloud.version>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
@@ -169,7 +169,7 @@
         <%_ } _%>
     </properties>
 
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
+<%_ if (serviceDiscoveryType || messageBroker === 'kafka') { _%>
     <dependencyManagement>
         <dependencies>
             <%_ if (messageBroker === 'kafka') { _%>
@@ -181,7 +181,7 @@
                 <scope>import</scope>
             </dependency>
             <%_ } _%>
-            <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+            <%_ if (serviceDiscoveryType) { _%>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -706,6 +706,19 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-spectator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (serviceDiscoveryType == 'eureka') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -724,19 +737,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-config</artifactId>
-        </dependency>
-        <%_ } _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-hystrix</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-spectator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'uaa') { _%>
@@ -1186,15 +1186,6 @@
             <properties>
                 <profile.swagger>,swagger</profile.swagger>
             </properties>
-        </profile>
-        <profile>
-            <id>shell</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-remote-shell</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
         <%_ if (!skipClient && clientFramework === 'angular2') { _%>
         <profile>

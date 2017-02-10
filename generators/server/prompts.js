@@ -146,12 +146,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return applicationType === 'microservice';
+                return applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway');
             },
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', applicationType === 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', applicationType === 'microservice' || (response.authenticationType === 'uaa' && applicationType === 'gateway'));
             },
             choices: [
                 {
@@ -175,12 +175,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return response.enableSocialSignIn;
+                return response.authenticationType === 'oauth2' && !response.databaseType;
             },
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.enableSocialSignIn);
+                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.databaseType);
             },
             choices: [
                 {
@@ -196,33 +196,12 @@ function askForServerSideOpts() {
         },
         {
             when: function (response) {
-                return response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice';
+                return !response.databaseType;
             },
             type: 'list',
             name: 'databaseType',
             message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType === 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
-            },
-            choices: [
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice';
-            },
-            type: 'list',
-            name: 'databaseType',
-            message: function (response) {
-                return getNumberedQuestion('Which *type* of database would you like to use?', response.authenticationType !== 'oauth2' && !response.enableSocialSignIn && applicationType !== 'microservice');
+                return getNumberedQuestion('Which *type* of database would you like to use?', !response.databaseType);
             },
             choices: [
                 {
@@ -264,7 +243,7 @@ function askForServerSideOpts() {
                 },
                 {
                     value: 'oracle',
-                    name: 'Oracle - Warning! The Oracle JDBC driver (ojdbc) is not bundled because it is not Open Source. Please follow our documentation to install it manually.'
+                    name: 'Oracle (Please follow our documentation to use the Oracle proprietary driver)'
                 },
                 {
                     value: 'mssql',
@@ -528,6 +507,23 @@ function askForOptionalItems() {
             }
         );
     }
+    if (applicationType === 'monolith' && this.authenticationType === 'jwt') {
+        if (this.hibernateCache === 'hazelcast') {
+            choices.push(
+                {
+                    name: 'Service Discovery and Configuration using JHipster Registry (important for scaling Hazelcast)',
+                    value: 'serviceDiscoveryType:eureka'
+                }
+            );
+        } else {
+            choices.push(
+                {
+                    name: 'Service Discovery and Configuration using JHipster Registry',
+                    value: 'serviceDiscoveryType:eureka'
+                }
+            );
+        }
+    }
     if (applicationType === 'monolith' || applicationType === 'gateway') {
         choices.push(
             {
@@ -560,6 +556,10 @@ function askForOptionalItems() {
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.enableSocialSignIn = this.getOptionFromArray(this.serverSideOptions, 'enableSocialSignIn');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
+            // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
+            if (!this.serviceDiscoveryType) {
+                this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
+            }
             done();
         }.bind(this));
     } else {

@@ -25,9 +25,13 @@ function askForMicroserviceJson() {
     }
 
     var done = this.async();
+    var databaseType = this.databaseType;
 
     var prompts = [
         {
+            when: function () {
+                return databaseType !== 'no';
+            },
             type: 'confirm',
             name: 'useMicroserviceJson',
             message: 'Do you want to generate this entity from an existing microservice?',
@@ -35,7 +39,7 @@ function askForMicroserviceJson() {
         },
         {
             when: function(response) {
-                return response.useMicroserviceJson === true;
+                return response.useMicroserviceJson === true || databaseType === 'no';
             },
             type: 'input',
             name: 'microservicePath',
@@ -59,7 +63,7 @@ function askForMicroserviceJson() {
     ];
 
     this.prompt(prompts).then(function(props) {
-        if (props.useMicroserviceJson) {
+        if (props.microservicePath) {
             this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
             if(path.isAbsolute(props.microservicePath)) {
                 this.microservicePath = props.microservicePath;

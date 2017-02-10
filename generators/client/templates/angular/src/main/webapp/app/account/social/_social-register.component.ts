@@ -14,7 +14,7 @@ export class SocialRegisterComponent implements OnInit  {
 
     constructor (
         private route: ActivatedRoute,
-        private jhiLanguageService: JhiLanguageService
+        private jhiLanguageService: JhiLanguageService,
     ) {
         this.jhiLanguageService.setLocations(['social']);
     }

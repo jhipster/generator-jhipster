@@ -7,8 +7,7 @@ const util = require('util'),
     scriptBase = require('../generator-base'),
     writeFiles = require('./files').writeFiles,
     packagejs = require('../../package.json'),
-    crypto = require('crypto'),
-    mkdirp = require('mkdirp');
+    crypto = require('crypto');
 
 var JhipsterServerGenerator = generators.Base.extend({});
 
@@ -130,10 +129,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.messageBroker = false;
             }
 
-            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
-                this.serviceDiscoveryType = this.applicationType !== 'monolith' ? 'eureka' : false;
+                this.serviceDiscoveryType = false;
             }
+
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';
@@ -219,6 +219,11 @@ module.exports = JhipsterServerGenerator.extend({
                 // If social sign in is not defined, it is disabled by default
                 if (this.enableSocialSignIn === undefined) {
                     this.enableSocialSignIn = false;
+                }
+
+                // If the service discovery is not defined, it is disabled by default
+                if (this.serviceDiscoveryType === undefined) {
+                    this.serviceDiscoveryType = false;
                 }
 
                 // If translation is not defined, it is enabled by default
@@ -310,13 +315,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.humanizedBaseName = _.startCase(this.baseName);
             this.mainClass = this.getMainClassName();
 
-            if (this.prodDatabaseType === 'oracle') {
-                // create a folder for users to place ojdbc jar
-                this.ojdbcVersion = '7';
-                this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
-                mkdirp(this.libFolder);
-            }
-
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
                 this.pkType = 'String';
             } else {
@@ -396,10 +394,9 @@ module.exports = JhipsterServerGenerator.extend({
 
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') + 'Please rename ' +
-                chalk.yellow.bold('ojdbc' + this.ojdbcVersion + '.jar') + ' to ' +
-                chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' and place it in the `' +
-                chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
+            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') +
+                'Please follow our documentation on using Oracle to set up the \n' +
+                'Oracle proprietary JDBC driver.');
         }
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 

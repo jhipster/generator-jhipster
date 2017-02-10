@@ -37,14 +37,14 @@ apply plugin: 'com.moowork.gulp'
     <%_ } _%>
 <%_ } _%>
 apply plugin: 'io.spring.dependency-management'
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa' || messageBroker === 'kafka') { _%>
+<%_ if (serviceDiscoveryType || messageBroker === 'kafka') { _%>
 dependencyManagement {
   imports {
-    <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
-    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:' + spring_cloud_stream_version
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType) { _%>
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
     <%_ } _%>
   }
 }
@@ -149,12 +149,6 @@ if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_dev.gradle'
 }
 
-if (project.hasProperty('shell')) {
-    dependencies {
-        compile "org.springframework.boot:spring-boot-starter-remote-shell"
-    }
-}
-
 if (project.hasProperty('graphite')) {
     apply from: 'gradle/graphite.gradle'
 }
@@ -188,6 +182,9 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/releases' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'http://repo.maven.apache.org/maven2' }
+    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
+    maven { url "https://maven.oracle.com" }
+    <%_ } _%>
 }
 
 dependencies {
@@ -301,17 +298,17 @@ dependencies {
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-ribbon"
-        <%_ if (serviceDiscoveryType === 'eureka') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-eureka"
-    compile "org.springframework.cloud:spring-cloud-starter-config"
-        <%_ } _%>
-        <%_ if (serviceDiscoveryType === 'consul') { _%>
-    compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
-    compile "org.springframework.cloud:spring-cloud-starter-consul-config"
-        <%_ } _%>
     compile "org.springframework.cloud:spring-cloud-starter-hystrix"
     compile "org.springframework.cloud:spring-cloud-starter-spectator"
     compile "org.springframework.retry:spring-retry"
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+    compile "org.springframework.cloud:spring-cloud-starter-eureka"
+    compile "org.springframework.cloud:spring-cloud-starter-config"
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
+    compile "org.springframework.cloud:spring-cloud-starter-consul-config"
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-security"

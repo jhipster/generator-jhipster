@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "Server nije dostupan",
         "url.not.found": "Stranica nije pronađena",
         "NotNull": "Polje {{ fieldName }} ne može biti prazno!",

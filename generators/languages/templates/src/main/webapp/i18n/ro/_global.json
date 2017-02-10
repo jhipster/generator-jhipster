@@ -135,6 +135,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "Serverul este indisponibil",
         "url.not.found": "Not found",
         "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Rx';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { MockLanguageService } from '../../../helpers/mock-language.service';
-<% } %>
+<%_ } _%>
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { LoginModalService } from '../../../../../../main/webapp/app/shared';
 import { Activate } from '../../../../../../main/webapp/app/account/activate/activate.service';

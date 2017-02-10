@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
                 "createLabel": "Crează o nouă <%= entityClassHumanized %>",
-                "createOrEditLabel": "Crează sau editează o <%= entityClassHumanized %>",
-                "search": "Search for <%= entityClassHumanized %>"
+                "createOrEditLabel": "Crează sau editează o <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Search for <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "O nouă <%= entityClassHumanized %> este creată cu identificatorul {{ param }}",
             "updated": "O <%= entityClassHumanized %> este editată cu identificatorul {{ param }}",

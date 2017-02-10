@@ -266,7 +266,7 @@ function askForServiceDiscovery() {
 }
 
 function askForAdminPassword() {
-    if (this.regenerate || this.composeApplicationType === 'monolith' || this.serviceDiscoveryType !== 'eureka') return;
+    if (this.regenerate || this.serviceDiscoveryType !== 'eureka') return;
 
     var done = this.async();
 
