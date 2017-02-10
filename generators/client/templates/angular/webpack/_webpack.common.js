@@ -76,8 +76,8 @@ module.exports = function (options) {
                             replacement: function (match, p1, offset, string) {
                                 return `_${p1} = ${DATAS[p1]};`;
                             }
-                        }
-                    ]})
+                        }]
+                    })
                 }
             ]
         },
