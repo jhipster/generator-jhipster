@@ -42,6 +42,7 @@ const expectedFiles = {
         '.travis.yml',
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'ehcache.xml',
+        SERVER_MAIN_RES_DIR + 'ehcache-prod.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
         SERVER_MAIN_RES_DIR + 'templates/error.html',
         SERVER_MAIN_RES_DIR + 'logback-spring.xml',

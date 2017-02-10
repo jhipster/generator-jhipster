@@ -582,9 +582,9 @@ Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
  */
 Generator.prototype.addEntryToEhcache = function (entry) {
     try {
-        var fullPath = SERVER_MAIN_RES_DIR + 'ehcache.xml';
+        var ehcachePath = SERVER_MAIN_RES_DIR + 'ehcache.xml';
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: ehcachePath,
             needle: 'jhipster-needle-ehcache-add-entry',
             splicable: [`<cache alias="${entry}" uses-template="simple"/>
 `
@@ -592,6 +592,18 @@ Generator.prototype.addEntryToEhcache = function (entry) {
         }, this);
     } catch (e) {
         this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache.xml file.\n'));
+    }
+    try {
+        var ehcacheProdPath = SERVER_MAIN_RES_DIR + 'ehcache-prod.xml';
+        jhipsterUtils.rewriteFile({
+            file: ehcacheProdPath,
+            needle: 'jhipster-needle-ehcache-add-entry',
+            splicable: [`<cache alias="${entry}" uses-template="simple"/>
+`
+            ]
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache-prod.xml file.\n'));
     }
 };
 
