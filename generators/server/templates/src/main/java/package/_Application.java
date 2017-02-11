@@ -23,6 +23,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 <%_ if (applicationType === 'gateway') { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 <%_ if (authenticationType === 'uaa') { _%>
 import org.springframework.context.annotation.FilterType;
@@ -60,6 +61,8 @@ public class <%= mainClass %> {
         this.env = env;
     }
 
+    public static ApplicationContext context;
+
     /**
      * Initializes <%= baseName %>.
      * <p>
@@ -89,7 +92,8 @@ public class <%= mainClass %> {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
-        Environment env = app.run(args).getEnvironment();
+        context = app.run(args);
+        Environment env = context.getEnvironment();
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:{}\n\t" +
