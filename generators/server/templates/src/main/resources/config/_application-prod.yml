@@ -124,7 +124,7 @@ spring:
             hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.SpringCacheRegionFactory
     cache:
         jcache:
-            config: ehcache-prod.xml
+            config: config/ehcache/ehcache-dev.xml
             <%_ } else if (hibernateCache == 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
@@ -194,17 +194,11 @@ jhipster:
     http:
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
-    <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
+    <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
     cache: # Cache configuration
-        <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache
             time-to-live-seconds: 3600
             backup-count: 1
-        <%_ } _%>
-        <%_ if (hibernateCache == 'ehcache') { _%>
-        ehcache: # Hibernate 2nd level cache
-            max-bytes-local-heap: 256M
-        <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType == 'jwt') { _%>
     security:
