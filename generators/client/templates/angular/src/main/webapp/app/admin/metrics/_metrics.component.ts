@@ -13,7 +13,7 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     metrics: any = {};
     cachesStats: any = {};
     servicesStats: any = {};
-    updatingMetrics: boolean = true;
+    updatingMetrics = true;
     JCACHE_KEY: string ;
 
     constructor(
