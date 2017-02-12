@@ -1082,7 +1082,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
  * @param {object} opt - options that can be passed to template method
  * @param {boolean} template - flag to use template method instead of copy
  */
-Generator.prototype.copyHtml = function (source, dest, generator, opt, template) {
+Generator.prototype.processHtml = function (source, dest, generator, opt, template) {
     this.copyTemplate(source, dest, 'stripHtml', generator, opt, template);
 };
 
@@ -1095,7 +1095,7 @@ Generator.prototype.copyHtml = function (source, dest, generator, opt, template)
  * @param {object} opt - options that can be passed to template method
  * @param {boolean} template - flag to use template method instead of copy
  */
-Generator.prototype.copyJs = function (source, dest, generator, opt, template) {
+Generator.prototype.processJs = function (source, dest, generator, opt, template) {
     this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
 };
 

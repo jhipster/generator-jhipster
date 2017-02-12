@@ -140,19 +140,19 @@ const angularjsFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'entities/_entity-management.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityPluralFileName}.html`
                 },
                 {
-                    file: 'entities/_entity-management-detail.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management-detail.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.html`
                 },
                 {
-                    file: 'entities/_entity-management-dialog.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management-dialog.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.html`
                 },
                 {
-                    file: 'entities/_entity-management-delete-dialog.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management-delete-dialog.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.html`
                 },
                 {
@@ -216,19 +216,19 @@ const angularFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'entities/_entity-management.component.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management.component.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-detail.component.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management-detail.component.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-dialog.component.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management-dialog.component.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-delete-dialog.component.html', method: 'copyHtml', template: true,
+                    file: 'entities/_entity-management-delete-dialog.component.html', method: 'processHtml', template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.html`
                 },
                 {
