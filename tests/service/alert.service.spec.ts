@@ -18,15 +18,13 @@ import { TestBed, inject } from '@angular/core/testing';
 import { Sanitizer } from '@angular/core';
 
 import { AlertService } from '../../src/service/alert.service';
-import { ConfigHelper } from '../../src/helper';
+import { ConfigService } from '../../src/config.service';
 
 function mockAlertService(sanitizer: Sanitizer) {
-    return new AlertService(sanitizer, false);
+    return new AlertService(sanitizer, null, new ConfigService({
+        i18nEnabled: false
+    }), false);
 }
-
-ConfigHelper.setModuleConfigOptions({
-    i18nEnabled: false
-});
 
 describe('Alert service test', () => {
 

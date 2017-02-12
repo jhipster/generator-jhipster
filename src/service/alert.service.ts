@@ -1,6 +1,6 @@
 import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
 import { TranslateService } from 'ng2-translate';
-import { ConfigHelper } from '../helper';
+import { ConfigService } from '../config.service';
 
 export type AlertType =  'success' | 'danger' | 'warning' | 'info';
 
@@ -25,8 +25,8 @@ export class AlertService {
     private i18nEnabled: boolean;
     private translateService: TranslateService;
 
-    constructor(private sanitizer: Sanitizer, private toast?: boolean, translateService?: TranslateService) {
-        this.i18nEnabled = ConfigHelper.getConfig().i18nEnabled;
+    constructor(private sanitizer: Sanitizer, translateService: TranslateService, configService: ConfigService, private toast?: boolean) {
+        this.i18nEnabled = configService.getConfig().i18nEnabled;
         this.alertId = 0; // unique id for each alert. Starts from 0.
         this.alerts = [];
         this.timeout = 5000; // default timeout in milliseconds

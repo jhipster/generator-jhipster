@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 import { MissingTranslationHandler, MissingTranslationHandlerParams } from 'ng2-translate';
-import { ConfigHelper } from '../helper';
+import { ConfigService } from '../config.service';
 
 export class JhiMissingTranslationHandler implements MissingTranslationHandler {
+    constructor(private configService: ConfigService) {}
+
     handle(params: MissingTranslationHandlerParams) {
         let key = params.key;
-        return `${ConfigHelper.getConfig().noi18nMessage}[${key}]`;
+        return `${this.configService.getConfig().noi18nMessage}[${key}]`;
     }
 }

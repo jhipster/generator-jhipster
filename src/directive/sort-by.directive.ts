@@ -15,7 +15,7 @@
  */
 import { Directive, Host, HostListener, Input, ElementRef, Renderer } from '@angular/core';
 import { JhiSortDirective } from './sort.directive';
-import { ConfigHelper } from '../helper';
+import { ConfigService } from '../config.service';
 
 @Directive({
     selector: '[jhiSortBy]'
@@ -28,9 +28,9 @@ export class JhiSortByDirective {
 
     jhiSort: JhiSortDirective;
 
-    constructor(@Host() jhiSort: JhiSortDirective, private el: ElementRef, private renderer: Renderer) {
+    constructor(@Host() jhiSort: JhiSortDirective, private el: ElementRef, private renderer: Renderer, configService: ConfigService) {
         this.jhiSort = jhiSort;
-        let config = ConfigHelper.getConfig();
+        let config = configService.getConfig();
         this.sortAscIcon = config.sortAscIcon;
         this.sortDescIcon = config.sortDescIcon;
     }
