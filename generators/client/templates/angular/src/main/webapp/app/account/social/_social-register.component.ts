@@ -3,7 +3,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { LoginModalService } from '../shared';
+import { LoginModalService } from '../../shared';
 
 @Component({
     selector: '<%=jhiPrefix%>-register',
