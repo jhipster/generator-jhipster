@@ -1242,21 +1242,19 @@ Generator.prototype.callHooks = function(hookFor, hookType, options) {
 };
 
 /**
- * get a property of an entity from the configuration file
+ * get an entity from the configuration file
  * @param {string} file - configuration file name for the entity
- * @param {string} key - key to read
  */
-Generator.prototype.getEntityProperty = function (file, key) {
-    var property = null;
+Generator.prototype.getEntityJson = function (file) {
+    let entityJson = null;
 
     try {
-        var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
-        property = entityJson[key];
+        entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
     } catch (err) {
-        this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
+        this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
     }
 
-    return property;
+    return entityJson;
 };
 
 /**
@@ -1693,6 +1691,8 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
  *
  * @param {object} files - files to write
  * @param {object} generator - the generator instance to use
+ * @param {boolean} returnFiles - weather to return the generated file list or to write them
+ * @param {string} prefix - pefix to add to path
  */
 Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, prefix) {
     let _this = generator || this;
@@ -1722,10 +1722,9 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
                     } else {
                         templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
                     }
-                    let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
-                    if (returnFiles) {
-                        filesOut.push(templatePathTo);
-                    } else {
+                    filesOut.push(templatePathTo);
+                    if (!returnFiles) {
+                        const templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
                         _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
                     }
                 });

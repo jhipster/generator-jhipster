@@ -11,15 +11,7 @@
             var relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
-            otherEntityName = relationships[idx].otherEntityName;
-            if (otherEntityName === 'user') {
-                otherEntityTableName = 'jhi_user';
-            } else {
-                otherEntityTableName = getEntityProperty(otherEntityName, 'entityTableName');
-                if (!otherEntityTableName) {
-                    otherEntityTableName = getTableName(otherEntityName);
-                }
-            }
+            otherEntityTableName = relationships[idx].otherEntityTableName;
             if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide)) {
                 var constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"

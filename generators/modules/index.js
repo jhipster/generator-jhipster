@@ -135,7 +135,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.composeLanguagesSub = this.composeLanguagesSub;
         jhipsterFunc.getNumberedQuestion = this.getNumberedQuestion;
         jhipsterFunc.buildApplication = this.buildApplication;
-
+        jhipsterFunc.writeFilesToDisk = this.writeFilesToDisk;
+        jhipsterFunc.getEntityJson = this.getEntityJson;
     },
 
     initializing: function () {

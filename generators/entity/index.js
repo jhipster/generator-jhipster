@@ -552,6 +552,17 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityRelationshipName));
                 }
 
+                let otherEntityName = relationship.otherEntityName;
+                let otherEntityData = this.getEntityJson(otherEntityName);
+                if (otherEntityName === 'user') {
+                    relationship.otherEntityTableName = 'jhi_user';
+                } else {
+                    relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
+                    if (!relationship.otherEntityTableName) {
+                        relationship.otherEntityTableName = this.getTableName(otherEntityName);
+                    }
+                }
+
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
                     relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                 }
