@@ -16,7 +16,7 @@
     "@angular/platform-browser-dynamic": "2.4.7",
     "@angular/router": "3.4.7",
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.15",
-    "angular2-infinite-scroll": "0.2.9",
+    "angular2-infinite-scroll": "0.3.0",
     "bootstrap": "4.0.0-alpha.5",
     "font-awesome": "4.7.0",
     "angular2-cookie": "1.2.6",
