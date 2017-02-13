@@ -7,7 +7,7 @@
         <expiry>
             <ttl unit="seconds">3600</ttl>
         </expiry>
-        <heap unit="MB">16</heap>
+        <heap unit="entries">100</heap>
     </cache-template>
 
     <cache alias="<%=packageName%>.domain.User" uses-template="simple"/>
