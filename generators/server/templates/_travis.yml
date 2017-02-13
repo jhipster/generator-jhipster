@@ -62,10 +62,8 @@ install:
 script:
 <%_ if (buildTool === 'maven') { _%>
   - ./mvnw clean test
-  - ./mvnw package -Pprod -DskipTests
 <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew clean test
-  - ./gradlew bootRepackage -Pprod -x test
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientFramework === 'angular1') { _%>
@@ -74,6 +72,11 @@ script:
     <%_ if (clientFramework === 'angular2') { _%>
   - yarn test
     <%_ } _%>
+<%_ } _%>
+<%_ if (buildTool === 'maven') { _%>
+  - ./mvnw package -Pprod -DskipTests
+<%_ } else if (buildTool === 'gradle') { _%>
+  - ./gradlew bootRepackage -Pprod -x test
 <%_ } _%>
 notifications:
   webhooks:
