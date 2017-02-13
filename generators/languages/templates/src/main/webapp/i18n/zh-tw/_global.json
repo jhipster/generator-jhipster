@@ -126,7 +126,7 @@
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
+        "internalServerError": "伺服器內部錯誤",
         "server.not.reachable": "無法連到伺服器",
         "url.not.found": "找不到",
         "NotNull": "欄位 {{fieldName}} 不能為空!",
