@@ -44,6 +44,11 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         this.healthService.checkHealth().subscribe(health => {
             this.healthData = this.healthService.transformHealthData(health);
             this.updatingHealth = false;
+        }, error => {
+            if (error.status === 503) {
+                this.healthData = this.healthService.transformHealthData(error.json());
+                this.updatingHealth = false;
+            }
         });
     }
 
@@ -51,9 +56,9 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>HealthModalComponent);
         modalRef.componentInstance.currentHealth = health;
         modalRef.result.then((result) => {
-            console.log(`Closed with: ${result}`);
+            // Left blank intentionally, nothing to do here
         }, (reason) => {
-            console.log(`Dismissed ${reason}`);
+            // Left blank intentionally, nothing to do here
         });
     }
 

@@ -1,16 +1,22 @@
 <div *ngIf="user">
-    <h2><span jhiTranslate="userManagement.detail.title">User</span> "{{user.login}}"</h2>
-    <dl class="row">
+    <h2>
+        <span jhiTranslate="userManagement.detail.title">User</span> [<b>{{user.login}}</b>]
+    </h2>
+    <dl class="row jh-entity-details">
         <dt><span jhiTranslate="userManagement.login">Login</span></dt>
-        <dd><span>{{user.login}}</span></dd>
+        <dd>
+            <span>{{user.login}}</span>
+            <span class="tag tag-danger" *ngIf="!user.activated"
+                  jhiTranslate="userManagement.deactivated">Deactivated</span>
+            <span class="tag tag-success" *ngIf="user.activated"
+                  jhiTranslate="userManagement.activated">Activated</span>
+        </dd>
         <dt><span jhiTranslate="userManagement.firstName">First Name</span></dt>
         <dd>{{user.firstName}}</dd>
         <dt><span jhiTranslate="userManagement.lastName">Last Name</span></dt>
         <dd>{{user.lastName}}</dd>
         <dt><span jhiTranslate="userManagement.email">Email</span></dt>
         <dd>{{user.email}}</dd>
-        <dt><span jhiTranslate="userManagement.activated">Activated</span></dt>
-        <dd>{{user.activated}}</dd>
         <%_ if (enableTranslation) { _%>
         <dt><span jhiTranslate="userManagement.langKey">Lang Key</span></dt>
         <dd>{{user.langKey}}</dd>
@@ -26,7 +32,9 @@
         <dt><span jhiTranslate="userManagement.profiles">Profiles</span></dt>
         <dd>
             <ul class="list-unstyled">
-                <li *ngFor="let authority of user.authorities"><span>{{authority}}</span></li>
+                <li *ngFor="let authority of user.authorities">
+                    <span class="tag tag-info">{{authority}}</span>
+                </li>
             </ul>
         </dd>
     </dl>

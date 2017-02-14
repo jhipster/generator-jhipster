@@ -7,7 +7,7 @@
         <expiry>
             <ttl unit="seconds">3600</ttl>
         </expiry>
-        <heap>100</heap>
+        <heap unit="entries">100</heap>
     </cache-template>
 
     <cache alias="<%=packageName%>.domain.User" uses-template="simple"/>
@@ -19,10 +19,7 @@
     <cache alias="<%=packageName%>.domain.PersistentToken" uses-template="simple"/>
 
     <cache alias="<%=packageName%>.domain.User.persistentTokens" uses-template="simple"/>
-    <%_ if (enableSocialSignIn) { _%>
 
-    <cache alias="<%=packageName%>.social.SocialUserConnection" uses-template="simple"/>
-    <%_ } _%>
+    <cache alias="<%=packageName%>.domain.PersistentAuditEvent" uses-template="simple"/>
 
-    <!-- jhipster-needle-ehcache-add-entry -->
 </config>

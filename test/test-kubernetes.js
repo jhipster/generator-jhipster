@@ -121,7 +121,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
         });
     });
 
-    describe('mysql and psql microservices without gateway', function () {
+    describe('MySQL and PostgreSQL microservices without gateway', function () {
         beforeEach(function (done) {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
@@ -228,7 +228,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
         });
     });
 
-    describe('kafka application', function () {
+    describe('Kafka application', function () {
         beforeEach(function (done) {
             helpers
                 .run(require.resolve('../generators/kubernetes'))

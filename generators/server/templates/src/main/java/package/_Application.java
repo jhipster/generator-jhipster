@@ -17,7 +17,7 @@ import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfigurati
 <%_ } _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType) { _%>
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
@@ -44,7 +44,7 @@ import java.util.Collection;
 <%_ } _%>
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %>})
 @EnableConfigurationProperties(<% if (databaseType == 'sql') { %>LiquibaseProperties.class<% } %>)
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>

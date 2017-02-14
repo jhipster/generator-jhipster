@@ -9,11 +9,11 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements
 
     threadDumpFilter: any;
     threadDump: any;
-    threadDumpAll: number = 0;
-    threadDumpBlocked: number = 0;
-    threadDumpRunnable: number = 0;
-    threadDumpTimedWaiting: number = 0;
-    threadDumpWaiting: number = 0;
+    threadDumpAll = 0;
+    threadDumpBlocked = 0;
+    threadDumpRunnable = 0;
+    threadDumpTimedWaiting = 0;
+    threadDumpWaiting = 0;
 
     constructor(public activeModal: NgbActiveModal) {}
 

@@ -582,9 +582,9 @@ Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
  */
 Generator.prototype.addEntryToEhcache = function (entry) {
     try {
-        var fullPath = SERVER_MAIN_RES_DIR + 'ehcache.xml';
+        var ehcachePath = SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml';
         jhipsterUtils.rewriteFile({
-            file: fullPath,
+            file: ehcachePath,
             needle: 'jhipster-needle-ehcache-add-entry',
             splicable: [`<cache alias="${entry}" uses-template="simple"/>
 `
@@ -592,6 +592,18 @@ Generator.prototype.addEntryToEhcache = function (entry) {
         }, this);
     } catch (e) {
         this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache.xml file.\n'));
+    }
+    try {
+        var ehcacheProdPath = SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml';
+        jhipsterUtils.rewriteFile({
+            file: ehcacheProdPath,
+            needle: 'jhipster-needle-ehcache-add-entry',
+            splicable: [`<cache alias="${entry}" uses-template="simple"/>
+`
+            ]
+        }, this);
+    } catch (e) {
+        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache-prod.xml file.\n'));
     }
 };
 
@@ -1049,7 +1061,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
             /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s[\"|\']ng-jhipster[\"|\']\;)/,       // ng2 import jhiLanguageService
             /(\,?\s?JhiLanguageService\,?\s?)/,                                                          // ng2 import jhiLanguageService
             /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?\:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
-            /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'|\"][a-zA-Z0-9-_]*[\'|\"]\]\)\;[\s]*)/,// jhiLanguageService invocations
+            /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'\"a-zA-Z0-9\-_,\s]+\]\)\;[\s]*)/,// jhiLanguageService invocations
         ].map(r => r.source).join('|'), 'g');
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
@@ -1070,7 +1082,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
  * @param {object} opt - options that can be passed to template method
  * @param {boolean} template - flag to use template method instead of copy
  */
-Generator.prototype.copyHtml = function (source, dest, generator, opt, template) {
+Generator.prototype.processHtml = function (source, dest, generator, opt, template) {
     this.copyTemplate(source, dest, 'stripHtml', generator, opt, template);
 };
 
@@ -1083,7 +1095,7 @@ Generator.prototype.copyHtml = function (source, dest, generator, opt, template)
  * @param {object} opt - options that can be passed to template method
  * @param {boolean} template - flag to use template method instead of copy
  */
-Generator.prototype.copyJs = function (source, dest, generator, opt, template) {
+Generator.prototype.processJs = function (source, dest, generator, opt, template) {
     this.copyTemplate(source, dest, 'stripJs', generator, opt, template);
 };
 
@@ -1230,21 +1242,19 @@ Generator.prototype.callHooks = function(hookFor, hookType, options) {
 };
 
 /**
- * get a property of an entity from the configuration file
+ * get an entity from the configuration file
  * @param {string} file - configuration file name for the entity
- * @param {string} key - key to read
  */
-Generator.prototype.getEntityProperty = function (file, key) {
-    var property = null;
+Generator.prototype.getEntityJson = function (file) {
+    let entityJson = null;
 
     try {
-        var entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
-        property = entityJson[key];
+        entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
     } catch (err) {
-        this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
+        this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
     }
 
-    return property;
+    return entityJson;
 };
 
 /**
@@ -1681,6 +1691,8 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
  *
  * @param {object} files - files to write
  * @param {object} generator - the generator instance to use
+ * @param {boolean} returnFiles - weather to return the generated file list or to write them
+ * @param {string} prefix - pefix to add to path
  */
 Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, prefix) {
     let _this = generator || this;
@@ -1710,10 +1722,9 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
                     } else {
                         templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
                     }
-                    let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
-                    if (returnFiles) {
-                        filesOut.push(templatePathTo);
-                    } else {
+                    filesOut.push(templatePathTo);
+                    if (!returnFiles) {
+                        const templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
                         _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
                     }
                 });

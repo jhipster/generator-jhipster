@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "Servidor no accesible",
         "url.not.found": "No s'ha trobat",
         "NotNull": "El camp {{fieldName}} no pot ser buit!",

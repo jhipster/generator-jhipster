@@ -127,6 +127,14 @@ module.exports = EntityGenerator.extend({
             if (!this.clientFramework) {
                 this.clientFramework = 'angular1';
             }
+            this.clientPackageManager = this.config.get('clientPackageManager');
+            if (!this.clientPackageManager) {
+                if (this.yarnInstall) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
+                }
+            }
 
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
@@ -145,7 +153,7 @@ module.exports = EntityGenerator.extend({
         },
 
         validateDbExistence: function () {
-            if(this.databaseType === 'no') {
+            if(this.databaseType === 'no' && !(this.authenticationType === 'uaa' && this.applicationType === 'gateway')) {
                 this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
             }
         },
@@ -553,6 +561,17 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityRelationshipName));
                 }
 
+                let otherEntityName = relationship.otherEntityName;
+                let otherEntityData = this.getEntityJson(otherEntityName);
+                if (otherEntityName === 'user') {
+                    relationship.otherEntityTableName = 'jhi_user';
+                } else {
+                    relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
+                    if (!relationship.otherEntityTableName) {
+                        relationship.otherEntityTableName = this.getTableName(otherEntityName);
+                    }
+                }
+
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
                     relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                 }
@@ -644,6 +663,15 @@ module.exports = EntityGenerator.extend({
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
             injectJsFilesToIndex.call(this);
+        }
+
+        // rebuild client for Angular
+        var rebuildClient = function () {
+            this.log('\n' + chalk.bold.green('Running `webpack:build:dev` to update client app\n'));
+            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
+        };
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
+            rebuildClient.call(this);
         }
     },
 

@@ -32,8 +32,8 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, Aft
         <%_ if (enableSocialSignIn) { _%>
         private socialService: SocialService,
         <%_ } _%>
-        private activeModal: NgbActiveModal,
-        private router: Router
+        private router: Router,
+        public activeModal: NgbActiveModal
     ) {
         this.credentials = {};
     }

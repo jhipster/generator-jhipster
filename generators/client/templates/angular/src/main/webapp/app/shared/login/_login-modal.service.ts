@@ -17,10 +17,8 @@ export class LoginModalService {
         this.isOpen = true;
         let modalRef = this.modalService.open(<%=jhiPrefixCapitalized%>LoginModalComponent);
         modalRef.result.then(result => {
-            console.log(`Closed with: ${result}`);
             this.isOpen = false;
         }, (reason) => {
-            console.log(`Dismissed ${reason}`);
             this.isOpen = false;
         });
         return modalRef;

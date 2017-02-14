@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPlural %>",
                 "createLabel": "नया <%= entityClassHumanized %> बनाएँ",
-                "createOrEditLabel": "<%= entityClassHumanized %> बनाएँ या संपादित करें",
-                "search": "<%= entityClassHumanized %> खोजें"
+                "createOrEditLabel": "<%= entityClassHumanized %> बनाएँ या संपादित करें"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "<%= entityClassHumanized %> खोजें"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "एक नया <%= entityClassHumanized %> [identifier: {{ param }}] तैयार है",
             "updated": "एक <%= entityClassHumanized %> [identifier: {{ param }}] का अद्यतन हुआ है",
