@@ -15,10 +15,8 @@ services:
 <%_ } _%>
 <%_ if (useKafka) { _%>
     zookeeper:
-        container_name: zookeeper
         image: <%= DOCKER_ZOOKEEPER %>
     kafka:
-        container_name: kafka
         image: <%= DOCKER_KAFKA %>
         environment:
             KAFKA_ADVERTISED_HOST_NAME: kafka
@@ -30,7 +28,6 @@ services:
 <%_ } _%>
 <%_ if (serviceDiscoveryType == 'eureka') { _%>
     jhipster-registry:
-        container_name: jhipster-registry
         image: <%= DOCKER_JHIPSTER_REGISTRY %>
         volumes:
         #    - ./central-server-config:/central-config
@@ -98,7 +95,6 @@ services:
 <%_ if (monitoring === 'prometheus') { _%>
     prometheus:
         image: <%= DOCKER_PROMETHEUS %>
-        container_name: prometheus
         volumes:
         - ./prometheus-conf/:/etc/prometheus/
         - prometheus_data:/prometheus
