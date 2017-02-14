@@ -8,6 +8,7 @@
     <%= entityAngularName %>Controller.$inject = [<% if (fieldsContainBlob) { %>'DataUtils', <% } %>'<%= entityClass %>'<% if (searchEngine == 'elasticsearch') { %>, '<%= entityClass %>Search'<% } %><% if (pagination != 'no') { %>, 'ParseLinks', 'AlertService', 'paginationConstants'<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, 'pagingParams'<% } %>];
 
     function <%= entityAngularName %>Controller(<% if (fieldsContainBlob) { %>DataUtils, <% } %><%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks, AlertService, paginationConstants<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, pagingParams<% } %>)
+
         var vm = this;
 
         <%_ if (pagination == 'pagination' || pagination == 'pager') { _%>

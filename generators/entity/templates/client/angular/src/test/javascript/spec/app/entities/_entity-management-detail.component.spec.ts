@@ -67,6 +67,7 @@ describe('Component Tests', () => {
         describe('OnInit', () => {
             it('Should call load all on init', () => {
             // GIVEN
+
             spyOn(service, 'find').and.returnValue(Observable.of(new <%= entityAngularName %>(<%_
             if (databaseType === 'sql' || databaseType === 'no') { %>10<% } else if (databaseType === 'mongodb' || databaseType === 'cassandra') { %>'aaa'<% } %>)));
 
