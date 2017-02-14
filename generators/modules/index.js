@@ -110,8 +110,10 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.dateFormatForLiquibase = this.dateFormatForLiquibase;
         jhipsterFunc.copyI18nFilesByName = this.copyI18nFilesByName;
         jhipsterFunc.copyTemplate = this.copyTemplate;
-        jhipsterFunc.copyHtml = this.copyHtml;
-        jhipsterFunc.copyJs = this.copyJs;
+        jhipsterFunc.copyHtml = this.processHtml;
+        jhipsterFunc.processHtml = this.processHtml;
+        jhipsterFunc.copyJs = this.processJs;
+        jhipsterFunc.processJs = this.processJs;
         jhipsterFunc.rewriteFile = this.rewriteFile;
         jhipsterFunc.replaceContent = this.replaceContent;
         jhipsterFunc.registerModule = this.registerModule;
@@ -135,7 +137,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.composeLanguagesSub = this.composeLanguagesSub;
         jhipsterFunc.getNumberedQuestion = this.getNumberedQuestion;
         jhipsterFunc.buildApplication = this.buildApplication;
-
+        jhipsterFunc.writeFilesToDisk = this.writeFilesToDisk;
+        jhipsterFunc.getEntityJson = this.getEntityJson;
     },
 
     initializing: function () {

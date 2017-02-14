@@ -127,6 +127,14 @@ module.exports = EntityGenerator.extend({
             if (!this.clientFramework) {
                 this.clientFramework = 'angular1';
             }
+            this.clientPackageManager = this.config.get('clientPackageManager');
+            if (!this.clientPackageManager) {
+                if (this.yarnInstall) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
+                }
+            }
 
             this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient') || this.options['skip-client'];
 
@@ -145,7 +153,7 @@ module.exports = EntityGenerator.extend({
         },
 
         validateDbExistence: function () {
-            if(this.databaseType === 'no') {
+            if(this.databaseType === 'no' && !(this.authenticationType === 'uaa' && this.applicationType === 'gateway')) {
                 this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
             }
         },
@@ -238,6 +246,7 @@ module.exports = EntityGenerator.extend({
             this.skipServer = true;
         }
     },
+
     _getMicroserviceAppName: function () {
         return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
     },
@@ -419,8 +428,8 @@ module.exports = EntityGenerator.extend({
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityAngularName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
-            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityStateName = _.kebabCase(this.entityAngularName);
+            this.entityUrl = this.entityStateName;
             this.entityTranslationKey = this.entityInstance;
             this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
@@ -552,6 +561,17 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityRelationshipName));
                 }
 
+                let otherEntityName = relationship.otherEntityName;
+                let otherEntityData = this.getEntityJson(otherEntityName);
+                if (otherEntityName === 'user') {
+                    relationship.otherEntityTableName = 'jhi_user';
+                } else {
+                    relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
+                    if (!relationship.otherEntityTableName) {
+                        relationship.otherEntityTableName = this.getTableName(otherEntityName);
+                    }
+                }
+
                 if (_.isUndefined(relationship.otherEntityNamePlural)) {
                     relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
                 }
@@ -561,7 +581,12 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityAngularName)) {
-                    relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
+                    if (relationship.otherEntityNameCapitalized !== 'User') {
+                        var otherEntityAngularSuffix = otherEntityData.angularJSSuffix || '';
+                        relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(otherEntityAngularSuffix));
+                    } else {
+                        relationship.otherEntityAngularName = 'User';
+                    }
                 }
 
                 if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {
@@ -573,7 +598,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
-                    relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
+                    relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
                 }
                 if (_.isUndefined(relationship.otherEntityModuleName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {
@@ -638,6 +663,15 @@ module.exports = EntityGenerator.extend({
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
             injectJsFilesToIndex.call(this);
+        }
+
+        // rebuild client for Angular
+        var rebuildClient = function () {
+            this.log('\n' + chalk.bold.green('Running `webpack:build:dev` to update client app\n'));
+            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
+        };
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
+            rebuildClient.call(this);
         }
     },
 

@@ -81,8 +81,7 @@ function writeFiles() {
             if (this.messageBroker === 'kafka') {
                 this.template(DOCKER_DIR + '_kafka.yml', DOCKER_DIR + 'kafka.yml', this, {});
             }
-
-            if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
+            if (this.serviceDiscoveryType) {
                 this.template(DOCKER_DIR + 'config/_README.md', DOCKER_DIR + 'central-server-config/README.md',this, {});
 
                 if (this.serviceDiscoveryType === 'consul') {
@@ -90,7 +89,6 @@ function writeFiles() {
                     this.copy(DOCKER_DIR + 'config/git2consul.json', DOCKER_DIR + 'config/git2consul.json');
                     this.copy(DOCKER_DIR + 'config/consul-config/application.yml', DOCKER_DIR + 'central-server-config/application.yml');
                 }
-
                 if (this.serviceDiscoveryType === 'eureka') {
                     this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
                     this.copy(DOCKER_DIR + 'config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
@@ -147,7 +145,8 @@ function writeFiles() {
             this.copy(SERVER_MAIN_RES_DIR + 'banner.txt', SERVER_MAIN_RES_DIR + 'banner.txt');
 
             if (this.hibernateCache === 'ehcache') {
-                this.template(SERVER_MAIN_RES_DIR + '_ehcache.xml', SERVER_MAIN_RES_DIR + 'ehcache.xml', this, {});
+                this.template(SERVER_MAIN_RES_DIR + 'config/ehcache/_ehcache-dev.xml', SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml', this, {});
+                this.template(SERVER_MAIN_RES_DIR + 'config/ehcache/_ehcache-prod.xml', SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml', this, {});
             }
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
@@ -301,7 +300,7 @@ function writeFiles() {
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway' && this.applicationType !== 'uaa') return;
+            if (!this.serviceDiscoveryType) return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
@@ -322,7 +321,9 @@ function writeFiles() {
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_package-info.java', javaDir + 'config/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.clusteredHttpSession === 'hazelcast') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
+            }
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DateTimeFormatConfiguration.java', javaDir + 'config/DateTimeFormatConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
@@ -450,8 +451,7 @@ function writeFiles() {
             if (this.applicationType === 'gateway'){
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
-
-            if (this.applicationType === 'gateway' || this.applicationType === 'microservice'  || this.applicationType === 'uaa'){
+            if (this.serviceDiscoveryType) {
                 this.template(SERVER_TEST_RES_DIR + 'config/_bootstrap.yml', SERVER_TEST_RES_DIR + 'config/bootstrap.yml', this, {});
             }
 
@@ -461,7 +461,7 @@ function writeFiles() {
             }
 
             if (this.hibernateCache === 'ehcache') {
-                this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});
+                this.template(SERVER_TEST_RES_DIR + 'config/ehcache/_ehcache-test.xml', SERVER_TEST_RES_DIR + 'config/ehcache/ehcache-test.xml', this, {});
             }
 
             // Create Gatling test files

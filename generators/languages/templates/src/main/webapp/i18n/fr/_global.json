@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Erreur interne du serveur",
         "server.not.reachable": "Serveur inaccessible",
         "url.not.found": "Non trouvé",
         "NotNull": "Le champ {{fieldName}} ne peut pas être vide !",

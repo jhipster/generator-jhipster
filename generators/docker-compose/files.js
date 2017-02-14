@@ -11,16 +11,17 @@ function writeFiles() {
         },
 
         writeRegistryFiles: function() {
-            if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
             if (this.serviceDiscoveryType === 'eureka') {
                 this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
-            }
-            if (this.serviceDiscoveryType === 'consul') {
-                this.template('_consul.yml', 'consul.yml');
             }
             if (this.serviceDiscoveryType) {
                 this.template('central-server-config/_application.yml', 'central-server-config/application.yml');
             }
+            if (this.gatewayNb === 0 && this.microserviceNb === 0) return;
+            if (this.serviceDiscoveryType === 'consul') {
+                this.template('_consul.yml', 'consul.yml');
+            }
+
         },
 
         writeKafkaFiles: function() {

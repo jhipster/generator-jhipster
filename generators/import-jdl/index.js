@@ -34,6 +34,14 @@ module.exports = JDLGenerator.extend({
             if (!this.clientFramework) {
                 this.clientFramework = 'angular1';
             }
+            this.clientPackageManager = this.config.get('clientPackageManager');
+            if (!this.clientPackageManager) {
+                if (this.yarnInstall) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
+                }
+            }
         }
     },
 
@@ -89,6 +97,15 @@ module.exports = JDLGenerator.extend({
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
             injectJsFilesToIndex.call(this);
+        }
+
+        // rebuild client for Angular
+        var rebuildClient = function () {
+            this.log('\n' + chalk.bold.green('Running `webpack:build:dev` to update client app\n'));
+            this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
+        };
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
+            rebuildClient.call(this);
         }
     }
 

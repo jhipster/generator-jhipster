@@ -30,10 +30,10 @@
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
-                    <span class="label label-danger" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
-                          data-translate="userManagement.deactivated" style="cursor: pointer;">Deactivated</span>
-                    <span class="label label-success" ng-click="vm.setActive(user, false)" ng-show="user.activated"
-                          data-translate="userManagement.activated" style="cursor: pointer;">Activated</span>
+                    <span class="label label-danger hand" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
+                          data-translate="userManagement.deactivated">Deactivated</span>
+                    <span class="label label-success hand" ng-click="vm.setActive(user, false)" ng-show="user.activated"
+                          data-translate="userManagement.activated">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
