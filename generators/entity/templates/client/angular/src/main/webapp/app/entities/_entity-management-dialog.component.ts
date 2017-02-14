@@ -42,6 +42,9 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
         hasManyToMany = hasManyToMany || relationships[idx].relationshipType == 'many-to-many';
         if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
             variableName = relationships[idx].relationshipFieldNamePlural.toLowerCase();
+            if (variableName === entityInstance) {
+                variableName += 'Collection';
+            }
             var relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
             query  = "this." + relationships[idx].otherEntityName + "Service.query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'}).subscribe((res: Response) => {"
             if (dto === "no") {
@@ -58,6 +61,9 @@ export class <%= entityAngularJSName %>DialogComponent implements OnInit {
             query += "\n        }, (res: Response) => this.onError(res.json()));"
         } else {
             variableName = relationships[idx].otherEntityNameCapitalizedPlural.toLowerCase();
+            if (variableName === entityInstance) {
+                variableName += 'Collection';
+            }
             query = 'this.' + relationships[idx].otherEntityName + 'Service.query().subscribe(';
             query += '\n            (res: Response) => { this.' + variableName + ' = res.json(); }, (res: Response) => this.onError(res.json()));';
         }
