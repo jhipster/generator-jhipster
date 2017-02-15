@@ -12,7 +12,7 @@ var path = require('path'),
     semver = require('semver'),
     exec = require('child_process').exec,
     os = require('os'),
-    http = require('http'),
+    https = require('https'),
     pluralize = require('pluralize');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
@@ -1479,7 +1479,7 @@ Generator.prototype.printJHipsterLogo = function () {
         chalk.green('  ╚██████╔╝') + chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗\n') +
         chalk.green('   ╚═════╝ ') + chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝\n')
     );
-    this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+    this.log(chalk.white.bold('                            https://jhipster.github.io\n'));
     if (!this.skipChecks) this.checkForNewVersion();
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
     this.log(chalk.white('Documentation for creating an application: ' + chalk.yellow('https://jhipster.github.io/creating-an-app/')));
@@ -1939,7 +1939,7 @@ Generator.prototype.isGitInstalled = function (callback) {
     this.gitExec('--version', function (code) {
         if (code !== 0) {
             this.warning('git is not found on your computer.\n',
-                ' Install git: ' + chalk.yellow('http://git-scm.com/')
+                ' Install git: ' + chalk.yellow('https://git-scm.com/')
             );
         }
         callback && callback(code);
@@ -1987,14 +1987,14 @@ Generator.prototype.hibernateSnakeCase = function (value) {
 Generator.prototype.contains = _.includes;
 
 /**
- * Function to issue a http get request, and process the result
+ * Function to issue a https get request, and process the result
  *
  *  @param {string} url - the url to fetch
  *  @param onSuccess - function, which gets called when the request succeeds, with the body of the response
  *  @param onFail - callback when the get failed.
  */
-Generator.prototype.httpGet = function(url, onSuccess, onFail) {
-    http.get(url, function(res) {
+Generator.prototype.httpsGet = function(url, onSuccess, onFail) {
+    https.get(url, function(res) {
         var body = '';
         res.on('data', function(chunk) {
             body += chunk;

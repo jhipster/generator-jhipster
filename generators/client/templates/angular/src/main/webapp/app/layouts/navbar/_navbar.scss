@@ -10,6 +10,8 @@ Navbar
 .jh-navbar {
     background-color: #353d47;
     padding: .2em 1em;
+    border-radius: 0; /* Hide the navbar rounded corners */
+	-moz-border-radius: 0;
     .profile-image {
         margin: -10px 0px;
         height: 40px;
