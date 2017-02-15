@@ -21,6 +21,9 @@ eureka:
         instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
         statusPageUrlPath: ${management.context-path}/info
         healthCheckUrlPath: ${management.context-path}/health
+        metadata-map:
+            profile: ${spring.profiles.active}
+            version: ${info.project.version}
 ribbon:
     eureka:
         enabled: true
