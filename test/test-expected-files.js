@@ -39,7 +39,6 @@ const expectedFiles = {
         '.gitignore',
         '.gitattributes',
         'Jenkinsfile',
-        '.travis.yml',
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml',
         SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml',

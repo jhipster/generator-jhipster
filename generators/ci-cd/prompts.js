@@ -16,6 +16,7 @@ function askPipelines() {
             default: [],
             choices: [
                 {name: 'Jenkins pipeline', value: 'jenkins'},
+                {name: 'Travis CI', value: 'travis'},
                 {name: 'Gitlab CI', value: 'gitlab'},
                 {name: 'Circle CI', value: 'circle'}
             ]
@@ -31,17 +32,17 @@ function askPipelines() {
 }
 
 function askIntegrations() {
-    if (this.abort) return;
+    if (this.abort || this.pipelines.length === 0) return;
     var done = this.async();
     var choices = [];
     if (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab')) {
         choices.push({name: '[Docker] Perform the build in a docker container', value: 'docker'});
     }
-    if(this.pipelines.includes('jenkins')) {
+    if (this.pipelines.includes('jenkins')) {
         choices.push({name: '[Sonar] Analyze code with Sonar', value: 'sonar'});
         choices.push({name: '[Gitlab] Send build status to Gitlab', value: 'gitlab'});
     }
-    if(this.herokuAppName) {
+    if (this.herokuAppName) {
         choices.push({name: '[Heroku] Deploy to heroku', value: 'heroku'});
     }
 

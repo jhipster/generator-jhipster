@@ -15,7 +15,7 @@ cache:
     key: "$CI_BUILD_REF_NAME"
     paths:
         - node_modules
-        - .maven
+        - .m2
 <%_ } _%>
 stages:
     - build
@@ -28,26 +28,39 @@ stages:
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     <%_ if (!skipClient) { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+    - ./gradlew yarn_install -PnodeInstall --no-daemon
+        <%_ } else if (clientPackageManager === 'yarn') { _%>
     - ./gradlew npmInstall -PnodeInstall --no-daemon
+        <%_ } _%>
     <%_ } _%>
 
 gradle-build:
     stage: build
     script:
         - ./gradlew compileJava -x check --no-daemon
-    <%_ if (!skipClient) { _%>
-gulp-build:
-    stage: build
-    script:
-        - ./gradlew gulp_build -PnodeInstall --no-daemon
-    <%_ } _%>
 gradle-test:
     stage: test
     script:
-        - ./gradlew check --no-daemon
+        - ./gradlew test --no-daemon
     artifacts:
         paths:
             - build/reports/tests/*
+    <%_ if (!skipClient) { _%>
+gradle-front-test:
+    stage: test
+    script:
+        <%_ if (clientFramework === 'angular1') { _%>
+        - ./gradlew gulp_test -PnodeInstall --no-daemon
+        <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+        - ./gradlew yarn_test -PnodeInstall --no-daemon
+            <%_ } else if (clientPackageManager === 'npm') { _%>
+        - ./gradlew npm_test -PnodeInstall --no-daemon
+            <%_ } _%>
+        <%_ } _%>
+    <%_ } _%>
+
     <%_ if (testFrameworks.includes('gatling')) { _%>
 gatling-test:
     stage: test
@@ -82,10 +95,10 @@ before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.4 -DyarnVersion=v0.18.1
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3
     - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn
         <%_ } else if (clientPackageManager === 'npm') { _%>
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.4 -DnpmVersion=3.10.9
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.5 -DnpmVersion=4.1.2
     - ./mvnw com.github.eirslett:frontend-maven-plugin:npm
         <%_ } _%>
     <%_ } _%>
@@ -94,12 +107,6 @@ maven-build:
     stage: build
     script: ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
 
-    <%_ if (!skipClient) { _%>
-gulp-build:
-    stage: build
-    script:
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=build
-    <%_ } _%>
 maven-test:
     stage: test
     script:
@@ -107,6 +114,21 @@ maven-test:
     artifacts:
         paths:
             - target/surefire-reports/*
+    <%_ if (!skipClient) { _%>
+maven-front-test:
+    stage: test
+    script:
+        <%_ if (clientFramework === 'angular1') { _%>
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test
+        <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test
+            <%_ } else if (clientPackageManager === 'npm') { _%>
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.yarn.arguments=test
+            <%_ } _%>
+        <%_ } _%>
+    <%_ } _%>
+
     <%_ if (testFrameworks.includes('gatling')) { _%>
 gatling-test:
     stage: test

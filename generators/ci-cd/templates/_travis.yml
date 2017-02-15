@@ -33,7 +33,9 @@ before_install:
   <%_ if (clientPackageManager === 'npm') { _%>
   - nvm install $NODE_VERSION
   - npm install -g npm
+  <%_ if (clientFramework === 'angular1') { _%>
   - npm install -g bower gulp-cli
+  <%_ } _%>
   - node -v
   - npm -v
     <%_ if (clientFramework === 'angular1') { _%>
@@ -67,7 +69,11 @@ script:
   - gulp test
     <%_ } _%>
     <%_ if (clientFramework === 'angular2') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
   - yarn test
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+  - npm test
+        <%_ } _%>
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>

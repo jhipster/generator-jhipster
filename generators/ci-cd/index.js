@@ -19,6 +19,7 @@ module.exports = PipelineGenerator.extend({
             this.log(chalk.white('[Beta] Welcome to the JHipster CI/CD Sub-Generator'));
         },
         getConfig: function () {
+            this.applicationType = this.config.get('applicationType');
             this.skipClient = this.config.get('skipClient');
             this.clientPackageManager = this.config.get('clientPackageManager');
             this.buildTool = this.config.get('buildTool');
@@ -26,10 +27,6 @@ module.exports = PipelineGenerator.extend({
             this.clientFramework = this.config.get('clientFramework');
             this.testFrameworks = this.config.get('testFrameworks');
             this.abort = false;
-            if (this.clientFramework === 'angular2') {
-                this.log(chalk.red('Angular > 1 is currently not supported, exiting...'));
-                this.abort = true;
-            }
         }
     },
 
@@ -44,6 +41,7 @@ module.exports = PipelineGenerator.extend({
             insight.trackWithEvent('generator', 'ci-cd');
         },
         setTemplateVariables: function() {
+            if (this.abort || this.integrations === undefined) return;
             this.gitLabIndent = this.integrations.includes('gitlab') ? '    ' : '';
             this.indent = this.integrations.includes('docker') ? '    ' : '';
             this.indent += this.gitLabIndent;
@@ -58,7 +56,10 @@ module.exports = PipelineGenerator.extend({
             this.template('_.gitlab-ci.yml', '.gitlab-ci.yml');
         }
         if (this.pipelines.includes('circle')) {
-            this.template('_circle.yml', '.circle.yml');
+            this.template('_circle.yml', 'circle.yml');
+        }
+        if (this.pipelines.includes('travis')) {
+            this.template('_travis.yml', '.travis.yml');
         }
     }
 
