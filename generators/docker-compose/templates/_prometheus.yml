@@ -2,7 +2,6 @@ version: '2'
 services:
   prometheus:
     image: <%= DOCKER_PROMETHEUS %>
-    container_name: prometheus
     volumes:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus

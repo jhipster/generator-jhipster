@@ -2,13 +2,10 @@ version: '2'
 services:
     msmongodb-app:
         image: msmongodb
-        external_links:
-            - msmongodb-mongodb:mongodb
-            - jhipster-registry:registry
         environment:
             - SPRING_PROFILES_ACTIVE=prod
-            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@registry:8761/config
-            - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017
+            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+            - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017
             - SPRING_DATA_MONGODB_DATABASE=msmongodb
     msmongodb-mongodb:
         extends:

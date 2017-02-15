@@ -26,7 +26,7 @@ module.exports = PipelineGenerator.extend({
             this.clientFramework = this.config.get('clientFramework');
             this.testFrameworks = this.config.get('testFrameworks');
             this.abort = false;
-            if(this.clientFramework === 'angular2') {
+            if (this.clientFramework === 'angular2') {
                 this.log(chalk.red('Angular > 1 is currently not supported, exiting...'));
                 this.abort = true;
             }

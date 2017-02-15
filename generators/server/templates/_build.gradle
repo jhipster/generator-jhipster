@@ -73,7 +73,7 @@ if (OperatingSystem.current().isWindows()) {
         doFirst {
             manifest {
                 attributes 'Class-Path': configurations.runtime.files.collect {
-                    it.toURL().toString().replaceFirst(/file:\/+/, '/')
+                    it.toURL().toString().replaceFirst(/file:\/+/, '/').replaceAll(' ', '%20')
                 }.join(' ')
             }
         }

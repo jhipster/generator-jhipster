@@ -1,7 +1,6 @@
 version: '2'
 services:
     mscassandra-cassandra:
-        container_name: mscassandra-cassandra
         build:
             context: .
             dockerfile: cassandra/Cassandra-Cluster.Dockerfile
@@ -17,15 +16,11 @@ services:
             - 9160:9160
     mscassandra-cassandra-node:
         image: cassandra:2.2.5
-        links:
-            - mscassandra-cassandra:seed
         environment:
-            - CASSANDRA_SEEDS=seed
+            - CASSANDRA_SEEDS=mscassandra-cassandra
     mscassandra-cassandra-migration:
         extends:
             file: cassandra-migration.yml
             service: mscassandra-cassandra-migration
-        links:
-            - mscassandra-cassandra
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql

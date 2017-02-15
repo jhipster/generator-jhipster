@@ -1,7 +1,6 @@
 version: '2'
 services:
     msmongodb-mongodb:
-        container_name: msmongodb-mongodb
         image: mongo:3.2.3
         ports:
             - "27017:27017"

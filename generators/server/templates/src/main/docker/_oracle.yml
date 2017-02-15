@@ -1,7 +1,6 @@
 version: '2'
 services:
     <%= baseName.toLowerCase() %>-oracle:
-        container_name: <%= baseName.toLowerCase() %>-oracle
         image: <%= DOCKER_ORACLE %>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/oracle/data:/u01/app/oracle
