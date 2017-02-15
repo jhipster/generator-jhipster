@@ -7,5 +7,6 @@ atlassian-ide-plugin.xml
 /.project
 test/temp/
 npm-debug.log*
+debug.log
 .vscode
 yarn.lock

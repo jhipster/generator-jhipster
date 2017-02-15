@@ -9,7 +9,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 @Injectable()
 export class Principal {
     private _identity: any;
-    private authenticated = false;
+    private authenticated: boolean = false;
     private authenticationState = new Subject<any>();
 
     constructor(
@@ -20,31 +20,32 @@ export class Principal {
     authenticate (_identity) {
         this._identity = _identity;
         this.authenticated = _identity !== null;
+        this.authenticationState.next(this._identity);
     }
 
-    hasAnyAuthority (authorities) {
+    hasAnyAuthority (authorities: string[]): Promise<boolean> {
         if (!this.authenticated || !this._identity || !this._identity.authorities) {
-            return false;
+            return Promise.resolve(false);
         }
 
         for (let i = 0; i < authorities.length; i++) {
             if (this._identity.authorities.indexOf(authorities[i]) !== -1) {
-                return true;
+                return Promise.resolve(true);
             }
         }
 
-        return false;
+        return Promise.resolve(false);
     }
 
-    hasAuthority (authority): Promise<any> {
+    hasAuthority (authority: string): Promise<boolean> {
         if (!this.authenticated) {
            return Promise.resolve(false);
         }
 
         return this.identity().then(id => {
-            return id.authorities && id.authorities.indexOf(authority) !== -1;
+            return Promise.resolve(id.authorities && id.authorities.indexOf(authority) !== -1);
         }, () => {
-            return false;
+            return Promise.resolve(false);
         });
     }
 
