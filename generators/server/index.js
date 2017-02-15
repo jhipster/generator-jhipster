@@ -7,7 +7,8 @@ const util = require('util'),
     scriptBase = require('../generator-base'),
     writeFiles = require('./files').writeFiles,
     packagejs = require('../../package.json'),
-    crypto = require('crypto');
+    crypto = require('crypto'),
+    os = require('os');
 
 var JhipsterServerGenerator = generators.Base.extend({});
 
@@ -400,15 +401,16 @@ module.exports = JhipsterServerGenerator.extend({
         }
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
-        let logMsg =
-            'Run your Spring Boot application:' +
-            '\n ' + chalk.yellow.bold('./mvnw');
+        let executable = 'mvnw';
         if (this.buildTool === 'gradle') {
-            logMsg =
-                'Run your Spring Boot application:' +
-                '\n ' + chalk.yellow.bold('./gradlew');
+            executable = 'gradlew';
         }
-        this.log(chalk.green(logMsg));
+        let logMsgComment = '';
+        if (os.platform() === 'win32') {
+            logMsgComment = ' (' + chalk.yellow.bold(executable) + ' if using Windows Command Prompt)';
+        }
+        this.log(chalk.green('Run your Spring Boot application:' +
+            '\n ' + chalk.yellow.bold('./' + executable) + logMsgComment));
     }
 
 });
