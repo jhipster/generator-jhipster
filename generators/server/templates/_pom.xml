@@ -116,9 +116,6 @@
         <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
         <%_ } _%>
-        <%_ if (databaseType === 'cassandra') { _%>
-        <netty-handler.version>4.0.44.Final</netty-handler.version>
-        <%_ } _%>
         <node.version>v6.9.5</node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
         <npm.version>4.1.2</npm.version>
@@ -410,14 +407,6 @@
             <artifactId>jzlib</artifactId>
             <version>${jzlib.version}</version>
         </dependency>
-        <%_ if (databaseType === 'cassandra') { _%>
-        <!-- include netty handler explicitly to overcome dependency mismatch when using Cassandra -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-handler</artifactId>
-            <version>${netty-handler.version}</version>
-        </dependency>
-        <%_ } _%>
         <%_ } _%>
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <dependency>

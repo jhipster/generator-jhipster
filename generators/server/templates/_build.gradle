@@ -392,9 +392,6 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-library"
     <%_ if (gatlingTests) { _%>
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
-    <%_ if (databaseType === 'cassandra') { _%>
-    compile "io.netty:netty-handler:${netty_handler_version}"
-    <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
     testCompile "com.h2database:h2"
