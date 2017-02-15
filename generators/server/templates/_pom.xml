@@ -42,9 +42,6 @@
         <%_ if (databaseType === 'cassandra') { _%>
         <cassandra-unit-spring.version>3.1.1.0</cassandra-unit-spring.version>
         <%_ } _%>
-        <%_ if (databaseType === 'sql') { _%>
-        <cdi-api.version>1.2</cdi-api.version>
-        <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <commons-codec.version>1.10</commons-codec.version>
         <%_ } _%>
@@ -406,13 +403,6 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-        </dependency>
-        <%_ } _%>
-        <%_ if (databaseType === 'sql') { _%>
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <version>${cdi-api.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
