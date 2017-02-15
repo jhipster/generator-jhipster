@@ -29,8 +29,7 @@ spec:
     spec:
       containers:
       - name: <%= app.baseName.toLowerCase() %>-app
-        image: <%= app.targetImageName %>
-        imagePullPolicy: IfNotPresent
+        image: <%= app.targetImageName %><% if (dockerTag) {%>:<%= dockerTag %><% } %>
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod

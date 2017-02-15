@@ -73,6 +73,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ],
                     adminPassword: 'meetup',
                     dockerRepositoryName: 'jhipsterrepository',
+                    dockerTag: 'latest',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'jhipsternamespace'
                 })
@@ -86,6 +87,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
             assert.file(expectedFiles.jhgate);
             assert.fileContent('jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
             assert.fileContent('jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+        });
+        it('creates deployment.yml without imagePullPolicy', function () {
+            assert.noFileContent('jhgate/jhgate-deployment.yml', /imagePullPolicy:/);
         });
     });
 
@@ -105,6 +109,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                         '02-mysql'
                     ],
                     dockerRepositoryName: 'jhipster',
+                    dockerTag: '1.0.0',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default'
                 })
@@ -118,6 +123,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
+        });
+        it('creates deployment.yml without imagePullPolicy', function () {
+            assert.noFileContent('jhgate/jhgate-deployment.yml', /imagePullPolicy:/);
         });
     });
 
@@ -137,6 +145,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                         '03-psql'
                     ],
                     dockerRepositoryName: 'jhipster',
+                    dockerTag: '1.0.0',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default'
                 })
@@ -153,6 +162,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
+        });
+        it('creates deployment.yml without imagePullPolicy', function () {
+            assert.noFileContent('msmysql/msmysql-deployment.yml', /imagePullPolicy:/);
         });
     });
 
@@ -175,6 +187,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                         '07-mariadb'
                     ],
                     dockerRepositoryName: 'jhipster',
+                    dockerTag: '1.0.0',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default'
                 })
@@ -215,6 +228,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                         '08-monolith'
                     ],
                     dockerRepositoryName: 'jhipster',
+                    dockerTag: '1.0.0',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default'
                 })
@@ -243,6 +257,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                         '09-kafka'
                     ],
                     dockerRepositoryName: 'jhipster',
+                    dockerTag: '1.0.0',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default'
                 })

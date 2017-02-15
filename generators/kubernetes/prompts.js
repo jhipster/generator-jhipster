@@ -6,6 +6,7 @@ const dockerComposePrompts = require('../docker-compose/prompts');
 module.exports = _.extend({
     askForKubernetesNamespace,
     askForDockerRepositoryName,
+    askForDockerTag,
     askForDockerPushCommand
 }, dockerComposePrompts);
 
@@ -39,6 +40,22 @@ function askForDockerRepositoryName() {
         this.dockerRepositoryName = props.dockerRepositoryName;
         done();
     });
+}
+
+function askForDockerTag() {
+    var done = this.async();
+
+    var prompts = [{
+        type: 'input',
+        name: 'dockerTag',
+        message: 'What should we use for the tag version?',
+        default: this.dockerTag ? this.dockerTag : 'latest'
+    }];
+
+    this.prompt(prompts).then(function(props) {
+        this.dockerTag = props.dockerTag;
+        done();
+    }.bind(this));
 }
 
 function askForDockerPushCommand() {
