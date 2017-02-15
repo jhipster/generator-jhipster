@@ -30,7 +30,6 @@ export class UserService {
             if (req.sort) {
                 params.paramsMap.set('sort', req.sort);
             }
-            params.set('filter', req.filter);
         }
 
         let options = {
