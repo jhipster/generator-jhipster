@@ -171,8 +171,7 @@
         <spring-cloud-stream.version>Brooklyn.SR2</spring-cloud-stream.version>
         <%_ } _%>
         <%_ if (serviceDiscoveryType) { _%>
-        <spring-cloud.version>Camden.SR4</spring-cloud.version>
-        <spring-cloud-netflix.version>1.2.5.RELEASE</spring-cloud-netflix.version>
+        <spring-cloud.version>Camden.SR5</spring-cloud.version>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <spring-security-oauth.version>2.0.12.RELEASE</spring-security-oauth.version>
@@ -203,11 +202,6 @@
             </dependency>
             <%_ } _%>
             <%_ if (serviceDiscoveryType) { _%>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-netflix-core</artifactId>
-                <version>${spring-cloud-netflix.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

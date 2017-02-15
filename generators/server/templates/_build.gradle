@@ -44,9 +44,7 @@ dependencyManagement {
     mavenBom 'org.springframework.cloud:spring-cloud-stream-dependencies:' + spring_cloud_stream_version
     <%_ } _%>
     <%_ if (serviceDiscoveryType) { _%>
-    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version {
-        bomProperty 'spring-cloud-netflix-core.version' '1.2.5.RELEASE'
-    }
+    mavenBom 'org.springframework.cloud:spring-cloud-dependencies:' + spring_cloud_version
     <%_ } _%>
   }
 }
