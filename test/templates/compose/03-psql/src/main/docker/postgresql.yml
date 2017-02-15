@@ -1,7 +1,6 @@
 version: '2'
 services:
     mspsql-postgresql:
-        container_name: mspsql-postgresql
         image: postgres:9.5.1
         # volumes:
         #     - ~/volumes/jhipster/mspsql/postgresql/:/var/lib/postgresql/

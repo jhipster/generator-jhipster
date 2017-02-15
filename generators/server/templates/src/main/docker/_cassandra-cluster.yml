@@ -1,7 +1,6 @@
 version: '2'
 services:
     <%= baseName.toLowerCase() %>-cassandra:
-        container_name: <%= baseName.toLowerCase() %>-cassandra
         image: <%= DOCKER_CASSANDRA %>
         # volumes:
         #     - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
@@ -13,15 +12,11 @@ services:
             - 9160:9160
     <%=baseName.toLowerCase()%>-cassandra-node:
         image: <%= DOCKER_CASSANDRA %>
-        links:
-            - <%= baseName.toLowerCase() %>-cassandra:seed
         environment:
-            - CASSANDRA_SEEDS=seed
+            - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
     <%=baseName.toLowerCase()%>-cassandra-migration:
         extends:
             file: cassandra-migration.yml
             service: <%=baseName.toLowerCase()%>-cassandra-migration
-        links:
-            - <%=baseName.toLowerCase()%>-cassandra
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql

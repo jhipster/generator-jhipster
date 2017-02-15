@@ -229,7 +229,6 @@ module.exports = DockerComposeGenerator.extend({
                         cassandraMigrationConfig.build.context = relativePath;
                         var createKeyspaceScript = cassandraClusterYaml.services[databaseServiceName + '-migration'].environment[0];
                         cassandraMigrationConfig.environment.push(createKeyspaceScript);
-                        cassandraMigrationConfig['links'] = cassandraClusterYaml.services[databaseServiceName + '-migration'].links;
                         var cqlFilesRelativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/resources/config/cql');
                         cassandraMigrationConfig['volumes'][0] = cqlFilesRelativePath + ':/cql:ro';
 
