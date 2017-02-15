@@ -246,7 +246,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-envers"
-    compile "org.hibernate:hibernate-validator:${hibernate_validator_version}"
+    compile "org.hibernate:hibernate-validator"
     compile ("org.liquibase:liquibase-core") {
         exclude(module: 'jetty-servlet')
     }
