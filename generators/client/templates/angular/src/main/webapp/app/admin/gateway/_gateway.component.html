@@ -24,11 +24,21 @@
                             Warning: no server available!
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped" *ngIf="route !== null">
+                            <table class="table table-striped" *ngIf="route">
                                 <tr *ngFor="let instance of route.serviceInstances">
-                                    <td>{{instance.host}}:{{instance.port}}</td>
-                                    <td *ngIf="instance.instanceInfo.status === 'UP'"><div class="tag tag-success">{{instance.instanceInfo.status}}</div></td>
-                                    <td *ngIf="!instance.instanceInfo.status === 'UP'"><div class="tag tag-danger">{{instance.instanceInfo.status}}</div></td>
+                                    <td><a href="{{instance.uri}}" target="_blank">{{instance.uri}}</a></td>
+                                    <td>
+                                        <div *ngIf="instance.instanceInfo" class="tag tag-{{instance.instanceInfo.status === 'UP'?'success':'danger'}}">{{instance.instanceInfo.status}}</div>
+                                        <div *ngIf="!instance.instanceInfo" class="tag tag-warning">?</div>
+                                    </td>
+                                    <td>
+                                        <span *ngFor="let entry of (instance.metadata | keys )">
+                                            <span class="tag tag-default font-weight-normal">
+                                                <span class="tag tag-pill tag-info font-weight-normal">{{entry.key}}</span>
+                                                {{entry.value}}
+                                            </span>
+                                        </span>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
