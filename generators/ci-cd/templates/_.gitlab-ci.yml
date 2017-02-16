@@ -1,8 +1,6 @@
-<%_ if (integrations.includes('docker')) { _%>
 image: openjdk:8
-<%_ } _%>
 
-<%_ if (buildTool == 'gradle') { _%>
+<%_ if (buildTool === 'gradle') { _%>
 cache:
     key: "$CI_BUILD_REF_NAME"
     paths:
@@ -10,7 +8,7 @@ cache:
         - .gradle/wrapper
         - .gradle/caches
 <%_ } _%>
-<%_ if (buildTool == 'maven') { _%>
+<%_ if (buildTool === 'maven') { _%>
 cache:
     key: "$CI_BUILD_REF_NAME"
     paths:
@@ -24,14 +22,14 @@ stages:
     - release
     - deploy
 
-<%_ if (buildTool == 'gradle') { _%>
+<%_ if (buildTool === 'gradle') { _%>
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x gradlew
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./gradlew yarn_install -PnodeInstall --no-daemon
-        <%_ } else if (clientPackageManager === 'yarn') { _%>
+        <%_ } else if (clientPackageManager === 'npm') { _%>
     - ./gradlew npmInstall -PnodeInstall --no-daemon
         <%_ } _%>
     <%_ } _%>
@@ -39,11 +37,11 @@ before_script:
 gradle-build:
     stage: build
     script:
-        - ./gradlew compileJava -x check --no-daemon
+        - ./gradlew compileJava -x check -PnodeInstall --no-daemon
 gradle-test:
     stage: test
     script:
-        - ./gradlew test --no-daemon
+        - ./gradlew test -PnodeInstall --no-daemon
     artifacts:
         paths:
             - build/reports/tests/*
@@ -67,10 +65,16 @@ gatling-test:
     stage: test
     allow_failure: true
     script:
-        - ./gradlew gatlingRun -x cleanResources --no-daemon
+        - ./gradlew gatlingRun -x cleanResources -PnodeInstall --no-daemon
     before_script:
+        - export GRADLE_USER_HOME=`pwd`/.gradle
+        - chmod +x gradlew
         <%_ if (!skipClient) { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+        - ./gradlew yarn_install -PnodeInstall --no-daemon
+            <%_ } else if (clientPackageManager === 'npm') { _%>
         - ./gradlew npmInstall -PnodeInstall --no-daemon
+            <%_ } _%>
         <%_ } _%>
         - ./gradlew bootRun &
     artifacts:
@@ -80,7 +84,7 @@ gatling-test:
 gradle-repackage:
     stage: package
     script:
-        - ./gradlew bootRepackage -Pprod -x check --no-daemon
+        - ./gradlew bootRepackage -Pprod -x check -PnodeInstall --no-daemon
     artifacts:
         paths:
             - build/libs/*.war
@@ -91,7 +95,7 @@ gradle-deploy:
         - HEROKU_API_KEY="<%= herokuApiKey %>" ./gradlew deployHeroku --no-daemon
     <%_ } _%>
 <%_ } _%>
-<%_ if (buildTool == 'maven') { _%>
+<%_ if (buildTool === 'maven') { _%>
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
     - chmod +x mvnw
@@ -138,12 +142,14 @@ gatling-test:
     script:
         - ./mvnw gatling:execute -Dmaven.repo.local=$MAVEN_USER_HOME
     before_script:
+        - export MAVEN_USER_HOME=`pwd`/.maven
+        - chmod +x mvnw
         <%_ if (!skipClient) { _%>
             <%_ if (clientPackageManager === 'yarn') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.4 -DyarnVersion=v0.18.1
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3
         - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn
             <%_ } else if (clientPackageManager === 'npm') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.4 -DnpmVersion=3.10.9
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.5 -DnpmVersion=4.1.2
         - ./mvnw com.github.eirslett:frontend-maven-plugin:npm
             <%_ } _%>
         <%_ } _%>
