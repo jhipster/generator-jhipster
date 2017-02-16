@@ -9,8 +9,8 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 @Injectable()
 export class Principal {
     private _identity: any;
-    private authenticated = false;
-    private authenticationState = new Subject<any>();
+    private _authenticated = false;
+    private _authenticationState = new Subject<any>();
 
     constructor(
         private account: AccountService<% if (websocket === 'spring-websocket') { %>,
@@ -19,12 +19,12 @@ export class Principal {
 
     authenticate (_identity) {
         this._identity = _identity;
-        this.authenticated = _identity !== null;
-        this.authenticationState.next(this._identity);
+        this._authenticated = _identity !== null;
+        this._authenticationState.next(this._identity);
     }
 
     hasAnyAuthority (authorities: string[]): Promise<boolean> {
-        if (!this.authenticated || !this._identity || !this._identity.authorities) {
+        if (!this._authenticated || !this._identity || !this._identity.authorities) {
             return Promise.resolve(false);
         }
 
@@ -38,7 +38,7 @@ export class Principal {
     }
 
     hasAuthority (authority: string): Promise<boolean> {
-        if (!this.authenticated) {
+        if (!this._authenticated) {
            return Promise.resolve(false);
         }
 
@@ -64,15 +64,15 @@ export class Principal {
         return this.account.get().toPromise().then(account => {
             if (account) {
                 this._identity = account;
-                this.authenticated = true;
+                this._authenticated = true;
                 <%_ if (websocket === 'spring-websocket') { _%>
                 this.trackerService.connect();
                 <%_ } _%>
             } else {
                 this._identity = null;
-                this.authenticated = false;
+                this._authenticated = false;
             }
-            this.authenticationState.next(this._identity);
+            this._authenticationState.next(this._identity);
             return this._identity;
         }).catch(err => {
             <%_ if (websocket === 'spring-websocket') { _%>
@@ -81,14 +81,14 @@ export class Principal {
             }
             <%_ } _%>
             this._identity = null;
-            this.authenticated = false;
-            this.authenticationState.next(this._identity);
+            this._authenticated = false;
+            this._authenticationState.next(this._identity);
             return null;
         });
     }
 
     isAuthenticated (): boolean {
-        return this.authenticated;
+        return this._authenticated;
     }
 
     isIdentityResolved (): boolean {
@@ -96,7 +96,7 @@ export class Principal {
     }
 
     getAuthenticationState(): Observable<any> {
-        return this.authenticationState.asObservable();
+        return this._authenticationState.asObservable();
     }
 
     getImageUrl(): String {
