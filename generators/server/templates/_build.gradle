@@ -431,6 +431,7 @@ if (project.hasProperty('nodeInstall')) {
     node {
         version = '6.9.5'
         npmVersion = '4.1.2'
+        yarnVersion = '0.20.3'
         download = true
     }
 }
