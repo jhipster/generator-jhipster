@@ -35,13 +35,13 @@
     "zone.js": "0.7.6"
   },
   "devDependencies": {
+    "@angular/cli": "1.0.0-beta.28.3",
     "@types/jasmine": "2.5.42",
     "@types/node": "7.0.5",
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "2.53.39",
     <%_ } _%>
     "add-asset-html-webpack-plugin": "1.0.2",
-    "angular-cli": "1.0.0-beta.28.3",
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "3.0.4-rc.2",
     "browser-sync": "2.18.7",
