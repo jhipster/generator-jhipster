@@ -27,6 +27,7 @@ stages:
 <%_ if (buildTool == 'gradle') { _%>
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x gradlew
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./gradlew yarn_install -PnodeInstall --no-daemon
@@ -93,6 +94,7 @@ gradle-deploy:
 <%_ if (buildTool == 'maven') { _%>
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
+    - chmod +x mvnw
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3

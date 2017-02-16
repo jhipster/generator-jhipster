@@ -44,8 +44,10 @@ dependencies:
 test:
     override:
 <%_ if (buildTool === 'maven') { _%>
+        - chmod +x mvnw
         - ./mvnw clean test
 <%_ } else if (buildTool === 'gradle') { _%>
+        - chmod +x gradlew
         - ./gradlew clean test --no-daemon
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>

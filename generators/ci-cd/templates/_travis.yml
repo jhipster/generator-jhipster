@@ -60,8 +60,10 @@ install:
   <%_ } _%>
 script:
 <%_ if (buildTool === 'maven') { _%>
+  - chmod +x mvnw
   - ./mvnw clean test
 <%_ } else if (buildTool === 'gradle') { _%>
+  - chmod +x gradlew
   - ./gradlew clean test
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>

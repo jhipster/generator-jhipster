@@ -17,6 +17,7 @@ node {
 
 <%_ if (buildTool === 'maven') { _%>
 <%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x mvnw"
 <%= indent %>        sh "./mvnw clean"
 <%= indent %>    }
 
@@ -83,6 +84,7 @@ node {
 
 <%_ } else if (buildTool === 'gradle') { _%>
 <%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x gradlew"
 <%= indent %>        sh "./gradlew clean --no-daemon"
 <%= indent %>    }
 
