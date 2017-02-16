@@ -38,7 +38,6 @@ const expectedFiles = {
         'README.md',
         '.gitignore',
         '.gitattributes',
-        'Jenkinsfile',
         SERVER_MAIN_RES_DIR + 'banner.txt',
         SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml',
         SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml',
