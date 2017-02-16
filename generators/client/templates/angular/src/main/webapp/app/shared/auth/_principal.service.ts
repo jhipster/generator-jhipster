@@ -9,7 +9,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 @Injectable()
 export class Principal {
     private _identity: any;
-    private authenticated: boolean = false;
+    private authenticated = false;
     private authenticationState = new Subject<any>();
 
     constructor(
