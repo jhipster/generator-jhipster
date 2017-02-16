@@ -433,20 +433,6 @@ if (project.hasProperty('nodeInstall')) {
         npmVersion = '4.1.2'
         download = true
     }
-
-    // Workaround for https://github.com/srs/gradle-node-plugin/issues/134
-    task installLocalNpm {
-        def npmVersion = ''
-        def packageFile = file( new File( (File) node.nodeModulesDir, 'node_modules/npm/package.json' ) )
-        if (packageFile.exists()) {
-            def json = new JsonSlurper().parseText(packageFile.text)
-            npmVersion = json.version
-        }
-        if (npmVersion != node.npmVersion) {
-            npmInstall.dependsOn 'npm_install_npm@' + node.npmVersion
-        }
-    }
-    npmInstall.dependsOn installLocalNpm
 }
 <%_ } _%>
 
