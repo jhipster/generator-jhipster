@@ -16,7 +16,7 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         <%_ if (!skipClient) { _%>
-        classpath "com.moowork.gradle:gradle-node-plugin:1.0.1"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
         <%_ } _%>
         classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
