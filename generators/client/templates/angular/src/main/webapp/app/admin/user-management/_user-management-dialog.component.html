@@ -1,10 +1,10 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                (click)="clear()">&times;</button>
         <h4 class="modal-title" id="myUserLabel" jhiTranslate="userManagement.home.createOrEditLabel">
             Create or edit a User</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>

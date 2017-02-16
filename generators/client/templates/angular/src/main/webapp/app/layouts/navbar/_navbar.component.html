@@ -1,15 +1,15 @@
-<nav class="navbar navbar-dark jh-navbar">
-    <div class="jh-logo-container float-xs-left">
-        <a class="jh-navbar-toggler hidden-lg-up float-xs-left" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
+<nav class="navbar navbar-dark navbar-toggleable-md jh-navbar">
+    <div class="jh-logo-container float-left">
+        <a class="jh-navbar-toggler hidden-lg-up float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
             <i class="fa fa-bars"></i>
         </a>
-        <a class="navbar-brand logo float-xs-right" routerLink="/" (click)="collapseNavbar()">
+        <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
             <span class="logo-img"></span>
             <span jhiTranslate="global.title" class="navbar-title"><%= capitalizedBaseName %></span> <span class="navbar-version">{{version}}</span>
         </a>
     </div>
-    <div class="collapse navbar-toggleable-md float-lg-right" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
-        <ul class="nav navbar-nav float-lg-right">
+    <div class="collapse navbar-collapse float-lg-right" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
+        <ul class="navbar-nav float-lg-right">
             <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
                     <i class="fa fa-home" aria-hidden="true"></i>

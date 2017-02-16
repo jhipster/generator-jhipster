@@ -1,7 +1,7 @@
 <!-- Modal used to display the threads dump -->
 <div class="modal-header">
-    <button type="button" class="close" (click)="activeModal.dismiss('closed')">&times;</button>
     <h4 class="modal-title" jhiTranslate="metrics.jvm.threads.dump.title">Threads dump</h4>
+    <button type="button" class="close" (click)="activeModal.dismiss('closed')">&times;</button>
 </div>
 <div class="modal-body pad">
     <span class="tag tag-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="tag-pill">{{threadDumpAll}}</span></span>&nbsp;
@@ -28,10 +28,10 @@
         <table class="table table-sm table-responsive">
             <thead>
                 <tr>
-                    <th class="text-xs-right" jhiTranslate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                    <th class="text-right" jhiTranslate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
                     <th jhiTranslate="metrics.jvm.threads.dump.lockname">Lock Name</th>
                 </tr>
             </thead>
@@ -49,5 +49,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary  pull-left" data-dismiss="modal" (click)="activeModal.dismiss('closed')">Done</button>
+    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal" (click)="activeModal.dismiss('closed')">Done</button>
 </div>

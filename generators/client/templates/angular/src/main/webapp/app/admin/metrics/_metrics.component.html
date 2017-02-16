@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span jhiTranslate="metrics.title">Application Metrics</span>
-        <button class="btn btn-primary float-xs-right" (click)="refresh()">
+        <button class="btn btn-primary float-right" (click)="refresh()">
             <span class="fa fa-refresh"></span> <span jhiTranslate="metrics.refresh.button">Refresh</span>
         </button>
     </h2>
@@ -46,19 +46,19 @@
             <b jhiTranslate="metrics.jvm.gc.title">Garbage collections</b>
             <div class="row">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
-                <div class="col-md-3 text-xs-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
+                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
             </div>
             <div class="row">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
-                <div class="col-md-3 text-xs-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
+                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
             </div>
             <div class="row">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.scavengecount">Scavenge count</div>
-                <div class="col-md-3 text-xs-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
+                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
             </div>
             <div class="row">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.scavengetime">Scavenge time</div>
-                <div class="col-md-3 text-xs-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
+                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
             </div>
         </div>
     </div>
@@ -74,10 +74,10 @@
             <tr>
                 <th jhiTranslate="metrics.jvm.http.table.code">Code</th>
                 <th jhiTranslate="metrics.jvm.http.table.count">Count</th>
-                <th class="text-xs-right" jhiTranslate="metrics.jvm.http.table.mean">Mean</th>
-                <th class="text-xs-right"><span jhiTranslate="metrics.jvm.http.table.average">Average</span> (1 min)</th>
-                <th class="text-xs-right"><span jhiTranslate="metrics.jvm.http.table.average">Average</span> (5 min)</th>
-                <th class="text-xs-right"><span jhiTranslate="metrics.jvm.http.table.average">Average</span> (15 min)</th>
+                <th class="text-right" jhiTranslate="metrics.jvm.http.table.mean">Mean</th>
+                <th class="text-right"><span jhiTranslate="metrics.jvm.http.table.average">Average</span> (1 min)</th>
+                <th class="text-right"><span jhiTranslate="metrics.jvm.http.table.average">Average</span> (5 min)</th>
+                <th class="text-right"><span jhiTranslate="metrics.jvm.http.table.average">Average</span> (15 min)</th>
             </tr>
             </thead>
             <tbody>
@@ -88,14 +88,14 @@
                         <span>{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count}}</span>
                     </ngb-progressbar>
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate | number:'1.0-2'}}
+                <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate | number:'1.0-2'}}
+                <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate | number:'1.0-2'}}
                 </td>
             </tr>
@@ -106,16 +106,16 @@
                         <span>{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count}}</span>
                     </ngb-progressbar>
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate | number:'1.0-2'}}
                 </td>
             </tr>
@@ -126,16 +126,16 @@
                         <span>{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count}}</span>
                     </ngb-progressbar>
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate | number:'1.0-2'}}
                 </td>
-                <td class="text-xs-right">
+                <td class="text-right">
                     {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate | number:'1.0-2'}}
                 </td>
             </tr>
@@ -149,27 +149,27 @@
             <thead>
             <tr>
                 <th jhiTranslate="metrics.servicesstats.table.name">Service name</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.count">Count</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.mean">Mean</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.min">Min</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.p50">p50</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.p75">p75</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.p95">p95</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.p99">p99</th>
-                <th class="text-xs-right" jhiTranslate="metrics.servicesstats.table.max">Max</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.count">Count</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.mean">Mean</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.min">Min</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.p50">p50</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.p75">p75</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.p95">p95</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.p99">p99</th>
+                <th class="text-right" jhiTranslate="metrics.servicesstats.table.max">Max</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let entry of servicesStats | keys">
                 <td>{{entry.key}}</td>
-                <td class="text-xs-right">{{entry.value.count}}</td>
-                <td class="text-xs-right">{{entry.value.mean * 1000 | number:'1.0-0'}}</td>
-                <td class="text-xs-right">{{entry.value.min * 1000 | number:'1.0-0'}}</td>
-                <td class="text-xs-right">{{entry.value.p50 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-xs-right">{{entry.value.p75 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-xs-right">{{entry.value.p95 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-xs-right">{{entry.value.p99 * 1000 | number:'1.0-0'}}</td>
-                <td class="text-xs-right">{{entry.value.max * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.count}}</td>
+                <td class="text-right">{{entry.value.mean * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.min * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p50 * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p75 * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p95 * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.p99 * 1000 | number:'1.0-0'}}</td>
+                <td class="text-right">{{entry.value.max * 1000 | number:'1.0-0'}}</td>
             </tr>
             </tbody>
         </table>
@@ -181,33 +181,33 @@
             <thead>
             <tr>
                 <th jhiTranslate="metrics.cache.cachename">Cache name</th>
-                <th class="text-xs-right" data-translate="metrics.cache.hits">Cache Hits</th>
-                <th class="text-xs-right" data-translate="metrics.cache.misses">Cache Misses</th>
-                <th class="text-xs-right" data-translate="metrics.cache.gets">Cache Gets</th>
-                <th class="text-xs-right" data-translate="metrics.cache.puts">Cache Puts</th>
-                <th class="text-xs-right" data-translate="metrics.cache.removals">Cache Removals</th>
-                <th class="text-xs-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
-                <th class="text-xs-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
-                <th class="text-xs-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
-                <th class="text-xs-right" data-translate="metrics.cache.averageGetTime">Average get time (µs)</th>
-                <th class="text-xs-right" data-translate="metrics.cache.averagePutTime">Average put time (µs)</th>
-                <th class="text-xs-right" data-translate="metrics.cache.averageRemoveTime">Average remove time (µs)</th>
+                <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
+                <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
+                <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
+                <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
+                <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
+                <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
+                <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
+                <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+                <th class="text-right" data-translate="metrics.cache.averageGetTime">Average get time (µs)</th>
+                <th class="text-right" data-translate="metrics.cache.averagePutTime">Average put time (µs)</th>
+                <th class="text-right" data-translate="metrics.cache.averageRemoveTime">Average remove time (µs)</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let entry of cachesStats | keys">
                 <td>{{entry.key}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-hits'].value}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-misses'].value}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-gets'].value}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-puts'].value}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-removals'].value}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-evictions'].value}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-hit-percentage'].value}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.cache-miss-percentage'].value }}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.average-get-time'].value  | number : '1.2-2' }}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.average-put-time'].value  | number : '1.2-2'}}</td>
-                <td class="text-xs-right">{{metrics.gauges[entry.key + '.average-remove-time'].value | number : '1.2-2' }}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-hits'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-misses'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-gets'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-puts'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-removals'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-evictions'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-hit-percentage'].value}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.cache-miss-percentage'].value }}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.average-get-time'].value  | number : '1.2-2' }}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.average-put-time'].value  | number : '1.2-2'}}</td>
+                <td class="text-right">{{metrics.gauges[entry.key + '.average-remove-time'].value | number : '1.2-2' }}</td>
             </tr>
             </tbody>
         </table>
@@ -219,14 +219,14 @@
             <thead>
                 <tr>
                     <th><span jhiTranslate="metrics.datasource.usage">Usage</span> ({{metrics.gauges['HikariPool-1.pool.ActiveConnections'].value}} / {{metrics.gauges['HikariPool-1.pool.TotalConnections'].value}})</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.count">Count</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.mean">Mean</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.min">Min</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.p50">p50</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.p75">p75</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.p95">p95</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.p99">p99</th>
-                    <th class="text-xs-right" jhiTranslate="metrics.datasource.max">Max</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.count">Count</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.mean">Mean</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.min">Min</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.p50">p50</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.p75">p75</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.p95">p95</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.p99">p99</th>
+                    <th class="text-right" jhiTranslate="metrics.datasource.max">Max</th>
                 </tr>
             </thead>
             <tbody>
@@ -238,14 +238,14 @@
                             </ngb-progressbar>
                         </div>
                     </td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].count}}</td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].mean | number:'1.0-2'}}</td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].min | number:'1.0-2'}}</td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p50 | number:'1.0-2'}}</td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p75 | number:'1.0-2'}}</td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p95 | number:'1.0-2'}}</td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p99 | number:'1.0-2'}}</td>
-                    <td class="text-xs-right">{{metrics.histograms['HikariPool-1.pool.Usage'].max | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].count}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].mean | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].min | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p50 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p75 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p95 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].p99 | number:'1.0-2'}}</td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].max | number:'1.0-2'}}</td>
                 </tr>
             </tbody>
         </table>

@@ -6,7 +6,7 @@
     <table class="table table-sm table-striped table-bordered table-responsive"
         style="table-layout:fixed">
         <thead>
-        <tr class="row">
+        <tr>
             <th class="col-sm-4" (click)="orderProp = 'prefix'; reverse=!reverse"><span jhiTranslate="configuration.table.prefix">Prefix</span></th>
             <th class="col-sm-8" (click)="orderProp = 'properties'; reverse=!reverse" jhiTranslate="configuration.table.properties">Properties</th>
         </tr>
@@ -18,7 +18,7 @@
                 <div class="row" *ngFor="let key of keys(entry.properties)">
                     <div class="col-md-4">{{key}}</div>
                     <div class="col-md-8">
-                        <span class="float-xs-right tag tag-default break">{{entry.properties[key]}}</span>
+                        <span class="float-right tag tag-default break">{{entry.properties[key]}}</span>
                     </div>
                 </div>
             </td>
@@ -29,7 +29,7 @@
         <table class="table table-sm table-striped table-bordered table-responsive"
                style="table-layout:fixed">
             <thead>
-            <tr class="row">
+            <tr>
                 <th class="col-sm-4">Property</th>
                 <th class="col-sm-8">Value</th>
             </tr>
@@ -38,7 +38,7 @@
             <tr *ngFor="let item of allConfiguration[key]">
                 <td class="break">{{item.key}}</td>
                 <td class="break">
-                    <span class="float-xs-right tag tag-default break">{{item.val}}</span>
+                    <span class="float-right tag tag-default break">{{item.val}}</span>
                 </td>
             </tr>
             </tbody>
