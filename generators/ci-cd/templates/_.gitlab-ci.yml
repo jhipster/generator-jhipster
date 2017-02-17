@@ -1,4 +1,6 @@
+<%_ if (integrations.includes('docker')) { _%>
 image: openjdk:8
+<%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
 cache:
@@ -20,7 +22,9 @@ stages:
     - test
     - package
     - release
+<%_ if (integrations.includes('heroku')) { _%>
     - deploy
+<%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
