@@ -83,21 +83,19 @@
                 });
 
                 function addApiKeyAuthorization() {
-                <% if (authenticationType === 'session') { %>
+                <%_ if (authenticationType === 'session') { _%>
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <% } %>
-                <% if (authenticationType === 'oauth2') { %>
+                <%_ } else if (authenticationType === 'oauth2') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken")).access_token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <% } %>
-                <% if (authenticationType === 'jwt' || authenticationType === 'uaa') { %>
+                <%_ } else if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
                     var authToken = JSON.parse(localStorage.getItem("jhi-authenticationtoken") || sessionStorage.getItem("jhi-authenticationtoken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
-                <% } %>
+                <%_ } _%>
                 }
 
                 function getCSRF() {

@@ -1234,12 +1234,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angularjs 1', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular1'})
+                .withOptions({skipInstall: true, auth: 'session'})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular1',
                     'useSass': true
                 })
                 .on('end', done);
@@ -1266,12 +1267,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angularjs 1 using npm flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular1', npm: true})
+                .withOptions({skipInstall: true, auth: 'session', npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular1',
                     'useSass': true
                 })
                 .on('end', done);
@@ -1287,12 +1289,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angular 2', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular2'})
+                .withOptions({skipInstall: true, auth: 'session'})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular2',
                     'useSass': true
                 })
                 .on('end', done);
@@ -1320,12 +1323,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angular 2 using yarn flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular2', npm: true})
+                .withOptions({skipInstall: true, auth: 'session', npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular2',
                     'useSass': true
                 })
                 .on('end', done);

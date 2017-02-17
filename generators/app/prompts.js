@@ -9,7 +9,6 @@ module.exports = {
     askForModuleName,
     askFori18n,
     askForTestOpts,
-    askForClient,
     askForMoreModules
 };
 
@@ -124,39 +123,6 @@ function askForTestOpts() {
         default: defaultChoice
     }).then(function (prompt) {
         this.testFrameworks = prompt.testFrameworks;
-        done();
-    }.bind(this));
-}
-
-function askForClient() {
-    if (this.existingProject) return;
-
-    var done = this.async();
-    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
-    var applicationType = this.applicationType;
-
-    this.prompt({
-        type: 'list',
-        name: 'clientFramework',
-        when: function (response) {
-            return (applicationType !== 'microservice' && applicationType !== 'uaa');
-        },
-        message: function (response) {
-            return getNumberedQuestion('Which *Framework* would you like to use for the client?', applicationType !== 'microservice' && applicationType !== 'uaa');
-        },
-        choices: [
-            {
-                value: 'angular1',
-                name: 'AngularJS 1.x'
-            },
-            {
-                value: 'angular2',
-                name: '[BETA] Angular 2.x'
-            }
-        ],
-        default: 'angular1'
-    }).then(function (prompt) {
-        this.clientFramework = this.configOptions.clientFramework = prompt.clientFramework;
         done();
     }.bind(this));
 }
