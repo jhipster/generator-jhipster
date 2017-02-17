@@ -19,7 +19,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityPluralFileName %>.html',
-                    controller: '<%= entityAngularJSName %>Controller',
+                    controller: '<%= entityAngularName %>Controller',
                     controllerAs: 'vm'
                 }
             },
@@ -69,7 +69,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.html',
-                    controller: '<%= entityAngularJSName %>DetailController',
+                    controller: '<%= entityAngularName %>DetailController',
                     controllerAs: 'vm'
                 }
             },
@@ -103,7 +103,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                    controller: '<%= entityAngularJSName %>DialogController',
+                    controller: '<%= entityAngularName %>DialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
@@ -128,7 +128,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                    controller: '<%= entityAngularJSName %>DialogController',
+                    controller: '<%= entityAngularName %>DialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
@@ -165,7 +165,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                    controller: '<%= entityAngularJSName %>DialogController',
+                    controller: '<%= entityAngularName %>DialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
@@ -190,7 +190,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.html',
-                    controller: '<%= entityAngularJSName %>DeleteController',
+                    controller: '<%= entityAngularName %>DeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {

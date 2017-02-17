@@ -18,13 +18,13 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes, CanActiva
 import { UserRouteAccessService } from '../../shared';
 import { PaginationUtil } from 'ng-jhipster';
 
-import { <%= entityAngularJSName %>Component } from './<%= entityFileName %>.component';
-import { <%= entityAngularJSName %>DetailComponent } from './<%= entityFileName %>-detail.component';
-import { <%= entityAngularJSName %>PopupComponent } from './<%= entityFileName %>-dialog.component';
+import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
+import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+import { <%= entityAngularName %>PopupComponent } from './<%= entityFileName %>-dialog.component';
 <%_ if (entityFileName.length <= 30) { _%>
-import { <%= entityAngularJSName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
+import { <%= entityAngularName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } else { _%>
-import { <%= entityAngularJSName %>DeletePopupComponent }
+import { <%= entityAngularName %>DeletePopupComponent }
     from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
 
@@ -32,7 +32,7 @@ import { Principal } from '../../shared';
 
 <%_ if (pagination == 'pagination' || pagination == 'pager') { _%>
 @Injectable()
-export class <%= entityAngularJSName %>ResolvePagingParams implements Resolve<any> {
+export class <%= entityAngularName %>ResolvePagingParams implements Resolve<any> {
 
   constructor(private paginationUtil: PaginationUtil) {}
 
@@ -51,10 +51,10 @@ export class <%= entityAngularJSName %>ResolvePagingParams implements Resolve<an
 export const <%= entityInstance %>Route: Routes = [
   {
     path: '<%= entityUrl %>',
-    component: <%= entityAngularJSName %>Component,
+    component: <%= entityAngularName %>Component,
     <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
     resolve: {
-      'pagingParams': <%= entityAngularJSName %>ResolvePagingParams
+      'pagingParams': <%= entityAngularName %>ResolvePagingParams
     },
     <%_ } _%>
     data: {
@@ -63,7 +63,7 @@ export const <%= entityInstance %>Route: Routes = [
     }
   }, {
     path: '<%= entityUrl %>/:id',
-    component: <%= entityAngularJSName %>DetailComponent,
+    component: <%= entityAngularName %>DetailComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
@@ -74,7 +74,7 @@ export const <%= entityInstance %>Route: Routes = [
 export const <%= entityInstance %>PopupRoute: Routes = [
   {
     path: '<%= entityUrl %>-new',
-    component: <%= entityAngularJSName %>PopupComponent,
+    component: <%= entityAngularName %>PopupComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
@@ -83,7 +83,7 @@ export const <%= entityInstance %>PopupRoute: Routes = [
   },
   {
     path: '<%= entityUrl %>/:id/edit',
-    component: <%= entityAngularJSName %>PopupComponent,
+    component: <%= entityAngularName %>PopupComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
@@ -92,7 +92,7 @@ export const <%= entityInstance %>PopupRoute: Routes = [
   },
   {
     path: '<%= entityUrl %>/:id/delete',
-    component: <%= entityAngularJSName %>DeletePopupComponent,
+    component: <%= entityAngularName %>DeletePopupComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>

@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('<%= entityAngularJSName %>DeleteController',<%= entityAngularJSName %>DeleteController);
+        .controller('<%= entityAngularName %>DeleteController',<%= entityAngularName %>DeleteController);
 
-    <%= entityAngularJSName %>DeleteController.$inject = ['$uibModalInstance', 'entity', '<%= entityClass %>'];
+    <%= entityAngularName %>DeleteController.$inject = ['$uibModalInstance', 'entity', '<%= entityClass %>'];
 
-    function <%= entityAngularJSName %>DeleteController($uibModalInstance, entity, <%= entityClass %>) {
+    function <%= entityAngularName %>DeleteController($uibModalInstance, entity, <%= entityClass %>) {
         var vm = this;
 
         vm.<%= entityInstance %> = entity;

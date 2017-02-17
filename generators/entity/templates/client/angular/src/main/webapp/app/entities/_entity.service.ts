@@ -8,12 +8,12 @@ import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
-import { <%= entityClass %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 <%_ if(hasDate) { _%>
 import { DateUtils } from 'ng-jhipster';
 <%_ } _%>
 @Injectable()
-export class <%= entityClass %>Service {
+export class <%= entityAngularName %>Service {
 
     private resourceUrl = '<% if (applicationType == 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
     <%_ if(searchEngine === 'elasticsearch') { _%>
@@ -22,14 +22,14 @@ export class <%= entityClass %>Service {
 
     constructor(private http: Http<% if (hasDate) { %>, private dateUtils: DateUtils<% } %>) { }
 
-    <%_ if (entityClass.length <= 30) { _%>
-    create(<%= entityInstance %>: <%= entityClass %>): Observable<<%= entityClass %>> {
+    <%_ if (entityAngularName.length <= 30) { _%>
+    create(<%= entityInstance %>: <%= entityAngularName %>): Observable<<%= entityAngularName %>> {
     <%_ } else { _%>
-    create(<%= entityInstance %>: <%= entityClass %>):
-        Observable<<%= entityClass %>> {
+    create(<%= entityInstance %>: <%= entityAngularName %>):
+        Observable<<%= entityAngularName %>> {
 
     <%_ } _%>
-        let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
+        let copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
@@ -41,14 +41,14 @@ export class <%= entityClass %>Service {
         });
     }
 
-    <%_ if (entityClass.length <= 30) { _%>
-    update(<%= entityInstance %>: <%= entityClass %>): Observable<<%= entityClass %>> {
+    <%_ if (entityAngularName.length <= 30) { _%>
+    update(<%= entityInstance %>: <%= entityAngularName %>): Observable<<%= entityAngularName %>> {
     <%_ } else { _%>
-    update(<%= entityInstance %>: <%= entityClass %>):
-        Observable<<%= entityClass %>> {
+    update(<%= entityInstance %>: <%= entityAngularName %>):
+        Observable<<%= entityAngularName %>> {
 
     <%_ } _%>
-        let copy: <%= entityClass %> = Object.assign({}, <%= entityInstance %>);
+        let copy: <%= entityAngularName %> = Object.assign({}, <%= entityInstance %>);
         <%_ for (idx in fields){ if (fields[idx].fieldType == 'LocalDate') { _%>
         copy.<%=fields[idx].fieldName%> = this.dateUtils
             .convertLocalDateToServer(<%= entityInstance %>.<%=fields[idx].fieldName%>);
@@ -60,7 +60,7 @@ export class <%= entityClass %>Service {
         });
     }
 
-    find(id: number): Observable<<%= entityClass %>> {
+    find(id: number): Observable<<%= entityAngularName %>> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             <%_ if(hasDate) { _%>
             let jsonResponse = res.json();

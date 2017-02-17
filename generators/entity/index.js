@@ -246,6 +246,7 @@ module.exports = EntityGenerator.extend({
             this.skipServer = true;
         }
     },
+
     _getMicroserviceAppName: function () {
         return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
     },
@@ -426,9 +427,9 @@ module.exports = EntityGenerator.extend({
             this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityAngularJSName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
-            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
-            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityAngularName = this.entityClass + _.upperFirst(_.camelCase(this.entityAngularJSSuffix));
+            this.entityStateName = _.kebabCase(this.entityAngularName);
+            this.entityUrl = this.entityStateName;
             this.entityTranslationKey = this.entityInstance;
             this.entityTranslationKeyMenu = _.camelCase(this.entityStateName);
 
@@ -579,6 +580,15 @@ module.exports = EntityGenerator.extend({
                     relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                 }
 
+                if (_.isUndefined(relationship.otherEntityAngularName)) {
+                    if (relationship.otherEntityNameCapitalized !== 'User') {
+                        var otherEntityAngularSuffix = otherEntityData.angularJSSuffix || '';
+                        relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(otherEntityAngularSuffix));
+                    } else {
+                        relationship.otherEntityAngularName = 'User';
+                    }
+                }
+
                 if (_.isUndefined(relationship.otherEntityNameCapitalizedPlural)) {
                     relationship.otherEntityNameCapitalizedPlural = pluralize(_.upperFirst(relationship.otherEntityName));
                 }
@@ -588,7 +598,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
-                    relationship.otherEntityStateName = _.trim(_.kebabCase(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
+                    relationship.otherEntityStateName = _.kebabCase(relationship.otherEntityAngularName);
                 }
                 if (_.isUndefined(relationship.otherEntityModuleName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {

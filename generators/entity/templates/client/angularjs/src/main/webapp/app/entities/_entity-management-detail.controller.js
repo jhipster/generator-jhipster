@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('<%= entityAngularJSName %>DetailController', <%= entityAngularJSName %>DetailController);
+        .controller('<%= entityAngularName %>DetailController', <%= entityAngularName %>DetailController);
 
-    <%= entityAngularJSName %>DetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity'<% for (idx in differentTypes) { %>, '<%= differentTypes[idx] %>'<% } %>];
+    <%= entityAngularName %>DetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity'<% for (idx in differentTypes) { %>, '<%= differentTypes[idx] %>'<% } %>];
 
-    function <%= entityAngularJSName %>DetailController($scope, $rootScope, $stateParams, previousState<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
+    function <%= entityAngularName %>DetailController($scope, $rootScope, $stateParams, previousState<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
         var vm = this;
 
         vm.<%= entityInstance %> = entity;
