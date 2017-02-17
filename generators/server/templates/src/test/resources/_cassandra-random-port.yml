@@ -586,3 +586,7 @@ encryption_options:
     # algorithm: SunX509
     # store_type: JKS
     # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA]
+
+# Workaround for bug in cassandra-unit 3.1.1.0
+# https://github.com/jsevellec/cassandra-unit/issues/212
+cdc_raw_directory: target/embeddedCassandra/cdc
