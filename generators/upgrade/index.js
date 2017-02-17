@@ -27,8 +27,11 @@ module.exports = UpgradeGenerator.extend({
             this.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
         },
 
-        getCurrentJHVersion: function () {
+        loadConfig: function () {
             this.currentVersion = this.config.get('jhipsterVersion');
+            this.clientPackageManager = this.config.get('clientPackageManager');
+            this.clientFramework = this.config.get('clientFramework');
+            this.skipInstall = this.options['skip-install'];
         }
     },
 
@@ -51,7 +54,7 @@ module.exports = UpgradeGenerator.extend({
 
     _generate: function(version, callback) {
         this.log('Regenerating app with jhipster ' + version + '...');
-        shelljs.exec('yo jhipster --with-entities --force --skip-install', {silent:false}, function (code, msg, err) {
+        shelljs.exec('yo jhipster --with-entities --force --skip-install', { silent: true }, function (code, msg, err) {
             if (code === 0) this.log(chalk.green('Successfully regenerated app with jhipster ' + version));
             else this.error('Something went wrong while generating project! '+ err);
             callback();
@@ -74,6 +77,12 @@ module.exports = UpgradeGenerator.extend({
 
     _regenerate: function(version, callback) {
         this._generate(version, function() {
+            if (this.clientFramework === 'angular1' && version === this.latestVersion) {
+                var result = this.spawnCommandSync('bower', ['install']);
+                if (result.status !== 0) {
+                    this.error('bower install failed.');
+                }
+            }
             this._gitCommitAll('Generated with JHipster ' + version, function() {
                 callback();
             }.bind(this));
@@ -92,8 +101,9 @@ module.exports = UpgradeGenerator.extend({
         checkLatestVersion: function() {
             this.log('Looking for latest ' + GENERATOR_JHIPSTER + ' version...');
             var done = this.async();
-            shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, msg, err) {
-                this.latestVersion = msg.replace('\n','');
+            var commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
+            shelljs.exec(commandPrefix + ' ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, msg, err) {
+                this.latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n','');
                 if (semver.lt(this.currentVersion, this.latestVersion)) {
                     this.log(chalk.green('New ' + GENERATOR_JHIPSTER + ' version found: ' + this.latestVersion));
                 } else if (this.force) {
@@ -173,18 +183,12 @@ module.exports = UpgradeGenerator.extend({
             }.bind(this);
 
             var installJhipsterLocally = function (version, callback) {
-                shelljs.exec('npm ll -p --depth=0 ' + GENERATOR_JHIPSTER, { silent: true }, function (code, msg, err) {
-                    if (code !== 0 || msg.split('@')[1].split(':')[0] !== this.currentVersion) {
-                        this.log('Installing JHipster ' + version + ' locally');
-                        shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + version, { silent: true }, function (code, msg, err) {
-                            if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
-                            else this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
-                            callback();
-                        }.bind(this));
-                    } else {
-                        this.log('Using already installed JHipster ' + version);
-                        callback();
-                    }
+                this.log('Installing JHipster ' + version + ' locally');
+                var commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
+                shelljs.exec(commandPrefix + ' ' + GENERATOR_JHIPSTER + '@' + version + ' --dev --no-lockfile', { silent: true }, function (code, msg, err) {
+                    if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
+                    else this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
+                    callback();
                 }.bind(this));
             }.bind(this);
 
@@ -222,9 +226,10 @@ module.exports = UpgradeGenerator.extend({
         },
 
         updateJhipster: function() {
-            this.log(chalk.yellow('Updating ' + GENERATOR_JHIPSTER + '. This might take some time...'));
+            this.log(chalk.yellow('Updating ' + GENERATOR_JHIPSTER + ' to ' + this.latestVersion +  ' . This might take some time...'));
             var done = this.async();
-            shelljs.exec('npm install ' + GENERATOR_JHIPSTER + '@' + this.latestVersion, {silent:true}, function (code, msg, err) {
+            var commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
+            shelljs.exec(commandPrefix + ' ' + GENERATOR_JHIPSTER + '@' + this.latestVersion + ' --dev --no-lockfile', { silent: true }, function (code, msg, err) {
                 if (code === 0) this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
                 else this.error('Something went wrong while updating generator! ' + msg + ' ' + err);
                 done();
@@ -258,34 +263,56 @@ module.exports = UpgradeGenerator.extend({
     },
 
     install: function () {
+        var done = this.async();
+
         var injectDependenciesAndConstants = function () {
-            if (this.options['skip-install']) {
-                this.log(
-                    'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
-                    '\n' +
-                    '\nInject your front end dependencies into your source code:' +
-                    '\n ' + chalk.yellow.bold('gulp inject') +
-                    '\n' +
-                    '\nGenerate the Angular constants:' +
-                    '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
-                    (this.useSass ?
-                    '\n' +
-                    '\nCompile your Sass style sheets:' +
-                    '\n ' + chalk.yellow.bold('gulp sass') : '') +
-                    '\n' +
-                    '\nOr do all of the above:' +
-                    '\n ' + chalk.yellow.bold('gulp install') +
-                    '\n'
-                );
-            } else {
-                this.spawnCommandSync('gulp', ['install']);
+            if (this.clientFramework === 'angular1') {
+                this.spawnCommandSync('bower', ['install']);
             }
+            if (this.skipInstall) {
+                let logMsg =
+                    'Start your Webpack development server with:' +
+                    '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
+                    '\n';
+
+                if (this.clientFramework === 'angular1') {
+                    logMsg =
+                        'Inject your front end dependencies into your source code:' +
+                        '\n ' + chalk.yellow.bold('gulp inject') +
+                        '\n' +
+                        '\nGenerate the AngularJS constants:' +
+                        '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
+                        (this.useSass ?
+                        '\n' +
+                        '\nCompile your Sass style sheets:' +
+                        '\n ' + chalk.yellow.bold('gulp sass') : '') +
+                        '\n' +
+                        '\nOr do all of the above:' +
+                        '\n ' + chalk.yellow.bold('gulp install') +
+                        '\n';
+                }
+                this.log(chalk.green(logMsg));
+            } else {
+                if (this.clientFramework === 'angular1') {
+                    var result = this.spawnCommandSync('gulp', ['install']);
+                    if (result.status !== 0) {
+                        this.error('gulp install failed.');
+                    }
+                }
+            }
+            done();
+
         };
-        if (!this.options['skip-install']) {
+        if (!this.skipInstall) {
             shelljs.rm('-rf', 'node_modules');
-            this.installDependencies({
-                callback: injectDependenciesAndConstants.bind(this)
-            });
+            this.log('Installing dependencies, please wait...');
+            var installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
+            shelljs.exec(installCommand, {silent:true}, function (code, msg, err) {
+                if (code !== 0) {
+                    this.error(installCommand + 'failed.');
+                }
+                injectDependenciesAndConstants.call(this);
+            }.bind(this));
         } else {
             injectDependenciesAndConstants.call(this);
         }
