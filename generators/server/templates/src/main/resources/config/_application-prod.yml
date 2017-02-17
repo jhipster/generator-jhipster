@@ -189,8 +189,6 @@ liquibase:
 # ===================================================================
 server:
     port: <%= serverPort %>
-server:
-    port: <%= serverPort %>
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
