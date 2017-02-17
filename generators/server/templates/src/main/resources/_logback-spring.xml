@@ -53,6 +53,7 @@
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <%_ } else if (databaseType == 'mongodb') { _%>
     <logger name="org.mongodb.driver" level="WARN"/>
+    <logger name="org.reflections" level="WARN"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>

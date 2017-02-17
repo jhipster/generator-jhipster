@@ -185,14 +185,14 @@ function askForMoreModules() {
 }
 
 function askModulesToBeInstalled(done, generator) {
-    generator.httpGet('http://npmsearch.com/query?fields=name,description,author,version&q=keywords:jhipster-module&start=0&size=50',
+    generator.httpsGet('https://api.npms.io/v2/search?q=keywords:jhipster-module&from=0&size=50',
         function(body) {
             var moduleResponse = JSON.parse(body);
             var choices = [];
             moduleResponse.results.forEach(function (modDef) {
                 choices.push({
-                    value: { name:modDef.name, version:modDef.version},
-                    name: `(${modDef.name}-${modDef.version}) ${modDef.description} [${modDef.author}]`
+                    value: { name:modDef.package.name, version:modDef.package.version},
+                    name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description} [${modDef.package.author.name}]`
                 });
             });
             if (choices.length > 0) {
@@ -206,7 +206,7 @@ function askModulesToBeInstalled(done, generator) {
                     // [ {name: [moduleName], version:[version]}, ...]
                     generator.otherModules = [];
                     prompt.otherModules.forEach(function(module) {
-                        generator.otherModules.push({name:module.name[0], version:module.version[0]});
+                        generator.otherModules.push({name:module.name, version:module.version});
                     });
                     generator.configOptions.otherModules = this.otherModules;
                     done();

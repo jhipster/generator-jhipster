@@ -376,7 +376,6 @@ const files = {
                 'shared/auth/_csrf.service.ts',
                 'shared/auth/_state-storage.service.ts',
                 'shared/auth/_principal.service.ts',
-                'shared/auth/_has-authority.directive.ts',
                 'shared/auth/_has-any-authority.directive.ts',
                 'shared/auth/_account.service.ts',
                 'shared/auth/_user-route-access-service.ts'

@@ -427,6 +427,7 @@ const expectedFiles = {
     ],
 
     mongodb: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/dbmigrations/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/dbmigrations/InitialSetupMigration.java',
         DOCKER_DIR + 'mongodb.yml',
         DOCKER_DIR + 'mongodb-cluster.yml',

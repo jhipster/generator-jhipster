@@ -1,9 +1,11 @@
-<%_ for (idx in fields) {
-    if (fields[idx].fieldIsEnum) { _%>
+<% var enumsAlreadyDeclared = [];
+    for (idx in fields) {
+    if (fields[idx].fieldIsEnum && enumsAlreadyDeclared.indexOf(fields[idx].fieldType) === -1) {
+        enumsAlreadyDeclared.push(fields[idx].fieldType); %>
 const enum <%= fields[idx].fieldType %> {<%
         const enums = fields[idx].fieldValues.split(',');
         for (var i = 0; i < enums.length; i++) { %>
-    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } _%>
+    '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } %>
 
 };
 <%_ } } _%>
