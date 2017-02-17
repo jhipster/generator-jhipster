@@ -194,6 +194,20 @@ liquibase:
     contexts: dev
 <%_ } _%>
 
+# ===================================================================
+# To enable HTTP/2, generate a certificate using:
+# keytool -genkey -alias undertow -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+#
+# You can also use Let's Encrypt:
+# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+#
+# Then, change server.port to 8443 and add the following server.ssl properties.
+#    ssl:
+#        key-store: keystore.p12
+#        key-store-password: <your-password>
+#        keyStoreType: PKCS12
+#        keyAlias: undertow
+# ===================================================================
 server:
     port: <%= serverPort %>
 
