@@ -131,13 +131,19 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         setLocationForStaticAssets(container);
         <%_ } _%>
 
-        // Enable HTTP/2 for Undertow - https://twitter.com/ankinson/status/829256167700492288
-        // NOTE: HTTP/2 requires HTTPS! HTTP requests will fallback to HTTP/1.1.
-        if (container instanceof UndertowEmbeddedServletContainerFactory) {
-            ((UndertowEmbeddedServletContainerFactory) container)
-                .addBuilderCustomizers((builder) -> {
-                    builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
-                });
+        /*
+         * Enable HTTP/2 for Undertow - https://twitter.com/ankinson/status/829256167700492288
+         * HTTP/2 requires HTTPS, so HTTP requests will fallback to HTTP/1.1.
+         * See the JHipsterProperties class and your application-*.yml configuration files
+         * for more information.
+         */
+        if (jHipsterProperties.getHttp().getVersion().equals(JHipsterProperties.Http.Version.V_2_0)) {
+            if (container instanceof UndertowEmbeddedServletContainerFactory) {
+                ((UndertowEmbeddedServletContainerFactory) container)
+                    .addBuilderCustomizers((builder) -> {
+                        builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
+                    });
+            }
         }
     }
     <%_ if (!skipClient) { _%>
