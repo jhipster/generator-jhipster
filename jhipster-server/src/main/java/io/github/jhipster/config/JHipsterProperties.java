@@ -139,10 +139,25 @@ public class JHipsterProperties {
 
     public static class Http {
 
+        public enum Version {V_1_1, V_2_0}
+
         private final Cache cache = new Cache();
+
+        /**
+         * HTTP version, must be "V_1_1" (for HTTP/1.1) or V_2_0 (for (HTTP/2)
+         */
+        public Version version = Version.V_1_1;
 
         public Cache getCache() {
             return cache;
+        }
+
+        public Version getVersion() {
+            return version;
+        }
+
+        public void setVersion(Version version) {
+            this.version = version;
         }
 
         public static class Cache {
