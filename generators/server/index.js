@@ -374,12 +374,12 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }
-            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
-            this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
-            this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
             if (this.configOptions.clientFramework) {
                 this.clientFramework = this.configOptions.clientFramework;
             }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+            this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
+            this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
         },
 
         composeLanguages: function () {
