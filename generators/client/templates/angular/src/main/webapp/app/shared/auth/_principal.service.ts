@@ -8,28 +8,28 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 
 @Injectable()
 export class Principal {
-    private _identity: any;
-    private _authenticated = false;
-    private _authenticationState = new Subject<any>();
+    private identity: any;
+    private authenticated = false;
+    private authenticationState = new Subject<any>();
 
     constructor(
         private account: AccountService<% if (websocket === 'spring-websocket') { %>,
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>
     ) {}
 
-    authenticate (_identity) {
-        this._identity = _identity;
-        this._authenticated = _identity !== null;
-        this._authenticationState.next(this._identity);
+    authenticate (identity) {
+        this.identity = identity;
+        this.authenticated = identity !== null;
+        this.authenticationState.next(this.identity);
     }
 
     hasAnyAuthority (authorities: string[]): Promise<boolean> {
-        if (!this._authenticated || !this._identity || !this._identity.authorities) {
+        if (!this.authenticated || !this.identity || !this.identity.authorities) {
             return Promise.resolve(false);
         }
 
         for (let i = 0; i < authorities.length; i++) {
-            if (this._identity.authorities.indexOf(authorities[i]) !== -1) {
+            if (this.identity.authorities.indexOf(authorities[i]) !== -1) {
                 return Promise.resolve(true);
             }
         }
@@ -38,7 +38,7 @@ export class Principal {
     }
 
     hasAuthority (authority: string): Promise<boolean> {
-        if (!this._authenticated) {
+        if (!this.authenticated) {
            return Promise.resolve(false);
         }
 
@@ -51,55 +51,55 @@ export class Principal {
 
     identity (force?: boolean): Promise<any> {
         if (force === true) {
-            this._identity = undefined;
+            this.identity = undefined;
         }
 
-        // check and see if we have retrieved the _identity data from the server.
+        // check and see if we have retrieved the identity data from the server.
         // if we have, reuse it by immediately resolving
-        if (this._identity) {
-            return Promise.resolve(this._identity);
+        if (this.identity) {
+            return Promise.resolve(this.identity);
         }
 
-        // retrieve the _identity data from the server, update the _identity object, and then resolve.
+        // retrieve the identity data from the server, update the identity object, and then resolve.
         return this.account.get().toPromise().then(account => {
             if (account) {
-                this._identity = account;
-                this._authenticated = true;
+                this.identity = account;
+                this.authenticated = true;
                 <%_ if (websocket === 'spring-websocket') { _%>
                 this.trackerService.connect();
                 <%_ } _%>
             } else {
-                this._identity = null;
-                this._authenticated = false;
+                this.identity = null;
+                this.authenticated = false;
             }
-            this._authenticationState.next(this._identity);
-            return this._identity;
+            this.authenticationState.next(this.identity);
+            return this.identity;
         }).catch(err => {
             <%_ if (websocket === 'spring-websocket') { _%>
             if (this.trackerService.stompClient && this.trackerService.stompClient.connected) {
                 this.trackerService.disconnect();
             }
             <%_ } _%>
-            this._identity = null;
-            this._authenticated = false;
-            this._authenticationState.next(this._identity);
+            this.identity = null;
+            this.authenticated = false;
+            this.authenticationState.next(this.identity);
             return null;
         });
     }
 
     isAuthenticated (): boolean {
-        return this._authenticated;
+        return this.authenticated;
     }
 
     isIdentityResolved (): boolean {
-        return this._identity !== undefined;
+        return this.identity !== undefined;
     }
 
     getAuthenticationState(): Observable<any> {
-        return this._authenticationState.asObservable();
+        return this.authenticationState.asObservable();
     }
 
     getImageUrl(): String {
-        return this.isIdentityResolved () ? this._identity.imageUrl : null;
+        return this.isIdentityResolved () ? this.identity.imageUrl : null;
     }
 }
