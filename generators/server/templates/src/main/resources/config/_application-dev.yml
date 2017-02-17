@@ -229,7 +229,7 @@ jhipster:
             app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
     http:
-        version: v_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
     cache: # Cache configuration
         hazelcast: # Hazelcast distributed cache
