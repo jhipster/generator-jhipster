@@ -6,9 +6,9 @@
         <dt><span jhiTranslate="userManagement.login">Login</span></dt>
         <dd>
             <span>{{user.login}}</span>
-            <span class="tag tag-danger" *ngIf="!user.activated"
+            <span class="badge badge-danger" *ngIf="!user.activated"
                   jhiTranslate="userManagement.deactivated">Deactivated</span>
-            <span class="tag tag-success" *ngIf="user.activated"
+            <span class="badge badge-success" *ngIf="user.activated"
                   jhiTranslate="userManagement.activated">Activated</span>
         </dd>
         <dt><span jhiTranslate="userManagement.firstName">First Name</span></dt>
@@ -33,7 +33,7 @@
         <dd>
             <ul class="list-unstyled">
                 <li *ngFor="let authority of user.authorities">
-                    <span class="tag tag-info">{{authority}}</span>
+                    <span class="badge badge-info">{{authority}}</span>
                 </li>
             </ul>
         </dd>

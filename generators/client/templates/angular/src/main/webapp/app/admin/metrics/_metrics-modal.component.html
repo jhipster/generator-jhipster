@@ -3,22 +3,22 @@
     <h4 class="modal-title" jhiTranslate="metrics.jvm.threads.dump.title">Threads dump</h4>
     <button type="button" class="close" (click)="activeModal.dismiss('closed')">&times;</button>
 </div>
-<div class="modal-body pad">
-    <span class="tag tag-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="tag-pill">{{threadDumpAll}}</span></span>&nbsp;
-    <span class="tag tag-success" (click)="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="tag-pill">{{threadDumpRunnable}}</span></span>&nbsp;
-    <span class="tag tag-info" (click)="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="tag-pill">{{threadDumpWaiting}}</span></span>&nbsp;
-    <span class="tag tag-warning" (click)="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="tag-pill">{{threadDumpTimedWaiting}}</span></span>&nbsp;
-    <span class="tag tag-danger" (click)="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="tag-pill">{{threadDumpBlocked}}</span></span>&nbsp;
+<div class="modal-body">
+    <span class="badge badge-primary" (click)="threadDumpFilter = {}">All&nbsp;<span class="badge badge-pill badge-default">{{threadDumpAll}}</span></span>&nbsp;
+    <span class="badge badge-success" (click)="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="badge badge-pill badge-default">{{threadDumpRunnable}}</span></span>&nbsp;
+    <span class="badge badge-info" (click)="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="badge badge-pill badge-default">{{threadDumpWaiting}}</span></span>&nbsp;
+    <span class="badge badge-warning" (click)="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="badge badge-pill badge-default">{{threadDumpTimedWaiting}}</span></span>&nbsp;
+    <span class="badge badge-danger" (click)="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="badge badge-pill badge-default">{{threadDumpBlocked}}</span></span>&nbsp;
     <div class="voffset2">&nbsp;</div>
     Filter
     <input type="text" [(ngModel)]="threadDumpFilter" class="form-control">
     <div class="row pad" *ngFor="let entry of threadDump | pureFilter:threadDumpFilter:'lockName' | keys">
-        <h5><span class="tag" [ngClass]="getTagClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
+        <h6><span class="badge" [ngClass]="getBadgeClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
             <a (click)="entry.show = !entry.show" href="javascript:void(0);">
                <span [hidden]="entry.show" jhiTranslate="metrics.jvm.threads.dump.show">Show StackTrace</span>
                <span [hidden]="!entry.show" jhiTranslate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
             </a>
-        </h5>
+        </h6>
         <div class="well" [hidden]="!entry.show">
             <div *ngFor="let st of entry.value.stackTrace | keys">
                 {{st.value.className}}.{{st.value.methodName}}({{st.value.fileName}}:{{st.value.lineNumber}})

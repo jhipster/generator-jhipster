@@ -34,7 +34,7 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements
             this.threadDumpTimedWaiting + this.threadDumpBlocked;
     }
 
-    getTagClass (threadState) {
+    getBadgeClass (threadState) {
         if (threadState === 'RUNNABLE') {
             return 'tag-success';
         } else if (threadState === 'WAITING') {

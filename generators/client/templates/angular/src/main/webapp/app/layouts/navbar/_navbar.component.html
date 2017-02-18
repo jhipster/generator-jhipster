@@ -13,7 +13,7 @@
             <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
                     <i class="fa fa-home" aria-hidden="true"></i>
-                    <span class="hidden-sm-down" jhiTranslate="global.menu.home">Home</span>
+                    <span jhiTranslate="global.menu.home">Home</span>
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
@@ -21,7 +21,7 @@
                 <a class="nav-link dropdown-toggle" routerLinkActive="active" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <i class="fa fa-th-list" aria-hidden="true"></i>
-                        <span class="hidden-sm-down" jhiTranslate="global.menu.entities.main">
+                        <span jhiTranslate="global.menu.entities.main">
                             Entities
                         </span>
                         <b class="caret"></b>
@@ -35,7 +35,7 @@
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
                         <i class="fa fa-user-plus" aria-hidden="true"></i>
-                        <span class="hidden-sm-down" jhiTranslate="global.menu.admin.main">Administration</span>
+                        <span jhiTranslate="global.menu.admin.main">Administration</span>
                         <b class="caret"></b>
                     </span>
                 </a>
@@ -129,7 +129,7 @@
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                   <span *ngIf="!getImageUrl()">
                     <i class="fa fa-user" aria-hidden="true"></i>
-                    <span class="hidden-sm" jhiTranslate="global.menu.account.main">
+                    <span jhiTranslate="global.menu.account.main">
                       Account
                     </span>
                     <b class="caret"></b>
