@@ -62,8 +62,10 @@ gradle-front-test:
         - ./gradlew npm_test -PnodeInstall --no-daemon
             <%_ } _%>
         <%_ } _%>
+    artifacts:
+        paths:
+            - build/test-results/karma/*
     <%_ } _%>
-
     <%_ if (testFrameworks.includes('gatling')) { _%>
 gatling-test:
     stage: test
@@ -137,8 +139,10 @@ maven-front-test:
         - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.yarn.arguments=test
             <%_ } _%>
         <%_ } _%>
+    artifacts:
+        paths:
+            - target/test-results/karma/*
     <%_ } _%>
-
     <%_ if (testFrameworks.includes('gatling')) { _%>
 gatling-test:
     stage: test
