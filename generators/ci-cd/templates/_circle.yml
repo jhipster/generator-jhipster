@@ -62,14 +62,14 @@ test:
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('circle')) { _%>
         - HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
     <%_ } else { _%>
         - ./mvnw package -Pprod -DskipTests
     <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
         - ./gradlew bootRepackage -Pprod -x test --no-daemon
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('circle')) { _%>
         - HEROKU_API_KEY="<%= herokuApiKey %>" ./gradlew deployHeroku --no-daemon
     <%_ } _%>
 <%_ } _%>
