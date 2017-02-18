@@ -124,7 +124,7 @@ spring:
             hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.SpringCacheRegionFactory
     cache:
         jcache:
-            config: config/ehcache/ehcache-dev.xml
+            config: config/ehcache/ehcache-prod.xml
             <%_ } else if (hibernateCache == 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
