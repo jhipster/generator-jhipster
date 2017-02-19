@@ -1,36 +1,31 @@
 <div>
     <%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
-    <h2><span jhiTranslate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></span>
-        <button class="btn btn-primary float-xs-right create-<%= entityUrl %>" [routerLink]="['/', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
+    <h2>
+        <span jhiTranslate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></span>
+        <button class="btn btn-primary float-right create-<%= entityUrl %>" [routerLink]="['/', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
             <span class="fa fa-plus"></span>
             <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= keyPrefix %>home.createLabel">
             Create new <%= entityClassHumanized %>
             </span>
-        </button></h2>
+        </button>
+    </h2>
     <jhi-alert></jhi-alert>
-
-    <div class="container-fluid">
-        <div class="row">
-            <%_ if (searchEngine == 'elasticsearch') { _%>
-            <div class="col-xs-8 no-padding-right">
-                <form name="searchForm" class="form-inline">
-                    <div class="input-group pull-right">
-                        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
-                        <span  class="input-group-btn width-min">
-                            <button class="btn btn-info" (click)="search(currentSearch)">
-                                <span class="fa fa-search"></span>
-                            </button>
-                        </span>
-                        <span class="input-group-btn width-min" *ngIf="currentSearch">
-                            <button class="btn btn-info" (click)="clear()">
-                                <span class="fa fa-trash-o"></span>
-                            </button>
-                        </span>
-                    </div>
-                </form>
-            </div>
-            <%_ } _%>
+    <div class="row">
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        <div class="col-sm-12 no-padding-right">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
+                    <button class="input-group-addon btn btn-info" (click)="search(currentSearch)">
+                        <span class="fa fa-search"></span>
+                    </button>
+                    <button class="input-group-addon btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <span class="fa fa-trash-o"></span>
+                    </button>
+                </div>
+            </form>
         </div>
+        <%_ } _%>
     </div>
     <br/>
     <div class="table-responsive" *ngIf="<%=entityInstancePlural %>">
@@ -127,7 +122,7 @@
                 </td>
                 <%_ } _%>
                 <%_ } _%>
-                <td class="text-xs-right">
+                <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
                                 [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id ]"
@@ -158,14 +153,22 @@
     <%_ if (databaseType !== 'cassandra') { _%>
         <%_ if (pagination == 'pager') { _%>
         <!-- Pager is not implemented yet, so this is normal pagination instead -->
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
-            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
+        <div *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
         <%_ } else if (pagination == 'pagination') { _%>
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
-            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+        <div *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
         <%_ } _%>
     <%_ } _%>

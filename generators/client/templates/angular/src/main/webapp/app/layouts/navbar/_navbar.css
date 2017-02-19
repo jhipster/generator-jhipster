@@ -32,7 +32,7 @@ Navbar
     padding: 0.5em;
 }
 
-.jh-navbar .navbar-nav .nav-item+.nav-item {
+.jh-navbar .navbar-nav .nav-item {
     margin-left: 1.5rem;
 }
 
