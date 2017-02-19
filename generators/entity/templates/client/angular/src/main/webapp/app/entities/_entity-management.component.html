@@ -1,7 +1,7 @@
 <div>
     <%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
     <h2><span jhiTranslate="<%= keyPrefix %>home.title"><%= entityClassPluralHumanized %></span>
-        <button class="btn btn-primary float-xs-right create-<%= entityUrl %>" [routerLink]="['/', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
+        <button class="btn btn-primary float-right create-<%= entityUrl %>" [routerLink]="['/', { outlets: { popup: ['<%= entityUrl %>-new'] } }]">
             <span class="fa fa-plus"></span>
             <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= keyPrefix %>home.createLabel">
             Create new <%= entityClassHumanized %>
@@ -127,7 +127,7 @@
                 </td>
                 <%_ } _%>
                 <%_ } _%>
-                <td class="text-xs-right">
+                <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
                                 [routerLink]="['../<%= entityUrl %>', <%= entityInstance %>.id ]"
@@ -158,14 +158,22 @@
     <%_ if (databaseType !== 'cassandra') { _%>
         <%_ if (pagination == 'pager') { _%>
         <!-- Pager is not implemented yet, so this is normal pagination instead -->
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
-            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
+        <div *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page"  (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
         <%_ } else if (pagination == 'pagination') { _%>
-        <div class="text-xs-center" *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
-            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+        <div *ngIf="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
         <%_ } _%>
     <%_ } _%>
