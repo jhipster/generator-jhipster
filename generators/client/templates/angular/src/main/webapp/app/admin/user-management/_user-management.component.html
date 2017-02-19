@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span jhiTranslate="userManagement.home.title">Users</span>
-        <button class="btn btn-primary float-xs-right" [routerLink]="['/', { outlets: { popup: ['user-management-new'] } }]">
+        <button class="btn btn-primary float-right" [routerLink]="['/', { outlets: { popup: ['user-management-new'] } }]">
             <span class="fa fa-plus"></span> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
@@ -48,7 +48,7 @@
                 <td>{{user.lastModifiedBy}}</td>
                 <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
                 <%_ } _%>
-                <td class="text-xs-right">
+                <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
                                 [routerLink]="['../user-management', user.login]"
@@ -77,9 +77,13 @@
         </table>
     </div>
     <%_ if (databaseType !== 'cassandra') { _%>
-    <div class="text-xs-center" *ngIf="users">
-        <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
-        <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+    <div *ngIf="users">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
     </div>
     <%_ } _%>
 </div>
