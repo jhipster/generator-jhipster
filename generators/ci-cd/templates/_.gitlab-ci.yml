@@ -1,4 +1,4 @@
-<%_ if (integrations.includes('docker')) { _%>
+<%_ if (gitlabUseDocker) { _%>
 image: openjdk:8
 <%_ } _%>
 
@@ -21,7 +21,7 @@ stages:
     - build
     - test
     - package
-<%_ if (integrations.includes('heroku')) { _%>
+<%_ if (heroku.includes('gitlab')) { _%>
     - deploy
 <%_ } _%>
 
@@ -93,7 +93,7 @@ gradle-repackage:
     artifacts:
         paths:
             - build/libs/*.war
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('gitlab')) { _%>
 gradle-deploy:
     stage: deploy
     script:
@@ -165,7 +165,7 @@ gatling-test:
         paths:
             - target/gatling/*
     <%_ } _%>
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('gitlab')) { _%>
 maven-deploy:
     stage: deploy
      script:

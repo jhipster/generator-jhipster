@@ -41,9 +41,9 @@ module.exports = PipelineGenerator.extend({
             insight.trackWithEvent('generator', 'ci-cd');
         },
         setTemplateVariables: function() {
-            if (this.abort || this.integrations === undefined) return;
-            this.gitLabIndent = this.integrations.includes('gitlab') ? '    ' : '';
-            this.indent = this.integrations.includes('docker') ? '    ' : '';
+            if (this.abort || this.jenkinsIntegrations === undefined) return;
+            this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
+            this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';
             this.indent += this.gitLabIndent;
         }
     },

@@ -5,10 +5,10 @@ node {
         checkout scm
     }
 
-<%_ if (integrations.includes('gitlab')) { _%>
+<%_ if (jenkinsIntegrations.includes('gitlab')) { _%>
     gitlabCommitStatus('build') {
 <%_ } _%>
-<%_ if (integrations.includes('docker')) { _%>
+<%_ if (jenkinsIntegrations.includes('docker')) { _%>
 <%= gitLabIndent %>    docker.image('openjdk:8').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
 <%_ } _%>
 <%= indent %>    stage('check java') {
@@ -72,7 +72,7 @@ node {
 <%= indent %>    }
 
     <%_ } _%>
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('jenkins')) { _%>
 <%= indent %>    stage('package and deploy') {
 <%= indent %>        sh "HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
@@ -135,14 +135,14 @@ node {
 <%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
 <%= indent %>    }
 
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('jenkins')) { _%>
 <%= indent %>    stage('deployment') {
 <%= indent %>        sh "HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./gradlew deployHeroku --no-daemon"
 <%= indent %>    }
 
      <%_ } _%>
 <%_ } _%>
-<%_ if (integrations.includes('sonar')) { _%>
+<%_ if (jenkinsIntegrations.includes('sonar')) { _%>
 <%= indent %>    stage('quality analysis') {
 <%= indent %>        withSonarQubeEnv('<%= jenkinsSonarName %>') {
     <%_ if (buildTool === 'maven') { _%>
@@ -153,10 +153,10 @@ node {
 <%= indent %>        }
 <%= indent %>    }
 <%_ } _%>
-<%_ if (integrations.includes('docker')) { _%>
+<%_ if (jenkinsIntegrations.includes('docker')) { _%>
 <%= gitLabIndent %>    }
 <%_ } _%>
-<%_ if (integrations.includes('gitlab')) { _%>
+<%_ if (jenkinsIntegrations.includes('gitlab')) { _%>
     }
 <%_ } _%>
 }
