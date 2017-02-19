@@ -97,7 +97,7 @@ gradle-repackage:
 gradle-deploy:
     stage: deploy
     script:
-        - HEROKU_API_KEY="<%= herokuApiKey %>" ./gradlew deployHeroku --no-daemon
+        - ./gradlew deployHeroku --no-daemon
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
@@ -169,7 +169,7 @@ gatling-test:
 maven-deploy:
     stage: deploy
      script:
-        - HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
     <%_ } else { _%>
 maven-package:
     stage: package

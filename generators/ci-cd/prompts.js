@@ -79,23 +79,13 @@ function askIntegrations() {
             message: 'Deploy to heroku?',
             default: [],
             choices: herokuChoices
-        },
-        {
-            when: function (response) {
-                return response.heroku !== undefined && (response.heroku.includes('jenkins') || response.heroku.includes('gitlab') || response.heroku.includes('circle'));
-            },
-            type: 'input',
-            name: 'herokuApiKey',
-            message: 'What is the Heroku API Key?',
-            default: ''
-        },
+        }
     ];
     this.prompt(prompts).then(props => {
         this.jenkinsIntegrations = props.jenkinsIntegrations;
         this.jenkinsSonarName = props.jenkinsSonarName;
         this.gitlabUseDocker = props.gitlabUseDocker;
         this.heroku = props.heroku;
-        this.herokuApiKey = props.herokuApiKey;
         done();
     });
 }
