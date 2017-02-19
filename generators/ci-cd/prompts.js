@@ -12,13 +12,13 @@ function askPipelines() {
         {
             type: 'checkbox',
             name: 'pipelines',
-            message: 'What CI/CD pipeline do you want to generate ?',
+            message: 'What CI/CD pipeline do you want to generate?',
             default: [],
             choices: [
                 {name: 'Jenkins pipeline', value: 'jenkins'},
                 {name: 'Travis CI', value: 'travis'},
                 {name: 'Gitlab CI', value: 'gitlab'},
-                {name: 'Circle CI', value: 'circle'}
+                {name: 'CircleCI', value: 'circle'}
             ]
         }
     ];
@@ -42,7 +42,7 @@ function askIntegrations() {
         herokuChoices.push({name: 'In Gitlab CI', value: 'gitlab'});
     }
     if (this.pipelines.includes('circle')) {
-        herokuChoices.push({name: 'In Circle CI', value: 'circle'});
+        herokuChoices.push({name: 'In CircleCI', value: 'circle'});
     }
 
     var prompts = [
@@ -53,7 +53,7 @@ function askIntegrations() {
             message: 'Jenkins pipeline: what tasks/integrations do you want to include?',
             default: [],
             choices: [
-                {name: 'Perform the build in a docker container', value: 'docker'},
+                {name: 'Perform the build in a Docker container', value: 'docker'},
                 {name: 'Analyze code with Sonar', value: 'sonar'},
                 {name: 'Send build status to Gitlab', value: 'gitlab'}
             ]
@@ -62,14 +62,14 @@ function askIntegrations() {
             when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('sonar'),
             type: 'input',
             name: 'jenkinsSonarName',
-            message: 'What is the name of the Sonar server ?',
+            message: 'What is the name of the Sonar server?',
             default: 'Sonar'
         },
         {
             when: this.pipelines.includes('gitlab'),
             type: 'confirm',
             name: 'gitlabUseDocker',
-            message: 'In Gitlab CI perform the build in a docker container (hint: gitlab.com uses docker container)?',
+            message: 'In Gitlab CI, perform the build in a docker container (hint: gitlab.com uses Docker container)?',
             default: false
         },
         {
