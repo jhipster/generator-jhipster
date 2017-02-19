@@ -21,7 +21,6 @@ stages:
     - build
     - test
     - package
-    - release
 <%_ if (heroku.includes('gitlab')) { _%>
     - deploy
 <%_ } _%>
