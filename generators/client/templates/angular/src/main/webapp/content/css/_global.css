@@ -46,6 +46,14 @@ Generic styles
     padding: 10px;
 }
 
+.w-40 {
+    width: 40% !important;
+}
+
+.w-60 {
+    width: 60% !important;
+}
+
 .break {
     white-space: normal;
     word-break:break-all;
