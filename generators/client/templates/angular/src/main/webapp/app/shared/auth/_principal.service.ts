@@ -8,7 +8,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 
 @Injectable()
 export class Principal {
-    private identityObj: any;
+    private userIdentity: any;
     private authenticated = false;
     private authenticationState = new Subject<any>();
 
@@ -18,18 +18,18 @@ export class Principal {
     ) {}
 
     authenticate (identity) {
-        this.identityObj = identity;
+        this.userIdentity = identity;
         this.authenticated = identity !== null;
-        this.authenticationState.next(this.identityObj);
+        this.authenticationState.next(this.userIdentity);
     }
 
     hasAnyAuthority (authorities: string[]): Promise<boolean> {
-        if (!this.authenticated || !this.identityObj || !this.identityObj.authorities) {
+        if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
             return Promise.resolve(false);
         }
 
         for (let i = 0; i < authorities.length; i++) {
-            if (this.identityObj.authorities.indexOf(authorities[i]) !== -1) {
+            if (this.userIdentity.authorities.indexOf(authorities[i]) !== -1) {
                 return Promise.resolve(true);
             }
         }
@@ -51,38 +51,38 @@ export class Principal {
 
     identity (force?: boolean): Promise<any> {
         if (force === true) {
-            this.identityObj = undefined;
+            this.userIdentity = undefined;
         }
 
-        // check and see if we have retrieved the identityObj     data from the server.
+        // check and see if we have retrieved the userIdentity data from the server.
         // if we have, reuse it by immediately resolving
-        if (this.identityObj) {
-            return Promise.resolve(this.identityObj);
+        if (this.userIdentity) {
+            return Promise.resolve(this.userIdentity);
         }
 
-        // retrieve the identityObj data from the server, update the identity object, and then resolve.
+        // retrieve the userIdentity data from the server, update the identity object, and then resolve.
         return this.account.get().toPromise().then(account => {
             if (account) {
-                this.identityObj = account;
+                this.userIdentity = account;
                 this.authenticated = true;
                 <%_ if (websocket === 'spring-websocket') { _%>
                 this.trackerService.connect();
                 <%_ } _%>
             } else {
-                this.identityObj = null;
+                this.userIdentity = null;
                 this.authenticated = false;
             }
-            this.authenticationState.next(this.identityObj);
-            return this.identityObj;
+            this.authenticationState.next(this.userIdentity);
+            return this.userIdentity;
         }).catch(err => {
             <%_ if (websocket === 'spring-websocket') { _%>
             if (this.trackerService.stompClient && this.trackerService.stompClient.connected) {
                 this.trackerService.disconnect();
             }
             <%_ } _%>
-            this.identityObj = null;
+            this.userIdentity = null;
             this.authenticated = false;
-            this.authenticationState.next(this.identityObj);
+            this.authenticationState.next(this.userIdentity);
             return null;
         });
     }
@@ -92,7 +92,7 @@ export class Principal {
     }
 
     isIdentityResolved (): boolean {
-        return this.identityObj !== undefined;
+        return this.userIdentity !== undefined;
     }
 
     getAuthenticationState(): Observable<any> {
@@ -100,6 +100,6 @@ export class Principal {
     }
 
     getImageUrl(): String {
-        return this.isIdentityResolved () ? this.identityObj.imageUrl : null;
+        return this.isIdentityResolved () ? this.userIdentity.imageUrl : null;
     }
 }
