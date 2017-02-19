@@ -65,12 +65,16 @@ node {
     stage('clean') {
         sh "./gradlew clean"
     }
-
     <%_ if (applicationType !== 'microservice') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+    stage('yarn install') {
+        sh "./gradlew yarn_install -PnodeInstall"
+    }
+        <%_ } else if (clientPackageManager === 'npm') { _%>
     stage('npm install') {
         sh "./gradlew npmInstall -PnodeInstall"
     }
-
+        <%_ } _%>
     <%_ } _%>
     stage('backend tests') {
         try {
@@ -83,9 +87,14 @@ node {
     }
 
     <%_ if (applicationType !== 'microservice') { _%>
+
     stage('frontend tests') {
         try {
+            <%_ if (clientPackageManager === 'yarn') { _%>
+            sh "./gradlew yarn_test -PnodeInstall"
+            <%_ } else if (clientPackageManager === 'npm') { _%>
             sh "./gradlew gulp_test -PnodeInstall"
+            <%_ } _%>
         } catch(err) {
             throw err
         } finally {
