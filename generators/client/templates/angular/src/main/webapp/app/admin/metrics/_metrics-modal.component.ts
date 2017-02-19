@@ -36,13 +36,13 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent implements
 
     getBadgeClass (threadState) {
         if (threadState === 'RUNNABLE') {
-            return 'tag-success';
+            return 'badge-success';
         } else if (threadState === 'WAITING') {
-            return 'tag-info';
+            return 'badge-info';
         } else if (threadState === 'TIMED_WAITING') {
-            return 'tag-warning';
+            return 'badge-warning';
         } else if (threadState === 'BLOCKED') {
-            return 'tag-danger';
+            return 'badge-danger';
         }
     }
 }

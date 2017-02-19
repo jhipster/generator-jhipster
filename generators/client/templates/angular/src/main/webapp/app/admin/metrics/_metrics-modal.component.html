@@ -12,17 +12,20 @@
     <div class="voffset2">&nbsp;</div>
     Filter
     <input type="text" [(ngModel)]="threadDumpFilter" class="form-control">
-    <div class="row pad" *ngFor="let entry of threadDump | pureFilter:threadDumpFilter:'lockName' | keys">
-        <h6><span class="badge" [ngClass]="getBadgeClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
+    <div class="pad" *ngFor="let entry of threadDump | pureFilter:threadDumpFilter:'lockName' | keys">
+        <h6>
+            <span class="badge" [ngClass]="getBadgeClass(entry.value.threadState)">{{entry.value.threadState}}</span>&nbsp;{{entry.value.threadName}} (ID {{entry.value.threadId}})
             <a (click)="entry.show = !entry.show" href="javascript:void(0);">
                <span [hidden]="entry.show" jhiTranslate="metrics.jvm.threads.dump.show">Show StackTrace</span>
                <span [hidden]="!entry.show" jhiTranslate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
             </a>
         </h6>
-        <div class="well" [hidden]="!entry.show">
-            <div *ngFor="let st of entry.value.stackTrace | keys">
-                {{st.value.className}}.{{st.value.methodName}}({{st.value.fileName}}:{{st.value.lineNumber}})
-                <span class="voffset1"></span>
+        <div class="card" [hidden]="!entry.show">
+            <div class="card-block">
+                <div *ngFor="let st of entry.value.stackTrace | keys" class="break">
+                    <samp>{{st.value.className}}.{{st.value.methodName}}(<code>{{st.value.fileName}}:{{st.value.lineNumber}}</code>)</samp>
+                    <span class="voffset1"></span>
+                </div>
             </div>
         </div>
         <table class="table table-sm table-responsive">
@@ -41,7 +44,7 @@
                     <td>{{entry.value.blockedCount}}</td>
                     <td>{{entry.value.waitedTime}}</td>
                     <td>{{entry.value.waitedCount}}</td>
-                    <td>{{entry.value.lockName}}</td>
+                    <td><code>{{entry.value.lockName}}</code></td>
                 </tr>
             </tbody>
         </table>

@@ -3,18 +3,17 @@
 
     <span jhiTranslate="configuration.filter">Filter (by prefix)</span> <input type="text" [(ngModel)]="filter" class="form-control">
     <label>Spring configuration</label>
-    <table class="table table-striped table-bordered table-responsive"
-        style="table-layout:fixed">
+    <table class="table table-striped table-bordered table-responsive" style="display: table">
         <thead>
         <tr>
-            <th class="col-4" scope="row" (click)="orderProp = 'prefix'; reverse=!reverse"><span jhiTranslate="configuration.table.prefix">Prefix</span></th>
-            <th class="col-sm-8" (click)="orderProp = 'properties'; reverse=!reverse" jhiTranslate="configuration.table.properties">Properties</th>
+            <th style="width: 40%" (click)="orderProp = 'prefix'; reverse=!reverse"><span jhiTranslate="configuration.table.prefix">Prefix</span></th>
+            <th style="width: 60%" (click)="orderProp = 'properties'; reverse=!reverse"><span jhiTranslate="configuration.table.properties">Properties</span></th>
         </tr>
         </thead>
-
+        <tbody>
         <tr *ngFor="let entry of (configuration | pureFilter:filter:'prefix' | orderBy:orderProp:reverse)">
-            <td class="col-4" scope="row"><span>{{entry.prefix}}</span></td>
-            <td class="col-8">
+            <td><span>{{entry.prefix}}</span></td>
+            <td>
                 <div class="row" *ngFor="let key of keys(entry.properties)">
                     <div class="col-md-4">{{key}}</div>
                     <div class="col-md-8">
@@ -23,21 +22,21 @@
                 </div>
             </td>
         </tr>
+        </tbody>
     </table>
     <div *ngFor="let key of keys(allConfiguration)">
         <label><span>{{key}}</span></label>
-        <table class="table table-sm table-striped table-bordered table-responsive"
-               style="table-layout:fixed">
+        <table class="table table-sm table-striped table-bordered table-responsive" style="display: table">
             <thead>
             <tr>
-                <th class="col-4" scope="row">Property</th>
-                <th class="col-8">Value</th>
+                <th style="width: 40%">Property</th>
+                <th style="width: 60%">Value</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let item of allConfiguration[key]">
-                <td class="break col-4" scope="row">{{item.key}}</td>
-                <td class="break col-8">
+                <td class="break">{{item.key}}</td>
+                <td class="break">
                     <span class="float-right badge badge-default break">{{item.val}}</span>
                 </td>
             </tr>
