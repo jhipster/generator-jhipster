@@ -41,7 +41,7 @@ export class AuthService {
             }
 
             if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0 &&
-                !this.principal.hasAnyAuthority(toStateInfo.data.authorities)) {
+                !this.principal.hasAnyAuthority(toStateInfo.data.authorities).__zone_symbol__value) {
 
                 if (isAuthenticated) {
                     // user is signed in but not authorized for desired state
