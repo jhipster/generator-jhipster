@@ -59,6 +59,8 @@ hystrix:
 
 <%_ } _%>
 management:
+    security:
+        roles: ADMIN
     context-path: /management
     health:
         mail:
