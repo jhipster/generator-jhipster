@@ -164,9 +164,9 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
-            this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.jhipsterVersion = packagejs.version;
             if (this.jhipsterVersion === undefined) {
-                this.jhipsterVersion = packagejs.version;
+                this.jhipsterVersion = this.config.get('jhipsterVersion');
             }
             this.authenticationType = this.config.get('authenticationType');
             if (this.authenticationType === 'session') {

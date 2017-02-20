@@ -176,9 +176,9 @@ module.exports = JhipsterGenerator.extend({
                 this.applicationType = 'monolith';
             }
             this.baseName = this.config.get('baseName');
-            this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.jhipsterVersion = packagejs.version;
             if (this.jhipsterVersion === undefined) {
-                this.jhipsterVersion = packagejs.version;
+                this.jhipsterVersion = this.config.get('jhipsterVersion');
             }
             this.otherModules = this.config.get('otherModules');
             this.testFrameworks = this.config.get('testFrameworks');
