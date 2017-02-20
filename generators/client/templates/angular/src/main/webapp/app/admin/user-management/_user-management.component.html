@@ -32,9 +32,9 @@
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
-                    <span class="tag tag-danger hand" (click)="setActive(user, true)" *ngIf="!user.activated"
+                    <span class="badge badge-danger hand" (click)="setActive(user, true)" *ngIf="!user.activated"
                           jhiTranslate="userManagement.deactivated">Deactivated</span>
-                    <span class="tag tag-success hand" (click)="setActive(user, false)" *ngIf="user.activated"
+                    <span class="badge badge-success hand" (click)="setActive(user, false)" *ngIf="user.activated"
                           jhiTranslate="userManagement.activated">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
