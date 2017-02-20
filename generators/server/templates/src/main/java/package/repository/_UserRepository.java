@@ -5,7 +5,9 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.User;
 
-import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
+import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
@@ -45,6 +47,8 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByLogin(String login);
     <%_ } _%>
+
+    Page<User> findAllByLoginNot(Pageable pageable, String login);
 }<% } else if (databaseType == 'cassandra') { %>
 @Repository
 public class UserRepository {

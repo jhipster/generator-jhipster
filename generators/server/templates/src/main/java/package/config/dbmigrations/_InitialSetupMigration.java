@@ -69,7 +69,7 @@ public class InitialSetupMigration {
         );
         usersCollection.insert(BasicDBObjectBuilder.start()
             .add("_id", "user-1")
-            .add("login", "anonymousUser")
+            .add("login", "anonymoususer")
             .add("password", "$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO")
             .add("first_name", "Anonymous")
             .add("last_name", "User")
