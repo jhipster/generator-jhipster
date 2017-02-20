@@ -16,7 +16,7 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         <%_ if (!skipClient) { _%>
-        classpath "com.moowork.gradle:gradle-node-plugin:1.0.1"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
         <%_ } _%>
         classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -431,22 +431,9 @@ if (project.hasProperty('nodeInstall')) {
     node {
         version = '6.9.5'
         npmVersion = '4.1.2'
+        yarnVersion = '0.20.3'
         download = true
     }
-
-    // Workaround for https://github.com/srs/gradle-node-plugin/issues/134
-    task installLocalNpm {
-        def npmVersion = ''
-        def packageFile = file( new File( (File) node.nodeModulesDir, 'node_modules/npm/package.json' ) )
-        if (packageFile.exists()) {
-            def json = new JsonSlurper().parseText(packageFile.text)
-            npmVersion = json.version
-        }
-        if (npmVersion != node.npmVersion) {
-            npmInstall.dependsOn 'npm_install_npm@' + node.npmVersion
-        }
-    }
-    npmInstall.dependsOn installLocalNpm
 }
 <%_ } _%>
 

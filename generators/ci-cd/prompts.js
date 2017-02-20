@@ -12,12 +12,13 @@ function askPipelines() {
         {
             type: 'checkbox',
             name: 'pipelines',
-            message: 'What CI/CD pipeline do you want to generate ?',
+            message: 'What CI/CD pipeline do you want to generate?',
             default: [],
             choices: [
                 {name: 'Jenkins pipeline', value: 'jenkins'},
+                {name: 'Travis CI', value: 'travis'},
                 {name: 'Gitlab CI', value: 'gitlab'},
-                {name: 'Circle CI', value: 'circle'}
+                {name: 'CircleCI', value: 'circle'}
             ]
         }
     ];
@@ -31,47 +32,60 @@ function askPipelines() {
 }
 
 function askIntegrations() {
-    if (this.abort) return;
+    if (this.abort || this.pipelines.length === 0) return;
     var done = this.async();
-    var choices = [];
-    if (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab')) {
-        choices.push({name: '[Docker] Perform the build in a docker container', value: 'docker'});
+    var herokuChoices = [];
+    if (this.pipelines.includes('jenkins')) {
+        herokuChoices.push({name: 'In Jenkins pipeline', value: 'jenkins'});
     }
-    if(this.pipelines.includes('jenkins')) {
-        choices.push({name: '[Sonar] Analyze code with Sonar', value: 'sonar'});
-        choices.push({name: '[Gitlab] Send build status to Gitlab', value: 'gitlab'});
+    if (this.pipelines.includes('gitlab')) {
+        herokuChoices.push({name: 'In Gitlab CI', value: 'gitlab'});
     }
-    if(this.herokuAppName) {
-        choices.push({name: '[Heroku] Deploy to heroku', value: 'heroku'});
+    if (this.pipelines.includes('circle')) {
+        herokuChoices.push({name: 'In CircleCI', value: 'circle'});
     }
 
     var prompts = [
         {
+            when: this.pipelines.includes('jenkins'),
             type: 'checkbox',
-            name: 'integrations',
-            message: 'What tasks/integrations do you want to include ?',
+            name: 'jenkinsIntegrations',
+            message: 'Jenkins pipeline: what tasks/integrations do you want to include?',
             default: [],
-            choices: choices
+            choices: [
+                {name: 'Perform the build in a Docker container', value: 'docker'},
+                {name: 'Analyze code with Sonar', value: 'sonar'},
+                {name: 'Send build status to Gitlab', value: 'gitlab'}
+            ]
         },
         {
-            when: response => this.pipelines.includes('jenkins') && response.integrations.includes('sonar'),
+            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('sonar'),
             type: 'input',
             name: 'jenkinsSonarName',
-            message: 'What is the name of the Sonar server ?',
+            message: 'What is the name of the Sonar server?',
             default: 'Sonar'
         },
         {
-            when: response => response.integrations.includes('heroku'),
-            type: 'input',
-            name: 'herokuApiKey',
-            message: 'What is the Heroku API Key ?',
-            default: ''
+            when: this.pipelines.includes('gitlab'),
+            type: 'confirm',
+            name: 'gitlabUseDocker',
+            message: 'In Gitlab CI, perform the build in a docker container (hint: gitlab.com uses Docker container)?',
+            default: false
         },
+        {
+            when: (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab') || this.pipelines.includes('circle')) && this.herokuAppName,
+            type: 'checkbox',
+            name: 'heroku',
+            message: 'Deploy to heroku?',
+            default: [],
+            choices: herokuChoices
+        }
     ];
     this.prompt(prompts).then(props => {
-        this.integrations = props.integrations;
+        this.jenkinsIntegrations = props.jenkinsIntegrations;
         this.jenkinsSonarName = props.jenkinsSonarName;
-        this.herokuApiKey = props.herokuApiKey;
+        this.gitlabUseDocker = props.gitlabUseDocker;
+        this.heroku = props.heroku;
         done();
     });
 }

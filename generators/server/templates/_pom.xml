@@ -166,7 +166,7 @@
         <springfox.version>2.6.1</springfox.version>
         <undertow.version>1.4.10.Final</undertow.version>
         <%_ if (clientPackageManager === 'yarn') { _%>
-        <yarn.version>v0.19.1</yarn.version>
+        <yarn.version>v0.20.3</yarn.version>
         <%_ } _%>
     </properties>
 

@@ -5,10 +5,10 @@ node {
         checkout scm
     }
 
-<%_ if (integrations.includes('gitlab')) { _%>
+<%_ if (jenkinsIntegrations.includes('gitlab')) { _%>
     gitlabCommitStatus('build') {
 <%_ } _%>
-<%_ if (integrations.includes('docker')) { _%>
+<%_ if (jenkinsIntegrations.includes('docker')) { _%>
 <%= gitLabIndent %>    docker.image('openjdk:8').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
 <%_ } _%>
 <%= indent %>    stage('check java') {
@@ -17,13 +17,14 @@ node {
 
 <%_ if (buildTool === 'maven') { _%>
 <%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x mvnw"
 <%= indent %>        sh "./mvnw clean"
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.4 -DyarnVersion=v0.18.1"
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3"
 <%= indent %>    }
 
 <%= indent %>    stage('yarn install') {
@@ -32,7 +33,7 @@ node {
 
         <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.4 -DnpmVersion=3.10.9"
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.5 -DnpmVersion=4.1.2"
 <%= indent %>    }
 
 <%= indent %>    stage('npm install') {
@@ -54,7 +55,15 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
+        <%_ if (clientFramework === 'angular1') { _%>
 <%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:gulp -Dfrontend.gulp.arguments=test"
+        <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test"
+            <%_ } else if (clientPackageManager === 'npm') { _%>
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.yarn.arguments=test"
+            <%_ } _%>
+        <%_ } _%>
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -63,9 +72,9 @@ node {
 <%= indent %>    }
 
     <%_ } _%>
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('jenkins')) { _%>
 <%= indent %>    stage('package and deploy') {
-<%= indent %>        sh "HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
+<%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
 <%= indent %>        sh "./mvnw package -Pprod -DskipTests"
@@ -75,15 +84,22 @@ node {
 
 <%_ } else if (buildTool === 'gradle') { _%>
 <%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x gradlew"
 <%= indent %>        sh "./gradlew clean --no-daemon"
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>    stage('install tools') {
+<%= indent %>        sh "./gradlew yarn_install -PnodeInstall --no-daemon"
+<%= indent %>    }
+        <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>    stage('npm install') {
 <%= indent %>        sh "./gradlew npmInstall -PnodeInstall --no-daemon"
 <%= indent %>    }
-
+        <%_ } _%>
     <%_ } _%>
+
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
 <%= indent %>            sh "./gradlew test -PnodeInstall --no-daemon"
@@ -97,7 +113,15 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
+        <%_ if (clientFramework === 'angular1') { _%>
 <%= indent %>            sh "./gradlew gulp_test -PnodeInstall --no-daemon"
+        <%_ } else if (clientFramework === 'angular2') { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>            sh "./gradlew yarn_test -PnodeInstall --no-daemon"
+            <%_ } else if (clientPackageManager === 'npm') { _%>
+<%= indent %>            sh "./gradlew npm_test -PnodeInstall --no-daemon"
+            <%_ } _%>
+        <%_ } _%>
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -108,17 +132,17 @@ node {
     <%_ } _%>
 <%= indent %>    stage('packaging') {
 <%= indent %>        sh "./gradlew bootRepackage -x test -Pprod -PnodeInstall --no-daemon"
-<%= indent %>        archiveArtifacts artifacts: '**/build/*.war', fingerprint: true
+<%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
 <%= indent %>    }
 
-    <%_ if (integrations.includes('heroku')) { _%>
+    <%_ if (heroku.includes('jenkins')) { _%>
 <%= indent %>    stage('deployment') {
-<%= indent %>        sh "HEROKU_API_KEY=\"<%= herokuApiKey %>\" ./gradlew deployHeroku --no-daemon"
+<%= indent %>        sh "./gradlew deployHeroku --no-daemon"
 <%= indent %>    }
 
      <%_ } _%>
 <%_ } _%>
-<%_ if (integrations.includes('sonar')) { _%>
+<%_ if (jenkinsIntegrations.includes('sonar')) { _%>
 <%= indent %>    stage('quality analysis') {
 <%= indent %>        withSonarQubeEnv('<%= jenkinsSonarName %>') {
     <%_ if (buildTool === 'maven') { _%>
@@ -129,10 +153,10 @@ node {
 <%= indent %>        }
 <%= indent %>    }
 <%_ } _%>
-<%_ if (integrations.includes('docker')) { _%>
+<%_ if (jenkinsIntegrations.includes('docker')) { _%>
 <%= gitLabIndent %>    }
 <%_ } _%>
-<%_ if (integrations.includes('gitlab')) { _%>
+<%_ if (jenkinsIntegrations.includes('gitlab')) { _%>
     }
 <%_ } _%>
 }
