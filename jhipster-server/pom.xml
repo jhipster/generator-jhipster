@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.4.4.RELEASE</version>
+        <version>1.5.1.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -29,7 +29,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 
         <!-- Library properties -->
         <hibernate.version>5.2.4.Final</hibernate.version>
@@ -39,7 +39,7 @@
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <prometheus-simpleclient.version>0.0.18</prometheus-simpleclient.version>
         <springfox.version>2.6.1</springfox.version>
-        <spring-cloud.version>Brixton.SR7</spring-cloud.version>
+        <spring-cloud.version>Camden.SR5</spring-cloud.version>
         <spring-security-oauth2.version>2.0.12.RELEASE</spring-security-oauth2.version>
     </properties>
 
