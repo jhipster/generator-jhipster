@@ -18,29 +18,29 @@
     <url>https://github.com/jhipster/jhipster</url>
 
     <prerequisites>
-        <maven>3.0.0</maven>
+        <maven>${maven.version}</maven>
     </prerequisites>
 
     <properties>
         <!-- Build properties -->
         <java.version>1.8</java.version>
+        <maven.version>3.0.0</maven.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
+        <maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 
         <!-- Library properties -->
         <hibernate.version>5.2.4.Final</hibernate.version>
-        <jcache.version>1.0.0</jcache.version>
-        <liquibase.version>3.5.3</liquibase.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <prometheus-simpleclient.version>0.0.18</prometheus-simpleclient.version>
+        <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
         <springfox.version>2.6.1</springfox.version>
         <spring-cloud.version>Camden.SR5</spring-cloud.version>
-        <spring-security-oauth2.version>2.0.12.RELEASE</spring-security-oauth2.version>
     </properties>
 
     <dependencyManagement>
@@ -70,7 +70,6 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-graphite</artifactId>
-            <version>${dropwizard-metrics.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -104,7 +103,6 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-            <version>${jcache.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -197,7 +195,6 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring-security-oauth2.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -258,7 +255,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -271,7 +267,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -284,7 +279,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
+                <version>${maven-gpg-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
@@ -298,7 +293,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>${maven-compiler-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -323,8 +318,8 @@
                 <configuration>
                     <rules>
                         <requireMavenVersion>
-                            <message>You are running an older version of Maven. JHipster requires at least Maven 3.0</message>
-                            <version>[3.0.0,)</version>
+                            <message>You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
+                            <version>[${maven.version},)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
                             <message>You are running an older version of Java. JHipster requires at least JDK ${java.version}</message>
