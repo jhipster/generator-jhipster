@@ -30,8 +30,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         private authServerProvider: AuthServerProvider,
         <%_ } _%>
-        private $document: Document,
-        private $window: Window,
+        @Inject(Document) private $document: Document,
+        @Inject(Window) private $window: Window,
         private csrfService: CSRFService
     ) {
         this.connection = this.createConnection();
