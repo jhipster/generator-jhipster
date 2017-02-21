@@ -390,9 +390,6 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-library"
     <%_ if (gatlingTests) { _%>
     testCompile "io.gatling.highcharts:gatling-charts-highcharts:${gatling_version}"
-        <%_ if (databaseType === 'cassandra') { _%>
-    compile "io.netty:netty-handler:4.0.36.Final"
-        <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
     testCompile "com.h2database:h2"
@@ -426,9 +423,9 @@ task stage(dependsOn: 'bootRepackage') {
 
 if (project.hasProperty('nodeInstall')) {
     node {
-        version = '6.9.5'
-        npmVersion = '4.1.2'
-        yarnVersion = '0.20.3'
+        version = '${node_version}'
+        npmVersion = '${npm_version}'
+        yarnVersion = '${yarn_version}'
         download = true
     }
 }

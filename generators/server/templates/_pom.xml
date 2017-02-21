@@ -32,7 +32,7 @@
     <%_ } _%>
 
     <prerequisites>
-        <maven>3.0.0</maven>
+        <maven>${maven.version}</maven>
     </prerequisites>
 
     <properties>
@@ -47,6 +47,7 @@
         <%_ if (cucumberTests) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
+        <docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.3</frontend-maven-plugin.version>
         <%_ } _%>
@@ -66,6 +67,15 @@
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <java.version>1.<%= javaVersion %></java.version>
+        <%_ if (databaseType === 'sql') { _%>
+        <javassist.version>3.21.0-GA</javassist.version>
+        <%_ } _%>
+        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
+        <jcache.version>1.0.0</jcache.version>
+        <%_ } _%>
+        <%_ if (gatlingTests) { _%>
+        <jzlib.version>1.1.3</jzlib.version>
+        <%_ } _%>
         <jhipster.server.version>1.0.3</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
@@ -83,14 +93,19 @@
         <%_ } _%>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <mapstruct.version>1.1.0.Final</mapstruct.version>
+        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.version>3.0.0</maven.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
         <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
+        <%_ } _%>
+        <%_ if (databaseType === 'mongodb') { _%>
+        <mongobee.version>0.10</mongobee.version>
         <%_ } _%>
         <node.version>v6.9.5</node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
@@ -105,9 +120,12 @@
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
+        <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <run.addResources>false</run.addResources>
+        <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
+        <scala.version>2.12.1</scala.version>
         <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
 
         <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
@@ -155,6 +173,9 @@
         <%_ } _%>
         <springfox.version>2.6.1</springfox.version>
         <undertow.version>1.4.10.Final</undertow.version>
+        <%_ if (databaseType === 'sql') { _%>
+        <validation-api.version>1.1.0.Final</validation-api.version>
+        <%_ } _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
         <yarn.version>v0.20.3</yarn.version>
         <%_ } _%>
@@ -370,16 +391,8 @@
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jzlib</artifactId>
-            <version>1.1.2</version>
+            <version>${jzlib.version}</version>
         </dependency>
-        <%_ if (databaseType === 'cassandra') { _%>
-        <!-- include netty handler explicitly to overcome dependency mismatch when using Cassandra -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-handler</artifactId>
-            <version>4.0.36.Final</version>
-        </dependency>
-        <%_ } _%>
         <%_ } _%>
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
         <dependency>
@@ -480,7 +493,7 @@
         <dependency>
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
-            <version>0.10</version>
+            <version>${mongobee.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
@@ -850,7 +863,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
@@ -884,8 +897,8 @@
                 <configuration>
                     <rules>
                         <requireMavenVersion>
-                            <message>You are running an older version of Maven. JHipster requires at least Maven 3.0</message>
-                            <version>[3.0.0,)</version>
+                            <message>You are running an older version of Maven. JHipster requires at least Maven ${maven.version}</message>
+                            <version>[${maven.version},)</version>
                         </requireMavenVersion>
                         <requireJavaVersion>
                             <message>You are running an older version of Java. JHipster requires at least JDK ${java.version}</message>
@@ -1023,7 +1036,7 @@
                     <dependency>
                         <groupId>org.javassist</groupId>
                         <artifactId>javassist</artifactId>
-                        <version>3.18.2-GA</version>
+                        <version>${javassist.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.liquibase.ext</groupId>
@@ -1038,7 +1051,7 @@
                     <dependency>
                         <groupId>javax.validation</groupId>
                         <artifactId>validation-api</artifactId>
-                        <version>1.1.0.Final</version>
+                        <version>${validation-api.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -1058,7 +1071,7 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.10</version>
+                <version>${docker-maven-plugin.version}</version>
                 <configuration>
                     <imageName><%= baseName.toLowerCase() %></imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
@@ -1246,7 +1259,6 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>2.5</version>
                         <configuration>
                             <filesets>
                                 <fileset>
@@ -1455,7 +1467,7 @@
                     <plugin>
                         <groupId>net.alchim31.maven</groupId>
                         <artifactId>scala-maven-plugin</artifactId>
-                        <version>3.2.2</version>
+                        <version>${scala-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>compile</id>
@@ -1477,7 +1489,7 @@
                         <configuration>
                             <recompileMode>incremental</recompileMode>
                             <verbose>true</verbose>
-                            <scalaVersion>2.11.7</scalaVersion>
+                            <scalaVersion>${scala.version}</scalaVersion>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -1506,9 +1518,6 @@
                 Profile for monitoring the application with Prometheus.
             -->
             <id>prometheus</id>
-            <properties>
-                <prometheus-simpleclient.version>0.0.18</prometheus-simpleclient.version>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>io.prometheus</groupId>
