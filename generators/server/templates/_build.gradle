@@ -229,7 +229,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_version}"
-    compile ("com.zaxxer:HikariCP") {
+    compile ("com.zaxxer:HikariCP:${hikaricp_version}") {
         exclude(module: 'tools')
     }
     <%_ } _%>
