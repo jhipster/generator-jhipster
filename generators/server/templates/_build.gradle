@@ -222,7 +222,7 @@ dependencies {
     compile "com.hazelcast:hazelcast-wm:${hazelcast_wm_version}"
     <%_ } _%>
     <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
-    compile "javax.cache:cache-api:${jcache_version}"
+    compile "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_version}"
