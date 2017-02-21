@@ -23,12 +23,11 @@ export class AuthService {
         function authThen () {
             let isAuthenticated = this.principal.isAuthenticated();
             let toStateInfo = this.stateStorageService.getDestinationState().destination;
-            let canActivate = true;
 
             // an authenticated user can't access to login and register pages
             if (isAuthenticated && (toStateInfo.name === 'register'<% if (authenticationType == 'jwt') { %> || toStateInfo.name === 'social-auth'<% } %>)) {
                 this.router.navigate(['']);
-                canActivate = false;
+                return false;
             }
 
             // recover and clear previousState after external login redirect (e.g. oauth2)
@@ -37,29 +36,30 @@ export class AuthService {
             if (isAuthenticated && !fromStateInfo.name && previousState) {
                 this.stateStorageService.resetPreviousState();
                 this.router.navigate([previousState.name], { queryParams:  previousState.params  });
-                canActivate = false;
+                return false;
             }
 
-            if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0 &&
-                !this.principal.hasAnyAuthority(toStateInfo.data.authorities)) {
-
-                if (isAuthenticated) {
-                    // user is signed in but not authorized for desired state
-                    this.router.navigate(['accessdenied']);
-                    canActivate = false;
-                } else {
-                    canActivate = false;
-                    // user is not authenticated. Show the state they wanted before you
-                    // send them to the login service, so you can return them when you're done
-                    let toStateParamsInfo = this.stateStorageService.getDestinationState().params;
-                    this.stateStorageService.storePreviousState(toStateInfo.name, toStateParamsInfo);
-                    // now, send them to the signin state so they can log in
-                    this.router.navigate(['accessdenied']).then(() => {
-                        this.loginModalService.open();
-                    });
-                }
+            if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0) {
+                return this.principal.hasAnyAuthority(toStateInfo.data.authorities).then(hasAnyAuthority => {
+                    if (!hasAnyAuthority) {
+                        if (isAuthenticated) {
+                            // user is signed in but not authorized for desired state
+                            this.router.navigate(['accessdenied']);
+                        } else {
+                            // user is not authenticated. Show the state they wanted before you
+                            // send them to the login service, so you can return them when you're done
+                            let toStateParamsInfo = this.stateStorageService.getDestinationState().params;
+                            this.stateStorageService.storePreviousState(toStateInfo.name, toStateParamsInfo);
+                            // now, send them to the signin state so they can log in
+                            this.router.navigate(['accessdenied']).then(() => {
+                                this.loginModalService.open();
+                            });
+                        }
+                    }
+                    return hasAnyAuthority;
+                });
             }
-            return canActivate;
+            return true;
         }
     }
 }
