@@ -4,6 +4,7 @@ import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
+import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
@@ -292,10 +293,11 @@ public class UserService {
     @Transactional(readOnly = true)<%_ } _%>
     <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserDTO::new);
+        return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }<% } else { // Cassandra %>
     public List<UserDTO> getAllManagedUsers() {
         return userRepository.findAll().stream()
+            .filter(user -> !Constants.ANONYMOUS_USER.equals(user.getLogin()))
             .map(UserDTO::new)
             .collect(Collectors.toList());
     }<% } %>
