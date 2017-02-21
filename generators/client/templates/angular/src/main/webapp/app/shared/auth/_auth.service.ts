@@ -41,7 +41,7 @@ export class AuthService {
 
             if (toStateInfo.data.authorities && toStateInfo.data.authorities.length > 0) {
                 return this.principal.hasAnyAuthority(toStateInfo.data.authorities).then(hasAnyAuthority => {
-                    if (hasAnyAuthority === false) {
+                    if (!hasAnyAuthority) {
                         if (isAuthenticated) {
                             // user is signed in but not authorized for desired state
                             this.router.navigate(['accessdenied']);
