@@ -64,10 +64,6 @@
         <hibernate.version>5.2.7.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
-        <%_ if (enableSocialSignIn) { _%>
-        <!-- Spring social -->
-        <httpclient.version>4.5.1</httpclient.version>
-        <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <java.version>1.<%= javaVersion %></java.version>
         <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
@@ -773,7 +769,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
