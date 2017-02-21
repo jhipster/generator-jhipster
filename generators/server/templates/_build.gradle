@@ -197,14 +197,14 @@ dependencies {
     compile ("net.logstash.logback:logstash-logback-encoder:${logstash_logback_encoder_version}") {
         exclude(module: 'ch.qos.logback')
     }
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc:${jackson_version}"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jackson_version}"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     <%_ if (databaseType === 'sql') { _%>
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
     <%_ } _%>
-    compile "com.fasterxml.jackson.core:jackson-annotations:${jackson_version}"
-    compile "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    compile "com.fasterxml.jackson.core:jackson-annotations"
+    compile "com.fasterxml.jackson.core:jackson-databind"
     compile ("com.ryantenney.metrics:metrics-spring:${metrics_spring_version}") {
         exclude(module: 'metrics-core')
         exclude(module: 'metrics-healthchecks')
