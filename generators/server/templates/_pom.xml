@@ -61,7 +61,6 @@
         <hazelcast-wm.version>3.8</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate-validator.version>5.3.3.Final</hibernate-validator.version>
         <hibernate.version>5.2.7.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
@@ -477,7 +476,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
