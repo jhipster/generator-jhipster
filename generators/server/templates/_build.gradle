@@ -381,7 +381,7 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "org.springframework.security:spring-security-test"
     testCompile "org.springframework.boot:spring-boot-test"
-    testCompile "org.assertj:assertj-core:${assertj_core_version}"
+    testCompile "org.assertj:assertj-core:${assertj_version}"
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core"
     <%_ if (databaseType === 'sql') { _%>

@@ -37,7 +37,7 @@
 
     <properties>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
-        <assertj-core.version>3.5.2</assertj-core.version>
+        <assertj.version>3.6.2</assertj.version>
         <awaitility.version>1.7.0</awaitility.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <commons-codec.version>1.10</commons-codec.version>
@@ -456,7 +456,6 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency>
         <%_ if (databaseType === 'cassandra') { _%>
