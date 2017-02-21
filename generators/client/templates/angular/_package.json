@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@angular/cli": "1.0.0-beta.28.3",
+    "@angular/compiler-cli": "2.4.7",
     "@types/jasmine": "2.5.42",
     "@types/node": "7.0.5",
     <%_ if (protractorTests) { _%>
