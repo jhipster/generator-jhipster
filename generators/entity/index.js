@@ -582,7 +582,7 @@ module.exports = EntityGenerator.extend({
 
                 if (_.isUndefined(relationship.otherEntityAngularName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {
-                        var otherEntityAngularSuffix = otherEntityData.angularJSSuffix || '';
+                        var otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
                         relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(otherEntityAngularSuffix));
                     } else {
                         relationship.otherEntityAngularName = 'User';
