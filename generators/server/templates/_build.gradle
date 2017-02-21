@@ -423,9 +423,9 @@ task stage(dependsOn: 'bootRepackage') {
 
 if (project.hasProperty('nodeInstall')) {
     node {
-        version = '6.9.5'
-        npmVersion = '4.1.2'
-        yarnVersion = '0.20.3'
+        version = '${node_version}'
+        npmVersion = '${npm_version}'
+        yarnVersion = '${yarn_version}'
         download = true
     }
 }
