@@ -87,7 +87,7 @@
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase.version>3.5.3</liquibase.version>
         <%_ } _%>
-        <logstash-logback-encoder.version>4.7</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>4.8</logstash-logback-encoder.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <lz4.version>1.3.0</lz4.version>
         <%_ } _%>
