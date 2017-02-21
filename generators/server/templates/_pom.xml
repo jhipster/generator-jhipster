@@ -38,7 +38,7 @@
     <properties>
         <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m</argLine>
         <assertj.version>3.6.2</assertj.version>
-        <awaitility.version>1.7.0</awaitility.version>
+        <awaitility.version>2.0.0</awaitility.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <commons-codec.version>1.10</commons-codec.version>
         <%_ } _%>
@@ -296,7 +296,7 @@
         </dependency>
         <%_ } _%>
         <dependency>
-            <groupId>com.jayway.awaitility</groupId>
+            <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
             <scope>test</scope>
