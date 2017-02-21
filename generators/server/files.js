@@ -556,9 +556,7 @@ function writeFiles() {
             /* User management java test files */
             var testDir = this.testDir;
 
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-                this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
-            }
+            this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
             if (this.enableSocialSignIn) {
                 this.template(SERVER_TEST_SRC_DIR + 'package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryIntTest.java', this, {});

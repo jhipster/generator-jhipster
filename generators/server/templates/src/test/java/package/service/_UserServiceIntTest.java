@@ -5,7 +5,9 @@ import <%=packageName%>.<%= mainClass %>;<% if ((databaseType == 'sql' || databa
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
+import <%=packageName%>.config.Constants;
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.service.dto.UserDTO;
 import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.service.util.RandomUtil;<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import java.time.LocalDate;<% } %>
@@ -16,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;<% if (databaseType 
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringRunner;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import java.util.Optional;<%}%>
 import java.util.List;
 
@@ -144,4 +148,15 @@ public class UserServiceIntTest <% if (databaseType == 'cassandra') { %>extends 
         persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>
         persistentTokenRepository.save(token);<% } %>
     }<% } %>
+
+    @Test
+    public void assertThatAnonymousUserIsNotGet() {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        final PageRequest pageable = new PageRequest(0, (int) userRepository.count());
+        final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
+        assertThat(allManagedUsers.getContent().stream()<% } %><% if (databaseType == 'cassandra') { %>
+        final List<UserDTO> allManagedUsers = userService.getAllManagedUsers();
+        assertThat(allManagedUsers.stream()<% } %>
+            .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
+            .isTrue();
+    }
 }
