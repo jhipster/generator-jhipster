@@ -54,9 +54,11 @@
         <gatling.version>2.2.3</gatling.version>
         <gatling-maven-plugin.version>2.2.1</gatling-maven-plugin.version>
         <%_ } _%>
-        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
-        <hazelcast.version>3.7</hazelcast.version>
-        <hazelcast-hibernate.version>1.1.1</hazelcast-hibernate.version>
+        <%_ if (hibernateCache === 'hazelcast') { _%>
+        <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
+        <%_ } _%>
+        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
+        <hazelcast-wm.version>3.8</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate-validator.version>5.3.3.Final</hibernate-validator.version>
@@ -257,28 +259,26 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>${hazelcast.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (hibernateCache === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate52</artifactId>
-            <version>${hazelcast-hibernate.version}</version>
+            <version>${hazelcast-hibernate52.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
-            <version>${hazelcast.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-wm</artifactId>
-            <version>${hazelcast.version}</version>
+            <version>${hazelcast-wm.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
