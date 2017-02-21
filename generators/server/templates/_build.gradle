@@ -286,11 +286,11 @@ dependencies {
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-    compile ("com.datastax.cassandra:cassandra-driver-core:${datastax_driver_version}") {
+    compile ("com.datastax.cassandra:cassandra-driver-core") {
         exclude module: 'com.codahale.metrics'
     }
-    compile "com.datastax.cassandra:cassandra-driver-extras:${datastax_driver_version}"
-    compile "com.datastax.cassandra:cassandra-driver-mapping:${datastax_driver_version}"
+    compile "com.datastax.cassandra:cassandra-driver-extras:" + dependencyManagement.managedVersions["com.datastax.cassandra:cassandra-driver-core"]
+    compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-zuul"

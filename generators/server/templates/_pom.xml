@@ -47,9 +47,6 @@
         <%_ if (cucumberTests) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-        <datastax-driver.version>3.1.4</datastax-driver.version>
-        <%_ } _%>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.3</frontend-maven-plugin.version>
         <%_ } _%>
@@ -663,7 +660,6 @@
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-core</artifactId>
-            <version>${datastax-driver.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.codahale.metrics</groupId>
@@ -674,12 +670,11 @@
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-extras</artifactId>
-            <version>${datastax-driver.version}</version>
+            <version>${cassandra-driver.version}</version>
         </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-mapping</artifactId>
-            <version>${datastax-driver.version}</version>
         </dependency>
         <%_ } _%>
         <!-- Spring Cloud -->
