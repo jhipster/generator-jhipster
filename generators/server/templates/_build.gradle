@@ -229,7 +229,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     compile "org.hibernate:hibernate-core:${hibernate_version}"
-    compile ("com.zaxxer:HikariCP") {
+    compile ("com.zaxxer:HikariCP:${hikaricp_version}") {
         exclude(module: 'tools')
     }
     <%_ } _%>
@@ -367,7 +367,7 @@ dependencies {
     compile "org.springframework.social:spring-social-facebook"
     compile "org.springframework.social:spring-social-twitter"
     <%_ } _%>
-    testCompile "com.jayway.awaitility:awaitility:${awaility_version}"
+    testCompile "org.awaitility:awaitility:${awaitility_version}"
     testCompile "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testCompile ("org.cassandraunit:cassandra-unit-spring:${cassandra_unit_spring_version}") {
@@ -381,7 +381,7 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "org.springframework.security:spring-security-test"
     testCompile "org.springframework.boot:spring-boot-test"
-    testCompile "org.assertj:assertj-core:${assertj_core_version}"
+    testCompile "org.assertj:assertj-core:${assertj_version}"
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core"
     <%_ if (databaseType === 'sql') { _%>
