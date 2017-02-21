@@ -47,9 +47,6 @@
         <%_ if (cucumberTests) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
-        <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
-        <datastax-driver.version>3.1.4</datastax-driver.version>
-        <%_ } _%>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.3</frontend-maven-plugin.version>
         <%_ } _%>
@@ -57,42 +54,32 @@
         <gatling.version>2.2.3</gatling.version>
         <gatling-maven-plugin.version>2.2.1</gatling-maven-plugin.version>
         <%_ } _%>
-        <%_ if (clusteredHttpSession === 'hazelcast' || hibernateCache === 'hazelcast') { _%>
-        <hazelcast.version>3.7</hazelcast.version>
-        <hazelcast-hibernate.version>1.1.1</hazelcast-hibernate.version>
+        <%_ if (hibernateCache === 'hazelcast') { _%>
+        <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
+        <%_ } _%>
+        <%_ if (clusteredHttpSession === 'hazelcast') { _%>
+        <hazelcast-wm.version>3.8</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate-validator.version>5.3.3.Final</hibernate-validator.version>
         <hibernate.version>5.2.7.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
-        <%_ if (enableSocialSignIn) { _%>
-        <!-- Spring social -->
-        <httpclient.version>4.5.1</httpclient.version>
-        <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
         <java.version>1.<%= javaVersion %></java.version>
-        <%_ if (hibernateCache === 'ehcache' || hibernateCache === 'hazelcast') { _%>
-        <jcache.version>1.0.0</jcache.version>
-        <%_ } _%>
         <jhipster.server.version>1.0.3</jhipster.server.version>
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        <jna.version>4.2.2</jna.version>
-        <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
+        <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+        <liquibase-mssql.version>1.5</liquibase-mssql.version>
+        <%_ } _%>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
-        <liquibase.version>3.5.3</liquibase.version>
         <%_ } _%>
         <logstash-logback-encoder.version>4.8</logstash-logback-encoder.version>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
         <lz4.version>1.3.0</lz4.version>
-        <%_ } _%>
-        <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
-        <mariadb.version>1.4.4</mariadb.version>
         <%_ } _%>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <mapstruct.version>1.1.0.Final</mapstruct.version>
@@ -102,9 +89,15 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <metrics-spring.version>3.1.3</metrics-spring.version>
+        <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+        <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
+        <%_ } _%>
         <node.version>v6.9.5</node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
         <npm.version>4.1.2</npm.version>
+        <%_ } _%>
+        <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
+        <oracle.version>12.1.0.2.0</oracle.version>
         <%_ } _%>
         <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
         <postgresql.version>9.4.1212</postgresql.version>
@@ -154,14 +147,11 @@
         <spring-cloud.version>Camden.SR5</spring-cloud.version>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
-        <spring-security-oauth2.version>2.0.12.RELEASE</spring-security-oauth2.version>
+        <spring-security-oauth.version>2.0.12.RELEASE</spring-security-oauth.version>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
-        <spring-social-facebook.version>2.0.3.RELEASE</spring-social-facebook.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
-        <spring-social-security.version>1.1.2.RELEASE</spring-social-security.version>
-        <spring-social-twitter.version>1.1.2.RELEASE</spring-social-twitter.version>
         <%_ } _%>
         <springfox.version>2.6.1</springfox.version>
         <undertow.version>1.4.10.Final</undertow.version>
@@ -212,11 +202,6 @@
         </dependency>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-healthchecks</artifactId>
-            <version>${dropwizard-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-json</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
@@ -233,12 +218,6 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-servlets</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>metrics-healthchecks</artifactId>
-                    <groupId>io.dropwizard.metrics</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <%_ if (databaseType === 'sql') { _%>
         <dependency>
@@ -249,7 +228,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -258,7 +236,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-json-org</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -271,28 +248,26 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>${hazelcast.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (hibernateCache === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate52</artifactId>
-            <version>${hazelcast-hibernate.version}</version>
+            <version>${hazelcast-hibernate52.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (hibernateCache === 'hazelcast' || clusteredHttpSession === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
-            <version>${hazelcast.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-wm</artifactId>
-            <version>${hazelcast.version}</version>
+            <version>${hazelcast-wm.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -410,7 +385,6 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-            <version>${jcache.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
@@ -423,7 +397,6 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>${mariadb.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
@@ -438,19 +411,19 @@
         <dependency>
             <groupId>com.oracle.jdbc</groupId>
             <artifactId>ojdbc7</artifactId>
-            <version>12.1.0.2</version>
+            <version>${oracle.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>6.1.0.jre8</version>
+            <version>${mssql-jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.sabomichal</groupId>
             <artifactId>liquibase-mssql</artifactId>
-            <version>1.5</version>
+            <version>${liquibase-mssql.version}</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -491,7 +464,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -561,7 +533,6 @@
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
-            <version>${jna.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
@@ -637,7 +608,6 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring-security-oauth2.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
@@ -651,7 +621,6 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring-security-oauth2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -663,7 +632,6 @@
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-core</artifactId>
-            <version>${datastax-driver.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.codahale.metrics</groupId>
@@ -674,12 +642,11 @@
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-extras</artifactId>
-            <version>${datastax-driver.version}</version>
+            <version>${cassandra-driver.version}</version>
         </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-mapping</artifactId>
-            <version>${datastax-driver.version}</version>
         </dependency>
         <%_ } _%>
         <!-- Spring Cloud -->
@@ -783,7 +750,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
-            <version>${spring-security.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
@@ -791,12 +757,10 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${httpclient.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-security</artifactId>
-            <version>${spring-social-security.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
@@ -806,12 +770,10 @@
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-facebook</artifactId>
-            <version>${spring-social-facebook.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-twitter</artifactId>
-            <version>${spring-social-twitter.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (cucumberTests) { _%>
