@@ -264,7 +264,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
     // needed to get around elasticsearch stacktrace about jna not found
     // https://github.com/elastic/elasticsearch/issues/13245
-    compile "net.java.dev.jna:jna:${jna_version}"
+    compile "net.java.dev.jna:jna"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-mongodb"

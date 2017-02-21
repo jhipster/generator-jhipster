@@ -70,9 +70,6 @@
         <%_ if (authenticationType === 'jwt') { _%>
         <jjwt.version>0.7.0</jjwt.version>
         <%_ } _%>
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        <jna.version>4.2.2</jna.version>
-        <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
@@ -535,7 +532,6 @@
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
-            <version>${jna.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
