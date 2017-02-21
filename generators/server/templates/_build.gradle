@@ -347,13 +347,13 @@ dependencies {
     compile "org.postgresql:postgresql"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
-    compile "org.mariadb.jdbc:mariadb-java-client:${mariadb_java_client_version}"
+    compile "org.mariadb.jdbc:mariadb-java-client"
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     compile "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
-    compile "com.microsoft.sqlserver:mssql-jdbc:${mssql_jdbc_driver_version}"
+    compile "com.microsoft.sqlserver:mssql-jdbc:${mssql_jdbc_version}"
     compile "com.github.sabomichal:liquibase-mssql:${liquibase_mssql_version}"
     <%_ } _%>
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
@@ -399,7 +399,7 @@ dependencies {
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
-    compile "com.oracle.jdbc:ojdbc7:${oracle_driver_java_version}"
+    compile "com.oracle.jdbc:ojdbc7:${oracle_version}"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"
