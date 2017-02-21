@@ -63,7 +63,7 @@
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate-validator.version>5.3.3.Final</hibernate-validator.version>
-        <hibernate.version>5.2.4.Final</hibernate.version>
+        <hibernate.version>5.2.7.Final</hibernate.version>
         <hikaricp.version>2.4.6</hikaricp.version>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
