@@ -147,14 +147,11 @@
         <spring-cloud.version>Camden.SR5</spring-cloud.version>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
-        <spring-security-oauth2.version>2.0.12.RELEASE</spring-security-oauth2.version>
+        <spring-security-oauth.version>2.0.12.RELEASE</spring-security-oauth.version>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
-        <spring-social-facebook.version>2.0.3.RELEASE</spring-social-facebook.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
-        <spring-social-security.version>1.1.2.RELEASE</spring-social-security.version>
-        <spring-social-twitter.version>1.1.2.RELEASE</spring-social-twitter.version>
         <%_ } _%>
         <springfox.version>2.6.1</springfox.version>
         <undertow.version>1.4.10.Final</undertow.version>
@@ -611,7 +608,6 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring-security-oauth2.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
@@ -625,7 +621,6 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring-security-oauth2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -755,7 +750,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
-            <version>${spring-security.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (enableSocialSignIn) { _%>
@@ -767,7 +761,6 @@
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-security</artifactId>
-            <version>${spring-social-security.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
@@ -777,12 +770,10 @@
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-facebook</artifactId>
-            <version>${spring-social-facebook.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.social</groupId>
             <artifactId>spring-social-twitter</artifactId>
-            <version>${spring-social-twitter.version}</version>
         </dependency>
         <%_ } _%>
         <%_ if (cucumberTests) { _%>
