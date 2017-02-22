@@ -164,6 +164,12 @@ module.exports = JhipsterGenerator.extend({
             }.bind(this));
         },
 
+        checkForNewVersion: function () {
+            if (!this.skipChecks) {
+                this.checkForNewVersion();
+            }
+        },
+
         validate: function () {
             if (this.skipServer && this.skipClient) {
                 this.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));

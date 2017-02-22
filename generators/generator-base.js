@@ -1480,7 +1480,6 @@ Generator.prototype.printJHipsterLogo = function () {
         chalk.green('   ╚═════╝ ') + chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝\n')
     );
     this.log(chalk.white.bold('                            https://jhipster.github.io\n'));
-    if (!this.skipChecks) this.checkForNewVersion();
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
     this.log(chalk.white('Documentation for creating an application: ' + chalk.yellow('https://jhipster.github.io/creating-an-app/')));
     this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
@@ -1491,15 +1490,21 @@ Generator.prototype.printJHipsterLogo = function () {
  */
 Generator.prototype.checkForNewVersion = function () {
     try {
+        var done = this.async();
         shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, stdout, stderr) {
             if (!stderr && semver.lt(packagejs.version, stdout)) {
                 this.log(
                     chalk.yellow(' ______________________________________________________________________________\n\n') +
-                    chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n','')) + chalk.gray(' (current: ' + packagejs.version + ')') + '\n' +
-                    chalk.yellow('  Run ' + chalk.magenta('npm install -g ' + GENERATOR_JHIPSTER ) + ' to update.\n') +
-                    chalk.yellow(' ______________________________________________________________________________\n')
+                    chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n','')) + chalk.gray(' (current: ' + packagejs.version + ')') + '\n'
                 );
+                if (this.yarnInstall) {
+                    this.log(chalk.yellow('  Run ' + chalk.magenta('yarn global upgrade ' + GENERATOR_JHIPSTER ) + ' to update.\n'));
+                } else {
+                    this.log(chalk.yellow('  Run ' + chalk.magenta('npm install -g ' + GENERATOR_JHIPSTER ) + ' to update.\n'));
+                }
+                this.log(chalk.yellow(' ______________________________________________________________________________\n'));
             }
+            done();
         }.bind(this));
     } catch (err) {
         // fail silently as this function doesnt affect normal generator flow
