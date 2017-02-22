@@ -9,6 +9,14 @@ import { AuditsService } from '../../../../../../main/webapp/app/admin/audits/au
 import { ITEMS_PER_PAGE } from '../../../../../../main/webapp/app/shared';
 
 
+function getDate(isToday= true){
+    let date: Date = new Date();
+    if (isToday) {
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() + 1}`;
+    }
+    return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+}
+
 describe('Component Tests', () => {
 
     describe('AuditsComponent', () => {
@@ -45,21 +53,23 @@ describe('Component Tests', () => {
 
         describe('today function ', () => {
             it('should set toDate to current date', () => {
-               let today: Date = new Date();
-               let date = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
-               comp.previousMonth();
-               expect(comp.fromDate).toBe(date);
+               comp.today();
+               expect(comp.toDate).toBe(getDate());
             });
         });
 
-        describe('By default, on loading', () => {
+        describe('previousMonth function ', () => {
+            it('should set toDate to current date', () => {
+               comp.previousMonth();
+               expect(comp.fromDate).toBe(getDate(false));
+            });
+        });
+
+        describe('By default, on init', () => {
             it('should set all default values correctly', () => {
-               let today: Date = new Date();
-               let toDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate() + 1}`;
-               let fromDate = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
                fixture.detectChanges();
-               expect(comp.toDate).toBe(toDate);
-               expect(comp.fromDate).toBe(fromDate);
+               expect(comp.toDate).toBe(getDate());
+               expect(comp.fromDate).toBe(getDate(false));
                expect(comp.itemsPerPage).toBe(ITEMS_PER_PAGE);
                expect(comp.page).toBe(1);
                expect(comp.reverse).toBeFalsy();
