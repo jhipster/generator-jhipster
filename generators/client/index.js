@@ -347,7 +347,15 @@ module.exports = JhipsterClientGenerator.extend({
 
         if (!this.options['skip-install']) {
             if (this.clientPackageManager === 'yarn') {
-                var result = this.spawnCommandSync('yarn');
+                var nbRetry = 0;
+                var maxRetry = 2;
+                do {
+                    if (nbRetry > 0) {
+                        this.warning('yarn install failed. Retrying to launch yarn: ' + nbRetry + '/' + maxRetry + ' retries.');
+                    }
+                    var result = this.spawnCommandSync('yarn');
+                    nbRetry++;
+                } while(result.status !== 0 && nbRetry <= maxRetry);
                 if (result.status !== 0) {
                     this.error('yarn install failed.');
                 }
