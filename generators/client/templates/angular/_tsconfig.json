@@ -10,7 +10,11 @@
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
         "outDir": "<%= DIST_DIR %>app",
+        "rootDir": "./",
         "lib": ["es6", "dom"],
+        "types": [
+            "node"
+        ],
         "typeRoots": [
             "node_modules/@types"
         ]
@@ -18,5 +22,9 @@
     "include": [
         "src/main/webapp/app",
         "src/test/javascript"
-    ]
+    ],
+    "angularCompilerOptions": {
+        "genDir": ".",
+        "entryModule": "src/main/webapp/app/app.module.ts#<%=angular2AppName%>AppModule"
+    }
 }

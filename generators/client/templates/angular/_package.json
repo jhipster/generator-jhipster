@@ -9,6 +9,7 @@
   "dependencies": {
     "@angular/common": "2.4.7",
     "@angular/compiler": "2.4.7",
+    "@angular/compiler-cli": "2.4.7",
     "@angular/core": "2.4.7",
     "@angular/forms": "2.4.7",
     "@angular/http": "2.4.7",
@@ -36,7 +37,6 @@
   },
   "devDependencies": {
     "@angular/cli": "1.0.0-beta.28.3",
-    "@angular/compiler-cli": "2.4.7",
     "@types/jasmine": "2.5.42",
     "@types/node": "7.0.5",
     <%_ if (protractorTests) { _%>
@@ -109,8 +109,9 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "lint": "tslint 'src/main/webapp/app/**/*.ts' --force",
-    "lint:fix": "tslint 'src/main/webapp/app/**/*.ts' --fix --force",
+    "lint": "tslint '<%= MAIN_SRC_DIR %>app/**/*.ts' --force",
+    "lint:fix": "tslint '<%= MAIN_SRC_DIR %>app/**/*.ts' --fix --force",
+    "ngc": "ngc -p 'src/main/webapp/app'",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "start": "<%= clientPackageManager %> run webpack:dev",
