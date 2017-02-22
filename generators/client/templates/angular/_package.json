@@ -111,7 +111,7 @@
   "scripts": {
     "lint": "tslint '<%= MAIN_SRC_DIR %>app/**/*.ts' --force",
     "lint:fix": "tslint '<%= MAIN_SRC_DIR %>app/**/*.ts' --fix --force",
-    "ngc": "ngc -p 'src/main/webapp/app'",
+    "ngc": "ngc -p '<%= MAIN_SRC_DIR %>app'",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "start": "<%= clientPackageManager %> run webpack:dev",

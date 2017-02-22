@@ -5,7 +5,7 @@
   },
   "apps": [
     {
-      "root": "<%= MAIN_SRC_DIR %>app",
+      "root": "<%= MAIN_SRC_DIR %>",
       "outDir": "<%= DIST_DIR %>app",
       "assets": [
         "content",
