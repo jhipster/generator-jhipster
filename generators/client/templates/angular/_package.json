@@ -64,6 +64,7 @@
     "karma": "1.4.1",
     "karma-chrome-launcher": "2.0.0",
     "karma-coverage": "1.1.1",
+    "karma-intl-shim": "1.0.3",
     "karma-jasmine": "1.1.0",
     "karma-junit-reporter": "1.2.0",
     "karma-phantomjs-launcher": "1.0.2",
