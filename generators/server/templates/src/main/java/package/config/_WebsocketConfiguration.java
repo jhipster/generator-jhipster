@@ -1,6 +1,7 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.security.AuthoritiesConstants;
+import io.github.jhipster.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,6 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
@@ -23,6 +23,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -32,6 +33,12 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
     public static final String IP_ADDRESS = "IP_ADDRESS";
 
+    private final JHipsterProperties jHipsterProperties;
+
+    public WebsocketConfiguration(JHipsterProperties jHipsterProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+    }
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
@@ -39,6 +46,7 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        String[] allowedOrigins = Optional.ofNullable(jHipsterProperties.getCors().getAllowedOrigins()).map(origins -> origins.toArray(new String[0])).orElse(new String[0]);
         registry.addEndpoint("/websocket/tracker")
             .setHandshakeHandler(new DefaultHandshakeHandler() {
                 @Override
@@ -52,6 +60,7 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
                     return principal;
                 }
             })
+            .setAllowedOrigins(allowedOrigins)
             .withSockJS()
             .setInterceptors(httpSessionHandshakeInterceptor());
     }
