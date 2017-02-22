@@ -418,6 +418,7 @@ const files = {
                 'spec/app/account/register/_register.component.spec.ts',
                 'spec/app/account/settings/_settings.component.spec.ts',
                 'spec/app/admin/health/_health.component.spec.ts',
+                'spec/app/admin/audits/_audits.component.spec.ts',
                 'spec/helpers/_spyobject.ts',
                 'spec/helpers/_mock-account.service.ts',
                 'spec/helpers/_mock-principal.service.ts',
