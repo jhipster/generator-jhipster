@@ -43,7 +43,7 @@
     <%_ } _%>
     "add-asset-html-webpack-plugin": "1.0.2",
     "angular2-template-loader": "0.6.2",
-    "awesome-typescript-loader": "3.0.4-rc.2",
+    "awesome-typescript-loader": "3.0.7",
     "browser-sync": "2.18.7",
     "browser-sync-webpack-plugin": "1.1.4",
     "codelyzer": "2.0.0",
