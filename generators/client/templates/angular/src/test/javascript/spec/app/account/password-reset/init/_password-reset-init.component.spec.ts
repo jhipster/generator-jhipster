@@ -1,12 +1,7 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
 import { Renderer, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../../helpers/mock-language.service';
-<%_ } _%>
+import { <%=angular2AppName%>TestModule } from '../../../test.module';
 import { PasswordResetInitComponent } from '../../../../../../../main/webapp/app/account/password-reset/init/password-reset-init.component';
 import { PasswordResetInit } from '../../../../../../../main/webapp/app/account/password-reset/init/password-reset-init.service';
 
@@ -19,23 +14,10 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
+                import: [<%=angular2AppName%>TestModule],
                 declarations: [PasswordResetInitComponent],
-                providers: [MockBackend,
+                providers: [
                     PasswordResetInit,
-                    BaseRequestOptions,
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
-                    <%_ if (enableTranslation) { _%>
-                    {
-                        provide: JhiLanguageService,
-                        useClass: MockLanguageService
-                    },
-                    <%_ } _%>
                     {
                         provide: Renderer,
                         useValue: {

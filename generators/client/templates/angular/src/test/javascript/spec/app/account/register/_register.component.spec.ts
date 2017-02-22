@@ -1,12 +1,7 @@
 import { ComponentFixture, TestBed, async, inject, tick, fakeAsync } from '@angular/core/testing';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
 import { Renderer, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/mock-language.service';
-<%_ } _%>
+import { <%=angular2AppName%>TestModule } from '../../../test.module';
 import { LoginModalService } from '../../../../../../main/webapp/app/shared';
 import { Register } from '../../../../../../main/webapp/app/account/register/register.service';
 import { RegisterComponent } from '../../../../../../main/webapp/app/account/register/register.component';
@@ -20,23 +15,10 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
+                import: [<%=angular2AppName%>TestModule],
                 declarations: [RegisterComponent],
-                providers: [MockBackend,
+                providers: [
                     Register,
-                    BaseRequestOptions,
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
-                    <%_ if (enableTranslation) { _%>
-                    {
-                        provide: JhiLanguageService,
-                        useClass: MockLanguageService
-                    },
-                    <% } %>
                     {
                         provide: LoginModalService,
                         useValue: null
