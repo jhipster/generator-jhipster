@@ -1,11 +1,6 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/mock-language.service';
-<%_ } _%>
+import { <%=angular2AppName%>TestModule } from '../../../test.module';
 import { PasswordComponent } from '../../../../../../main/webapp/app/account/password/password.component';
 import { Password } from '../../../../../../main/webapp/app/account/password/password.service';
 import { Principal } from '../../../../../../main/webapp/app/shared/auth/principal.service';
@@ -26,29 +21,15 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
+                imports: [<%=angular2AppName%>TestModule],
                 declarations: [PasswordComponent],
                 providers: [
-                    MockBackend,
                     Principal,
                     AccountService,
                     <%_ if (websocket === 'spring-websocket') { _%>
                     {
                         provide: <%=jhiPrefixCapitalized%>TrackerService,
                         useClass: MockTrackerService
-                    },
-                    <%_ } _%>
-                    BaseRequestOptions,
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
-                    <%_ if (enableTranslation) { _%>
-                    {
-                        provide: JhiLanguageService,
-                        useClass: MockLanguageService
                     },
                     <%_ } _%>
                     Password
