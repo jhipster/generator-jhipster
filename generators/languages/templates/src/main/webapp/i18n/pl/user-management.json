@@ -5,7 +5,7 @@
             "createLabel": "Stwórz nowego użytkownika",
             "createOrEditLabel": "Stwórz lub edytuj użytkownika"
         },
-        "created": "Utworzono nowegu użytkownika z identyfikatorem {{ param }}",
+        "created": "Utworzono nowego użytkownika z identyfikatorem {{ param }}",
         "updated": "Uaktualniono użytkownika z identyfikatorem {{ param }}",
         "deleted": "Usunięto użytkownika z identyfikatorem {{ param }}",
         "delete": {
