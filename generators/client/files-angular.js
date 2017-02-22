@@ -409,6 +409,7 @@ const files = {
             templates: [
                 '_karma.conf.js',
                 'spec/_entry.ts',
+                'spec/_test.module.ts',
                 'spec/app/account/activate/_activate.component.spec.ts',
                 'spec/app/account/password/_password.component.spec.ts',
                 'spec/app/account/password/_password-strength-bar.component.spec.ts',
