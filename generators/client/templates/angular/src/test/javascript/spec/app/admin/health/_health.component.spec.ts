@@ -1,11 +1,6 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { MockBackend } from '@angular/http/testing';
-import { Http, BaseRequestOptions } from '@angular/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
-import { MockLanguageService } from '../../../helpers/mock-language.service';
-<%_ } _%>
+import { <%=angular2AppName%>TestModule } from '../../../test.module';
 import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from '../../../../../../main/webapp/app/admin/health/health.component';
 import { <%=jhiPrefixCapitalized%>HealthService } from '../../../../../../main/webapp/app/admin/health/health.service';
 
@@ -20,24 +15,9 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
+                import: [<%=angular2AppName%>TestModule],
                 declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent],
                 providers: [
-                    MockBackend,
-                    BaseRequestOptions,
-                    {
-                        provide: Http,
-                        useFactory: (backendInstance: MockBackend, defaultOptions: BaseRequestOptions) => {
-                            return new Http(backendInstance, defaultOptions);
-                        },
-                        deps: [MockBackend, BaseRequestOptions]
-                    },
-                    <%=jhiPrefixCapitalized%>HealthService,
-                    <%_ if (enableTranslation) { _%>
-                    {
-                        provide: JhiLanguageService,
-                        useClass: MockLanguageService
-                    },
-                    <%_ } _%>
                     {
                         provide: NgbModal,
                         useValue: null
