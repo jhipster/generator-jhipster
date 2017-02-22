@@ -15,9 +15,10 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                import: [<%=angular2AppName%>TestModule],
+                imports: [<%=angular2AppName%>TestModule],
                 declarations: [ActivateComponent],
                 providers: [
+                    Activate,
                     {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({'key': 'ABC123'})

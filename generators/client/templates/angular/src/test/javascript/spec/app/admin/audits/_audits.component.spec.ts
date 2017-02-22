@@ -19,7 +19,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                import: [<%=angular2AppName%>TestModule],
+                imports: [<%=angular2AppName%>TestModule],
                 declarations: [AuditsComponent],
                 providers: [
                     AuditsService,

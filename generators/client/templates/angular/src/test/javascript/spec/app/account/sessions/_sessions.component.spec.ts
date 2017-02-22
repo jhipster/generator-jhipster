@@ -20,7 +20,7 @@ describe('Component Tests', () => {
             sessions = new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0');
 
             fixture = TestBed.configureTestingModule({
-                import: [<%=angular2AppName%>TestModule],
+                imports: [<%=angular2AppName%>TestModule],
                 declarations: [SessionsComponent],
                 providers: [
                     SessionsService,

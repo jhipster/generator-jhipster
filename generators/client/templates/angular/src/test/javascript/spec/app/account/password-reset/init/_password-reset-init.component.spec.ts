@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { Renderer, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
-import { <%=angular2AppName%>TestModule } from '../../../test.module';
+import { <%=angular2AppName%>TestModule } from '../../../../test.module';
 import { PasswordResetInitComponent } from '../../../../../../../main/webapp/app/account/password-reset/init/password-reset-init.component';
 import { PasswordResetInit } from '../../../../../../../main/webapp/app/account/password-reset/init/password-reset-init.service';
 
@@ -14,7 +14,7 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             fixture = TestBed.configureTestingModule({
-                import: [<%=angular2AppName%>TestModule],
+                imports: [<%=angular2AppName%>TestModule],
                 declarations: [PasswordResetInitComponent],
                 providers: [
                     PasswordResetInit,

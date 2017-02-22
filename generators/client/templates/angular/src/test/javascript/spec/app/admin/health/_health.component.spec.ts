@@ -15,9 +15,10 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                import: [<%=angular2AppName%>TestModule],
+                imports: [<%=angular2AppName%>TestModule],
                 declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent],
                 providers: [
+                    <%=jhiPrefixCapitalized%>HealthService,
                     {
                         provide: NgbModal,
                         useValue: null
