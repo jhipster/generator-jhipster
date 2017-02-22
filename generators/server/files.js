@@ -142,10 +142,6 @@ function writeFiles() {
             mkdirp(SERVER_MAIN_RES_DIR);
             this.copy(SERVER_MAIN_RES_DIR + 'banner.txt', SERVER_MAIN_RES_DIR + 'banner.txt');
 
-            if (this.hibernateCache === 'ehcache') {
-                this.template(SERVER_MAIN_RES_DIR + 'config/ehcache/_ehcache-dev.xml', SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml', this, {});
-                this.template(SERVER_MAIN_RES_DIR + 'config/ehcache/_ehcache-prod.xml', SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml', this, {});
-            }
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
             }
@@ -459,10 +455,6 @@ function writeFiles() {
             if (this.authenticationType === 'uaa') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/security/_OAuth2TokenMockUtil.java', testDir + 'security/OAuth2TokenMockUtil.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/config/_SecurityBeanOverrideConfiguration.java', testDir + 'config/SecurityBeanOverrideConfiguration.java', this, {});
-            }
-
-            if (this.hibernateCache === 'ehcache') {
-                this.template(SERVER_TEST_RES_DIR + 'config/ehcache/_ehcache-test.xml', SERVER_TEST_RES_DIR + 'config/ehcache/ehcache-test.xml', this, {});
             }
 
             // Create Gatling test files
