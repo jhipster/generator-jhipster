@@ -238,6 +238,15 @@ jhipster:
             max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
     <%_ } _%>
+   <%_ if (websocket === 'spring-websocket') { _%>
+    cors:
+        allowed-origins: "*"
+        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        allowed-headers: "*"
+        exposed-headers:
+        allow-credentials: true
+        max-age: 1800
+    <%_ } _%>
     <%_ if (authenticationType == 'jwt') { _%>
     security:
         authentication:
