@@ -35,7 +35,7 @@
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>
 
         <!-- Library properties -->
-        <hibernate.version>5.2.4.Final</hibernate.version>
+        <hibernate.version>5.2.8.Final</hibernate.version>
         <liquibase-slf4j.version>2.0.0</liquibase-slf4j.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <prometheus-simpleclient.version>0.0.20</prometheus-simpleclient.version>

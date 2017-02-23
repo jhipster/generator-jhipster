@@ -178,8 +178,14 @@ public class JHipsterProperties {
 
         private final Hazelcast hazelcast = new Hazelcast();
 
+        private final Ehcache ehcache = new Ehcache();
+
         public Hazelcast getHazelcast() {
             return hazelcast;
+        }
+
+        public Ehcache getEhcache() {
+            return ehcache;
         }
 
         public static class Hazelcast {
@@ -202,6 +208,29 @@ public class JHipsterProperties {
 
             public void setBackupCount(int backupCount) {
                 this.backupCount = backupCount;
+            }
+        }
+
+        public static class Ehcache {
+
+            private int timeToLiveSeconds = 3600;
+
+            private long maxEntries = 100;
+
+            public int getTimeToLiveSeconds() {
+                return timeToLiveSeconds;
+            }
+
+            public void setTimeToLiveSeconds(int timeToLiveSeconds) {
+                this.timeToLiveSeconds = timeToLiveSeconds;
+            }
+
+            public long getMaxEntries() {
+                return maxEntries;
+            }
+
+            public void setMaxEntries(long maxEntries) {
+                this.maxEntries = maxEntries;
             }
         }
     }
