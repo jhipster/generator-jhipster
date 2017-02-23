@@ -62,7 +62,7 @@
         <hazelcast-wm.version>3.8</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        <hibernate.version>5.2.7.Final</hibernate.version>
+        <hibernate.version>5.2.8.Final</hibernate.version>
         <hikaricp.version>2.6.0</hikaricp.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.7.9</jacoco-maven-plugin.version>

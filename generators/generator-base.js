@@ -21,6 +21,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const constants = require('./generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = Generator;
@@ -565,45 +566,32 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
  */
 Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
     // Add the entity to ehcache
-    this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}`);
+    this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName()`);
     // Add the collections linked to that entity to ehcache
     for (var idx in relationships) {
         var relationshipType = relationships[idx].relationshipType;
         if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-            this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.${relationships[idx].relationshipFieldNamePlural}`);
+            this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName().${relationships[idx].relationshipFieldNamePlural}`);
         }
     }
 };
 
 /**
- * Add a new entry to the ehcache.xml file
+ * Add a new entry to Ehcache in CacheConfiguration.java
  *
  * @param {string} name - the entry (including package name) to cache.
  */
 Generator.prototype.addEntryToEhcache = function (entry) {
     try {
-        var ehcachePath = SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml';
+        var ehcachePath = SERVER_MAIN_SRC_DIR + `${this.packageFolder}/config/CacheConfiguration.java`;
         jhipsterUtils.rewriteFile({
             file: ehcachePath,
             needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`<cache alias="${entry}" uses-template="simple"/>
-`
+            splicable: [`cm.createCache(${entry}, cacheConfiguration);`
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache.xml file.\n'));
-    }
-    try {
-        var ehcacheProdPath = SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml';
-        jhipsterUtils.rewriteFile({
-            file: ehcacheProdPath,
-            needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`<cache alias="${entry}" uses-template="simple"/>
-`
-            ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache-prod.xml file.\n'));
+        this.log(chalk.yellow('\nUnable to add ' + entry + ' to CacheConfiguration.java file.\n\t' + e.message));
     }
 };
 

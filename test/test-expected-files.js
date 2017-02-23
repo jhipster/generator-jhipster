@@ -39,8 +39,6 @@ const expectedFiles = {
         '.gitignore',
         '.gitattributes',
         SERVER_MAIN_RES_DIR + 'banner.txt',
-        SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml',
-        SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
         SERVER_MAIN_RES_DIR + 'templates/error.html',
         SERVER_MAIN_RES_DIR + 'logback-spring.xml',
@@ -123,7 +121,6 @@ const expectedFiles = {
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/UserResourceIntTest.java',
         SERVER_TEST_RES_DIR + 'config/application.yml',
         SERVER_TEST_RES_DIR + 'logback-test.xml',
-        SERVER_TEST_RES_DIR + 'config/ehcache/ehcache-test.xml',
         '.editorconfig'
     ],
 

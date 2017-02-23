@@ -20,8 +20,8 @@ function buildProject() {
     dir=$1
     echo "*********************** Building $dir"
     pushd "$mydir/samples/$dir"
-    npm link generator-jhipster
     yo jhipster --force
+    npm link generator-jhipster
     if [ -f pom.xml ]; then
         ./mvnw verify
     else
@@ -45,7 +45,11 @@ if [ "$1" = "build" ]; then
         buildProject "$2"
     else
         for dir in $(ls -1 "$mydir/samples"); do
-            buildProject "$dir"
+            if [ -f "$mydir/samples/$dir/.yo-rc.json" ]; then
+                buildProject "$dir"
+            else
+                echo "$dir: Not a JHipster project. Skipping"
+            fi
         done
     fi
 elif [ "$1" = "clean" ]; then
@@ -53,7 +57,11 @@ elif [ "$1" = "clean" ]; then
         cleanProject "$2"
     else
         for dir in $(ls -1 "$mydir/samples"); do
-            cleanProject "$dir"
+            if [ -f "$mydir/samples/$dir/.yo-rc.json" ]; then
+                cleanProject "$dir"
+            else
+                echo "$dir: Not a JHipster project. Skipping"
+            fi
         done
     fi
 else

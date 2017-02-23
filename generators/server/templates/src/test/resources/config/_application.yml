@@ -66,11 +66,6 @@ spring:
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
-    <%_ if (hibernateCache == 'ehcache') { _%>
-    cache:
-        jcache:
-            config: config/ehcache/ehcache-dev.xml
-    <%_ } _%>
     <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra' || applicationType == 'gateway' || searchEngine == 'elasticsearch') { _%>
     data:
     <%_ } _%>
