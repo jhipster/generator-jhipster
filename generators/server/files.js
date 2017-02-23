@@ -557,6 +557,8 @@ function writeFiles() {
             var testDir = this.testDir;
 
             this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
+            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_LogsResourceIntTest.java', testDir + 'web/rest/LogsResourceIntTest.java', this, {});
+            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_ProfileInfoResourceIntTest.java', testDir + 'web/rest/ProfileInfoResourceIntTest.java', this, {});
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
             if (this.enableSocialSignIn) {
                 this.template(SERVER_TEST_SRC_DIR + 'package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryIntTest.java', this, {});
