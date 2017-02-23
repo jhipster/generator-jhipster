@@ -34,6 +34,27 @@ function Generator() {
 util.inherits(Generator, generator);
 
 /**
+ * Utility function to use templates.
+ *
+ * @param {string} template - Template file.
+ * @param {string} destination - The resulting file.
+ */
+Generator.prototype.template = function (template, destination, generator, options) {
+    var _this = generator || this;
+    _this.fs.copyTpl(_this.templatePath(template), _this.destinationPath(destination), _this);
+};
+
+/**
+ * Utility function to copy files.
+ *
+ * @param {string} source - Original file.
+ * @param {string} destination - The resulting file.
+ */
+Generator.prototype.copy = function (source, destination) {
+    this.fs.copy(this.templatePath(source), this.destinationPath(destination));
+};
+
+/**
  * Add a new menu element, at the root of the menu.
  *
  * @param {string} routerName - The name of the AngularJS router that is added to the menu.
@@ -1057,7 +1078,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
         _this.copy(source, dest);
         break;
     default:
-        _this.template(source, dest, _this, _opt);
+        _this.fs.copyTpl(source, dest, _this, _opt);
     }
 };
 
@@ -1624,17 +1645,13 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
         var skipServer = type && type === 'client';
         // skip client if app type is server
         var skipClient = type && type === 'server';
-        generator.composeWith('jhipster:languages', {
-            options: {
-                'skip-install': true,
-                'skip-server': skipServer,
-                'skip-client': skipClient,
-                configOptions: configOptions,
-                force: generator.options['force']
-            },
-            args: generator.languages
-        }, {
-            local: require.resolve('./languages')
+        this.composeWith(require.resolve('./languages'), {
+            'skip-install': true,
+            'skip-server': skipServer,
+            'skip-client': skipClient,
+            configOptions: configOptions,
+            force: generator.options['force'],
+            languages: generator.languages
         });
     }
 };
@@ -1756,24 +1773,22 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     }
 
     // Templates
-    _this.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`, this, {});
-    _this.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`, this, {});
-    _this.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`, this, {});
-    _this.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`, this, {});
-
-
+    this.fs.copyTpl(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`, _this, {});
+    this.fs.copyTpl(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`, _this, {});
+    this.fs.copyTpl(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`, _this, {});
+    this.fs.copyTpl(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`, _this, {});
 };
 
 Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
     var langProp = lang.replace(/-/g, '_');
-    _this.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`, this, {});
+    this.fs.copyTpl(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`, _this, {});
 
 };
 
 Generator.prototype.copyI18n = function (language, prefix) {
     try {
-        this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`, this, {});
+        this.fs.copyTpl(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`, this, {});
         this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
@@ -1783,7 +1798,7 @@ Generator.prototype.copyI18n = function (language, prefix) {
 
 Generator.prototype.copyEnumI18n = function (language, enumInfo , prefix) {
     try {
-        this.template(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo, {});
+        this.fs.copyTpl(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo, {});
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing

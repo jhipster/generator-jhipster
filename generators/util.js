@@ -109,7 +109,7 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
                 body = replaceTitle(body, _this, template);
                 break;
             }
-            _this.write(dest, body);
+            _this.fs.write(dest, body);
         });
     }
 }
