@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "服务器无法访问",
         "url.not.found": "Not found",
         "NotNull": "域 {{fieldName}} 不能为空!",

@@ -1,21 +1,71 @@
-angular
-    .module('<%=angularAppName%>')
-    .controller('<%= entityAngularJSName %>DetailController', <%= entityAngularJSName %>DetailController);
+<%_
+var i18nToLoad = [entityInstance];
+for (var idx in fields) {
+    if (fields[idx].fieldIsEnum == true) {
+        i18nToLoad.push(fields[idx].enumInstance);
+    }
+}
+_%>
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+<%_ } else if (fieldsContainBlob) { _%>
+import { DataUtils } from 'ng-jhipster';
+<%_ } _%>
+import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 
-<%= entityAngularJSName %>DetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity'<% for (idx in differentTypes) { %>, '<%= differentTypes[idx] %>'<% } %>];
+@Component({
+    selector: '<%= jhiPrefix %>-<%= entityFileName %>-detail',
+    templateUrl: './<%= entityFileName %>-detail.component.html'
+})
+export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestroy {
 
-function <%= entityAngularJSName %>DetailController($scope, $rootScope, $stateParams, previousState<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
-    var vm = this;
+    <%= entityInstance %>: <%= entityAngularName %>;
+    private subscription: any;
 
-    vm.<%= entityInstance %> = entity;
-    vm.previousState = previousState.name;
+    constructor(
+        <%_ if (enableTranslation) { _%>
+        private jhiLanguageService: JhiLanguageService,
+        <%_ } _%>
+        <%_ if (fieldsContainBlob) { _%>
+        private dataUtils: DataUtils,
+        <%_ } _%>
+        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        private route: ActivatedRoute
+    ) {
+        <%_ if (enableTranslation) { _%>
+        this.jhiLanguageService.setLocations(<%- toArrayString(i18nToLoad) %>);
+        <%_ } _%>
+    }
+
+    ngOnInit() {
+        this.subscription = this.route.params.subscribe(params => {
+            this.load(params['id']);
+        });
+    }
+
+    load (id) {
+        this.<%= entityInstance %>Service.find(id).subscribe(<%= entityInstance %> => {
+            this.<%= entityInstance %> = <%= entityInstance %>;
+        });
+    }
     <%_ if (fieldsContainBlob) { _%>
-    vm.byteSize = DataUtils.byteSize;
-    vm.openFile = DataUtils.openFile;
-    <%_ } _%>
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
+    }
 
-    var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
-        vm.<%= entityInstance %> = result;
-    });
-    $scope.$on('$destroy', unsubscribe);
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+    <%_ } _%>
+    previousState() {
+        window.history.back();
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
 }

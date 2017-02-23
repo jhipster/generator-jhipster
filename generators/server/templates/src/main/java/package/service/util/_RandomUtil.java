@@ -13,7 +13,7 @@ public final class RandomUtil {
     }
 
     /**
-     * Generates a password.
+     * Generate a password.
      *
      * @return the generated password
      */
@@ -22,7 +22,7 @@ public final class RandomUtil {
     }
 
     /**
-     * Generates an activation key.
+     * Generate an activation key.
      *
      * @return the generated activation key
      */
@@ -31,11 +31,32 @@ public final class RandomUtil {
     }
 
     /**
-    * Generates a reset key.
+    * Generate a reset key.
     *
     * @return the generated reset key
     */
     public static String generateResetKey() {
         return RandomStringUtils.randomNumeric(DEF_COUNT);
     }
+    <%_ if (authenticationType == 'session') { _%>
+
+    /**
+    * Generate a unique series to validate a persistent token, used in the
+    * authentication remember-me mechanism.
+    *
+    * @return the generated series data
+    */
+    public static String generateSeriesData() {
+        return RandomStringUtils.randomAlphanumeric(DEF_COUNT);
+    }
+
+    /**
+    * Generate a persistent token, used in the authentication remember-me mechanism.
+    *
+    * @return the generated token data
+    */
+    public static String generateTokenData() {
+        return RandomStringUtils.randomAlphanumeric(DEF_COUNT);
+    }
+    <%_ } _%>
 }

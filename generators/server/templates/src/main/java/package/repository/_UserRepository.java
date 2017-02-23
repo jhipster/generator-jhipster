@@ -5,11 +5,11 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.User;
 
-import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
+import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.data.domain.Pageable;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;
@@ -41,10 +41,14 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByLogin(String login);
     <%_ if (databaseType == 'sql') { _%>
 
-    @Query(value = "select distinct user from User user left join fetch user.authorities",
-        countQuery = "select count(user) from User user")
-    Page<User> findAllWithAuthorities(Pageable pageable);
+    @EntityGraph(attributePaths = "authorities")
+    User findOneWithAuthoritiesById(<%= pkType %> id);
+
+    @EntityGraph(attributePaths = "authorities")
+    Optional<User> findOneWithAuthoritiesByLogin(String login);
     <%_ } _%>
+
+    Page<User> findAllByLoginNot(Pageable pageable, String login);
 }<% } else if (databaseType == 'cassandra') { %>
 @Repository
 public class UserRepository {

@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Crear nuevo <%= entityClassHumanized %>",
-                "createOrEditLabel": "Crear o editar <%= entityClassHumanized %>",
-                "search": "Search for <%= entityClassHumanized %>"
+                "createOrEditLabel": "Crear o editar <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Search for <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "Un nuevo <%= entityClassHumanized %> ha sido creado con el identificador {{ param }}",
             "updated": "Un <%= entityClassHumanized %> ha sido actualizado con el identificador {{ param }}",

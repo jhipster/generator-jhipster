@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-config
+  namespace: default
+#common configuration shared between all applications
+data:
+  application.yml: |-
+    configserver:
+      name: <% if (serviceDiscoveryType == 'eureka') { %> JHipster Registry<% } %><% if (serviceDiscoveryType == 'consul') { %>Consul<% } %>
+      status: Connected to <% if (serviceDiscoveryType == 'eureka') { %>the JHipster Registry<% } %><% if (serviceDiscoveryType == 'consul') { %>Consul<% } %> running in Kubernetes
+    <%_ if (serviceDiscoveryType == 'eureka') { _%>
+    eureka:
+      client:
+        serviceUrl:
+          # This must contain a list of all Eureka server replicas for registry HA to work correctly
+          defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${jhipster.registry.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+    <%_ } _%>
+    jhipster:
+      security:
+        authentication:
+          jwt:
+            secret: <%= jwtSecretKey %>
+  #application-prod.yml: |-
+  #  configserver:
+  #    status: Connected in prod

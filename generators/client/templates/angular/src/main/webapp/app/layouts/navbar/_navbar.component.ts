@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from 'ui-router-ng2';
+import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { JhiLanguageService } from 'ng-jhipster';
 
-import { ProfileService } from '../profiles/profile.service'; //barrel doesnt work here
-import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
+import { ProfileService } from '../profiles/profile.service'; // FIXME barrel doesnt work here
+import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, LoginModalService, LoginService } from '../../shared';
 
 import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
 
 @Component({
-    selector: 'navbar',
-    templateUrl: './navbar.component.html'
+    selector: '<%=jhiPrefix%>-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: [
+        <%_ if (useSass) { _%>
+        'navbar.scss'
+        <%_ } else { _%>
+        'navbar.css'
+        <%_ } _%>
+    ]
 })
 export class NavbarComponent implements OnInit {
 
@@ -21,21 +29,26 @@ export class NavbarComponent implements OnInit {
     version: string;
 
     constructor(
-        private $state: StateService,
         private loginService: LoginService,
         <%_ if (enableTranslation) { _%>
+        private languageHelper: JhiLanguageHelper,
         private languageService: JhiLanguageService,
         <%_ } _%>
         private principal: Principal,
         private loginModalService: LoginModalService,
-        private profileService: ProfileService
+        private profileService: ProfileService,
+        private router: Router
     ) {
         this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
+        this.isNavbarCollapsed = true;
+        <%_ if (enableTranslation) { _%>
+        this.languageService.addLocation('home');
+        <%_ } _%>
     }
 
     ngOnInit() {
         <%_ if (enableTranslation) { _%>
-        this.languageService.getAll().then((languages) => {
+        this.languageHelper.getAll().then((languages) => {
             this.languages = languages;
         });
         <%_ } _%>
@@ -67,10 +80,14 @@ export class NavbarComponent implements OnInit {
     logout() {
         this.collapseNavbar();
         this.loginService.logout();
-        this.$state.go('home');
+        this.router.navigate(['']);
     }
 
     toggleNavbar() {
         this.isNavbarCollapsed = !this.isNavbarCollapsed;
+    }
+
+    getImageUrl() {
+        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
     }
 }

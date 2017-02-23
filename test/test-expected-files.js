@@ -38,10 +38,7 @@ const expectedFiles = {
         'README.md',
         '.gitignore',
         '.gitattributes',
-        'Jenkinsfile',
-        '.travis.yml',
         SERVER_MAIN_RES_DIR + 'banner.txt',
-        SERVER_MAIN_RES_DIR + 'ehcache.xml',
         SERVER_MAIN_RES_DIR + '.h2.server.properties',
         SERVER_MAIN_RES_DIR + 'templates/error.html',
         SERVER_MAIN_RES_DIR + 'logback-spring.xml',
@@ -89,10 +86,10 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/PersistentTokenRepository.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/AuthoritiesConstants.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/CustomPersistentRememberMeServices.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/PersistentTokenRememberMeServices.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/SecurityUtils.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/SpringSecurityAuditorAware.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/UserDetailsService.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/DomainUserDetailsService.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/UserNotActivatedException.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/AuditEventService.java',
@@ -118,11 +115,12 @@ const expectedFiles = {
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/service/UserServiceIntTest.java',
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/AccountResourceIntTest.java',
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/AuditResourceIntTest.java',
+        SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/LogsResourceIntTest.java',
+        SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/ProfileInfoResourceIntTest.java',
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/TestUtil.java',
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/UserResourceIntTest.java',
         SERVER_TEST_RES_DIR + 'config/application.yml',
         SERVER_TEST_RES_DIR + 'logback-test.xml',
-        SERVER_TEST_RES_DIR + 'ehcache.xml',
         '.editorconfig'
     ],
 
@@ -395,7 +393,8 @@ const expectedFiles = {
     ],
 
     microservice: [
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java'
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
+        'package.json'
     ],
 
     microserviceGradle: [
@@ -425,6 +424,7 @@ const expectedFiles = {
     ],
 
     mongodb: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/dbmigrations/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/dbmigrations/InitialSetupMigration.java',
         DOCKER_DIR + 'mongodb.yml',
         DOCKER_DIR + 'mongodb-cluster.yml',
@@ -449,7 +449,7 @@ const expectedFiles = {
     elasticsearch: [
         DOCKER_DIR + 'elasticsearch.yml',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/search/UserSearchRepository.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/ElasticSearchConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/ElasticsearchConfiguration.java',
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/config/elasticsearch/IndexReinitializer.java'
     ],
 

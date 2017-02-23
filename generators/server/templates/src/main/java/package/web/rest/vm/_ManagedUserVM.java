@@ -1,12 +1,12 @@
 package <%=packageName%>.web.rest.vm;
-<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
-import java.time.ZonedDateTime;<% } %>
 
-import java.util.Set;
-
-import <%=packageName%>.domain.User;
 import <%=packageName%>.service.dto.UserDTO;
 import javax.validation.constraints.Size;
+
+<%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+import java.time.ZonedDateTime;
+<%_ } _%>
+import java.util.Set;
 
 /**
  * View Model extending the UserDTO, which is meant to be used in the user management UI.
@@ -14,86 +14,26 @@ import javax.validation.constraints.Size;
 public class ManagedUserVM extends UserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
+
     public static final int PASSWORD_MAX_LENGTH = 100;
-
-    private <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
-
-    private String createdBy;
-
-    private ZonedDateTime createdDate;
-
-    private String lastModifiedBy;
-
-    private ZonedDateTime lastModifiedDate;<% } %>
 
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
     public ManagedUserVM() {
-    }
-
-    public ManagedUserVM(User user) {
-        super(user);
-        this.id = user.getId();<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
-        this.createdBy = user.getCreatedBy();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();<% } %>
-        this.password = null;
+        // Empty constructor needed for Jackson.
     }
 
     public ManagedUserVM(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id, String login, String password, String firstName, String lastName,
-                         String email, boolean activated, String langKey, Set<String> authorities<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,
-                         String createdBy, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate<% } %>) {
-        super(login, firstName, lastName, email, activated, langKey, authorities);
-        this.id = id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
-        this.createdBy = createdBy;
-        this.createdDate = createdDate;
-        this.lastModifiedBy = lastModifiedBy;
-        this.lastModifiedDate = lastModifiedDate;<% } %>
+                         String email, boolean activated<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>, String imageUrl<% } %>, String langKey,
+                         <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>String createdBy, ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate,
+                        <% } %>Set<String> authorities) {
+
+        super(id, login, firstName, lastName, email, activated<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>,  imageUrl<% } %>, langKey,
+            <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>createdBy, createdDate, lastModifiedBy, lastModifiedDate,  <% } %>authorities);
+
         this.password = password;
     }
-
-    public <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
-        return id;
-    }
-
-    public void setId(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id) {
-        this.id = id;
-    }<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
-
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public ZonedDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(ZonedDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public ZonedDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(ZonedDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }<% } %>
 
     public String getPassword() {
         return password;
@@ -102,11 +42,6 @@ public class ManagedUserVM extends UserDTO {
     @Override
     public String toString() {
         return "ManagedUserVM{" +
-            "id=" + id +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +<% } %>
             "} " + super.toString();
     }
 }

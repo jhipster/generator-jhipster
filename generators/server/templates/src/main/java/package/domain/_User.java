@@ -4,7 +4,8 @@ import <%=packageName%>.config.Constants;
 <% if (databaseType == 'cassandra') { %>
 import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;<% } %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no') { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType == 'sql') { %>
+import org.hibernate.annotations.BatchSize;<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
@@ -95,6 +96,13 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Field("lang_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "lang_key")<% } %>
     private String langKey;
+    <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+
+    @Size(max = 256)<% if (databaseType == 'sql') { %>
+    @Column(name = "image_url", length = 256)<% } %><% if (databaseType == 'mongodb') { %>
+    @Field("image_url")<% } %>
+    private String imageUrl;
+    <%_ } _%>
 
     @Size(max = 20)<% if (databaseType == 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
@@ -109,7 +117,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key")<% } %>
     private String resetKey;<%if (databaseType == 'sql') {%>
 
-    @Column(name = "reset_date", nullable = true)
+    @Column(name = "reset_date")
     private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
 
     @Field("reset_date")
@@ -124,7 +132,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         name = "jhi_user_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'sql') { %>
+    @BatchSize(size = 20)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
     private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType == 'session' && databaseType == 'sql') { %>
 
@@ -181,6 +190,16 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public void setEmail(String email) {
         this.email = email;
     }
+    <%_ if (databaseType == 'mongodb' || databaseType == 'sql') { _%>
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    <%_ } _%>
 
     public boolean getActivated() {
         return activated;
@@ -275,7 +294,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
+            ", email='" + email + '\'' +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+            ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +

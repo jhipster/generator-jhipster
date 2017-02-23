@@ -1,7 +1,3 @@
-<%_ if (serviceDiscoveryType === 'consul') { _%>
-consul:
-    token: to-change-in-production-client
-<%_ } _%>
 spring:
     application:
         name: <%= baseName %>
@@ -10,3 +6,13 @@ spring:
         # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
         # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
         active: #spring.profiles.active#
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    cloud:
+        consul:
+            discovery:
+                tags: profile=${spring.profiles.active}, version=${info.project.version}
+    <%_ } _%>
+
+info:
+    project:
+        version: #project.version#

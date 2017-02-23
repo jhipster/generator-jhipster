@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "Server je nedostupný",
         "url.not.found": "Not found",
         "NotNull": "Pole {{ fieldName }} nemôže byť prázdne!",

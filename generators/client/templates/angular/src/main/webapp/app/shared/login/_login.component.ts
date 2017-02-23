@@ -1,12 +1,10 @@
-import { Component, OnInit, Renderer, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { StateService } from 'ui-router-ng2';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from '../language/language.service';
-<%_ } _%>
+import { Router } from '@angular/router';
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>EventManager } from 'ng-jhipster';
+
 import { LoginService } from '../login/login.service';
 import { StateStorageService } from '../auth/state-storage.service';
-import { EventManager } from '../service/event-manager.service';
 <%_ if (enableSocialSignIn) { _%>
 import { SocialService } from '../social/social.service';
 <%_ } _%>
@@ -15,7 +13,7 @@ import { SocialService } from '../social/social.service';
     selector: '<%=jhiPrefix%>-login-modal',
     templateUrl: './login.component.html'
 })
-export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
+export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit, AfterViewInit {
     authenticationError: boolean;
     password: string;
     rememberMe: boolean;
@@ -24,7 +22,6 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
 
     constructor(
         private eventManager: EventManager,
-        private $state: StateService,
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         <%_ } _%>
@@ -35,7 +32,8 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
         <%_ if (enableSocialSignIn) { _%>
         private socialService: SocialService,
         <%_ } _%>
-        private activeModal: NgbActiveModal
+        private router: Router,
+        public activeModal: NgbActiveModal
     ) {
         this.credentials = {};
     }
@@ -68,24 +66,22 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
         }).then(() => {
             this.authenticationError = false;
             this.activeModal.dismiss('login success');
-            if (this.$state.current.name === 'register' || this.$state.current.name === 'activate' ||
-                this.$state.current.name === 'finishReset' || this.$state.current.name === 'requestReset') {
-                this.$state.go('home');
+            if (this.router.url === '/register' || this.router.url === '/activate' ||
+                this.router.url === '/finishReset' || this.router.url === '/requestReset') {
+                this.router.navigate(['']);
             }
 
-            this.eventManager.broadcast(
-                {
-                    name: 'authenticationSuccess',
-                    content: 'Sending Authentication Success'
-                }
-            );
+            this.eventManager.broadcast({
+                name: 'authenticationSuccess',
+                content: 'Sending Authentication Success'
+            });
 
-            // previousState was set in the authExpiredInterceptor before being redirected to login modal.
-            // since login is succesful, go to stored previousState and clear previousState
+            // // previousState was set in the authExpiredInterceptor before being redirected to login modal.
+            // // since login is succesful, go to stored previousState and clear previousState
             let previousState = this.stateStorageService.getPreviousState();
             if (previousState) {
                 this.stateStorageService.resetPreviousState();
-                this.$state.go(previousState.name, previousState.params);
+                this.router.navigate([previousState.name], { queryParams:  previousState.params });
             }
         }).catch(() => {
             this.authenticationError = true;
@@ -94,11 +90,11 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements OnInit {
 
     register () {
         this.activeModal.dismiss('to state register');
-        this.$state.go('register');
+        this.router.navigate(['/register']);
     }
 
     requestResetPassword () {
         this.activeModal.dismiss('to state requestReset');
-        this.$state.go('requestReset');
+        this.router.navigate(['/reset', 'request']);
     }
 }

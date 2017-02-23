@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
 import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health-modal.component';
 
@@ -11,7 +13,14 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
     healthData: any;
     updatingHealth: boolean;
 
-    constructor(private modalService: NgbModal, private healthService: <%=jhiPrefixCapitalized%>HealthService) {}
+    constructor(
+        private jhiLanguageService: JhiLanguageService,
+        private modalService: NgbModal,
+        private healthService: <%=jhiPrefixCapitalized%>HealthService
+    ) {
+        this.jhiLanguageService.setLocations(['health']);
+
+    }
 
     ngOnInit() {
         this.refresh();
@@ -21,11 +30,11 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         return this.healthService.getBaseName(name);
     }
 
-    getTagClass(statusState) {
+    getBadgeClass(statusState) {
         if (statusState === 'UP') {
-            return 'tag-success';
+            return 'badge-success';
         } else {
-            return 'tag-danger';
+            return 'badge-danger';
         }
     }
 
@@ -35,6 +44,11 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         this.healthService.checkHealth().subscribe(health => {
             this.healthData = this.healthService.transformHealthData(health);
             this.updatingHealth = false;
+        }, error => {
+            if (error.status === 503) {
+                this.healthData = this.healthService.transformHealthData(error.json());
+                this.updatingHealth = false;
+            }
         });
     }
 
@@ -42,9 +56,9 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>HealthModalComponent);
         modalRef.componentInstance.currentHealth = health;
         modalRef.result.then((result) => {
-            console.log(`Closed with: ${result}`);
+            // Left blank intentionally, nothing to do here
         }, (reason) => {
-            console.log(`Dismissed ${reason}`);
+            // Left blank intentionally, nothing to do here
         });
     }
 

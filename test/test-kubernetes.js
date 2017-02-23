@@ -7,8 +7,14 @@ var helpers = require('yeoman-test');
 var fse = require('fs-extra');
 
 const expectedFiles = {
-    registry : [
-        'registry/jhipster-registry.yml'
+    eurekaregistry: [
+        'registry/jhipster-registry.yml',
+        'registry/application-configmap.yml'
+    ],
+    consulregistry: [
+        'registry/consul.yml',
+        'registry/consul-config-loader.yml',
+        'registry/application-configmap.yml'
     ],
     jhgate : [
         'jhgate/jhgate-deployment.yml',
@@ -73,8 +79,8 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .on('end', done);
         });
         it('creates expected registry files and content', function () {
-            assert.file(expectedFiles.registry);
-            assert.fileContent('registry/jhipster-registry.yml', /http:\/\/admin:meetup/);
+            assert.file(expectedFiles.eurekaregistry);
+            assert.fileContent('registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
         });
         it('creates expected gateway files and content', function () {
             assert.file(expectedFiles.jhgate);
@@ -105,7 +111,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .on('end', done);
         });
         it('creates expected registry files', function () {
-            assert.file(expectedFiles.registry);
+            assert.file(expectedFiles.eurekaregistry);
         });
         it('creates expected gateway files', function () {
             assert.file(expectedFiles.jhgate);
@@ -115,7 +121,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
         });
     });
 
-    describe('mysql and psql microservices without gateway', function () {
+    describe('MySQL and PostgreSQL microservices without gateway', function () {
         beforeEach(function (done) {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
@@ -137,7 +143,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .on('end', done);
         });
         it('creates expected registry files', function () {
-            assert.file(expectedFiles.registry);
+            assert.file(expectedFiles.eurekaregistry);
         });
         it('doesn\'t creates gateway files', function () {
             assert.noFile(expectedFiles.jhgate);
@@ -175,7 +181,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .on('end', done);
         });
         it('creates expected registry files', function () {
-            assert.file(expectedFiles.registry);
+            assert.file(expectedFiles.eurekaregistry);
         });
         it('creates expected gateway files', function () {
             assert.file(expectedFiles.jhgate);
@@ -215,14 +221,14 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .on('end', done);
         });
         it('doesn\'t creates registry files', function () {
-            assert.noFile(expectedFiles.registry);
+            assert.noFile(expectedFiles.eurekaregistry);
         });
         it('creates expected default files', function () {
             assert.file(expectedFiles.monolith);
         });
     });
 
-    describe('kafka application', function () {
+    describe('Kafka application', function () {
         beforeEach(function (done) {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
@@ -243,7 +249,7 @@ describe('JHipster Kubernetes Sub Generator', function () {
                 .on('end', done);
         });
         it('doesn\'t creates registry files', function () {
-            assert.noFile(expectedFiles.registry);
+            assert.noFile(expectedFiles.eurekaregistry);
         });
         it('creates expected default files', function () {
             assert.file(expectedFiles.kafka);

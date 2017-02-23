@@ -52,6 +52,7 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true" nullable="true"/>
             </column>
+            <column name="image_url" type="varchar(256)"/>
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
@@ -102,12 +103,11 @@
     <%_ if (authenticationType == 'session') { _%>
 
         <createTable tableName="jhi_persistent_token">
-            <!-- Maximum line length of Base64 output is 76 -->
-            <column name="series" type="varchar(76)">
+            <column name="series" type="varchar(20)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="bigint"/>
-            <column name="token_value" type="varchar(76)">
+            <column name="token_value" type="varchar(20)">
                 <constraints nullable="false" />
             </column>
             <column name="token_date" type="date"/>
@@ -254,8 +254,8 @@
             <column name="authorities" type="varchar(255)"/>
             <column name="access_token_validity" type="INT"/>
             <column name="refresh_token_validity" type="INT"/>
-            <column name="additional_information" type="VARCHAR(4096)"/>
-            <column name="autoapprove" type="VARCHAR(4096)"/>
+            <column name="additional_information" type="VARCHAR(4000)"/>
+            <column name="autoapprove" type="VARCHAR(4000)"/>
         </createTable>
 
         <createTable tableName="oauth_client_token">
@@ -268,7 +268,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_client_token"
-            constraintName="fk_oauth_client_token_user_name"
+            constraintName="fk_oauth_client_token_username"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 
@@ -286,7 +286,7 @@
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_access_token"
-            constraintName="fk_oauth_access_token_user_name"
+            constraintName="fk_oauth_access_token_username"
             referencedColumnNames="login"
             referencedTableName="jhi_user"/>
 

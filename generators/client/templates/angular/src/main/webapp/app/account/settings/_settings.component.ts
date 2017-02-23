@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
 
-import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageService<% } %> } from '../../shared';
+import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from '../../shared';
 
 @Component({
-    selector: 'settings',
+    selector: '<%=jhiPrefix%>-settings',
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
@@ -12,14 +13,21 @@ export class SettingsComponent implements OnInit {
     settingsAccount: any;
     languages: any[];
 
-    constructor(private account: AccountService, private principal: Principal<% if (enableTranslation) { %>, private languageService: JhiLanguageService<% } %>) {}
+    constructor(
+        private account: AccountService,
+        private principal: Principal<% if (enableTranslation) { %>,
+        private languageService: JhiLanguageService,
+        private languageHelper: JhiLanguageHelper<% } %>
+    ) {
+        this.languageService.setLocations(['settings']);
+    }
 
     ngOnInit () {
         this.principal.identity().then((account) => {
             this.settingsAccount = this.copyAccount(account);
         });
         <%_ if (enableTranslation) { _%>
-        this.languageService.getAll().then((languages) => {
+        this.languageHelper.getAll().then((languages) => {
             this.languages = languages;
         });
         <%_ } _%>
@@ -52,7 +60,8 @@ export class SettingsComponent implements OnInit {
             firstName: account.firstName,
             langKey: account.langKey,
             lastName: account.lastName,
-            login: account.login
+            login: account.login,
+            imageUrl: account.imageUrl
         };
     }
 }

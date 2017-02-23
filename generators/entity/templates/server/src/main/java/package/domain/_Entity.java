@@ -130,6 +130,7 @@ public class <%= entityClass %> implements Serializable {
         joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType),
         relationshipType = relationships[idx].relationshipType,
         relationshipValidate = relationships[idx].relationshipValidate,
+        relationshipRequired = relationships[idx].relationshipRequired,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         ownerSide = relationships[idx].ownerSide;
         if (otherEntityRelationshipName != null) {
@@ -149,7 +150,7 @@ public class <%= entityClass %> implements Serializable {
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else if (relationshipType == 'many-to-one') { _%>
-    @ManyToOne
+    @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
     <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
     <%_ }_%>
@@ -169,14 +170,14 @@ public class <%= entityClass %> implements Serializable {
     <%- include relationship_validators -%>
     <%_ }_%>
     @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="ID"))
+               joinColumns = @JoinColumn(name="<%= getPluralColumnName(name) %>_id", referencedColumnName="id"),
+               inverseJoinColumns = @JoinColumn(name="<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName="id"))
     <%_     } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else { _%>
     <%_     if (ownerSide) { _%>
-    @OneToOne
+    @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
     <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
     <%_ }_%>

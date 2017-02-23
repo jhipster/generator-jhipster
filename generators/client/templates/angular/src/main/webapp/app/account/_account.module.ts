@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { UIRouterModule } from 'ui-router-ng2';
+import { RouterModule } from '@angular/router';
 
 import { <%=angular2AppName%>SharedModule } from '../shared';
 
@@ -12,7 +12,6 @@ import {
     <%_ if (authenticationType === 'session') { _%>
     SessionsService,
     SessionsComponent,
-    sessionsState,
     <%_ } _%>
     PasswordStrengthBarComponent,
     RegisterComponent,
@@ -21,53 +20,26 @@ import {
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
     SettingsComponent,
-    settingsState,
-    activateState,
-    passwordState,
-    finishResetState,
-    requestResetState,
-    registerState,
     <%_ if (enableSocialSignIn) { _%>
     SocialRegisterComponent,
-    socialRegisterState,
-    <%_ if (authenticationType == 'jwt') { _%>
+        <%_ if (authenticationType == 'jwt') { _%>
     SocialAuthComponent,
-    socialAuthState,
-    <%_ } _%>
+        <%_ } _%>
     <%_ } _%>
     accountState
 } from './';
 
-let ACCOUNT_STATES = [
-    accountState,
-    activateState,
-    passwordState,
-    finishResetState,
-    requestResetState,
-    registerState,
-    <%_ if (authenticationType === 'session') { _%>
-    sessionsState,
-    <%_ } _%>
-    <%_ if (enableSocialSignIn) { _%>
-    <%_ if (authenticationType == 'jwt') { _%>
-    socialAuthState,
-    <%_ } _%>
-    socialRegisterState,
-    <%_ } _%>
-    settingsState
-];
-
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        UIRouterModule.forChild({ states: ACCOUNT_STATES })
+        RouterModule.forRoot(accountState, { useHash: true })
     ],
     declarations: [
         <%_ if (enableSocialSignIn) { _%>
         SocialRegisterComponent,
-        <%_ if (authenticationType == 'jwt') { _%>
+            <%_ if (authenticationType == 'jwt') { _%>
         SocialAuthComponent,
-        <%_ } _%>
+            <%_ } _%>
         <%_ } _%>
         ActivateComponent,
         RegisterComponent,

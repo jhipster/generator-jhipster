@@ -4,4 +4,8 @@ import { <%=angular2AppName%>AppModule } from './app.module';
 
 ProdConfig();
 
+if (module['hot']) {
+    module['hot'].accept();
+}
+
 platformBrowserDynamic().bootstrapModule(<%=angular2AppName%>AppModule);

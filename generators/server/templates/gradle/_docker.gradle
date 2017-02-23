@@ -1,4 +1,4 @@
-import org.apache.tools.ant.taskdefs.condition.Os
+import org.gradle.internal.os.OperatingSystem
 
 task buildDocker(type: Exec) {
     doFirst {
@@ -13,7 +13,7 @@ task buildDocker(type: Exec) {
             include "*.war*"
         }
     }
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    if (OperatingSystem.current().isWindows()) {
         commandLine 'cmd', '/c', 'docker', 'build', '-f', 'build/docker/Dockerfile', '-t', '<%= baseName.toLowerCase() %>', 'build/docker/'
     } else {
         commandLine 'docker', 'build', '-f', 'build/docker/Dockerfile', '-t', '<%= baseName.toLowerCase() %>', 'build/docker/'

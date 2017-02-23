@@ -2,8 +2,9 @@ const webpack = require('webpack');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const path = require('path');
 
 module.exports = function (options) {
     const DATAS = {
@@ -13,36 +14,20 @@ module.exports = function (options) {
     return {
         entry: {
             'polyfills': './src/main/webapp/app/polyfills',
-            'vendor': './src/main/webapp/app/vendor',
+            <%_ if (useSass) { _%>
+            'global': './src/main/webapp/content/scss/global.scss',
+            <%_ } else { _%>
+            'global': './src/main/webapp/content/css/global.css',
+            <%_ } _%>
             'main': './src/main/webapp/app/app.main'
         },
         resolve: {
             extensions: ['.ts', '.js'],
             modules: ['node_modules']
         },
-        output: {
-            path: <% if (buildTool === 'gradle') { %>'./build/www'<% } else { %>'./target/www'<% } %>,
-            filename: '[name].bundle.js',
-            chunkFilename: '[id].chunk.js'
-        },
-        devServer: {
-            proxy: [{
-                context: [<% if (authenticationType == 'oauth2') { %>
-                    '/oauth',<% } %>
-                    '/api',
-                    '/management',
-                    '/swagger-resources',
-                    '/v2/api-docs',
-                    '/h2-console'
-                ],
-                target: 'http://127.0.0.1:<%= serverPort %>',
-                secure: false
-            }]
-        },
         module: {
             rules: [
-                { test: /[\/]angular\.js$/, loader: "exports?angular" },
-                { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' },
+                { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
                 {
                     test: /\.ts$/,
                     loaders: [
@@ -53,22 +38,43 @@ module.exports = function (options) {
                 },
                 {
                     test: /\.html$/,
-                    loader: 'raw',
+                    loader: 'raw-loader',
                     exclude: ['./src/main/webapp/index.html']
                 },
-                { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
+                <%_ if (useSass) { _%>
+                {
+                    test: /\.scss$/,
+                    loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+                    exclude: /(vendor\.scss|global\.scss)/
+                },
+                {
+                    test: /(vendor\.scss|global\.scss)/,
+                    loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+                },
+                <%_ } _%>
                 {
                     test: /\.css$/,
-                    loader: ExtractTextPlugin.extract({
-                        fallbackLoader: "style-loader",
-                        loader: "css-loader"
-                    })
+                    loaders: ['to-string-loader', 'css-loader'],
+                    exclude: /(vendor\.css|global\.css)/
+                },
+                {
+                    test: /(vendor\.css|global\.css)/,
+                    loaders: ['style-loader', 'css-loader']
                 },
                 {
                     test: /\.(jpe?g|png|gif|svg|woff|woff2|ttf|eot)$/i,
                     loaders: [
-                        'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                        'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+                        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]', {
+                            loader: 'image-webpack-loader',
+                            query: {
+                                gifsicle: {
+                                    interlaced: false
+                                },
+                                optipng: {
+                                    optimizationLevel: 7
+                                }
+                            }
+                        }
                     ]
                 },
                 {
@@ -79,18 +85,24 @@ module.exports = function (options) {
                             replacement: function (match, p1, offset, string) {
                                 return `_${p1} = ${DATAS[p1]};`;
                             }
-                        }
-                    ]})
+                        }]
+                    })
                 }
             ]
         },
         plugins: [
             new CommonsChunkPlugin({
-                name: ['polyfills', 'vendor'].reverse()
+                names: ['manifest', 'polyfills'].reverse()
+            }),
+            new webpack.DllReferencePlugin({
+                context: './',
+                manifest: require(path.resolve('./<%= BUILD_DIR %>www/vendor.json')),
             }),
             new CopyWebpackPlugin([
                 { from: './node_modules/swagger-ui/dist', to: 'swagger-ui/dist' },
-                { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' }<% if (enableTranslation) { %>,
+                { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
+                { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
+                { from: './src/main/webapp/robots.txt', to: 'robots.txt' }<% if (enableTranslation) { %>,
                 { from: './src/main/webapp/i18n', to: 'i18n' }<% } %>
             ]),
             new webpack.ProvidePlugin({
@@ -98,11 +110,13 @@ module.exports = function (options) {
                 jQuery: "jquery"
             }),
             new HtmlWebpackPlugin({
-                template: 'handlebars!./src/main/webapp/index.hbs',
+                template: './src/main/webapp/index.html',
                 chunksSortMode: 'dependency',
-                inject: 'body',
-                data: DATAS
+                inject: 'body'
             }),
+            new AddAssetHtmlPlugin([
+                { filepath: path.resolve('./<%= BUILD_DIR %>www/vendor.dll.js'), includeSourcemap: false }
+            ]),
             new StringReplacePlugin()
         ]
     };

@@ -3,6 +3,7 @@ package <%=packageName%>;
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
 import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
 <%_ } _%>
+import <%=packageName%>.config.ApplicationProperties;
 import <%=packageName%>.config.DefaultProfileUtil;
 
 import io.github.jhipster.config.JHipsterConstants;
@@ -17,7 +18,7 @@ import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfigurati
 <%_ } _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+<%_ if (serviceDiscoveryType) { _%>
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
@@ -43,8 +44,8 @@ import java.util.Collection;
 @ComponentScan
 <%_ } _%>
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %>})
-@EnableConfigurationProperties(<% if (databaseType == 'sql') { %>LiquibaseProperties.class<% } %>)
-<%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
+@EnableConfigurationProperties({<% if (databaseType == 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
+<%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
 <%_ } _%>
 <%_ if (applicationType === 'gateway') { _%>
@@ -69,7 +70,6 @@ public class <%= mainClass %> {
      */
     @PostConstruct
     public void initApplication() {
-        log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             log.error("You have misconfigured your application! It should not run " +
@@ -91,16 +91,22 @@ public class <%= mainClass %> {
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
+        String protocol = "http";
+        if (env.getProperty("server.ssl.key-store") != null) {
+            protocol = "https";
+        }
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
-                "Local: \t\thttp://localhost:{}\n\t" +
-                "External: \thttp://{}:{}\n\t" +
+                "Local: \t\t{}://localhost:{}\n\t" +
+                "External: \t{}://{}:{}\n\t" +
                 "Profile(s): \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
+            protocol,
             env.getProperty("server.port"),
+            protocol,
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
-            Arrays.toString(env.getActiveProfiles()));
+            env.getActiveProfiles());
         <%_ if (serviceDiscoveryType && (applicationType == 'microservice' || applicationType == 'gateway' || applicationType == 'uaa')) { _%>
 
         String configServerStatus = env.getProperty("configserver.status");

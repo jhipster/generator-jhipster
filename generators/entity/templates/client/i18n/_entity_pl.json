@@ -4,12 +4,12 @@
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Dodaj <%= entityClassHumanized %>",
-                "createOrEditLabel": "Dodaj lub edytuj: <%= entityClassHumanized %>",
-                "search": "Search for <%= entityClassHumanized %>"
+                "createOrEditLabel": "Dodaj lub edytuj: <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Szukaj <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",<% } %>
+            "created": "Utworzono nowy <%= entityClassHumanized %> z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono <%= entityClassHumanized %> z identyfikatorem {{ param }}",
+            "deleted": "Usunięto <%= entityClassHumanized %> z identyfikatorem {{ param }}",<% } %>
             "delete": {
                 "question": "Czy na pewno chcesz usunąć <%= entityClassHumanized %> {{ id }}?"
             },
@@ -22,9 +22,9 @@
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+            "created": "Utworzono nowy <%= entityClassHumanized %> z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono <%= entityClassHumanized %> z identyfikatorem {{ param }}",
+            "deleted": "Usunięto <%= entityClassHumanized %> z identyfikatorem {{ param }}"
         }
     }<% } %>
 }

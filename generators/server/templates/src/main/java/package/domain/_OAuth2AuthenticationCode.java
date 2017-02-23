@@ -37,12 +37,12 @@ public class OAuth2AuthenticationCode implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
 
         OAuth2AuthenticationCode that = (OAuth2AuthenticationCode) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) { return false; }
 
         return true;
     }

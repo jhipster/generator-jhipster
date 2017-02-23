@@ -1,12 +1,19 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { UIRouterModule } from 'ui-router-ng2';
+import { RouterModule } from '@angular/router';
+import { ParseLinks } from 'ng-jhipster';
+<%_ if (websocket === 'spring-websocket') { _%>
+import { <%=jhiPrefixCapitalized%>TrackerService } from './../shared/tracker/tracker.service';
+<%_ } _%>
 
-import { <%=angular2AppName%>SharedModule, ParseLinks } from '../shared';
+import { <%=angular2AppName%>SharedModule } from '../shared';
 
 import {
+    adminState,
     AuditsComponent,
     <%_ if (!skipUserManagement) { _%>
     UserMgmtComponent,
+    UserDialogComponent,
+    UserDeleteDialogComponent,
     UserMgmtDetailComponent,
     UserMgmtDialogComponent,
     UserMgmtDeleteDialogComponent,
@@ -19,68 +26,36 @@ import {
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
     AuditsService,
-    UserService,
     <%=jhiPrefixCapitalized%>ConfigurationService,
     <%=jhiPrefixCapitalized%>HealthService,
     <%=jhiPrefixCapitalized%>MetricsService,
     <%_ if (applicationType === 'gateway') { _%>
     GatewayRoutesService,
     <%=jhiPrefixCapitalized%>GatewayComponent,
-    gatewayState,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerComponent,
-    trackerState,
     <%_ } _%>
     LogsService,
-    adminState,
-    auditState,
-    configState,
-    docsState,
-    healthState,
-    logsState,
     <%_ if (!skipUserManagement) { _%>
-    userMgmtState,
-    userMgmtDetailState,
-    userMgmtNewState,
-    userMgmtEditState,
-    userMgmtDeleteState,
+    UserResolvePagingParams,
+    UserResolve,
+    UserModalService
     <%_ } _%>
-    metricsState
 } from './';
 
-let ADMIN_STATES = [
-    adminState,
-    auditState,
-    configState,
-    docsState,
-    healthState,
-    logsState,
-    <%_ if (applicationType === 'gateway') { _%>
-    gatewayState,
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
-    trackerState,
-    <%_ } _%>
-    <%_ if (!skipUserManagement) { _%>
-    userMgmtState,
-    userMgmtDetailState,
-    userMgmtNewState,
-    userMgmtEditState,
-    userMgmtDeleteState,
-    <%_ } _%>
-    metricsState
-];
 
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedModule,
-        UIRouterModule.forChild({ states: ADMIN_STATES })
+        RouterModule.forRoot(adminState, { useHash: true })
     ],
     declarations: [
         AuditsComponent,
         <%_ if (!skipUserManagement) { _%>
         UserMgmtComponent,
+        UserDialogComponent,
+        UserDeleteDialogComponent,
         UserMgmtDetailComponent,
         UserMgmtDialogComponent,
         UserMgmtDeleteDialogComponent,
@@ -109,7 +84,6 @@ let ADMIN_STATES = [
     ],
     providers: [
         AuditsService,
-        UserService,
         <%=jhiPrefixCapitalized%>ConfigurationService,
         <%=jhiPrefixCapitalized%>HealthService,
         <%=jhiPrefixCapitalized%>MetricsService,
@@ -117,7 +91,14 @@ let ADMIN_STATES = [
         GatewayRoutesService,
         <%_ } _%>
         LogsService,
-        ParseLinks
+        <%_ if (websocket === 'spring-websocket') { _%>
+        <%=jhiPrefixCapitalized%>TrackerService,
+        <%_ } _%>
+        <%_ if (!skipUserManagement) { _%>
+        UserResolvePagingParams,
+        UserResolve,
+        UserModalService
+        <%_ } _%>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

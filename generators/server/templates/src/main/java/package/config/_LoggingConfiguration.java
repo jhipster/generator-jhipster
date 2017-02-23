@@ -113,10 +113,12 @@ public class LoggingConfiguration {
 
         @Override
         public void onStop(LoggerContext context) {
+            // Nothing to do.
         }
 
         @Override
         public void onLevelChange(ch.qos.logback.classic.Logger logger, Level level) {
+            // Nothing to do.
         }
     }
 

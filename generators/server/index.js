@@ -8,7 +8,7 @@ const util = require('util'),
     writeFiles = require('./files').writeFiles,
     packagejs = require('../../package.json'),
     crypto = require('crypto'),
-    mkdirp = require('mkdirp');
+    os = require('os');
 
 var JhipsterServerGenerator = generator.extend({});
 
@@ -96,6 +96,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
             this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
             this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+            this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
             this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
             this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
@@ -129,10 +130,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.messageBroker = false;
             }
 
-            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+            this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
             if (this.serviceDiscoveryType === undefined) {
-                this.serviceDiscoveryType = this.applicationType !== 'monolith' ? 'eureka' : false;
+                this.serviceDiscoveryType = false;
             }
+
             this.databaseType = this.config.get('databaseType');
             if (this.databaseType === 'mongodb') {
                 this.devDatabaseType = 'mongodb';
@@ -162,9 +164,9 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
-            this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.jhipsterVersion = packagejs.version;
             if (this.jhipsterVersion === undefined) {
-                this.jhipsterVersion = packagejs.version;
+                this.jhipsterVersion = this.config.get('jhipsterVersion');
             }
             this.authenticationType = this.config.get('authenticationType');
             if (this.authenticationType === 'session') {
@@ -220,6 +222,11 @@ module.exports = JhipsterServerGenerator.extend({
                     this.enableSocialSignIn = false;
                 }
 
+                // If the service discovery is not defined, it is disabled by default
+                if (this.serviceDiscoveryType === undefined) {
+                    this.serviceDiscoveryType = false;
+                }
+
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation === undefined) {
                     this.enableTranslation = true;
@@ -271,10 +278,11 @@ module.exports = JhipsterServerGenerator.extend({
 
             // Make dist dir available in templates
             if (this.buildTool === 'maven') {
-                this.CLIENT_DIST_DIR = 'target/' + constants.CLIENT_DIST_DIR;
+                this.BUILD_DIR = 'target/';
             } else {
-                this.CLIENT_DIST_DIR = 'build/' + constants.CLIENT_DIST_DIR;
+                this.BUILD_DIR = 'build/';
             }
+            this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             // Make documentation URL available in templates
             this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
             this.DOCUMENTATION_ARCHIVE_URL = constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH + 'v' + this.jhipsterVersion;
@@ -307,13 +315,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.humanizedBaseName = _.startCase(this.baseName);
             this.mainClass = this.getMainClassName();
-
-            if (this.prodDatabaseType === 'oracle') {
-                // create a folder for users to place ojdbc jar
-                this.ojdbcVersion = '7';
-                this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
-                mkdirp(this.libFolder);
-            }
 
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
                 this.pkType = 'String';
@@ -373,12 +374,12 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.configOptions.testFrameworks) {
                 this.testFrameworks = this.configOptions.testFrameworks;
             }
-            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
-            this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
-            this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
             if (this.configOptions.clientFramework) {
                 this.clientFramework = this.configOptions.clientFramework;
             }
+            this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+            this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
+            this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
         },
 
         composeLanguages: function () {
@@ -394,12 +395,22 @@ module.exports = JhipsterServerGenerator.extend({
 
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') + 'Please rename ' +
-                chalk.yellow.bold('ojdbc' + this.ojdbcVersion + '.jar') + ' to ' +
-                chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' and place it in the `' +
-                chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
+            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') +
+                'Please follow our documentation on using Oracle to set up the \n' +
+                'Oracle proprietary JDBC driver.');
         }
-        this.log(chalk.green.bold('\nServer app generated successfully.\n'));
+        this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+
+        let executable = 'mvnw';
+        if (this.buildTool === 'gradle') {
+            executable = 'gradlew';
+        }
+        let logMsgComment = '';
+        if (os.platform() === 'win32') {
+            logMsgComment = ' (' + chalk.yellow.bold(executable) + ' if using Windows Command Prompt)';
+        }
+        this.log(chalk.green('Run your Spring Boot application:' +
+            '\n ' + chalk.yellow.bold('./' + executable) + logMsgComment));
     }
 
 });

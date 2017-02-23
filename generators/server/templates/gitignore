@@ -3,13 +3,16 @@
 ######################<% if (!skipClient && useSass) { %>
 /<%= CLIENT_MAIN_SRC_DIR %>content/css/main.css<% } %>
 /<%= CLIENT_DIST_DIR %>**
+/<%= TEST_DIR %>javascript/coverage/
+/<%= TEST_DIR %>javascript/PhantomJS*/
 
 ######################
 # Node
 ######################
-node/
+/node/
 node_tmp/
 node_modules/
+npm-debug.log.*
 
 ######################
 # SASS
@@ -32,6 +35,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+.factorypath
 /<%= SERVER_MAIN_RES_DIR %>rebel.xml
 
 # External tool builders
@@ -64,13 +68,14 @@ local.properties
 ######################
 # Maven
 ######################
-log/
-target/
+/log/
+/target/
 
 ######################
 # Gradle
 ######################
 .gradle/
+/build/
 
 ######################
 # Package Files
@@ -105,7 +110,6 @@ Desktop.ini
 ######################
 # Directories
 ######################
-/build/
 /bin/
 /deploy/
 

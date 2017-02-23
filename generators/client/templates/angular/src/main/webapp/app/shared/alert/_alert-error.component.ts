@@ -1,14 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate';
 <%_ } _%>
-
-import { AlertService } from './alert.service';
-import { EventManager } from '../service/event-manager.service';
+import { EventManager, AlertService } from 'ng-jhipster';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
-    selector: 'jhi-alert-error',
+    selector: '<%=jhiPrefix%>-alert-error',
     template: `
         <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
@@ -16,7 +14,7 @@ import { Subscription } from 'rxjs/Rx';
             </div>
         </div>`
 })
-export class JhiAlertErrorComponent implements OnDestroy {
+export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     alerts: any[];
     cleanHttpErrorListener: Subscription;
@@ -56,7 +54,8 @@ export class JhiAlertErrorComponent implements OnDestroy {
                             let fieldName = <% if (enableTranslation) { %>translateService.instant('<%=angularAppName%>.' +
                                 fieldError.objectName + '.' + convertedField)<% } else { %>convertedField.charAt(0).toUpperCase() +
                                 convertedField.slice(1)<% } %>;
-                            this.addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
+                            this.addErrorAlert(
+                                'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                         }
                     } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
                         this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json());

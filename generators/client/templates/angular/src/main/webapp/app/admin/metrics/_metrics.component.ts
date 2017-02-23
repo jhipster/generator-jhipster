@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { JhiLanguageService } from 'ng-jhipster';
+
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics-modal.component';
 import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 
@@ -11,11 +13,16 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
     metrics: any = {};
     cachesStats: any = {};
     servicesStats: any = {};
-    updatingMetrics: boolean = true;
+    updatingMetrics = true;
     JCACHE_KEY: string ;
 
-    constructor(private modalService: NgbModal, private metricsService: <%=jhiPrefixCapitalized%>MetricsService) {
+    constructor(
+        private jhiLanguageService: JhiLanguageService,
+        private modalService: NgbModal,
+        private metricsService: <%=jhiPrefixCapitalized%>MetricsService
+    ) {
         this.JCACHE_KEY = 'jcache.statistics';
+        this.jhiLanguageService.setLocations(['metrics']);
     }
 
     ngOnInit() {
@@ -57,9 +64,9 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
             const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent, { size: 'lg'});
             modalRef.componentInstance.threadDump = data;
             modalRef.result.then((result) => {
-                console.log(`Closed with: ${result}`);
+                // Left blank intentionally, nothing to do here
             }, (reason) => {
-                console.log(`Dismissed ${reason}`);
+                // Left blank intentionally, nothing to do here
             });
         });
     }

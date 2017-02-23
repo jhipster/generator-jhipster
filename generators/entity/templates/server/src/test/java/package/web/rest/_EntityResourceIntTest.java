@@ -17,6 +17,7 @@ import <%=packageName%>.service.<%= entityClass %>Service;<% } if (searchEngine 
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,6 +65,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
 public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+<%_
+    var oldSource = '';
+    try {
+        oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIntTest.java', 'utf8');
+    } catch (e) {}
+_%>
     <%_ for (idx in fields) {
     var defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -115,13 +122,49 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         if (fields[idx].fieldValidateRulesMaxlength < sampleTextLength) {
             sampleTextLength = fields[idx].fieldValidateRulesMaxlength;
         }
-        for (var i = 0; i < sampleTextLength; i++ ) {
+        for (var i = 0; i < sampleTextLength; i++) {
             sampleTextString += "A";
             updatedTextString += "B";
+        }
+        if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
+            if (oldSource !== '') {
+                // Check for old values
+                var sampleTextStringSearchResult = new RegExp('private static final String ' + defaultValueName + ' = "(.*)";', 'm').exec(oldSource);
+                if (sampleTextStringSearchResult != null) {
+                    sampleTextString = sampleTextStringSearchResult[1];
+                }
+                var updatedTextStringSearchResult = new RegExp('private static final String ' + updatedValueName + ' = "(.*)";', 'm').exec(oldSource);
+                if (updatedTextStringSearchResult != null) {
+                    updatedTextString = updatedTextStringSearchResult[1];
+                }
+            }
+            // Generate Strings, using pattern
+            try {
+                var patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
+                var randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
+                // set infinite repetitionals max range
+                randExp.max = 1;
+                if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+                    sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+                }
+                if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+                    updatedTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+                }
+            } catch (error) {
+                log(this.chalkRed('Error generating test value for entity "' + entityClass +
+                    '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
+                    '", generating default values for this field. Detailed error message: "' + error.message + '".'));
+            }
+            if (sampleTextString === updatedTextString) {
+                updatedTextString = updatedTextString + "B";
+                log(this.chalkRed('Randomly generated first and second test values for entity "' + entityClass +
+                    '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
+                    '" in file "' + entityClass + 'ResourceIntTest" where equal, added symbol "B" to second value.'));
+            }
         }_%>
 
-    private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";
+    private static final String <%=defaultValueName %> = "<%-sampleTextString %>";
+    private static final String <%=updatedValueName %> = "<%-updatedTextString %>";
     <%_ } else if (fieldType == 'Integer') { _%>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
@@ -192,6 +235,9 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
 <%_ if (databaseType == 'sql') { _%>
 
     @Autowired
@@ -212,6 +258,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
             .setMessageConverters(jacksonMessageConverter).build();
     }
 
@@ -294,7 +341,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ }} if (searchEngine == 'elasticsearch') { _%>
 
-        // Validate the <%= entityClass %> in ElasticSearch
+        // Validate the <%= entityClass %> in Elasticsearch
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
         <%_ } _%>
@@ -444,7 +491,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } } if (searchEngine == 'elasticsearch') { _%>
 
-        // Validate the <%= entityClass %> in ElasticSearch
+        // Validate the <%= entityClass %> in Elasticsearch
         <%= entityClass %> <%= entityInstance %>Es = <%= entityInstance %>SearchRepository.findOne(test<%= entityClass %>.getId());
         assertThat(<%= entityInstance %>Es).isEqualToComparingFieldByField(test<%= entityClass %>);
         <%_ } _%>
@@ -487,7 +534,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());<% if (searchEngine == 'elasticsearch') { %>
 
-        // Validate ElasticSearch is empty
+        // Validate Elasticsearch is empty
         boolean <%= entityInstance %>ExistsInEs = <%= entityInstance %>SearchRepository.exists(<%= entityInstance %>.getId());
         assertThat(<%= entityInstance %>ExistsInEs).isFalse();<% } %>
 
@@ -519,4 +566,9 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
             <%_ } _%>
             .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType == 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent != 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType == 'Integer') { %><% } else if (fields[idx].fieldType == 'Long') { %>.intValue()<% } else if (fields[idx].fieldType == 'Float' || fields[idx].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType == 'ZonedDateTime') { %>)<% } else { %>.toString()<% } %>)))<% } %>;
     }<% } %>
+
+    @Test
+    public void equalsVerifier() throws Exception {
+        TestUtil.equalsVerifier(<%= entityClass %>.class);
+    }
 }

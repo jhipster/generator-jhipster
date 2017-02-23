@@ -1,0 +1,31 @@
+{
+    "reset": {
+        "request": {
+            "title": "Zresetuj swoje hasło",
+            "form": {
+                "button": "Reset hasła"
+            },
+            "messages": {
+                "info": "Wpisz e-mail użyty podczas rejestracji.",
+                "success": "Sprawdź e-mail w celu uzyskania szczegołów jak zresetować hasło.",
+                "notfound": "<strong>E-Mail nie był zarejestrowany!</strong> Proszę sprawdź i spróbuj ponownie."
+            }
+        },
+        "finish" : {
+            "title": "Reset hasła",
+            "form": {
+                "button": "Sprawdź nowe hasło"
+            },
+            "messages": {
+                "info": "Wybierz nowe hasło",
+                <%_ if (clientFramework === 'angular1') { _%>
+                "success": "<strong>Twoje hasło zostało zresetowane.</strong> Proszę <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">zaloguj się</a>.",
+                <%_ } else if (clientFramework === 'angular2') { _%>
+                "success": "<strong>Twoje hasło zostało zresetowane.</strong> Proszę ",
+                <%_ } _%>
+                "keymissing": "Brakuje klucza resetującego hasło.",
+                "error": "Twoje hasło nie mogło zostać zresetowane. Pamiętaj, że prośba o zresetowanie hasła jest ważna tylko przez 24 godziny."
+            }
+        }
+    }
+}

@@ -1,13 +1,13 @@
 {
     "social": {
-        "btnLabel": "Sign in with {{ label }}",
+        "btnLabel": "使用 {{ label }} 登入",
         "register": {
-            "title": "Register with {{ label }}",
-            "errorTitle": "Register with an external account",
+            "title": "透過 {{ label }} 註冊",
+            "errorTitle": "使用外部帳號註冊",
             "messages": {
-                "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+                "success": "<strong>註冊成功!</strong> 請檢查您的電子郵件信箱進行確認。",
                 "error": {
-                    "fail": "<strong>Registration failed!</strong> A problem occurred during the validation of your external account, we advise you to try with another connection."
+                    "fail": "<strong>註冊失敗!</strong> 驗證您的外部帳號時發生問題，建議您試試其他連線。"
                 }
             }
         }

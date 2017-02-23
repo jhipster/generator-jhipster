@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Response } from '@angular/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EventManager, PaginationUtil, ParseLinks, AlertService, JhiLanguageService } from 'ng-jhipster';
 
-import { StateService } from 'ui-router-ng2';
-
-import { User } from './user.model';
-import { UserService } from './user.service';
-import { AlertService, EventManager, ITEMS_PER_PAGE, PaginationUtil, ParseLinks, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, User, UserService } from '../../shared';
+import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
-    selector: 'user-mgmt',
+    selector: '<%=jhiPrefix%>-user-mgmt',
     templateUrl: './user-management.component.html'
 })
-export class UserMgmtComponent implements OnInit {
+export class UserMgmtComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     users: User[];
     error: any;
     success: any;
     <%_ if (databaseType !== 'cassandra') { _%>
+    routeData: any;
     links: any;
     totalItems: any;
     queryCount: any;
@@ -29,34 +29,48 @@ export class UserMgmtComponent implements OnInit {
     <%_ } _%>
 
     constructor(
+        private jhiLanguageService: JhiLanguageService,
         private userService: UserService,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
-        <%_ if (databaseType !== 'cassandra') { _%>
         private principal: Principal,
+        private eventManager: EventManager,<%_ if (databaseType !== 'cassandra') { _%>
+        private paginationUtil: PaginationUtil,
+        private paginationConfig: PaginationConfig,
         <%_ } _%>
-        private $state: StateService,
-        private eventManager: EventManager,
-        private paginationUtil: PaginationUtil
+        private activatedRoute: ActivatedRoute,
+        private router: Router
     ) {
+        <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = paginationUtil.parsePage($state.params['page']);
-        this.previousPage = this.page;
-        this.reverse = paginationUtil.parseAscending($state.params['sort']);
-        this.predicate = 'id';
+        this.routeData = this.activatedRoute.data.subscribe(data => {
+            this.page = data['pagingParams'].page;
+            this.previousPage = data['pagingParams'].page;
+            this.reverse = data['pagingParams'].ascending;
+            this.predicate = data['pagingParams'].predicate;
+        });
+        <%_ } _%>
+        this.jhiLanguageService.setLocations(['user-management']);
     }
 
     ngOnInit() {
-        this.loadAll();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
+            this.loadAll();
+            this.registerChangeInUsers();
         });
-        this.registerChangeInUsers();
+    }
+
+    ngOnDestroy() {
+        <%_ if (databaseType !== 'cassandra') { _%>
+        this.routeData.unsubscribe();
+        <%_ } _%>
     }
 
     registerChangeInUsers() {
         this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
+
     setActive (user, isActivated) {
         user.activated = isActivated;
 
@@ -72,35 +86,21 @@ export class UserMgmtComponent implements OnInit {
                 }
             });
     }
+
     loadAll () {
-        this.userService.query({
-            page: this.page -1,
+        this.userService.query(<%_ if (databaseType !== 'cassandra') { _%>{
+            page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
+            sort: this.sort()}<%_ } _%>).subscribe(
             (res: Response) => this.onSuccess(res.json(), res.headers),
             (res: Response) => this.onError(res.json())
         );
     }
-    private onSuccess(data, headers) {
-        // hide anonymous user from user management: it's a required user for Spring Security
-        let hiddenUsersSize = 0;
-        for (let i in data) {
-            if (data[i]['login'] === 'anonymoususer') {
-                data.splice(i, 1);
-                hiddenUsersSize++;
-            }
-        }
-        <%_ if (databaseType !== 'cassandra') { _%>
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count') - hiddenUsersSize;
-        this.queryCount = this.totalItems;
-        <%_ } _%>
-        this.users = data;
+
+    trackIdentity (index, item: User) {
+        return item.id;
     }
-    private onError (error) {
-        this.alertService.error(error.error, error.message, null);
-    }
+
     <%_ if (databaseType !== 'cassandra') { _%>
     sort () {
         let result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
@@ -109,17 +109,35 @@ export class UserMgmtComponent implements OnInit {
         }
         return result;
     }
+
     loadPage (page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
         }
     }
+
     transition () {
-        this.$state.transitionTo(this.$state.$current, {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+        this.router.navigate(['/user-management'], { queryParams:
+                {
+                    page: this.page,
+                    sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+                }
         });
+        this.loadAll();
     }
+
     <%_ } _%>
+    private onSuccess(data, headers) {
+        <%_ if (databaseType !== 'cassandra') { _%>
+        this.links = this.parseLinks.parse(headers.get('link'));
+        this.totalItems = headers.get('X-Total-Count');
+        this.queryCount = this.totalItems;
+        <%_ } _%>
+        this.users = data;
+    }
+
+    private onError(error) {
+        this.alertService.error(error.error, error.message, null);
+    }
 }

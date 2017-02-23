@@ -23,7 +23,7 @@
                 <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Gateway",
                 <%_ } _%>
-                "userManagement": "User management",
+                "userManagement": "Użytkownicy",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
                 "health": "Status",
@@ -95,13 +95,13 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
+            "addblob": "Dodaj dane binarne",
+            "addimage": "Dodaj zdjęcie",
             "back": "Wstecz",
             "cancel": "Anuluj",
             "delete": "Usuń",
             "edit": "Edytuj",
-            "open": "Open",
+            "open": "Otwórz",
             "save": "Zapisz",
             "view": "Widok"
         },
@@ -126,13 +126,14 @@
         }
     },
     "error": {
+        "internalServerError": "Wewnętrzny błąd serwera",
         "server.not.reachable": "Serwer jest nieosiągalny",
-        "url.not.found": "Not found",
+        "url.not.found": "Nie znaleziono",
         "NotNull": "Wartość {{fieldName}} nie może być pusta!",
         "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "userexists": "Użytkownik o takiej nazwie już istnieje!",
+        "emailexists": "Użytkownik z takim adresem e-mail już istnieje!",
+        "idexists": "Nowy {{entityName}} nie może jeszcze mieć przypisanego ID"
     },
     "footer": "To jest stopka"
 }

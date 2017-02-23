@@ -305,14 +305,14 @@ entity tables helpers
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.dl-horizontal.jh-entity-details > {
+.row.jh-entity-details > {
     dd {
         margin-bottom: 15px;
     }
 }
 
 @media screen and (min-width: 768px) {
-    .dl-horizontal.jh-entity-details > {
+    .row.jh-entity-details > {
         dt {
             margin-bottom: 15px;
         }

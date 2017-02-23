@@ -15,6 +15,7 @@
     "jwtSecretKey": "c6b5316a091620462170221f08507f3a43237b09",
     "enableTranslation": true,
     "applicationType": "microservice",
+    "serviceDiscoveryType": "eureka",
     "testFrameworks": [
       "gatling"
     ],

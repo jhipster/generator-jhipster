@@ -35,8 +35,6 @@ function writeFiles() {
             this.copy('gitignore', '.gitignore');
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
-            this.template('_travis.yml', '.travis.yml', this, {});
-            this.template('_Jenkinsfile', 'Jenkinsfile', this, {});
         },
 
         writeDockerFiles: function () {
@@ -61,6 +59,9 @@ function writeFiles() {
             if (this.prodDatabaseType === 'mssql') {
                 this.template(DOCKER_DIR + '_mssql.yml', DOCKER_DIR + 'mssql.yml', this, {});
             }
+            if (this.prodDatabaseType === 'oracle') {
+                this.template(DOCKER_DIR + '_oracle.yml', DOCKER_DIR + 'oracle.yml', this, {});
+            }
             if (this.applicationType === 'gateway' || this.prodDatabaseType === 'cassandra') {
                 // docker-compose files
                 this.template(DOCKER_DIR + '_cassandra.yml', DOCKER_DIR + 'cassandra.yml', this, {});
@@ -78,8 +79,7 @@ function writeFiles() {
             if (this.messageBroker === 'kafka') {
                 this.template(DOCKER_DIR + '_kafka.yml', DOCKER_DIR + 'kafka.yml', this, {});
             }
-
-            if (this.applicationType === 'microservice' || this.applicationType === 'gateway' || this.applicationType === 'uaa') {
+            if (this.serviceDiscoveryType) {
                 this.template(DOCKER_DIR + 'config/_README.md', DOCKER_DIR + 'central-server-config/README.md',this, {});
 
                 if (this.serviceDiscoveryType === 'consul') {
@@ -87,7 +87,6 @@ function writeFiles() {
                     this.copy(DOCKER_DIR + 'config/git2consul.json', DOCKER_DIR + 'config/git2consul.json');
                     this.copy(DOCKER_DIR + 'config/consul-config/application.yml', DOCKER_DIR + 'central-server-config/application.yml');
                 }
-
                 if (this.serviceDiscoveryType === 'eureka') {
                     this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
                     this.copy(DOCKER_DIR + 'config/docker-config/application.yml', DOCKER_DIR + 'central-server-config/docker-config/application.yml');
@@ -143,9 +142,6 @@ function writeFiles() {
             mkdirp(SERVER_MAIN_RES_DIR);
             this.copy(SERVER_MAIN_RES_DIR + 'banner.txt', SERVER_MAIN_RES_DIR + 'banner.txt');
 
-            if (this.hibernateCache === 'ehcache') {
-                this.template(SERVER_MAIN_RES_DIR + '_ehcache.xml', SERVER_MAIN_RES_DIR + 'ehcache.xml', this, {});
-            }
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
                 this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
             }
@@ -164,8 +160,11 @@ function writeFiles() {
                 this.copy(SERVER_MAIN_RES_DIR + '/config/liquibase/master.xml', SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml');
             }
 
-            if (this.databaseType === 'mongodb' && !this.skipUserManagement) {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/_InitialSetupMigration.java', javaDir + 'config/dbmigrations/InitialSetupMigration.java', this, {});
+            if (this.databaseType === 'mongodb') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/_package-info.java', javaDir + 'config/dbmigrations/package-info.java', this, {});
+                if (!this.skipUserManagement) {
+                    this.template(SERVER_MAIN_SRC_DIR + 'package/config/dbmigrations/_InitialSetupMigration.java', javaDir + 'config/dbmigrations/InitialSetupMigration.java', this, {});
+                }
             }
 
             if (this.databaseType === 'cassandra' || this.applicationType === 'gateway') {
@@ -219,7 +218,7 @@ function writeFiles() {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
             }
 
-            this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/security/_DomainUserDetailsService.java', javaDir + 'security/DomainUserDetailsService.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
 
@@ -254,7 +253,7 @@ function writeFiles() {
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
 
             if (this.authenticationType === 'session') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_PersistentTokenRememberMeServices.java', javaDir + 'security/PersistentTokenRememberMeServices.java', this, {});
             }
 
             if (this.enableSocialSignIn) {
@@ -298,7 +297,7 @@ function writeFiles() {
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
-            if (this.applicationType !== 'microservice' && this.applicationType !== 'gateway' && this.applicationType !== 'uaa') return;
+            if (!this.serviceDiscoveryType) return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
@@ -319,7 +318,9 @@ function writeFiles() {
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_package-info.java', javaDir + 'config/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
+            if (this.hibernateCache === 'ehcache' || this.hibernateCache === 'hazelcast' || this.clusteredHttpSession === 'hazelcast') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
+            }
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_DateTimeFormatConfiguration.java', javaDir + 'config/DateTimeFormatConfiguration.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
@@ -354,7 +355,7 @@ function writeFiles() {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/cassandra/_package-info.java', javaDir + 'config/cassandra/package-info.java', this, {});
             }
             if (this.searchEngine === 'elasticsearch') {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/config/_ElasticsearchConfiguration.java', javaDir + 'config/ElasticsearchConfiguration.java', this, {});
             }
             if (this.messageBroker === 'kafka') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MessagingConfiguration.java', javaDir + 'config/MessagingConfiguration.java', this, {});
@@ -447,18 +448,13 @@ function writeFiles() {
             if (this.applicationType === 'gateway'){
                 this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
             }
-
-            if (this.applicationType === 'gateway' || this.applicationType === 'microservice'  || this.applicationType === 'uaa'){
+            if (this.serviceDiscoveryType) {
                 this.template(SERVER_TEST_RES_DIR + 'config/_bootstrap.yml', SERVER_TEST_RES_DIR + 'config/bootstrap.yml', this, {});
             }
 
             if (this.authenticationType === 'uaa') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/security/_OAuth2TokenMockUtil.java', testDir + 'security/OAuth2TokenMockUtil.java', this, {});
                 this.template(SERVER_TEST_SRC_DIR + 'package/config/_SecurityBeanOverrideConfiguration.java', testDir + 'config/SecurityBeanOverrideConfiguration.java', this, {});
-            }
-
-            if (this.hibernateCache === 'ehcache') {
-                this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});
             }
 
             // Create Gatling test files
@@ -477,7 +473,7 @@ function writeFiles() {
                 mkdirp(TEST_DIR + 'features/');
             }
 
-            // Create ElasticSearch test files
+            // Create Elasticsearch test files
             if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/config/elasticsearch/_IndexReinitializer.java', testDir + 'config/elasticsearch/IndexReinitializer.java', this, {});
             }
@@ -552,9 +548,9 @@ function writeFiles() {
             /* User management java test files */
             var testDir = this.testDir;
 
-            if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-                this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
-            }
+            this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
+            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_LogsResourceIntTest.java', testDir + 'web/rest/LogsResourceIntTest.java', this, {});
+            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_ProfileInfoResourceIntTest.java', testDir + 'web/rest/ProfileInfoResourceIntTest.java', this, {});
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
             if (this.enableSocialSignIn) {
                 this.template(SERVER_TEST_SRC_DIR + 'package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryIntTest.java', this, {});

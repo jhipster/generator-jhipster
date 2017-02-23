@@ -7,18 +7,18 @@ exports.config = {
     specs: [
         './e2e/account/*.spec.ts',
         './e2e/admin/*.spec.ts',
-        './e2e/entities/*.js'
+        './e2e/entities/*.spec.ts'
     ],
 
     capabilities: {
-        'browserName': 'firefox',
+        'browserName': 'chrome',
         'phantomjs.binary.path': require('phantomjs-prebuilt').path,
         'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
 
     directConnect: true,
 
-    baseUrl: 'http://localhost:8080/',
+    baseUrl: 'http://localhost:<%= serverPort %>/',
 
     framework: 'jasmine2',
 
@@ -36,11 +36,11 @@ exports.config = {
     onPrepare: function() {
         browser.driver.manage().window().setSize(1280, 1024);
         jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
-            savePath: '<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e',
+            savePath: '<%= BUILD_DIR %>reports/e2e',
             consolidateAll: false
         }));
         jasmine.getEnv().addReporter(new HtmlScreenshotReporter({
-            dest: "<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e/screenshots"
+            dest: "<%= BUILD_DIR %>reports/e2e/screenshots"
         }));
     },
 

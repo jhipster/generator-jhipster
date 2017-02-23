@@ -32,7 +32,7 @@ module.exports = ExportJDLGenerator.extend({
                 jhiCore.convertJsonServerOptionsToJDL({'generator-jhipster': this.config.getAll()}, this.jdl);
             } catch (e) {
                 this.log(e.message || e);
-                this.error(`\nError while parsing entities to JDL\n`);
+                this.error('\nError while parsing entities to JDL\n');
             }
         }
     },
