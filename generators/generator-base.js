@@ -1078,7 +1078,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
         _this.copy(source, dest);
         break;
     default:
-        _this.fs.copyTpl(source, dest, _this, _opt);
+        _this.template(source, dest, _this, _opt);
     }
 };
 
@@ -1773,22 +1773,22 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
     }
 
     // Templates
-    this.fs.copyTpl(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`, _this, {});
-    this.fs.copyTpl(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`, _this, {});
-    this.fs.copyTpl(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`, _this, {});
-    this.fs.copyTpl(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`, _this, {});
+    this.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`, _this, {});
+    this.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`, _this, {});
+    this.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`, _this, {});
+    this.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`, _this, {});
 };
 
 Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
     var langProp = lang.replace(/-/g, '_');
-    this.fs.copyTpl(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`, _this, {});
+    this.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`, _this, {});
 
 };
 
 Generator.prototype.copyI18n = function (language, prefix) {
     try {
-        this.fs.copyTpl(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`, this, {});
+        this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`, this, {});
         this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
@@ -1798,7 +1798,7 @@ Generator.prototype.copyI18n = function (language, prefix) {
 
 Generator.prototype.copyEnumI18n = function (language, enumInfo , prefix) {
     try {
-        this.fs.copyTpl(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo, {});
+        this.template(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo, {});
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing
