@@ -21,7 +21,6 @@ import static springfox.documentation.builders.PathSelectors.regex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
@@ -46,7 +45,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * have access to the Swagger view.
  */
 @Configuration
-@ConditionalOnClass({ApiInfo.class, BeanValidatorPluginsConfiguration.class})
+@ConditionalOnClass({ ApiInfo.class, BeanValidatorPluginsConfiguration.class })
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
 @Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
@@ -91,7 +90,8 @@ public class SwaggerConfiguration {
         return docket;
     }
 
-    @Bean PageableParameterBuilderPlugin pageableParameterBuilderPlugin(TypeNameExtractor nameExtractor,
+    @Bean
+    PageableParameterBuilderPlugin pageableParameterBuilderPlugin(TypeNameExtractor nameExtractor,
         TypeResolver resolver) {
 
         return new PageableParameterBuilderPlugin(nameExtractor, resolver);

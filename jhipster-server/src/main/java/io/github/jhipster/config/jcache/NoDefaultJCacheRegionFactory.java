@@ -16,17 +16,11 @@
 
 package io.github.jhipster.config.jcache;
 
-import java.io.IOException;
 import java.util.Properties;
+import javax.cache.Cache;
 
-import org.hibernate.boot.spi.SessionFactoryOptions;
-import org.hibernate.cache.CacheException;
 import org.hibernate.cache.jcache.JCacheRegionFactory;
 import org.hibernate.cache.spi.CacheDataDescription;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-
-import javax.cache.Cache;
 
 /**
  * Extends the default {@code JCacheRegionFactory} but makes sure all caches are already existing to prevent
@@ -35,7 +29,9 @@ import javax.cache.Cache;
 public class NoDefaultJCacheRegionFactory extends JCacheRegionFactory {
 
     @Override
-    protected Cache<Object, Object> createCache(String regionName, Properties properties, CacheDataDescription metadata) {
-        throw new IllegalStateException("All Hibernate caches should be created upfront. Please update CacheConfiguration.java with the missing cache");
+    protected Cache<Object, Object> createCache(String regionName, Properties properties, CacheDataDescription
+        metadata) {
+        throw new IllegalStateException("All Hibernate caches should be created upfront. " +
+            "Please update CacheConfiguration.java with the missing cache");
     }
 }
