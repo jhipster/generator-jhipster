@@ -571,7 +571,7 @@ Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
     for (var idx in relationships) {
         var relationshipType = relationships[idx].relationshipType;
         if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-            this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName().${relationships[idx].relationshipFieldNamePlural}`);
+            this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName() + ".${relationships[idx].relationshipFieldNamePlural}"`);
         }
     }
 };

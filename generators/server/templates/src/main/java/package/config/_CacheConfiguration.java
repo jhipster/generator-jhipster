@@ -58,14 +58,12 @@ import javax.annotation.PreDestroy;
 @AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
 public class CacheConfiguration {
     <%_ if (hibernateCache == 'ehcache') { _%>
-    private final JHipsterProperties jHipsterProperties;
 
     private final javax.cache.configuration.Configuration<Object, Object> cacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
-
-        JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
+        JHipsterProperties.Cache.Ehcache ehcache =
+            jHipsterProperties.getCache().getEhcache();
 
         cacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
             CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
