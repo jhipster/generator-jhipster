@@ -79,8 +79,8 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 { file: '_favicon.ico', method: 'copy' },
-                { file: '_robots.txt', method: 'copy' },
-                { file: '_404.html', method: 'copy' },
+                { file: '_robots.txt', method: 'template' },
+                { file: '_404.html', method: 'template' },
                 { file: '_index.html', method: 'template'}
             ]
         }

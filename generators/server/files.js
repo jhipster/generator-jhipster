@@ -32,7 +32,7 @@ function writeFiles() {
 
         writeGlobalFiles: function () {
             this.template('_README.md', 'README.md', this, {});
-            this.copy('gitignore', '.gitignore');
+            this.template('gitignore', '.gitignore', this, {});
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
         },
@@ -486,7 +486,7 @@ function writeFiles() {
 
             /* User management resources files */
             if (this.databaseType === 'sql') {
-                this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv');
+                this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users.csv', this, {});
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/authorities.csv');
                 this.copy(SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv', SERVER_MAIN_RES_DIR + 'config/liquibase/users_authorities.csv');
                 if (this.authenticationType === 'oauth2') {
