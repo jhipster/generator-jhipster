@@ -20,8 +20,8 @@ function buildProject() {
     dir=$1
     echo "*********************** Building $dir"
     pushd "$mydir/samples/$dir"
-    yo jhipster --force
     npm link generator-jhipster
+    yo jhipster --force
     if [ -f pom.xml ]; then
         ./mvnw verify
     else
