@@ -218,7 +218,7 @@ describe('JHipster CI-CD Sub Generator', function () {
                         'travis',
                         'gitlab',
                         'circle'
-                    ],
+                    ]
                 })
                 .on('end', done);
         });
@@ -228,7 +228,7 @@ describe('JHipster CI-CD Sub Generator', function () {
             assert.file(expectedFiles.gitlab);
             assert.file(expectedFiles.circle);
         });
-        it('doesn\'t contain Docker, Sonar', function () {
+        it('doesn\'t contain Docker, Sonar, Heroku', function () {
             assert.noFileContent('Jenkinsfile', /docker/);
             assert.noFileContent('Jenkinsfile', /sonar/);
             assert.noFileContent('Jenkinsfile', /heroku/);
@@ -267,7 +267,7 @@ describe('JHipster CI-CD Sub Generator', function () {
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.circle);
         });
-        it('contains Docker, Sonar', function () {
+        it('contains Docker, Sonar, Heroku', function () {
             assert.fileContent('Jenkinsfile', /docker/);
             assert.fileContent('Jenkinsfile', /sonar/);
             assert.fileContent('Jenkinsfile', /heroku/);
@@ -330,7 +330,7 @@ describe('JHipster CI-CD Sub Generator', function () {
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.gitlab);
         });
-        it('contains image openjdk, heroku', function () {
+        it('contains heroku', function () {
             assert.fileContent('circle.yml', /heroku/);
         });
     });

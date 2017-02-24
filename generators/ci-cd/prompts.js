@@ -17,7 +17,7 @@ function askPipelines() {
             choices: [
                 {name: 'Jenkins pipeline', value: 'jenkins'},
                 {name: 'Travis CI', value: 'travis'},
-                {name: 'Gitlab CI', value: 'gitlab'},
+                {name: 'GitLab CI', value: 'gitlab'},
                 {name: 'CircleCI', value: 'circle'}
             ]
         }
@@ -39,7 +39,7 @@ function askIntegrations() {
         herokuChoices.push({name: 'In Jenkins pipeline', value: 'jenkins'});
     }
     if (this.pipelines.includes('gitlab')) {
-        herokuChoices.push({name: 'In Gitlab CI', value: 'gitlab'});
+        herokuChoices.push({name: 'In GitLab CI', value: 'gitlab'});
     }
     if (this.pipelines.includes('circle')) {
         herokuChoices.push({name: 'In CircleCI', value: 'circle'});
@@ -55,7 +55,7 @@ function askIntegrations() {
             choices: [
                 {name: 'Perform the build in a Docker container', value: 'docker'},
                 {name: 'Analyze code with Sonar', value: 'sonar'},
-                {name: 'Send build status to Gitlab', value: 'gitlab'}
+                {name: 'Send build status to GitLab', value: 'gitlab'}
             ]
         },
         {
@@ -69,7 +69,7 @@ function askIntegrations() {
             when: this.pipelines.includes('gitlab'),
             type: 'confirm',
             name: 'gitlabUseDocker',
-            message: 'In Gitlab CI, perform the build in a docker container (hint: gitlab.com uses Docker container)?',
+            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container)?',
             default: false
         },
         {
