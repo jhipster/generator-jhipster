@@ -236,7 +236,7 @@ module.exports = KubernetesGenerator.extend({
             var originalImageName = this.appConfigs[i].baseName.toLowerCase();
             var targetImageName = this.appConfigs[i].targetImageName;
             if (originalImageName !== targetImageName) {
-                this.log('  ' + chalk.cyan('docker tag ' + originalImageName + ' ' + targetImageName));
+                this.log('  ' + chalk.cyan('docker image tag ' + originalImageName + ' ' + targetImageName));
             }
             this.log('  ' + chalk.cyan(this.dockerPushCommand + ' ' + targetImageName));
         }
