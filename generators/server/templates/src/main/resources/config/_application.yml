@@ -127,6 +127,11 @@ spring:
 security:
     basic:
         enabled: false
+    <%_ if (authenticationType == 'oauth2') { _%>
+    oauth2:
+        resource:
+            filter-order: 3
+    <%_ } _%>
 
 server:
     session:
