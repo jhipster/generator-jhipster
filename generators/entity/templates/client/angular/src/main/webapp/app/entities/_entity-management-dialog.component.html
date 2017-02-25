@@ -71,7 +71,7 @@
                 <input id="field_<%= fieldName %>" type="text" class="form-control" name="<%= fieldName %>" ngbDatepicker  #<%= fieldName %>Dp="ngbDatepicker" [(ngModel)]="<%= entityInstance %>.<%= fieldName %>"
                 <%- include ng_validators %>/>
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" (click)="<%= fieldName %>Dp.open()"><i class="fa fa-calendar"></i></button>
+                    <button type="button" class="btn btn-default" (click)="<%= fieldName %>Dp.toggle()"><i class="fa fa-calendar"></i></button>
                 </span>
             </div>
             <%_ } else if (fieldType == 'ZonedDateTime') { _%>
