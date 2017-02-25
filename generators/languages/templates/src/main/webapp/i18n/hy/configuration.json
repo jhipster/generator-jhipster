@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Կարգավորումներ ",
+        "filter": "Filter (ըստ նախդիրի)",
+        "table": {
+            "prefix": "Նախդիրի",
+            "properties": "Հատկություններ"
+        }
+    }
+}
