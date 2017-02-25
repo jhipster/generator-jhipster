@@ -215,7 +215,7 @@
         <div [hidden]="!(editForm.controls.<%= relationshipName %>?.dirty && editForm.controls.<%= relationshipName %>?.invalid)">
             <%_ if (relationshipRequired) { _%>
             <small class="form-text text-danger"
-                [hidden]="!<%= relationshipName %>?.errors?.required" jhiTranslate="entity.validation.required">
+                [hidden]="!editForm.controls.<%= relationshipName %>?.errors?.required" jhiTranslate="entity.validation.required">
                 This field is required.
             </small>
             <%_ } _%>
