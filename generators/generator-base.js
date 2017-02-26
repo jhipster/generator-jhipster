@@ -329,6 +329,7 @@ Generator.prototype.isSupportedLanguage = function (language) {
  */
 Generator.prototype.getAllSupportedLanguageOptions = function () {
     return [
+        {name: 'Armenian', value: 'hy'},
         {name: 'Catalan', value: 'ca'},
         {name: 'Chinese (Simplified)', value: 'zh-cn'},
         {name: 'Chinese (Traditional)', value: 'zh-tw'},

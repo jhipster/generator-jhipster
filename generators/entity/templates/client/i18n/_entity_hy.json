@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized  %>",
+                "createLabel": "Ստեղծել նոր <%= entityClassHumanized %>",
+                "createOrEditLabel": "Ստեղծել կամ փոփոխել <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Գտնել <%= entityClassHumanized %>"<% } %>
+            },<% if (!microserviceAppName) { %>
+            "created": "Նոր <%= entityClassHumanized %> ստեղծված է {{ param }} նունացուցիչով",
+            "updated": "<%= entityClassHumanized %> թարմացվաց է {{ param }} նունացուցիչով",
+            "deleted": "<%= entityClassHumanized %> հեռացված է {{ param }}  նունացուցիչով",<% } %>
+            "delete": {
+                "question": "Դուք վստահ ե՞ք, որ ցանկանում եք հեռացնել <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Նոր <%= entityClassHumanized %> ստեղծված է {{ param }} նունացուցիչով",
+            "updated": "<%= entityClassHumanized %> թարմացվաց է {{ param }} նունացուցիչով",
+            "deleted": "<%= entityClassHumanized %> հեռացված է {{ param }} նունացուցիչով"
+        }
+    }<% } %>
+}

@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Օգտվողների ակտիվությունը իրական ժամանակում ",
+        "table": {
+            "userlogin": "Օգտվող",
+            "ipaddress": "IP հասցե",
+            "userAgent": "User agent",
+            "page": "Ընթացիկ էջ",
+            "time": "Ժամ"
+        }
+    }
+}
