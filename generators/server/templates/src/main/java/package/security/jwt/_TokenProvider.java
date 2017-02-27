@@ -90,7 +90,15 @@ public class TokenProvider {
             return true;
         } catch (SignatureException e) {
             log.info("Invalid JWT signature: " + e.getMessage());
-            return false;
+        } catch (MalformedJwtException e) {
+            log.info("Invalid JWT token: " + e.getMessage());
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token: " + e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT token: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.info("JWT token compact of handler are invalid: " + e.getMessage());
         }
+        return false;
     }
 }

@@ -559,6 +559,7 @@ function writeFiles() {
 
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_AccountResourceIntTest.java', testDir + 'web/rest/AccountResourceIntTest.java', this, {});
             this.template(SERVER_TEST_SRC_DIR + 'package/security/_SecurityUtilsUnitTest.java', testDir + 'security/SecurityUtilsUnitTest.java', this, {});
+            this.template(SERVER_TEST_SRC_DIR + 'package/security/jwt/_TokenProviderTest.java', testDir + 'security/jwt/TokenProviderTest.java', this, {});
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_AuditResourceIntTest.java', testDir + 'web/rest/AuditResourceIntTest.java', this, {});
