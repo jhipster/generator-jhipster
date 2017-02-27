@@ -21,6 +21,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const constants = require('./generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = Generator;
@@ -328,6 +329,7 @@ Generator.prototype.isSupportedLanguage = function (language) {
  */
 Generator.prototype.getAllSupportedLanguageOptions = function () {
     return [
+        {name: 'Armenian', value: 'hy'},
         {name: 'Catalan', value: 'ca'},
         {name: 'Chinese (Simplified)', value: 'zh-cn'},
         {name: 'Chinese (Traditional)', value: 'zh-tw'},
@@ -565,45 +567,32 @@ Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
  */
 Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
     // Add the entity to ehcache
-    this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}`);
+    this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName()`);
     // Add the collections linked to that entity to ehcache
     for (var idx in relationships) {
         var relationshipType = relationships[idx].relationshipType;
         if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-            this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.${relationships[idx].relationshipFieldNamePlural}`);
+            this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName() + ".${relationships[idx].relationshipFieldNamePlural}"`);
         }
     }
 };
 
 /**
- * Add a new entry to the ehcache.xml file
+ * Add a new entry to Ehcache in CacheConfiguration.java
  *
  * @param {string} name - the entry (including package name) to cache.
  */
 Generator.prototype.addEntryToEhcache = function (entry) {
     try {
-        var ehcachePath = SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-dev.xml';
+        var ehcachePath = SERVER_MAIN_SRC_DIR + `${this.packageFolder}/config/CacheConfiguration.java`;
         jhipsterUtils.rewriteFile({
             file: ehcachePath,
             needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`<cache alias="${entry}" uses-template="simple"/>
-`
+            splicable: [`cm.createCache(${entry}, cacheConfiguration);`
             ]
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache.xml file.\n'));
-    }
-    try {
-        var ehcacheProdPath = SERVER_MAIN_RES_DIR + 'config/ehcache/ehcache-prod.xml';
-        jhipsterUtils.rewriteFile({
-            file: ehcacheProdPath,
-            needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`<cache alias="${entry}" uses-template="simple"/>
-`
-            ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to add ' + entry + ' to ehcache-prod.xml file.\n'));
+        this.log(chalk.yellow('\nUnable to add ' + entry + ' to CacheConfiguration.java file.\n\t' + e.message));
     }
 };
 
@@ -1480,7 +1469,6 @@ Generator.prototype.printJHipsterLogo = function () {
         chalk.green('   ╚═════╝ ') + chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝\n')
     );
     this.log(chalk.white.bold('                            https://jhipster.github.io\n'));
-    if (!this.skipChecks) this.checkForNewVersion();
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
     this.log(chalk.white('Documentation for creating an application: ' + chalk.yellow('https://jhipster.github.io/creating-an-app/')));
     this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
@@ -1491,15 +1479,21 @@ Generator.prototype.printJHipsterLogo = function () {
  */
 Generator.prototype.checkForNewVersion = function () {
     try {
+        var done = this.async();
         shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, stdout, stderr) {
             if (!stderr && semver.lt(packagejs.version, stdout)) {
                 this.log(
                     chalk.yellow(' ______________________________________________________________________________\n\n') +
-                    chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n','')) + chalk.gray(' (current: ' + packagejs.version + ')') + '\n' +
-                    chalk.yellow('  Run ' + chalk.magenta('npm install -g ' + GENERATOR_JHIPSTER ) + ' to update.\n') +
-                    chalk.yellow(' ______________________________________________________________________________\n')
+                    chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n','')) + chalk.gray(' (current: ' + packagejs.version + ')') + '\n'
                 );
+                if (this.yarnInstall) {
+                    this.log(chalk.yellow('  Run ' + chalk.magenta('yarn global upgrade ' + GENERATOR_JHIPSTER ) + ' to update.\n'));
+                } else {
+                    this.log(chalk.yellow('  Run ' + chalk.magenta('npm install -g ' + GENERATOR_JHIPSTER ) + ' to update.\n'));
+                }
+                this.log(chalk.yellow(' ______________________________________________________________________________\n'));
             }
+            done();
         }.bind(this));
     } catch (err) {
         // fail silently as this function doesnt affect normal generator flow

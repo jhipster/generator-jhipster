@@ -1,4 +1,15 @@
 package <%=packageName%>.config;
+<%_ if (hibernateCache == 'ehcache') { _%>
+
+import io.github.jhipster.config.JHipsterProperties;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.expiry.Duration;
+import org.ehcache.expiry.Expirations;
+import org.ehcache.jsr107.Eh107Configuration;
+
+import java.util.concurrent.TimeUnit;
+<%_ } _%>
 <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
 
 import io.github.jhipster.config.JHipsterConstants;
@@ -17,6 +28,9 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+<%_ if (hibernateCache == 'ehcache') { _%>
+import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+<%_ } _%>
 <%_ if ((hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') && serviceDiscoveryType) { _%>
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 <%_ } _%><%_ if (hibernateCache == 'hazelcast' || hibernateCache == 'no') { _%>
@@ -43,6 +57,40 @@ import javax.annotation.PreDestroy;
 @AutoConfigureAfter(value = { MetricsConfiguration.class })
 @AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
 public class CacheConfiguration {
+    <%_ if (hibernateCache == 'ehcache') { _%>
+
+    private final javax.cache.configuration.Configuration<Object, Object> cacheConfiguration;
+
+    public CacheConfiguration(JHipsterProperties jHipsterProperties) {
+        JHipsterProperties.Cache.Ehcache ehcache =
+            jHipsterProperties.getCache().getEhcache();
+
+        cacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
+            CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
+                ResourcePoolsBuilder.newResourcePoolsBuilder().heap(ehcache.getMaxEntries()))
+                .withExpiry(Expirations.timeToLiveExpiration(Duration.of(ehcache.getTimeToLiveSeconds(), TimeUnit.SECONDS)))
+                .build());
+    }
+
+    @Bean
+    public JCacheManagerCustomizer cacheManagerCustomizer() {
+        return cm -> {
+            <%_ if (!skipUserManagement) { _%>
+            cm.createCache(<%=packageName%>.domain.User.class.getName(), cacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.Authority.class.getName(), cacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.User.class.getName() + ".authorities", cacheConfiguration);
+            <%_ if (authenticationType === 'session') { _%>
+            cm.createCache(<%=packageName%>.domain.PersistentToken.class.getName(), cacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", cacheConfiguration);
+            <%_ } _%>
+            <%_ if (enableSocialSignIn) { _%>
+            cm.createCache(<%=packageName%>.domain.SocialUserConnection.class.getName(), cacheConfiguration);
+            <%_ } _%>
+            <%_ } _%>
+            // jhipster-needle-ehcache-add-entry
+        };
+    }
+    <%_ } _%>
     <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
