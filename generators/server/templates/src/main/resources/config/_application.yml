@@ -127,7 +127,7 @@ spring:
 security:
     basic:
         enabled: false
-    <%_ if (authenticationType == 'oauth2') { _%>
+    <%_ if (authenticationType == 'oauth2' || authenticationType == 'uaa') { _%>
     oauth2:
         resource:
             filter-order: 3
