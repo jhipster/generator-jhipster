@@ -19,8 +19,8 @@
             "node_modules/@types"
         ]
     },
-    "include": [
-        "src/main/webapp/app",
+    "exclude": [
+        "node_modules",
         "src/test/javascript"
     ],
     "angularCompilerOptions": {
