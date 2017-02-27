@@ -79,9 +79,16 @@ script:
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
+  <%_ if (heroku.includes('travis')) { _%>
+  - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy-war -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+  <%_ } else { _%>
   - ./mvnw package -Pprod -DskipTests
+  <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew bootRepackage -Pprod -x test
+  <%_ if (heroku.includes('travis')) { _%>
+  - ./gradlew deployHeroku
+  <%_ } _%>
 <%_ } _%>
 notifications:
   webhooks:

@@ -44,6 +44,9 @@ function askIntegrations() {
     if (this.pipelines.includes('circle')) {
         herokuChoices.push({name: 'In CircleCI', value: 'circle'});
     }
+    if (this.pipelines.includes('travis')) {
+        herokuChoices.push({name: 'In Travis CI', value: 'travis'});
+    }
 
     var prompts = [
         {
@@ -73,7 +76,7 @@ function askIntegrations() {
             default: false
         },
         {
-            when: (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab') || this.pipelines.includes('circle')) && this.herokuAppName,
+            when: (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab') || this.pipelines.includes('circle') || this.pipelines.includes('travis')) && this.herokuAppName,
             type: 'checkbox',
             name: 'heroku',
             message: 'Deploy to heroku?',

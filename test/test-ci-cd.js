@@ -235,6 +235,7 @@ describe('JHipster CI-CD Sub Generator', function () {
             assert.noFileContent('.gitlab-ci.yml', /image: openjdk/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
             assert.noFileContent('circle.yml', /heroku/);
+            assert.noFileContent('.travis.yml', /heroku/);
         });
     });
 
@@ -335,4 +336,32 @@ describe('JHipster CI-CD Sub Generator', function () {
         });
     });
 
+    describe('Travis CI', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
+                })
+                .withOptions({skipChecks: true})
+                .withPrompts({
+                    pipelines: [
+                        'travis'
+                    ],
+                    heroku: [
+                        'travis'
+                    ]
+                })
+                .on('end', done);
+        });
+        it('creates expected files', function () {
+            assert.file(expectedFiles.travis);
+            assert.noFile(expectedFiles.jenkins);
+            assert.noFile(expectedFiles.circle);
+            assert.noFile(expectedFiles.gitlab);
+        });
+        it('contains heroku', function () {
+            assert.fileContent('.travis.yml', /heroku/);
+        });
+    });
 });
