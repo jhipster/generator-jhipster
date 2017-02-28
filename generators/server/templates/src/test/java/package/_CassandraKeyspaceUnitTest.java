@@ -1,7 +1,7 @@
 package <%=packageName%>;
 
-import com.datastax.driver.core.KeyspaceMetadata;
-import com.datastax.driver.core.Session;
+import com.datastax.driver.core.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
 
     @Test
     public void shouldListCassandraUnitKeyspace() throws Exception {
-        KeyspaceMetadata metadata = session.getCluster().getMetadata();
+        Metadata metadata = session.getCluster().getMetadata();
         assertThat(metadata.getKeyspace(CASSANDRA_UNIT_KEYSPACE)).isNotNull();
     }
 }
