@@ -87,6 +87,9 @@ var ngValidators = './ng_validators';
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('<%=fieldName %>')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
+                <%_ } else if(fieldType == 'Boolean') { _%>
+                <input type="<%= fieldInputType %>" name="<%= fieldName %>" id="field_<%= fieldName %>"
+                          ng-model="vm.<%= entityInstance %>.<%= fieldName %>"/>
                 <%_ } else if(fieldTypeBlobContent == 'text') { _%>
                 <textarea class="form-control" name="<%= fieldName %>" id="field_<%= fieldName %>"
                     ng-model="vm.<%= entityInstance %>.<%= fieldName %>" <%- include(ngValidators) %>></textarea>
