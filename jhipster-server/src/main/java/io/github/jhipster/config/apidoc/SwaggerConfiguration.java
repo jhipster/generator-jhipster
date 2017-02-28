@@ -81,6 +81,7 @@ public class SwaggerConfiguration {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)
             .forCodeGeneration(true)
+            .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
             .genericModelSubstitutes(ResponseEntity.class)
             .select()
             .paths(regex(jHipsterProperties.getSwagger().getDefaultIncludePattern()))
