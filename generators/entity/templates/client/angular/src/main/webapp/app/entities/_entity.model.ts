@@ -15,6 +15,7 @@ import { <%= rel.otherEntityNameCapitalized %> } from '../<%= rel.otherEntityMod
 <%_ }
 }
 var variables = {};
+var defaultVariablesValues = {};
 var tsKeyType;
 if (pkType == 'String') {
     tsKeyType = 'string';
@@ -32,6 +33,7 @@ for (idx in fields) {
         tsType = 'any';
     } else if (fieldType == 'Boolean') {
         tsType = 'boolean';
+        defaultVariablesValues[fieldName] = 'this.' + fieldName + ' = false;';
     } else if (fieldType == 'Double' || fieldType == 'Float' || fieldType == 'Long' || fieldType == 'Integer' || fieldType == 'BigDecimal') {
         tsType = 'number';
     } else if (fieldType == 'String'  || fieldType == 'UUID') {
@@ -56,5 +58,7 @@ for (idx in relationships) {
 export class <%= entityAngularName %> {
     constructor(<% for (idx in variables) { %>
         public <%- variables[idx] %>,<% } %>
-    ) { }
+    ) { <% for (idx in defaultVariablesValues) { %>
+        <%- defaultVariablesValues[idx] %> <% } %>
+    }
 }
