@@ -588,7 +588,7 @@ Generator.prototype.addEntryToEhcache = function (entry) {
         jhipsterUtils.rewriteFile({
             file: ehcachePath,
             needle: 'jhipster-needle-ehcache-add-entry',
-            splicable: [`cm.createCache(${entry}, cacheConfiguration);`
+            splicable: [`cm.createCache(${entry}, jcacheConfiguration);`
             ]
         }, this);
     } catch (e) {
