@@ -93,12 +93,11 @@ function rewriteJSONFile(filePath, rewriteFile, _this) {
     _this.fs.writeJSON(filePath, jsonObj, null, 4);
 }
 
-function copyWebResource(source, dest, regex, type, _this, _opt, template) {
-
-    _opt = _opt !== undefined ? _opt : {};
+function copyWebResource(source, dest, regex, type, generator, opt, template) {
+    let _this = generator || this;
+    let _opt = opt || {};
     if (_this.enableTranslation) {
-        // uses template method instead of copy if template boolean is set as true
-        template ? _this.template(source, dest, _this, _opt) : _this.copy(source, dest);
+        _this.template(source, dest, _this, _opt);
     } else {
         stripContent(source, regex, _this, _opt, (body) => {
             switch (type) {
@@ -106,8 +105,7 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
                 body = replacePlaceholders(body, _this);
                 break;
             case 'js' :
-                this.log('---------->');
-                body = replaceTitle(body, _this, template);
+                body = replaceTitle(body, _this);
                 break;
             }
             _this.fs.write(dest, body);
@@ -118,14 +116,13 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
 function stripContent(source, regex, _this, _opt, cb) {
     ejs.renderFile(path.join(_this.sourceRoot(), source), _this, _opt, (err, res) => {
         if(!err) {
-            this.log('---------->', res);
             res = res.replace(regex, '');
             cb(res);
         }
     });
 }
 
-function replaceTitle(body, _this, template) {
+function replaceTitle(body, _this) {
     var re = /pageTitle[\s]*:[\s]*[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"]/g;
     var match;
 
@@ -157,12 +154,12 @@ function replacePlaceholders(body, _this) {
     return body;
 }
 
-function geti18nJson(key, _this, template) {
+function geti18nJson(key, _this) {
 
     var i18nDirectory = LANGUAGES_MAIN_SRC_DIR + 'i18n/en/',
         name = _.kebabCase(key.split('.')[0]),
         filename = i18nDirectory + name + '.json',
-        render = template;
+        render;
 
     if (!shelljs.test('-f', path.join(_this.sourceRoot(), filename))) {
         filename = i18nDirectory + '_' + name + '.json';

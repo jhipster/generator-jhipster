@@ -1,3 +1,4 @@
+/*global describe, beforeEach, it*/
 'use strict';
 
 const assert = require('yeoman-assert');
@@ -28,4 +29,4 @@ function shouldBeV3DockerfileCompatible(databaseType) {
         assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /external_links:/);
         assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /links:/);
     });
-};
+}
