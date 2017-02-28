@@ -83,6 +83,7 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "raw-loader": "0.5.1",
+    "rimraf": "2.6.1",
     "run-sequence": "1.2.2",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "string-replace-webpack-plugin": "0.0.5",
@@ -113,6 +114,7 @@
     "lint": "tslint '<%= MAIN_SRC_DIR %>app/**/*.ts' --force",
     "lint:fix": "tslint '<%= MAIN_SRC_DIR %>app/**/*.ts' --fix --force",
     "ngc": "ngc",
+    "cleanup": "rimraf '<%= MAIN_SRC_DIR %>app/**/*.ngfactory.ts' '<%= MAIN_SRC_DIR %>app/**/*.ngstyle.ts' '<%= MAIN_SRC_DIR %>app/**/*.ngsummary.json' build",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "start": "<%= clientPackageManager %> run webpack:dev",

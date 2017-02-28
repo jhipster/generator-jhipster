@@ -9,8 +9,8 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
-        "outDir": "<%= DIST_DIR %>app",
-        "rootDir": "./",
+        "outDir": "build",
+        "rootDir": "<%= MAIN_SRC_DIR %>app",
         "lib": ["es6", "dom"],
         "types": [
             "node"
@@ -25,6 +25,6 @@
     ],
     "angularCompilerOptions": {
         "genDir": ".",
-        "entryModule": "src/main/webapp/app/app.module.ts#<%=angular2AppName%>AppModule"
+        "entryModule": "<%= MAIN_SRC_DIR %>app/app.module.ts#<%=angular2AppName%>AppModule"
     }
 }
