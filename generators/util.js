@@ -9,13 +9,13 @@ const constants = require('./generator-constants'),
     LANGUAGES_MAIN_SRC_DIR = '../../languages/templates/' + constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = {
-    rewrite: rewrite,
-    rewriteFile: rewriteFile,
-    replaceContent: replaceContent,
-    classify: classify,
-    rewriteJSONFile: rewriteJSONFile,
-    copyWebResource: copyWebResource,
-    getJavadoc: getJavadoc
+    rewrite,
+    rewriteFile,
+    replaceContent,
+    classify,
+    rewriteJSONFile,
+    copyWebResource,
+    getJavadoc
 };
 
 function rewriteFile(args, _this) {
