@@ -7,13 +7,13 @@ const prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
 
 var webbrowserDriver= '';
 if (os.platform() === 'win32') {
-    webbrowserDriver = prefix + 'node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.22.exe';
+    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.26.exe';
 } else {
-    webbrowserDriver = prefix + 'node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_2.22';
+    webbrowserDriver = prefix + 'node_modules/webdriver-manager/selenium/chromedriver_2.26';
 }
 
 exports.config = {
-    seleniumServerJar: prefix + 'node_modules/protractor/node_modules/webdriver-manager/selenium/selenium-server-standalone-2.53.1.jar',
+    seleniumServerJar: prefix + 'node_modules/webdriver-manager/selenium/selenium-server-standalone-2.53.1.jar',
     chromeDriver: webbrowserDriver,
     allScriptsTimeout: 20000,
 
@@ -24,14 +24,14 @@ exports.config = {
     },
 
     capabilities: {
-        'browserName': 'firefox',
+        'browserName': 'chrome',
         'phantomjs.binary.path': require('phantomjs-prebuilt').path,
         'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
 
     directConnect: true,
 
-    baseUrl: 'http://localhost:8080/',
+    baseUrl: 'http://localhost:<%= serverPort %>/',
 
     framework: 'jasmine2',
 
@@ -72,11 +72,11 @@ exports.config = {
 
         browser.driver.manage().window().setSize(1280, 1024);
         jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
-            savePath: '<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e',
+            savePath: '<%= BUILD_DIR %>reports/e2e',
             consolidateAll: false
         }));
         jasmine.getEnv().addReporter(new HtmlScreenshotReporter({
-            dest: "<% if (buildTool == 'maven') { %>target<% } else { %>build<% } %>/reports/e2e/screenshots"
+            dest: "<%= BUILD_DIR %>reports/e2e/screenshots"
         }));
     }
 };

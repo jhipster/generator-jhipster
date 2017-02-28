@@ -1,7 +1,6 @@
 version: '2'
 services:
     msmariadb-mariadb:
-        container_name: msmariadb-mariadb
         image: mysql:5.7.11
         # volumes:
         #     - ~/volumes/jhipster/msmysql/mysql/:/var/lib/mysql/

@@ -1,19 +1,19 @@
 {
     "home": {
-        "title": "歡迎, Java Hipster!",
-        "subtitle": "這裡是首頁",
+        "title": "Java 文青，歡迎!",
+        "subtitle": "這裡是您的首頁",
         "logged": {
-            "message": "您目前是以 \"{{username}}\" 帳號登入."
+            "message": "您目前是用 “{{username}}” 帳號登入。"
         },
-        "question": "如果您有任何 JHipster 問題, 可以查閱下列資源:",
+        "question": "要是您對 JHipster 有任何疑問，可以到:",
         "link": {
             "homepage": "JHipster 首頁",
-            "stackoverflow": "Stack Overflow 上關於 JHipster 的討論",
-            "bugtracker": "JHipster 的錯誤追蹤",
-            "chat": "JHipster public chat room",
-            "follow": "在 Twitter 上聯絡 @java_hipster"
+            "stackoverflow": "Stack Overflow 上標有 JHipster 的問題",
+            "bugtracker": "JHipster 議題管理",
+            "chat": "JHipster 公開聊天室",
+            "follow": "在 Twitter 上關注 @java_hipster"
         },
-        "like": "如果您喜歡 JHipster, 請記得給我們一顆星星在",
+        "like": "如果您喜歡 JHipster，別忘了給我們一顆星星，馬上連到",
         "github": "GitHub"
     }
 }

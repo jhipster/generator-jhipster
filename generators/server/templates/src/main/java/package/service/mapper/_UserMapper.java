@@ -1,6 +1,8 @@
 package <%=packageName%>.service.mapper;
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<% } %>
+
+<%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+import <%=packageName%>.domain.Authority;
+<%_ } _%>
 import <%=packageName%>.domain.User;
 import <%=packageName%>.service.dto.UserDTO;
 import org.mapstruct.*;
@@ -27,7 +29,6 @@ public interface UserMapper {
     <%_ if ((authenticationType == 'session') && (databaseType == 'sql')) { _%>
     @Mapping(target = "persistentTokens", ignore = true)
     <%_ } } _%>
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "activationKey", ignore = true)
     @Mapping(target = "resetKey", ignore = true)
     @Mapping(target = "resetDate", ignore = true)
@@ -44,8 +45,8 @@ public interface UserMapper {
         user.setId(id);
         return user;
     }
-
     <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+
     default Set<String> stringsFromAuthorities (Set<Authority> authorities) {
         return authorities.stream().map(Authority::getName)
             .collect(Collectors.toSet());

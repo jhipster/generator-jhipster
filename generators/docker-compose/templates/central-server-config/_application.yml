@@ -19,9 +19,9 @@ jhipster:
             reportFrequency: 60 # in seconds
 <%_ } _%>
 
-<%_ if (serviceDiscoveryType == 'eureka') { _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
         serviceUrl:
-            defaultZone: http://admin:<%= adminPassword %>@registry:8761/eureka/
+            defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
 <%_ } _%>

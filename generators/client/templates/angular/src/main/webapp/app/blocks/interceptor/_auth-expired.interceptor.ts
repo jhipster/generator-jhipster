@@ -1,4 +1,4 @@
-import { HttpInterceptable } from './http.interceptable';
+import { HttpInterceptor } from 'ng-jhipster';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
@@ -8,7 +8,7 @@ import { Principal } from '../../shared/auth/principal.service';
     <%_ if (authenticationType === 'oauth2') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-oauth2.service';
     <%_ } else { _%>
-import {AuthServerProvider} from '../../shared/auth/auth-jwt.service';
+import { AuthServerProvider } from '../../shared/auth/auth-jwt.service';
     <%_ } _%>
 <%_ } if (authenticationType === 'session') { _%>
 import { AuthServerProvider } from '../../shared/auth/auth-session.service';
@@ -16,7 +16,7 @@ import { StateStorageService } from '../../shared/auth/state-storage.service';
 import { LoginModalService } from '../../shared/login/login-modal.service';
 <%_ } _%>
 
-export class AuthExpiredInterceptor extends HttpInterceptable {
+export class AuthExpiredInterceptor extends HttpInterceptor {
 
 <%_ if (authenticationType === 'oauth2' || authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     constructor(private injector: Injector) {
@@ -55,7 +55,7 @@ export class AuthExpiredInterceptor extends HttpInterceptable {
         let self = this;
 
         return <Observable<Response>> observable.catch((error) => {
-            // TODO this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach..... but I don't know how to do this bow
+            <%_ // TODO this is ng1 way...the ng2 would be more like someRouterService.subscribe(url).forEach.. this needs to be updated _%>
             if (error.status === 401 && error.text() !== '' && error.json().path && error.json().path.indexOf('/api/account') === -1) {
                 let authServerProvider = self.injector.get(AuthServerProvider);
                 let destination = this.stateStorageService.getDestinationState();

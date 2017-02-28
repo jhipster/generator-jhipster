@@ -2,13 +2,10 @@ version: '2'
 services:
     msmariadb-app:
         image: msmariadb
-        external_links:
-            - msmariadb-mariadb:mariadb
-            - jhipster-registry:registry
         environment:
             - SPRING_PROFILES_ACTIVE=prod
-            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@registry:8761/config
-            - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/msmariadb
+            - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
+            - SPRING_DATASOURCE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb
     msmariadb-mariadb:
         extends:
             file: mariadb.yml

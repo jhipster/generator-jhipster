@@ -25,9 +25,13 @@ function askForMicroserviceJson() {
     }
 
     var done = this.async();
+    var databaseType = this.databaseType;
 
     var prompts = [
         {
+            when: function () {
+                return databaseType !== 'no';
+            },
             type: 'confirm',
             name: 'useMicroserviceJson',
             message: 'Do you want to generate this entity from an existing microservice?',
@@ -35,7 +39,7 @@ function askForMicroserviceJson() {
         },
         {
             when: function(response) {
-                return response.useMicroserviceJson === true;
+                return response.useMicroserviceJson === true || databaseType === 'no';
             },
             type: 'input',
             name: 'microservicePath',
@@ -59,7 +63,7 @@ function askForMicroserviceJson() {
     ];
 
     this.prompt(prompts).then(function(props) {
-        if (props.useMicroserviceJson) {
+        if (props.microservicePath) {
             this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
             if(path.isAbsolute(props.microservicePath)) {
                 this.microservicePath = props.microservicePath;
@@ -374,6 +378,31 @@ function askForPagination() {
             default: 0
         }
     ];
+    // TODO this should be removed when https://github.com/jhipster/generator-jhipster/issues/5007 is done
+    if (this.clientFramework === 'angular2') {
+        prompts = [
+            {
+                type: 'list',
+                name: 'pagination',
+                message: 'Do you want pagination on your entity?',
+                choices: [
+                    {
+                        value: 'no',
+                        name: 'No'
+                    },
+                    {
+                        value: 'pagination',
+                        name: 'Yes, with pagination links'
+                    },
+                    {
+                        value: 'infinite-scroll',
+                        name: 'Yes, with infinite scroll'
+                    }
+                ],
+                default: 0
+            }
+        ];
+    }
     this.prompt(prompts).then(function (props) {
         this.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
@@ -413,7 +442,7 @@ function askForField(done) {
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (!skipServer && jhiCore.isReservedFieldName(input, prodDatabaseType)) {
-                    return `Your field name cannot contain a Java, AngularJS or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
+                    return `Your field name cannot contain a Java, Angular or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
@@ -1070,13 +1099,13 @@ function askForRelationship(done) {
             type: 'input',
             name: 'otherEntityField',
             message: function (response) {
-                return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?';
+                return 'When you display this relationship with Angular, which field from \'' + response.otherEntityName + '\' do you want to use?';
             },
             default: 'id'
         },
         {
             when: function (response) {
-                return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && response.ownerSide === true) || (response.relationshipType === 'one-to-one' && response.ownerSide === true)));
+                return (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' || (response.relationshipType === 'many-to-many' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')) || (response.relationshipType === 'one-to-one' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'))));
             },
             type: 'confirm',
             name: 'relationshipValidate',
@@ -1114,6 +1143,8 @@ function askForRelationship(done) {
 
             if(props.otherEntityName.toLowerCase() === 'user') {
                 relationship.ownerSide = true;
+                relationship.otherEntityField = 'login';
+                relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
 
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));

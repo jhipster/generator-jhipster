@@ -1,0 +1,125 @@
+# JHipster Registry HA cluster
+#
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, the JHipster Registry and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8761 by running :
+#   kubectl port-forward jhipster-registry-0 8761
+#
+# To scale your JHipster Registry cluster :
+#   In this file, change the value of spec.replicas and CLUSTER_SIZE to any value
+#   Apply the descriptor again : `kubectl apply -f jhipster-registry.yml`
+#   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
+#   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
+#   `kubectl delete pod jhipster-registry-0`, `kubectl delete pod jhipster-registry-1`
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registry-secret
+type: Opaque
+data:
+  registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jhipster-registry
+  labels:
+    app: jhipster-registry
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  ports:
+  - port: 8761
+  clusterIP: None
+  selector:
+    app: jhipster-registry
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: jhipster-registry
+spec:
+  serviceName: jhipster-registry
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: jhipster-registry
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: jhipster-registry
+        image: <%= DOCKER_JHIPSTER_REGISTRY %>
+        ports:
+        - containerPort: 8761
+        env:
+        # StatefulSet specific configuration
+        - name: CLUSTER_SIZE
+          value: "2"
+        - name: STATEFULSET_NAME
+          value: "jhipster-registry"
+        - name: STATEFULSET_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        # Registry configuration
+        - name: SPRING_PROFILES_ACTIVE
+          value: prod,native
+        - name: SECURITY_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: registry-secret
+              key: registry-admin-password
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
+          value: my-secret-token-to-change-in-production
+        - name: EUREKA_CLIENT_FETCH_REGISTRY
+          value: 'true'
+        - name: EUREKA_REGISTER_WITH_EUREKA
+          value: 'true'
+        # Eureka specific tweaking
+        - name: EUREKA_SERVER_REGISTRY_SYNC_RETRY_WAIT_MS
+          value: '500'
+        - name: EUREKA_SERVER_A_SGCACHE_EXPIRY_TIMEOUT_MS
+          value: '60000'
+        - name: EUREKA_SERVER_EVICTION_INTERVAL_TIMER_IN_MS
+          value: '30000'
+        - name: EUREKA_SERVER_PEER_EUREKA_NODES_UPDATE_INTERVAL_MS
+          value: '30000'
+        - name: EUREKA_SERVER_RENAWAL_THRESHOLD_UPDATE_INTERVAL_MS
+          value: '15000'
+        # Example "prod" configuration
+        # - name: SPRING_PROFILES_ACTIVE
+        #   value: prod
+        # - name: GIT_URI
+        #   value: https://github.com/jhipster/jhipster-registry/
+        # - name: GIT_SEARCH_PATHS
+        #   value: central-config
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - |
+            HOSTNAME=$(hostname)
+            export EUREKA_INSTANCE_HOSTNAME="${HOSTNAME}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local"
+            echo "Setting EUREKA_INSTANCE_HOSTNAME=${EUREKA_INSTANCE_HOSTNAME}"
+            echo "Configuring Registry Replicas for CLUSTER_SIZE=${CLUSTER_SIZE}"
+
+            LAST_POD_INDEX=$((${CLUSTER_SIZE} - 1))
+            REPLICAS=""
+            for i in $(seq 0 $LAST_POD_INDEX); do
+              REPLICAS="${REPLICAS}http://admin:${SECURITY_USER_PASSWORD}@${STATEFULSET_NAME}-${i}.jhipster-registry.${STATEFULSET_NAMESPACE}.svc.cluster.local:8761/eureka/"
+              if [ $i -lt $LAST_POD_INDEX ]; then
+                REPLICAS="${REPLICAS},"
+              fi
+            done
+            export EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=$REPLICAS
+            echo "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=${REPLICAS}"
+
+            java -jar /jhipster-registry.war --spring.cloud.config.server.git.uri=${GIT_URI} --spring.cloud.config.server.git.search-paths=${GIT_SEARCH_PATHS} -Djava.security.egd=file:/dev/./urandom
+        volumeMounts:
+        - name: config-volume
+          mountPath: /central-config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: application-config

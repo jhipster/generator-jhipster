@@ -47,6 +47,9 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      * @param <%= instanceName %> the entity to save
      * @return the persisted entity
      */
+    <%_ if (service == 'serviceImpl') { _%>
+    @Override
+    <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService}); -%>
         return result;
@@ -57,8 +60,13 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      *  <% if (pagination != 'no') { %>
      *  @param pageable the pagination information<% } %>
      *  @return the list of entities
-     */<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true) <% } %>
+     */
+    <%_ if (service == 'serviceImpl') { _%>
+    @Override
+    <%_ } _%>
+    <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
         <%_ if (pagination == 'no') { _%>
@@ -81,8 +89,13 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      *
      *  @param id the id of the entity
      *  @return the entity
-     */<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true) <% } %>
+     */
+    <%_ if (service == 'serviceImpl') { _%>
+    @Override
+    <%_ } _%>
+    <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public <%= instanceType %> findOne(<%= pkType %> id) {
         log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
         return <%= instanceName %>;
@@ -93,17 +106,26 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      *
      *  @param id the id of the entity
      */
+    <%_ if (service == 'serviceImpl') { _%>
+    @Override
+    <%_ } _%>
     public void delete(<%= pkType %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
-    }<% if (searchEngine == 'elasticsearch') { %>
+    }
+    <%_ if (searchEngine == 'elasticsearch') { _%>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
      *  @param query the query of the search
      *  @return the list of entities
-     */<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true)<% } %>
+     */
+    <%_ if (service == 'serviceImpl') { _%>
+    @Override
+    <%_ } _%>
+    <%_ if (databaseType == 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public <% if (pagination != 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
         <%_ if (pagination == 'no') { _%>
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
@@ -115,5 +137,6 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
             <%_ } else { _%>
         return result;
         <%_ } } _%>
-    }<% } %>
+    }
+    <%_ } _%>
 }

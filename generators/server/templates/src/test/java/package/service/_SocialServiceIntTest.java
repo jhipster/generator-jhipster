@@ -77,6 +77,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
         socialService.createSocialUser(connection, "fr");
         MultiValueMap<String, Connection<?>> connectionsByProviderId = new LinkedMultiValueMap<>();
@@ -103,6 +104,7 @@ public class SocialServiceIntTest {
             "",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -115,11 +117,13 @@ public class SocialServiceIntTest {
         User user = createExistingUser("@LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
-            "OTHER_LAST_NAME");
+            "OTHER_LAST_NAME",
+            "OTHER_IMAGE_URL");
         Connection<?> connection = createConnection("@LOGIN",
             "",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -139,6 +143,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -159,6 +164,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -168,6 +174,7 @@ public class SocialServiceIntTest {
         User user = userRepository.findOneByEmail("mail@mail.com").get();
         assertThat(user.getFirstName()).isEqualTo("FIRST_NAME");
         assertThat(user.getLastName()).isEqualTo("LAST_NAME");
+        assertThat(user.getImageUrl()).isEqualTo("IMAGE_URL");
 
         // Teardown
         userRepository.delete(user);
@@ -180,6 +187,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -203,6 +211,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -223,6 +232,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER_OTHER_THAN_TWITTER");
 
         // Exercise
@@ -243,6 +253,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "twitter");
 
         // Exercise
@@ -263,6 +274,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -282,12 +294,14 @@ public class SocialServiceIntTest {
         createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
-            "OTHER_LAST_NAME");
+            "OTHER_LAST_NAME",
+            "OTHER_IMAGE_URL");
         long initialUserCount = userRepository.count();
         Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -307,11 +321,13 @@ public class SocialServiceIntTest {
         createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
-            "OTHER_LAST_NAME");
+            "OTHER_LAST_NAME",
+            "OTHER_IMAGE_URL");
         Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -322,7 +338,7 @@ public class SocialServiceIntTest {
         assertThat(userToVerify.getLogin()).isEqualTo("@other_login");
         assertThat(userToVerify.getFirstName()).isEqualTo("OTHER_FIRST_NAME");
         assertThat(userToVerify.getLastName()).isEqualTo("OTHER_LAST_NAME");
-
+        assertThat(userToVerify.getImageUrl()).isEqualTo("OTHER_IMAGE_URL");
         // Teardown
         userRepository.delete(userToVerify);
     }
@@ -334,6 +350,7 @@ public class SocialServiceIntTest {
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
+            "IMAGE_URL",
             "PROVIDER");
 
         // Exercise
@@ -351,6 +368,7 @@ public class SocialServiceIntTest {
                                            String email,
                                            String firstName,
                                            String lastName,
+                                           String imageUrl,
                                            String providerId) {
         UserProfile userProfile = mock(UserProfile.class);
         when(userProfile.getEmail()).thenReturn(email);
@@ -362,6 +380,7 @@ public class SocialServiceIntTest {
         ConnectionKey key = new ConnectionKey(providerId, "PROVIDER_USER_ID");
         when(connection.fetchUserProfile()).thenReturn(userProfile);
         when(connection.getKey()).thenReturn(key);
+        when(connection.getImageUrl()).thenReturn(imageUrl);
 
         return connection;
     }
@@ -369,13 +388,15 @@ public class SocialServiceIntTest {
     private User createExistingUser(String login,
                                     String email,
                                     String firstName,
-                                    String lastName) {
+                                    String lastName,
+                                    String imageUrl) {
         User user = new User();
         user.setLogin(login);
         user.setPassword(passwordEncoder.encode("password"));
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
+        user.setImageUrl(imageUrl);
         return userRepository.<% if (databaseType === 'sql') { %>saveAndFlush<% } else if (databaseType === 'mongodb') { %>save<% } %>(user);
     }
 }

@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "Сервер не доступен",
         "url.not.found": "Not found",
         "NotNull": "Поле {{fieldName}} не может быть пустым!",

@@ -1,23 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { StateService } from 'ui-router-ng2';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { EventManager, JhiLanguageService } from 'ng-jhipster';
 
-import { Account, LoginModalService, Principal, EventManager } from '../shared';
+import { Account, LoginModalService, Principal } from '../shared';
 
 @Component({
-    selector: 'home',
-    templateUrl: './home.component.html'
+    selector: '<%=jhiPrefix%>-home',
+    templateUrl: './home.component.html',
+    styleUrls: [
+        <%_ if (useSass) { _%>
+        'home.scss'
+        <%_ } else { _%>
+        'home.css'
+        <%_ } _%>
+    ]
+
 })
 export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
 
     constructor(
+        private jhiLanguageService: JhiLanguageService,
         private principal: Principal,
-        private $state: StateService,
         private loginModalService: LoginModalService,
         private eventManager: EventManager
-    ) {}
+    ) {
+        this.jhiLanguageService.setLocations(['home']);
+    }
 
     ngOnInit() {
         this.principal.identity().then((account) => {

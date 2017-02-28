@@ -1,23 +1,23 @@
 {
     "health": {
         "title": "服務狀態",
-        "refresh.button": "重整",
+        "refresh.button": "重新整理",
         "stacktrace": "堆疊追蹤",
         "details": {
-            "details": "詳細信息",
+            "details": "詳細資訊",
             "properties": "屬性",
-            "name": "名",
+            "name": "名稱",
             "value": "值",
             "error": "錯誤"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Message broker",
+            "binders": "Message Broker",
             <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "configServer": "Microservice 設定伺服器",
             "hystrix": "Hystrix",
             <%_ } _%>
             "diskSpace": "硬碟空間",

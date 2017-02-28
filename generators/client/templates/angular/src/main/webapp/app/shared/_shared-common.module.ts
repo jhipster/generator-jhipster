@@ -1,88 +1,57 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Sanitizer } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+
 <%_ if (enableTranslation) { _%>
-import { MissingTranslationHandler } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate';
 <%_ } _%>
+import { AlertService } from 'ng-jhipster';
 
 import {
     <%=angular2AppName%>SharedLibsModule,
-    TruncateCharactersPipe,
-    TruncateWordsPipe,
-    CapitalizePipe,
-    FilterPipe,
-    OrderByPipe,
     <%_ if (enableTranslation) { _%>
-    JhiTranslate,
-    JhiMissingTranslationHandler,
-    JhiLanguageService,
+    JhiLanguageHelper,
     FindLanguageFromKeyPipe,
-    <%_ }_%>
-    KeysPipe,
-    MaxbytesValidator,
-    MinbytesValidator,
-    ShowValidationDirective,
-    JhiItemCountComponent,
-    alertServiceProvider,
-    JhiAlertComponent,
-    JhiAlertErrorComponent,
-    PaginationUtil,
-    ParseLinks,
-    DataUtils,
-    DateUtils,
-    EventManager
+    <%_ } _%>
+    <%=jhiPrefixCapitalized%>AlertComponent,
+    <%=jhiPrefixCapitalized%>AlertErrorComponent
 } from './';
+
+
+export function alertServiceProvider(sanitizer: Sanitizer<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
+    // set below to true to make alerts look like toast
+    let isToast = false;
+    return new AlertService(sanitizer, isToast<% if (enableTranslation) { %>, translateService<% } %>);
+}
 
 @NgModule({
     imports: [
         <%=angular2AppName%>SharedLibsModule
     ],
     declarations: [
-        TruncateCharactersPipe,
-        TruncateWordsPipe,
-        OrderByPipe,
-        FilterPipe,
-        CapitalizePipe,
-        KeysPipe,
         <%_ if (enableTranslation) { _%>
-        JhiTranslate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiItemCountComponent,
-        MaxbytesValidator,
-        MinbytesValidator,
-        ShowValidationDirective
+        <%=jhiPrefixCapitalized%>AlertComponent,
+        <%=jhiPrefixCapitalized%>AlertErrorComponent
     ],
     providers: [
         <%_ if (enableTranslation) { _%>
-        JhiLanguageService,
-        { provide: MissingTranslationHandler, useClass: JhiMissingTranslationHandler },
+        JhiLanguageHelper,
         <%_ } _%>
-        alertServiceProvider(),
-        PaginationUtil,
-        ParseLinks,
-        DataUtils,
-        DateUtils,
-        EventManager
+        {
+            provide: AlertService,
+            useFactory: alertServiceProvider,
+            deps: [Sanitizer<% if (enableTranslation) { %>, TranslateService<% } %>]
+        },
+        Title
     ],
     exports: [
         <%=angular2AppName%>SharedLibsModule,
-        TruncateCharactersPipe,
-        TruncateWordsPipe,
-        OrderByPipe,
-        FilterPipe,
-        CapitalizePipe,
-        KeysPipe,
         <%_ if (enableTranslation) { _%>
-        JhiTranslate,
         FindLanguageFromKeyPipe,
         <%_ } _%>
-        JhiAlertComponent,
-        JhiAlertErrorComponent,
-        JhiItemCountComponent,
-        MaxbytesValidator,
-        MinbytesValidator,
-        ShowValidationDirective
+        <%=jhiPrefixCapitalized%>AlertComponent,
+        <%=jhiPrefixCapitalized%>AlertErrorComponent
     ]
 })
 export class <%=angular2AppName%>SharedCommonModule {}

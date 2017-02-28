@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 #-------------------------------------------------------------------------------
 # Functions
@@ -13,7 +14,7 @@ moveEntity() {
 #-------------------------------------------------------------------------------
 rm -Rf "$HOME"/app
 mkdir -p "$HOME"/app/.jhipster/
-if [ "$JHIPSTER" == "app-mongodb" ]; then
+if [ "$JHIPSTER" == "app-ng2-mongodb" ]; then
     moveEntity MongoBankAccount
 
     moveEntity FieldTestEntity
@@ -24,7 +25,7 @@ if [ "$JHIPSTER" == "app-mongodb" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [ "$JHIPSTER" == "app-cassandra" ]; then
+elif [ "$JHIPSTER" == "app-ng2-cassandra" ]; then
     moveEntity CassBankAccount
 
     moveEntity CassTestEntity
@@ -45,7 +46,7 @@ elif [[ ("$JHIPSTER" == "app-microservice-eureka") || ("$JHIPSTER" == "app-micro
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]; then
+elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-ng2-psql-es-noi18n") ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
@@ -83,7 +84,7 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
 
-elif [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+elif [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity
     moveEntity FieldTestServiceClassEntity
@@ -92,7 +93,7 @@ elif [ "$JHIPSTER" == "app-gateway-uaa" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ ("$JHIPSTER" != "app-ng2-default") && ("$JHIPSTER" != "app-ng2-jwt") && ("$JHIPSTER" != "app-ng2-sass-noi18n") ]]; then
+else
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation

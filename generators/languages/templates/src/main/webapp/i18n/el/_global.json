@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "Ο διακομιστής δεν είναι προσβάσιμος",
         "url.not.found": "Not found",
         "NotNull": "Το ακόλουθο πεδίο δεν μπορεί να είναι κενό: {{ fieldName }}",

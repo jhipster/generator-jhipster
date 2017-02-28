@@ -10,15 +10,14 @@ export class AuditsService  {
         let params: URLSearchParams = new URLSearchParams();
         params.set('fromDate', req.fromDate);
         params.set('toDate', req.toDate);
+        params.set('page', req.page);
+        params.set('size', req.size);
+        params.set('sort', req.sort);
 
         let options = {
-            body: {
-                page: req.page,
-                size: req.size
-            },
             search: params
         };
 
-        return this.http.get('management/audits', options);
+        return this.http.get('<% if (authenticationType === 'uaa') { %><%= uaaBaseName.toLowerCase() %>/<% } %>management/audits', options);
     }
 }

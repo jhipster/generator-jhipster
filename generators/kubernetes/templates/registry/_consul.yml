@@ -1,0 +1,174 @@
+# Consul HA cluster
+#
+# Based on https://github.com/kubernetes/charts/tree/14bee1e456c1789d1ebdfc2dc7e3ae2b9ea930ce/incubator/consul
+# Note that as this is based on a StatefulSet, it will only work on Kubernetes >= 1.5
+#
+# By default, Consul and its UI is not accessible from outside the cluster for security reasons
+# You can setup temporary access to it on localhost:8500 by running :
+#   kubectl port-forward consul-0 8500
+#
+# To check the state of your Consul cluster :
+#   kubectl exec consul-0 -- sh -c 'consul members'
+#
+# To scale your Consul cluster :
+#   kubectl patch statefulset/consul -p '{"spec":{"replicas": 5}}'
+#
+# To check the state of every node
+#   for i in {0..4}; do kubectl exec consul-$i -- sh -c 'consul members'; done
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gossip-key
+type: Opaque
+data:
+  gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  labels:
+    app: consul
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  ports:
+  - name: http
+    port: 8500
+  - name: rpc
+    port: 8400
+  - name: serflan-tcp
+    protocol: "TCP"
+    port: 8301
+  - name: serflan-udp
+    protocol: "UDP"
+    port: 8301
+  - name: serfwan-tcp
+    protocol: "TCP"
+    port: 8302
+  - name: serfwan-udp
+    protocol: "UDP"
+    port: 8302
+  - name: server
+    port: 8300
+  - name: consuldns
+    port: 8600
+  clusterIP: None
+  selector:
+    app: consul
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: consul
+spec:
+  serviceName: consul
+  replicas: 3
+  template:
+    metadata:
+      name: consul
+      labels:
+        app: consul
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: "consul"
+        image: <%= DOCKER_CONSUL %>
+        imagePullPolicy: "Always"
+        ports:
+        - name: http
+          containerPort: 8500
+        - name: rpc
+          containerPort: 8400
+        - name: serflan-tcp
+          protocol: "TCP"
+          containerPort: 8301
+        - name: serflan-udp
+          protocol: "UDP"
+          containerPort: 8301
+        - name: serfwan-tcp
+          protocol: "TCP"
+          containerPort: 8302
+        - name: serfwan-udp
+          protocol: "UDP"
+          containerPort: 8302
+        - name: server
+          containerPort: 8300
+        - name: consuldns
+          containerPort: 8600
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+        env:
+        - name: INITIAL_CLUSTER_SIZE
+          value: "3"
+        - name: PETSET_NAME
+          value: "consul"
+        - name: PETSET_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/consul
+        - name: gossip-key
+          mountPath: /etc/consul/secrets
+          readOnly: true
+        command:
+          - "/bin/sh"
+          - "-ec"
+          - |
+            IP=$(hostname -i)
+
+            if [ -e /etc/consul/secrets/gossip-key ]; then
+              echo "{\"encrypt\": \"$(base64 /etc/consul/secrets/gossip-key)\"}" > /etc/consul/encrypt.json
+              GOSSIP_KEY="-config-file /etc/consul/encrypt.json"
+            fi
+
+            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
+                while true; do
+                    echo "Waiting for ${PETSET_NAME}-${i}.${PETSET_NAME} to come up"
+                    ping -W 1 -c 1 ${PETSET_NAME}-${i}.${PETSET_NAME}.${PETSET_NAMESPACE}.svc.cluster.local > /dev/null && break
+                    sleep 1s
+                done
+            done
+
+            PEERS=""
+            for i in $(seq 0 $((${INITIAL_CLUSTER_SIZE} - 1))); do
+                PEERS="${PEERS}${PEERS:+ } -retry-join $(ping -c 1 ${PETSET_NAME}-${i}.${PETSET_NAME}.${PETSET_NAMESPACE}.svc.cluster.local | awk -F'[()]' '/PING/{print $2}')"
+            done
+
+            exec /bin/consul agent \
+              -data-dir=/var/lib/consul \
+              -server \
+              -ui \
+              -bootstrap-expect=${INITIAL_CLUSTER_SIZE} \
+              -bind=0.0.0.0 \
+              -advertise=${IP} \
+              ${PEERS} \
+              ${GOSSIP_KEY} \
+              -client=0.0.0.0
+      volumes:
+      - name: gossip-key
+        secret:
+          secretName: gossip-key
+      #readinessProbe:
+      #  httpGet:
+      #    path: /v1/health/service/consul
+      #    port: 8500
+      #  initialDelaySeconds: 10
+      #  timeoutSeconds: 1
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+      annotations:
+        volume.alpha.kubernetes.io/storage-class: anything
+    spec:
+      accessModes:
+        - "ReadWriteOnce"
+      resources:
+        requests:
+          # upstream recommended max is 700M
+          storage: "700M"

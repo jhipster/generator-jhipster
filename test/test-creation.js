@@ -7,13 +7,13 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const getFilesForOptions = require('./test-utils').getFilesForOptions;
 const expectedFiles = require('./test-expected-files');
+const shouldBeV3DockerfileCompatible = require('./test-docker-compose').shouldBeV3DockerfileCompatible;
 
 const constants = require('../generators/generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR;
-
 
 describe('JHipster generator', function () {
 
@@ -68,6 +68,7 @@ describe('JHipster generator', function () {
         it('contains install-node-and-yarn in pom.xml', function () {
             assert.fileContent('pom.xml', /install-node-and-yarn/);
         });
+        shouldBeV3DockerfileCompatible('mysql');
     });
 
     describe('default configuration with angular2', function () {
@@ -198,6 +199,7 @@ describe('JHipster generator', function () {
                 testFrameworks: []
             }));
         });
+        shouldBeV3DockerfileCompatible('mariadb');
     });
 
     describe('default gradle configuration', function () {
@@ -425,6 +427,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.postgresql);
             assert.file(expectedFiles.elasticsearch);
         });
+        shouldBeV3DockerfileCompatible('postgresql');
     });
 
     describe('mongodb', function () {
@@ -456,6 +459,7 @@ describe('JHipster generator', function () {
         it('creates expected files with "MongoDB"', function () {
             assert.file(expectedFiles.mongodb);
         });
+        shouldBeV3DockerfileCompatible('mongodb');
     });
 
     describe('mssql', function () {
@@ -489,6 +493,7 @@ describe('JHipster generator', function () {
             assert.fileContent('pom.xml', /mssql-jdbc/);
             assert.fileContent(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', /identityInsertEnabled/);
         });
+        shouldBeV3DockerfileCompatible('mssql');
     });
 
     describe('cassandra', function () {
@@ -520,6 +525,7 @@ describe('JHipster generator', function () {
         it('creates expected files with "Cassandra"', function () {
             assert.file(expectedFiles.cassandra);
         });
+        shouldBeV3DockerfileCompatible('cassandra');
     });
 
     describe('cassandra no i18n', function () {
@@ -865,7 +871,7 @@ describe('JHipster generator', function () {
                 enableTranslation: true,
                 authenticationType: 'session',
                 testFrameworks: []
-            }));
+            }, '', ['package.json']));
         });
     });
 
@@ -900,7 +906,7 @@ describe('JHipster generator', function () {
                 enableTranslation: true,
                 authenticationType: 'session',
                 testFrameworks: []
-            }));
+            },'' , ['package.json']));
             assert.noFile(['gradle/yeoman.gradle']);
         });
     });
@@ -969,6 +975,39 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.dockerServices);
+            assert.file(expectedFiles.eureka);
+            assert.noFile(expectedFiles.consul);
+        });
+    });
+
+    describe('monolith with eureka', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, skipChecks: true})
+                .withPrompts({
+                    'applicationType': 'monolith',
+                    'baseName': 'jhipster',
+                    'packageName': 'com.mycompany.myapp',
+                    'packageFolder': 'com/mycompany/myapp',
+                    'authenticationType': 'session',
+                    'hibernateCache': 'ehcache',
+                    'databaseType': 'sql',
+                    'devDatabaseType': 'h2Memory',
+                    'prodDatabaseType': 'mysql',
+                    'useSass': false,
+                    'enableTranslation': true,
+                    'nativeLanguage': 'en',
+                    'languages': ['fr'],
+                    'buildTool': 'maven',
+                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    'serverSideOptions' : ['serviceDiscoveryType:eureka']
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the monolith application type', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
             assert.file(expectedFiles.eureka);
             assert.noFile(expectedFiles.consul);
         });
@@ -1195,12 +1234,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angularjs 1', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular1'})
+                .withOptions({skipInstall: true, auth: 'session'})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular1',
                     'useSass': true
                 })
                 .on('end', done);
@@ -1227,12 +1267,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angularjs 1 using npm flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular1', npm: true})
+                .withOptions({skipInstall: true, auth: 'session', npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular1',
                     'useSass': true
                 })
                 .on('end', done);
@@ -1248,12 +1289,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angular 2', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular2'})
+                .withOptions({skipInstall: true, auth: 'session'})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular2',
                     'useSass': true
                 })
                 .on('end', done);
@@ -1281,12 +1323,13 @@ describe('JHipster client generator', function () {
     describe('generate client with angular 2 using yarn flag', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', client: 'angular2', npm: true})
+                .withOptions({skipInstall: true, auth: 'session', npm: true})
                 .withPrompts({
                     'baseName': 'jhipster',
                     'enableTranslation': true,
                     'nativeLanguage': 'en',
                     'languages': ['fr'],
+                    'clientFramework': 'angular2',
                     'useSass': true
                 })
                 .on('end', done);

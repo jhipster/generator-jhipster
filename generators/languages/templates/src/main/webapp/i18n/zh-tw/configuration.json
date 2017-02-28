@@ -1,9 +1,9 @@
 {
     "configuration": {
         "title": "設定",
-        "filter": "過濾條件 (依照開頭字母)",
+        "filter": "篩選條件 (依據前置名稱)",
         "table": {
-            "prefix": "開頭字母",
+            "prefix": "前置名稱",
             "properties": "屬性"
         }
     }

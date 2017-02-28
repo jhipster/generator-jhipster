@@ -1,15 +1,18 @@
-declare var SockJS;
-declare var Stomp;
 import { Injectable, Inject } from '@angular/core';
-import { Observable, Observer } from 'rxjs/Rx';
-<%_ if (authenticationType === 'oauth2') { _%>
-import { LocalStorageService } from 'ng2-webstorage';
-<%_ } _%>
+import { Router, NavigationEnd } from '@angular/router';
+import { Observable, Observer, Subscription } from 'rxjs/Rx';
 
 import { CSRFService } from '../auth/csrf.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import { AuthServerProvider } from '../auth/auth-oauth2.service';
+<%_ } _%>
+
+<%_ // TODO find a better way to import these libs here _%>
+import SockJS = require('sockjs-client');
+import Stomp = require('webstomp-client');
 
 @Injectable()
 export class <%=jhiPrefixCapitalized%>TrackerService {
@@ -19,14 +22,13 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
     connectedPromise: any;
     listener: Observable<any>;
     listenerObserver: Observer<any>;
-    alreadyConnectedOnce: boolean = false;
+    alreadyConnectedOnce = false;
+    private subscription: Subscription;
 
     constructor(
-        @Inject('$rootScope') private $rootScope,
-        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+        private router: Router,
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         private authServerProvider: AuthServerProvider,
-        <%_ } if (authenticationType === 'oauth2') { _%>
-        private $localStorage: LocalStorageService,
         <%_ } _%>
         private $document: Document,
         private $window: Window,
@@ -37,24 +39,21 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
     }
 
     connect () {
-        if (this.connectedPromise === null) this.connection = this.createConnection();
-        //building absolute path so that websocket doesnt fail when deploying with a context path
-        var loc = this.$window.location;
-        var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
-        <%_ if (authenticationType === 'oauth2') { _%>
-        /*jshint camelcase: false */
-        var authToken = this.$json.stringify(this.$localStorage.retrieve('authenticationToken')).access_token;
-        url += '?access_token=' + authToken;
-        <%_ } if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-        var authToken = this.authServerProvider.getToken();
+        if (this.connectedPromise === null) {
+          this.connection = this.createConnection();
+        }
+        // building absolute path so that websocket doesnt fail when deploying with a context path
+        const loc = this.$window.location;
+        let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+        <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+        const authToken = this.authServerProvider.getToken()<% if (authenticationType === 'oauth2') { %>.access_token<% } %>;
         if (authToken) {
             url += '?access_token=' + authToken;
         }
         <%_ } _%>
-        var socket = new SockJS(url);
+        const socket = new SockJS(url);
         this.stompClient = Stomp.over(socket);
-        var stateChangeStart;
-        var headers = {};
+        let headers = {};
         <%_ if (authenticationType === 'session') { _%>
         headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
         <%_ } _%>
@@ -63,15 +62,12 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
             this.connectedPromise = null;
             this.sendActivity();
             if (!this.alreadyConnectedOnce) {
-                stateChangeStart = this.$rootScope.$on('$stateChangeStart', () => {
+                this.subscription = this.router.events.subscribe((event) => {
+                  if (event instanceof NavigationEnd) {
                     this.sendActivity();
+                  }
                 });
                 this.alreadyConnectedOnce = true;
-            }
-        });
-        this.$rootScope.$on('$destroy', () => {
-            if (stateChangeStart && stateChangeStart !== null) {
-                stateChangeStart();
             }
         });
     }
@@ -81,6 +77,11 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
             this.stompClient.disconnect();
             this.stompClient = null;
         }
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
+        this.alreadyConnectedOnce = false;
     }
 
     receive () {
@@ -90,9 +91,9 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
     sendActivity() {
         if (this.stompClient !== null && this.stompClient.connected) {
             this.stompClient.send(
-                '/topic/activity',
-                {},
-                JSON.stringify({'page': this.$rootScope.toState.name})
+                '/topic/activity', // destination
+                JSON.stringify({'page': this.router.routerState.snapshot.url}), // body
+                {} // header
             );
         }
     }

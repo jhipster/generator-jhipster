@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "Kreiraj novi <%= entityClassHumanized %>",
+                "createOrEditLabel": "Kreirajte ili izmenite <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Potražite <%= entityClassHumanized %>"<% } %>
+            },<% if (!microserviceAppName) { %>
+            "created": "Kreiran je novi <%= entityClassHumanized %> pod nazivom {{ param }}",
+            "updated": "<%= entityClassHumanized %> pod nazivom {{ param }} je ažuriran",
+            "deleted": "<%= entityClassHumanized %> pod nazivom {{ param }} je obrisan",<% } %>
+            "delete": {
+                "question": "Da li ste sigurni da želite da obrišete <%= entityClassHumanized %> pod nazivom {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "Kreiran je novi <%= entityClassHumanized %> pod nazivom  {{ param }}",
+            "updated": "<%= entityClassHumanized %> pod nazivom {{ param }} je ažuriran",
+            "deleted": "<%= entityClassHumanized %> pod nazivom {{ param }} je obrisan"
+        }
+    }<% } %>
+}

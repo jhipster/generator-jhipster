@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPlural %>",
                 "createLabel": "Egy új <%= entityClassHumanized %> létrehozása",
-                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClassHumanized %>t",
-                "search": "Search for <%= entityClassHumanized %>"
+                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClassHumanized %>t"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Search for <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
             "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",

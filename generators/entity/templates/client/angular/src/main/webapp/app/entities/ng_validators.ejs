@@ -11,10 +11,10 @@ if (field.fieldValidate == true) {
         validators.push('required');
     }
     if (rules.indexOf('minlength') != -1) {
-        validators.push('ng-minlength="' + field.fieldValidateRulesMinlength + '"');
+        validators.push('minlength="' + field.fieldValidateRulesMinlength + '"');
     }
     if (rules.indexOf('maxlength') != -1) {
-        validators.push('ng-maxlength="' + field.fieldValidateRulesMaxlength + '"');
+        validators.push('maxlength="' + field.fieldValidateRulesMaxlength + '"');
     }
     if (rules.indexOf('min') != -1) {
         validators.push('min="' + field.fieldValidateRulesMin + '"');
@@ -29,7 +29,7 @@ if (field.fieldValidate == true) {
         validators.push('maxbytes="' + field.fieldValidateRulesMaxbytes +'"');
     }
     if (rules.indexOf('pattern') != -1) {
-        validators.push('ng-pattern="/' + field.fieldValidateRulesPattern + '/"');
+        validators.push('pattern="' + field.fieldValidateRulesPattern.replace(/"/g, '&#34;') + '"');
     }
 
     result = validators.join(' ');

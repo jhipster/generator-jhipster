@@ -12,6 +12,7 @@ const constants = require('../generators/generator-constants'),
 
 describe('JHipster generator languages', function () {
     var languages = [
+        {name: 'Armenian', value: 'hy'},
         {name: 'Catalan', value: 'ca'},
         {name: 'Chinese (Simplified)', value: 'zh-cn'},
         {name: 'Chinese (Traditional)', value: 'zh-tw'},

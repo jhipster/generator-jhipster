@@ -23,16 +23,33 @@ launchCurlOrProtractor() {
         exit 1
     fi
 
-    if [ "$PROTRACTOR" == 1 ]; then
-        echo "[$(date)] Connected to application. Start protractor tests."
-        gulp itest --no-notification
+    if [ "$PROTRACTOR" != 1 ]; then
+        exit 0
     fi
+
+    retryCount=0
+    maxRetry=2
+    until [ "$retryCount" -ge "$maxRetry" ]
+    do
+        result=0
+        if [[ -f "gulpfile.js" ]]; then
+            gulp itest --no-notification
+        elif [[ -f "tsconfig.json" ]]; then
+            yarn run e2e
+        fi
+        result=$?
+        [ $result -eq 0 ] && break
+        retryCount=$((retryCount+1))
+        echo "e2e tests failed... retryCount =" $retryCount "/" $maxRetry
+        sleep 15
+    done
+    exit $result
 }
 
 #-------------------------------------------------------------------------------
 # Package UAA
 #-------------------------------------------------------------------------------
-if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     cd "$HOME"/uaa
     ./mvnw package -DskipTests=true -P"$PROFILE"
 fi
@@ -61,14 +78,20 @@ fi
 # Run the application
 #-------------------------------------------------------------------------------
 if [ "$RUN_APP" == 1 ]; then
-    if [ "$JHIPSTER" == "app-gateway-uaa" ]; then
+    if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
         cd "$HOME"/uaa
-        java -jar target/*.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS &
+        java -jar target/*.war \
+            --spring.profiles.active="$PROFILE" \
+            --logging.level.io.github.jhipster.sample=ERROR \
+            --logging.level.io.github.jhipster.travis=ERROR &
         sleep 80
     fi
 
     cd "$HOME"/app
-    java -jar app.war --spring.profiles.active="$PROFILE" --spring.output.ansi.enabled=ALWAYS &
+    java -jar app.war \
+        --spring.profiles.active="$PROFILE" \
+        --logging.level.io.github.jhipster.sample=ERROR \
+        --logging.level.io.github.jhipster.travis=ERROR &
     sleep 40
 
     if [[ ("$JHIPSTER" != 'app-microservice-eureka') && ("$JHIPSTER" != 'app-microservice-consul') ]]; then

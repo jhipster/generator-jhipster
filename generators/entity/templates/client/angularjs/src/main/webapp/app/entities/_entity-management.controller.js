@@ -3,11 +3,12 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('<%= entityAngularJSName %>Controller', <%= entityAngularJSName %>Controller);
+        .controller('<%= entityAngularName %>Controller', <%= entityAngularName %>Controller);
 
-    <%= entityAngularJSName %>Controller.$inject = ['$scope', '$state'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, '<%= entityClass %>'<% if (searchEngine == 'elasticsearch') { %>, '<%= entityClass %>Search'<% } %><% if (pagination != 'no') { %>, 'ParseLinks', 'AlertService', 'paginationConstants'<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, 'pagingParams'<% } %>];
+    <%= entityAngularName %>Controller.$inject = [<% if (pagination == 'pagination' || pagination == 'pager') { %>'$state', <% } %><% if (fieldsContainBlob) { %>'DataUtils', <% } %>'<%= entityClass %>'<% if (searchEngine == 'elasticsearch') { %>, '<%= entityClass %>Search'<% } %><% if (pagination != 'no') { %>, 'ParseLinks', 'AlertService', 'paginationConstants'<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, 'pagingParams'<% } %>];
 
-    function <%= entityAngularJSName %>Controller ($scope, $state<% if (fieldsContainBlob) { %>, DataUtils<% } %>, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks, AlertService, paginationConstants<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, pagingParams<% } %>) {
+    function <%= entityAngularName %>Controller(<% if (pagination == 'pagination' || pagination == 'pager') { %>$state, <% } %><% if (fieldsContainBlob) { %>DataUtils, <% } %><%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks, AlertService, paginationConstants<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, pagingParams<% } %>) {
+
         var vm = this;
 
         <%_ if (pagination == 'pagination' || pagination == 'pager') { _%>

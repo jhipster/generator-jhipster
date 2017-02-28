@@ -1,5 +1,9 @@
 'use strict';
-
+<%_
+let elementGetter = `getText()`;
+if (enableTranslation) {
+    elementGetter = `getAttribute('data-translate')`;
+} _%>
 describe('account', function () {
 
     var username = element(by.id('username'));
@@ -14,12 +18,13 @@ describe('account', function () {
 
     it('should fail to login with bad password', function () {
         <%_ if (enableTranslation) { _%>
-        element.all(by.css('h1')).first().getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/home.title/);
-        });
+        const expect1 = /home.title/;
         <%_ } else { _%>
-        expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
+        const expect1 = /Welcome, Java Hipster!/;
         <%_ } _%>
+        element.all(by.css('h1')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect1);
+        });
         accountMenu.click();
         login.click();
 
@@ -28,34 +33,37 @@ describe('account', function () {
         element(by.css('button[type=submit]')).click();
 
         <%_ if (enableTranslation) { _%>
-        element(by.css('.alert-danger')).getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/login.messages.error.authentication/);
-        });
+        const expect2 = /login.messages.error.authentication/;
         <%_ } else { _%>
-        expect(element(by.css('.alert-danger')).getText()).toMatch(/Failed to sign in!/);
+        const expect2 = /Failed to sign in!/;
         <%_ } _%>
+        element.all(by.css('.alert-danger')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect2);
+        });
     });
 
     it('should login successfully with admin account', function () {
         <%_ if (enableTranslation) { _%>
-        element.all(by.css('h1')).first().getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/login.title/);
-        });
+        const expect1 = /login.title/;
         <%_ } else { _%>
-        expect(element.all(by.css('h1')).first().getText()).toMatch(/Sign in/);
+        const expect1 = /Sign in/;
         <%_ } _%>
+        element.all(by.css('h1')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect1);
+        });
 
         username.clear().sendKeys('admin');
         password.clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
 
         <%_ if (enableTranslation) { _%>
-        element(by.css('.alert-success')).getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/home.logged.message/);
-        });
+        const expect2 = /home.logged.message/;
         <%_ } else { _%>
-        expect(element(by.css('.alert-success')).getText()).toMatch(/You are logged in as user "admin"/);
+        const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
+        element.all(by.css('.alert-success')).<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect2);
+        });
     });
 
     it('should be able to update settings', function () {
@@ -63,21 +71,23 @@ describe('account', function () {
         element(by.css('[ui-sref="settings"]')).click();
 
         <%_ if (enableTranslation) { _%>
-        element(by.css('h2')).getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/settings.title/);
-        });
+        const expect1 = /settings.title/;
         <%_ } else { _%>
-        expect(element(by.css('h2')).getText()).toMatch(/User settings for \[admin\]/);
+        const expect1 = /User settings for \[admin\]/;
         <%_ } _%>
+        element.all(by.css('h2')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect1);
+        });
         element(by.css('button[type=submit]')).click();
 
         <%_ if (enableTranslation) { _%>
-        element(by.css('.alert-success')).getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/settings.messages.success/);
-        });
+        const expect2 = /settings.messages.success/;
         <%_ } else { _%>
-        expect(element(by.css('.alert-success')).getText()).toMatch(/Settings saved!/);
+        const expect2 = /Settings saved!/;
         <%_ } _%>
+        element.all(by.css('.alert-success')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect2);
+        });
     });
 
     it('should be able to update password', function () {
@@ -85,23 +95,25 @@ describe('account', function () {
         element(by.css('[ui-sref="password"]')).click();
 
         <%_ if (enableTranslation) { _%>
-        element.all(by.css('h2')).first().getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/password.title/);
-        });
+        const expect1 = /password.title/;
         <%_ } else { _%>
-        expect(element.all(by.css('h2')).first().getText()).toMatch(/Password for \[admin\]/);
+        const expect1 = /Password for \[admin\]/;
         <%_ } _%>
+        element.all(by.css('h2')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect1);
+        });
         password.sendKeys('newpassword');
         element(by.id('confirmPassword')).sendKeys('newpassword');
         element(by.css('button[type=submit]')).click();
 
         <%_ if (enableTranslation) { _%>
-        element(by.css('.alert-success')).getAttribute('data-translate').then(function (value) {
-            expect(value).toMatch(/password.messages.success/);
-        });
+        const expect2 = /password.messages.success/;
         <%_ } else { _%>
-        expect(element(by.css('.alert-success')).getText()).toMatch(/Password changed!/);
+        const expect2 = /Password changed!/;
         <%_ } _%>
+        element.all(by.css('.alert-success')).first().<%- elementGetter %>.then((value) => {
+            expect(value).toMatch(expect2);
+        });
         accountMenu.click();
         logout.click();
 

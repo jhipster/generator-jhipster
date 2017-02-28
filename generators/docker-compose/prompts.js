@@ -204,18 +204,19 @@ function askForMonitoring() {
 }
 
 function askForServiceDiscovery() {
-    if (this.regenerate || this.composeApplicationType === 'monolith') return;
+    if (this.regenerate) return;
 
     var done = this.async();
 
     var serviceDiscoveryEnabledApps = [];
     this.appConfigs.forEach(function (appConfig, index) {
-        if(appConfig.serviceDiscoveryType && (appConfig.applicationType === 'microservice' || appConfig.applicationType === 'gateway')) {
+        if(appConfig.serviceDiscoveryType) {
             serviceDiscoveryEnabledApps.push({baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType});
         }
     }, this);
 
     if(serviceDiscoveryEnabledApps.length === 0) {
+        this.serviceDiscoveryType = false;
         done();
         return;
     }
@@ -251,7 +252,7 @@ function askForServiceDiscovery() {
                     name: 'Consul'
                 },
                 {
-                    value: 'no',
+                    value: false,
                     name: 'No Service Discovery and Configuration'
                 }
             ],
@@ -266,7 +267,7 @@ function askForServiceDiscovery() {
 }
 
 function askForAdminPassword() {
-    if (this.regenerate || this.composeApplicationType === 'monolith' || this.serviceDiscoveryType !== 'eureka') return;
+    if (this.regenerate || this.serviceDiscoveryType !== 'eureka') return;
 
     var done = this.async();
 
@@ -284,6 +285,7 @@ function askForAdminPassword() {
 
     this.prompt(prompts).then(function(props) {
         this.adminPassword = props.adminPassword;
+        this.adminPasswordBase64 = new Buffer(this.adminPassword).toString('base64');
         done();
     }.bind(this));
 }

@@ -126,16 +126,16 @@ const files = {
                 'entities/_entity.state.js',
                 // home module
                 'home/_home.controller.js',
-                { file: 'home/_home.state.js', method: 'copyJs' },
-                { file: 'home/_home.html', method: 'copyHtml' },
+                { file: 'home/_home.state.js', method: 'processJs' },
+                { file: 'home/_home.html', method: 'processHtml' },
                 // layouts
                 'layouts/navbar/_navbar.controller.js',
                 'services/profiles/_profile.service.js',
                 'services/profiles/_page-ribbon.directive.js',
-                { file: 'layouts/navbar/_navbar.html', method: 'copyHtml' },
-                { file: 'layouts/error/_error.html', method: 'copyHtml' },
-                { file: 'layouts/error/_accessdenied.html', method: 'copyHtml' },
-                { file: 'layouts/error/_error.state.js', method: 'copyJs' }
+                { file: 'layouts/navbar/_navbar.html', method: 'processHtml' },
+                { file: 'layouts/error/_error.html', method: 'processHtml' },
+                { file: 'layouts/error/_accessdenied.html', method: 'processHtml' },
+                { file: 'layouts/error/_error.state.js', method: 'processJs' }
             ]
         },
         {
@@ -152,32 +152,32 @@ const files = {
             templates: [
                 'account/_account.state.js',
                 'account/activate/_activate.controller.js',
-                { file: 'account/activate/_activate.state.js', method: 'copyJs' },
-                { file: 'account/activate/_activate.html', method: 'copyHtml' },
+                { file: 'account/activate/_activate.state.js', method: 'processJs' },
+                { file: 'account/activate/_activate.html', method: 'processHtml' },
                 'account/password/_password.controller.js',
-                { file: 'account/password/_password.state.js', method: 'copyJs' },
+                { file: 'account/password/_password.state.js', method: 'processJs' },
                 'account/password/_password-strength-bar.directive.js',
-                { file: 'account/password/_password.html', method: 'copyHtml' },
+                { file: 'account/password/_password.html', method: 'processHtml' },
                 'account/register/_register.controller.js',
-                { file: 'account/register/_register.state.js', method: 'copyJs' },
-                { file: 'account/register/_register.html', method: 'copyHtml' },
+                { file: 'account/register/_register.state.js', method: 'processJs' },
+                { file: 'account/register/_register.html', method: 'processHtml' },
                 'account/reset/request/_reset.request.controller.js',
-                { file: 'account/reset/request/_reset.request.state.js', method: 'copyJs' },
-                { file: 'account/reset/request/_reset.request.html', method: 'copyHtml' },
+                { file: 'account/reset/request/_reset.request.state.js', method: 'processJs' },
+                { file: 'account/reset/request/_reset.request.html', method: 'processHtml' },
                 'account/reset/finish/_reset.finish.controller.js',
-                { file: 'account/reset/finish/_reset.finish.html', method: 'copyHtml' },
-                { file: 'account/reset/finish/_reset.finish.state.js', method: 'copyJs' },
+                { file: 'account/reset/finish/_reset.finish.html', method: 'processHtml' },
+                { file: 'account/reset/finish/_reset.finish.state.js', method: 'processJs' },
                 'account/settings/_settings.controller.js',
-                { file: 'account/settings/_settings.state.js', method: 'copyJs' },
-                { file: 'account/settings/_settings.html', method: 'copyHtml' }
+                { file: 'account/settings/_settings.state.js', method: 'processJs' },
+                { file: 'account/settings/_settings.html', method: 'processHtml' }
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session',
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/sessions/_sessions.state.js', method: 'copyJs' },
-                { file: 'account/sessions/_sessions.html', method: 'copyHtml' },
+                { file: 'account/sessions/_sessions.state.js', method: 'processJs' },
+                { file: 'account/sessions/_sessions.html', method: 'processHtml' },
                 'account/sessions/_sessions.controller.js'
             ]
         },
@@ -185,12 +185,12 @@ const files = {
             condition: generator => generator.enableSocialSignIn,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'account/social/directive/_social.html', method: 'copyHtml' },
-                { file: 'account/social/_social-register.html', method: 'copyHtml' },
+                { file: 'account/social/directive/_social.html', method: 'processHtml' },
+                { file: 'account/social/_social-register.html', method: 'processHtml' },
                 'account/social/directive/_social.directive.js',
                 'account/social/_social-register.controller.js',
                 'account/social/_social.service.js',
-                { file: 'account/social/_social.state.js', method: 'copyJs' }
+                { file: 'account/social/_social.state.js', method: 'processJs' }
             ]
         },
         {
@@ -208,38 +208,38 @@ const files = {
                 'admin/_admin.state.js',
                 'admin/audits/_audits.controller.js',
                 'admin/audits/_audits.service.js',
-                { file: 'admin/audits/_audits.state.js', method: 'copyJs' },
-                { file: 'admin/audits/_audits.html', method: 'copyHtml' },
+                { file: 'admin/audits/_audits.state.js', method: 'processJs' },
+                { file: 'admin/audits/_audits.html', method: 'processHtml' },
                 'admin/configuration/_configuration.controller.js',
                 'admin/configuration/_configuration.service.js',
-                { file: 'admin/configuration/_configuration.state.js', method: 'copyJs' },
-                { file: 'admin/configuration/_configuration.html', method: 'copyHtml' },
+                { file: 'admin/configuration/_configuration.state.js', method: 'processJs' },
+                { file: 'admin/configuration/_configuration.html', method: 'processHtml' },
                 'admin/health/_health.controller.js',
                 'admin/health/_health.modal.controller.js',
                 'admin/health/_health.service.js',
-                { file: 'admin/health/_health.state.js', method: 'copyJs' },
-                { file: 'admin/health/_health.html', method: 'copyHtml' },
-                { file: 'admin/health/_health.modal.html', method: 'copyHtml' },
+                { file: 'admin/health/_health.state.js', method: 'processJs' },
+                { file: 'admin/health/_health.html', method: 'processHtml' },
+                { file: 'admin/health/_health.modal.html', method: 'processHtml' },
                 'admin/logs/_logs.controller.js',
                 'admin/logs/_logs.service.js',
-                { file: 'admin/logs/_logs.state.js', method: 'copyJs' },
-                { file: 'admin/logs/_logs.html', method: 'copyHtml' },
+                { file: 'admin/logs/_logs.state.js', method: 'processJs' },
+                { file: 'admin/logs/_logs.html', method: 'processHtml' },
                 'admin/metrics/_metrics.controller.js',
                 'admin/metrics/_metrics.modal.controller.js',
                 'admin/metrics/_metrics.service.js',
-                { file: 'admin/metrics/_metrics.state.js', method: 'copyJs' },
-                { file: 'admin/metrics/_metrics.html', method: 'copyHtml', template: true },
-                { file: 'admin/metrics/_metrics.modal.html', method: 'copyHtml', template: true },
+                { file: 'admin/metrics/_metrics.state.js', method: 'processJs' },
+                { file: 'admin/metrics/_metrics.html', method: 'processHtml', template: true },
+                { file: 'admin/metrics/_metrics.modal.html', method: 'processHtml', template: true },
                 { file: 'admin/docs/_docs.html', method: 'copy' },
-                { file: 'admin/docs/_docs.state.js', method: 'copyJs' }
+                { file: 'admin/docs/_docs.state.js', method: 'processJs' }
             ]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/tracker/_tracker.html', method: 'copyHtml' },
-                { file: 'admin/tracker/_tracker.state.js', method: 'copyJs' },
+                { file: 'admin/tracker/_tracker.html', method: 'processHtml' },
+                { file: 'admin/tracker/_tracker.state.js', method: 'processJs' },
                 'admin/tracker/_tracker.controller.js',
                 'admin/tracker/_tracker.service.js'
             ]
@@ -248,11 +248,11 @@ const files = {
             condition: generator => !generator.skipUserManagement,
             path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/user-management/_user-management.html', method: 'copyHtml' },
-                { file: 'admin/user-management/_user-management-detail.html', method: 'copyHtml' },
-                { file: 'admin/user-management/_user-management-dialog.html', method: 'copyHtml' },
-                { file: 'admin/user-management/_user-management-delete-dialog.html', method: 'copyHtml' },
-                { file: 'admin/user-management/_user-management.state.js', method: 'copyJs' },
+                { file: 'admin/user-management/_user-management.html', method: 'processHtml' },
+                { file: 'admin/user-management/_user-management-detail.html', method: 'processHtml' },
+                { file: 'admin/user-management/_user-management-dialog.html', method: 'processHtml' },
+                { file: 'admin/user-management/_user-management-delete-dialog.html', method: 'processHtml' },
+                { file: 'admin/user-management/_user-management.state.js', method: 'processJs' },
                 'admin/user-management/_user-management.controller.js',
                 'admin/user-management/_user-management-detail.controller.js',
                 'admin/user-management/_user-management-dialog.controller.js',
@@ -265,8 +265,8 @@ const files = {
             templates: [
                 'admin/gateway/_gateway.controller.js',
                 'admin/gateway/_gateway-routes.service.js',
-                { file: 'admin/gateway/_gateway.state.js', method: 'copyJs' },
-                { file: 'admin/gateway/_gateway.html', method: 'copyHtml' }
+                { file: 'admin/gateway/_gateway.state.js', method: 'processJs' },
+                { file: 'admin/gateway/_gateway.html', method: 'processHtml' }
             ]
         }
     ],
@@ -274,8 +274,8 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                { file: 'components/login/_login.html', method: 'copyHtml' },
-                { file: 'components/login/_login.service.js', method: 'copyJs' },
+                { file: 'components/login/_login.html', method: 'processHtml' },
+                { file: 'components/login/_login.service.js', method: 'processJs' },
                 'components/login/_login.controller.js',
                 'components/form/_show-validation.directive.js',
                 'components/form/_maxbytes.directive.js',

@@ -28,36 +28,42 @@ public class ProfileInfoResource {
     }
 
     @GetMapping("/profile-info")
-    public ProfileInfoResponse getActiveProfiles() {
+    public ProfileInfoVM getActiveProfiles() {
         String[] activeProfiles = DefaultProfileUtil.getActiveProfiles(env);
-        return new ProfileInfoResponse(activeProfiles, getRibbonEnv(activeProfiles));
+        return new ProfileInfoVM(activeProfiles, getRibbonEnv(activeProfiles));
     }
 
     private String getRibbonEnv(String[] activeProfiles) {
         String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();
-
         if (displayOnActiveProfiles == null) {
             return null;
         }
-
         List<String> ribbonProfiles = new ArrayList<>(Arrays.asList(displayOnActiveProfiles));
         List<String> springBootProfiles = Arrays.asList(activeProfiles);
         ribbonProfiles.retainAll(springBootProfiles);
-
-        if (ribbonProfiles.size() > 0) {
+        if (!ribbonProfiles.isEmpty()) {
             return ribbonProfiles.get(0);
         }
         return null;
     }
 
-    class ProfileInfoResponse {
+    class ProfileInfoVM {
 
-        public String[] activeProfiles;
-        public String ribbonEnv;
+        private String[] activeProfiles;
 
-        ProfileInfoResponse(String[] activeProfiles, String ribbonEnv) {
+        private String ribbonEnv;
+
+        ProfileInfoVM(String[] activeProfiles, String ribbonEnv) {
             this.activeProfiles = activeProfiles;
             this.ribbonEnv = ribbonEnv;
+        }
+
+        public String[] getActiveProfiles() {
+            return activeProfiles;
+        }
+
+        public String getRibbonEnv() {
+            return ribbonEnv;
         }
     }
 }

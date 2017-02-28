@@ -24,12 +24,12 @@ public class OAuth2AuthenticationApproval extends Approval implements Serializab
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
 
         OAuth2AuthenticationApproval that = (OAuth2AuthenticationApproval) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) { return false; }
 
         return true;
     }

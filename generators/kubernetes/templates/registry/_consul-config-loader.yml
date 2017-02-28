@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: consul-config-loader
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: consul-config-loader
+    spec:
+      containers:
+      - name: consul-config-loader
+        image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: INIT_SLEEP_SECONDS
+          value: "5"
+        - name: CONSUL_URL
+          value: consul.<%= kubernetesNamespace %>.svc.cluster.local
+        - name: CONSUL_PORT
+          value: "8500"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: application-config

@@ -67,8 +67,8 @@ public class SocialConfiguration implements SocialConfigurer {
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
         // Google configuration
-        String googleClientId = environment.getProperty("spring.social.google.clientId");
-        String googleClientSecret = environment.getProperty("spring.social.google.clientSecret");
+        String googleClientId = environment.getProperty("spring.social.google.client-id");
+        String googleClientSecret = environment.getProperty("spring.social.google.client-secret");
         if (googleClientId != null && googleClientSecret != null) {
             log.debug("Configuring GoogleConnectionFactory");
             connectionFactoryConfigurer.addConnectionFactory(
@@ -82,8 +82,8 @@ public class SocialConfiguration implements SocialConfigurer {
         }
 
         // Facebook configuration
-        String facebookClientId = environment.getProperty("spring.social.facebook.clientId");
-        String facebookClientSecret = environment.getProperty("spring.social.facebook.clientSecret");
+        String facebookClientId = environment.getProperty("spring.social.facebook.client-id");
+        String facebookClientSecret = environment.getProperty("spring.social.facebook.client-secret");
         if (facebookClientId != null && facebookClientSecret != null) {
             log.debug("Configuring FacebookConnectionFactory");
             connectionFactoryConfigurer.addConnectionFactory(
@@ -97,8 +97,8 @@ public class SocialConfiguration implements SocialConfigurer {
         }
 
         // Twitter configuration
-        String twitterClientId = environment.getProperty("spring.social.twitter.clientId");
-        String twitterClientSecret = environment.getProperty("spring.social.twitter.clientSecret");
+        String twitterClientId = environment.getProperty("spring.social.twitter.client-id");
+        String twitterClientSecret = environment.getProperty("spring.social.twitter.client-secret");
         if (twitterClientId != null && twitterClientSecret != null) {
             log.debug("Configuring TwitterConnectionFactory");
             connectionFactoryConfigurer.addConnectionFactory(

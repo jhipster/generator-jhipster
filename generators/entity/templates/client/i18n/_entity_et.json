@@ -4,8 +4,8 @@
             "home": {
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Lisa uus <%= entityClassHumanized %>",
-                "createOrEditLabel": "Lisa või muuda <%= entityClassHumanized %>",
-                "search": "Otsi <%= entityClassHumanized %>"
+                "createOrEditLabel": "Lisa või muuda <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Otsi <%= entityClassHumanized %>"<% } %>
             },<% if (!microserviceAppName) { %>
             "created": "Uus <%= entityClassHumanized %> on loodud identifikaatoriga {{ param }}",
             "updated": "<%= entityClassHumanized %> identifikaatoriga {{ param }} on muudetud",

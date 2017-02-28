@@ -1,9 +1,8 @@
-import { HttpInterceptable } from './http.interceptable';
+import { HttpInterceptor, EventManager } from 'ng-jhipster';
 import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { EventManager } from '../../shared/service/event-manager.service';
 
-export class ErrorHandlerInterceptor extends HttpInterceptable {
+export class ErrorHandlerInterceptor extends HttpInterceptor {
 
     constructor(private eventManager: EventManager) {
         super();

@@ -57,6 +57,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar.jhiPrefixCapitalized = _.upperFirst(jhipsterVar.jhiPrefix);
         jhipsterVar.jhipsterVersion = this.config.get('jhipsterVersion');
         jhipsterVar.serverPort = this.config.get('serverPort');
+        jhipsterVar.clientFramework = this.config.get('clientFramework');
 
         jhipsterVar.angularAppName = this.getAngularAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
@@ -81,6 +82,9 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.addBowerrcParameter = this.addBowerrcParameter;
         jhipsterFunc.addBowerDependency = this.addBowerDependency;
         jhipsterFunc.addBowerOverride = this.addBowerOverride;
+        jhipsterFunc.addNpmDependency = this.addNpmDependency;
+        jhipsterFunc.addNpmDevDependency = this.addNpmDevDependency;
+        jhipsterFunc.addNpmScript = this.addNpmScript;
         jhipsterFunc.addMainCSSStyle = this.addMainCSSStyle;
         jhipsterFunc.addMainSCSSStyle = this.addMainSCSSStyle;
         jhipsterFunc.addAngularJsModule = this.addAngularJsModule;
@@ -106,8 +110,10 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.dateFormatForLiquibase = this.dateFormatForLiquibase;
         jhipsterFunc.copyI18nFilesByName = this.copyI18nFilesByName;
         jhipsterFunc.copyTemplate = this.copyTemplate;
-        jhipsterFunc.copyHtml = this.copyHtml;
-        jhipsterFunc.copyJs = this.copyJs;
+        jhipsterFunc.copyHtml = this.processHtml;
+        jhipsterFunc.processHtml = this.processHtml;
+        jhipsterFunc.copyJs = this.processJs;
+        jhipsterFunc.processJs = this.processJs;
         jhipsterFunc.rewriteFile = this.rewriteFile;
         jhipsterFunc.replaceContent = this.replaceContent;
         jhipsterFunc.registerModule = this.registerModule;
@@ -131,7 +137,8 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.composeLanguagesSub = this.composeLanguagesSub;
         jhipsterFunc.getNumberedQuestion = this.getNumberedQuestion;
         jhipsterFunc.buildApplication = this.buildApplication;
-
+        jhipsterFunc.writeFilesToDisk = this.writeFilesToDisk;
+        jhipsterFunc.getEntityJson = this.getEntityJson;
     },
 
     initializing: function () {

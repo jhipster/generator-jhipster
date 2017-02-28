@@ -4,11 +4,11 @@
         "refresh.button": "Odśwież",
         "stacktrace": "Stos wywołań",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "Szczegóły",
+            "properties": "Właściwości",
+            "name": "Nazwa",
+            "value": "Wartość",
+            "error": "Błąd"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>

@@ -16,7 +16,10 @@
     "buildTool": "maven",
     "enableTranslation": true,
     "nativeLanguage": "en",
-    "languages": ["en", "fr"],
+    "languages": [
+      "en",
+      "fr"
+    ],
     "enableSocialSignIn": false,
     "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
@@ -24,6 +27,10 @@
     ],
     "serverPort": "8080",
     "jhiPrefix": "jhi",
-    "travis": true
+    "travis": true,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "clientPackageManager": "yarn",
+    "clientFramework": "angular2"
   }
 }

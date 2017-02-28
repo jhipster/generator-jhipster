@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { JhiLanguageService } from 'ng-jhipster';
 
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.service';
 
@@ -6,7 +7,7 @@ import { <%=jhiPrefixCapitalized%>ConfigurationService } from './configuration.s
     selector: '<%=jhiPrefix%>-configuration',
     templateUrl: './configuration.component.html'
 })
-export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
+export class <%=jhiPrefixCapitalized%>ConfigurationComponent implements OnInit {
     allConfiguration: any = null;
     configuration: any = null;
     configKeys: any[];
@@ -14,7 +15,11 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     orderProp: string;
     reverse: boolean;
 
-    constructor(private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService) {
+    constructor(
+        private jhiLanguageService: JhiLanguageService,
+        private configurationService: <%=jhiPrefixCapitalized%>ConfigurationService
+    ) {
+        this.jhiLanguageService.setLocations(['configuration']);
         this.configKeys = [];
         this.filter = '';
         this.orderProp = 'prefix';
@@ -22,7 +27,7 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
     }
 
     keys(dict): Array<string> {
-        return Object.keys(dict);
+        return (dict === undefined) ? [] : Object.keys(dict);
     }
 
     ngOnInit() {
@@ -30,7 +35,9 @@ export class <%=jhiPrefixCapitalized%>ConfigurationComponent {
             this.configuration = configuration;
 
             for (let config of configuration) {
-                this.configKeys.push(Object.keys(config.properties));
+                if (config.properties !== undefined) {
+                    this.configKeys.push(Object.keys(config.properties));
+                }
             }
         });
 

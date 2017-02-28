@@ -14,8 +14,9 @@ import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.embedded.*;
+import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
+import io.undertow.UndertowOptions;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,7 +58,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         if (env.getActiveProfiles().length != 0) {
-            log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
+            log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);<% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
@@ -129,6 +130,21 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // When running in an IDE or with <% if (buildTool == 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
         setLocationForStaticAssets(container);
         <%_ } _%>
+
+        /*
+         * Enable HTTP/2 for Undertow - https://twitter.com/ankinson/status/829256167700492288
+         * HTTP/2 requires HTTPS, so HTTP requests will fallback to HTTP/1.1.
+         * See the JHipsterProperties class and your application-*.yml configuration files
+         * for more information.
+         */
+        if (jHipsterProperties.getHttp().getVersion().equals(JHipsterProperties.Http.Version.V_2_0)) {
+            if (container instanceof UndertowEmbeddedServletContainerFactory) {
+                ((UndertowEmbeddedServletContainerFactory) container)
+                    .addBuilderCustomizers((builder) -> {
+                        builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
+                    });
+            }
+        }
     }
     <%_ if (!skipClient) { _%>
 
@@ -156,7 +172,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         String fullExecutablePath = this.getClass().getResource("").getPath();
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("<% if (buildTool == 'gradle') { %>build/<% } else { %>target/<% } %>");
+        int extractionEndIndex = extractedPath.indexOf("<%= BUILD_DIR %>");
         if(extractionEndIndex <= 0) {
             return "";
         }
@@ -206,18 +222,23 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     @Bean
-    @ConditionalOnProperty(name = "jhipster.cors.allowed-origins")
     public CorsFilter corsFilter() {
-        log.debug("Registering CORS filter");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
-        source.registerCorsConfiguration("/api/**", config);
-        source.registerCorsConfiguration("/v2/api-docs", config);
-        source.registerCorsConfiguration("/oauth/**", config);
-        <%_ if (applicationType == 'gateway') { _%>
-        source.registerCorsConfiguration("/*/api/**", config);
-        source.registerCorsConfiguration("/*/oauth/**", config);
-        <%_ } _%>
+        if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
+            log.debug("Registering CORS filter");
+            source.registerCorsConfiguration("/api/**", config);
+            source.registerCorsConfiguration("/v2/api-docs", config);
+            <%_ if (authenticationType === 'oauth2') { _%>
+            source.registerCorsConfiguration("/oauth/**", config);
+            <%_ } _%>
+            <%_ if (applicationType === 'gateway') { _%>
+            source.registerCorsConfiguration("/*/api/**", config);
+            <%_ if (authenticationType === 'uaa') { _%>
+            source.registerCorsConfiguration("/*/oauth/**", config);
+            <%_ } _%>
+            <%_ } _%>
+        }
         return new CorsFilter(source);
     }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
 

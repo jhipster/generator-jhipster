@@ -1,5 +1,6 @@
 package <%=packageName%>.repository;
 
+import <%=packageName%>.config.Constants;
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.domain.PersistentAuditEvent;
 
@@ -22,8 +23,6 @@ import java.util.List;
 public class CustomAuditEventRepository implements AuditEventRepository {
 
     private static final String AUTHORIZATION_FAILURE = "AUTHORIZATION_FAILURE";
-
-    private static final String ANONYMOUS_USER = "anonymoususer";
 
     private final PersistenceAuditEventRepository persistenceAuditEventRepository;
 
@@ -68,7 +67,7 @@ public class CustomAuditEventRepository implements AuditEventRepository {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void add(AuditEvent event) {
         if (!AUTHORIZATION_FAILURE.equals(event.getType()) &&
-            !ANONYMOUS_USER.equals(event.getPrincipal())) {
+            !Constants.ANONYMOUS_USER.equals(event.getPrincipal())) {
 
             PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
             persistentAuditEvent.setPrincipal(event.getPrincipal());

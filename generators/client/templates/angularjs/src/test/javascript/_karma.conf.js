@@ -43,14 +43,12 @@ module.exports = function (config) {
 
         reporters: ['dots', 'junit', 'coverage', 'progress'],
 
-        junitReporter: {<% if (buildTool == 'maven') { %>
-            outputFile: '../target/test-results/karma/TESTS-results.xml'<% } else { %>
-            outputFile: '../build/test-results/karma/TESTS-results.xml'<% } %>
+        junitReporter: {
+            outputFile: '../<%= BUILD_DIR %>test-results/karma/TESTS-results.xml'
         },
 
-        coverageReporter: {<% if (buildTool == 'maven') { %>
-            dir: 'target/test-results/coverage',<% } else { %>
-            dir: 'build/test-results/coverage',<% } %>
+        coverageReporter: {
+            dir: '<%= BUILD_DIR %>test-results/coverage',
             reporters: [
                 {type: 'lcov', subdir: 'report-lcov'}
             ]

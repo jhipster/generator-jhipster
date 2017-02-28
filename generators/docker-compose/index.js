@@ -24,7 +24,7 @@ module.exports = DockerComposeGenerator.extend({
 
     initializing: {
         sayHello: function() {
-            this.log(chalk.white('Welcome to the JHipster Docker Compose Sub-Generator '));
+            this.log(chalk.white(chalk.bold('🐳') + '  Welcome to the JHipster Docker Compose Sub-Generator ' + chalk.bold('🐳')));
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
         },
 
@@ -200,26 +200,8 @@ module.exports = DockerComposeGenerator.extend({
                 }
 
                 if (this.serviceDiscoveryType === 'eureka') {
-                    // Re-configure the JHipster Registry if it is already configured
-                    var spring_cloud_config_uri_configured = false;
-                    yamlConfig.environment.forEach(function (env, index, envArr) {
-
-                        if (env.startsWith('SPRING_CLOUD_CONFIG_URI')) {
-                            envArr[index] = 'SPRING_CLOUD_CONFIG_URI=http://admin:' +
-                                this.adminPassword + '@registry:8761/config';
-                            spring_cloud_config_uri_configured = true;
-                        }
-                    }, this);
-                    // Configure the JHipster Registry if it is not already configured
-                    if (!spring_cloud_config_uri_configured) {
-                        yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
-                            this.adminPassword + '@registry:8761/config');
-                    }
-                }
-                // Configure the JHipster Registry if it is not already configured
-                if (!spring_cloud_config_uri_configured && appConfig.applicationType !== 'monolith') {
-                    yamlConfig.environment.push('SPRING_CLOUD_CONFIG_URI=http://admin:' +
-                        this.adminPassword + '@registry:8761/config');
+                    // Set the JHipster Registry password
+                    yamlConfig.environment.push('JHIPSTER_REGISTRY_PASSWORD=' + this.adminPassword);
                 }
 
                 parentConfiguration[lowercaseBaseName + '-app'] = yamlConfig;
@@ -247,7 +229,6 @@ module.exports = DockerComposeGenerator.extend({
                         cassandraMigrationConfig.build.context = relativePath;
                         var createKeyspaceScript = cassandraClusterYaml.services[databaseServiceName + '-migration'].environment[0];
                         cassandraMigrationConfig.environment.push(createKeyspaceScript);
-                        cassandraMigrationConfig['links'] = cassandraClusterYaml.services[databaseServiceName + '-migration'].links;
                         var cqlFilesRelativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/resources/config/cql');
                         cassandraMigrationConfig['volumes'][0] = cqlFilesRelativePath + ':/cql:ro';
 

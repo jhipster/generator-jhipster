@@ -126,6 +126,7 @@
         }
     },
     "error": {
+        "internalServerError": "Internal server error",
         "server.not.reachable": "सर्वर पहुँच योग्य नहीं",
         "url.not.found": "Not found",
         "NotNull": "यह  {{ fieldName }} रिक्त नहीं हो सकता!",
