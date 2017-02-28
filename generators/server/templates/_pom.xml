@@ -59,7 +59,7 @@
         <hazelcast-hibernate52.version>1.2</hazelcast-hibernate52.version>
         <%_ } _%>
         <%_ if (clusteredHttpSession === 'hazelcast') { _%>
-        <hazelcast-wm.version>3.8</hazelcast-wm.version>
+        <hazelcast-wm.version>3.7</hazelcast-wm.version>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
         <hibernate.version>5.2.8.Final</hibernate.version>
