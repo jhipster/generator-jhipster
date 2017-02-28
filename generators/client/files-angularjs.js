@@ -395,7 +395,7 @@ module.exports = {
 
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
-    this.fs.copy(this.templatePath('angularjs/gulp/_handle-errors.js'), this.destinationPath('gulp/handle-errors.js')); // to avoid interpolate errors
+    this.copy('angularjs/gulp/_handle-errors.js', 'gulp/handle-errors.js'); // to avoid interpolate errors
     // write angular 1.x files
     this.writeFilesToDisk(files, this, false, 'angularjs');
 }

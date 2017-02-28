@@ -1771,7 +1771,7 @@ Generator.prototype.installI18nServerFilesByLanguage = function (_this, resource
 
 Generator.prototype.copyI18n = function (language, prefix) {
     try {
-        this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`, this, {});
+        this.template(`${prefix}/i18n/_entity_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${this.entityInstance}.json`);
         this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
@@ -1781,7 +1781,7 @@ Generator.prototype.copyI18n = function (language, prefix) {
 
 Generator.prototype.copyEnumI18n = function (language, enumInfo , prefix) {
     try {
-        this.template(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo, {});
+        this.template(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo);
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing

@@ -344,7 +344,7 @@ module.exports = JhipsterGenerator.extend({
                     this.otherModules = [];
                 }
                 // Generate a package.json file containing the current version of the generator as dependency
-                this.template('_skipClientApp.package.json', 'package.json', this, {});
+                this.template('_skipClientApp.package.json', 'package.json');
 
                 if (!this.options['skip-install']) {
                     if (this.clientPackageManager === 'yarn') {

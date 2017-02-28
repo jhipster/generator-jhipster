@@ -344,7 +344,7 @@ function writeFiles() {
                     if (!this.skipServer) {
                         this.template(
                             `${SERVER_TEMPLATES_DIR}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,
-                            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`, enumInfo, {}
+                            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`, enumInfo
                         );
                     }
 
