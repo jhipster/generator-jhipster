@@ -53,7 +53,7 @@ module.exports = ServiceGenerator.extend({
 
     writing: function () {
         this.serviceClass = _.upperFirst(this.name);
-        this.serviceInstance = this.name.toLowerCase();
+        this.serviceInstance = _.lowerCase(this.name);
 
         this.template(SERVER_MAIN_SRC_DIR + 'package/service/_Service.java',
             SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.serviceClass + 'Service.java');

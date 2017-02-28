@@ -1625,17 +1625,13 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
         var skipServer = type && type === 'client';
         // skip client if app type is server
         var skipClient = type && type === 'server';
-        generator.composeWith('jhipster:languages', {
-            options: {
-                'skip-install': true,
-                'skip-server': skipServer,
-                'skip-client': skipClient,
-                configOptions: configOptions,
-                force: generator.options['force']
-            },
-            args: generator.languages
-        }, {
-            local: require.resolve('./languages')
+        generator.composeWith(require.resolve('./languages'), {
+            'skip-install': true,
+            'skip-server': skipServer,
+            'skip-client': skipClient,
+            configOptions: configOptions,
+            force: generator.options['force'],
+            languages: generator.languages
         });
     }
 };
@@ -1733,42 +1729,43 @@ Generator.prototype.writeFilesToDisk = function (files, generator, returnFiles, 
 /*========================================================================*/
 
 Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDir, lang) {
-    this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'gateway.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'login.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'logs.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'home.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'metrics.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'password.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'register.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'sessions.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'settings.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'user-management.json', lang);
+    let generator = _this || this;
+    generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'password.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'register.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'sessions.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'settings.json', lang);
+    generator.copyI18nFilesByName(generator, webappDir, 'user-management.json', lang);
 
     // tracker.json for Websocket
     if (this.websocket === 'spring-websocket') {
-        this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
+        generator.copyI18nFilesByName(generator, webappDir, 'tracker.json', lang);
     }
 
     if (this.enableSocialSignIn) {
-        this.copyI18nFilesByName(_this, webappDir, 'social.json', lang);
+        generator.copyI18nFilesByName(generator, webappDir, 'social.json', lang);
     }
 
     // Templates
-    _this.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`, this, {});
-    _this.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`, this, {});
-    _this.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`, this, {});
-    _this.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`, this, {});
-
+    generator.template(`${webappDir}i18n/${lang}/_activate.json`, `${webappDir}i18n/${lang}/activate.json`);
+    generator.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`);
+    generator.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`);
+    generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
 
 };
 
 Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
+    let generator = _this || this;
     // Template the message server side properties
     var langProp = lang.replace(/-/g, '_');
-    _this.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`, this, {});
+    generator.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`);
 
 };
 
@@ -2013,4 +2010,25 @@ Generator.prototype.toArrayString = function(array) {
  */
 Generator.prototype.stripMargin = function(content) {
     return content.replace(/^[ ]*\|/gm,'');
+};
+
+/**
+ * Utility function to copy and process templates.
+ *
+ * @param {string} template - Template file.
+ * @param {string} destination - The resulting file.
+ */
+Generator.prototype.template = function (template, destination, generator, options) {
+    const _this = generator || this;
+    _this.fs.copyTpl(_this.templatePath(template), _this.destinationPath(destination), _this, options);
+};
+
+/**
+ * Utility function to copy files.
+ *
+ * @param {string} source - Original file.
+ * @param {string} destination - The resulting file.
+ */
+Generator.prototype.copy = function (source, destination) {
+    this.fs.copy(this.templatePath(source), this.destinationPath(destination));
 };

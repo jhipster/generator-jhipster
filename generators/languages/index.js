@@ -42,8 +42,8 @@ module.exports = LanguagesGenerator.extend({
 
         this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
-
         // Validate languages passed as argument
+        this.languages = this.options.languages;
         this.languages && this.languages.forEach(function (language) {
             if (!this.isSupportedLanguage(language)) {
                 this.log('\n');

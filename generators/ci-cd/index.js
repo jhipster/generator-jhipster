@@ -1,17 +1,17 @@
 'use strict';
 var util = require('util'),
     chalk = require('chalk'),
-    generators = require('yeoman-generator'),
+    generator = require('yeoman-generator'),
     prompts = require('./prompts'),
     scriptBase = require('../generator-base');
 
-var PipelineGenerator = generators.Base.extend({});
+var PipelineGenerator = generator.extend({});
 
 util.inherits(PipelineGenerator, scriptBase);
 
 module.exports = PipelineGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
     },
 
     initializing: {
