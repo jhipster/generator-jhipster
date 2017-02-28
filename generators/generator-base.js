@@ -34,6 +34,27 @@ function Generator() {
 util.inherits(Generator, generator);
 
 /**
+ * Utility function to use templates.
+ *
+ * @param {string} template - Template file.
+ * @param {string} destination - The resulting file.
+ */
+Generator.prototype.template = function (template, destination, generator, options) {
+    var _this = generator || this;
+    _this.fs.copyTpl(_this.templatePath(template), _this.destinationPath(destination), _this);
+};
+
+/**
+ * Utility function to copy files.
+ *
+ * @param {string} source - Original file.
+ * @param {string} destination - The resulting file.
+ */
+Generator.prototype.copy = function (source, destination) {
+    this.fs.copy(this.templatePath(source), this.destinationPath(destination));
+};
+
+/**
  * Add a new menu element, at the root of the menu.
  *
  * @param {string} routerName - The name of the AngularJS router that is added to the menu.
