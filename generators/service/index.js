@@ -15,6 +15,7 @@ module.exports = ServiceGenerator.extend({
     constructor: function () {
         generator.apply(this, arguments);
         this.argument('name', {type: String, required: true});
+        this.name = this.options.name;
     },
 
     initializing: {

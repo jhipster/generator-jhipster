@@ -69,6 +69,8 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
+
+        this.name = this.options.name;
         // remove extension if feeding json files
         if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');

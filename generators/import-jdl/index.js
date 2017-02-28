@@ -14,7 +14,7 @@ module.exports = JDLGenerator.extend({
     constructor: function () {
         generator.apply(this, arguments);
         this.argument('jdlFiles', {type: Array, required: true});
-
+        this.jdlFiles = this.options.jdlFiles;
     },
 
     initializing: {
