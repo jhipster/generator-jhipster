@@ -56,7 +56,14 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         new BrowserSyncPlugin({
             host: 'localhost',
             port: 9000,
-            proxy: 'http://localhost:9060'
+            proxy: {
+                target: 'http://localhost:9060'
+                <% if (websocket === 'spring-websocket') { %>,
+                // When your app also uses web sockets
+                // NOTE: requires 2.8.1 or above
+                ws: true
+                <% } %>
+            }
         }, {
             reload: false
         }),
