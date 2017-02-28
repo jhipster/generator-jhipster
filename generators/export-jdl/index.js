@@ -15,7 +15,7 @@ module.exports = ExportJDLGenerator.extend({
         this.baseName = this.config.get('baseName');
         this.jdl = new jhiCore.JDLObject();
         this.argument('jdlFile', { type: String, required: false, defaults: this.baseName + '.jh' });
-        this.jdlFiles = this.options.jdlFiles;
+        this.jdlFile = this.options.jdlFile;
     },
 
     default: {

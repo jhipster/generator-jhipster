@@ -333,8 +333,7 @@ function writeFiles() {
                 var field = this.fields[idx];
                 if (field.fieldIsEnum === true) {
                     var fieldType = field.fieldType;
-                    var enumInfo = new Object();
-                    enumInfo.packageName = this.packageName;
+                    var enumInfo = this;
                     enumInfo.enumName = fieldType;
                     enumInfo.enumValues = field.fieldValues;
                     field.enumInstance = _.lowerFirst(enumInfo.enumName);

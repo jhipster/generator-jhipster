@@ -76,7 +76,7 @@ module.exports = JDLGenerator.extend({
                     this.composeWith(require.resolve('../entity'), {
                         regenerate: true,
                         'skip-install': true,
-                        name: entity.name
+                        arguments: [entity.name]
                     });
                 }, this);
             } catch (e) {
