@@ -106,6 +106,7 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
                 body = replacePlaceholders(body, _this);
                 break;
             case 'js' :
+                this.log('---------->');
                 body = replaceTitle(body, _this, template);
                 break;
             }
@@ -117,6 +118,7 @@ function copyWebResource(source, dest, regex, type, _this, _opt, template) {
 function stripContent(source, regex, _this, _opt, cb) {
     ejs.renderFile(path.join(_this.sourceRoot(), source), _this, _opt, (err, res) => {
         if(!err) {
+            this.log('---------->', res);
             res = res.replace(regex, '');
             cb(res);
         }

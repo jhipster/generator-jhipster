@@ -1,13 +1,10 @@
 /*global describe, beforeEach, it*/
 'use strict';
 
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fse = require('fs-extra');
-
-const constants = require('../generators/generator-constants'),
-    DOCKER_DIR = constants.DOCKER_DIR;
+const path = require('path');
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+const fse = require('fs-extra');
 
 const expectedFiles = {
     dockercompose : [
@@ -373,14 +370,3 @@ describe('JHipster Docker Compose Sub Generator', function () {
         });
     });
 });
-
-exports.shouldBeV3DockerfileCompatible = function(databaseType) {
-    it('creates compose file without container_name, external_links, links', function () {
-        assert.noFileContent(DOCKER_DIR + 'app.yml', /container_name:/);
-        assert.noFileContent(DOCKER_DIR + 'app.yml', /external_links:/);
-        assert.noFileContent(DOCKER_DIR + 'app.yml', /links:/);
-        assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /container_name:/);
-        assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /external_links:/);
-        assert.noFileContent(DOCKER_DIR + databaseType + '.yml', /links:/);
-    });
-};

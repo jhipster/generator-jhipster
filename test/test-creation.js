@@ -7,7 +7,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const getFilesForOptions = require('./test-utils').getFilesForOptions;
 const expectedFiles = require('./test-expected-files');
-const shouldBeV3DockerfileCompatible = require('./test-docker-compose').shouldBeV3DockerfileCompatible;
+const shouldBeV3DockerfileCompatible = require('./test-utils').shouldBeV3DockerfileCompatible;
 
 const constants = require('../generators/generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
