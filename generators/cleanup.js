@@ -1,12 +1,12 @@
 'use strict';
 
-const constants = require('./generator-constants'),
-    ANGULAR_DIR = constants.ANGULAR_DIR,
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const constants = require('./generator-constants');
+const ANGULAR_DIR = constants.ANGULAR_DIR;
+const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = {
-    cleanupOldFiles: cleanupOldFiles,
-    cleanupOldServerFiles: cleanupOldServerFiles
+    cleanupOldFiles,
+    cleanupOldServerFiles
 };
 /**
  * Removes files that where generated in previous JHipster versions and therefore need to be removed

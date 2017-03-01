@@ -86,5 +86,4 @@ const constants = {
     DOCKER_GRAFANA: DOCKER_GRAFANA
 };
 
-
 module.exports = constants;
