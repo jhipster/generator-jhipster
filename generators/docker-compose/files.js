@@ -42,8 +42,8 @@ function writeFiles() {
             if (this.monitoring !== 'prometheus') return;
 
             // Generate a list of target apps to monitor for the prometheus config
-            var appsToMonitor = [];
-            for(var i = 0; i < this.appConfigs.length; i++) {
+            const appsToMonitor = [];
+            for(let i = 0; i < this.appConfigs.length; i++) {
                 appsToMonitor.push('             - ' + this.appConfigs[i].baseName + '-app:' + this.appConfigs[i].serverPort);
             }
 
