@@ -1,6 +1,5 @@
 'use strict';
 const path = require('path');
-// const util = require('util');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
