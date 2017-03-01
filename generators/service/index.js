@@ -1,13 +1,13 @@
 'use strict';
-var util = require('util'),
-    generator = require('yeoman-generator'),
-    _ = require('lodash'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const generator = require('yeoman-generator');
+const _ = require('lodash');
+const scriptBase = require('../generator-base');
 
-const constants = require('../generator-constants'),
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const constants = require('../generator-constants');
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-var ServiceGenerator = generator.extend({});
+const ServiceGenerator = generator.extend({});
 
 util.inherits(ServiceGenerator, scriptBase);
 
@@ -29,9 +29,9 @@ module.exports = ServiceGenerator.extend({
     },
 
     prompting: function () {
-        var done = this.async();
+        const done = this.async();
 
-        var prompts = [
+        const prompts = [
             {
                 type: 'confirm',
                 name: 'useInterface',
@@ -39,14 +39,14 @@ module.exports = ServiceGenerator.extend({
                 default: false
             }
         ];
-        this.prompt(prompts).then(function (props) {
+        this.prompt(prompts).then((props) => {
             this.useInterface = props.useInterface;
             done();
-        }.bind(this));
+        });
     },
     default: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'service');
             insight.track('service/interface', this.useInterface);
         }
