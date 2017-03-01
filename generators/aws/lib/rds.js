@@ -1,28 +1,28 @@
 'use strict';
 
-var aws;
+let aws;
 
-var Rds = module.exports = function Rds(Aws) {
+const Rds = module.exports = function Rds(Aws) {
     aws = Aws;
 };
 
 Rds.prototype.createDatabase = function createDatabase(params, callback) {
-    var dbInstanceClass = params.dbInstanceClass,
+    const dbInstanceClass = params.dbInstanceClass,
         dbName = params.dbName,
         dbEngine = params.dbEngine,
         dbPassword = params.dbPassword,
         dbUsername = params.dbUsername;
 
-    createRdsSecurityGroup({rdsSecurityGroupName: dbName}, function (err, data) {
+    createRdsSecurityGroup({rdsSecurityGroupName: dbName}, (err, data) => {
         if (err) {
             callback({message: err.message}, null);
         } else {
-            var rdsSecurityGroupId = data.rdsSecurityGroupId;
+            const rdsSecurityGroupId = data.rdsSecurityGroupId;
 
             if (!rdsSecurityGroupId) {
                 callback(null, {message: 'Database ' + dbName + ' already exists'});
             } else {
-                authorizeSecurityGroupIngress({rdsSecurityGroupId: rdsSecurityGroupId}, function (err) {
+                authorizeSecurityGroupIngress({rdsSecurityGroupId: rdsSecurityGroupId}, (err) => {
                     if (err) {
                         callback({message: err.message}, null);
                     } else {
@@ -48,15 +48,15 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
 };
 
 Rds.prototype.createDatabaseUrl = function createDatabaseUrl(params, callback) {
-    var rds = new aws.RDS(),
+    const rds = new aws.RDS(),
         dbName = params.dbName,
         dbEngine = params.dbEngine;
 
-    rds.waitFor('dBInstanceAvailable', {DBInstanceIdentifier: dbName}, function (err, data) {
+    rds.waitFor('dBInstanceAvailable', {DBInstanceIdentifier: dbName}, (err, data) => {
         if (err) {
             callback(err, null);
         } else {
-            var dbEndpoint = data.DBInstances[0].Endpoint,
+            const dbEndpoint = data.DBInstances[0].Endpoint,
                 dbUrl = 'jdbc:' + dbEngine + '://' + dbEndpoint.Address + ':' + dbEndpoint.Port + '/' + dbName,
                 message = 'Database available at ' + dbUrl;
             callback(null, {message: message, dbUrl: dbUrl});
@@ -65,14 +65,14 @@ Rds.prototype.createDatabaseUrl = function createDatabaseUrl(params, callback) {
 };
 
 function createRdsSecurityGroup(params, callback) {
-    var ec2 = new aws.EC2();
+    const ec2 = new aws.EC2();
 
-    var securityGroupParams = {
+    const securityGroupParams = {
         Description: 'Enable database access to Beanstalk application',
         GroupName: params.rdsSecurityGroupName
     };
 
-    ec2.createSecurityGroup(securityGroupParams, function (err, data) {
+    ec2.createSecurityGroup(securityGroupParams, (err, data) => {
         if (err && err.code === 'InvalidGroup.Duplicate') {
             callback(null, {message: 'Security group ' + params.rdsSecurityGroupName + ' already exists'});
         } else if (err) {
@@ -84,9 +84,9 @@ function createRdsSecurityGroup(params, callback) {
 }
 
 function authorizeSecurityGroupIngress(params, callback) {
-    var ec2 = new aws.EC2();
+    const ec2 = new aws.EC2();
 
-    var securityGroupParams = {
+    const securityGroupParams = {
         GroupId: params.rdsSecurityGroupId,
         IpProtocol: 'tcp',
         FromPort: 0,
@@ -94,7 +94,7 @@ function authorizeSecurityGroupIngress(params, callback) {
         CidrIp: '0.0.0.0/0'
     };
 
-    ec2.authorizeSecurityGroupIngress(securityGroupParams, function (err) {
+    ec2.authorizeSecurityGroupIngress(securityGroupParams, (err) => {
         if (err) {
             callback(err, null);
         } else {
@@ -104,9 +104,9 @@ function authorizeSecurityGroupIngress(params, callback) {
 }
 
 function createDbInstance(params, callback) {
-    var rds = new aws.RDS();
+    const rds = new aws.RDS();
 
-    var dbInstanceParams = {
+    const dbInstanceParams = {
         AllocatedStorage: 5,
         DBInstanceClass: params.dbInstanceClass,
         DBInstanceIdentifier: params.dbName,
@@ -119,7 +119,7 @@ function createDbInstance(params, callback) {
         Iops: 0
     };
 
-    rds.createDBInstance(dbInstanceParams, function (err) {
+    rds.createDBInstance(dbInstanceParams, (err) => {
         if (err && err.code === 'DBInstanceAlreadyExists') {
             callback(null, {message: 'Database already exists'});
         } else if (err) {
