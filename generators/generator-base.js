@@ -1,19 +1,19 @@
 'use strict';
-var path = require('path'),
-    util = require('util'),
-    _ = require('lodash'),
-    generator = require('yeoman-generator'),
-    chalk = require('chalk'),
-    jhipsterUtils = require('./util'),
-    Insight = require('insight'),
-    fs = require('fs'),
-    shelljs = require('shelljs'),
-    packagejs = require('../package.json'),
-    semver = require('semver'),
-    exec = require('child_process').exec,
-    os = require('os'),
-    https = require('https'),
-    pluralize = require('pluralize');
+const path = require('path');
+const util = require('util');
+const _ = require('lodash');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const jhipsterUtils = require('./util');
+const Insight = require('insight');
+const fs = require('fs');
+const shelljs = require('shelljs');
+const packagejs = require('../package.json');
+const semver = require('semver');
+const exec = require('child_process').exec;
+const os = require('os');
+const https = require('https');
+const pluralize = require('pluralize');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
@@ -34,27 +34,6 @@ function Generator() {
 util.inherits(Generator, generator);
 
 /**
- * Utility function to use templates.
- *
- * @param {string} template - Template file.
- * @param {string} destination - The resulting file.
- */
-Generator.prototype.template = function (template, destination, generator, options) {
-    var _this = generator || this;
-    _this.fs.copyTpl(_this.templatePath(template), _this.destinationPath(destination), _this);
-};
-
-/**
- * Utility function to copy files.
- *
- * @param {string} source - Original file.
- * @param {string} destination - The resulting file.
- */
-Generator.prototype.copy = function (source, destination) {
-    this.fs.copy(this.templatePath(source), this.destinationPath(destination));
-};
-
-/**
  * Add a new menu element, at the root of the menu.
  *
  * @param {string} routerName - The name of the AngularJS router that is added to the menu.
@@ -63,8 +42,8 @@ Generator.prototype.copy = function (source, destination) {
  * @param {string} clientFramework - The name of the client framework
  */
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation, clientFramework) {
+    let navbarPath;
     try {
-        var navbarPath;
         if (clientFramework === 'angular1') {
             navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
             jhipsterUtils.rewriteFile({
@@ -93,7 +72,6 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             }, this);
         }
 
-
     } catch (e) {
         this.log(chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
@@ -108,8 +86,8 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  * @param {string} clientFramework - The name of the client framework
  */
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation, clientFramework) {
+    let navbarAdminPath;
     try {
-        var navbarAdminPath;
         if (clientFramework === 'angular1') {
             navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         } else {
@@ -139,8 +117,8 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  * @param {string} clientFramework - The name of the client framework
  */
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation, clientFramework) {
+    let entityMenuPath;
     try {
-        var entityMenuPath;
         if (clientFramework === 'angular1') {
             entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
             jhipsterUtils.rewriteFile({
@@ -180,12 +158,12 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation, c
  * @param {string} clientFramework - The name of the client framework
  */
 Generator.prototype.addEntityToModule = function (entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
+    const entityModulePath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
     try {
         if (clientFramework === 'angular1') {
             return;
         }
-        var appName = this.getAngular2AppName();
-        var entityModulePath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
+        const appName = this.getAngular2AppName();
 
         jhipsterUtils.rewriteFile({
             file: entityModulePath,
@@ -219,7 +197,7 @@ Generator.prototype.addEntityToModule = function (entityInstance, entityClass, e
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addElementTranslationKey = function (key, value, language) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -241,7 +219,7 @@ Generator.prototype.addElementTranslationKey = function (key, value, language) {
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addAdminElementTranslationKey = function (key, value, language) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -263,7 +241,7 @@ Generator.prototype.addAdminElementTranslationKey = function (key, value, langua
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addEntityTranslationKey = function (key, value, language) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -285,9 +263,9 @@ Generator.prototype.addEntityTranslationKey = function (key, value, language) {
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addGlobalTranslationKey = function (key, value, language) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+        jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
             jsonObj[key] = value;
         }, this);
     } catch (e) {
@@ -305,9 +283,9 @@ Generator.prototype.addGlobalTranslationKey = function (key, value, language) {
  */
 Generator.prototype.addTranslationKeyToAllLanguages = function (key, value, method, enableTranslation) {
     if (enableTranslation) {
-        this.getAllInstalledLanguages().forEach(function (language) {
+        this.getAllInstalledLanguages().forEach((language) => {
             this[method](key, value, language);
-        }, this);
+        });
     }
 };
 
@@ -315,10 +293,10 @@ Generator.prototype.addTranslationKeyToAllLanguages = function (key, value, meth
  * get all the languages installed currently
  */
 Generator.prototype.getAllInstalledLanguages = function () {
-    var languages = [];
-    this.getAllSupportedLanguages().forEach(function (language) {
+    let languages = [];
+    this.getAllSupportedLanguages().forEach((language) => {
         try {
-            var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
+            const stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
             if (stats.isDirectory()) {
                 languages.push(language);
             }
@@ -393,10 +371,10 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
  * @param {string} comment - url of how to configure the social service
  */
 Generator.prototype.addSocialConfiguration = function (name, clientId, clientSecret, comment) {
-    var fullPath = SERVER_MAIN_RES_DIR + 'config/application.yml';
+    const fullPath = SERVER_MAIN_RES_DIR + 'config/application.yml';
     try {
         this.log(chalk.yellow('   update ') + fullPath);
-        var config = '';
+        let config = '';
         if (comment) {
             config += '# ' + comment + '\n        ';
         }
@@ -422,9 +400,9 @@ Generator.prototype.addSocialConfiguration = function (name, clientId, clientSec
  * @param {string} version - dependency version
  */
 Generator.prototype.addBowerDependency = function (name, version) {
-    var fullPath = 'bower.json';
+    const fullPath = 'bower.json';
     try {
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+        jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
             jsonObj.dependencies[name] = version;
         }, this);
     } catch (e) {
@@ -443,10 +421,10 @@ Generator.prototype.addBowerDependency = function (name, version) {
  *
  */
 Generator.prototype.addBowerOverride = function (bowerPackageName, main, isIgnored, dependencies) {
-    var fullPath = 'bower.json';
+    const fullPath = 'bower.json';
     try {
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
-            var override = {};
+        jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
+            const override = {};
             if (main !== undefined && main.length > 0) {
                 override['main'] = main;
             }
@@ -473,10 +451,10 @@ Generator.prototype.addBowerOverride = function (bowerPackageName, main, isIgnor
  * @param {string, obj, bool, etc.} value - value of the parameter
  */
 Generator.prototype.addBowerrcParameter = function (key, value) {
-    var fullPath = '.bowerrc';
+    const fullPath = '.bowerrc';
     try {
         this.log(chalk.yellow('   update ') + fullPath);
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+        jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
             jsonObj[key] = value;
         }, this);
     } catch (e) {
@@ -491,9 +469,9 @@ Generator.prototype.addBowerrcParameter = function (key, value) {
  * @param {string} version - dependency version
  */
 Generator.prototype.addNpmDependency = function (name, version) {
-    var fullPath = 'package.json';
+    const fullPath = 'package.json';
     try {
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+        jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
             jsonObj.dependencies[name] = version;
         }, this);
     } catch (e) {
@@ -509,9 +487,9 @@ Generator.prototype.addNpmDependency = function (name, version) {
  * @param {string} version - devDependency version
  */
 Generator.prototype.addNpmDevDependency = function (name, version) {
-    var fullPath = 'package.json';
+    const fullPath = 'package.json';
     try {
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+        jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
             jsonObj.devDependencies[name] = version;
         }, this);
     } catch (e) {
@@ -527,9 +505,9 @@ Generator.prototype.addNpmDevDependency = function (name, version) {
  * @param {string} data - script version
  */
 Generator.prototype.addNpmScript = function (name, data) {
-    var fullPath = 'package.json';
+    const fullPath = 'package.json';
     try {
-        jhipsterUtils.rewriteJSONFile(fullPath, function (jsonObj) {
+        jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
             jsonObj.scripts[name] = data;
         }, this);
     } catch (e) {
@@ -545,7 +523,7 @@ Generator.prototype.addNpmScript = function (name, data) {
  *
  */
 Generator.prototype.addAngularJsModule = function (moduleName) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.module.js';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.module.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -566,7 +544,7 @@ Generator.prototype.addAngularJsModule = function (moduleName) {
  *
  */
 Generator.prototype.addAngularJsInterceptor = function (interceptorName) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/blocks/config/http.config.js';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'app/blocks/config/http.config.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -590,8 +568,8 @@ Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
     // Add the entity to ehcache
     this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName()`);
     // Add the collections linked to that entity to ehcache
-    for (var idx in relationships) {
-        var relationshipType = relationships[idx].relationshipType;
+    for (const idx in relationships) {
+        const relationshipType = relationships[idx].relationshipType;
         if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
             this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName() + ".${relationships[idx].relationshipFieldNamePlural}"`);
         }
@@ -605,7 +583,7 @@ Generator.prototype.addEntityToEhcache = function (entityClass, relationships) {
  */
 Generator.prototype.addEntryToEhcache = function (entry) {
     try {
-        var ehcachePath = SERVER_MAIN_SRC_DIR + `${this.packageFolder}/config/CacheConfiguration.java`;
+        const ehcachePath = SERVER_MAIN_SRC_DIR + `${this.packageFolder}/config/CacheConfiguration.java`;
         jhipsterUtils.rewriteFile({
             file: ehcachePath,
             needle: 'jhipster-needle-ehcache-add-entry',
@@ -642,8 +620,8 @@ Generator.prototype.addConstraintsChangelogToLiquibase = function (changelogName
  * @param {string} needle - The needle at where it has to be added.
  */
 Generator.prototype.addLiquibaseChangelogToMaster = function (changelogName, needle) {
+    const fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
     try {
-        var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: needle,
@@ -686,8 +664,9 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  * @param {string} clientFramework - The name of the client framework
  */
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor, clientFramework) {
-    var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
-    var loginfullPath, registerfullPath;
+    const socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
+    let loginfullPath;
+    let registerfullPath;
     if (clientFramework === 'angular1') {
         loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
         registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
@@ -697,7 +676,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
     }
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
-        var serviceCode = `case '${socialName}': return '${socialParameter}';`;
+        const serviceCode = `case '${socialName}': return '${socialParameter}';`;
         jhipsterUtils.rewriteFile({
             file: socialServicefullPath,
             needle: 'jhipster-needle-add-social-button',
@@ -706,7 +685,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
             ]
         }, this);
 
-        var buttonCode = `<jh-social ng-provider="${socialName}"></jh-social>`;
+        const buttonCode = `<jh-social ng-provider="${socialName}"></jh-social>`;
         this.log(chalk.yellow('update ') + loginfullPath);
         jhipsterUtils.rewriteFile({
             file: loginfullPath,
@@ -724,7 +703,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
             ]
         }, this);
 
-        var buttonStyle = `.jh-btn-${socialName} {
+        const buttonStyle = `.jh-btn-${socialName} {
                  background-color: ${buttonColor};
                  border-color: rgba(0, 0, 0, 0.2);
                  color: #fff;
@@ -744,17 +723,17 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
 /**
  * Add a new social connection factory in the SocialConfiguration.java file.
  *
- * @param {string} javaDir - default java directory of the project (JHipster var)
+ * @param {string} javaDir - default java directory of the project (JHipster const)
  * @param {string} importPackagePath - package path of the ConnectionFactory class
  * @param {string} socialName - name of the social module
  * @param {string} connectionFactoryClassName - name of the ConnectionFactory class
  * @param {string} configurationName - name of the section in the config yaml file
  */
 Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackagePath, socialName, connectionFactoryClassName, configurationName) {
-    var fullPath = javaDir + 'config/social/SocialConfiguration.java';
+    const fullPath = javaDir + 'config/social/SocialConfiguration.java';
     try {
         this.log(chalk.yellow('\nupdate ') + fullPath);
-        var javaImport = 'import ' + importPackagePath + ';\n';
+        const javaImport = 'import ' + importPackagePath + ';\n';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-social-connection-factory-import-package',
@@ -763,9 +742,9 @@ Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackag
             ]
         }, this);
 
-        var clientId = socialName + 'ClientId';
-        var clientSecret = socialName + 'ClientSecret';
-        var javaCode = '// ' + socialName + ' configuration\n' +
+        const clientId = socialName + 'ClientId';
+        const clientSecret = socialName + 'ClientSecret';
+        const javaCode = '// ' + socialName + ' configuration\n' +
             '        String ' + clientId + ' = environment.getProperty("spring.social.' + configurationName + '.clientId");\n' +
             '        String ' + clientSecret + ' = environment.getProperty("spring.social.' + configurationName + '.clientSecret");\n' +
             '        if (' + clientId + ' != null && ' + clientSecret + ' != null) {\n' +
@@ -816,8 +795,8 @@ Generator.prototype.addMainCSSStyle = function (isUseSass, style, comment) {
         this.addMainSCSSStyle(style, comment);
     }
 
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'content/css/main.css';
-    var styleBlock = '';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'content/css/main.css';
+    let styleBlock = '';
     if (comment) {
         styleBlock += '/* ==========================================================================\n';
         styleBlock += comment + '\n';
@@ -858,8 +837,8 @@ Generator.prototype.addMainCSSStyle = function (isUseSass, style, comment) {
  *
  */
 Generator.prototype.addMainSCSSStyle = function (style, comment) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'scss/main.scss';
-    var styleBlock = '';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'scss/main.scss';
+    let styleBlock = '';
     if (comment) {
         styleBlock += '/* ==========================================================================\n';
         styleBlock += comment + '\n';
@@ -888,9 +867,9 @@ Generator.prototype.addMainSCSSStyle = function (style, comment) {
  * @param {string} other - explicit other thing: scope, exclusions...
  */
 Generator.prototype.addMavenDependency = function (groupId, artifactId, version, other) {
+    const fullPath = 'pom.xml';
     try {
-        var fullPath = 'pom.xml';
-        var dependency = '<dependency>\n' +
+        let dependency = '<dependency>\n' +
             '            <groupId>' + groupId + '</groupId>\n' +
             '            <artifactId>' + artifactId + '</artifactId>\n';
         if (version) {
@@ -921,9 +900,9 @@ Generator.prototype.addMavenDependency = function (groupId, artifactId, version,
  * @param {string} other - explicit other thing: executions, configuration...
  */
 Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, other) {
+    const fullPath = 'pom.xml';
     try {
-        var fullPath = 'pom.xml';
-        var plugin = '<plugin>\n' +
+        let plugin = '<plugin>\n' +
             '                <groupId>' + groupId + '</groupId>\n' +
             '                <artifactId>' + artifactId + '</artifactId>\n';
         if (version) {
@@ -953,8 +932,8 @@ Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, oth
  * @param {string} version - explicit plugin version number
  */
 Generator.prototype.addGradlePlugin = function (group, name, version) {
+    const fullPath = 'build.gradle';
     try {
-        var fullPath = 'build.gradle';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-gradle-buildscript-dependency',
@@ -976,8 +955,8 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
  * @param {string} version - explicit version number
  */
 Generator.prototype.addGradleDependency = function (scope, group, name, version) {
+    const fullPath = 'build.gradle';
     try {
-        var fullPath = 'build.gradle';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-gradle-dependency',
@@ -996,8 +975,8 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
  * @param {string} name - name of the file to apply from, must be 'fileName.gradle'
  */
 Generator.prototype.applyFromGradleScript = function (name) {
+    const fullPath = 'build.gradle';
     try {
-        var fullPath = 'build.gradle';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-gradle-apply-from',
@@ -1014,26 +993,26 @@ Generator.prototype.applyFromGradleScript = function (name) {
  * Generate a date to be used by Liquibase changelogs.
  */
 Generator.prototype.dateFormatForLiquibase = function () {
-    var now = new Date();
-    var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-    var year = '' + now_utc.getFullYear();
-    var month = '' + (now_utc.getMonth() + 1);
+    const now = new Date();
+    const now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+    const year = '' + now_utc.getFullYear();
+    let month = '' + (now_utc.getMonth() + 1);
     if (month.length === 1) {
         month = '0' + month;
     }
-    var day = '' + now_utc.getDate();
+    let day = '' + now_utc.getDate();
     if (day.length === 1) {
         day = '0' + day;
     }
-    var hour = '' + now_utc.getHours();
+    let hour = '' + now_utc.getHours();
     if (hour.length === 1) {
         hour = '0' + hour;
     }
-    var minute = '' + now_utc.getMinutes();
+    let minute = '' + now_utc.getMinutes();
     if (minute.length === 1) {
         minute = '0' + minute;
     }
-    var second = '' + now_utc.getSeconds();
+    let second = '' + now_utc.getSeconds();
     if (second.length === 1) {
         second = '0' + second;
     }
@@ -1052,8 +1031,8 @@ Generator.prototype.dateFormatForLiquibase = function () {
  */
 Generator.prototype.copyTemplate = function (source, dest, action, generator, opt, template) {
 
-    var _this = generator || this;
-    var _opt = opt || {};
+    const _this = generator || this;
+    const _opt = opt || {};
     let regex;
     switch (action) {
     case 'stripHtml' :
@@ -1063,6 +1042,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
             /( translate-compile)/,                                                         // translate-compile
             /( translate-value-max\="[0-9\{\}\(\)\|]*")/,                                   // translate-value-max
         ].map(r => r.source).join('|'), 'g');
+
         jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
         break;
     case 'stripJs' :
@@ -1073,6 +1053,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, generator, op
             /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?\:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
             /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'\"a-zA-Z0-9\-_,\s]+\]\)\;[\s]*)/,// jhiLanguageService invocations
         ].map(r => r.source).join('|'), 'g');
+
         jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
         break;
     case 'copy' :
@@ -1162,12 +1143,12 @@ Generator.prototype.replaceContent = function (filePath, pattern, content, regex
  */
 Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
     try {
-        var modules;
-        var error, duplicate;
-        var moduleName = _.startCase(npmPackageName.replace(GENERATOR_JHIPSTER + '-', ''));
-        var generatorName = npmPackageName.replace('generator-', '');
-        var generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app');
-        var moduleConfig = {
+        let modules;
+        let error, duplicate;
+        const moduleName = _.startCase(npmPackageName.replace(GENERATOR_JHIPSTER + '-', ''));
+        const generatorName = npmPackageName.replace('generator-', '');
+        const generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app');
+        const moduleConfig = {
             name: moduleName + ' generator',
             npmPackageName: npmPackageName,
             description: description ? description : 'A JHipster module to generate ' + moduleName,
@@ -1202,7 +1183,7 @@ Generator.prototype.registerModule = function (npmPackageName, hookFor, hookType
 Generator.prototype.updateEntityConfig = function (file, key, value) {
 
     try {
-        var entityJson = this.fs.readJSON(file);
+        const entityJson = this.fs.readJSON(file);
         entityJson[key] = value;
         this.fs.writeJSON(file, entityJson, null, 4);
     } catch (err) {
@@ -1215,7 +1196,7 @@ Generator.prototype.updateEntityConfig = function (file, key, value) {
  * get the module hooks config json
  */
 Generator.prototype.getModuleHooks = function () {
-    var modulesConfig = [];
+    let modulesConfig = [];
     try {
         if (shelljs.test('-f', MODULES_HOOK_FILE)) {
             modulesConfig = this.fs.readJSON(MODULES_HOOK_FILE);
@@ -1234,9 +1215,9 @@ Generator.prototype.getModuleHooks = function () {
  * @param options : the options to pass to the hooks
  */
 Generator.prototype.callHooks = function(hookFor, hookType, options) {
-    var modules = this.getModuleHooks();
+    const modules = this.getModuleHooks();
     // run through all module hooks, which matches the hookFor and hookType
-    modules.forEach(function (module) {
+    modules.forEach((module) => {
         if (module.hookFor === hookFor && module.hookType === hookType) {
             // compose with the modules callback generator
             try {
@@ -1248,7 +1229,7 @@ Generator.prototype.callHooks = function(hookFor, hookType, options) {
                     chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
             }
         }
-    }, this);
+    });
 };
 
 /**
@@ -1271,17 +1252,17 @@ Generator.prototype.getEntityJson = function (file) {
  * get sorted list of entities according to changelog date (i.e. the order in which they were added)
  */
 Generator.prototype.getExistingEntities = function () {
-    var entities = [];
+    const entities = [];
 
     function isBefore(e1, e2) {
         return e1.definition.changelogDate - e2.definition.changelogDate;
     }
 
     if (shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
-        shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach(function (file) {
-            var definition = this.fs.readJSON(file);
+        shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach((file) => {
+            const definition = this.fs.readJSON(file);
             entities.push({name: path.basename(file, '.json'), definition: definition});
-        }, this);
+        });
     }
 
     return entities.sort(isBefore);
@@ -1296,7 +1277,7 @@ Generator.prototype.getExistingEntities = function () {
  * @param {string} lang - language for which file needs to be copied
  */
 Generator.prototype.copyI18nFilesByName = function (generator, webappDir, fileToCopy, lang) {
-    var _this = generator || this;
+    const _this = generator || this;
     _this.copy(`${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
 };
 
@@ -1306,7 +1287,7 @@ Generator.prototype.copyI18nFilesByName = function (generator, webappDir, fileTo
  * @param {string} version - A valid semver version string
  */
 Generator.prototype.isJhipsterVersionLessThan = function (version) {
-    var jhipsterVersion = this.config.get('jhipsterVersion');
+    const jhipsterVersion = this.config.get('jhipsterVersion');
     if (!jhipsterVersion) {
         return true;
     }
@@ -1332,7 +1313,7 @@ Generator.prototype.gitExec = function (args, options, callback) {
     if (!Array.isArray(args)) {
         args = [args];
     }
-    var command = 'git ' + args.join(' ');
+    const command = 'git ' + args.join(' ');
     shelljs.exec(command, options, callback);
 };
 
@@ -1371,8 +1352,8 @@ Generator.prototype.getPluralColumnName = function (value) {
  * @param {string} prodDatabaseType - database type
  */
 Generator.prototype.getJoinTableName = function (entityName, relationshipName, prodDatabaseType) {
-    var joinTableName = this.getTableName(entityName) + '_'+ this.getTableName(relationshipName);
-    var limit = 0;
+    const joinTableName = this.getTableName(entityName) + '_'+ this.getTableName(relationshipName);
+    let limit = 0;
     if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
         this.warning(`The generated join table "${ joinTableName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
@@ -1383,9 +1364,9 @@ Generator.prototype.getJoinTableName = function (entityName, relationshipName, p
         limit = 64;
     }
     if (limit > 0) {
-        var halfLimit = Math.floor(limit/2),
-            entityTable = _.snakeCase(this.getTableName(entityName).substring(0, halfLimit)),
-            relationTable = _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+        const halfLimit = Math.floor(limit/2);
+        const entityTable = _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
+        const relationTable = _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}`;
     }
     return joinTableName;
@@ -1400,13 +1381,13 @@ Generator.prototype.getJoinTableName = function (entityName, relationshipName, p
  * @param {boolean} noSnakeCase - do not convert names to snakecase
  */
 Generator.prototype.getConstraintName = function (entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-    var constraintName;
+    let constraintName;
     if (noSnakeCase) {
         constraintName = `fk_${entityName}_${relationshipName}_id`;
     } else {
         constraintName = `fk_${this.getTableName(entityName)}_${this.getTableName(relationshipName)}_id`;
     }
-    var limit = 0;
+    let limit = 0;
 
     if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
         this.warning(`The generated constraint name "${ constraintName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
@@ -1418,9 +1399,9 @@ Generator.prototype.getConstraintName = function (entityName, relationshipName, 
         limit = 62;
     }
     if (limit > 0) {
-        var halfLimit = Math.floor(limit/2),
-            entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : _.snakeCase(this.getTableName(entityName).substring(0, halfLimit)),
-            relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+        const halfLimit = Math.floor(limit/2);
+        const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
+        const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
         return `${entityTable}_${relationTable}_id`;
     }
     return constraintName;
@@ -1453,9 +1434,8 @@ Generator.prototype.generateKeyStore = function() {
         this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
     } else {
         shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
-        var parent = this;
-        var javaHome = shelljs.env['JAVA_HOME'];
-        var keytoolPath = '';
+        const javaHome = shelljs.env['JAVA_HOME'];
+        let keytoolPath = '';
         if (javaHome) {
             keytoolPath = javaHome + '/bin/';
         }
@@ -1467,11 +1447,11 @@ Generator.prototype.generateKeyStore = function() {
             '-keypass password ' +
             '-keysize 2048 ' +
             `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
-        , function(code) {
+        , (code) => {
             if (code !== 0) {
-                parent.error('\nFailed to create a KeyStore with \'keytool\'', code);
+                this.error('\nFailed to create a KeyStore with \'keytool\'', code);
             } else {
-                parent.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+                this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
             }
         });
     }
@@ -1500,8 +1480,8 @@ Generator.prototype.printJHipsterLogo = function () {
  */
 Generator.prototype.checkForNewVersion = function () {
     try {
-        var done = this.async();
-        shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, function (code, stdout, stderr) {
+        const done = this.async();
+        shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, (code, stdout, stderr) => {
             if (!stderr && semver.lt(packagejs.version, stdout)) {
                 this.log(
                     chalk.yellow(' ______________________________________________________________________________\n\n') +
@@ -1515,7 +1495,7 @@ Generator.prototype.checkForNewVersion = function () {
                 this.log(chalk.yellow(' ______________________________________________________________________________\n'));
             }
             done();
-        }.bind(this));
+        });
     } catch (err) {
         // fail silently as this function doesnt affect normal generator flow
     }
@@ -1540,8 +1520,8 @@ Generator.prototype.getAngular2AppName = function () {
  */
 Generator.prototype.getMainClassName = function () {
 
-    var main = _.upperFirst(this.getAngularAppName());
-    var acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
+    const main = _.upperFirst(this.getAngularAppName());
+    const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
     return acceptableForJava.test(main) ? main : 'Application';
 };
@@ -1553,9 +1533,9 @@ Generator.prototype.getMainClassName = function () {
  */
 Generator.prototype.askModuleName = function (generator) {
 
-    var done = generator.async();
-    var defaultAppBaseName = this.getDefaultAppName();
-    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    const done = generator.async();
+    const defaultAppBaseName = this.getDefaultAppName();
+    const getNumberedQuestion = this.getNumberedQuestion.bind(this);
     generator.prompt({
         type: 'input',
         name: 'baseName',
@@ -1586,11 +1566,11 @@ Generator.prototype.askModuleName = function (generator) {
  */
 Generator.prototype.aski18n = function (generator) {
 
-    var languageOptions = this.getAllSupportedLanguageOptions();
-    var getNumberedQuestion = this.getNumberedQuestion.bind(this);
+    const languageOptions = this.getAllSupportedLanguageOptions();
+    const getNumberedQuestion = this.getNumberedQuestion.bind(this);
 
-    var done = generator.async();
-    var prompts = [
+    const done = generator.async();
+    const prompts = [
         {
             type: 'confirm',
             name: 'enableTranslation',
@@ -1643,9 +1623,9 @@ Generator.prototype.aski18n = function (generator) {
 Generator.prototype.composeLanguagesSub = function (generator, configOptions, type) {
     if (generator.enableTranslation) {
         // skip server if app type is client
-        var skipServer = type && type === 'client';
+        const skipServer = type && type === 'client';
         // skip client if app type is server
-        var skipClient = type && type === 'server';
+        const skipClient = type && type === 'server';
         generator.composeWith(require.resolve('./languages'), {
             'skip-install': true,
             'skip-server': skipServer,
@@ -1664,7 +1644,7 @@ Generator.prototype.composeLanguagesSub = function (generator, configOptions, ty
  * @param {boolean} cond - increment question
  */
 Generator.prototype.getNumberedQuestion = function (msg, cond) {
-    var order;
+    let order;
     if (cond) {
         ++this.currentQuestion;
     }
@@ -1680,7 +1660,7 @@ Generator.prototype.getNumberedQuestion = function (msg, cond) {
  * @param {Function} cb - callback when build is complete
  */
 Generator.prototype.buildApplication = function (buildTool, profile, cb) {
-    var buildCmd = 'mvnw package -DskipTests=true -B';
+    let buildCmd = 'mvnw package -DskipTests=true -B';
 
     if (buildTool === 'gradle') {
         buildCmd = 'gradlew bootRepackage -x test';
@@ -1690,7 +1670,7 @@ Generator.prototype.buildApplication = function (buildTool, profile, cb) {
         buildCmd = './' + buildCmd;
     }
     buildCmd += ' -P' + profile;
-    var child = {};
+    const child = {};
     child.stdout = exec(buildCmd, cb).stdout;
     child.buildCmd = buildCmd;
 
@@ -1785,7 +1765,7 @@ Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDi
 Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
     let generator = _this || this;
     // Template the message server side properties
-    var langProp = lang.replace(/-/g, '_');
+    const langProp = lang.replace(/-/g, '_');
     generator.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`);
 
 };
@@ -1810,11 +1790,11 @@ Generator.prototype.copyEnumI18n = function (language, enumInfo , prefix) {
 };
 
 Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
     try {
-        var content = '.constant(\'LANGUAGES\', [\n';
-        for (var i = 0, len = languages.length; i < len; i++) {
-            var language = languages[i];
+        let content = '.constant(\'LANGUAGES\', [\n';
+        for (let i = 0, len = languages.length; i < len; i++) {
+            const language = languages[i];
             content += '            \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
         }
         content +=
@@ -1832,11 +1812,11 @@ Generator.prototype.updateLanguagesInLanguageConstant = function (languages) {
 };
 
 Generator.prototype.updateLanguagesInLanguageConstantNG2 = function (languages) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/shared/language/language.constants.ts';
+    const fullPath = CLIENT_MAIN_SRC_DIR + 'app/shared/language/language.constants.ts';
     try {
-        var content = 'export const LANGUAGES: string[] = [\n';
-        for (var i = 0, len = languages.length; i < len; i++) {
-            var language = languages[i];
+        let content = 'export const LANGUAGES: string[] = [\n';
+        for (let i = 0, len = languages.length; i < len; i++) {
+            const language = languages[i];
             content += '    \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
         }
         content +=
@@ -1854,7 +1834,7 @@ Generator.prototype.updateLanguagesInLanguageConstantNG2 = function (languages) 
 };
 
 Generator.prototype.insight = function () {
-    var insight = new Insight({
+    const insight = new Insight({
         trackingCode: 'UA-46075199-2',
         packageName: packagejs.name,
         packageVersion: packagejs.version
@@ -1900,9 +1880,9 @@ Generator.prototype.formatAsFieldJavadoc = function (text) {
 };
 
 Generator.prototype.formatAsApiDescription = function (text) {
-    var rows = text.split('\n');
-    var description = rows[0];
-    for (var i = 1; i < rows.length; i++) {
+    const rows = text.split('\n');
+    let description = rows[0];
+    for (let i = 1; i < rows.length; i++) {
         // discard empty rows
         if (rows[i] === '') {
             continue;
@@ -1938,9 +1918,9 @@ Generator.prototype.isSignedDecimalNumber = function (input) {
 };
 
 Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
-    var signed = isSigned ? '(\\-|\\+)?' : '';
-    var decimal = isDecimal ? '(\\.[0-9]+)?' : '';
-    var regex = new RegExp('^' + signed + '([0-9]+' + decimal + ')$');
+    const signed = isSigned ? '(\\-|\\+)?' : '';
+    const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
+    const regex = new RegExp('^' + signed + '([0-9]+' + decimal + ')$');
 
     if (regex.test(input)) return Number(input);
 
@@ -1976,7 +1956,7 @@ Generator.prototype.getOptionFromArray = function (array, option) {
  * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
  */
 Generator.prototype.hibernateSnakeCase = function (value) {
-    var res = '';
+    let res = '';
     if (value) {
         value = value.replace('.', '_');
         res = value[0];
@@ -2007,7 +1987,7 @@ Generator.prototype.contains = _.includes;
  */
 Generator.prototype.httpsGet = function(url, onSuccess, onFail) {
     https.get(url, function(res) {
-        var body = '';
+        let body = '';
         res.on('data', function(chunk) {
             body += chunk;
         });
@@ -2039,9 +2019,10 @@ Generator.prototype.stripMargin = function(content) {
  * @param {string} template - Template file.
  * @param {string} destination - The resulting file.
  */
-Generator.prototype.template = function (template, destination, generator, options) {
+Generator.prototype.template = function (template, destination, generator, options, context) {
     const _this = generator || this;
-    _this.fs.copyTpl(_this.templatePath(template), _this.destinationPath(destination), _this, options);
+    const _context = context || _this;
+    _this.fs.copyTpl(_this.templatePath(template), _this.destinationPath(destination), _context, options);
 };
 
 /**

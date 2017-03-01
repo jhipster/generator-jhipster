@@ -329,30 +329,33 @@ function writeFiles() {
         },
 
         writeEnumFiles: function() {
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
+            for (let idx in this.fields) {
+                const field = this.fields[idx];
                 if (field.fieldIsEnum === true) {
-                    var fieldType = field.fieldType;
-                    var enumInfo = this;
-                    enumInfo.enumName = fieldType;
-                    enumInfo.enumValues = field.fieldValues;
-                    field.enumInstance = _.lowerFirst(enumInfo.enumName);
-                    enumInfo.enumInstance = field.enumInstance;
-                    enumInfo.angularAppName = this.angularAppName;
-                    enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
+                    const fieldType = field.fieldType;
+                    field.enumInstance = _.lowerFirst(fieldType);
+                    const enumInfo = {
+                        enumName: fieldType,
+                        enumValues: field.fieldValues,
+                        enumInstance: field.enumInstance,
+                        angularAppName: this.angularAppName,
+                        enums: field.fieldValues.replace(/\s/g, '').split(','),
+                        packageName: this.packageName
+                    };
                     if (!this.skipServer) {
                         this.template(
                             `${SERVER_TEMPLATES_DIR}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/_Enum.java`,
-                            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`, enumInfo
+                            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
+                            this, {}, enumInfo
                         );
                     }
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
-                        var languages = this.languages || this.getAllInstalledLanguages();
-                        languages.forEach(function (language) {
+                        const languages = this.languages || this.getAllInstalledLanguages();
+                        languages.forEach(language => {
                             this.copyEnumI18n(language, enumInfo, CLIENT_I18N_TEMPLATES_DIR);
-                        }, this);
+                        });
                     }
 
                 }
