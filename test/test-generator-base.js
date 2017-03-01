@@ -6,135 +6,135 @@ const assert = require('assert'),
     expectedFiles = require('./test-expected-files'),
     Generator = require('../generators/generator-base');
 
-Generator.prototype.log = function (msg) {console.log(msg);};
+Generator.prototype.log = (msg) => {console.log(msg);};
 
-describe('Generator Base', function () {
-    describe('getAllSupportedLanguages', function () {
-        describe('when called', function () {
-            it('returns an array', function () {
+describe('Generator Base', () => {
+    describe('getAllSupportedLanguages', () => {
+        describe('when called', () => {
+            it('returns an array', () => {
                 assert.notEqual(Generator.prototype.getAllSupportedLanguages().length, 0);
             });
         });
     });
-    describe('isSupportedLanguage', function () {
-        describe('when called with valid language', function () {
-            it('returns true', function () {
+    describe('isSupportedLanguage', () => {
+        describe('when called with valid language', () => {
+            it('returns true', () => {
                 assert.equal(Generator.prototype.isSupportedLanguage('en'), true);
             });
         });
-        describe('when called with invalid language', function () {
-            it('returns false', function () {
+        describe('when called with invalid language', () => {
+            it('returns false', () => {
                 assert.equal(Generator.prototype.isSupportedLanguage('ab'), false);
             });
         });
     });
-    describe('getAllSupportedLanguageOptions', function () {
-        describe('when called', function () {
-            it('returns an array', function () {
+    describe('getAllSupportedLanguageOptions', () => {
+        describe('when called', () => {
+            it('returns an array', () => {
                 assert.notEqual(Generator.prototype.getAllSupportedLanguages().length, 0);
             });
         });
     });
-    describe('getTableName', function () {
-        describe('when called with a value', function () {
-            it('returns a table name', function () {
+    describe('getTableName', () => {
+        describe('when called with a value', () => {
+            it('returns a table name', () => {
                 assert.equal(Generator.prototype.getTableName('tableName'), 'table_name');
             });
         });
     });
-    describe('getColumnName', function () {
-        describe('when called with a value', function () {
-            it('returns a column name', function () {
+    describe('getColumnName', () => {
+        describe('when called with a value', () => {
+            it('returns a column name', () => {
                 assert.equal(Generator.prototype.getColumnName('colName'), 'col_name');
                 assert.equal(Generator.prototype.getColumnName('colNName'), 'colnname');
             });
         });
     });
-    describe('getPluralColumnName', function () {
-        describe('when called with a value', function () {
-            it('returns a plural column name', function () {
+    describe('getPluralColumnName', () => {
+        describe('when called with a value', () => {
+            it('returns a plural column name', () => {
                 assert.equal(Generator.prototype.getPluralColumnName('colName'), 'col_names');
             });
         });
     });
-    describe('getJoinTableName', function () {
-        describe('when called with a value', function () {
-            it('returns a join table name', function () {
+    describe('getJoinTableName', () => {
+        describe('when called with a value', () => {
+            it('returns a join table name', () => {
                 assert.equal(Generator.prototype.getJoinTableName('entityName', 'relationshipName', 'mysql'), 'entity_name_relationship_name');
             });
         });
-        describe('when called with a long name', function () {
-            it('returns a proper join table name', function () {
+        describe('when called with a long name', () => {
+            it('returns a proper join table name', () => {
                 assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
                 assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle'), 'entity_name_lon_relationship_n');
             });
         });
     });
-    describe('getConstraintName', function () {
-        describe('when called with a value', function () {
-            it('returns a constraint name', function () {
+    describe('getConstraintName', () => {
+        describe('when called with a value', () => {
+            it('returns a constraint name', () => {
                 assert.equal(Generator.prototype.getConstraintName('entityName', 'relationshipName', 'mysql'), 'fk_entity_name_relationship_name_id');
             });
         });
-        describe('when called with a long name', function () {
-            it('returns a proper constraint name', function () {
+        describe('when called with a long name', () => {
+            it('returns a proper constraint name', () => {
                 assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle').length, 30);
                 assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle'), 'entity_name_lo_relationship_id');
             });
         });
     });
-    describe('printJHipsterLogo', function () {
-        describe('when called', function () {
-            it('prints the logo', function () {
+    describe('printJHipsterLogo', () => {
+        describe('when called', () => {
+            it('prints the logo', () => {
                 assert.equal(Generator.prototype.printJHipsterLogo(), undefined);
             });
         });
     });
-    describe('checkForNewVersion', function () {
-        describe('when called', function () {
-            it('prints the new version info', function () {
+    describe('checkForNewVersion', () => {
+        describe('when called', () => {
+            it('prints the new version info', () => {
                 assert.equal(Generator.prototype.checkForNewVersion(), undefined);
             });
         });
     });
-    describe('getAngularAppName', function () {
-        describe('when called with name', function () {
-            it('return the angular app name', function () {
+    describe('getAngularAppName', () => {
+        describe('when called with name', () => {
+            it('return the angular app name', () => {
                 Generator.prototype.baseName = 'myTest';
                 assert.equal(Generator.prototype.getAngularAppName(), 'myTestApp');
             });
         });
-        describe('when called with name having App', function () {
-            it('return the angular app name', function () {
+        describe('when called with name having App', () => {
+            it('return the angular app name', () => {
                 Generator.prototype.baseName = 'myApp';
                 assert.equal(Generator.prototype.getAngularAppName(), 'myApp');
             });
         });
     });
-    describe('getMainClassName', function () {
-        describe('when called with name', function () {
-            it('return the app name', function () {
+    describe('getMainClassName', () => {
+        describe('when called with name', () => {
+            it('return the app name', () => {
                 Generator.prototype.baseName = 'myTest';
                 assert.equal(Generator.prototype.getMainClassName(), 'MyTestApp');
             });
         });
-        describe('when called with name having App', function () {
-            it('return the app name', function () {
+        describe('when called with name having App', () => {
+            it('return the app name', () => {
                 Generator.prototype.baseName = 'myApp';
                 assert.equal(Generator.prototype.getMainClassName(), 'MyApp');
             });
         });
-        describe('when called with name having invalid java chars', function () {
-            it('return the default app name', function () {
+        describe('when called with name having invalid java chars', () => {
+            it('return the default app name', () => {
                 Generator.prototype.baseName = '9myApp';
                 assert.equal(Generator.prototype.getMainClassName(), 'Application');
             });
         });
     });
 
-    describe('writeFilesToDisk', function () {
-        describe('when called with default angular client options', function () {
-            it('should produce correct files', function () {
+    describe('writeFilesToDisk', () => {
+        describe('when called with default angular client options', () => {
+            it('should produce correct files', () => {
                 const files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
                 const generator = {
                     useSass: false,
@@ -148,8 +148,8 @@ describe('Generator Base', function () {
                 assert.deepEqual(out, filesToAssert);
             });
         });
-        describe('when called with default angular client options skipping user-management', function () {
-            it('should produce correct files', function () {
+        describe('when called with default angular client options skipping user-management', () => {
+            it('should produce correct files', () => {
                 const files = require('../generators/client/files-angularjs').files; // fetch angular 1 files
                 const generator = {
                     useSass: false,
@@ -165,8 +165,8 @@ describe('Generator Base', function () {
         });
     });
 
-    describe('stripMargin', function () {
-        it('should produce correct output without margin', function () {
+    describe('stripMargin', () => {
+        it('should produce correct output without margin', () => {
             const entityFolderName = 'entityFolderName', entityFileName = 'entityFileName';
             const content =
                 `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
@@ -182,7 +182,7 @@ export * from './entityFolderName/entityFileName.component';
 export * from './entityFolderName/entityFileName.state';`;
             assert.equal(Generator.prototype.stripMargin(content), out);
         });
-        it('should produce correct indented output without margin', function () {
+        it('should produce correct indented output without margin', () => {
             const routerName = 'routerName', enableTranslation = true, glyphiconName = 'glyphiconName';
             const content =
                 `|<li ui-sref-active="active">

@@ -15,10 +15,10 @@ const constants = require('../generators/generator-constants'),
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR;
 
-describe('JHipster generator', function () {
+describe('JHipster generator', () => {
 
-    describe('default configuration', function () {
-        beforeEach(function (done) {
+    describe('default configuration', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -43,7 +43,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
@@ -59,20 +59,20 @@ describe('JHipster generator', function () {
                 TEST_DIR + 'gatling/logback.xml'
             ]);
         });
-        it('contains clientFramework with angular1 value', function () {
+        it('contains clientFramework with angular1 value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
         });
-        it('contains clientPackageManager with npm value', function () {
+        it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
         });
-        it('contains install-node-and-yarn in pom.xml', function () {
+        it('contains install-node-and-yarn in pom.xml', () => {
             assert.fileContent('pom.xml', /install-node-and-yarn/);
         });
         shouldBeV3DockerfileCompatible('mysql');
     });
 
-    describe('default configuration with angular2', function () {
-        beforeEach(function (done) {
+    describe('default configuration with angular2', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -98,7 +98,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files for angular2', function () {
+        it('creates expected default files for angular2', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
@@ -110,13 +110,13 @@ describe('JHipster generator', function () {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular2 value', function () {
+        it('contains clientFramework with angular2 value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
         });
     });
 
-    describe('default configuration using npm flag', function () {
-        beforeEach(function (done) {
+    describe('default configuration using npm flag', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true, npm: true})
                 .withPrompts({
@@ -141,7 +141,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
@@ -153,16 +153,16 @@ describe('JHipster generator', function () {
                 testFrameworks: []
             }));
         });
-        it('contains clientPackageManager with yarn value', function () {
+        it('contains clientPackageManager with yarn value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
-        it('contains install-node-and-npm in pom.xml', function () {
+        it('contains install-node-and-npm in pom.xml', () => {
             assert.fileContent('pom.xml', /install-node-and-npm/);
         });
     });
 
-    describe('mariadb configuration', function () {
-        beforeEach(function (done) {
+    describe('mariadb configuration', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -187,7 +187,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
@@ -202,8 +202,8 @@ describe('JHipster generator', function () {
         shouldBeV3DockerfileCompatible('mariadb');
     });
 
-    describe('default gradle configuration', function () {
-        beforeEach(function (done) {
+    describe('default gradle configuration', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -226,7 +226,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files for gradle', function () {
+        it('creates expected default files for gradle', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.file(['gradle/yeoman.gradle']);
@@ -241,8 +241,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('package names', function () {
-        beforeEach(function (done) {
+    describe('package names', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -265,7 +265,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with correct package names', function () {
+        it('creates expected files with correct package names', () => {
             assert.file([
                 SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java'
             ]);
@@ -274,8 +274,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('bad application name for java', function () {
-        beforeEach(function (done) {
+    describe('bad application name for java', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -298,7 +298,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with default application name', function () {
+        it('creates expected files with default application name', () => {
             assert.file([
                 SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java'
             ]);
@@ -306,8 +306,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('application names', function () {
-        beforeEach(function (done) {
+    describe('application names', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -330,7 +330,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with correct application name', function () {
+        it('creates expected files with correct application name', () => {
             assert.file([
                 CLIENT_MAIN_SRC_DIR + 'app/home/home.state.js'
             ]);
@@ -338,8 +338,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('oauth2', function () {
-        beforeEach(function (done) {
+    describe('oauth2', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -362,15 +362,15 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with authenticationType "oauth2"', function () {
+        it('creates expected files with authenticationType "oauth2"', () => {
             assert.file([
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/OAuth2ServerConfiguration.java'
             ]);
         });
     });
 
-    describe('hazelcast', function () {
-        beforeEach(function (done) {
+    describe('hazelcast', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -395,8 +395,8 @@ describe('JHipster generator', function () {
 
     });
 
-    describe('postgresql and elasticsearch', function () {
-        beforeEach(function (done) {
+    describe('postgresql and elasticsearch', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -423,15 +423,15 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with "PostgreSQL" and "Elasticsearch"', function () {
+        it('creates expected files with "PostgreSQL" and "Elasticsearch"', () => {
             assert.file(expectedFiles.postgresql);
             assert.file(expectedFiles.elasticsearch);
         });
         shouldBeV3DockerfileCompatible('postgresql');
     });
 
-    describe('mongodb', function () {
-        beforeEach(function (done) {
+    describe('mongodb', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -456,14 +456,14 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with "MongoDB"', function () {
+        it('creates expected files with "MongoDB"', () => {
             assert.file(expectedFiles.mongodb);
         });
         shouldBeV3DockerfileCompatible('mongodb');
     });
 
-    describe('mssql', function () {
-        beforeEach(function (done) {
+    describe('mssql', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -488,7 +488,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with "Microsoft SQL Server"', function () {
+        it('creates expected files with "Microsoft SQL Server"', () => {
             assert.file(expectedFiles.mssql);
             assert.fileContent('pom.xml', /mssql-jdbc/);
             assert.fileContent(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', /identityInsertEnabled/);
@@ -496,8 +496,8 @@ describe('JHipster generator', function () {
         shouldBeV3DockerfileCompatible('mssql');
     });
 
-    describe('cassandra', function () {
-        beforeEach(function (done) {
+    describe('cassandra', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -522,14 +522,14 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with "Cassandra"', function () {
+        it('creates expected files with "Cassandra"', () => {
             assert.file(expectedFiles.cassandra);
         });
         shouldBeV3DockerfileCompatible('cassandra');
     });
 
-    describe('cassandra no i18n', function () {
-        beforeEach(function (done) {
+    describe('cassandra no i18n', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -552,15 +552,15 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with "Cassandra"', function () {
+        it('creates expected files with "Cassandra"', () => {
             assert.file(expectedFiles.cassandra);
             assert.noFile(expectedFiles.i18n);
             assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
         });
     });
 
-    describe('no i18n', function () {
-        beforeEach(function (done) {
+    describe('no i18n', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -581,14 +581,14 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('does not create i18n files if i18n is disabled', function () {
+        it('does not create i18n files if i18n is disabled', () => {
             assert.noFile(expectedFiles.i18n);
             assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
         });
     });
 
-    describe('social login for http session', function () {
-        beforeEach(function (done) {
+    describe('social login for http session', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -613,7 +613,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with social login for http session enabled', function () {
+        it('creates expected files with social login for http session enabled', () => {
             assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
                 useSass: false,
                 enableTranslation: true,
@@ -624,8 +624,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('social login for JWT session', function () {
-        beforeEach(function (done) {
+    describe('social login for JWT session', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -650,7 +650,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with social login for http session enabled', function () {
+        it('creates expected files with social login for http session enabled', () => {
             assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
                 useSass: false,
                 enableTranslation: true,
@@ -661,8 +661,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('JWT authentication', function () {
-        beforeEach(function (done) {
+    describe('JWT authentication', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -685,7 +685,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with JWT authentication', function () {
+        it('creates expected files with JWT authentication', () => {
             assert.file(expectedFiles.jwt);
             assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
                 useSass: false,
@@ -696,8 +696,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('Messaging with Kafka configuration', function () {
-        beforeEach(function (done) {
+    describe('Messaging with Kafka configuration', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -734,15 +734,15 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with Kafka message broker enabled', function () {
+        it('creates expected files with Kafka message broker enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gatling);
             assert.file(expectedFiles.messageBroker);
         });
     });
 
-    describe('Protractor tests', function () {
-        beforeEach(function (done) {
+    describe('Protractor tests', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -776,7 +776,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with Protractor enabled', function () {
+        it('creates expected files with Protractor enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
                 useSass: false,
@@ -793,8 +793,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('Cucumber tests', function () {
-        beforeEach(function (done) {
+    describe('Cucumber tests', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -828,7 +828,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with Cucumber enabled', function () {
+        it('creates expected files with Cucumber enabled', () => {
             assert.file(expectedFiles.server);
             assert.file([
                 TEST_DIR + 'features/user/user.feature'
@@ -840,8 +840,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('skip client', function () {
-        beforeEach(function (done) {
+    describe('skip client', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipClient: true, skipChecks: true})
                 .withPrompts({
@@ -863,7 +863,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration with skip client option enabled', function () {
+        it('creates expected files for default configuration with skip client option enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.noFile(getFilesForOptions(require('../generators/client/files-angularjs').files, {
@@ -875,8 +875,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('skip client with gradle', function () {
-        beforeEach(function (done) {
+    describe('skip client with gradle', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipClient: true, skipChecks: true})
                 .withPrompts({
@@ -898,7 +898,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration with skip client option enabled', function () {
+        it('creates expected files for default configuration with skip client option enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.noFile(getFilesForOptions(require('../generators/client/files-angularjs').files, {
@@ -911,8 +911,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('gateway with eureka', function () {
-        beforeEach(function (done) {
+    describe('gateway with eureka', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -937,7 +937,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with the gateway application type', function () {
+        it('creates expected files with the gateway application type', () => {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
             assert.file(expectedFiles.eureka);
@@ -945,8 +945,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('microservice with eureka', function () {
-        beforeEach(function (done) {
+    describe('microservice with eureka', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -971,7 +971,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with the microservice application type', function () {
+        it('creates expected files with the microservice application type', () => {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.dockerServices);
@@ -980,8 +980,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('monolith with eureka', function () {
-        beforeEach(function (done) {
+    describe('monolith with eureka', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -1005,7 +1005,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with the monolith application type', function () {
+        it('creates expected files with the monolith application type', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file(expectedFiles.eureka);
@@ -1013,8 +1013,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('gateway with consul', function () {
-        beforeEach(function (done) {
+    describe('gateway with consul', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -1039,7 +1039,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with the gateway application type', function () {
+        it('creates expected files with the gateway application type', () => {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
             assert.noFile(expectedFiles.eureka);
@@ -1047,8 +1047,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('microservice with consul', function () {
-        beforeEach(function (done) {
+    describe('microservice with consul', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -1073,7 +1073,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with the microservice application type', function () {
+        it('creates expected files with the microservice application type', () => {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.dockerServices);
@@ -1082,8 +1082,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('microservice with gradle and eureka', function () {
-        beforeEach(function (done) {
+    describe('microservice with gradle and eureka', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -1110,7 +1110,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with the microservice application type', function () {
+        it('creates expected files with the microservice application type', () => {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.microserviceGradle);
@@ -1119,8 +1119,8 @@ describe('JHipster generator', function () {
         });
     });
 
-    describe('UAA server with Eureka', function () {
-        beforeEach(function (done) {
+    describe('UAA server with Eureka', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
                 .withPrompts({
@@ -1146,18 +1146,18 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with the UAA application type', function () {
+        it('creates expected files with the UAA application type', () => {
             assert.file(expectedFiles.uaa);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.eureka);
         });
     });
 
-    describe('UAA gateway with eureka', function () {
-        beforeEach(function (done) {
+    describe('UAA gateway with eureka', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipChecks: true})
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
                 })
                 .withPrompts({
@@ -1184,7 +1184,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files for UAA auth with the Gateway application type', function () {
+        it('creates expected files for UAA auth with the Gateway application type', () => {
             assert.file(expectedFiles.gateway);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.eureka);
@@ -1192,9 +1192,9 @@ describe('JHipster generator', function () {
     });
 });
 
-describe('JHipster server generator', function () {
-    describe('generate server', function () {
-        beforeEach(function (done) {
+describe('JHipster server generator', () => {
+    describe('generate server', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/server'))
                 .withOptions({skipInstall: true, gatling: true, skipChecks: true})
                 .withPrompts({
@@ -1216,7 +1216,7 @@ describe('JHipster server generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration with gatling enabled for server generator', function () {
+        it('creates expected files for default configuration with gatling enabled for server generator', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.gatling);
@@ -1230,9 +1230,9 @@ describe('JHipster server generator', function () {
     });
 });
 
-describe('JHipster client generator', function () {
-    describe('generate client with angularjs 1', function () {
-        beforeEach(function (done) {
+describe('JHipster client generator', () => {
+    describe('generate client with angularjs 1', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({skipInstall: true, auth: 'session'})
                 .withPrompts({
@@ -1246,7 +1246,7 @@ describe('JHipster client generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration for client generator', function () {
+        it('creates expected files for default configuration for client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
@@ -1256,16 +1256,16 @@ describe('JHipster client generator', function () {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular1 value', function () {
+        it('contains clientFramework with angular1 value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
         });
-        it('contains clientPackageManager with yarn value', function () {
+        it('contains clientPackageManager with yarn value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
         });
     });
 
-    describe('generate client with angularjs 1 using npm flag', function () {
-        beforeEach(function (done) {
+    describe('generate client with angularjs 1 using npm flag', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({skipInstall: true, auth: 'session', npm: true})
                 .withPrompts({
@@ -1278,16 +1278,16 @@ describe('JHipster client generator', function () {
                 })
                 .on('end', done);
         });
-        it('contains clientFramework with angular1 value', function () {
+        it('contains clientFramework with angular1 value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
         });
-        it('contains clientPackageManager with npm value', function () {
+        it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
     });
 
-    describe('generate client with angular 2', function () {
-        beforeEach(function (done) {
+    describe('generate client with angular 2', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({skipInstall: true, auth: 'session'})
                 .withPrompts({
@@ -1301,7 +1301,7 @@ describe('JHipster client generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration for client-2 generator', function () {
+        it('creates expected files for default configuration for client-2 generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
@@ -1312,16 +1312,16 @@ describe('JHipster client generator', function () {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular2 value', function () {
+        it('contains clientFramework with angular2 value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
         });
-        it('contains clientPackageManager with yarn value', function () {
+        it('contains clientPackageManager with yarn value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
         });
     });
 
-    describe('generate client with angular 2 using yarn flag', function () {
-        beforeEach(function (done) {
+    describe('generate client with angular 2 using yarn flag', () => {
+        beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({skipInstall: true, auth: 'session', npm: true})
                 .withPrompts({
@@ -1335,7 +1335,7 @@ describe('JHipster client generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration for client-2 generator', function () {
+        it('creates expected files for default configuration for client-2 generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
@@ -1346,10 +1346,10 @@ describe('JHipster client generator', function () {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular2 value', function () {
+        it('contains clientFramework with angular2 value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angular2"/);
         });
-        it('contains clientPackageManager with npm value', function () {
+        it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
     });
