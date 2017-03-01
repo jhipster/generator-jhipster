@@ -1535,7 +1535,6 @@ Generator.prototype.askModuleName = function (generator) {
 
     const done = generator.async();
     const defaultAppBaseName = this.getDefaultAppName();
-    const getNumberedQuestion = this.getNumberedQuestion.bind(this);
     generator.prompt({
         type: 'input',
         name: 'baseName',
@@ -1549,7 +1548,7 @@ Generator.prototype.askModuleName = function (generator) {
             }
             return true;
         },
-        message: response => getNumberedQuestion('What is the base name of your application?', true),
+        message: response => this.getNumberedQuestion('What is the base name of your application?', true),
         default: defaultAppBaseName
     }).then((prompt) => {
         generator.baseName = prompt.baseName;
@@ -1565,14 +1564,13 @@ Generator.prototype.askModuleName = function (generator) {
 Generator.prototype.aski18n = function (generator) {
 
     const languageOptions = this.getAllSupportedLanguageOptions();
-    const getNumberedQuestion = this.getNumberedQuestion.bind(this);
 
     const done = generator.async();
     const prompts = [
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: response => getNumberedQuestion('Would you like to enable internationalization support?', true),
+            message: response => this.getNumberedQuestion('Would you like to enable internationalization support?', true),
             default: true
         },
         {
