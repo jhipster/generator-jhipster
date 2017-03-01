@@ -1,9 +1,9 @@
-<%_ var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-var mapper = entityInstance  + 'Mapper';
-var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
-var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
-var resultEntity;
+<%_ const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+const mapper = entityInstance  + 'Mapper';
+const dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
+const entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
+let resultEntity;
 if (!viaService) {
     if (dto == 'mapstruct') {
         resultEntity = entityInstance; %>

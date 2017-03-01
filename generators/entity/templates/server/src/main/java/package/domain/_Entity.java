@@ -1,8 +1,8 @@
 package <%=packageName%>.domain;<%
-var importApiModelProperty = false;
-var importJsonignore = false;
-var importSet = false;
-var uniqueEnums = {}; %><%- include imports -%>
+let importApiModelProperty = false;
+let importJsonignore = false;
+let importSet = false;
+const uniqueEnums = {}; %><%- include imports -%>
 <% if (databaseType == 'cassandra') { %>
 import com.datastax.driver.mapping.annotations.*;<% } %><% if (importJsonignore == true) { %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (typeof javadoc != 'undefined') { %>
@@ -65,14 +65,14 @@ public class <%= entityClass %> implements Serializable {
     if (typeof fields[idx].javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(fields[idx].javadoc) %>
     <%_ }
-    var required = false;
-    var fieldValidate = fields[idx].fieldValidate;
-    var fieldValidateRules = fields[idx].fieldValidateRules;
-    var fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
-    var fieldType = fields[idx].fieldType;
-    var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-    var fieldName = fields[idx].fieldName;
-    var fieldNameUnderscored = fields[idx].fieldNameUnderscored;
+    let required = false;
+    const fieldValidate = fields[idx].fieldValidate;
+    const fieldValidateRules = fields[idx].fieldValidateRules;
+    const fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
+    const fieldType = fields[idx].fieldType;
+    const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+    const fieldName = fields[idx].fieldName;
+    const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     if (fieldValidate == true) {
         if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
             required = true;
@@ -122,17 +122,17 @@ public class <%= entityClass %> implements Serializable {
     }
 
     for (idx in relationships) {
-        var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
-        otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural,
-        relationshipName = relationships[idx].relationshipName,
-        relationshipFieldName = relationships[idx].relationshipFieldName,
-        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
-        joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType),
-        relationshipType = relationships[idx].relationshipType,
-        relationshipValidate = relationships[idx].relationshipValidate,
-        relationshipRequired = relationships[idx].relationshipRequired,
-        otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
-        ownerSide = relationships[idx].ownerSide;
+        const otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
+        const otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural;
+        const relationshipName = relationships[idx].relationshipName;
+        const relationshipFieldName = relationships[idx].relationshipFieldName;
+        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+        const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+        const relationshipType = relationships[idx].relationshipType;
+        const relationshipValidate = relationships[idx].relationshipValidate;
+        const relationshipRequired = relationships[idx].relationshipRequired;
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        const ownerSide = relationships[idx].ownerSide;
         if (otherEntityRelationshipName != null) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -197,10 +197,10 @@ public class <%= entityClass %> implements Serializable {
         this.id = id;
     }
 <%_ for (idx in fields) {
-        var fieldType = fields[idx].fieldType;
-        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        var fieldName = fields[idx].fieldName;
-        var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
+        const fieldType = fields[idx].fieldType;
+        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+        const fieldName = fields[idx].fieldName;
+        const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; _%>
 
     <%_ if (fieldTypeBlobContent != 'text') { _%>
         <%_ if (fieldType.toLowerCase() == 'boolean') { _%>
@@ -252,16 +252,16 @@ public class <%= entityClass %> implements Serializable {
 <%_ } _%>
 <%_
     for (idx in relationships) {
-        var relationshipFieldName = relationships[idx].relationshipFieldName,
-        relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
-        relationshipType = relationships[idx].relationshipType,
-        otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
-        relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
-        relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
-        otherEntityName = relationships[idx].otherEntityName,
-        otherEntityNamePlural = relationships[idx].otherEntityNamePlural,
-        otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized
-        otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
+        const relationshipFieldName = relationships[idx].relationshipFieldName;
+        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+        const relationshipType = relationships[idx].relationshipType;
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+        const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
+        const otherEntityName = relationships[idx].otherEntityName;
+        const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+        const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalize;
+        const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
     _%>
     <%_ if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') { _%>
 
@@ -345,9 +345,9 @@ public class <%= entityClass %> implements Serializable {
         return "<%= entityClass %>{" +
             "id=" + id +
             <%_ for (idx in fields) {
-                var fieldType = fields[idx].fieldType;
-                var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-                var fieldName = fields[idx].fieldName; _%>
+                const fieldType = fields[idx].fieldType;
+                const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+                const fieldName = fields[idx].fieldName; _%>
             ", <%= fieldName %>='" + <%= fieldName %> + "'" +
                 <%_ if ((fieldType == 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent != 'text') { _%>
             ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
