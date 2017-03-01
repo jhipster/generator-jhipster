@@ -1,21 +1,21 @@
 'use strict';
-const util = require('util'),
-    generator = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
-    scriptBase = require('../generator-base'),
-    prompts = require('./prompts'),
-    writeAngularFiles = require('./files-angular').writeFiles,
-    writeAngularJsFiles = require('./files-angularjs').writeFiles,
-    packagejs = require('../../package.json');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const _ = require('lodash');
+const scriptBase = require('../generator-base');
+const prompts = require('./prompts');
+const writeAngularFiles = require('./files-angular').writeFiles;
+const writeAngularJsFiles = require('./files-angularjs').writeFiles;
+const packagejs = require('../../package.json');
 
-var JhipsterClientGenerator = generator.extend({});
+const JhipsterClientGenerator = generator.extend({});
 
 util.inherits(JhipsterClientGenerator, scriptBase);
 
-/* Constants use throughout */
-const constants = require('../generator-constants'),
-    QUESTIONS = constants.CLIENT_QUESTIONS;
+/* Constants used throughout */
+const constants = require('../generator-constants');
+const QUESTIONS = constants.CLIENT_QUESTIONS;
 
 module.exports = JhipsterClientGenerator.extend({
     constructor: function () {
@@ -130,7 +130,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
         },
 
-        setupClientVars: function () {
+        setupClientconsts: function () {
             // Make constants available in templates
             this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -151,12 +151,12 @@ module.exports = JhipsterClientGenerator.extend({
             this.languages = this.config.get('languages');
             this.messageBroker = this.config.get('messageBroker');
             this.packagejs = packagejs;
-            var baseName = this.config.get('baseName');
+            const baseName = this.config.get('baseName');
             if (baseName) {
                 this.baseName = baseName;
             }
 
-            var clientConfigFound = this.useSass !== undefined;
+            const clientConfigFound = this.useSass !== undefined;
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation === undefined) {
@@ -199,7 +199,7 @@ module.exports = JhipsterClientGenerator.extend({
 
     configuring: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'client');
             insight.track('app/clientFramework', this.clientFramework);
             insight.track('app/useSass', this.useSass);
@@ -347,13 +347,14 @@ module.exports = JhipsterClientGenerator.extend({
 
         if (!this.options['skip-install']) {
             if (this.clientPackageManager === 'yarn') {
-                var nbRetry = 0;
-                var maxRetry = 2;
+                const maxRetry = 2;
+                let nbRetry = 0;
+                let result;
                 do {
                     if (nbRetry > 0) {
                         this.warning('yarn install failed. Retrying to launch yarn: ' + nbRetry + '/' + maxRetry + ' retries.');
                     }
-                    var result = this.spawnCommandSync('yarn');
+                    result = this.spawnCommandSync('yarn');
                     nbRetry++;
                 } while(result.status !== 0 && nbRetry <= maxRetry);
                 if (result.status !== 0) {
