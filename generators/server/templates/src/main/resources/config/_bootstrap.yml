@@ -1,3 +1,14 @@
+# ===================================================================
+# Spring Cloud <% if (serviceDiscoveryType === 'consul') { %>Consul <% } %>Config bootstrap configuration for the "dev" profile
+# In prod profile, properties will be overwriten by the ones defined in bootstrap-prod.yml
+# ===================================================================
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
+
+jhipster:
+    registry:
+        password: admin
+<%_ } _%>
+
 spring:
     application:
         name: <%= baseName %>
@@ -6,12 +17,26 @@ spring:
         # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
         # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
         active: #spring.profiles.active#
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                 tags: profile=${spring.profiles.active}, version=${info.project.version}
-    <%_ } _%>
+            config:
+                fail-fast: true
+                format: yaml
+                profile-separator: "-"
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType === 'eureka') { _%>
+        config:
+            fail-fast: true
+            uri: http://admin:${jhipster.registry.password}@localhost:8761/config
+            # name of the config server's property source (file.yml) that we want to use
+            name: <%= baseName %>
+            profile: dev # profile(s) of the property source
+            label: master # toggle to switch to a different version of the configuration as stored in git
+            # it can be set to any label, branch or commit of the config source git repository
+        <%_ } _%>
 
 info:
     project:
