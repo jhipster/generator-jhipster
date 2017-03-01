@@ -1,15 +1,15 @@
 'use strict';
-var util = require('util'),
-    generator = require('yeoman-generator'),
-    chalk = require('chalk'),
-    scriptBase = require('../generator-base'),
-    cleanup = require('../cleanup'),
-    prompts = require('./prompts'),
-    packagejs = require('../../package.json'),
-    exec = require('child_process').exec,
-    semver = require('semver');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const scriptBase = require('../generator-base');
+const cleanup = require('../cleanup');
+const prompts = require('./prompts');
+const packagejs = require('../../package.json');
+const exec = require('child_process').exec;
+const semver = require('semver');
 
-var JhipsterGenerator = generator.extend({});
+const JhipsterGenerator = generator.extend({});
 
 util.inherits(JhipsterGenerator, scriptBase);
 
@@ -95,50 +95,50 @@ module.exports = JhipsterGenerator.extend({
 
         checkJava: function () {
             if (this.skipChecks || this.skipServer) return;
-            var done = this.async();
-            exec('java -version', function (err, stdout, stderr) {
+            const done = this.async();
+            exec('java -version', (err, stdout, stderr) => {
                 if (err) {
                     this.warning('Java 8 is not found on your computer.');
                 } else {
-                    var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
+                    const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                     if (!javaVersion.match(/1\.8/)) {
                         this.warning('Java 8 is not found on your computer. Your Java version is: ' + chalk.yellow(javaVersion));
                     }
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         checkNode: function () {
             if (this.skipChecks || this.skipServer) return;
-            var done = this.async();
-            exec('node -v', function (err, stdout, stderr) {
+            const done = this.async();
+            exec('node -v', (err, stdout, stderr) => {
                 if (err) {
                     this.warning('NodeJS is not found on your system.');
                 } else {
-                    var nodeVersion = semver.clean(stdout);
-                    var nodeFromPackageJson = packagejs.engines.node;
+                    const nodeVersion = semver.clean(stdout);
+                    const nodeFromPackageJson = packagejs.engines.node;
                     if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
                         this.warning('Your NodeJS version is too old (' + nodeVersion + '). You should use at least NodeJS ' + chalk.bold(nodeFromPackageJson));
                     }
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         checkGit: function () {
             if (this.skipChecks || this.skipClient) return;
-            var done = this.async();
-            this.isGitInstalled(function (code) {
+            const done = this.async();
+            this.isGitInstalled((code) => {
                 this.gitInstalled = code === 0;
                 done();
-            }.bind(this));
+            });
         },
 
         checkGitConnection: function () {
             if (!this.gitInstalled) return;
-            var done = this.async();
-            exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, function (error) {
+            const done = this.async();
+            exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, (error) => {
                 if (error) {
                     this.warning('Failed to connect to "git://github.com"\n',
                         ' 1. Check your Internet connection.\n',
@@ -146,13 +146,13 @@ module.exports = JhipsterGenerator.extend({
                     );
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         checkYarn: function () {
             if (this.skipChecks || !this.yarnInstall) return;
-            var done = this.async();
-            exec('yarn --version', function (err) {
+            const done = this.async();
+            exec('yarn --version', (err) => {
                 if (err) {
                     this.warning('yarn is not found on your computer.\n',
                         ' Using npm instead');
@@ -161,7 +161,7 @@ module.exports = JhipsterGenerator.extend({
                     this.yarnInstall = true;
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         checkForNewVersion: function () {
@@ -176,7 +176,7 @@ module.exports = JhipsterGenerator.extend({
             }
         },
 
-        setupVars: function () {
+        setupconsts: function () {
             this.applicationType = this.config.get('applicationType');
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
@@ -191,7 +191,7 @@ module.exports = JhipsterGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
-            var configFound = this.baseName !== undefined && this.applicationType !== undefined;
+            const configFound = this.baseName !== undefined && this.applicationType !== undefined;
             if (configFound) {
                 this.existingProject = true;
                 // If translation is not defined, it is enabled by default
@@ -286,7 +286,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
             insight.track('app/testFrameworks', this.testFrameworks);
@@ -325,14 +325,14 @@ module.exports = JhipsterGenerator.extend({
 
         regenerateEntities: function () {
             if (this.withEntities) {
-                this.getExistingEntities().forEach(function (entity) {
+                this.getExistingEntities().forEach((entity) => {
                     this.composeWith(require.resolve('../entity'), {
                         regenerate: true,
                         'skip-install': true,
                         force: this.options['force'],
                         name: entity.name
                     });
-                }, this);
+                });
             }
         }
     },
@@ -360,7 +360,7 @@ module.exports = JhipsterGenerator.extend({
 
         afterRunHook: function () {
             try {
-                var modules = this.getModuleHooks();
+                const modules = this.getModuleHooks();
                 if (modules.length > 0) {
                     this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // run through all post app creation module hooks

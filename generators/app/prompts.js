@@ -2,7 +2,6 @@
 
 const chalk = require('chalk');
 
-
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
