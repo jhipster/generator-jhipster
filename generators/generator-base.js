@@ -1539,7 +1539,7 @@ Generator.prototype.askModuleName = function (generator) {
     generator.prompt({
         type: 'input',
         name: 'baseName',
-        validate: function (input) {
+        validate: (input) => {
             if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                 return 'Your application name cannot contain special characters or a blank space';
             } else if (generator.applicationType === 'microservice' && /_/.test(input)) {
@@ -1549,14 +1549,12 @@ Generator.prototype.askModuleName = function (generator) {
             }
             return true;
         },
-        message: function (response) {
-            return getNumberedQuestion('What is the base name of your application?', true);
-        },
+        message: response => getNumberedQuestion('What is the base name of your application?', true),
         default: defaultAppBaseName
-    }).then(function (prompt) {
+    }).then((prompt) => {
         generator.baseName = prompt.baseName;
         done();
-    }.bind(generator));
+    });
 };
 
 /**
@@ -1574,15 +1572,11 @@ Generator.prototype.aski18n = function (generator) {
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: function (response) {
-                return getNumberedQuestion('Would you like to enable internationalization support?', true);
-            },
+            message: response => getNumberedQuestion('Would you like to enable internationalization support?', true),
             default: true
         },
         {
-            when: function (response) {
-                return response.enableTranslation === true;
-            },
+            when: response => response.enableTranslation === true,
             type: 'list',
             name: 'nativeLanguage',
             message: 'Please choose the native language of the application?',
@@ -1591,26 +1585,20 @@ Generator.prototype.aski18n = function (generator) {
             store: true
         },
         {
-            when: function (response) {
-                return response.enableTranslation === true;
-            },
+            when: response => response.enableTranslation === true,
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
-            choices: function (response) {
-                return _.filter(languageOptions, function (o) {
-                    return o.value !== response.nativeLanguage;
-                });
-            }
+            choices: response => _.filter(languageOptions, o => o.value !== response.nativeLanguage)
         }
     ];
 
-    generator.prompt(prompts).then(function (prompt) {
+    generator.prompt(prompts).then((prompt) => {
         generator.enableTranslation = prompt.enableTranslation;
         generator.nativeLanguage = prompt.nativeLanguage;
         generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
         done();
-    }.bind(generator));
+    });
 };
 
 /**
@@ -1840,7 +1828,7 @@ Generator.prototype.insight = function () {
         packageVersion: packagejs.version
     });
 
-    insight.trackWithEvent = function (category, action) {
+    insight.trackWithEvent = (category, action) => {
         insight.track(category, action);
         insight.trackEvent({
             category: category,
@@ -1928,19 +1916,19 @@ Generator.prototype.filterNumber = function (input, isSigned, isDecimal) {
 };
 
 Generator.prototype.isGitInstalled = function (callback) {
-    this.gitExec('--version', function (code) {
+    this.gitExec('--version', (code) => {
         if (code !== 0) {
             this.warning('git is not found on your computer.\n',
                 ' Install git: ' + chalk.yellow('https://git-scm.com/')
             );
         }
         callback && callback(code);
-    }.bind(this));
+    });
 };
 
 Generator.prototype.getOptionFromArray = function (array, option) {
     let optionValue = false;
-    array.forEach(function (value) {
+    array.forEach((value) => {
         if (_.includes(value, option)) {
             optionValue = value.split(':')[1];
         }
@@ -1986,12 +1974,12 @@ Generator.prototype.contains = _.includes;
  *  @param onFail - callback when the get failed.
  */
 Generator.prototype.httpsGet = function(url, onSuccess, onFail) {
-    https.get(url, function(res) {
+    https.get(url, (res) => {
         let body = '';
-        res.on('data', function(chunk) {
+        res.on('data', (chunk) => {
             body += chunk;
         });
-        res.on('end', function() {
+        res.on('end', () => {
             onSuccess(body);
         });
     }).on('error', onFail);
