@@ -143,7 +143,7 @@ function writeFiles() {
             this.copy(SERVER_MAIN_RES_DIR + 'banner.txt', SERVER_MAIN_RES_DIR + 'banner.txt');
 
             if (this.devDatabaseType === 'h2Disk' || this.devDatabaseType === 'h2Memory') {
-                this.copy(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
+                this.template(SERVER_MAIN_RES_DIR + 'h2.server.properties', SERVER_MAIN_RES_DIR + '.h2.server.properties');
             }
 
             // Thymeleaf templates
