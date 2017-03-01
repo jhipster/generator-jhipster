@@ -1,9 +1,9 @@
 'use strict';
 
-const _ = require('lodash'),
-    randexp = require('randexp'),
-    chalk = require('chalk'),
-    fs = require('fs');
+const _ = require('lodash');
+const randexp = require('randexp');
+const chalk = require('chalk');
+const fs = require('fs');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
@@ -378,10 +378,10 @@ function writeFiles() {
 
             // Copy for each
             if (this.enableTranslation) {
-                var languages = this.languages || this.getAllInstalledLanguages();
-                languages.forEach(function (language) {
+                const languages = this.languages || this.getAllInstalledLanguages();
+                languages.forEach((language) => {
                     this.copyI18n(language, CLIENT_I18N_TEMPLATES_DIR);
-                }, this);
+                });
             }
         }
     };
