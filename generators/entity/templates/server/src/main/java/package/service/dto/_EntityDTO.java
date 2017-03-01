@@ -64,7 +64,7 @@ public class <%= entityClass %>DTO implements Serializable {
         const relationshipType = relationships[idx].relationshipType;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
-        const ownerSide = relationships[idx].ownerSide; _%;
+        const ownerSide = relationships[idx].ownerSide; _%>
     <%_ if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
     private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
