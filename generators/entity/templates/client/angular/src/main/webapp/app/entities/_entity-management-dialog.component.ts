@@ -1,6 +1,6 @@
 <%_
-var i18nToLoad = [entityInstance];
-for (var idx in fields) {
+const i18nToLoad = [entityInstance];
+for (const idx in fields) {
     if (fields[idx].fieldIsEnum == true) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
@@ -16,7 +16,7 @@ import { EventManager, AlertService<% if (enableTranslation) { %>, JhiLanguageSe
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>PopupService } from './<%= entityFileName %>-popup.service';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
-<%_ for (var rel of differentRelationships) { _%>
+<%_ for (const rel of differentRelationships) { _%>
 import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Service } from '../<%= rel.otherEntityModulePath %>';
 <%_ } _%>
 <%_
@@ -33,19 +33,19 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     authorities: any[];
     isSaving: boolean;
     <%_
-    var queries = [];
-    var variables = [];
-    var hasManyToMany = false;
+    const queries = [];
+    const variables = [];
+    let hasManyToMany = false;
     for (idx in relationships) {
-        var query;
-        var variableName;
+        let query;
+        let variableName;
         hasManyToMany = hasManyToMany || relationships[idx].relationshipType == 'many-to-many';
         if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
             variableName = relationships[idx].relationshipFieldNamePlural.toLowerCase();
             if (variableName === entityInstance) {
                 variableName += 'Collection';
             }
-            var relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
+            const relationshipFieldName = "this." + entityInstance + "." + relationships[idx].relationshipFieldName;
             query  = "this." + relationships[idx].otherEntityName + "Service.query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'}).subscribe((res: Response) => {"
             if (dto === "no") {
                 query += "\n            if (!" + relationshipFieldName + " || !" + relationshipFieldName + ".id) {"
@@ -72,7 +72,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             variables.push(variableName + ': ' + relationships[idx].otherEntityAngularName + '[];');
         }
     }
-    for (idx in variables) { %>
+    for (const idx in variables) { %>
     <%- variables[idx] %>
     <%_ } _%>
     constructor(
@@ -152,9 +152,9 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
     <%_
-    var entitiesSeen = [];
+    const entitiesSeen = [];
     for (idx in relationships) {
-        var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
             if(entitiesSeen.indexOf(otherEntityNameCapitalized) == -1) {
     _%>
 

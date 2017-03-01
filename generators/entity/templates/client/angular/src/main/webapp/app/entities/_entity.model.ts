@@ -1,32 +1,32 @@
-<% var enumsAlreadyDeclared = [];
-    for (idx in fields) {
+<% const enumsAlreadyDeclared = [];
+    for (const idx in fields) {
     if (fields[idx].fieldIsEnum && enumsAlreadyDeclared.indexOf(fields[idx].fieldType) === -1) {
         enumsAlreadyDeclared.push(fields[idx].fieldType); %>
 const enum <%= fields[idx].fieldType %> {<%
         const enums = fields[idx].fieldValues.split(',');
-        for (var i = 0; i < enums.length; i++) { %>
+        for (let i = 0; i < enums.length; i++) { %>
     '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% } } %>
 
 };
 <%_ } } _%>
 <%_ if (dto == "no") {
-       for (var rel of differentRelationships) { _%>
+       for (const rel of differentRelationships) { _%>
 import { <%= rel.otherEntityNameCapitalized %> } from '../<%= rel.otherEntityModulePath %>';
 <%_ }
 }
-var variables = {};
-var defaultVariablesValues = {};
-var tsKeyType;
+const variables = {};
+const defaultVariablesValues = {};
+let tsKeyType;
 if (pkType == 'String') {
     tsKeyType = 'string';
 } else {
     tsKeyType = 'number';
 }
 variables['id'] = 'id?: ' + tsKeyType;
-for (idx in fields) {
-    var fieldType = fields[idx].fieldType;
-    var fieldName = fields[idx].fieldName;
-    var tsType;
+for (const idx in fields) {
+    const fieldType = fields[idx].fieldType;
+    const fieldName = fields[idx].fieldName;
+    let tsType;
     if (fields[idx].fieldIsEnum) {
         tsType = fieldType;
     } else if (fieldType == 'ZonedDateTime') {
@@ -44,8 +44,8 @@ for (idx in fields) {
     variables[fieldName] = fieldName + '?: ' + tsType;
 }
 for (idx in relationships) {
-    var fieldType;
-    var fieldName;
+    let fieldType;
+    let fieldName;
     if (dto == "no") {
         fieldType = relationships[idx].otherEntityNameCapitalized;
         fieldName = relationships[idx].relationshipFieldName;

@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-<%_ var hasDate = false;
+<%_ let hasDate = false;
     if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
         hasDate = true;
     }

@@ -1,11 +1,11 @@
 <%#	Returns a string of all angular validators required for the input field. -%>
 <%
-var field = fields[idx];
-var result = '';
+const field = fields[idx];
+let result = '';
 
 if (field.fieldValidate == true) {
-	var rules = field.fieldValidateRules;
-	var validators = [];
+	const rules = field.fieldValidateRules;
+	const validators = [];
 
     if (rules.indexOf('required') != -1 && field.fieldType != 'Boolean') {
         validators.push('required');
