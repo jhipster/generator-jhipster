@@ -1,16 +1,16 @@
 'use strict';
-const util = require('util'),
-    generator = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
-    prompts = require('./prompts'),
-    scriptBase = require('../generator-base'),
-    writeFiles = require('./files').writeFiles,
-    packagejs = require('../../package.json'),
-    crypto = require('crypto'),
-    os = require('os');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const _ = require('lodash');
+const prompts = require('./prompts');
+const scriptBase = require('../generator-base');
+const writeFiles = require('./files').writeFiles;
+const packagejs = require('../../package.json');
+const crypto = require('crypto');
+const os = require('os');
 
-var JhipsterServerGenerator = generator.extend({});
+const JhipsterServerGenerator = generator.extend({});
 
 util.inherits(JhipsterServerGenerator, scriptBase);
 
@@ -78,7 +78,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
         },
 
-        setupServerVars: function () {
+        setupServerconsts: function () {
             // Make constants available in templates
             this.MAIN_DIR = constants.MAIN_DIR;
             this.TEST_DIR = constants.TEST_DIR;
@@ -108,7 +108,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
 
-            this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+            this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the constiable as it might be useful in the future.
             this.packagejs = packagejs;
             this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
             if (!this.applicationType) {
@@ -177,24 +177,24 @@ module.exports = JhipsterServerGenerator.extend({
             this.languages = this.config.get('languages');
             this.uaaBaseName = this.config.get('uaaBaseName');
             this.clientFramework = this.config.get('clientFramework');
-            var testFrameworks = this.config.get('testFrameworks');
+            const testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
             }
 
-            var baseName = this.config.get('baseName');
+            const baseName = this.config.get('baseName');
             if (baseName) {
                 // to avoid overriding name from configOptions
                 this.baseName = baseName;
             }
 
-            // force variables unused by microservice applications
+            // force constiables unused by microservice applications
             if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                 this.clusteredHttpSession = false;
                 this.websocket = false;
             }
 
-            var serverConfigFound = this.packageName !== undefined &&
+            const serverConfigFound = this.packageName !== undefined &&
                 this.authenticationType !== undefined &&
                 this.hibernateCache !== undefined &&
                 this.clusteredHttpSession !== undefined &&
@@ -291,7 +291,7 @@ module.exports = JhipsterServerGenerator.extend({
 
     configuring: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'server');
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);

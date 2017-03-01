@@ -1,7 +1,7 @@
 'use strict';
 
-const mkdirp = require('mkdirp'),
-    cleanup = require('../cleanup');
+const mkdirp = require('mkdirp');
+const cleanup = require('../cleanup');
 
 /* Constants use throughout */
 const constants = require('../generator-constants'),
@@ -17,7 +17,7 @@ module.exports = {
     writeFiles
 };
 
-var javaDir;
+let javaDir;
 
 function writeFiles() {
     return {
@@ -372,7 +372,7 @@ function writeFiles() {
             }
         },
 
-        writeServerJavaRepoFiles: function () {
+        writeServerJaconstepoFiles: function () {
 
             if (this.searchEngine === 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java');
@@ -428,7 +428,7 @@ function writeFiles() {
         writeServerTestFwFiles: function () {
 
             // Create Test Java files
-            var testDir = this.testDir;
+            const testDir = this.testDir;
 
             mkdirp(testDir);
 
@@ -546,7 +546,7 @@ function writeFiles() {
             }
 
             /* User management java test files */
-            var testDir = this.testDir;
+            const testDir = this.testDir;
 
             this.template(SERVER_TEST_SRC_DIR + 'package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java');
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_LogsResourceIntTest.java', testDir + 'web/rest/LogsResourceIntTest.java');
