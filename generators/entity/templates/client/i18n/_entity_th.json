@@ -1,0 +1,30 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPluralHumanized %>",
+                "createLabel": "สร้าง <%= entityClassHumanized %>",
+                "createOrEditLabel": "สร้างหรือแก้ไข <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "ค้นหา <%= entityClassHumanized %>"<% } %>
+            },<% if (!microserviceAppName) { %>
+            "created": "<%= entityClassHumanized %> ถูกสร้างด้วย {{ param }}",
+            "updated": "<%= entityClassHumanized %> ถูกแก้ไขด้วย {{ param }}",
+            "deleted": "<%= entityClassHumanized %> ถูกลบด้วย {{ param }}",<% } %>
+            "delete": {
+                "question": "คุณต้องการที่จะลบ <%= entityClassHumanized %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClassHumanized %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameHumanized %>"<% } %>
+        }
+    }<% if (microserviceAppName) { %>,
+    "<%= microserviceAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "created": "<%= entityClassHumanized %> ถูกสร้างด้วย {{ param }}",
+            "updated": "<%= entityClassHumanized %> ถูกแก้ไขด้วย {{ param }}",
+            "deleted": "<%= entityClassHumanized %> ถูกลบด้วย {{ param }}"
+        }
+    }<% } %>
+}
