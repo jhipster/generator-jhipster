@@ -52,9 +52,9 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     private static final String ENTITY_NAME = "<%= entityInstance %>";
-    <% var viaService = service != 'no';
-    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
+    <% const viaService = service != 'no';
+    const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource'}); -%>
 
     /**

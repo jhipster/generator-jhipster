@@ -56,7 +56,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @PartitionKey
     private String id;<% } %>
 
-    <%_ var columnMax = 50;
+    <%_ let columnMax = 50;
         if (enableSocialSignIn) {
             columnMax = 100;
         } _%>

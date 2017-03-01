@@ -66,9 +66,9 @@ public class <%= entityClass %>Repository {
                 <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
                 <%= entityInstance %>.setId(row.getUUID("id"));<%
                 for (idx in fields) {
-                    var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
-                    var fieldName = fields[idx].fieldName;
-                    var fieldNameUnderscored = fields[idx].fieldNameUnderscored;
+                    const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+                    const fieldName = fields[idx].fieldName;
+                    const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
                     if (fields[idx].fieldType == 'Integer') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'BigDecimal') { %>
                 <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'LocalDate') { %>
