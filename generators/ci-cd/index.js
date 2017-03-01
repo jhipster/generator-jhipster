@@ -1,11 +1,11 @@
 'use strict';
-var util = require('util'),
-    chalk = require('chalk'),
-    generator = require('yeoman-generator'),
-    prompts = require('./prompts'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const chalk = require('chalk');
+const generator = require('yeoman-generator');
+const prompts = require('./prompts');
+const scriptBase = require('../generator-base');
 
-var PipelineGenerator = generator.extend({});
+const PipelineGenerator = generator.extend({});
 
 util.inherits(PipelineGenerator, scriptBase);
 
@@ -37,10 +37,10 @@ module.exports = PipelineGenerator.extend({
     configuring: {
         insight: function () {
             if (this.abort) return;
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'ci-cd');
         },
-        setTemplateVariables: function() {
+        setTemplateconstiables: function() {
             if (this.abort || this.jenkinsIntegrations === undefined) return;
             this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
             this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';
