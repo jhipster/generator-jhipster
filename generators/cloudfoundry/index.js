@@ -91,9 +91,12 @@ module.exports = CloudFoundryGenerator.extend({
 
             if (this.databaseType !== 'no') {
                 this.log(chalk.bold('Creating the database'));
-                const child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, {}, function (err, stdout, stderr) {
-                    done();
-                }.bind(this));
+                const child = exec(
+                    'cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName,
+                    {},
+                    (err, stdout, stderr) => {
+                        done();
+                    });
                 child.stdout.on('data', (data) => {
                     this.log(data.toString());
                 });
