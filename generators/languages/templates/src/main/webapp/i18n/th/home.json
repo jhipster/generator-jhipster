@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "ยินดีต้อนรับ, Java Hipster!",
+        "subtitle": "นี่คือหน้าเวปเพจของคุณ",
+        "logged": {
+            "message": "คุณได้เข้าระบบโดยใช้ชื่อ \"{{username}}\"."
+        },
+        "question": "หากคุณมีคำถามเกี่ยวกับ JHipster:",
+        "link": {
+            "homepage": "JHipster โฮมเพจ",
+            "stackoverflow": "JHipster ที่ Stack Overflow",
+            "bugtracker": "ติดตามการแก้ไขบัคของ JHipster",
+            "chat": "ห้องสนทนา JHipster",
+            "follow": "ติดตาม @java_hipster ทางทวิตเตอร์"
+        },
+        "like": "ถ้าคุณชอบ JHipster, อย่าลืมให้ดาวกับเรา",
+        "github": "GitHub"
+    }
+}

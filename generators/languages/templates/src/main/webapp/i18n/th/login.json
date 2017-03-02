@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "เข้าระบบ",
+        "form": {
+            "password": "รหัสผ่าน",
+            "password.placeholder": "รหัสผ่านของคุณ",
+            "rememberme": "จดจำฉัน",
+            "button": "เข้าระบบ"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>เกิดความผิดพลานในการเข้าระบบ!</strong> กรุณาตรวจสอบข้อมูลประจำตัวอีกครั้ง."
+            }
+        },
+        "password" : {
+            "forgot": "ลืมรหัสผ่านหรือไม่?"
+        }
+    }
+}
