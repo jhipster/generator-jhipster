@@ -143,7 +143,7 @@ public class AccountResource {
      */
     @PostMapping("/account")
     @Timed
-    public ResponseEntity<String> saveAccount(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity saveAccount(@Valid @RequestBody UserDTO userDTO) {
         Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userDTO.getLogin()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
@@ -153,7 +153,7 @@ public class AccountResource {
             .map(u -> {
                 userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey());
-                return new ResponseEntity<String>(HttpStatus.OK);
+                return new ResponseEntity(HttpStatus.OK);
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
@@ -255,8 +255,8 @@ public class AccountResource {
     }
 
     private boolean checkPasswordLength(String password) {
-        return (!StringUtils.isEmpty(password) &&
+        return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH);
+            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
     }
 }

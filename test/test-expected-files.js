@@ -378,7 +378,6 @@ const expectedFiles = {
 
     gateway: [
         SERVER_MAIN_RES_DIR + 'config/bootstrap.yml',
-        SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml',
         SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml',
         SERVER_TEST_RES_DIR + 'config/bootstrap.yml',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/GatewayConfiguration.java',

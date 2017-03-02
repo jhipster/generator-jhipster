@@ -355,6 +355,7 @@ module.exports = class extends Generator {
             {name: 'Swedish', value: 'sv'},
             {name: 'Turkish', value: 'tr'},
             {name: 'Tamil', value: 'ta'},
+            {name: 'Thai', value: 'th'},
             {name: 'Vietnamese', value: 'vi'}
         ];
     }
@@ -584,7 +585,7 @@ module.exports = class extends Generator {
             jhipsterUtils.rewriteFile({
                 file: ehcachePath,
                 needle: 'jhipster-needle-ehcache-add-entry',
-                splicable: [`cm.createCache(${entry}, cacheConfiguration);`
+                splicable: [`cm.createCache(${entry}, jcacheConfiguration);`
                 ]
             }, this);
         } catch (e) {

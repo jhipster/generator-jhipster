@@ -187,7 +187,7 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 ## Continuous Integration (optional)
 
-To set up a CI environment, consult the [Setting up Continuous Integration][] page.
+To configure CI for your project, run the ci-cd sub-generator (`yo jhipster:ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [JHipster Homepage and latest documentation]: <%= DOCUMENTATION_URL %>
 [JHipster <%= jhipsterVersion %> archive]: <%= DOCUMENTATION_ARCHIVE_URL %>

@@ -300,7 +300,6 @@ function writeFiles() {
             if (!this.serviceDiscoveryType) return;
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap.yml');
-            this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml');
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml');
         },
 

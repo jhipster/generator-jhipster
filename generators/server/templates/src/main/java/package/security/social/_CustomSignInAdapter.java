@@ -60,8 +60,9 @@ public class CustomSignInAdapter implements SignInAdapter {
             String jwt = tokenProvider.createToken(authenticationToken, false);
             ServletWebRequest servletWebRequest = (ServletWebRequest) request;
             servletWebRequest.getResponse().addCookie(getSocialAuthenticationCookie(jwt));
-        } catch (AuthenticationException exception) {
+        } catch (AuthenticationException ae) {
             log.error("Social authentication error");
+            log.trace("Authentication exception trace: {}", ae);
         }
         return jHipsterProperties.getSocial().getRedirectAfterSignIn();
     }

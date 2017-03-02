@@ -1,0 +1,13 @@
+{
+    "activate": {
+        "title": "Activation",
+        "messages": {
+            <%_ if (clientFramework === 'angular1') { _%>
+            "success": "<strong>ชื่อผู้ใช้ของคุณสามารถใช้งานได้แล้ว.</strong> กรุณา <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">ลงชื่อเข้าใช้</a>.",
+            <%_ } else if (clientFramework === 'angular2') { _%>
+            "success": "<strong>ชื่อผู้ใช้ของคุณสามารถใช้งานได้แล้ว.</strong> กรุณา ",
+            <%_ } _%>
+            "error": "<strong>ไม่สามารถเริ่มการใช้งานได้.</strong> กรุณากรอกแบบฟอร์มเพื่อลงทะเบียนก่อนการลงชื่อเข้าใช้."
+        }
+    }
+}
