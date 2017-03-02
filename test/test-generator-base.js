@@ -4,130 +4,130 @@
 
 const assert = require('assert'),
     expectedFiles = require('./test-expected-files'),
-    Generator = require('../generators/generator-base');
+    BaseGenerator = require('../generators/generator-base');
 
-Generator.prototype.log = (msg) => {console.log(msg);};
+BaseGenerator.prototype.log = (msg) => {console.log(msg);};
 
 describe('Generator Base', () => {
     describe('getAllSupportedLanguages', () => {
         describe('when called', () => {
             it('returns an array', () => {
-                assert.notEqual(Generator.prototype.getAllSupportedLanguages().length, 0);
+                assert.notEqual(BaseGenerator.prototype.getAllSupportedLanguages().length, 0);
             });
         });
     });
     describe('isSupportedLanguage', () => {
         describe('when called with valid language', () => {
             it('returns true', () => {
-                assert.equal(Generator.prototype.isSupportedLanguage('en'), true);
+                assert.equal(BaseGenerator.prototype.isSupportedLanguage('en'), true);
             });
         });
         describe('when called with invalid language', () => {
             it('returns false', () => {
-                assert.equal(Generator.prototype.isSupportedLanguage('ab'), false);
+                assert.equal(BaseGenerator.prototype.isSupportedLanguage('ab'), false);
             });
         });
     });
     describe('getAllSupportedLanguageOptions', () => {
         describe('when called', () => {
             it('returns an array', () => {
-                assert.notEqual(Generator.prototype.getAllSupportedLanguages().length, 0);
+                assert.notEqual(BaseGenerator.prototype.getAllSupportedLanguages().length, 0);
             });
         });
     });
     describe('getTableName', () => {
         describe('when called with a value', () => {
             it('returns a table name', () => {
-                assert.equal(Generator.prototype.getTableName('tableName'), 'table_name');
+                assert.equal(BaseGenerator.prototype.getTableName('tableName'), 'table_name');
             });
         });
     });
     describe('getColumnName', () => {
         describe('when called with a value', () => {
             it('returns a column name', () => {
-                assert.equal(Generator.prototype.getColumnName('colName'), 'col_name');
-                assert.equal(Generator.prototype.getColumnName('colNName'), 'colnname');
+                assert.equal(BaseGenerator.prototype.getColumnName('colName'), 'col_name');
+                assert.equal(BaseGenerator.prototype.getColumnName('colNName'), 'colnname');
             });
         });
     });
     describe('getPluralColumnName', () => {
         describe('when called with a value', () => {
             it('returns a plural column name', () => {
-                assert.equal(Generator.prototype.getPluralColumnName('colName'), 'col_names');
+                assert.equal(BaseGenerator.prototype.getPluralColumnName('colName'), 'col_names');
             });
         });
     });
     describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
-                assert.equal(Generator.prototype.getJoinTableName('entityName', 'relationshipName', 'mysql'), 'entity_name_relationship_name');
+                assert.equal(BaseGenerator.prototype.getJoinTableName('entityName', 'relationshipName', 'mysql'), 'entity_name_relationship_name');
             });
         });
         describe('when called with a long name', () => {
             it('returns a proper join table name', () => {
-                assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
-                assert.equal(Generator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle'), 'entity_name_lon_relationship_n');
+                assert.equal(BaseGenerator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle').length, 30);
+                assert.equal(BaseGenerator.prototype.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle'), 'entity_name_lon_relationship_n');
             });
         });
     });
     describe('getConstraintName', () => {
         describe('when called with a value', () => {
             it('returns a constraint name', () => {
-                assert.equal(Generator.prototype.getConstraintName('entityName', 'relationshipName', 'mysql'), 'fk_entity_name_relationship_name_id');
+                assert.equal(BaseGenerator.prototype.getConstraintName('entityName', 'relationshipName', 'mysql'), 'fk_entity_name_relationship_name_id');
             });
         });
         describe('when called with a long name', () => {
             it('returns a proper constraint name', () => {
-                assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle').length, 30);
-                assert.equal(Generator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle'), 'entity_name_lo_relationship_id');
+                assert.equal(BaseGenerator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle').length, 30);
+                assert.equal(BaseGenerator.prototype.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle'), 'entity_name_lo_relationship_id');
             });
         });
     });
     describe('printJHipsterLogo', () => {
         describe('when called', () => {
             it('prints the logo', () => {
-                assert.equal(Generator.prototype.printJHipsterLogo(), undefined);
+                assert.equal(BaseGenerator.prototype.printJHipsterLogo(), undefined);
             });
         });
     });
     describe('checkForNewVersion', () => {
         describe('when called', () => {
             it('prints the new version info', () => {
-                assert.equal(Generator.prototype.checkForNewVersion(), undefined);
+                assert.equal(BaseGenerator.prototype.checkForNewVersion(), undefined);
             });
         });
     });
     describe('getAngularAppName', () => {
         describe('when called with name', () => {
             it('return the angular app name', () => {
-                Generator.prototype.baseName = 'myTest';
-                assert.equal(Generator.prototype.getAngularAppName(), 'myTestApp');
+                BaseGenerator.prototype.baseName = 'myTest';
+                assert.equal(BaseGenerator.prototype.getAngularAppName(), 'myTestApp');
             });
         });
         describe('when called with name having App', () => {
             it('return the angular app name', () => {
-                Generator.prototype.baseName = 'myApp';
-                assert.equal(Generator.prototype.getAngularAppName(), 'myApp');
+                BaseGenerator.prototype.baseName = 'myApp';
+                assert.equal(BaseGenerator.prototype.getAngularAppName(), 'myApp');
             });
         });
     });
     describe('getMainClassName', () => {
         describe('when called with name', () => {
             it('return the app name', () => {
-                Generator.prototype.baseName = 'myTest';
-                assert.equal(Generator.prototype.getMainClassName(), 'MyTestApp');
+                BaseGenerator.prototype.baseName = 'myTest';
+                assert.equal(BaseGenerator.prototype.getMainClassName(), 'MyTestApp');
             });
         });
         describe('when called with name having App', () => {
             it('return the app name', () => {
-                Generator.prototype.baseName = 'myApp';
-                assert.equal(Generator.prototype.getMainClassName(), 'MyApp');
+                BaseGenerator.prototype.baseName = 'myApp';
+                assert.equal(BaseGenerator.prototype.getMainClassName(), 'MyApp');
             });
         });
         describe('when called with name having invalid java chars', () => {
             it('return the default app name', () => {
-                Generator.prototype.baseName = '9myApp';
-                assert.equal(Generator.prototype.getMainClassName(), 'Application');
+                BaseGenerator.prototype.baseName = '9myApp';
+                assert.equal(BaseGenerator.prototype.getMainClassName(), 'Application');
             });
         });
     });
@@ -144,7 +144,7 @@ describe('Generator Base', () => {
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
-                const out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                const out = BaseGenerator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
             });
         });
@@ -159,7 +159,7 @@ describe('Generator Base', () => {
                     testFrameworks: []
                 };
                 const filesToAssert = expectedFiles.client.sort();
-                const out = Generator.prototype.writeFilesToDisk(files, generator, true).sort();
+                const out = BaseGenerator.prototype.writeFilesToDisk(files, generator, true).sort();
                 assert.deepEqual(out, filesToAssert);
             });
         });
@@ -180,7 +180,7 @@ export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
 export * from './entityFolderName/entityFileName.state';`;
-            assert.equal(Generator.prototype.stripMargin(content), out);
+            assert.equal(BaseGenerator.prototype.stripMargin(content), out);
         });
         it('should produce correct indented output without margin', () => {
             const routerName = 'routerName', enableTranslation = true, glyphiconName = 'glyphiconName';
@@ -198,7 +198,7 @@ export * from './entityFolderName/entityFileName.state';`;
         <span data-translate="global.menu.routerName">routerName</span>
     </a>
 </li>`;
-            assert.equal(Generator.prototype.stripMargin(content), out);
+            assert.equal(BaseGenerator.prototype.stripMargin(content), out);
         });
     });
 });
