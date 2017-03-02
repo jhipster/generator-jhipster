@@ -330,7 +330,7 @@ module.exports = JhipsterGenerator.extend({
                         regenerate: true,
                         'skip-install': true,
                         force: this.options['force'],
-                        name: entity.name
+                        arguments: [entity.name]
                     });
                 });
             }
