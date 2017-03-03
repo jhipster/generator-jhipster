@@ -8,8 +8,9 @@ for (const idx in fields) {
 _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Rx';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
+import { EventManager, JhiLanguageService<% if (fieldsContainBlob) { %>, DataUtils<% } %> } from 'ng-jhipster';
 <%_ } else if (fieldsContainBlob) { _%>
 import { DataUtils } from 'ng-jhipster';
 <%_ } _%>
@@ -24,8 +25,10 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
 
     <%= entityInstance %>: <%= entityAngularName %>;
     private subscription: any;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         <%_ if (enableTranslation) { _%>
         private jhiLanguageService: JhiLanguageService,
         <%_ } _%>
@@ -44,6 +47,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
         this.subscription = this.route.params.subscribe(params => {
             this.load(params['id']);
         });
+        this.registerChangeIn<%= entityClassPlural %>();
     }
 
     load (id) {
@@ -66,6 +70,11 @@ export class <%= entityAngularName %>DetailComponent implements OnInit, OnDestro
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
+    }
+
+    registerChangeIn<%= entityClassPlural %>() {
+        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => this.load(this.<%= entityInstance %>.id));
     }
 
 }
