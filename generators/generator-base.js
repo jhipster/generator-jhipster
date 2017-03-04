@@ -47,11 +47,11 @@ module.exports = class extends Generator {
                     file: navbarPath,
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li ui-sref-active="active">
-                                    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                        <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
-                                    </a>
-                                </li>`
+                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                    <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                </a>
+                            </li>`
                     ]
                 }, this);
             } else {
@@ -60,11 +60,11 @@ module.exports = class extends Generator {
                     file: navbarPath,
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li routerLinkActive="active">
-                                    <a routerLink="${routerName}" routerLinkActive="active" ng-click="vm.collapseNavbar()">
-                                        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                        <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
-                                    </a>
-                                </li>`
+                                <a routerLink="${routerName}" routerLinkActive="active" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                    <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                </a>
+                            </li>`
                     ]
                 }, this);
             }
@@ -94,11 +94,11 @@ module.exports = class extends Generator {
                 file: navbarAdminPath,
                 needle: 'jhipster-needle-add-element-to-admin-menu',
                 splicable: [`<li ui-sref-active="active" >
-                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                    <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                    <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`
+                            <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
+                                <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                            </a>
+                        </li>`
                 ]
             }, this);
         } catch (e) {
@@ -122,11 +122,11 @@ module.exports = class extends Generator {
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [`<li ui-sref-active="active">
-                                    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                                        <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                        <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
-                                    </a>
-                                </li>`
+                                <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                                    <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                                </a>
+                            </li>`
                     ]
                 }, this);
             } else {
@@ -134,12 +134,15 @@ module.exports = class extends Generator {
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
-                    splicable: [`<li uiSrefActive="active">
-                            <a class="dropdown-item" routerLink="${routerName}" (click)="collapseNavbar()">
-                                <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                                <span ${enableTranslation ? 'jhiTranslate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
-                            </a>
-                        </li>`
+                    splicable: [
+                        this.stripMargin(
+                            `|<li uiSrefActive="active">
+                             |                        <a class="dropdown-item" routerLink="${routerName}" (click)="collapseNavbar()">
+                             |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                             |                            <span ${enableTranslation ? 'jhiTranslate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                             |                        </a>
+                             |                    </li>`
+                        )
                     ]
                 }, this);
             }

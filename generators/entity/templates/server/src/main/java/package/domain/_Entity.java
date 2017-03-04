@@ -260,7 +260,7 @@ public class <%= entityClass %> implements Serializable {
         const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
         const otherEntityName = relationships[idx].otherEntityName;
         const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-        const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalize;
+        const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
         const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
     _%>
     <%_ if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') { _%>
