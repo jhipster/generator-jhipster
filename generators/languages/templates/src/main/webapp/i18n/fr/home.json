@@ -5,7 +5,7 @@
         "logged": {
             "message": "Vous êtes connecté en tant que \"{{username}}\"."
         },
-        "question": "Si vous avez des questions à propos de JHipster:",
+        "question": "Si vous avez des questions à propos de JHipster :",
         "link": {
             "homepage": "Page d'accueil de JHipster",
             "stackoverflow": "JHipster sur Stack Overflow",
@@ -14,6 +14,6 @@
             "follow": "Suivez @java_hipster sur Twitter"
         },
         "like": "Si vous aimez JHipster, donnez nous une étoile sur",
-        "github": "GitHub"
+        "github": "GitHub "
     }
 }
