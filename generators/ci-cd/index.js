@@ -19,6 +19,7 @@ module.exports = PipelineGenerator.extend({
             this.log(chalk.white('[Beta] Welcome to the JHipster CI/CD Sub-Generator'));
         },
         getConfig: function () {
+            this.baseName = this.config.get('baseName');
             this.applicationType = this.config.get('applicationType');
             this.skipClient = this.config.get('skipClient');
             this.clientPackageManager = this.config.get('clientPackageManager');
