@@ -108,6 +108,10 @@ module.exports = JhipsterServerGenerator.extend({
             this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
             this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
 
+            this.NODE_VERSION = constants.NODE_VERSION;
+            this.YARN_VERSION = constants.YARN_VERSION;
+            this.NPM_VERSION = constants.NPM_VERSION;
+
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packagejs = packagejs;
             this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;

@@ -9,6 +9,8 @@ var PipelineGenerator = generators.Base.extend({});
 
 util.inherits(PipelineGenerator, scriptBase);
 
+const constants = require('../generator-constants');
+
 module.exports = PipelineGenerator.extend({
     constructor: function () {
         generators.Base.apply(this, arguments);
@@ -27,6 +29,11 @@ module.exports = PipelineGenerator.extend({
             this.clientFramework = this.config.get('clientFramework');
             this.testFrameworks = this.config.get('testFrameworks');
             this.abort = false;
+        },
+        initConstants: function () {
+            this.NODE_VERSION = constants.NODE_VERSION;
+            this.YARN_VERSION = constants.YARN_VERSION;
+            this.NPM_VERSION = constants.NPM_VERSION;
         }
     },
 
