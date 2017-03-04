@@ -41,7 +41,7 @@ Before you can build this project, you must install and configure the following 
 <%_ } _%>
 
 After installing Node, you should be able to run the following command to install development tools.
-You will only need to run this command when dependencies change in `package.json`.
+You will only need to run this command when dependencies change in [package.json](package.json).
 
     <%= clientPackageManager %> install
 
@@ -63,7 +63,7 @@ auto-refreshes when files change on your hard drive.
     <%= clientPackageManager %> start
 
 [<%= clientPackageMngrName %>][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in `package.json`. You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
+specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
 The `<%= clientPackageManager %> run` command will list all of the scripts available to run for this project.
@@ -80,12 +80,12 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 
-Edit `src/main/webapp/app/vendor.ts`file:
+Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
 ~~~
 
-Edit `src/main/webapp/content/css/vendor.css` file:
+Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor.css) file:
 ~~~
 @import '~leaflet/dist/leaflet.css';
 ~~~
@@ -95,7 +95,7 @@ Note: there are still few other things remaining to do for Leaflet that we won't
     gulp
 
 [Bower][] is used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in `bower.json`. You can also run `bower update` and `bower install` to manage dependencies.
+specifying a newer version in [bower.json](bower.json). You can also run `bower update` and `bower install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
 <%_ } _%>
 <%_ } _%>
@@ -126,7 +126,7 @@ To optimize the <%= baseName %> application for production, run:
     ./gradlew -Pprod clean bootRepackage<% } %>
 
 <%_ if(!skipClient) { _%>
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
+This will concatenate and minify the client CSS and JavaScript files. It will also modify [index.html](index.html) so it references these new files.
 <%_ } _%>
 To ensure everything worked, run:
 <% if (buildTool == 'maven') { %>
@@ -145,7 +145,7 @@ To launch your application's tests, run:
 <% if(!skipClient) { %>
 ### Client tests
 
-Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in `<%= CLIENT_TEST_SRC_DIR %>` and can be run with:
+Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
 <%_ if (clientFramework === 'angular2') { _%>
     <%= clientPackageManager %> test
@@ -153,11 +153,11 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
     gulp test
 <%_ } _%>
 
-<% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
+<% if (protractorTests) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [<%= CLIENT_TEST_SRC_DIR %>e2e](<%= CLIENT_TEST_SRC_DIR %>e2e)
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
 <% } %><% if (gatlingTests) { %>### Other tests
 
-Performance tests are run by [Gatling][] and written in Scala. They're located in `src/test/gatling` and can be run with:
+Performance tests are run by [Gatling][] and written in Scala. They're located in [src/test/gatling](src/test/gatling) and can be run with:
 
     <% if (buildTool == 'maven') { %>./mvnw gatling:execute<% } else { %>./gradlew gatlingRun<% } %>
 <% } %>
@@ -165,7 +165,7 @@ For more information, refer to the [Running tests page][].
 
 ## Using Docker to simplify development (optional)
 
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the `src/main/docker` folder to launch required third party services.
+You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 For example, to start a <%= prodDatabaseType%> database in a docker container, run:
 
     docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml up -d
