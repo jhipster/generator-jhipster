@@ -126,7 +126,7 @@ To optimize the <%= baseName %> application for production, run:
     ./gradlew -Pprod clean bootRepackage<% } %>
 
 <%_ if(!skipClient) { _%>
-This will concatenate and minify the client CSS and JavaScript files. It will also modify [index.html](index.html) so it references these new files.
+This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
 <%_ } _%>
 To ensure everything worked, run:
 <% if (buildTool == 'maven') { %>
