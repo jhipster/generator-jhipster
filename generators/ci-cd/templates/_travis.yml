@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "6.9.5"
+  - "<%= NODE_VERSION %>"
 jdk:
   - oraclejdk8
 sudo: false
@@ -22,7 +22,7 @@ cache:
 <%_ } _%>
 env:
   global:
-    - NODE_VERSION=6.9.5
+    - NODE_VERSION=<%= NODE_VERSION %>
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
 before_install:

@@ -24,7 +24,7 @@ node {
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3"
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>"
 <%= indent %>    }
 
 <%= indent %>    stage('yarn install') {
@@ -33,7 +33,7 @@ node {
 
         <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.5 -DnpmVersion=4.1.2"
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
 <%= indent %>    }
 
 <%= indent %>    stage('npm install') {
