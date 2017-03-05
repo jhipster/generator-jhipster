@@ -1,11 +1,11 @@
 'use strict';
 
-const util = require('util'),
-    shelljs = require('shelljs'),
-    generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    jhiCore = require('jhipster-core'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const shelljs = require('shelljs');
+const generators = require('yeoman-generator');
+const chalk = require('chalk');
+const jhiCore = require('jhipster-core');
+const scriptBase = require('../generator-base');
 
 const JDLGenerator = generator.extend({});
 
