@@ -50,6 +50,11 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
                     params = destinationEvent.params;
                     destinationData = destinationEvent.data;
                     destinationName = destinationEvent.url[0].path;
+                } else {
+                    destinationEvent = event.state.root.children[0];
+                    params = destinationEvent.params;
+                    destinationData = destinationEvent.data;
+                    destinationName = destinationEvent.url[0].path;
                 }
                 let from = {name: this.router.url.slice(1)};
                 let destination = {name: destinationName, data: destinationData};
