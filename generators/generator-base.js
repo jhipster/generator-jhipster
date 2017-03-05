@@ -1963,10 +1963,9 @@ module.exports = class extends Generator {
         return res;
     }
 
-    contains() {
-        return _.includes(arguments);
+    contains(array, item) {
+        return _.includes(array, item);
     }
-
     /**
      * Function to issue a https get request, and process the result
      *

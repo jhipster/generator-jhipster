@@ -23,6 +23,7 @@ import { <%= rel.otherEntityAngularName %>, <%= rel.otherEntityAngularName%>Serv
 // TODO replace ng-file-upload dependency by an ng2 depedency
 // TODO Find a better way to format dates so that it works with NgbDatePicker
 _%>
+
 @Component({
     selector: '<%= jhiPrefix %>-<%= entityFileName %>-dialog',
     templateUrl: './<%= entityFileName %>-dialog.component.html'
@@ -36,7 +37,7 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     const queries = [];
     const variables = [];
     let hasManyToMany = false;
-    for (idx in relationships) {
+    for (const idx in relationships) {
         let query;
         let variableName;
         hasManyToMany = hasManyToMany || relationships[idx].relationshipType == 'many-to-many';
