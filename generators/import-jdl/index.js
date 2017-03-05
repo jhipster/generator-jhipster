@@ -2,7 +2,7 @@
 
 const util = require('util');
 const shelljs = require('shelljs');
-const generators = require('yeoman-generator');
+const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
 const scriptBase = require('../generator-base');
