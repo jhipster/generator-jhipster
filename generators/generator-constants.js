@@ -22,6 +22,7 @@ const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.4.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.5.1';
 const DOCKER_GRAFANA = 'grafana/grafana:4.0.2';
+const DOCKER_JENKINS = 'jenkins:latest';
 
 // version of Node, Yarn, NPM
 const NODE_VERSION = '6.10.0';
@@ -89,10 +90,10 @@ const constants = {
     DOCKER_PROMETHEUS: DOCKER_PROMETHEUS,
     DOCKER_PROMETHEUS_ALERTMANAGER: DOCKER_PROMETHEUS_ALERTMANAGER,
     DOCKER_GRAFANA: DOCKER_GRAFANA,
-
     NODE_VERSION: NODE_VERSION,
     YARN_VERSION: YARN_VERSION,
-    NPM_VERSION: NPM_VERSION
+    NPM_VERSION: NPM_VERSION,
+    DOCKER_JENKINS: DOCKER_JENKINS
 };
 
 
