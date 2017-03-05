@@ -43,12 +43,3 @@ services:
     jhipster-console:
         scale: 1
 <%_ } _%>
-
-<%_ if (monitoring === 'prometheus') { _%>
-    prometheus:
-        scale: 1
-    alertmanager:
-        scale: 1
-    grafana:
-        scale: 1
-<%_ } _%>
