@@ -272,6 +272,38 @@ describe('JHipster CI-CD Sub Generator', function () {
             assert.fileContent('Jenkinsfile', /docker/);
             assert.fileContent('Jenkinsfile', /sonar/);
             assert.fileContent('Jenkinsfile', /heroku/);
+            assert.noFileContent('Jenkinsfile', /def dockerImage/);
+        });
+    });
+
+    describe('Jenkins with pushing to Docker Registry', function () {
+        beforeEach(function (done) {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
+                })
+                .withOptions({skipChecks: true})
+                .withPrompts({
+                    pipelines: [
+                        'jenkins'
+                    ],
+                    jenkinsIntegrations: [
+                        'publishDocker'
+                    ],
+                    dockerRegistryURL: 'https://registry.hub.docker.com',
+                    dockerRegistryCredentialsId: 'jhipster'
+                })
+                .on('end', done);
+        });
+        it('creates expected files', function () {
+            assert.file(expectedFiles.jenkins);
+            assert.noFile(expectedFiles.gitlab);
+            assert.noFile(expectedFiles.travis);
+            assert.noFile(expectedFiles.circle);
+        });
+        it('contains def dockerImage', function () {
+            assert.fileContent('Jenkinsfile', /def dockerImage/);
         });
     });
 
