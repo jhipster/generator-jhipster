@@ -31,6 +31,8 @@ spring:
     <%_ } _%>
     jackson:
         serialization.write_dates_as_timestamps: false
+    cache:
+        type: none
     <%_ if (messageBroker == 'kafka') { _%>
     cloud:
         stream:

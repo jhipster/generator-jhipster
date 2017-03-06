@@ -359,6 +359,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'Swedish', value: 'sv'},
         {name: 'Turkish', value: 'tr'},
         {name: 'Tamil', value: 'ta'},
+        {name: 'Thai', value: 'th'},
         {name: 'Vietnamese', value: 'vi'}
     ];
 };

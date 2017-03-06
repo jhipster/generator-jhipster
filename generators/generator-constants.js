@@ -23,6 +23,11 @@ const DOCKER_PROMETHEUS = 'prom/prometheus:v1.4.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.5.1';
 const DOCKER_GRAFANA = 'grafana/grafana:4.0.2';
 
+// version of Node, Yarn, NPM
+const NODE_VERSION = '6.10.0';
+const YARN_VERSION = '0.21.3';
+const NPM_VERSION = '4.3.0';
+
 // all constants used throughout all generators
 
 const MAIN_DIR = 'src/main/';
@@ -83,7 +88,11 @@ const constants = {
     DOCKER_CONSUL_CONFIG_LOADER: DOCKER_CONSUL_CONFIG_LOADER,
     DOCKER_PROMETHEUS: DOCKER_PROMETHEUS,
     DOCKER_PROMETHEUS_ALERTMANAGER: DOCKER_PROMETHEUS_ALERTMANAGER,
-    DOCKER_GRAFANA: DOCKER_GRAFANA
+    DOCKER_GRAFANA: DOCKER_GRAFANA,
+
+    NODE_VERSION: NODE_VERSION,
+    YARN_VERSION: YARN_VERSION,
+    NPM_VERSION: NPM_VERSION
 };
 
 

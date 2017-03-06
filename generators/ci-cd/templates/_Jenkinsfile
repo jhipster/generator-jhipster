@@ -24,7 +24,7 @@ node {
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v6.9.5 -DyarnVersion=v0.20.3"
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>"
 <%= indent %>    }
 
 <%= indent %>    stage('yarn install') {
@@ -33,7 +33,7 @@ node {
 
         <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v6.9.5 -DnpmVersion=4.1.2"
+<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
 <%= indent %>    }
 
 <%= indent %>    stage('npm install') {
@@ -154,6 +154,27 @@ node {
 <%= indent %>    }
 <%_ } _%>
 <%_ if (jenkinsIntegrations.includes('docker')) { _%>
+<%= gitLabIndent %>    }
+<%_ } _%>
+<%_ if (jenkinsIntegrations.includes('publishDocker')) { _%>
+
+<%= gitLabIndent %>    def dockerImage
+<%= gitLabIndent %>    stage('build docker') {
+    <%_ if (buildTool === 'maven') { _%>
+<%= gitLabIndent %>        sh "cp -R src/main/docker target/"
+<%= gitLabIndent %>        sh "cp target/*.war target/docker/"
+<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'target/docker')
+    <%_ } else if (buildTool === 'gradle' ) { _%>
+<%= gitLabIndent %>        sh "cp -R src/main/docker build/"
+<%= gitLabIndent %>        sh "cp build/libs/*.war build/docker/"
+<%= gitLabIndent %>        dockerImage = docker.build('<%= baseName.toLowerCase() %>', 'build/docker')
+    <%_ } _%>
+<%= gitLabIndent %>    }
+
+<%= gitLabIndent %>    stage('publish docker') {
+<%= gitLabIndent %>        docker.withRegistry('<%= dockerRegistryURL %>', '<%= dockerRegistryCredentialsId %>') {
+<%= gitLabIndent %>            dockerImage.push 'latest'
+<%= gitLabIndent %>        }
 <%= gitLabIndent %>    }
 <%_ } _%>
 <%_ if (jenkinsIntegrations.includes('gitlab')) { _%>

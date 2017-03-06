@@ -1,0 +1,39 @@
+{
+    "health": {
+        "title": "ตรวจสอบสถานะระบบ",
+        "refresh.button": "รีเฟรช",
+        "stacktrace": "Stacktrace",
+        "details": {
+			"details": "รายละเอียด",
+            "properties": "คุณสมบัติ",
+            "name": "ชื่อ",
+            "value": "ค่า",
+            "error": "ผิดพลาด"
+        },
+        "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Message broker",
+            <%_ } _%>
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            "hystrix": "Hystrix",
+            <%_ } _%>
+            "diskSpace": "พื้นที่เก็บข้อมูล",
+            "mail": "อีเมล"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "ฐานข้อมูล"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "เซอร์วิส",
+            "status": "สถานะ"
+        },
+        "status": {
+            "UP": "ขึ้น",
+            "DOWN": "ลง"
+        }
+    }
+}
