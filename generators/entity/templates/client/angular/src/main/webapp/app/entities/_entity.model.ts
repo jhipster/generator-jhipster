@@ -59,6 +59,6 @@ export class <%= entityAngularName %> {
     constructor(<% for (idx in variables) { %>
         public <%- variables[idx] %>,<% } %>
     ) {<% for (idx in defaultVariablesValues) { %>
-        <%- defaultVariablesValues[idx] %> <% } %>
+        <%- defaultVariablesValues[idx] %><% } %>
     }
 }
