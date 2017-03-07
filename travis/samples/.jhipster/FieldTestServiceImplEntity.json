@@ -3,18 +3,18 @@
     "relationships": [],
     "fields": [
         {
-            "fieldName": "stringField",
+            "fieldName": "stringMika",
             "fieldType": "String"
         },
         {
-            "fieldName": "stringRequiredField",
+            "fieldName": "stringRequiredMika",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "stringMinlengthField",
+            "fieldName": "stringMinlengthMika",
             "fieldType": "String",
             "fieldValidateRules": [
                 "minlength"
@@ -22,7 +22,7 @@
             "fieldValidateRulesMinlength": 0
         },
         {
-            "fieldName": "stringMaxlengthField",
+            "fieldName": "stringMaxlengthMika",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -30,7 +30,7 @@
             "fieldValidateRulesMaxlength": 20
         },
         {
-            "fieldName": "stringPatternField",
+            "fieldName": "stringPatternMika",
             "fieldType": "String",
             "fieldValidateRules": [
                 "pattern"
@@ -39,18 +39,18 @@
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
         {
-            "fieldName": "integerField",
+            "fieldName": "integerMika",
             "fieldType": "Integer"
         },
         {
-            "fieldName": "integerRequiredField",
+            "fieldName": "integerRequiredMika",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "integerMinField",
+            "fieldName": "integerMinMika",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "min"
@@ -58,7 +58,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "integerMaxField",
+            "fieldName": "integerMaxMika",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "max"
@@ -66,18 +66,18 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "longField",
+            "fieldName": "longMika",
             "fieldType": "Long"
         },
         {
-            "fieldName": "longRequiredField",
+            "fieldName": "longRequiredMika",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "longMinField",
+            "fieldName": "longMinMika",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "min"
@@ -85,7 +85,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "longMaxField",
+            "fieldName": "longMaxMika",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "max"
@@ -93,18 +93,18 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "floatField",
+            "fieldName": "floatMika",
             "fieldType": "Float"
         },
         {
-            "fieldName": "floatRequiredField",
+            "fieldName": "floatRequiredMika",
             "fieldType": "Float",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "floatMinField",
+            "fieldName": "floatMinMika",
             "fieldType": "Float",
             "fieldValidateRules": [
                 "min"
@@ -112,7 +112,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "floatMaxField",
+            "fieldName": "floatMaxMika",
             "fieldType": "Float",
             "fieldValidateRules": [
                 "max"
@@ -120,14 +120,14 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "doubleRequiredField",
+            "fieldName": "doubleRequiredMika",
             "fieldType": "Double",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "doubleMinField",
+            "fieldName": "doubleMinMika",
             "fieldType": "Double",
             "fieldValidateRules": [
                 "min"
@@ -135,7 +135,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "doubleMaxField",
+            "fieldName": "doubleMaxMika",
             "fieldType": "Double",
             "fieldValidateRules": [
                 "max"
@@ -143,14 +143,14 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "bigDecimalRequiredField",
+            "fieldName": "bigDecimalRequiredMika",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "bigDecimalMinField",
+            "fieldName": "bigDecimalMinMika",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "min"
@@ -158,7 +158,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "bigDecimalMaxField",
+            "fieldName": "bigDecimalMaxMika",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "max"
@@ -166,45 +166,45 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "localDateField",
+            "fieldName": "localDateMika",
             "fieldType": "LocalDate"
         },
         {
-            "fieldName": "localDateRequiredField",
+            "fieldName": "localDateRequiredMika",
             "fieldType": "LocalDate",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "zonedDateTimeField",
+            "fieldName": "zonedDateTimeMika",
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "zonedDateTimeRequiredField",
+            "fieldName": "zonedDateTimeRequiredMika",
             "fieldType": "ZonedDateTime",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "booleanField",
+            "fieldName": "booleanMika",
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "booleanRequiredField",
+            "fieldName": "booleanRequiredMika",
             "fieldType": "Boolean",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "enumField",
+            "fieldName": "enumMika",
             "fieldType": "EnumFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
         },
         {
-            "fieldName": "enumRequiredField",
+            "fieldName": "enumRequiredMika",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
             "fieldValidateRules": [
@@ -212,12 +212,12 @@
             ]
         },
         {
-            "fieldName": "byteImageField",
+            "fieldName": "byteImageMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image"
         },
         {
-            "fieldName": "byteImageRequiredField",
+            "fieldName": "byteImageRequiredMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
             "fieldValidateRules": [
@@ -225,7 +225,7 @@
             ]
         },
         {
-            "fieldName": "byteImageMinbytesField",
+            "fieldName": "byteImageMinbytesMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
             "fieldValidateRules": [
@@ -234,7 +234,7 @@
             "fieldValidateRulesMinbytes": 0
         },
         {
-            "fieldName": "byteImageMaxbytesField",
+            "fieldName": "byteImageMaxbytesMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
             "fieldValidateRules": [
@@ -243,12 +243,12 @@
             "fieldValidateRulesMaxbytes": 10000
         },
         {
-            "fieldName": "byteAnyField",
+            "fieldName": "byteAnyMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
         },
         {
-            "fieldName": "byteAnyRequiredField",
+            "fieldName": "byteAnyRequiredMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
             "fieldValidateRules": [
@@ -256,7 +256,7 @@
             ]
         },
         {
-            "fieldName": "byteAnyMinbytesField",
+            "fieldName": "byteAnyMinbytesMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
             "fieldValidateRules": [
@@ -265,7 +265,7 @@
             "fieldValidateRulesMinbytes": 0
         },
         {
-            "fieldName": "byteAnyMaxbytesField",
+            "fieldName": "byteAnyMaxbytesMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
             "fieldValidateRules": [
@@ -274,12 +274,12 @@
             "fieldValidateRulesMaxbytes": 10000
         },
         {
-            "fieldName": "byteTextField",
+            "fieldName": "byteTextMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"
         },
         {
-            "fieldName": "byteTextRequiredField",
+            "fieldName": "byteTextRequiredMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
             "fieldValidateRules": [
@@ -287,7 +287,7 @@
             ]
         },
         {
-            "fieldName": "byteTextMinbytesField",
+            "fieldName": "byteTextMinbytesMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
             "fieldValidateRules": [
@@ -296,7 +296,7 @@
             "fieldValidateRulesMinbytes": 0
         },
         {
-            "fieldName": "byteTextMaxbytesField",
+            "fieldName": "byteTextMaxbytesMika",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
             "fieldValidateRules": [
