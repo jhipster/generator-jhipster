@@ -60,14 +60,16 @@ export const <%= entityInstance %>Route: Routes = [
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }, {
     path: '<%= entityUrl %>/:id',
     component: <%= entityAngularName %>DetailComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }
 ];
 
@@ -79,6 +81,7 @@ export const <%= entityInstance %>PopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -88,6 +91,7 @@ export const <%= entityInstance %>PopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -97,6 +101,7 @@ export const <%= entityInstance %>PopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   }
 ];
