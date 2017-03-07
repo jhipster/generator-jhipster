@@ -58,7 +58,8 @@ function askIntegrations() {
             choices: [
                 {name: 'Perform the build in a Docker container', value: 'docker'},
                 {name: 'Analyze code with Sonar', value: 'sonar'},
-                {name: 'Send build status to GitLab', value: 'gitlab'}
+                {name: 'Send build status to GitLab', value: 'gitlab'},
+                {name: 'Build and publish a Docker image', value: 'publishDocker'}
             ]
         },
         {
@@ -67,6 +68,20 @@ function askIntegrations() {
             name: 'jenkinsSonarName',
             message: 'What is the name of the Sonar server?',
             default: 'Sonar'
+        },
+        {
+            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryURL',
+            message: 'What is the URL of the Docker registry?',
+            default: 'https://registry.hub.docker.com'
+        },
+        {
+            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryCredentialsId',
+            message: 'What is the Jenkins Credentials ID for the Docker registry?',
+            default: 'docker-login'
         },
         {
             when: this.pipelines.includes('gitlab'),
@@ -87,6 +102,8 @@ function askIntegrations() {
     this.prompt(prompts).then(props => {
         this.jenkinsIntegrations = props.jenkinsIntegrations;
         this.jenkinsSonarName = props.jenkinsSonarName;
+        this.dockerRegistryURL = props.dockerRegistryURL;
+        this.dockerRegistryCredentialsId = props.dockerRegistryCredentialsId;
         this.gitlabUseDocker = props.gitlabUseDocker;
         this.heroku = props.heroku;
         done();

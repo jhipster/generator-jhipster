@@ -9,6 +9,8 @@ const PipelineGenerator = generator.extend({});
 
 util.inherits(PipelineGenerator, scriptBase);
 
+const constants = require('../generator-constants');
+
 module.exports = PipelineGenerator.extend({
     constructor: function () {
         generator.apply(this, arguments);
@@ -19,6 +21,7 @@ module.exports = PipelineGenerator.extend({
             this.log(chalk.white('[Beta] Welcome to the JHipster CI/CD Sub-Generator'));
         },
         getConfig: function () {
+            this.baseName = this.config.get('baseName');
             this.applicationType = this.config.get('applicationType');
             this.skipClient = this.config.get('skipClient');
             this.clientPackageManager = this.config.get('clientPackageManager');
@@ -27,6 +30,11 @@ module.exports = PipelineGenerator.extend({
             this.clientFramework = this.config.get('clientFramework');
             this.testFrameworks = this.config.get('testFrameworks');
             this.abort = false;
+        },
+        initConstants: function () {
+            this.NODE_VERSION = constants.NODE_VERSION;
+            this.YARN_VERSION = constants.YARN_VERSION;
+            this.NPM_VERSION = constants.NPM_VERSION;
         }
     },
 

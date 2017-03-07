@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.5.1.RELEASE</version>
+        <version>1.5.2.RELEASE</version>
         <relativePath />
     </parent>
 
@@ -107,9 +107,9 @@
         <%_ if (databaseType === 'mongodb') { _%>
         <mongobee.version>0.10</mongobee.version>
         <%_ } _%>
-        <node.version>v6.9.5</node.version>
+        <node.version>v<%= NODE_VERSION %></node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
-        <npm.version>4.1.2</npm.version>
+        <npm.version><%= NPM_VERSION %></npm.version>
         <%_ } _%>
         <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
         <oracle.version>12.1.0.2.0</oracle.version>
@@ -177,7 +177,7 @@
         <validation-api.version>1.1.0.Final</validation-api.version>
         <%_ } _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
-        <yarn.version>v0.20.3</yarn.version>
+        <yarn.version>v<%= YARN_VERSION %></yarn.version>
         <%_ } _%>
     </properties>
 

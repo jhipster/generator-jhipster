@@ -3,7 +3,7 @@
     <h2><span data-translate="<%= keyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
-    <dl class="row jh-entity-details">
+    <dl class="dl-horizontal jh-entity-details">
         <%_ for (idx in fields) {
             const fieldName = fields[idx].fieldName;
             const fieldType = fields[idx].fieldType;

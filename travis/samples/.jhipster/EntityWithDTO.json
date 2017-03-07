@@ -3,7 +3,7 @@
     "relationships": [],
     "fields": [
         {
-            "fieldName": "name",
+            "fieldName": "emma",
             "fieldType": "String"
         }
     ],
