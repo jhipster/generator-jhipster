@@ -44,19 +44,19 @@
         </div>
         <div class="col-md-4">
             <b jhiTranslate="metrics.jvm.gc.title">Garbage collections</b>
-            <div class="row">
+            <div class="row" *ngIf="metrics.gauges['jvm.garbage.PS-MarkSweep.count']">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
                 <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="metrics.gauges['jvm.garbage.PS-MarkSweep.time']">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
                 <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="metrics.gauges['jvm.garbage.PS-Scavenge.count']">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.scavengecount">Scavenge count</div>
                 <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="metrics.gauges['jvm.garbage.PS-Scavenge.time']">
                 <div class="col-md-9" jhiTranslate="metrics.jvm.gc.scavengetime">Scavenge time</div>
                 <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
             </div>
