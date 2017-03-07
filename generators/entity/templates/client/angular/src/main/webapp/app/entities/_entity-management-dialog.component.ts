@@ -141,6 +141,8 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
                 .subscribe((res: <%= entityAngularName %>) =>
                     this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: <%= entityAngularName %>) => 
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
@@ -151,6 +153,11 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
     }
 
     private onSaveError (error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
