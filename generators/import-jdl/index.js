@@ -1,4 +1,5 @@
 'use strict';
+
 const util = require('util');
 const shelljs = require('shelljs');
 const generator = require('yeoman-generator');
@@ -65,8 +66,6 @@ module.exports = JDLGenerator.extend({
                 this.log(e);
                 this.error('\nError while parsing entities from JDL\n');
             }
-
-
         },
 
         generateEntities: function () {
@@ -80,9 +79,8 @@ module.exports = JDLGenerator.extend({
                     });
                 });
             } catch (e) {
-                this.error(`Error while generating entities from parsed JDL\n${ e }`);
+                this.error(`Error while generating entities from parsed JDL\n${e}`);
             }
-
         }
     },
 
@@ -97,12 +95,11 @@ module.exports = JDLGenerator.extend({
 
         // rebuild client for Angular
         const rebuildClient = () => {
-            this.log('\n' + chalk.bold.green('Running `webpack:build:dev` to update client app\n'));
+            this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app')}\n`);
             this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
             rebuildClient();
         }
     }
-
 });
