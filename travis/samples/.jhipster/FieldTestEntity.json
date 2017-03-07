@@ -3,18 +3,18 @@
     "relationships": [],
     "fields": [
         {
-            "fieldName": "stringField",
+            "fieldName": "stringTom",
             "fieldType": "String"
         },
         {
-            "fieldName": "stringRequiredField",
+            "fieldName": "stringRequiredTom",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "stringMinlengthField",
+            "fieldName": "stringMinlengthTom",
             "fieldType": "String",
             "fieldValidateRules": [
                 "minlength"
@@ -22,7 +22,7 @@
             "fieldValidateRulesMinlength": 0
         },
         {
-            "fieldName": "stringMaxlengthField",
+            "fieldName": "stringMaxlengthTom",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
@@ -30,7 +30,7 @@
             "fieldValidateRulesMaxlength": 20
         },
         {
-            "fieldName": "stringPatternField",
+            "fieldName": "stringPatternTom",
             "fieldType": "String",
             "fieldValidateRules": [
                 "pattern"
@@ -39,18 +39,18 @@
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
         {
-            "fieldName": "integerField",
+            "fieldName": "integerTom",
             "fieldType": "Integer"
         },
         {
-            "fieldName": "integerRequiredField",
+            "fieldName": "integerRequiredTom",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "integerMinField",
+            "fieldName": "integerMinTom",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "min"
@@ -58,7 +58,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "integerMaxField",
+            "fieldName": "integerMaxTom",
             "fieldType": "Integer",
             "fieldValidateRules": [
                 "max"
@@ -66,18 +66,18 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "longField",
+            "fieldName": "longTom",
             "fieldType": "Long"
         },
         {
-            "fieldName": "longRequiredField",
+            "fieldName": "longRequiredTom",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "longMinField",
+            "fieldName": "longMinTom",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "min"
@@ -85,7 +85,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "longMaxField",
+            "fieldName": "longMaxTom",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "max"
@@ -93,18 +93,18 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "floatField",
+            "fieldName": "floatTom",
             "fieldType": "Float"
         },
         {
-            "fieldName": "floatRequiredField",
+            "fieldName": "floatRequiredTom",
             "fieldType": "Float",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "floatMinField",
+            "fieldName": "floatMinTom",
             "fieldType": "Float",
             "fieldValidateRules": [
                 "min"
@@ -112,7 +112,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "floatMaxField",
+            "fieldName": "floatMaxTom",
             "fieldType": "Float",
             "fieldValidateRules": [
                 "max"
@@ -120,14 +120,14 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "doubleRequiredField",
+            "fieldName": "doubleRequiredTom",
             "fieldType": "Double",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "doubleMinField",
+            "fieldName": "doubleMinTom",
             "fieldType": "Double",
             "fieldValidateRules": [
                 "min"
@@ -135,7 +135,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "doubleMaxField",
+            "fieldName": "doubleMaxTom",
             "fieldType": "Double",
             "fieldValidateRules": [
                 "max"
@@ -143,14 +143,14 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "bigDecimalRequiredField",
+            "fieldName": "bigDecimalRequiredTom",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "bigDecimalMinField",
+            "fieldName": "bigDecimalMinTom",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "min"
@@ -158,7 +158,7 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldName": "bigDecimalMaxField",
+            "fieldName": "bigDecimalMaxTom",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "max"
@@ -166,45 +166,45 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldName": "localDateField",
+            "fieldName": "localDateTom",
             "fieldType": "LocalDate"
         },
         {
-            "fieldName": "localDateRequiredField",
+            "fieldName": "localDateRequiredTom",
             "fieldType": "LocalDate",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "zonedDateTimeField",
+            "fieldName": "zonedDateTimeTom",
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "zonedDateTimeRequiredField",
+            "fieldName": "zonedDateTimeRequiredTom",
             "fieldType": "ZonedDateTime",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "booleanField",
+            "fieldName": "booleanTom",
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "booleanRequiredField",
+            "fieldName": "booleanRequiredTom",
             "fieldType": "Boolean",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "enumField",
+            "fieldName": "enumTom",
             "fieldType": "EnumFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
         },
         {
-            "fieldName": "enumRequiredField",
+            "fieldName": "enumRequiredTom",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
             "fieldValidateRules": [
@@ -212,12 +212,12 @@
             ]
         },
         {
-            "fieldName": "byteImageField",
+            "fieldName": "byteImageTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image"
         },
         {
-            "fieldName": "byteImageRequiredField",
+            "fieldName": "byteImageRequiredTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
             "fieldValidateRules": [
@@ -225,7 +225,7 @@
             ]
         },
         {
-            "fieldName": "byteImageMinbytesField",
+            "fieldName": "byteImageMinbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
             "fieldValidateRules": [
@@ -234,7 +234,7 @@
             "fieldValidateRulesMinbytes": 0
         },
         {
-            "fieldName": "byteImageMaxbytesField",
+            "fieldName": "byteImageMaxbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image",
             "fieldValidateRules": [
@@ -243,12 +243,12 @@
             "fieldValidateRulesMaxbytes": 10000
         },
         {
-            "fieldName": "byteAnyField",
+            "fieldName": "byteAnyTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
         },
         {
-            "fieldName": "byteAnyRequiredField",
+            "fieldName": "byteAnyRequiredTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
             "fieldValidateRules": [
@@ -256,7 +256,7 @@
             ]
         },
         {
-            "fieldName": "byteAnyMinbytesField",
+            "fieldName": "byteAnyMinbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
             "fieldValidateRules": [
@@ -265,7 +265,7 @@
             "fieldValidateRulesMinbytes": 0
         },
         {
-            "fieldName": "byteAnyMaxbytesField",
+            "fieldName": "byteAnyMaxbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any",
             "fieldValidateRules": [
@@ -274,12 +274,12 @@
             "fieldValidateRulesMaxbytes": 10000
         },
         {
-            "fieldName": "byteTextField",
+            "fieldName": "byteTextTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"
         },
         {
-            "fieldName": "byteTextRequiredField",
+            "fieldName": "byteTextRequiredTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
             "fieldValidateRules": [
@@ -287,7 +287,7 @@
             ]
         },
         {
-            "fieldName": "byteTextMinbytesField",
+            "fieldName": "byteTextMinbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
             "fieldValidateRules": [
@@ -296,7 +296,7 @@
             "fieldValidateRulesMinbytes": 0
         },
         {
-            "fieldName": "byteTextMaxbytesField",
+            "fieldName": "byteTextMaxbytesTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text",
             "fieldValidateRules": [
