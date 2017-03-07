@@ -292,16 +292,16 @@ entity tables helpers
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.row.jh-entity-details > dd {
+.dl-horizontal.jh-entity-details > dd {
     margin-bottom: 15px;
 }
 
 @media screen and (min-width: 768px) {
-    .row.jh-entity-details > dt {
+    .dl-horizontal.jh-entity-details > dt {
         margin-bottom: 15px;
     }
 
-    .row.jh-entity-details > dd {
+    .dl-horizontal.jh-entity-details > dd {
         border-bottom: 1px solid #eee;
         padding-left: 180px;
         margin-left: 0;
