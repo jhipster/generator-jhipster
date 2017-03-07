@@ -52,9 +52,13 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
                     destinationName = destinationEvent.url[0].path;
                 } else {
                     destinationEvent = event.state.root.children[0];
-                    params = destinationEvent.params;
-                    destinationData = destinationEvent.data;
-                    destinationName = destinationEvent.url[0].path;
+                    if (destinationEvent !== undefined) {
+                        params = destinationEvent.params;
+                        destinationData = destinationEvent.data;
+                        if (destinationEvent.url.length > 0) {
+                            destinationName = destinationEvent.url[0].path;
+                        }
+                    }
                 }
                 let from = {name: this.router.url.slice(1)};
                 let destination = {name: destinationName, data: destinationData};
