@@ -136,11 +136,9 @@ export class <%= entityAngularName %>DialogComponent implements OnInit {
         if (this.<%= entityInstance %>.id !== undefined) {
             this.<%= entityInstance %>Service.update(this.<%= entityInstance %>)
                 .subscribe((res: <%= entityAngularName %>) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.<%= entityInstance %>Service.create(this.<%= entityInstance %>)
-                .subscribe((res: <%= entityAngularName %>) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
                 .subscribe((res: <%= entityAngularName %>) => 
                     this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
