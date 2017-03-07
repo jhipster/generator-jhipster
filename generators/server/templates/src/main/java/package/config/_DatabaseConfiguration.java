@@ -14,6 +14,7 @@ import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 <%_ if (databaseType == 'mongodb') { _%>
 
 import com.github.mongobee.Mongobee;
+import com.mongodb.MongoClient;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
 import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
@@ -134,9 +135,9 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public Mongobee mongobee(MongoTemplate mongoTemplate, MongoProperties mongoProperties) {
+    public Mongobee mongobee(MongoClient mongoClient, MongoTemplate mongoTemplate, MongoProperties mongoProperties) {
         log.debug("Configuring Mongobee");
-        Mongobee mongobee = new Mongobee(mongoProperties.getUri());
+        Mongobee mongobee = new Mongobee(mongoClient);
         mongobee.setDbName(mongoProperties.getDatabase());
         mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
