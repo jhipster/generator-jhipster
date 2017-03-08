@@ -976,6 +976,8 @@
                 <configuration>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
+                    <parallel>suitesAndClasses</parallel>
+                    <useUnlimitedThreads>true</useUnlimitedThreads>
                 </configuration>
             </plugin>
             <plugin>
