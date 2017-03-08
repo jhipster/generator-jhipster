@@ -17,11 +17,20 @@ import io.github.jhipster.config.JHipsterConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (hibernateCache == 'hazelcast') { %>
 import org.springframework.cache.CacheManager;<% } %>
+<%_ if (databaseType == 'mongodb') { _%>
+import org.springframework.cloud.Cloud;
+import org.springframework.cloud.CloudException;
+<%_ } _%>
 import org.springframework.cloud.config.java.AbstractCloudConfig;
+<%_ if (databaseType == 'mongodb') { _%>
+import org.springframework.cloud.service.ServiceInfo;
+import org.springframework.cloud.service.common.MongoServiceInfo;
+<%_ } _%>
 import org.springframework.context.annotation.*;
 <%_ if (databaseType == 'mongodb') { _%>
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -82,10 +91,18 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     }
 
     @Bean
-    public Mongobee mongobee(MongoDbFactory mongoDbFactory) throws Exception {
-        log.debug("Configuring Mongobee");
-        Mongobee mongobee = new Mongobee(mongoDbFactory.getDb().getMongo());
+    public Mongobee mongobee(MongoDbFactory mongoDbFactory, MongoTemplate mongoTemplate, Cloud cloud) {
+        log.debug("Configuring Cloud Mongobee");
+        List<ServiceInfo> matchingServiceInfos = cloud.getServiceInfos(MongoDbFactory.class);
+
+        if (matchingServiceInfos.size() != 1) {
+            throw new CloudException("No unique service matching MongoDbFactory found. Expected 1, found "
+                + matchingServiceInfos.size());
+        }
+        MongoServiceInfo info = (MongoServiceInfo) matchingServiceInfos.get(0);
+        Mongobee mongobee = new Mongobee(info.getUri());
         mongobee.setDbName(mongoDbFactory.getDb().getName());
+        mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
         mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
         mongobee.setEnabled(true);

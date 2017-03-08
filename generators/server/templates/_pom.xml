@@ -105,7 +105,7 @@
         <mssql-jdbc.version>6.1.0.jre8</mssql-jdbc.version>
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
-        <mongobee.version>0.10</mongobee.version>
+        <mongobee.version>0.12</mongobee.version>
         <%_ } _%>
         <node.version>v<%= NODE_VERSION %></node.version>
         <%_ if (clientPackageManager === 'npm') { _%>
