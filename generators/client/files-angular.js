@@ -130,6 +130,7 @@ const files = {
                 { file: 'home/_home.route.ts', method: 'processJs' },
                 { file: 'home/_home.component.ts', method: 'processJs' },
                 { file: 'home/_home.component.html', method: 'processHtml' },
+                
                 // layouts
                 'layouts/_index.ts',
                 'layouts/_layout-routing.module.ts',
@@ -138,6 +139,8 @@ const files = {
                 'layouts/profiles/_profile-info.model.ts',
                 'layouts/main/_main.component.ts',
                 'layouts/main/_main.component.html',
+                { file: 'layouts/breadcrumb/_breadcrumb.component.ts', method: 'processJs' },
+                { file: 'layouts/breadcrumb/_breadcrumb.component.html', method: 'processHtml' },
                 { file: 'layouts/navbar/_navbar.component.ts', method: 'processJs' },
                 { file: 'layouts/navbar/_navbar.component.html', method: 'processHtml' },
                 'layouts/footer/_footer.component.ts',
