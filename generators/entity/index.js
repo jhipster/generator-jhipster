@@ -661,21 +661,21 @@ module.exports = EntityGenerator.extend({
     writing : writeFiles(),
 
     install: function () {
-        const injectJsFilesToIndex = function () {
+        const injectJsFilesToIndex = () => {
             this.log('\n' + chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n'));
             this.spawnCommand('gulp', ['inject:app']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
-            injectJsFilesToIndex.call(this);
+            injectJsFilesToIndex();
         }
 
         // rebuild client for Angular
-        const rebuildClient = function () {
+        const rebuildClient = () => {
             this.log('\n' + chalk.bold.green('Running `webpack:build:dev` to update client app\n'));
             this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
-            rebuildClient.call(this);
+            rebuildClient();
         }
     },
 

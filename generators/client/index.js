@@ -334,8 +334,9 @@ module.exports = JhipsterClientGenerator.extend({
         };
 
         let installConfig = {
-            bower: false,
-            npm: true,
+            bower: this.clientFramework === 'angular1',
+            npm: this.clientPackageManager !== 'yarn',
+            yarn: this.clientPackageManager === 'yarn',
             callback: injectDependenciesAndConstants
         };
 
@@ -346,28 +347,7 @@ module.exports = JhipsterClientGenerator.extend({
         }
 
         if (!this.options['skip-install']) {
-            if (this.clientPackageManager === 'yarn') {
-                const maxRetry = 2;
-                let nbRetry = 0;
-                let result;
-                do {
-                    if (nbRetry > 0) {
-                        this.warning('yarn install failed. Retrying to launch yarn: ' + nbRetry + '/' + maxRetry + ' retries.');
-                    }
-                    result = this.spawnCommandSync('yarn');
-                    nbRetry++;
-                } while(result.status !== 0 && nbRetry <= maxRetry);
-                if (result.status !== 0) {
-                    this.error('yarn install failed.');
-                }
-                if (this.clientFramework === 'angular1') {
-                    this.spawnCommandSync('bower', ['install']);
-                }
-                injectDependenciesAndConstants();
-
-            } else if (this.clientPackageManager === 'npm') {
-                this.installDependencies(installConfig);
-            }
+            this.installDependencies(installConfig);
         } else {
             injectDependenciesAndConstants();
         }
