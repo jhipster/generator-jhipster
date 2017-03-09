@@ -61,7 +61,9 @@
       serverPort: 8080,
       enableSocialSignIn: false,
       useSass: false,
-      jhiPrefix: 'jhi'
+      jhiPrefix: 'jhi',
+      messageBroker: false,
+      serviceDiscoveryType: false
     },
     constants: {},
     entities: [],
@@ -220,6 +222,12 @@ applicationContentDecl
   }
   / JHI_PREFIX SPACE* jhiPrefix:[A-z0-9_-]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.jhiPrefix = jhiPrefix.join('');
+  }
+  / MESSAGE_BROKER SPACE* messageBroker:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.messageBroker = messageBroker;
+  }
+  / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.serviceDiscoveryType = serviceDiscoveryType;
   }
   / ''
 
@@ -480,6 +488,8 @@ SERVER_PORT = 'serverPort'
 ENABLE_SOCIAL_SIGN_IN = 'enableSocialSignIn'
 USE_SASS = 'useSass'
 JHI_PREFIX = 'jhiPrefix'
+MESSAGE_BROKER = 'messageBroker'
+SERVICE_DISCOVERY_TYPE = 'serviceDiscoveryType'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
