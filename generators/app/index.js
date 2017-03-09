@@ -85,7 +85,7 @@ module.exports = JhipsterGenerator.extend({
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.yarnInstall = this.configOptions.yarnInstall = !this.options['npm'];
+        this.useYarn = this.configOptions.useYarn = !this.options['npm'];
     },
 
     initializing: {
@@ -150,15 +150,15 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkYarn: function () {
-            if (this.skipChecks || !this.yarnInstall) return;
+            if (this.skipChecks || !this.useYarn) return;
             const done = this.async();
             exec('yarn --version', (err) => {
                 if (err) {
                     this.warning('yarn is not found on your computer.\n',
                         ' Using npm instead');
-                    this.yarnInstall = false;
+                    this.useYarn = false;
                 } else {
-                    this.yarnInstall = true;
+                    this.useYarn = true;
                 }
                 done();
             });
@@ -201,7 +201,7 @@ module.exports = JhipsterGenerator.extend({
             }
             this.clientPackageManager = this.config.get('clientPackageManager');
             if (!this.clientPackageManager) {
-                if (this.yarnInstall) {
+                if (this.useYarn) {
                     this.clientPackageManager = 'yarn';
                 } else {
                     this.clientPackageManager = 'npm';

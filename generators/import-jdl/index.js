@@ -37,7 +37,7 @@ module.exports = JDLGenerator.extend({
             }
             this.clientPackageManager = this.config.get('clientPackageManager');
             if (!this.clientPackageManager) {
-                if (this.yarnInstall) {
+                if (this.useYarn) {
                     this.clientPackageManager = 'yarn';
                 } else {
                     this.clientPackageManager = 'npm';

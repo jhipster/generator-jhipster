@@ -119,7 +119,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
-        this.yarnInstall = this.configOptions.yarnInstall = !this.options['npm'];
+        this.useYarn = this.configOptions.useYarn = !this.options['npm'];
         this.clientPackageManager = this.configOptions.clientPackageManager;
     },
 
@@ -172,7 +172,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.existingProject = true;
             }
             if (!this.clientPackageManager) {
-                if (this.yarnInstall) {
+                if (this.useYarn) {
                     this.clientPackageManager = 'yarn';
                 } else {
                     this.clientPackageManager = 'npm';
@@ -323,8 +323,9 @@ module.exports = JhipsterClientGenerator.extend({
                 'To install your dependencies manually, run: ' + chalk.yellow.bold(this.clientPackageManager + ' install & bower install');
         }
 
-        let injectDependenciesAndConstants = () => {
-            if (this.options['skip-install']) {
+        const injectDependenciesAndConstants = (err) => {
+            if (err) {
+                this.warning('Install of dependencies failed!');
                 this.log(logMsg);
             } else {
                 if (this.clientFramework === 'angular1') {
@@ -333,23 +334,17 @@ module.exports = JhipsterClientGenerator.extend({
             }
         };
 
-        let installConfig = {
+        const installConfig = {
             bower: this.clientFramework === 'angular1',
             npm: this.clientPackageManager !== 'yarn',
             yarn: this.clientPackageManager === 'yarn',
             callback: injectDependenciesAndConstants
         };
 
-        if (this.clientFramework === 'angular1') {
-            installConfig = {
-                callback: injectDependenciesAndConstants
-            };
-        }
-
-        if (!this.options['skip-install']) {
-            this.installDependencies(installConfig);
+        if (this.options['skip-install']) {
+            this.log(logMsg);
         } else {
-            injectDependenciesAndConstants();
+            this.installDependencies(installConfig);
         }
     },
 
