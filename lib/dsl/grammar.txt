@@ -59,7 +59,9 @@
       testFrameworks: ['gatling', 'protactor'],
       languages: ['en'],
       serverPort: 8080,
-      enableSocialSignIn: false
+      enableSocialSignIn: false,
+      useSass: false,
+      jhiPrefix: 'jhi'
     },
     constants: {},
     entities: [],
@@ -212,6 +214,12 @@ applicationContentDecl
   }
   / ENABLE_SOCIAL_SIGN_IN SPACE* enableSocialSignIn:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.enableSocialSignIn = enableSocialSignIn;
+  }
+  / USE_SASS SPACE* useSass:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.useSass = useSass;
+  }
+  / JHI_PREFIX SPACE* jhiPrefix:[A-z0-9_-]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.jhiPrefix = jhiPrefix.join('');
   }
   / ''
 
@@ -470,6 +478,8 @@ TEST_FRAMEWORK = 'testFrameworks'
 LANGUAGES = 'languages'
 SERVER_PORT = 'serverPort'
 ENABLE_SOCIAL_SIGN_IN = 'enableSocialSignIn'
+USE_SASS = 'useSass'
+JHI_PREFIX = 'jhiPrefix'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
