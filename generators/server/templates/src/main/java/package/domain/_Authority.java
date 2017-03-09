@@ -32,6 +32,7 @@ public class Authority implements Serializable {
     public Authority() {
     }
 
+    @NotNull
     public Authority(String name) {
         this.name = name;
     }
