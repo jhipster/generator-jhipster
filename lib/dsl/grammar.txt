@@ -57,7 +57,9 @@
       enableTranslation: true,
       applicationType: 'monolith',
       testFrameworks: ['gatling', 'protactor'],
-      languages: ['en']
+      languages: ['en'],
+      serverPort: 8080,
+      enableSocialSignIn: false
     },
     constants: {},
     entities: [],
@@ -204,6 +206,12 @@ applicationContentDecl
         parsed.application.languages.push(results[i].trim());
       }
     }
+  }
+  / SERVER_PORT SPACE* serverPort:[0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.serverPort = parseInt(serverPort.join(''), 10);
+  }
+  / ENABLE_SOCIAL_SIGN_IN SPACE* enableSocialSignIn:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.enableSocialSignIn = enableSocialSignIn;
   }
   / ''
 
@@ -460,6 +468,8 @@ ENABLE_TRANSLATION = 'enableTranslation'
 APPLICATION_TYPE = 'applicationType'
 TEST_FRAMEWORK = 'testFrameworks'
 LANGUAGES = 'languages'
+SERVER_PORT = 'serverPort'
+ENABLE_SOCIAL_SIGN_IN = 'enableSocialSignIn'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
