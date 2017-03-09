@@ -5,5 +5,6 @@ services:
     ports:
       - 49001:8080
       - 50000:50000
-    volumes:
-      - ./jenkins_data:/var/jenkins_home
+    #volumes:
+    # warning: be sure the local jenkins_home folder is created before using this volume
+    # - ~/volumes/jenkins_home:/var/jenkins_home
