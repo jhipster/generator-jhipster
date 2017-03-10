@@ -266,43 +266,6 @@ module.exports = UpgradeGenerator.extend({
 
     install: function () {
         const done = this.async();
-
-        const injectDependenciesAndConstants = () => {
-            if (this.clientFramework === 'angular1') {
-                this.spawnCommandSync('bower', ['install']);
-            }
-            if (this.skipInstall) {
-                let logMsg =
-                    `${'Start your Webpack development server with:' +
-                    '\n '}${chalk.yellow.bold(`${this.clientPackageManager} start`)
-                    }\n`;
-
-                if (this.clientFramework === 'angular1') {
-                    logMsg =
-                        `${'Inject your front end dependencies into your source code:' +
-                        '\n '}${chalk.yellow.bold('gulp inject')
-                        }\n` +
-                        '\nGenerate the AngularJS constants:' +
-                        `\n ${chalk.yellow.bold('gulp ngconstant:dev')
-                        }${this.useSass ?
-                        `${'\n' +
-                        '\nCompile your Sass style sheets:' +
-                        '\n '}${chalk.yellow.bold('gulp sass')}` : ''
-                        }\n` +
-                        '\nOr do all of the above:' +
-                        `\n ${chalk.yellow.bold('gulp install')
-                        }\n`;
-                }
-                this.log(chalk.green(logMsg));
-            } else if (this.clientFramework === 'angular1') {
-                const result = this.spawnCommandSync('gulp', ['install']);
-                if (result.status !== 0) {
-                    this.error('gulp install failed.');
-                }
-            }
-            done();
-        };
-
         if (!this.skipInstall) {
             shelljs.rm('-rf', 'node_modules');
             this.log('Installing dependencies, please wait...');
@@ -311,10 +274,16 @@ module.exports = UpgradeGenerator.extend({
                 if (code !== 0) {
                     this.error(`${installCommand}failed.`);
                 }
-                injectDependenciesAndConstants();
+                if (this.clientFramework === 'angular1') {
+                    this.spawnCommandSync('bower', ['install']);
+                }
             });
         } else {
-            injectDependenciesAndConstants();
+            let logMsg =
+                'Start your Webpack development server with:' +
+                '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
+                '\n';
+            this.log(chalk.green(logMsg));
         }
     },
 
