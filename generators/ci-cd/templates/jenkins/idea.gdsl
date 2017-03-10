@@ -17,7 +17,6 @@ contributor(ctx) {
     method(name: 'mail', type: 'Object', namedParams: [parameter(name: 'subject', type: 'java.lang.String'), parameter(name: 'body', type: 'java.lang.String'), parameter(name: 'bcc', type: 'java.lang.String'), parameter(name: 'cc', type: 'java.lang.String'), parameter(name: 'charset', type: 'java.lang.String'), parameter(name: 'from', type: 'java.lang.String'), parameter(name: 'mimeType', type: 'java.lang.String'), parameter(name: 'replyTo', type: 'java.lang.String'), parameter(name: 'to', type: 'java.lang.String'), ], doc: 'Mail')
     method(name: 'milestone', type: 'Object', params: [ordinal:'java.lang.Integer'], doc: 'The milestone step forces all builds to go through in order')
     method(name: 'milestone', type: 'Object', namedParams: [parameter(name: 'ordinal', type: 'java.lang.Integer'), parameter(name: 'label', type: 'java.lang.String'), ], doc: 'The milestone step forces all builds to go through in order')
-    method(name: 'node', type: 'Object', params: [label:java.lang.String, body:'Closure'], doc: 'Allocate node')
     method(name: 'properties', type: 'Object', params: [properties:'Map'], doc: 'Set job properties')
     method(name: 'readTrusted', type: 'Object', params: [path:'java.lang.String'], doc: 'Read trusted file from SCM')
     method(name: 'resolveScm', type: 'Object', namedParams: [parameter(name: 'source', type: 'Map'), parameter(name: 'targets', type: 'Map'), parameter(name: 'ignoreErrors', type: 'boolean'), ], doc: 'Resolves an SCM from an SCM Source and a list of candidate target branch names')
