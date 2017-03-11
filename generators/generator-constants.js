@@ -11,7 +11,7 @@ const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:2.4.1';
-const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.0.1';
+const DOCKER_KAFKA = 'wurstmeister/kafka:0.10.1.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
 const DOCKER_SONAR = 'sonarqube:6.2-alpine';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v1.3.2';
@@ -22,6 +22,7 @@ const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.4.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.5.1';
 const DOCKER_GRAFANA = 'grafana/grafana:4.0.2';
+const DOCKER_JENKINS = 'jenkins:latest';
 
 // version of Node, Yarn, NPM
 const NODE_VERSION = '6.10.0';
@@ -89,10 +90,10 @@ const constants = {
     DOCKER_PROMETHEUS: DOCKER_PROMETHEUS,
     DOCKER_PROMETHEUS_ALERTMANAGER: DOCKER_PROMETHEUS_ALERTMANAGER,
     DOCKER_GRAFANA: DOCKER_GRAFANA,
-
     NODE_VERSION: NODE_VERSION,
     YARN_VERSION: YARN_VERSION,
-    NPM_VERSION: NPM_VERSION
+    NPM_VERSION: NPM_VERSION,
+    DOCKER_JENKINS: DOCKER_JENKINS
 };
 
 module.exports = constants;

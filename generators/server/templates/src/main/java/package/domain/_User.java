@@ -14,6 +14,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 <%_ } _%>
 <%_ if (databaseType == 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
@@ -63,7 +64,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = <%=columnMax %>)<% if (databaseType == 'sql') { %>
-    @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %>
+    @Column(length = <%=columnMax %>, unique = true, nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
+    @Indexed<% } %>
     private String login;
 
     @JsonIgnore
@@ -84,7 +86,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     @Email
     @Size(max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100, unique = true)<% } %>
+    @Column(length = 100, unique = true)<% } %><% if (databaseType == 'mongodb') { %>
+    @Indexed<% } %>
     private String email;
 <% if (databaseType == 'sql') { %>
     @NotNull

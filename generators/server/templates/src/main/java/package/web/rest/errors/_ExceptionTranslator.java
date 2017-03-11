@@ -37,8 +37,11 @@ public class ExceptionTranslator {
     public ErrorVM processValidationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
-
-        return processFieldErrors(fieldErrors);
+        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
+        for (FieldError fieldError : fieldErrors) {
+            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
+        }
+        return dto;
     }
 
     @ExceptionHandler(CustomParameterizedException.class)
@@ -53,16 +56,6 @@ public class ExceptionTranslator {
     @ResponseBody
     public ErrorVM processAccessDeniedException(AccessDeniedException e) {
         return new ErrorVM(ErrorConstants.ERR_ACCESS_DENIED, e.getMessage());
-    }
-
-    private ErrorVM processFieldErrors(List<FieldError> fieldErrors) {
-        ErrorVM dto = new ErrorVM(ErrorConstants.ERR_VALIDATION);
-
-        for (FieldError fieldError : fieldErrors) {
-            dto.add(fieldError.getObjectName(), fieldError.getField(), fieldError.getCode());
-        }
-
-        return dto;
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)

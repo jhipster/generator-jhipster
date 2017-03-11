@@ -35,6 +35,11 @@ module.exports = PipelineGenerator.extend({
             this.NODE_VERSION = constants.NODE_VERSION;
             this.YARN_VERSION = constants.YARN_VERSION;
             this.NPM_VERSION = constants.NPM_VERSION;
+        },
+        getConstants: function() {
+            this.DOCKER_DIR = constants.DOCKER_DIR;
+            this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+            this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
         }
     },
 
@@ -58,7 +63,9 @@ module.exports = PipelineGenerator.extend({
 
     writing: function () {
         if (this.pipelines.includes('jenkins')) {
-            this.template('_Jenkinsfile', 'Jenkinsfile');
+            this.template('jenkins/_Jenkinsfile', 'Jenkinsfile');
+            this.template('jenkins/_jenkins.yml', this.DOCKER_DIR + 'jenkins.yml');
+            this.template('jenkins/idea.gdsl', this.SERVER_MAIN_RES_DIR + 'idea.gdsl');
         }
         if (this.pipelines.includes('gitlab')) {
             this.template('_.gitlab-ci.yml', '.gitlab-ci.yml');
