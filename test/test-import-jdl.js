@@ -37,7 +37,7 @@ describe('JHipster generator import jdl', function () {
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/import-jdl'), dir);
                 })
-                .withArguments(['jdl.jdl', 'jdl2.jdl'])
+                .withArguments(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'])
                 .on('end', done);
         });
 
@@ -52,7 +52,11 @@ describe('JHipster generator import jdl', function () {
                 '.jhipster/Country.json',
                 '.jhipster/Region.json',
                 '.jhipster/DepartmentAlt.json',
-                '.jhipster/JobHistoryAlt.json'
+                '.jhipster/JobHistoryAlt.json',
+                '.jhipster/Listing.json',
+                '.jhipster/Profile.json',
+                '.jhipster/WishList.json'
+
             ]);
         });
     });
