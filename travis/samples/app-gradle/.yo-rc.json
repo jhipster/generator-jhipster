@@ -32,6 +32,7 @@
     "messageBroker": false,
     "serviceDiscoveryType": false,
     "clientPackageManager": "yarn",
-    "clientFramework": "angular1"
+    "clientFramework": "angular1",
+    "jhipsterVersion": "4.0.8"
   }
 }

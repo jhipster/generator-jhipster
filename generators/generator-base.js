@@ -1769,7 +1769,7 @@ module.exports = class extends Generator {
 
     copyEnumI18n(language, enumInfo , prefix) {
         try {
-            this.template(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, enumInfo);
+            this.template(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
             // An exception is thrown if the folder doesn't exist
             // do nothing
