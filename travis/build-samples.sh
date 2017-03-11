@@ -16,7 +16,7 @@ function usage() {
     exit 2
 }
 
-function buildProject() {
+function generateProject() {
     dir=$1
     JHIPSTER=$dir
     APP_FOLDER="$JHIPSTER_SAMPLES/$dir"
@@ -26,6 +26,15 @@ function buildProject() {
     pushd "$APP_FOLDER"
     yarn link generator-jhipster
     yo jhipster --force --no-insight --skip-checks --with-entities
+    popd
+}
+
+function buildProject() {
+    dir=$1
+    JHIPSTER=$dir
+    APP_FOLDER="$JHIPSTER_SAMPLES/$dir"
+    generateProject "$1"
+    pushd "$APP_FOLDER"
     echo "*********************** Testing $dir"
     if [ -f "mvnw" ]; then
         ./mvnw test \
@@ -63,6 +72,18 @@ if [ "$1" = "build" ]; then
         for dir in $(ls -1 "$JHIPSTER_SAMPLES"); do
             if [ -f "$JHIPSTER_SAMPLES/$dir/.yo-rc.json" ]; then
                 buildProject "$dir"
+            else
+                echo "$dir: Not a JHipster project. Skipping"
+            fi
+        done
+    fi
+elif [ "$1" = "generate" ]; then
+    if [ "$2" != "" ]; then
+        generateProject "$2"
+    else
+        for dir in $(ls -1 "$JHIPSTER_SAMPLES"); do
+            if [ -f "$JHIPSTER_SAMPLES/$dir/.yo-rc.json" ]; then
+                generateProject "$dir"
             else
                 echo "$dir: Not a JHipster project. Skipping"
             fi

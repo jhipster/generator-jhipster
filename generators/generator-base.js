@@ -1414,7 +1414,7 @@ module.exports = class extends Generator {
      * @param {string} msg - message to print
      */
     error(msg) {
-        this.env.error(chalk.red.bold('ERROR! ') + msg);
+        this.env.error(`${chalk.red.bold('ERROR!')} ${msg}`);
     }
 
     /**
@@ -1423,7 +1423,7 @@ module.exports = class extends Generator {
      * @param {string} value - message to print
      */
     warning(msg) {
-        this.log(chalk.yellow.bold('WARNING! ') + msg);
+        this.log(`${chalk.yellow.bold('WARNING!')} ${msg}`);
     }
 
     /**
@@ -1675,6 +1675,7 @@ module.exports = class extends Generator {
     writeFilesToDisk(files, generator, returnFiles, prefix) {
         let _this = generator || this;
         let filesOut = [];
+        let startTime = new Date();
         // using the fastest method for iterations
         for (let i = 0, blocks = Object.keys(files); i < blocks.length; i++) {
             for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {
@@ -1703,11 +1704,15 @@ module.exports = class extends Generator {
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
                             const templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
+                            // if (method === 'template')
                             _this[method](templatePathFrom, templatePathTo, _this, options, useTemplate);
                         }
                     });
                 }
             }
+        }
+        if (this.isDebugEnabled) {
+            this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         }
         return filesOut;
     }
@@ -2023,4 +2028,12 @@ module.exports = class extends Generator {
         this.fs.copy(this.templatePath(source), this.destinationPath(destination));
     }
 
+    /**
+     * Print a debug message.
+     *
+     * @param {string} value - message to print
+     */
+    debug(msg) {
+        this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+    }
 };

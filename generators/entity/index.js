@@ -82,6 +82,7 @@ module.exports = EntityGenerator.extend({
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
+        this.isDebugEnabled = this.options['debug'];
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }

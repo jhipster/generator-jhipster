@@ -86,6 +86,7 @@ module.exports = JhipsterGenerator.extend({
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
         this.useYarn = this.configOptions.useYarn = !this.options['npm'];
+        this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options['debug'];
     },
 
     initializing: {
@@ -330,6 +331,7 @@ module.exports = JhipsterGenerator.extend({
                         regenerate: true,
                         'skip-install': true,
                         force: this.options['force'],
+                        debug: this.isDebugEnabled,
                         arguments: [entity.name]
                     });
                 });

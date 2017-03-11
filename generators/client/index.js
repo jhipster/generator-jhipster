@@ -121,6 +121,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.logo = this.configOptions.logo;
         this.useYarn = this.configOptions.useYarn = !this.options['npm'];
         this.clientPackageManager = this.configOptions.clientPackageManager;
+        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options['debug'];
     },
 
     initializing: {

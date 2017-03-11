@@ -70,6 +70,7 @@ module.exports = JhipsterServerGenerator.extend({
         this.logo = this.configOptions.logo;
         this.baseName = this.configOptions.baseName;
         this.clientPackageManager = this.configOptions.clientPackageManager;
+        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options['debug'];
     },
     initializing: {
         displayLogo: function () {
