@@ -1,5 +1,5 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
+
 
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -16,29 +16,28 @@ const constants = require('../generators/generator-constants'),
     TEST_DIR = constants.TEST_DIR;
 
 describe('JHipster generator', () => {
-
     describe('default configuration', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({ skipInstall: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -55,8 +54,8 @@ describe('JHipster generator', () => {
                 testFrameworks: []
             }));
             assert.noFile([
-                TEST_DIR + 'gatling/gatling.conf',
-                TEST_DIR + 'gatling/logback.xml'
+                `${TEST_DIR}gatling/gatling.conf`,
+                `${TEST_DIR}gatling/logback.xml`
             ]);
         });
         it('contains clientFramework with angular1 value', () => {
@@ -74,26 +73,26 @@ describe('JHipster generator', () => {
     describe('default configuration with angular2', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'clientFramework': 'angular2',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    clientFramework: 'angular2',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -118,25 +117,25 @@ describe('JHipster generator', () => {
     describe('default configuration using npm flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true, npm: true})
+                .withOptions({ skipInstall: true, skipChecks: true, npm: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -164,25 +163,25 @@ describe('JHipster generator', () => {
     describe('mariadb configuration', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Disk',
-                    'prodDatabaseType': 'mariadb',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mariadb',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -205,23 +204,23 @@ describe('JHipster generator', () => {
     describe('default gradle configuration', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'gradle',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'gradle',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -244,127 +243,127 @@ describe('JHipster generator', () => {
     describe('package names', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.otherpackage',
-                    'packageFolder': 'com/otherpackage',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.otherpackage',
+                    packageFolder: 'com/otherpackage',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
 
         it('creates expected files with correct package names', () => {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java'
+                `${SERVER_MAIN_SRC_DIR}com/otherpackage/JhipsterApp.java`
             ]);
-            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /package com\.otherpackage;/);
-            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/JhipsterApp.java', /public class JhipsterApp/);
+            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/JhipsterApp.java`, /package com\.otherpackage;/);
+            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/JhipsterApp.java`, /public class JhipsterApp/);
         });
     });
 
     describe('bad application name for java', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': '21Points',
-                    'packageName': 'com.otherpackage',
-                    'packageFolder': 'com/otherpackage',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: '21Points',
+                    packageName: 'com.otherpackage',
+                    packageFolder: 'com/otherpackage',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
 
         it('creates expected files with default application name', () => {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java'
+                `${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`
             ]);
-            assert.fileContent(SERVER_MAIN_SRC_DIR + 'com/otherpackage/Application.java', /public class Application/);
+            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`, /public class Application/);
         });
     });
 
     describe('application names', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'myapplication',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'myapplication',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
 
         it('creates expected files with correct application name', () => {
             assert.file([
-                CLIENT_MAIN_SRC_DIR + 'app/home/home.state.js'
+                `${CLIENT_MAIN_SRC_DIR}app/home/home.state.js`
             ]);
-            assert.fileContent(CLIENT_MAIN_SRC_DIR + 'app/home/home.state.js', /myapplicationApp/);
+            assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/home/home.state.js`, /myapplicationApp/);
         });
     });
 
     describe('oauth2', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'oauth2',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'oauth2',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
 
         it('creates expected files with authenticationType "oauth2"', () => {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/OAuth2ServerConfiguration.java'
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/OAuth2ServerConfiguration.java`
             ]);
         });
     });
@@ -372,51 +371,50 @@ describe('JHipster generator', () => {
     describe('hazelcast', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'hazelcast',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'hazelcast',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
-
     });
 
     describe('postgresql and elasticsearch', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'no',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'postgresql',
-                    'prodDatabaseType': 'postgresql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : [
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'no',
+                    databaseType: 'sql',
+                    devDatabaseType: 'postgresql',
+                    prodDatabaseType: 'postgresql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: [
                         'searchEngine:elasticsearch'
                     ]
                 })
@@ -433,25 +431,25 @@ describe('JHipster generator', () => {
     describe('mongodb', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'no',
-                    'databaseType': 'mongodb',
-                    'devDatabaseType': 'mongodb',
-                    'prodDatabaseType': 'mongodb',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'no',
+                    databaseType: 'mongodb',
+                    devDatabaseType: 'mongodb',
+                    prodDatabaseType: 'mongodb',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -465,25 +463,25 @@ describe('JHipster generator', () => {
     describe('mssql', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'no',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'mssql',
-                    'prodDatabaseType': 'mssql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'no',
+                    databaseType: 'sql',
+                    devDatabaseType: 'mssql',
+                    prodDatabaseType: 'mssql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -491,7 +489,7 @@ describe('JHipster generator', () => {
         it('creates expected files with "Microsoft SQL Server"', () => {
             assert.file(expectedFiles.mssql);
             assert.fileContent('pom.xml', /mssql-jdbc/);
-            assert.fileContent(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', /identityInsertEnabled/);
+            assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`, /identityInsertEnabled/);
         });
         shouldBeV3DockerfileCompatible('mssql');
     });
@@ -499,25 +497,25 @@ describe('JHipster generator', () => {
     describe('cassandra', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'no',
-                    'databaseType': 'cassandra',
-                    'devDatabaseType': 'cassandra',
-                    'prodDatabaseType': 'cassandra',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'no',
+                    databaseType: 'cassandra',
+                    devDatabaseType: 'cassandra',
+                    prodDatabaseType: 'cassandra',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -531,23 +529,23 @@ describe('JHipster generator', () => {
     describe('cassandra no i18n', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'no',
-                    'databaseType': 'cassandra',
-                    'devDatabaseType': 'cassandra',
-                    'prodDatabaseType': 'cassandra',
-                    'useSass': false,
-                    'enableTranslation': false,
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'skipClient': false,
-                    'skipUserManagement': false,
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'no',
+                    databaseType: 'cassandra',
+                    devDatabaseType: 'cassandra',
+                    prodDatabaseType: 'cassandra',
+                    useSass: false,
+                    enableTranslation: false,
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    skipClient: false,
+                    skipUserManagement: false,
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -555,58 +553,58 @@ describe('JHipster generator', () => {
         it('creates expected files with "Cassandra"', () => {
             assert.file(expectedFiles.cassandra);
             assert.noFile(expectedFiles.i18n);
-            assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
+            assert.file([`${SERVER_MAIN_RES_DIR}i18n/messages.properties`]);
         });
     });
 
     describe('no i18n', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'hazelcast',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': false,
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'hazelcast',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: false,
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
 
         it('does not create i18n files if i18n is disabled', () => {
             assert.noFile(expectedFiles.i18n);
-            assert.file([SERVER_MAIN_RES_DIR + 'i18n/messages.properties']);
+            assert.file([`${SERVER_MAIN_RES_DIR}i18n/messages.properties`]);
         });
     });
 
     describe('social login for http session', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [
                         'enableSocialSignIn:true'
                     ]
                 })
@@ -627,23 +625,23 @@ describe('JHipster generator', () => {
     describe('social login for JWT session', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'jwt',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [
                         'enableSocialSignIn:true'
                     ]
                 })
@@ -664,23 +662,23 @@ describe('JHipster generator', () => {
     describe('JWT authentication', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'jwt',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -699,35 +697,35 @@ describe('JHipster generator', () => {
     describe('Messaging with Kafka configuration', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'serverPort': '8080',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': false,
-                    'websocket': false,
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Disk',
-                    'prodDatabaseType': 'mysql',
-                    'searchEngine': false,
-                    'buildTool': 'maven',
-                    'enableSocialSignIn': false,
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'useSass': false,
-                    'applicationType': 'monolith',
-                    'testFrameworks': [
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serverPort: '8080',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    clusteredHttpSession: false,
+                    websocket: false,
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    searchEngine: false,
+                    buildTool: 'maven',
+                    enableSocialSignIn: false,
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    useSass: false,
+                    applicationType: 'monolith',
+                    testFrameworks: [
                         'gatling'
                     ],
-                    'jhiPrefix': 'jhi',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': [
+                    jhiPrefix: 'jhi',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: [
                         'en'
                     ],
-                    'serverSideOptions' : [
+                    serverSideOptions: [
                         'messageBroker:kafka'
                     ]
                 })
@@ -744,32 +742,32 @@ describe('JHipster generator', () => {
     describe('Protractor tests', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'serverPort': '8080',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': false,
-                    'websocket': false,
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Disk',
-                    'prodDatabaseType': 'mysql',
-                    'searchEngine': false,
-                    'buildTool': 'maven',
-                    'enableSocialSignIn': false,
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'useSass': false,
-                    'applicationType': 'monolith',
-                    'testFrameworks': [
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serverPort: '8080',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    clusteredHttpSession: false,
+                    websocket: false,
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    searchEngine: false,
+                    buildTool: 'maven',
+                    enableSocialSignIn: false,
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    useSass: false,
+                    applicationType: 'monolith',
+                    testFrameworks: [
                         'protractor'
                     ],
-                    'jhiPrefix': 'jhi',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': [
+                    jhiPrefix: 'jhi',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: [
                         'en'
                     ]
                 })
@@ -787,8 +785,8 @@ describe('JHipster generator', () => {
                 ]
             }));
             assert.noFile([
-                TEST_DIR + 'gatling/gatling.conf',
-                TEST_DIR + 'gatling/logback.xml'
+                `${TEST_DIR}gatling/gatling.conf`,
+                `${TEST_DIR}gatling/logback.xml`
             ]);
         });
     });
@@ -796,32 +794,32 @@ describe('JHipster generator', () => {
     describe('Cucumber tests', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'serverPort': '8080',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'clusteredHttpSession': false,
-                    'websocket': false,
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Disk',
-                    'prodDatabaseType': 'mysql',
-                    'searchEngine': false,
-                    'buildTool': 'maven',
-                    'enableSocialSignIn': false,
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'useSass': false,
-                    'applicationType': 'monolith',
-                    'testFrameworks': [
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serverPort: '8080',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    clusteredHttpSession: false,
+                    websocket: false,
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    searchEngine: false,
+                    buildTool: 'maven',
+                    enableSocialSignIn: false,
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    useSass: false,
+                    applicationType: 'monolith',
+                    testFrameworks: [
                         'cucumber'
                     ],
-                    'jhiPrefix': 'jhi',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': [
+                    jhiPrefix: 'jhi',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: [
                         'en'
                     ]
                 })
@@ -831,11 +829,11 @@ describe('JHipster generator', () => {
         it('creates expected files with Cucumber enabled', () => {
             assert.file(expectedFiles.server);
             assert.file([
-                TEST_DIR + 'features/user/user.feature'
+                `${TEST_DIR}features/user/user.feature`
             ]);
             assert.noFile([
-                TEST_DIR + 'gatling/gatling.conf',
-                TEST_DIR + 'gatling/logback.xml'
+                `${TEST_DIR}gatling/gatling.conf`,
+                `${TEST_DIR}gatling/logback.xml`
             ]);
         });
     });
@@ -843,22 +841,22 @@ describe('JHipster generator', () => {
     describe('skip client', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipClient: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipClient: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'buildTool': 'maven',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    buildTool: 'maven',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -878,22 +876,22 @@ describe('JHipster generator', () => {
     describe('skip client with gradle', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipClient: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipClient: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'buildTool': 'gradle',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    buildTool: 'gradle',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -906,7 +904,7 @@ describe('JHipster generator', () => {
                 enableTranslation: true,
                 authenticationType: 'session',
                 testFrameworks: []
-            },'' , ['package.json']));
+            }, '', ['package.json']));
             assert.noFile(['gradle/yeoman.gradle']);
         });
     });
@@ -914,25 +912,25 @@ describe('JHipster generator', () => {
     describe('gateway with eureka', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'applicationType': 'gateway',
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'jwt',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'serviceDiscoveryType' : 'eureka'
+                    applicationType: 'gateway',
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [],
+                    serviceDiscoveryType: 'eureka'
                 })
                 .on('end', done);
         });
@@ -948,25 +946,25 @@ describe('JHipster generator', () => {
     describe('microservice with eureka', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'applicationType': 'microservice',
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'jwt',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'mysql',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'serviceDiscoveryType' : 'eureka'
+                    applicationType: 'microservice',
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'mysql',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [],
+                    serviceDiscoveryType: 'eureka'
                 })
                 .on('end', done);
         });
@@ -983,24 +981,24 @@ describe('JHipster generator', () => {
     describe('monolith with eureka', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'applicationType': 'monolith',
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : ['serviceDiscoveryType:eureka']
+                    applicationType: 'monolith',
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: ['serviceDiscoveryType:eureka']
                 })
                 .on('end', done);
         });
@@ -1016,25 +1014,25 @@ describe('JHipster generator', () => {
     describe('gateway with consul', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'applicationType': 'gateway',
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'jwt',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'serviceDiscoveryType' : 'consul'
+                    applicationType: 'gateway',
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [],
+                    serviceDiscoveryType: 'consul'
                 })
                 .on('end', done);
         });
@@ -1050,25 +1048,25 @@ describe('JHipster generator', () => {
     describe('microservice with consul', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'applicationType': 'microservice',
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'jwt',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'mysql',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'serviceDiscoveryType' : 'consul'
+                    applicationType: 'microservice',
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'mysql',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [],
+                    serviceDiscoveryType: 'consul'
                 })
                 .on('end', done);
         });
@@ -1085,27 +1083,27 @@ describe('JHipster generator', () => {
     describe('microservice with gradle and eureka', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'applicationType': 'microservice',
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'jwt',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'gradle',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'skipClient': true,
-                    'skipUserManagement': true,
-                    'serviceDiscoveryType' : 'eureka'
+                    applicationType: 'microservice',
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'jwt',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'gradle',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [],
+                    skipClient: true,
+                    skipUserManagement: true,
+                    serviceDiscoveryType: 'eureka'
                 })
                 .on('end', done);
         });
@@ -1122,26 +1120,26 @@ describe('JHipster generator', () => {
     describe('UAA server with Eureka', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
-                    'applicationType': 'uaa',
-                    'baseName': 'jhipster-uaa',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'serverPort': '9999',
-                    'authenticationType': 'uaa',
-                    'hibernateCache': 'no',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'mysql',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'serviceDiscoveryType' : 'eureka'
+                    applicationType: 'uaa',
+                    baseName: 'jhipster-uaa',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serverPort: '9999',
+                    authenticationType: 'uaa',
+                    hibernateCache: 'no',
+                    databaseType: 'sql',
+                    devDatabaseType: 'mysql',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [],
+                    serviceDiscoveryType: 'eureka'
                 })
                 .on('end', done);
         });
@@ -1156,30 +1154,30 @@ describe('JHipster generator', () => {
     describe('UAA gateway with eureka', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipChecks: true})
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
                 })
                 .withPrompts({
-                    'applicationType': 'gateway',
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'serverPort': '8080',
-                    'authenticationType': 'uaa',
-                    'uaaBaseName': './uaa/',
-                    'hibernateCache': 'hazelcast',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'mysql',
-                    'prodDatabaseType': 'mysql',
-                    'useSass': false,
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : [],
-                    'serviceDiscoveryType' : 'eureka'
+                    applicationType: 'gateway',
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serverPort: '8080',
+                    authenticationType: 'uaa',
+                    uaaBaseName: './uaa/',
+                    hibernateCache: 'hazelcast',
+                    databaseType: 'sql',
+                    devDatabaseType: 'mysql',
+                    prodDatabaseType: 'mysql',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: [],
+                    serviceDiscoveryType: 'eureka'
                 })
                 .on('end', done);
         });
@@ -1196,22 +1194,22 @@ describe('JHipster server generator', () => {
     describe('generate server', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/server'))
-                .withOptions({skipInstall: true, gatling: true, skipChecks: true})
+                .withOptions({ skipInstall: true, gatling: true, skipChecks: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'packageName': 'com.mycompany.myapp',
-                    'packageFolder': 'com/mycompany/myapp',
-                    'authenticationType': 'session',
-                    'hibernateCache': 'ehcache',
-                    'databaseType': 'sql',
-                    'devDatabaseType': 'h2Memory',
-                    'prodDatabaseType': 'mysql',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'buildTool': 'maven',
-                    'rememberMeKey': '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    'serverSideOptions' : []
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    authenticationType: 'session',
+                    hibernateCache: 'ehcache',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
                 })
                 .on('end', done);
         });
@@ -1234,14 +1232,14 @@ describe('JHipster client generator', () => {
     describe('generate client with angularjs 1', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session'})
+                .withOptions({ skipInstall: true, auth: 'session' })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'clientFramework': 'angular1',
-                    'useSass': true
+                    baseName: 'jhipster',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    clientFramework: 'angular1',
+                    useSass: true
                 })
                 .on('end', done);
         });
@@ -1267,14 +1265,14 @@ describe('JHipster client generator', () => {
     describe('generate client with angularjs 1 using npm flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', npm: true})
+                .withOptions({ skipInstall: true, auth: 'session', npm: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'clientFramework': 'angular1',
-                    'useSass': true
+                    baseName: 'jhipster',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    clientFramework: 'angular1',
+                    useSass: true
                 })
                 .on('end', done);
         });
@@ -1289,14 +1287,14 @@ describe('JHipster client generator', () => {
     describe('generate client with angular 2', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session'})
+                .withOptions({ skipInstall: true, auth: 'session' })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'clientFramework': 'angular2',
-                    'useSass': true
+                    baseName: 'jhipster',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    clientFramework: 'angular2',
+                    useSass: true
                 })
                 .on('end', done);
         });
@@ -1323,14 +1321,14 @@ describe('JHipster client generator', () => {
     describe('generate client with angular 2 using yarn flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({skipInstall: true, auth: 'session', npm: true})
+                .withOptions({ skipInstall: true, auth: 'session', npm: true })
                 .withPrompts({
-                    'baseName': 'jhipster',
-                    'enableTranslation': true,
-                    'nativeLanguage': 'en',
-                    'languages': ['fr'],
-                    'clientFramework': 'angular2',
-                    'useSass': true
+                    baseName: 'jhipster',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    clientFramework: 'angular2',
+                    useSass: true
                 })
                 .on('end', done);
         });

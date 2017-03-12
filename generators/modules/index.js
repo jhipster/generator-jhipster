@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const generator = require('yeoman-generator');
 const _ = require('lodash');
@@ -21,7 +21,7 @@ module.exports = ModulesGenerator.extend({
             this.error(chalk.red('This sub-generator must be used by JHipster modules, and the module name is not defined.'));
         }
 
-        this.log('Composing JHipster configuration with module ' + chalk.red(jhipsterVar.moduleName));
+        this.log(`Composing JHipster configuration with module ${chalk.red(jhipsterVar.moduleName)}`);
 
         const baseName = this.config.get('baseName');
         const packageName = this.config.get('packageName');
@@ -29,7 +29,7 @@ module.exports = ModulesGenerator.extend({
 
         if (!this.options.skipValidation && (baseName === undefined || packageName === undefined)) {
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
-            this.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
+            this.error(`JHipster ${jhipsterVar.moduleName} is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.`);
         }
         // add required JHipster constiables
         jhipsterVar.baseName = this.baseName = baseName;
@@ -61,7 +61,7 @@ module.exports = ModulesGenerator.extend({
 
         jhipsterVar.angularAppName = this.getAngularAppName();
         jhipsterVar.mainClassName = this.getMainClassName();
-        jhipsterVar.javaDir = constants.SERVER_MAIN_SRC_DIR + packageFolder + '/';
+        jhipsterVar.javaDir = `${constants.SERVER_MAIN_SRC_DIR + packageFolder}/`;
         jhipsterVar.resourceDir = constants.SERVER_MAIN_RES_DIR;
         jhipsterVar.webappDir = constants.CLIENT_MAIN_SRC_DIR;
         jhipsterVar.CONSTANTS = constants;
@@ -70,7 +70,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.fs = this.fs;
         jhipsterFunc.log = this.log;
 
-        //add common methods from script-base.js
+        // add common methods from script-base.js
         jhipsterFunc.addSocialButton = this.addSocialButton;
         jhipsterFunc.addSocialConnectionFactory = this.addSocialConnectionFactory;
         jhipsterFunc.addMavenDependency = this.addMavenDependency;

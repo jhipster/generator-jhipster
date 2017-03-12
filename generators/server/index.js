@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -61,16 +61,16 @@ module.exports = JhipsterServerGenerator.extend({
 
         this.skipClient = !this.options['client-hook'] || this.configOptions.skipClient || this.config.get('skipClient');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.enableTranslation = this.options['i18n'];
+        this.enableTranslation = this.options.i18n;
         this.testFrameworks = [];
-        this.options['gatling'] && this.testFrameworks.push('gatling');
-        this.options['cucumber'] && this.testFrameworks.push('cucumber');
+        this.options.gatling && this.testFrameworks.push('gatling');
+        this.options.cucumber && this.testFrameworks.push('cucumber');
         this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.logo = this.configOptions.logo;
         this.baseName = this.configOptions.baseName;
         this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options['debug'];
+        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
     },
     initializing: {
         displayLogo: function () {
@@ -211,7 +211,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.buildTool !== undefined;
 
             if (this.baseName !== undefined && serverConfigFound) {
-
                 // Generate remember me key if key does not already exist in config
                 if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
@@ -243,7 +242,7 @@ module.exports = JhipsterServerGenerator.extend({
                     this.languages = ['en', 'fr'];
                 }
                 // user-management will be handled by UAA app
-                if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+                if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
                     this.skipUserManagement = true;
                 }
 
@@ -290,7 +289,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             // Make documentation URL available in templates
             this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-            this.DOCUMENTATION_ARCHIVE_URL = constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH + 'v' + this.jhipsterVersion;
+            this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${this.jhipsterVersion}`;
         }
     },
 
@@ -328,7 +327,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             this.packageFolder = this.packageName.replace(/\./g, '/');
-            this.testDir = constants.SERVER_TEST_SRC_DIR + this.packageFolder + '/';
+            this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;
             if (!this.nativeLanguage) {
                 // set to english when translation is set to false
                 this.nativeLanguage = 'en';
@@ -397,11 +396,10 @@ module.exports = JhipsterServerGenerator.extend({
     writing: writeFiles(),
 
     end: function () {
-
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
-            this.warning(chalk.yellow.bold('You have selected Oracle database.\n') +
-                'Please follow our documentation on using Oracle to set up the \n' +
+            this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
+                }Please follow our documentation on using Oracle to set up the \n` +
                 'Oracle proprietary JDBC driver.');
         }
         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
@@ -412,10 +410,10 @@ module.exports = JhipsterServerGenerator.extend({
         }
         let logMsgComment = '';
         if (os.platform() === 'win32') {
-            logMsgComment = ' (' + chalk.yellow.bold(executable) + ' if using Windows Command Prompt)';
+            logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
         }
-        this.log(chalk.green('Run your Spring Boot application:' +
-            '\n ' + chalk.yellow.bold('./' + executable) + logMsgComment));
+        this.log(chalk.green(`${'Run your Spring Boot application:' +
+            '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
     }
 
 });

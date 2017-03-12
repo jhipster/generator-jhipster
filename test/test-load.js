@@ -1,5 +1,5 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
+
 
 const assert = require('assert');
 

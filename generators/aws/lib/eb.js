@@ -1,4 +1,4 @@
-'use strict';
+
 let aws;
 let uuidV4;
 
@@ -7,7 +7,7 @@ const Eb = module.exports = function Eb(Aws, generator) {
     try {
         uuidV4 = require('uuid/v4');
     } catch (e) {
-        generator.error('Something went wrong while running jhipster:aws:\n' + e);
+        generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
 };
 
@@ -15,7 +15,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
     const applicationName = params.applicationName,
         bucketName = params.bucketName,
         warKey = params.warKey,
-        versionLabel = this.warKey + '-' + uuidV4(),
+        versionLabel = `${this.warKey}-${uuidV4()}`,
         environmentName = params.environmentName,
         dbUrl = params.dbUrl,
         dbUsername = params.dbUsername,
@@ -31,7 +31,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
 
     createApplicationVersion(applicationParams, (err) => {
         if (err) {
-            callback({message: err.message}, null);
+            callback({ message: err.message }, null);
         } else {
             const environmentParams = {
                 applicationName,
@@ -45,25 +45,23 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
 
             checkEnvironment(environmentParams, (err, data) => {
                 if (err) {
-                    callback({message: err.message}, null);
+                    callback({ message: err.message }, null);
+                } else if (data.environmentExists) {
+                    updateEnvironment(environmentParams, (err, data) => {
+                        if (err) {
+                            callback({ message: err.message }, null);
+                        } else {
+                            callback(null, { message: data.message });
+                        }
+                    });
                 } else {
-                    if (data.environmentExists) {
-                        updateEnvironment(environmentParams, (err, data)  => {
-                            if (err) {
-                                callback({message: err.message}, null);
-                            } else {
-                                callback(null, {message: data.message});
-                            }
-                        });
-                    } else {
-                        createEnvironment(environmentParams, (err, data) => {
-                            if (err) {
-                                callback({message: err.message}, null);
-                            } else {
-                                callback(null, {message: data.message});
-                            }
-                        });
-                    }
+                    createEnvironment(environmentParams, (err, data) => {
+                        if (err) {
+                            callback({ message: err.message }, null);
+                        } else {
+                            callback(null, { message: data.message });
+                        }
+                    });
                 }
             });
         }
@@ -92,7 +90,7 @@ function createApplicationVersion(params, callback) {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Application version ' + applicationName + ' created successful'});
+            callback(null, { message: `Application version ${applicationName} created successful` });
         }
     });
 }
@@ -110,14 +108,13 @@ function checkEnvironment(params, callback) {
 
     elasticbeanstalk.describeEnvironments(environmentParams, (err, data) => {
         if (data.Environments.length === 0) {
-            callback(null, {message: 'Environment ' + environmentName + ' not exists', environmentExists: false});
+            callback(null, { message: `Environment ${environmentName} not exists`, environmentExists: false });
         } else if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Environment ' + environmentName + ' already exists', environmentExists: true});
+            callback(null, { message: `Environment ${environmentName} already exists`, environmentExists: true });
         }
     });
-
 }
 
 function createEnvironment(params, callback) {
@@ -180,7 +177,7 @@ function createEnvironment(params, callback) {
 
         elasticbeanstalk.createEnvironment(environmentParams, (err) => {
             if (err) callback(err, null);
-            else callback(null, {message: 'Environment ' + environmentName + ' created successful'});
+            else callback(null, { message: `Environment ${environmentName} created successful` });
         });
     });
 }
@@ -195,7 +192,7 @@ function getLatestSolutionStackName(callback) {
 
     function filterSolutionStackNames(data, callback) {
         const filteredArray = data.SolutionStacks.filter(filterCriteria);
-        callback(null, {solutionStackName: filteredArray[0]});
+        callback(null, { solutionStackName: filteredArray[0] });
     }
 
     function filterCriteria(element) {
@@ -226,7 +223,7 @@ function updateEnvironment(params, callback) {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Environment ' + environmentName + ' updated successful'});
+            callback(null, { message: `Environment ${environmentName} updated successful` });
         }
     });
 }

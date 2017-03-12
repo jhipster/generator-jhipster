@@ -1,5 +1,3 @@
-'use strict';
-
 const chalk = require('chalk');
 
 module.exports = {
@@ -21,7 +19,7 @@ function askForInsightOptIn() {
         when: () => insight.optOut === undefined,
         type: 'confirm',
         name: 'insight',
-        message: 'May ' + chalk.cyan('JHipster') + ' anonymously report usage statistics to improve the tool over time?',
+        message: `May ${chalk.cyan('JHipster')} anonymously report usage statistics to improve the tool over time?`,
         default: true
     }).then((prompt) => {
         if (prompt.insight !== undefined) {
@@ -94,14 +92,14 @@ function askForTestOpts() {
     if (!this.skipServer) {
         // all server side test frameworks should be added here
         choices.push(
-            {name: 'Gatling', value: 'gatling'},
-            {name: 'Cucumber', value: 'cucumber'}
+            { name: 'Gatling', value: 'gatling' },
+            { name: 'Cucumber', value: 'cucumber' }
         );
     }
     if (!this.skipClient) {
         // all client side test frameworks should be added here
         choices.push(
-            {name: 'Protractor', value: 'protractor'}
+            { name: 'Protractor', value: 'protractor' }
         );
     }
     const done = this.async();
@@ -144,7 +142,7 @@ function askModulesToBeInstalled(done, generator) {
         const choices = [];
         moduleResponse.results.forEach((modDef) => {
             choices.push({
-                value: { name:modDef.package.name, version:modDef.package.version},
+                value: { name: modDef.package.name, version: modDef.package.version },
                 name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description} [${modDef.package.author.name}]`
             });
         });
@@ -159,7 +157,7 @@ function askModulesToBeInstalled(done, generator) {
                 // [ {name: [moduleName], version:[version]}, ...]
                 generator.otherModules = [];
                 prompt.otherModules.forEach((module) => {
-                    generator.otherModules.push({name:module.name, version:module.version});
+                    generator.otherModules.push({ name: module.name, version: module.version });
                 });
                 generator.configOptions.otherModules = generator.otherModules;
                 done();

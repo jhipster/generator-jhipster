@@ -1,5 +1,5 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
+
 
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -7,28 +7,27 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    dockercompose : [
+    dockercompose: [
         'docker-compose.yml',
         'jhipster-registry.yml',
         'central-server-config/application.yml'
     ],
-    elk : [
+    elk: [
         'jhipster-console.yml',
         'log-conf/logstash.conf'
     ],
-    prometheus : [
+    prometheus: [
         'prometheus.yml',
         'prometheus-conf/alert.rules',
         'prometheus-conf/prometheus.yml',
         'alertmanager-conf/config.yml'
     ],
-    monolith : [
+    monolith: [
         'docker-compose.yml'
     ]
 };
 
 describe('JHipster Docker Compose Sub Generator', () => {
-
     describe('only gateway', () => {
         beforeEach((done) => {
             helpers
@@ -39,7 +38,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway'
                     ],
                     clusteredDbApps: [],
@@ -70,7 +69,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '02-mysql'
                     ],
                     clusteredDbApps: [],
@@ -101,7 +100,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql'
                     ],
@@ -133,7 +132,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql'
                     ],
@@ -168,7 +167,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql'
                     ],
@@ -200,11 +199,11 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({force: true})
+                .withOptions({ force: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql',
                         '06-uaa'
@@ -240,7 +239,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql',
                         '03-psql',
@@ -278,7 +277,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '02-mysql',
                         '03-psql',
@@ -317,7 +316,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '01-gateway',
                         '05-cassandra'
                     ],
@@ -352,7 +351,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
-                    'chosenApps': [
+                    chosenApps: [
                         '08-monolith'
                     ],
                     clusteredDbApps: [],
@@ -360,7 +359,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected default files', function() {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
         });
         it('creates compose file without container_name, external_links, links', () => {

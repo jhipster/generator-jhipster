@@ -1,4 +1,4 @@
-'use strict';
+
 const path = require('path');
 const html = require('html-wiring');
 const shelljs = require('shelljs');
@@ -6,7 +6,7 @@ const ejs = require('ejs');
 const _ = require('lodash');
 
 const constants = require('./generator-constants');
-const LANGUAGES_MAIN_SRC_DIR = '../../languages/templates/' + constants.CLIENT_MAIN_SRC_DIR;
+const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
 module.exports = {
     rewrite,
@@ -46,9 +46,7 @@ function escapeRegExp(str) {
 
 function rewrite(args) {
     // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(function (line) {
-        return `\s*${escapeRegExp(line)}`;
-    }).join('\n'));
+    const re = new RegExp(args.splicable.map(line => `\s*${escapeRegExp(line)}`).join('\n'));
 
     if (re.test(args.haystack)) {
         return args.haystack;
@@ -112,7 +110,7 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
 
 function renderContent(source, generator, context, options, cb) {
     ejs.renderFile(generator.templatePath(source), context, options, (err, res) => {
-        if(!err) {
+        if (!err) {
             cb(res);
         } else {
             generator.error(`Copying template ${source} failed. [${err}]`);
@@ -126,7 +124,8 @@ function replaceTitle(body, generator) {
 
     while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
-        const key = match[1], target = key;
+        const key = match[1];
+        const target = key;
         const jsonData = geti18nJson(key, generator);
         const keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
 
@@ -142,7 +141,8 @@ function replacePlaceholders(body, generator) {
 
     while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
-        const key = match[2], target = match[1];
+        const key = match[2];
+        const target = match[1];
         const jsonData = geti18nJson(key, generator);
         const keyValue = jsonData !== undefined ? deepFind(jsonData, key, true) : undefined; // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
 
@@ -153,14 +153,13 @@ function replacePlaceholders(body, generator) {
 }
 
 function geti18nJson(key, generator) {
-
-    const i18nDirectory = LANGUAGES_MAIN_SRC_DIR + 'i18n/en/';
+    const i18nDirectory = `${LANGUAGES_MAIN_SRC_DIR}i18n/en/`;
     const name = _.kebabCase(key.split('.')[0]);
-    let filename = i18nDirectory + name + '.json';
+    let filename = `${i18nDirectory + name}.json`;
     let render;
 
     if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
-        filename = i18nDirectory + '_' + name + '.json';
+        filename = `${i18nDirectory}_${name}.json`;
         render = true;
     }
     try {
@@ -171,7 +170,7 @@ function geti18nJson(key, generator) {
         return file;
     } catch (err) {
         generator.log(err);
-        generator.log('Error in file: ' + filename);
+        generator.log(`Error in file: ${filename}`);
         // 'Error reading translation file!'
         return undefined;
     }
@@ -180,26 +179,25 @@ function geti18nJson(key, generator) {
 function deepFind(obj, path, placeholder) {
     const paths = path.split('.');
     let current = obj;
-    if (placeholder) {// dirty fix for placeholders, the json files needs to be corrected
-        paths[paths.length - 2] = paths[paths.length - 2] + '.' + paths[paths.length - 1];
+    if (placeholder) { // dirty fix for placeholders, the json files needs to be corrected
+        paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
         paths.pop();
     }
     for (let i = 0; i < paths.length; ++i) {
         if (current[paths[i]] === undefined) {
             return undefined;
-        } else {
-            current = current[paths[i]];
         }
+        current = current[paths[i]];
     }
     return current;
 }
 
-function getJavadoc (text, indentSize) {
-    let javadoc = _.repeat(' ', indentSize) + '/**';
+function getJavadoc(text, indentSize) {
+    let javadoc = `${_.repeat(' ', indentSize)}/**`;
     const rows = text.split('\n');
     for (let i = 0; i < rows.length; i++) {
-        javadoc = javadoc + '\n' + _.repeat(' ', indentSize) + ' * ' + rows[i];
+        javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} * ${rows[i]}`;
     }
-    javadoc = javadoc + '\n' + _.repeat(' ', indentSize) + ' */';
+    javadoc = `${javadoc}\n${_.repeat(' ', indentSize)} */`;
     return javadoc;
 }

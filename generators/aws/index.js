@@ -1,4 +1,3 @@
-'use strict';
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -63,7 +62,7 @@ module.exports = AwsGenerator.extend({
         },
         createAwsFactory: function () {
             const cb = this.async();
-            this.awsFactory.init({region: this.awsRegion});
+            this.awsFactory.init({ region: this.awsRegion });
             cb();
         },
         saveConfig: function () {
@@ -103,7 +102,7 @@ module.exports = AwsGenerator.extend({
 
             const s3 = this.awsFactory.getS3();
 
-            s3.createBucket({bucket: this.bucketName}, (err, data) => {
+            s3.createBucket({ bucket: this.bucketName }, (err, data) => {
                 if (err) {
                     this.error(chalk.red(err.message));
                 } else {

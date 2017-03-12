@@ -1,18 +1,18 @@
-'use strict';
+
 const fs = require('fs');
 
 const FILE_EXTENSION = '.original',
     S3_STANDARD_REGION = 'us-east-1';
 
-let progressbar;
+let Progressbar;
 
 
 const S3 = module.exports = function S3(Aws, generator) {
     this.Aws = Aws;
     try {
-        progressbar = require('progress');
+        Progressbar = require('progress');
     } catch (e) {
-        generator.error('Something went wrong while running jhipster:aws:\n' + e);
+        generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
 };
 
@@ -22,7 +22,7 @@ S3.prototype.createBucket = function createBucket(params, callback) {
 
     const s3Params = {
         Bucket: bucket,
-        CreateBucketConfiguration: {LocationConstraint: region}
+        CreateBucketConfiguration: { LocationConstraint: region }
     };
 
     if (region.toLowerCase() === S3_STANDARD_REGION) {
@@ -40,15 +40,15 @@ S3.prototype.createBucket = function createBucket(params, callback) {
                 if (err) {
                     error(err.message, callback);
                 } else {
-                    success('Bucket ' + bucket + ' created successful', callback);
+                    success(`Bucket ${bucket} created successful`, callback);
                 }
             });
         } else if (err && err.statusCode === 301) {
-            error('Bucket ' + bucket + ' is already in use', callback);
+            error(`Bucket ${bucket} is already in use`, callback);
         } else if (err) {
             error(err.message, callback);
         } else {
-            success('Bucket ' + bucket + ' already exists', callback);
+            success(`Bucket ${bucket} already exists`, callback);
         }
     });
 };
@@ -64,7 +64,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
         buildFolder = 'target/';
     }
 
-    findWarFilename(buildFolder, (err, warFilename)  => {
+    findWarFilename(buildFolder, (err, warFilename) => {
         if (err) {
             error(err, callback);
         } else {
@@ -76,7 +76,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                     Key: warKey
                 },
                 signatureVersion: 'v4',
-                httpOptions: {timeout: 600000}
+                httpOptions: { timeout: 600000 }
             });
 
             const filePath = buildFolder + warFilename,
@@ -86,7 +86,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                 if (err) {
                     error(err.message, callback);
                 } else {
-                    callback(null, {message: message, warKey: warKey});
+                    callback(null, { message: message, warKey: warKey });
                 }
             });
         }
@@ -114,11 +114,10 @@ function uploadToS3(s3, body, callback) {
         if (err) {
             callback(err, null);
         } else {
-            s3.upload({Body: body}).on('httpUploadProgress', (evt) => {
-
+            s3.upload({ Body: body }).on('httpUploadProgress', (evt) => {
                 if (bar === undefined && evt.total) {
                     const total = evt.total / 1000000;
-                    bar = new progressbar('uploading [:bar] :percent :etas', {
+                    bar = new Progressbar('uploading [:bar] :percent :etas', {
                         complete: '=',
                         incomplete: ' ',
                         width: 20,
@@ -141,9 +140,9 @@ function uploadToS3(s3, body, callback) {
 }
 
 function success(message, callback) {
-    callback(null, {message: message});
+    callback(null, { message: message });
 }
 
 function error(message, callback) {
-    callback({message: message}, null);
+    callback({ message: message }, null);
 }

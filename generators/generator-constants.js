@@ -1,4 +1,4 @@
-'use strict';
+
 
 // version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v2.5.8';
@@ -48,22 +48,22 @@ const constants = {
     CLIENT_QUESTIONS: 4,
     SERVER_QUESTIONS: 15,
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
-    DOCKER_DIR: MAIN_DIR + 'docker/',
+    DOCKER_DIR: `${MAIN_DIR}docker/`,
 
     MAIN_DIR: MAIN_DIR,
     TEST_DIR: TEST_DIR,
 
-    CLIENT_MAIN_SRC_DIR: MAIN_DIR + 'webapp/',
-    CLIENT_TEST_SRC_DIR: TEST_DIR + 'javascript/',
+    CLIENT_MAIN_SRC_DIR: `${MAIN_DIR}webapp/`,
+    CLIENT_TEST_SRC_DIR: `${TEST_DIR}javascript/`,
     CLIENT_DIST_DIR: CLIENT_DIST_DIR,
-    ANGULAR_DIR: MAIN_DIR + 'webapp/app/',
+    ANGULAR_DIR: `${MAIN_DIR}webapp/app/`,
 
-    SERVER_MAIN_SRC_DIR: MAIN_DIR + 'java/',
-    SERVER_MAIN_RES_DIR: MAIN_DIR + 'resources/',
-    SERVER_TEST_SRC_DIR: TEST_DIR + 'java/',
-    SERVER_TEST_RES_DIR: TEST_DIR + 'resources/',
+    SERVER_MAIN_SRC_DIR: `${MAIN_DIR}java/`,
+    SERVER_MAIN_RES_DIR: `${MAIN_DIR}resources/`,
+    SERVER_TEST_SRC_DIR: `${TEST_DIR}java/`,
+    SERVER_TEST_RES_DIR: `${TEST_DIR}resources/`,
 
-    //entity related
+    // entity related
     SUPPORTED_VALIDATION_RULES: SUPPORTED_VALIDATION_RULES,
 
     JHIPSTER_DOCUMENTATION_URL: JHIPSTER_DOCUMENTATION_URL,

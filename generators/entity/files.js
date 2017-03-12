@@ -1,4 +1,4 @@
-'use strict';
+
 
 const _ = require('lodash');
 const randexp = require('randexp');
@@ -30,7 +30,8 @@ const serverFiles = {
             condition: generator => generator.databaseType === 'sql',
             path: SERVER_MAIN_RES_DIR,
             templates: [{
-                file: 'config/liquibase/changelog/_added_entity.xml', options: { interpolate : INTERPOLATE_REGEX },
+                file: 'config/liquibase/changelog/_added_entity.xml',
+                options: { interpolate: INTERPOLATE_REGEX },
                 renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
             }]
         },
@@ -38,7 +39,8 @@ const serverFiles = {
             condition: generator => generator.databaseType === 'sql' && (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne),
             path: SERVER_MAIN_RES_DIR,
             templates: [{
-                file: 'config/liquibase/changelog/_added_entity_constraints.xml', options: { interpolate : INTERPOLATE_REGEX },
+                file: 'config/liquibase/changelog/_added_entity_constraints.xml',
+                options: { interpolate: INTERPOLATE_REGEX },
                 renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`
             }]
         },
@@ -119,7 +121,7 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
                 file: 'package/web/rest/_EntityResourceIntTest.java',
-                options: {'context': {'randexp': randexp, '_': _, 'chalkRed': chalk.red, 'fs': fs, 'SERVER_TEST_SRC_DIR': SERVER_TEST_SRC_DIR}},
+                options: { context: { randexp: randexp, _: _, chalkRed: chalk.red, fs: fs, SERVER_TEST_SRC_DIR: SERVER_TEST_SRC_DIR } },
                 renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
             }]
         },
@@ -127,7 +129,8 @@ const serverFiles = {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [{
-                file: 'gatling/simulations/_EntityGatlingTest.scala', options: { interpolate : INTERPOLATE_REGEX },
+                file: 'gatling/simulations/_EntityGatlingTest.scala',
+                options: { interpolate: INTERPOLATE_REGEX },
                 renameTo: generator => `gatling/simulations/${generator.entityClass}GatlingTest.scala`
             }]
         }
@@ -140,19 +143,27 @@ const angularjsFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'entities/_entity-management.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityPluralFileName}.html`
                 },
                 {
-                    file: 'entities/_entity-management-detail.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management-detail.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.html`
                 },
                 {
-                    file: 'entities/_entity-management-dialog.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management-dialog.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.html`
                 },
                 {
-                    file: 'entities/_entity-management-delete-dialog.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management-delete-dialog.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.html`
                 },
                 {
@@ -216,19 +227,27 @@ const angularFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
-                    file: 'entities/_entity-management.component.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management.component.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-detail.component.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management-detail.component.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-dialog.component.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management-dialog.component.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-dialog.component.html`
                 },
                 {
-                    file: 'entities/_entity-management-delete-dialog.component.html', method: 'processHtml', template: true,
+                    file: 'entities/_entity-management-delete-dialog.component.html',
+                    method: 'processHtml',
+                    template: true,
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.html`
                 },
                 {
@@ -303,14 +322,14 @@ module.exports = {
 
 function writeFiles() {
     return {
-        saveRemoteEntityPath: function() {
+        saveRemoteEntityPath: function () {
             if (_.isUndefined(this.microservicePath)) {
                 return;
             }
-            this.copy(this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json', this.destinationPath(this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'));
+            this.copy(`${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`, this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`));
         },
 
-        writeServerFiles: function() {
+        writeServerFiles: function () {
             if (this.skipServer) return;
 
             // write server side files
@@ -318,9 +337,9 @@ function writeFiles() {
 
             if (this.databaseType === 'sql') {
                 if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
-                    this.addConstraintsChangelogToLiquibase(this.changelogDate + '_added_entity_constraints_' + this.entityClass);
+                    this.addConstraintsChangelogToLiquibase(`${this.changelogDate}_added_entity_constraints_${this.entityClass}`);
                 }
-                this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
+                this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
 
                 if (this.hibernateCache === 'ehcache') {
                     this.addEntityToEhcache(this.entityClass, this.relationships);
@@ -328,8 +347,8 @@ function writeFiles() {
             }
         },
 
-        writeEnumFiles: function() {
-            for (let idx in this.fields) {
+        writeEnumFiles: function () {
+            for (const idx in this.fields) {
                 const field = this.fields[idx];
                 if (field.fieldIsEnum === true) {
                     const fieldType = field.fieldType;
@@ -353,11 +372,10 @@ function writeFiles() {
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
                         const languages = this.languages || this.getAllInstalledLanguages();
-                        languages.forEach(language => {
+                        languages.forEach((language) => {
                             this.copyEnumI18n(language, enumInfo, CLIENT_I18N_TEMPLATES_DIR);
                         });
                     }
-
                 }
             }
         },

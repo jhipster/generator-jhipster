@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const fs = require('fs');
 const generator = require('yeoman-generator');
@@ -46,9 +46,9 @@ module.exports = HerokuGenerator.extend({
                     this.log.error('Run the generator again to create a new app.');
                 } else {
                     const json = JSON.parse(stdout);
-                    this.herokuAppName = json['app']['name'];
-                    if (json['dynos'].length > 0) {
-                        this.dynoSize = json['dynos'][0]['size'];
+                    this.herokuAppName = json.app.name;
+                    if (json.dynos.length > 0) {
+                        this.dynoSize = json.dynos[0].size;
                     }
                     this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
                     this.herokuAppExists = true;
@@ -143,10 +143,10 @@ module.exports = HerokuGenerator.extend({
             if (this.abort || this.herokuAppExists) return;
             const done = this.async();
 
-            const regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
+            const regionParams = (this.herokuRegion !== 'us') ? ` --region ${this.herokuRegion}` : '';
 
             this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-            let herokuCreateCmd = 'heroku create ' + this.herokuAppName + regionParams;
+            let herokuCreateCmd = `heroku create ${this.herokuAppName}${regionParams}`;
             this.log(herokuCreateCmd);
 
             const child = exec(herokuCreateCmd, {}, (err, stdout, stderr) => {
@@ -156,7 +156,7 @@ module.exports = HerokuGenerator.extend({
                             {
                                 type: 'list',
                                 name: 'herokuForceName',
-                                message: 'The Heroku app "' + chalk.cyan(this.herokuAppName) + '" already exists! Use it anyways?',
+                                message: `The Heroku app "${chalk.cyan(this.herokuAppName)}" already exists! Use it anyways?`,
                                 choices: [{
                                     value: 'Yes',
                                     name: 'Yes, I have access to it'
@@ -171,9 +171,9 @@ module.exports = HerokuGenerator.extend({
                         this.prompt(prompts).then((props) => {
                             let getHerokuAppName = def => def;
                             if (props.herokuForceName === 'Yes') {
-                                herokuCreateCmd = 'heroku git:remote --app ' + this.herokuAppName;
+                                herokuCreateCmd = `heroku git:remote --app ${this.herokuAppName}`;
                             } else {
-                                herokuCreateCmd = 'heroku create ' + regionParams;
+                                herokuCreateCmd = `heroku create ${regionParams}`;
 
                                 // Extract from "Created random-app-name-1234... done"
                                 getHerokuAppName = (def, stdout) => stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
@@ -212,7 +212,7 @@ module.exports = HerokuGenerator.extend({
             });
         },
 
-        herokuAddonsCreate: function() {
+        herokuAddonsCreate: function () {
             if (this.abort) return;
             const done = this.async();
 
@@ -240,7 +240,7 @@ module.exports = HerokuGenerator.extend({
             });
         },
 
-        configureJHipsterRegistry: function() {
+        configureJHipsterRegistry: function () {
             if (this.abort || this.herokuAppExists) return;
             const done = this.async();
 
@@ -254,7 +254,7 @@ module.exports = HerokuGenerator.extend({
 
                 this.log('');
                 this.prompt(prompts).then((props) => {
-                    const configSetCmd = 'heroku config:set ' + 'JHIPSTER_REGISTRY_URL=' + props.herokuJHipsterRegistry + ' --app ' + this.herokuAppName;
+                    const configSetCmd = `${'heroku config:set ' + 'JHIPSTER_REGISTRY_URL='}${props.herokuJHipsterRegistry} --app ${this.herokuAppName}`;
                     const child = exec(configSetCmd, {}, (err, stdout, stderr) => {
                         if (err) {
                             this.abort = true;
@@ -280,8 +280,8 @@ module.exports = HerokuGenerator.extend({
             const done = this.async();
             this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-            this.template('_bootstrap-heroku.yml', constants.SERVER_MAIN_RES_DIR + '/config/bootstrap-heroku.yml');
-            this.template('_application-heroku.yml', constants.SERVER_MAIN_RES_DIR + '/config/application-heroku.yml');
+            this.template('_bootstrap-heroku.yml', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
+            this.template('_application-heroku.yml', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
             this.template('_Procfile', 'Procfile');
             if (this.buildTool === 'gradle') {
                 this.template('_heroku.gradle', 'gradle/heroku.gradle');
@@ -319,7 +319,6 @@ module.exports = HerokuGenerator.extend({
                 const line = data.toString().trim();
                 if (line.length !== 0) this.log(line);
             });
-
         },
 
         productionDeploy: function () {
@@ -336,15 +335,15 @@ module.exports = HerokuGenerator.extend({
             const warFile = files[0];
             const herokuDeployCommand = `heroku deploy:jar ${warFile} --app ${this.herokuAppName}`;
 
-            this.log(chalk.bold('\nUploading your application code.\nThis may take ' + chalk.cyan('several minutes') + ' depending on your connection speed...'));
+            this.log(chalk.bold(`\nUploading your application code.\nThis may take ${chalk.cyan('several minutes')} depending on your connection speed...`));
             const child = exec(herokuDeployCommand, (err, stdout) => {
                 if (err) {
                     this.abort = true;
                     this.log.error(err);
                 }
-                this.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
-                this.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
-                this.log(chalk.yellow('After application modification, redeploy it with\n\t' + chalk.bold('yo jhipster:heroku')));
+                this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
+                this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
+                this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('yo jhipster:heroku')}`));
                 done();
             });
 

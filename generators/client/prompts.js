@@ -1,4 +1,4 @@
-'use strict';
+
 
 module.exports = {
     askForModuleName,
@@ -8,7 +8,6 @@ module.exports = {
 };
 
 function askForModuleName() {
-
     if (this.baseName) return;
 
     this.askModuleName(this);

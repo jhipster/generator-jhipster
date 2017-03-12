@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+
+
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -45,26 +46,26 @@ module.exports = KubernetesGenerator.extend({
     },
 
     initializing: {
-        sayHello: function() {
-            this.log(chalk.white(chalk.bold('⎈') + ' [BETA] Welcome to the JHipster Kubernetes Generator ' + chalk.bold('⎈')));
-            this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
+        sayHello: function () {
+            this.log(chalk.white(`${chalk.bold('⎈')} [BETA] Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
+            this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
         },
 
-        checkDocker: function() {
+        checkDocker: function () {
             if (this.skipChecks) return;
             const done = this.async();
 
-            shelljs.exec('docker -v', {silent:true}, (code, stdout, stderr) => {
+            shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
+                    this.log(`${chalk.yellow.bold('WARNING!')} Docker version 1.10.0 or later is not installed on your computer.\n` +
                         '         Read http://docs.docker.com/engine/installation/#installation\n');
                 } else {
                     const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
                     const dockerVersionMajor = dockerVersion.split('.')[0];
                     const dockerVersionMinor = dockerVersion.split('.')[1];
-                    if ( dockerVersionMajor < 1 || ( dockerVersionMajor === 1 && dockerVersionMinor < 10 )) {
-                        this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
-                            '         Docker version found: ' + dockerVersion + '\n' +
+                    if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
+                        this.log(`${chalk.yellow.bold('WARNING!')} Docker version 1.10.0 or later is not installed on your computer.\n` +
+                            `         Docker version found: ${dockerVersion}\n` +
                             '         Read http://docs.docker.com/engine/installation/#installation\n');
                     }
                 }
@@ -72,20 +73,20 @@ module.exports = KubernetesGenerator.extend({
             });
         },
 
-        checkKubernetes: function() {
+        checkKubernetes: function () {
             if (this.skipChecks) return;
             const done = this.async();
 
-            shelljs.exec('kubectl version', {silent:true}, (code, stdout, stderr) => {
+            shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
                 if (stderr) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' kubectl 1.2 or later is not installed on your computer.\n' +
+                    this.log(`${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
                       'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n');
                 }
                 done();
             });
         },
 
-        loadConfig: function() {
+        loadConfig: function () {
             this.defaultAppsFolders = this.config.get('appsFolders');
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
@@ -120,15 +121,15 @@ module.exports = KubernetesGenerator.extend({
 
         files.forEach((file) => {
             if (file.isDirectory()) {
-                if ((shelljs.test('-f', file.name + '/.yo-rc.json'))
-                    && (shelljs.test('-f', file.name + '/src/main/docker/app.yml'))) {
+                if ((shelljs.test('-f', `${file.name}/.yo-rc.json`))
+                    && (shelljs.test('-f', `${file.name}/src/main/docker/app.yml`))) {
                     try {
-                        const fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
+                        const fileData = this.fs.readJSON(`${file.name}/.yo-rc.json`);
                         if (fileData['generator-jhipster'].baseName !== undefined) {
                             appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                         }
-                    } catch(err) {
-                        this.log(chalk.red(file + ': this .yo-rc.json can\'t be read'));
+                    } catch (err) {
+                        this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
                     }
                 }
             }
@@ -156,7 +157,7 @@ module.exports = KubernetesGenerator.extend({
             insight.trackWithEvent('generator', 'kubernetes');
         },
 
-        checkImages: function() {
+        checkImages: function () {
             this.log('\nChecking Docker images in applications\' directories...');
 
             let imagePath = '';
@@ -165,34 +166,34 @@ module.exports = KubernetesGenerator.extend({
             this.warningMessage = 'To generate Docker image, please run:\n';
             for (let i = 0; i < this.appsFolders.length; i++) {
                 if (this.appConfigs[i].buildTool === 'maven') {
-                    imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
+                    imagePath = this.destinationPath(`${this.directoryPath + this.appsFolders[i]}/target/docker/${_.kebabCase(this.appConfigs[i].baseName)}-*.war`);
                     runCommand = './mvnw package -Pprod docker:build';
                 } else {
-                    imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/build/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
+                    imagePath = this.destinationPath(`${this.directoryPath + this.appsFolders[i]}/build/docker/${_.kebabCase(this.appConfigs[i].baseName)}-*.war`);
                     runCommand = './gradlew -Pprod bootRepackage buildDocker';
                 }
                 if (shelljs.ls(imagePath).length === 0) {
                     this.warning = true;
-                    this.warningMessage += '  ' + chalk.cyan(runCommand) +  ' in ' + this.destinationPath(this.directoryPath + this.appsFolders[i]) + '\n';
+                    this.warningMessage += `  ${chalk.cyan(runCommand)} in ${this.destinationPath(this.directoryPath + this.appsFolders[i])}\n`;
                 }
             }
         },
 
-        configureImageNames: function() {
+        configureImageNames: function () {
             for (let i = 0; i < this.appsFolders.length; i++) {
                 const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-                const targetImageName = this.dockerRepositoryName ? this.dockerRepositoryName + '/' + originalImageName : originalImageName;
+                const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
                 this.appConfigs[i].targetImageName = targetImageName;
             }
         },
 
-        generateJwtSecret: function() {
+        generateJwtSecret: function () {
             if (this.jwtSecretKey === undefined) {
                 this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
             }
         },
 
-        setAppsFolderPaths: function() {
+        setAppsFolderPaths: function () {
             if (this.applicationType) return;
             this.appsFolderPaths = [];
             for (let i = 0; i < this.appsFolders.length; i++) {
@@ -201,7 +202,7 @@ module.exports = KubernetesGenerator.extend({
             }
         },
 
-        saveConfig: function() {
+        saveConfig: function () {
             this.config.set('appsFolders', this.appsFolders);
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
@@ -215,37 +216,37 @@ module.exports = KubernetesGenerator.extend({
 
     writing: writeFiles(),
 
-    end: function() {
+    end: function () {
         if (this.warning) {
-            this.log('\n' + chalk.yellow.bold('WARNING!') + ' Kubernetes configuration generated with missing images!');
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated with missing images!`);
             this.log(this.warningMessage);
         } else {
-            this.log('\n' + chalk.bold.green('Kubernetes configuration successfully generated!'));
+            this.log(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);
         }
 
-        this.log(chalk.yellow.bold('WARNING!') + ' You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:');
+        this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
             const targetImageName = this.appConfigs[i].targetImageName;
             if (originalImageName !== targetImageName) {
-                this.log('  ' + chalk.cyan('docker image tag ' + originalImageName + ' ' + targetImageName));
+                this.log(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
             }
-            this.log('  ' + chalk.cyan(this.dockerPushCommand + ' ' + targetImageName));
+            this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
         this.log('\nYou can deploy all your apps by running: ');
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
-            this.log('  ' + chalk.cyan('kubectl apply -f registry'));
+            this.log(`  ${chalk.cyan('kubectl apply -f registry')}`);
         }
         for (let i = 0; i < this.appsFolders.length; i++) {
-            this.log('  ' + chalk.cyan('kubectl apply -f ' + this.appConfigs[i].baseName));
+            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.appConfigs[i].baseName}`)}`);
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
             this.log('\nUse these commands to find your application\'s IP addresses:');
             for (let i = 0; i < this.appsFolders.length; i++) {
-                if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    this.log('  ' + chalk.cyan('kubectl get svc '+this.appConfigs[i].baseName));
+                if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
+                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName}`)}`);
                 }
             }
             this.log();

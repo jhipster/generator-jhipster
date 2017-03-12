@@ -1,4 +1,4 @@
-'use strict';
+
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -15,16 +15,16 @@ module.exports = ReportGenerator.extend({
     },
 
     initializing: {
-        sayHello: function() {
+        sayHello: function () {
             this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
         },
 
         checkJHipster: function () {
             const done = this.async();
             this.log('##### **JHipster Version(s)**');
-            shelljs.exec('npm list generator-jhipster', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('npm list generator-jhipster', { silent: true }, (err, stdout, stderr) => {
                 if (stdout) {
-                    this.log('\n```\n' + stdout + '```\n');
+                    this.log(`\n\`\`\`\n${stdout}\`\`\`\n`);
                 }
                 done();
             });
@@ -33,8 +33,8 @@ module.exports = ReportGenerator.extend({
         displayConfiguration: function () {
             const done = this.async();
             const result = shelljs.cat('.yo-rc.json');
-            this.log('\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
-                '\n```yaml\n' + result + '\n```\n');
+            this.log(`${'\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
+                '\n```yaml\n'}${result}\n\`\`\`\n`);
             done();
         },
 
@@ -44,7 +44,7 @@ module.exports = ReportGenerator.extend({
             shelljs.ls('.jhipster/*.json').forEach((file) => {
                 this.log(file.split('/')[1]);
                 const result = shelljs.cat(file);
-                this.log('\n```yaml\n' + result + '\n```\n');
+                this.log(`\n\`\`\`yaml\n${result}\n\`\`\`\n`);
             });
             done();
         },
@@ -52,7 +52,7 @@ module.exports = ReportGenerator.extend({
         checkJava: function () {
             const done = this.async();
             this.log('\n##### **Browsers and Operating System**\n');
-            shelljs.exec('java -version', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('java -version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
                     this.log(stderr);
                 }
@@ -62,7 +62,7 @@ module.exports = ReportGenerator.extend({
 
         checkGit: function () {
             const done = this.async();
-            shelljs.exec('git version', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('git version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
                     this.log(stdout);
                 }
@@ -72,9 +72,9 @@ module.exports = ReportGenerator.extend({
 
         checkNode: function () {
             const done = this.async();
-            shelljs.exec('node -v', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('node -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log('node: ' + stdout);
+                    this.log(`node: ${stdout}`);
                 }
                 done();
             });
@@ -82,9 +82,9 @@ module.exports = ReportGenerator.extend({
 
         checkNpm: function () {
             const done = this.async();
-            shelljs.exec('npm -v', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('npm -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log('npm: ' + stdout);
+                    this.log(`npm: ${stdout}`);
                 }
                 done();
             });
@@ -92,9 +92,9 @@ module.exports = ReportGenerator.extend({
 
         checkBower: function () {
             const done = this.async();
-            shelljs.exec('bower -v', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('bower -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log('bower: ' + stdout);
+                    this.log(`bower: ${stdout}`);
                 }
                 done();
             });
@@ -102,7 +102,7 @@ module.exports = ReportGenerator.extend({
 
         checkGulp: function () {
             const done = this.async();
-            shelljs.exec('gulp -v', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('gulp -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
                     this.log('gulp:');
                     this.log(stdout);
@@ -113,9 +113,9 @@ module.exports = ReportGenerator.extend({
 
         checkYeoman: function () {
             const done = this.async();
-            shelljs.exec('yo --version', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('yo --version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log('yeoman: ' + stdout);
+                    this.log(`yeoman: ${stdout}`);
                 }
                 done();
             });
@@ -123,17 +123,17 @@ module.exports = ReportGenerator.extend({
 
         checkYarn: function () {
             const done = this.async();
-            shelljs.exec('yarn --version', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('yarn --version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
-                    this.log('yarn: ' + stdout);
+                    this.log(`yarn: ${stdout}`);
                 }
                 done();
             });
         },
 
-        checkDocker: function() {
+        checkDocker: function () {
             const done = this.async();
-            shelljs.exec('docker -v', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('docker -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
                     this.log(stdout);
                 }
@@ -141,9 +141,9 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkDockerCompose: function() {
+        checkDockerCompose: function () {
             const done = this.async();
-            shelljs.exec('docker-compose -v', {silent:true}, (err, stdout, stderr) => {
+            shelljs.exec('docker-compose -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
                     this.log(stdout);
                 }

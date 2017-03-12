@@ -1,4 +1,4 @@
-'use strict';
+
 
 const _ = require('lodash');
 
@@ -24,7 +24,7 @@ function prompting() {
             type: 'input',
             name: 'environmentName',
             message: 'Environment name:',
-            default: this.baseName + '-env'
+            default: `${this.baseName}-env`
         },
         {
             type: 'input',
@@ -44,7 +44,7 @@ function prompting() {
             message: 'Database username:',
             validate: (input) => {
                 if (input === '') return 'Please provide a username';
-                else return true;
+                return true;
             }
         },
         {
@@ -54,7 +54,7 @@ function prompting() {
             validate: (input) => {
                 if (input === '') return 'Please provide a password';
                 else if (input.length < 8) return 'Password must contain minimum 8 chars';
-                else return true;
+                return true;
             }
         },
         {

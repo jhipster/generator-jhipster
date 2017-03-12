@@ -1,5 +1,5 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
+
 
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -25,13 +25,13 @@ describe('JHipster generator service', () => {
 
         it('creates service file', () => {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java'
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
             ]);
         });
 
         it('doesnt create interface', () => {
             assert.noFile([
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
             ]);
         });
     });
@@ -51,8 +51,8 @@ describe('JHipster generator service', () => {
 
         it('creates service file', () => {
             assert.file([
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java',
-                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
             ]);
         });
     });

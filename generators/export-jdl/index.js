@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const chalk = require('chalk');
 const generator = require('yeoman-generator');
@@ -14,7 +14,7 @@ module.exports = ExportJDLGenerator.extend({
         generator.apply(this, arguments);
         this.baseName = this.config.get('baseName');
         this.jdl = new jhiCore.JDLObject();
-        this.argument('jdlFile', { type: String, required: false, defaults: this.baseName + '.jh' });
+        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jh` });
         this.jdlFile = this.options.jdlFile;
     },
 
@@ -27,10 +27,10 @@ module.exports = ExportJDLGenerator.extend({
         parseJson: function () {
             this.log('Parsing entities from .jhipster dir...');
             try {
-                let entities = {};
-                this.getExistingEntities().forEach(entity => entities[entity.name] = entity.definition);
+                const entities = {};
+                this.getExistingEntities().forEach((entity) => { entities[entity.name] = entity.definition; });
                 jhiCore.convertJsonEntitiesToJDL(entities, this.jdl);
-                jhiCore.convertJsonServerOptionsToJDL({'generator-jhipster': this.config.getAll()}, this.jdl);
+                jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, this.jdl);
             } catch (e) {
                 this.log(e.message || e);
                 this.error('\nError while parsing entities to JDL\n');
@@ -39,11 +39,11 @@ module.exports = ExportJDLGenerator.extend({
     },
 
     writing: function () {
-        let content = '// JDL definition for application \'' + this.baseName + '\' generated with command \'yo jhipster:export-jdl\'\n\n' + this.jdl.toString();
+        const content = `// JDL definition for application '${this.baseName}' generated with command 'yo jhipster:export-jdl'\n\n${this.jdl.toString()}`;
         this.fs.write(this.jdlFile, content);
     },
 
-    end: function() {
+    end: function () {
         this.log(chalk.green.bold('\nEntities successfully exported to JDL file\n'));
     }
 

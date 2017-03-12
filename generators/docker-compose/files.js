@@ -1,4 +1,4 @@
-'use strict';
+
 
 module.exports = {
     writeFiles
@@ -6,11 +6,11 @@ module.exports = {
 
 function writeFiles() {
     return {
-        writeDockerCompose: function() {
+        writeDockerCompose: function () {
             this.template('_docker-compose.yml', 'docker-compose.yml');
         },
 
-        writeRegistryFiles: function() {
+        writeRegistryFiles: function () {
             if (this.serviceDiscoveryType === 'eureka') {
                 this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
             }
@@ -21,16 +21,15 @@ function writeFiles() {
             if (this.serviceDiscoveryType === 'consul') {
                 this.template('_consul.yml', 'consul.yml');
             }
-
         },
 
-        writeKafkaFiles: function() {
+        writeKafkaFiles: function () {
             if (!this.useKafka) return;
 
             this.template('_kafka.yml', 'kafka.yml');
         },
 
-        writeElkFiles: function() {
+        writeElkFiles: function () {
             if (this.monitoring !== 'elk') return;
 
             this.template('_jhipster-console.yml', 'jhipster-console.yml');
@@ -38,13 +37,13 @@ function writeFiles() {
             this.template('log-data/_.gitignore', 'log-data/.gitignore');
         },
 
-        writePrometheusFiles: function() {
+        writePrometheusFiles: function () {
             if (this.monitoring !== 'prometheus') return;
 
             // Generate a list of target apps to monitor for the prometheus config
             const appsToMonitor = [];
-            for(let i = 0; i < this.appConfigs.length; i++) {
-                appsToMonitor.push('             - ' + this.appConfigs[i].baseName + '-app:' + this.appConfigs[i].serverPort);
+            for (let i = 0; i < this.appConfigs.length; i++) {
+                appsToMonitor.push(`             - ${this.appConfigs[i].baseName}-app:${this.appConfigs[i].serverPort}`);
             }
 
             // Format the application target list as a YAML array

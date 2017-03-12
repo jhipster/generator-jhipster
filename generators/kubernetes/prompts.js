@@ -1,4 +1,4 @@
-'use strict';
+
 
 const _ = require('lodash');
 const dockerComposePrompts = require('../docker-compose/prompts');

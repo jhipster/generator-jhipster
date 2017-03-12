@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -18,7 +18,7 @@ const GENERATOR_JHIPSTER = 'generator-jhipster',
 module.exports = UpgradeGenerator.extend({
     constructor: function () {
         generator.apply(this, arguments);
-        this.force = this.options['force'];
+        this.force = this.options.force;
     },
 
     initializing: {
@@ -35,47 +35,47 @@ module.exports = UpgradeGenerator.extend({
         }
     },
 
-    _gitCheckout: function(branch, callback) {
+    _gitCheckout: function (branch, callback) {
         this.gitExec(['checkout', '-q', branch], (code, msg, err) => {
-            if (code !== 0) this.error('Unable to checkout branch ' + branch + ':\n' + err);
-            this.log('Checked out branch \"' + branch + '\"');
+            if (code !== 0) this.error(`Unable to checkout branch ${branch}:\n${err}`);
+            this.log(`Checked out branch \"${branch}\"`);
             callback();
         });
     },
 
-    _cleanUp: function() {
+    _cleanUp: function () {
         shelljs.ls('-A').forEach((file) => {
-            if(['.yo-rc.json', '.jhipster', 'node_modules', '.git'].indexOf(file) === -1) {
+            if (['.yo-rc.json', '.jhipster', 'node_modules', '.git'].indexOf(file) === -1) {
                 shelljs.rm('-rf', file);
             }
         });
         this.log('Cleaned up directory');
     },
 
-    _generate: function(version, callback) {
-        this.log('Regenerating app with jhipster ' + version + '...');
+    _generate: function (version, callback) {
+        this.log(`Regenerating app with jhipster ${version}...`);
         shelljs.exec('yo jhipster --with-entities --force --skip-install', { silent: true }, (code, msg, err) => {
-            if (code === 0) this.log(chalk.green('Successfully regenerated app with jhipster ' + version));
-            else this.error('Something went wrong while generating project! '+ err);
+            if (code === 0) this.log(chalk.green(`Successfully regenerated app with jhipster ${version}`));
+            else this.error(`Something went wrong while generating project! ${err}`);
             callback();
         });
     },
 
-    _gitCommitAll: function(commitMsg, callback) {
+    _gitCommitAll: function (commitMsg, callback) {
         const commit = () => {
-            this.gitExec(['commit', '-q', '-m', '\"' + commitMsg + '\"', '-a', '--allow-empty'], (code, msg, err) => {
-                if (code !== 0) this.error('Unable to commit in git:\n' + err);
-                this.log('Committed with message \"' + commitMsg + '\"');
+            this.gitExec(['commit', '-q', '-m', `\"${commitMsg}\"`, '-a', '--allow-empty'], (code, msg, err) => {
+                if (code !== 0) this.error(`Unable to commit in git:\n${err}`);
+                this.log(`Committed with message \"${commitMsg}\"`);
                 callback();
             });
         };
-        this.gitExec(['add', '-A'], {maxBuffer: 1024 * 500}, (code, msg, err) => {
-            if (code !== 0) this.error('Unable to add resources in git:\n' + err);
+        this.gitExec(['add', '-A'], { maxBuffer: 1024 * 500 }, (code, msg, err) => {
+            if (code !== 0) this.error(`Unable to add resources in git:\n${err}`);
             commit();
         });
     },
 
-    _regenerate: function(version, callback) {
+    _regenerate: function (version, callback) {
         this._generate(version, () => {
             if (this.clientFramework === 'angular1' && version === this.latestVersion) {
                 const result = this.spawnCommandSync('bower', ['install']);
@@ -83,14 +83,14 @@ module.exports = UpgradeGenerator.extend({
                     this.error('bower install failed.');
                 }
             }
-            this._gitCommitAll('Generated with JHipster ' + version, () => {
+            this._gitCommitAll(`Generated with JHipster ${version}`, () => {
                 callback();
             });
         });
     },
 
     configuring: {
-        assertGitPresent: function() {
+        assertGitPresent: function () {
             const done = this.async();
             this.isGitInstalled((code) => {
                 if (code !== 0) this.error('Exiting the process.');
@@ -98,28 +98,28 @@ module.exports = UpgradeGenerator.extend({
             });
         },
 
-        checkLatestVersion: function() {
-            this.log('Looking for latest ' + GENERATOR_JHIPSTER + ' version...');
+        checkLatestVersion: function () {
+            this.log(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
             const done = this.async();
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
-            shelljs.exec(commandPrefix + ' ' + GENERATOR_JHIPSTER + ' version', {silent:true}, (code, msg, err) => {
-                this.latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n','');
+            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, msg, err) => {
+                this.latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
                 if (semver.lt(this.currentVersion, this.latestVersion)) {
-                    this.log(chalk.green('New ' + GENERATOR_JHIPSTER + ' version found: ' + this.latestVersion));
+                    this.log(chalk.green(`New ${GENERATOR_JHIPSTER} version found: ${this.latestVersion}`));
                 } else if (this.force) {
                     this.log(chalk.yellow('Forced re-generation'));
                 } else {
-                    this.error(chalk.green('No update available.') + ' Application has already been generated with latest version.');
+                    this.error(`${chalk.green('No update available.')} Application has already been generated with latest version.`);
                 }
                 done();
             });
         },
 
-        assertGitRepository: function() {
+        assertGitRepository: function () {
             const done = this.async();
             const gitInit = () => {
                 this.gitExec('init', (code, msg, err) => {
-                    if (code !== 0) this.error('Unable to initialize a new git repository:\n' + msg + ' ' + err);
+                    if (code !== 0) this.error(`Unable to initialize a new git repository:\n${msg} ${err}`);
                     this.log('Initialized a new git repository');
                     this._gitCommitAll('Initial', () => {
                         done();
@@ -135,10 +135,10 @@ module.exports = UpgradeGenerator.extend({
             });
         },
 
-        assertNoLocalChanges: function() {
+        assertNoLocalChanges: function () {
             const done = this.async();
             this.gitExec(['status', '--porcelain'], (code, msg, err) => {
-                if (code !== 0) this.error('Unable to check for local changes:\n' + msg + ' ' + err);
+                if (code !== 0) this.error(`Unable to check for local changes:\n${msg} ${err}`);
                 if (msg != null && msg !== '') {
                     this.warning(' local changes found.\n' +
                         '\tPlease commit/stash them before upgrading');
@@ -148,16 +148,16 @@ module.exports = UpgradeGenerator.extend({
             });
         },
 
-        detectCurrentBranch: function() {
+        detectCurrentBranch: function () {
             const done = this.async();
             this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], (code, msg, err) => {
-                if (code !== 0) this.error('Unable to detect current git branch:\n' + msg + ' ' + err);
-                this.sourceBranch = msg.replace('\n','');
+                if (code !== 0) this.error(`Unable to detect current git branch:\n${msg} ${err}`);
+                this.sourceBranch = msg.replace('\n', '');
                 done();
             });
         },
 
-        prepareUpgradeBranch: function() {
+        prepareUpgradeBranch: function () {
             const done = this.async();
             const getGitVersion = (callback) => {
                 this.gitExec(['--version'], (code, msg) => {
@@ -174,20 +174,22 @@ module.exports = UpgradeGenerator.extend({
                         args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
                     }
                     this.gitExec(args, (code, msg, err) => {
-                        if (code !== 0) this.error('Unable to record current code has been generated with version ' +
-                            this.currentVersion + ':\n' + msg + ' ' + err);
-                        this.log('Current code recorded as generated with version ' + this.currentVersion);
+                        if (code !== 0) {
+                            this.error(`Unable to record current code has been generated with version ${
+                            this.currentVersion}:\n${msg} ${err}`);
+                        }
+                        this.log(`Current code recorded as generated with version ${this.currentVersion}`);
                         done();
                     });
                 });
             };
 
             const installJhipsterLocally = (version, callback) => {
-                this.log('Installing JHipster ' + version + ' locally');
+                this.log(`Installing JHipster ${version} locally`);
                 const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                shelljs.exec(commandPrefix + ' ' + GENERATOR_JHIPSTER + '@' + version + ' --dev --no-lockfile', { silent: true }, (code, msg, err) => {
-                    if (code === 0) this.log(chalk.green('Installed ' + GENERATOR_JHIPSTER + '@' + version));
-                    else this.error('Something went wrong while installing the JHipster generator! ' + msg + ' ' + err);
+                shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile`, { silent: true }, (code, msg, err) => {
+                    if (code === 0) this.log(chalk.green(`Installed ${GENERATOR_JHIPSTER}@${version}`));
+                    else this.error(`Something went wrong while installing the JHipster generator! ${msg} ${err}`);
                     callback();
                 });
             };
@@ -206,8 +208,8 @@ module.exports = UpgradeGenerator.extend({
 
             const createUpgradeBranch = () => {
                 this.gitExec(['checkout', '--orphan', UPGRADE_BRANCH], (code, msg, err) => {
-                    if (code !== 0) this.error('Unable to create ' + UPGRADE_BRANCH + ' branch:\n' + msg + ' ' + err);
-                    this.log('Created branch ' + UPGRADE_BRANCH);
+                    if (code !== 0) this.error(`Unable to create ${UPGRADE_BRANCH} branch:\n${msg} ${err}`);
+                    this.log(`Created branch ${UPGRADE_BRANCH}`);
                     regenerate();
                 });
             };
@@ -225,35 +227,35 @@ module.exports = UpgradeGenerator.extend({
             insight.trackWithEvent('generator', 'upgrade');
         },
 
-        updateJhipster: function() {
-            this.log(chalk.yellow('Updating ' + GENERATOR_JHIPSTER + ' to ' + this.latestVersion +  ' . This might take some time...'));
+        updateJhipster: function () {
+            this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestVersion} . This might take some time...`));
             const done = this.async();
             const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-            shelljs.exec(commandPrefix + ' ' + GENERATOR_JHIPSTER + '@' + this.latestVersion + ' --dev --no-lockfile', { silent: true }, (code, msg, err) => {
-                if (code === 0) this.log(chalk.green('Updated ' + GENERATOR_JHIPSTER + ' to version ' + this.latestVersion));
-                else this.error('Something went wrong while updating generator! ' + msg + ' ' + err);
+            shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER}@${this.latestVersion} --dev --no-lockfile`, { silent: true }, (code, msg, err) => {
+                if (code === 0) this.log(chalk.green(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`));
+                else this.error(`Something went wrong while updating generator! ${msg} ${err}`);
                 done();
             });
         },
 
-        checkoutUpgradeBranch: function() {
+        checkoutUpgradeBranch: function () {
             const done = this.async();
             this._gitCheckout(UPGRADE_BRANCH, done);
         },
 
-        generateWithLatestVersion: function() {
+        generateWithLatestVersion: function () {
             const done = this.async();
             this._cleanUp();
             this._regenerate(this.latestVersion, done);
         },
 
-        checkoutSourceBranch: function() {
+        checkoutSourceBranch: function () {
             const done = this.async();
             this._gitCheckout(this.sourceBranch, done);
         },
 
-        mergeChangesBack: function() {
-            this.log('Merging changes back to ' + this.sourceBranch + '...');
+        mergeChangesBack: function () {
+            this.log(`Merging changes back to ${this.sourceBranch}...`);
             const done = this.async();
             this.gitExec(['merge', '-q', UPGRADE_BRANCH], (code, msg, err) => {
                 this.log(chalk.green('Merge done!'));
@@ -271,33 +273,31 @@ module.exports = UpgradeGenerator.extend({
             }
             if (this.skipInstall) {
                 let logMsg =
-                    'Start your Webpack development server with:' +
-                    '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
-                    '\n';
+                    `${'Start your Webpack development server with:' +
+                    '\n '}${chalk.yellow.bold(`${this.clientPackageManager} start`)
+                    }\n`;
 
                 if (this.clientFramework === 'angular1') {
                     logMsg =
-                        'Inject your front end dependencies into your source code:' +
-                        '\n ' + chalk.yellow.bold('gulp inject') +
-                        '\n' +
+                        `${'Inject your front end dependencies into your source code:' +
+                        '\n '}${chalk.yellow.bold('gulp inject')
+                        }\n` +
                         '\nGenerate the AngularJS constants:' +
-                        '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
-                        (this.useSass ?
-                        '\n' +
+                        `\n ${chalk.yellow.bold('gulp ngconstant:dev')
+                        }${this.useSass ?
+                        `${'\n' +
                         '\nCompile your Sass style sheets:' +
-                        '\n ' + chalk.yellow.bold('gulp sass') : '') +
-                        '\n' +
+                        '\n '}${chalk.yellow.bold('gulp sass')}` : ''
+                        }\n` +
                         '\nOr do all of the above:' +
-                        '\n ' + chalk.yellow.bold('gulp install') +
-                        '\n';
+                        `\n ${chalk.yellow.bold('gulp install')
+                        }\n`;
                 }
                 this.log(chalk.green(logMsg));
-            } else {
-                if (this.clientFramework === 'angular1') {
-                    const result = this.spawnCommandSync('gulp', ['install']);
-                    if (result.status !== 0) {
-                        this.error('gulp install failed.');
-                    }
+            } else if (this.clientFramework === 'angular1') {
+                const result = this.spawnCommandSync('gulp', ['install']);
+                if (result.status !== 0) {
+                    this.error('gulp install failed.');
                 }
             }
             done();
@@ -307,9 +307,9 @@ module.exports = UpgradeGenerator.extend({
             shelljs.rm('-rf', 'node_modules');
             this.log('Installing dependencies, please wait...');
             const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
-            shelljs.exec(installCommand, {silent:true}, (code, msg, err) => {
+            shelljs.exec(installCommand, { silent: true }, (code, msg, err) => {
                 if (code !== 0) {
-                    this.error(installCommand + 'failed.');
+                    this.error(`${installCommand}failed.`);
                 }
                 injectDependenciesAndConstants();
             });

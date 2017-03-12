@@ -1,10 +1,11 @@
-'use strict';
+
 const S3 = require('./s3.js');
 const Rds = require('./rds.js');
 const shelljs = require('shelljs');
 const Eb = require('./eb.js');
 
-let Aws, generator;
+let Aws;
+let generator;
 
 const AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
     generator = generatorRef;
@@ -17,8 +18,8 @@ const AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
         if (generator.config.get('clientPackageManager') === 'npm') {
             installCommand = 'npm install aws-sdk progress uuid --prefix node_modules/generator-jhipster';
         }
-        shelljs.exec(installCommand, {silent: true}, (code, msg, err) => {
-            if (code !== 0) generator.error('Something went wrong while installing:\n' + err);
+        shelljs.exec(installCommand, { silent: true }, (code, msg, err) => {
+            if (code !== 0) generator.error(`Something went wrong while installing:\n${err}`);
             Aws = require('aws-sdk');
             cb();
         });

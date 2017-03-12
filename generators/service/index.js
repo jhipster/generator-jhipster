@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const generator = require('yeoman-generator');
 const _ = require('lodash');
@@ -14,13 +14,13 @@ util.inherits(ServiceGenerator, scriptBase);
 module.exports = ServiceGenerator.extend({
     constructor: function () {
         generator.apply(this, arguments);
-        this.argument('name', {type: String, required: true});
+        this.argument('name', { type: String, required: true });
         this.name = this.options.name;
     },
 
     initializing: {
         getConfig: function () {
-            this.log('The service ' + this.name + ' is being created.');
+            this.log(`The service ${this.name} is being created.`);
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
             this.packageFolder = this.config.get('packageFolder');
@@ -56,12 +56,12 @@ module.exports = ServiceGenerator.extend({
         this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = _.lowerCase(this.name);
 
-        this.template(SERVER_MAIN_SRC_DIR + 'package/service/_Service.java',
-            SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.serviceClass + 'Service.java');
+        this.template(`${SERVER_MAIN_SRC_DIR}package/service/_Service.java`,
+            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`);
 
         if (this.useInterface) {
-            this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_ServiceImpl.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.serviceClass + 'ServiceImpl.java');
+            this.template(`${SERVER_MAIN_SRC_DIR}package/service/impl/_ServiceImpl.java`,
+                `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`);
         }
     }
 

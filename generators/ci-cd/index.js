@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const chalk = require('chalk');
 const generator = require('yeoman-generator');
@@ -17,7 +17,7 @@ module.exports = PipelineGenerator.extend({
     },
 
     initializing: {
-        sayHello: function() {
+        sayHello: function () {
             this.log(chalk.white('[Beta] Welcome to the JHipster CI/CD Sub-Generator'));
         },
         getConfig: function () {
@@ -36,7 +36,7 @@ module.exports = PipelineGenerator.extend({
             this.YARN_VERSION = constants.YARN_VERSION;
             this.NPM_VERSION = constants.NPM_VERSION;
         },
-        getConstants: function() {
+        getConstants: function () {
             this.DOCKER_DIR = constants.DOCKER_DIR;
             this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
             this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
@@ -53,7 +53,7 @@ module.exports = PipelineGenerator.extend({
             const insight = this.insight();
             insight.trackWithEvent('generator', 'ci-cd');
         },
-        setTemplateconstiables: function() {
+        setTemplateconstiables: function () {
             if (this.abort || this.jenkinsIntegrations === undefined) return;
             this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
             this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';
@@ -64,8 +64,8 @@ module.exports = PipelineGenerator.extend({
     writing: function () {
         if (this.pipelines.includes('jenkins')) {
             this.template('jenkins/_Jenkinsfile', 'Jenkinsfile');
-            this.template('jenkins/_jenkins.yml', this.DOCKER_DIR + 'jenkins.yml');
-            this.template('jenkins/idea.gdsl', this.SERVER_MAIN_RES_DIR + 'idea.gdsl');
+            this.template('jenkins/_jenkins.yml', `${this.DOCKER_DIR}jenkins.yml`);
+            this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
         }
         if (this.pipelines.includes('gitlab')) {
             this.template('_.gitlab-ci.yml', '.gitlab-ci.yml');

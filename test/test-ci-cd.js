@@ -1,5 +1,5 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
+
 
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -16,7 +16,7 @@ const expectedFiles = {
     gitlab: [
         '.gitlab-ci.yml'
     ],
-    circle : [
+    circle: [
         'circle.yml'
     ]
 };
@@ -29,7 +29,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng1-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -55,7 +55,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng1-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -81,7 +81,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng2-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -107,7 +107,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -133,7 +133,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng1-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -159,7 +159,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng1-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -185,7 +185,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-npm'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -211,7 +211,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins',
@@ -246,7 +246,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins'
@@ -276,14 +276,14 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
-    describe('Jenkins with pushing to Docker Registry', function () {
-        beforeEach(function (done) {
+    describe('Jenkins with pushing to Docker Registry', () => {
+        beforeEach((done) => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'jenkins'
@@ -296,13 +296,13 @@ describe('JHipster CI-CD Sub Generator', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files', function () {
+        it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
             assert.noFile(expectedFiles.gitlab);
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.circle);
         });
-        it('contains def dockerImage', function () {
+        it('contains def dockerImage', () => {
             assert.fileContent('Jenkinsfile', /def dockerImage/);
         });
     });
@@ -314,7 +314,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'gitlab'
@@ -345,7 +345,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'circle'
@@ -375,7 +375,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ng2-yarn'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipelines: [
                         'travis'

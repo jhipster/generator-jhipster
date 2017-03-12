@@ -1,4 +1,4 @@
-'use strict';
+
 
 const mkdirp = require('mkdirp');
 /* Constants use throughout */
@@ -97,7 +97,7 @@ const files = {
                 '_vendor.ts',
                 'blocks/config/_prod.config.ts',
                 'blocks/config/_uib-pagination.config.ts',
-                //interceptors
+                // interceptors
                 'blocks/interceptor/_errorhandler.interceptor.ts',
                 'blocks/interceptor/_notification.interceptor.ts',
                 'blocks/interceptor/_http.provider.ts'
@@ -142,7 +142,7 @@ const files = {
                 { file: 'layouts/navbar/_navbar.component.html', method: 'processHtml' },
                 'layouts/footer/_footer.component.ts',
                 { file: 'layouts/footer/_footer.component.html', method: 'processHtml' },
-                { file:'layouts/error/_error.route.ts', method: 'processJs' },
+                { file: 'layouts/error/_error.route.ts', method: 'processJs' },
                 { file: 'layouts/error/_error.component.ts', method: 'processJs' },
                 { file: 'layouts/error/_error.component.html', method: 'processHtml' }
             ]
@@ -184,7 +184,7 @@ const files = {
                 { file: 'account/activate/_activate.component.ts', method: 'processJs' },
                 { file: 'account/activate/_activate.component.html', method: 'processHtml' },
                 'account/activate/_activate.service.ts',
-                { file:'account/password/_password.route.ts', method: 'processJs' },
+                { file: 'account/password/_password.route.ts', method: 'processJs' },
                 'account/password/_password-strength-bar.component.ts',
                 { file: 'account/password/_password.component.ts', method: 'processJs' },
                 { file: 'account/password/_password.component.html', method: 'processHtml' },
@@ -338,14 +338,14 @@ const files = {
                 'shared/_shared-libs.module.ts',
                 'shared/_shared-common.module.ts',
                 'shared/constants/_pagination.constants.ts',
-                //models
+                // models
                 'shared/user/_account.model.ts',
-                //login
+                // login
                 'shared/login/_login.component.ts',
                 { file: 'shared/login/_login.component.html', method: 'processHtml' },
                 'shared/login/_login.service.ts',
                 'shared/login/_login-modal.service.ts',
-                //alert service code
+                // alert service code
                 'shared/alert/_alert.component.ts',
                 'shared/alert/_alert-error.component.ts'
             ]

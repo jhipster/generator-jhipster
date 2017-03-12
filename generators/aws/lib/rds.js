@@ -1,4 +1,4 @@
-'use strict';
+
 
 let aws;
 
@@ -13,18 +13,18 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
         dbPassword = params.dbPassword,
         dbUsername = params.dbUsername;
 
-    createRdsSecurityGroup({rdsSecurityGroupName: dbName}, (err, data) => {
+    createRdsSecurityGroup({ rdsSecurityGroupName: dbName }, (err, data) => {
         if (err) {
-            callback({message: err.message}, null);
+            callback({ message: err.message }, null);
         } else {
             const rdsSecurityGroupId = data.rdsSecurityGroupId;
 
             if (!rdsSecurityGroupId) {
-                callback(null, {message: 'Database ' + dbName + ' already exists'});
+                callback(null, { message: `Database ${dbName} already exists` });
             } else {
-                authorizeSecurityGroupIngress({rdsSecurityGroupId: rdsSecurityGroupId}, (err) => {
+                authorizeSecurityGroupIngress({ rdsSecurityGroupId: rdsSecurityGroupId }, (err) => {
                     if (err) {
-                        callback({message: err.message}, null);
+                        callback({ message: err.message }, null);
                     } else {
                         createDbInstance({
                             dbInstanceClass: dbInstanceClass,
@@ -33,11 +33,11 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
                             dbPassword: dbPassword,
                             dbUsername: dbUsername,
                             rdsSecurityGroupId: rdsSecurityGroupId
-                        }, function (err, data) {
+                        }, (err, data) => {
                             if (err) {
-                                callback({message: err.message}, null);
+                                callback({ message: err.message }, null);
                             } else {
-                                callback(null, {message: data.message});
+                                callback(null, { message: data.message });
                             }
                         });
                     }
@@ -52,14 +52,14 @@ Rds.prototype.createDatabaseUrl = function createDatabaseUrl(params, callback) {
         dbName = params.dbName,
         dbEngine = params.dbEngine;
 
-    rds.waitFor('dBInstanceAvailable', {DBInstanceIdentifier: dbName}, (err, data) => {
+    rds.waitFor('dBInstanceAvailable', { DBInstanceIdentifier: dbName }, (err, data) => {
         if (err) {
             callback(err, null);
         } else {
             const dbEndpoint = data.DBInstances[0].Endpoint,
-                dbUrl = 'jdbc:' + dbEngine + '://' + dbEndpoint.Address + ':' + dbEndpoint.Port + '/' + dbName,
-                message = 'Database available at ' + dbUrl;
-            callback(null, {message: message, dbUrl: dbUrl});
+                dbUrl = `jdbc:${dbEngine}://${dbEndpoint.Address}:${dbEndpoint.Port}/${dbName}`,
+                message = `Database available at ${dbUrl}`;
+            callback(null, { message: message, dbUrl: dbUrl });
         }
     });
 };
@@ -74,11 +74,11 @@ function createRdsSecurityGroup(params, callback) {
 
     ec2.createSecurityGroup(securityGroupParams, (err, data) => {
         if (err && err.code === 'InvalidGroup.Duplicate') {
-            callback(null, {message: 'Security group ' + params.rdsSecurityGroupName + ' already exists'});
+            callback(null, { message: `Security group ${params.rdsSecurityGroupName} already exists` });
         } else if (err) {
             callback(err, null);
         } else {
-            callback(null, {rdsSecurityGroupId: data.GroupId});
+            callback(null, { rdsSecurityGroupId: data.GroupId });
         }
     });
 }
@@ -98,7 +98,7 @@ function authorizeSecurityGroupIngress(params, callback) {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Create security group successful'});
+            callback(null, { message: 'Create security group successful' });
         }
     });
 }
@@ -121,11 +121,11 @@ function createDbInstance(params, callback) {
 
     rds.createDBInstance(dbInstanceParams, (err) => {
         if (err && err.code === 'DBInstanceAlreadyExists') {
-            callback(null, {message: 'Database already exists'});
+            callback(null, { message: 'Database already exists' });
         } else if (err) {
             callback(err, null);
         } else {
-            callback(null, {message: 'Database created successful'});
+            callback(null, { message: 'Database created successful' });
         }
     });
 }

@@ -1,4 +1,4 @@
-'use strict';
+
 
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -57,17 +57,15 @@ function askForPath() {
         default: this.directoryPath || '../',
         validate: (input) => {
             const path = this.destinationPath(input);
-            if(shelljs.test('-d', path)) {
+            if (shelljs.test('-d', path)) {
                 const appsFolders = getAppFolders.call(this, input, composeApplicationType);
 
-                if(appsFolders.length === 0) {
-                    return 'No microservice or gateway found in ' + path;
-                } else {
-                    return true;
+                if (appsFolders.length === 0) {
+                    return `No microservice or gateway found in ${path}`;
                 }
-            } else {
-                return path + ' is not a directory or doesn\'t exist';
+                return true;
             }
+            return `${path} is not a directory or doesn't exist`;
         }
     }];
 
@@ -76,14 +74,14 @@ function askForPath() {
 
         this.appsFolders = getAppFolders.call(this, this.directoryPath, composeApplicationType);
 
-        //Removing registry from appsFolders, using reverse for loop
-        for(let i = this.appsFolders.length - 1; i >= 0; i--) {
+        // Removing registry from appsFolders, using reverse for loop
+        for (let i = this.appsFolders.length - 1; i >= 0; i--) {
             if (this.appsFolders[i] === 'jhipster-registry' || this.appsFolders[i] === 'registry') {
-                this.appsFolders.splice(i,1);
+                this.appsFolders.splice(i, 1);
             }
         }
 
-        this.log(chalk.green(this.appsFolders.length + ' applications found at ' + this.destinationPath(this.directoryPath) + '\n'));
+        this.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
 
         done();
     });
@@ -112,9 +110,9 @@ function askForApps() {
         this.monolithicNb = 0;
         this.microserviceNb = 0;
 
-        //Loading configs
+        // Loading configs
         this.appsFolders.forEach((appFolder) => {
-            const path = this.destinationPath(this.directoryPath + appFolder +'/.yo-rc.json');
+            const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
             const fileData = this.fs.readJSON(path);
             const config = fileData['generator-jhipster'];
 
@@ -139,11 +137,11 @@ function askForClustersMode() {
 
     const mongoApps = [];
     this.appConfigs.forEach((appConfig, index) => {
-        if(appConfig.prodDatabaseType === 'mongodb') {
+        if (appConfig.prodDatabaseType === 'mongodb') {
             mongoApps.push(this.appsFolders[index]);
         }
     });
-    if(mongoApps.length===0) return;
+    if (mongoApps.length === 0) return;
 
     const done = this.async();
 
@@ -206,28 +204,26 @@ function askForServiceDiscovery() {
 
     const serviceDiscoveryEnabledApps = [];
     this.appConfigs.forEach((appConfig, index) => {
-        if(appConfig.serviceDiscoveryType) {
-            serviceDiscoveryEnabledApps.push({baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType});
+        if (appConfig.serviceDiscoveryType) {
+            serviceDiscoveryEnabledApps.push({ baseName: appConfig.baseName, serviceDiscoveryType: appConfig.serviceDiscoveryType });
         }
     });
 
-    if(serviceDiscoveryEnabledApps.length === 0) {
+    if (serviceDiscoveryEnabledApps.length === 0) {
         this.serviceDiscoveryType = false;
         done();
         return;
     }
 
-    if(serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'consul')){
+    if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'consul')) {
         this.serviceDiscoveryType = 'consul';
         this.log(chalk.green('Consul detected as the service discovery and configuration provider used by your apps'));
         done();
-    }
-    else if(serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'eureka')){
+    } else if (serviceDiscoveryEnabledApps.every(app => app.serviceDiscoveryType === 'eureka')) {
         this.serviceDiscoveryType = 'eureka';
         this.log(chalk.green('JHipster registry detected as the service discovery and configuration provider used by your apps'));
         done();
-    }
-    else {
+    } else {
         this.log(chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'));
         this.log('Your service discovery enabled apps:');
         serviceDiscoveryEnabledApps.forEach((app) => {
@@ -287,20 +283,20 @@ function getAppFolders(input, composeApplicationType) {
     const appsFolders = [];
 
     files.forEach((file) => {
-        if(file.isDirectory()) {
-            if( (shelljs.test('-f', input + file.name + '/.yo-rc.json'))
-                && (shelljs.test('-f', input + file.name + '/src/main/docker/app.yml')) ) {
+        if (file.isDirectory()) {
+            if ((shelljs.test('-f', `${input + file.name}/.yo-rc.json`))
+                && (shelljs.test('-f', `${input + file.name}/src/main/docker/app.yml`))) {
                 try {
-                    const fileData = this.fs.readJSON(input + file.name + '/.yo-rc.json');
+                    const fileData = this.fs.readJSON(`${input + file.name}/.yo-rc.json`);
                     if ((fileData['generator-jhipster'].baseName !== undefined)
                         && ((composeApplicationType === undefined)
                             || (composeApplicationType === fileData['generator-jhipster'].applicationType)
-                            || ((composeApplicationType === 'microservice') && ('gateway' === fileData['generator-jhipster'].applicationType))
-                            || ((composeApplicationType === 'microservice') && ('uaa' === fileData['generator-jhipster'].applicationType)))) {
+                            || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'gateway'))
+                            || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'uaa')))) {
                         appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                     }
-                } catch(err) {
-                    this.log(chalk.red(file + ': this .yo-rc.json can\'t be read'));
+                } catch (err) {
+                    this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
                 }
             }
         }

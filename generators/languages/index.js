@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -48,9 +48,9 @@ module.exports = LanguagesGenerator.extend({
             if (!this.isSupportedLanguage(language)) {
                 this.log('\n');
                 this.error(chalk.red(
-                    'Unsupported language "' + language + '" passed as argument to language generator.' +
-                    '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(),
-                    o => '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')').join('')
+                    `Unsupported language "${language}" passed as argument to language generator.` +
+                    `\nSupported languages: ${_.map(this.getAllSupportedLanguageOptions(),
+                    o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
                 ));
             }
         });
@@ -59,11 +59,11 @@ module.exports = LanguagesGenerator.extend({
         getConfig: function () {
             if (this.languages) {
                 if (this.skipClient) {
-                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for server'));
+                    this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
                 } else if (this.skipServer) {
-                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for client'));
+                    this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for client`));
                 } else {
-                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ')));
+                    this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')}`));
                 }
                 this.languagesToApply = this.languages;
             } else {
@@ -103,7 +103,6 @@ module.exports = LanguagesGenerator.extend({
             });
         } else {
             this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
-            return;
         }
     },
 

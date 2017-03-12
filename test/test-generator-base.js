@@ -1,12 +1,12 @@
-/*global describe, it*/
+/* global describe, it*/
 /* eslint-disable no-console */
-'use strict';
+
 
 const assert = require('assert'),
     expectedFiles = require('./test-expected-files'),
     BaseGenerator = require('../generators/generator-base');
 
-BaseGenerator.prototype.log = (msg) => {console.log(msg);};
+BaseGenerator.prototype.log = (msg) => { console.log(msg); };
 
 describe('Generator Base', () => {
     describe('getAllSupportedLanguages', () => {
@@ -167,7 +167,8 @@ describe('Generator Base', () => {
 
     describe('stripMargin', () => {
         it('should produce correct output without margin', () => {
-            const entityFolderName = 'entityFolderName', entityFileName = 'entityFileName';
+            const entityFolderName = 'entityFolderName';
+            const entityFileName = 'entityFileName';
             const content =
                 `|export * from './${entityFolderName}/${entityFileName}-dialog.component';
                  |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
@@ -183,12 +184,14 @@ export * from './entityFolderName/entityFileName.state';`;
             assert.equal(BaseGenerator.prototype.stripMargin(content), out);
         });
         it('should produce correct indented output without margin', () => {
-            const routerName = 'routerName', enableTranslation = true, glyphiconName = 'glyphiconName';
+            const routerName = 'routerName';
+            const enableTranslation = true;
+            const glyphiconName = 'glyphiconName';
             const content =
                 `|<li ui-sref-active="active">
                  |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                  |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                 |        <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${routerName}</span>
+                 |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
                  |    </a>
                  |</li>`;
             const out =

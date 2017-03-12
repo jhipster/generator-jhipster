@@ -1,4 +1,4 @@
-'use strict';
+
 
 const mkdirp = require('mkdirp');
 /* Constants use throughout */
@@ -292,7 +292,7 @@ const files = {
                 'components/util/_sort.directive.js',
                 'components/util/_sort-by.directive.js',
                 'components/util/_jhi-item-count.directive.js',
-                //alert service code
+                // alert service code
                 'components/alert/_alert.service.js',
                 'components/alert/_alert.directive.js',
                 'components/alert/_alert-error.directive.js'

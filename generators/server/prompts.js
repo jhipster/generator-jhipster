@@ -1,4 +1,4 @@
-'use strict';
+
 
 const path = require('path');
 const shelljs = require('shelljs');
@@ -98,9 +98,8 @@ function askForServerSideOpts() {
 
                 if (uaaAppData && uaaAppData.baseName && uaaAppData.applicationType === 'uaa') {
                     return true;
-                } else {
-                    return 'Could not find a valid JHipster UAA server in path "' + input + '"';
                 }
+                return `Could not find a valid JHipster UAA server in path "${input}"`;
             }
         },
         {
@@ -109,7 +108,7 @@ function askForServerSideOpts() {
             name: 'serviceDiscoveryType',
             message: response => this.getNumberedQuestion(
                 'Which Service Discovery and Configuration solution would you like to use?',
-                applicationType === 'gateway' || applicationType === 'microservice' ||  applicationType === 'uaa'
+                applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'
             ),
             choices: [
                 {
@@ -393,12 +392,12 @@ function askForServerSideOpts() {
             this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
         }
 
-        //this will be handled by the UAA app
-        if(this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
+        // this will be handled by the UAA app
+        if (this.applicationType === 'gateway' && this.authenticationType === 'uaa') {
             this.skipUserManagement = true;
         }
 
-        if(this.applicationType === 'uaa') {
+        if (this.applicationType === 'uaa') {
             this.authenticationType = 'uaa';
         }
 
@@ -535,18 +534,17 @@ function getUaaAppName(input) {
 
     input = input.trim();
     let fromPath = '';
-    if(path.isAbsolute(input)) {
-        fromPath = input + '/' + '.yo-rc.json';
+    if (path.isAbsolute(input)) {
+        fromPath = `${input}/` + '.yo-rc.json';
     } else {
-        fromPath = this.destinationPath(input + '/' + '.yo-rc.json');
+        fromPath = this.destinationPath(`${input}/` + '.yo-rc.json');
     }
 
     if (shelljs.test('-f', fromPath)) {
         const fileData = this.fs.readJSON(fromPath);
         if (fileData && fileData['generator-jhipster']) {
             return fileData['generator-jhipster'];
-        } else return false;
-    } else {
-        return false;
+        } return false;
     }
+    return false;
 }

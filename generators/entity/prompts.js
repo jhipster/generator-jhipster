@@ -1,4 +1,4 @@
-'use strict';
+
 
 const chalk = require('chalk');
 const path = require('path');
@@ -43,30 +43,29 @@ function askForMicroserviceJson() {
             store: true,
             validate: (input) => {
                 let fromPath = '';
-                if(path.isAbsolute(input)) {
-                    fromPath = input + '/' + this.filename;
+                if (path.isAbsolute(input)) {
+                    fromPath = `${input}/${this.filename}`;
                 } else {
-                    fromPath = this.destinationPath(input + '/' + this.filename);
+                    fromPath = this.destinationPath(`${input}/${this.filename}`);
                 }
 
                 if (shelljs.test('-f', fromPath)) {
                     return true;
-                } else {
-                    return this.filename + ' not found in ' + input + '/';
                 }
+                return `${this.filename} not found in ${input}/`;
             }
         }
     ];
 
     this.prompt(prompts).then((props) => {
         if (props.microservicePath) {
-            this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
-            if(path.isAbsolute(props.microservicePath)) {
+            this.log(chalk.green(`\nFound the ${this.filename} configuration file, entity can be automatically generated!\n`));
+            if (path.isAbsolute(props.microservicePath)) {
                 this.microservicePath = props.microservicePath;
             } else {
                 this.microservicePath = path.resolve(props.microservicePath);
             }
-            this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
+            this.fromPath = `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`;
             this.useConfigurationFile = true;
             this.useMicroserviceJson = true;
             this._loadJson();
@@ -77,7 +76,7 @@ function askForMicroserviceJson() {
 
 function askForUpdate() {
     // ask only if running an existing entity without arg option --force or --regenerate
-    const isForce = this.options['force'] || this.regenerate;
+    const isForce = this.options.force || this.regenerate;
     this.updateEntity = 'regenerate'; // default if skipping questions by --force
     if (isForce || !this.useConfigurationFile) {
         return;
@@ -115,7 +114,6 @@ function askForUpdate() {
             this.env.error(chalk.green('Aborting entity update, no changes were made.'));
         }
         done();
-
     });
 }
 
@@ -158,7 +156,7 @@ function askForFieldsToRemove() {
     ];
     this.prompt(prompts).then((props) => {
         if (props.confirmRemove) {
-            this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
+            this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
             for (let i = this.fields.length - 1; i >= 0; i -= 1) {
                 const field = this.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
@@ -167,7 +165,6 @@ function askForFieldsToRemove() {
             }
         }
         done();
-
     });
 }
 
@@ -213,16 +210,15 @@ function askForRelationsToRemove() {
     ];
     this.prompt(prompts).then((props) => {
         if (props.confirmRemove) {
-            this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
+            this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
             for (let i = this.relationships.length - 1; i >= 0; i -= 1) {
                 const rel = this.relationships[i];
-                if (props.relsToRemove.filter(val => val === rel.relationshipName + ':' + rel.relationshipType).length > 0) {
+                if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
                     this.relationships.splice(i, 1);
                 }
             }
         }
         done();
-
     });
 }
 
@@ -401,7 +397,7 @@ function askForPagination() {
  * ask question for a field creation
  */
 function askForField(done) {
-    this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
+    this.log(chalk.green(`\nGenerating field #${this.fields.length + 1}\n`));
     const skipServer = this.skipServer;
     const prodDatabaseType = this.prodDatabaseType;
     const databaseType = this.databaseType;
@@ -427,7 +423,7 @@ function askForField(done) {
                 } else if (input === 'id' || fieldNamesUnderscored.indexOf(_.snakeCase(input)) !== -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (!skipServer && jhiCore.isReservedFieldName(input, prodDatabaseType)) {
-                    return `Your field name cannot contain a Java, Angular or ${ prodDatabaseType.toUpperCase() } reserved keyword`;
+                    return `Your field name cannot contain a Java, Angular or ${prodDatabaseType.toUpperCase()} reserved keyword`;
                 } else if (prodDatabaseType === 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
                 }
@@ -493,10 +489,9 @@ function askForField(done) {
                 if (response.fieldType === 'enum') {
                     response.fieldIsEnum = true;
                     return true;
-                } else {
-                    response.fieldIsEnum = false;
-                    return false;
                 }
+                response.fieldIsEnum = false;
+                return false;
             },
             type: 'input',
             name: 'fieldType',
@@ -532,11 +527,11 @@ function askForField(done) {
                 }
                 const enums = input.replace(/\s/g, '').split(',');
                 if (_.uniq(enums).length !== enums.length) {
-                    return 'Enum values cannot contain duplicates (typed values: ' + input + ')';
+                    return `Enum values cannot contain duplicates (typed values: ${input})`;
                 }
                 for (let i = 0; i < enums.length; i++) {
                     if (/^[0-9].*/.test(enums[i])) {
-                        return 'Enum value "' + enums[i] + '" cannot start with a number';
+                        return `Enum value "${enums[i]}" cannot start with a number`;
                     }
                     if (enums[i] === '') {
                         return 'Enum value cannot be empty (did you accidentally type "," twice in a row?)';
@@ -1004,7 +999,7 @@ function askForRelationship(done) {
                 (response.relationshipType === 'one-to-one' && response.ownerSide === true))),
             type: 'input',
             name: 'otherEntityField',
-            message: response => 'When you display this relationship with Angular, which field from \'' + response.otherEntityName + '\' do you want to use?',
+            message: response => `When you display this relationship with Angular, which field from '${response.otherEntityName}' do you want to use?`,
             default: 'id'
         },
         {
@@ -1031,7 +1026,6 @@ function askForRelationship(done) {
         }
     ];
     this.prompt(prompts).then((props) => {
-
         if (props.relationshipAdd) {
             const relationship = {
                 relationshipName: props.relationshipName,
@@ -1043,7 +1037,7 @@ function askForRelationship(done) {
                 otherEntityRelationshipName: props.otherEntityRelationshipName
             };
 
-            if(props.otherEntityName.toLowerCase() === 'user') {
+            if (props.otherEntityName.toLowerCase() === 'user') {
                 relationship.ownerSide = true;
                 relationship.otherEntityField = 'login';
                 relationship.otherEntityRelationshipName = _.lowerFirst(name);
@@ -1079,28 +1073,28 @@ function logFieldsAndRelationships() {
                     validationDetails = 'required ';
                 }
                 if (field.fieldValidateRules.indexOf('minlength') !== -1) {
-                    validationDetails += 'minlength=\'' + field.fieldValidateRulesMinlength + '\' ';
+                    validationDetails += `minlength='${field.fieldValidateRulesMinlength}' `;
                 }
                 if (field.fieldValidateRules.indexOf('maxlength') !== -1) {
-                    validationDetails += 'maxlength=\'' + field.fieldValidateRulesMaxlength + '\' ';
+                    validationDetails += `maxlength='${field.fieldValidateRulesMaxlength}' `;
                 }
                 if (field.fieldValidateRules.indexOf('pattern') !== -1) {
-                    validationDetails += 'pattern=\'' + field.fieldValidateRulesPattern + '\' ';
+                    validationDetails += `pattern='${field.fieldValidateRulesPattern}' `;
                 }
                 if (field.fieldValidateRules.indexOf('min') !== -1) {
-                    validationDetails += 'min=\'' + field.fieldValidateRulesMin + '\' ';
+                    validationDetails += `min='${field.fieldValidateRulesMin}' `;
                 }
                 if (field.fieldValidateRules.indexOf('max') !== -1) {
-                    validationDetails += 'max=\'' + field.fieldValidateRulesMax + '\' ';
+                    validationDetails += `max='${field.fieldValidateRulesMax}' `;
                 }
                 if (field.fieldValidateRules.indexOf('minbytes') !== -1) {
-                    validationDetails += 'minbytes=\'' + field.fieldValidateRulesMinbytes + '\' ';
+                    validationDetails += `minbytes='${field.fieldValidateRulesMinbytes}' `;
                 }
                 if (field.fieldValidateRules.indexOf('maxbytes') !== -1) {
-                    validationDetails += 'maxbytes=\'' + field.fieldValidateRulesMaxbytes + '\' ';
+                    validationDetails += `maxbytes='${field.fieldValidateRulesMaxbytes}' `;
                 }
             }
-            this.log(chalk.red(field.fieldName) + chalk.white(' (' + field.fieldType + (field.fieldTypeBlobContent ? ' ' + field.fieldTypeBlobContent : '') + ') ') + chalk.cyan(validationDetails));
+            this.log(chalk.red(field.fieldName) + chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) + chalk.cyan(validationDetails));
         });
         this.log();
     }
@@ -1111,7 +1105,7 @@ function logFieldsAndRelationships() {
             if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.indexOf('required') !== -1) {
                 validationDetails = 'required ';
             }
-            this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _.upperFirst(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType)+' ' + chalk.cyan(validationDetails));
+            this.log(`${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(relationship.relationshipType)} ${chalk.cyan(validationDetails)}`);
         });
         this.log();
     }

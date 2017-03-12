@@ -1,5 +1,5 @@
-/*global describe, beforeEach, it*/
-'use strict';
+/* global describe, beforeEach, it*/
+
 
 const path = require('path');
 const assert = require('yeoman-assert');
@@ -16,39 +16,39 @@ const expectedFiles = {
         'registry/consul-config-loader.yml',
         'registry/application-configmap.yml'
     ],
-    jhgate : [
+    jhgate: [
         'jhgate/jhgate-deployment.yml',
         'jhgate/jhgate-mysql.yml',
         'jhgate/jhgate-service.yml'
     ],
-    msmysql : [
+    msmysql: [
         'msmysql/msmysql-deployment.yml',
         'msmysql/msmysql-mysql.yml',
         'msmysql/msmysql-service.yml'
     ],
-    mspsql : [
+    mspsql: [
         'mspsql/mspsql-deployment.yml',
         'mspsql/mspsql-postgresql.yml',
         'mspsql/mspsql-service.yml',
         'mspsql/mspsql-elasticsearch.yml'
     ],
-    msmongodb : [
+    msmongodb: [
         'msmongodb/msmongodb-deployment.yml',
         'msmongodb/msmongodb-mongodb.yml',
         'msmongodb/msmongodb-service.yml'
     ],
-    msmariadb : [
+    msmariadb: [
         'msmariadb/msmariadb-deployment.yml',
         'msmariadb/msmariadb-mariadb.yml',
         'msmariadb/msmariadb-service.yml'
     ],
-    monolith : [
+    monolith: [
         'samplemysql/samplemysql-deployment.yml',
         'samplemysql/samplemysql-mysql.yml',
         'samplemysql/samplemysql-service.yml',
         'samplemysql/samplemysql-elasticsearch.yml'
     ],
-    kafka : [
+    kafka: [
         'samplekafka/samplekafka-deployment.yml',
         'samplekafka/samplekafka-mysql.yml',
         'samplekafka/samplekafka-service.yml',
@@ -64,7 +64,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -96,7 +96,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -128,7 +128,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -163,7 +163,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -207,7 +207,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
@@ -235,7 +235,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
-                .withOptions({skipChecks: true})
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
@@ -255,5 +255,4 @@ describe('JHipster Kubernetes Sub Generator', () => {
             assert.file(expectedFiles.kafka);
         });
     });
-
 });

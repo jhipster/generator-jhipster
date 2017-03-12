@@ -1,4 +1,4 @@
-'use strict';
+
 
 const util = require('util');
 const shelljs = require('shelljs');
@@ -14,7 +14,7 @@ util.inherits(JDLGenerator, scriptBase);
 module.exports = JDLGenerator.extend({
     constructor: function () {
         generator.apply(this, arguments);
-        this.argument('jdlFiles', {type: Array, required: true});
+        this.argument('jdlFiles', { type: Array, required: true });
         this.jdlFiles = this.options.jdlFiles;
     },
 
@@ -61,7 +61,7 @@ module.exports = JDLGenerator.extend({
                     databaseType: this.prodDatabaseType
                 });
                 this.log('Writing entity JSON files.');
-                jhiCore.exportToJSON(entities, this.options['force']);
+                jhiCore.exportToJSON(entities, this.options.force);
             } catch (e) {
                 this.log(e);
                 this.error('\nError while parsing entities from JDL\n');
@@ -86,7 +86,7 @@ module.exports = JDLGenerator.extend({
 
     install: function () {
         const injectJsFilesToIndex = () => {
-            this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
+            this.log(`\n${chalk.bold.green('Running gulp Inject to add javascript to index\n')}`);
             this.spawnCommand('gulp', ['inject:app']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {

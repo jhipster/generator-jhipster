@@ -1,4 +1,4 @@
-'use strict';
+
 const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
@@ -15,7 +15,7 @@ const https = require('https');
 const pluralize = require('pluralize');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
-const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
+const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const constants = require('./generator-constants'),
@@ -42,35 +42,34 @@ module.exports = class extends Generator {
         let navbarPath;
         try {
             if (clientFramework === 'angular1') {
-                navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+                navbarPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`;
                 jhipsterUtils.rewriteFile({
                     file: navbarPath,
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li ui-sref-active="active">
                                 <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                    <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                    <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
                     ]
                 }, this);
             } else {
-                navbarPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+                navbarPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
                 jhipsterUtils.rewriteFile({
                     file: navbarPath,
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li routerLinkActive="active">
                                 <a routerLink="${routerName}" routerLinkActive="active" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                    <span ${enableTranslation ? 'data-translate="global.menu.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                    <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
                     ]
                 }, this);
             }
-
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
         }
     }
 
@@ -86,9 +85,9 @@ module.exports = class extends Generator {
         let navbarAdminPath;
         try {
             if (clientFramework === 'angular1') {
-                navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+                navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`;
             } else {
-                navbarAdminPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+                navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
             }
             jhipsterUtils.rewriteFile({
                 file: navbarAdminPath,
@@ -96,13 +95,13 @@ module.exports = class extends Generator {
                 splicable: [`<li ui-sref-active="active" >
                             <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
-                                <span ${enableTranslation ? 'data-translate="global.menu.admin.' + routerName + '"' : ''}>${_.startCase(routerName)}</span>
+                                <span ${enableTranslation ? `data-translate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                             </a>
                         </li>`
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to admin menu.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`);
         }
     }
 
@@ -117,20 +116,20 @@ module.exports = class extends Generator {
         let entityMenuPath;
         try {
             if (clientFramework === 'angular1') {
-                entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
+                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [`<li ui-sref-active="active">
                                 <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                    <span ${enableTranslation ? 'data-translate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                                    <span ${enableTranslation ? `data-translate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
                     ]
                 }, this);
             } else {
-                entityMenuPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.component.html';
+                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
@@ -139,7 +138,7 @@ module.exports = class extends Generator {
                             `|<li uiSrefActive="active">
                              |                        <a class="dropdown-item" routerLink="${routerName}" (click)="collapseNavbar()">
                              |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                             |                            <span ${enableTranslation ? 'jhiTranslate="global.menu.entities.' + _.camelCase(routerName) + '"' : ''}>${_.startCase(routerName)}</span>
+                             |                            <span ${enableTranslation ? `jhiTranslate="global.menu.entities.${_.camelCase(routerName)}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`
                         )
@@ -147,7 +146,7 @@ module.exports = class extends Generator {
                 }, this);
             }
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
         }
     }
     /**
@@ -158,7 +157,7 @@ module.exports = class extends Generator {
      * @param {string} clientFramework - The name of the client framework
      */
     addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework) {
-        const entityModulePath = CLIENT_MAIN_SRC_DIR + 'app/entities/entity.module.ts';
+        const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
         try {
             if (clientFramework === 'angular1') {
                 return;
@@ -184,8 +183,9 @@ module.exports = class extends Generator {
                     )
                 ]
             }, this);
-        } catch (e) {this.log(e);
-            this.log(chalk.yellow('\nUnable to find ') + entityModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance+ entityClass+ entityFolderName+ entityFileName + ' ' + chalk.yellow('not added to ' + entityModulePath + '.\n'));
+        } catch (e) {
+            this.log(e);
+            this.log(`${chalk.yellow('\nUnable to find ') + entityModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(`not added to ${entityModulePath}.\n`)}`);
         }
     }
 
@@ -197,7 +197,7 @@ module.exports = class extends Generator {
      * @param {string} language - The language to which this translation should be added
      */
     addElementTranslationKey(key, value, language) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -219,7 +219,7 @@ module.exports = class extends Generator {
      * @param {string} language - The language to which this translation should be added
      */
     addAdminElementTranslationKey(key, value, language) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -241,7 +241,7 @@ module.exports = class extends Generator {
      * @param {string} language - The language to which this translation should be added
      */
     addEntityTranslationKey(key, value, language) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -263,13 +263,13 @@ module.exports = class extends Generator {
      * @param {string} language - The language to which this translation should be added
      */
     addGlobalTranslationKey(key, value, language) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
         try {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
                 jsonObj[key] = value;
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + '(key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added to global translations.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`);
         }
     }
 
@@ -293,10 +293,10 @@ module.exports = class extends Generator {
      * get all the languages installed currently
      */
     getAllInstalledLanguages() {
-        let languages = [];
+        const languages = [];
         this.getAllSupportedLanguages().forEach((language) => {
             try {
-                const stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
+                const stats = fs.lstatSync(`${CLIENT_MAIN_SRC_DIR}i18n/${language}`);
                 if (stats.isDirectory()) {
                     languages.push(language);
                 }
@@ -328,38 +328,38 @@ module.exports = class extends Generator {
      */
     getAllSupportedLanguageOptions() {
         return [
-            {name: 'Armenian', value: 'hy'},
-            {name: 'Catalan', value: 'ca'},
-            {name: 'Chinese (Simplified)', value: 'zh-cn'},
-            {name: 'Chinese (Traditional)', value: 'zh-tw'},
-            {name: 'Czech', value: 'cs'},
-            {name: 'Danish', value: 'da'},
-            {name: 'Dutch', value: 'nl'},
-            {name: 'English', value: 'en'},
-            {name: 'Estonian', value: 'et'},
-            {name: 'French', value: 'fr'},
-            {name: 'Galician', value: 'gl'},
-            {name: 'German', value: 'de'},
-            {name: 'Greek', value: 'el'},
-            {name: 'Hindi', value: 'hi'},
-            {name: 'Hungarian', value: 'hu'},
-            {name: 'Italian', value: 'it'},
-            {name: 'Japanese', value: 'ja'},
-            {name: 'Korean', value: 'ko'},
-            {name: 'Marathi', value: 'mr'},
-            {name: 'Polish', value: 'pl'},
-            {name: 'Portuguese (Brazilian)', value: 'pt-br'},
-            {name: 'Portuguese', value: 'pt-pt'},
-            {name: 'Romanian', value: 'ro'},
-            {name: 'Russian', value: 'ru'},
-            {name: 'Slovak', value: 'sk'},
-            {name: 'Serbian', value: 'sr'},
-            {name: 'Spanish', value: 'es'},
-            {name: 'Swedish', value: 'sv'},
-            {name: 'Turkish', value: 'tr'},
-            {name: 'Tamil', value: 'ta'},
-            {name: 'Thai', value: 'th'},
-            {name: 'Vietnamese', value: 'vi'}
+            { name: 'Armenian', value: 'hy' },
+            { name: 'Catalan', value: 'ca' },
+            { name: 'Chinese (Simplified)', value: 'zh-cn' },
+            { name: 'Chinese (Traditional)', value: 'zh-tw' },
+            { name: 'Czech', value: 'cs' },
+            { name: 'Danish', value: 'da' },
+            { name: 'Dutch', value: 'nl' },
+            { name: 'English', value: 'en' },
+            { name: 'Estonian', value: 'et' },
+            { name: 'French', value: 'fr' },
+            { name: 'Galician', value: 'gl' },
+            { name: 'German', value: 'de' },
+            { name: 'Greek', value: 'el' },
+            { name: 'Hindi', value: 'hi' },
+            { name: 'Hungarian', value: 'hu' },
+            { name: 'Italian', value: 'it' },
+            { name: 'Japanese', value: 'ja' },
+            { name: 'Korean', value: 'ko' },
+            { name: 'Marathi', value: 'mr' },
+            { name: 'Polish', value: 'pl' },
+            { name: 'Portuguese (Brazilian)', value: 'pt-br' },
+            { name: 'Portuguese', value: 'pt-pt' },
+            { name: 'Romanian', value: 'ro' },
+            { name: 'Russian', value: 'ru' },
+            { name: 'Slovak', value: 'sk' },
+            { name: 'Serbian', value: 'sr' },
+            { name: 'Spanish', value: 'es' },
+            { name: 'Swedish', value: 'sv' },
+            { name: 'Turkish', value: 'tr' },
+            { name: 'Tamil', value: 'ta' },
+            { name: 'Thai', value: 'th' },
+            { name: 'Vietnamese', value: 'vi' }
         ];
     }
 
@@ -372,16 +372,16 @@ module.exports = class extends Generator {
      * @param {string} comment - url of how to configure the social service
      */
     addSocialConfiguration(name, clientId, clientSecret, comment) {
-        const fullPath = SERVER_MAIN_RES_DIR + 'config/application.yml';
+        const fullPath = `${SERVER_MAIN_RES_DIR}config/application.yml`;
         try {
             this.log(chalk.yellow('   update ') + fullPath);
             let config = '';
             if (comment) {
-                config += '# ' + comment + '\n        ';
+                config += `# ${comment}\n        `;
             }
-            config += name + ':\n' +
-                '            clientId: ' + clientId + '\n' +
-                '            clientSecret: ' + clientSecret + '\n';
+            config += `${name}:\n` +
+                `            clientId: ${clientId}\n` +
+                `            clientSecret: ${clientSecret}\n`;
             jhipsterUtils.rewriteFile({
                 file: fullPath,
                 needle: 'jhipster-needle-add-social-configuration',
@@ -390,7 +390,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'social configuration ' + name + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}social configuration ${name}${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -408,7 +408,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(e);
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bower dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -427,13 +427,13 @@ module.exports = class extends Generator {
             jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
                 const override = {};
                 if (main !== undefined && main.length > 0) {
-                    override['main'] = main;
+                    override.main = main;
                 }
                 if (isIgnored) {
-                    override['ignore'] = true;
+                    override.ignore = true;
                 }
                 if (dependencies) {
-                    override['dependencies'] = dependencies;
+                    override.dependencies = dependencies;
                 }
                 if (jsonObj.overrides === undefined) {
                     jsonObj.overrides = {};
@@ -441,7 +441,7 @@ module.exports = class extends Generator {
                 jsonObj.overrides[bowerPackageName] = override;
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + bowerPackageName + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bower override configuration (bowerPackageName: ${bowerPackageName}, main:${JSON.stringify(main)}, ignore:${isIgnored})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -459,7 +459,7 @@ module.exports = class extends Generator {
                 jsonObj[key] = value;
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bowerrc parameter (key: ${key}, value:${value})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -477,7 +477,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(e);
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'npm dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -495,7 +495,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(e);
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'npm devDependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -513,7 +513,7 @@ module.exports = class extends Generator {
             }, this);
         } catch (e) {
             this.log(e);
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'npm script (name: ' + name + ', data:' + data + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -524,7 +524,7 @@ module.exports = class extends Generator {
      *
      */
     addAngularJsModule(moduleName) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.module.js';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/app.module.js`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -545,7 +545,7 @@ module.exports = class extends Generator {
      *
      */
     addAngularJsInterceptor(interceptorName) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'app/blocks/config/http.config.js';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/blocks/config/http.config.js`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -584,7 +584,7 @@ module.exports = class extends Generator {
      */
     addEntryToEhcache(entry) {
         try {
-            const ehcachePath = SERVER_MAIN_SRC_DIR + `${this.packageFolder}/config/CacheConfiguration.java`;
+            const ehcachePath = `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/config/CacheConfiguration.java`;
             jhipsterUtils.rewriteFile({
                 file: ehcachePath,
                 needle: 'jhipster-needle-ehcache-add-entry',
@@ -592,7 +592,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to add ' + entry + ' to CacheConfiguration.java file.\n\t' + e.message));
+            this.log(chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.\n\t${e.message}`));
         }
     }
 
@@ -621,7 +621,7 @@ module.exports = class extends Generator {
      * @param {string} needle - The needle at where it has to be added.
      */
     addLiquibaseChangelogToMaster(changelogName, needle) {
-        const fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
+        const fullPath = `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -631,7 +631,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName}.xml ${chalk.yellow('not added.\n')}`);
         }
     }
 
@@ -665,15 +665,15 @@ module.exports = class extends Generator {
      * @param {string} clientFramework - The name of the client framework
      */
     addSocialButton(isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor, clientFramework) {
-        const socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
+        const socialServicefullPath = `${CLIENT_MAIN_SRC_DIR}app/account/social/social.service.js`;
         let loginfullPath;
         let registerfullPath;
         if (clientFramework === 'angular1') {
-            loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
-            registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
+            loginfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/login/login.html`;
+            registerfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/register/register.html`;
         } else {
-            loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.component.html';
-            registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.component.html';
+            loginfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/login/login.component.html`;
+            registerfullPath = `${CLIENT_MAIN_SRC_DIR}app/account/register/register.component.html`;
         }
         try {
             this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
@@ -714,10 +714,9 @@ module.exports = class extends Generator {
                     border-color: rgba(0, 0, 0, 0.2);
                     color: #fff;
                 }`;
-            this.addMainCSSStyle(isUseSass, buttonStyle, 'Add sign in style for ' + socialName);
-
+            this.addMainCSSStyle(isUseSass, buttonStyle, `Add sign in style for ${socialName}`);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to add social button modification.\n' + e));
+            this.log(chalk.yellow(`\nUnable to add social button modification.\n${e}`));
         }
     }
 
@@ -731,10 +730,10 @@ module.exports = class extends Generator {
      * @param {string} configurationName - name of the section in the config yaml file
      */
     addSocialConnectionFactory(javaDir, importPackagePath, socialName, connectionFactoryClassName, configurationName) {
-        const fullPath = javaDir + 'config/social/SocialConfiguration.java';
+        const fullPath = `${javaDir}config/social/SocialConfiguration.java`;
         try {
             this.log(chalk.yellow('\nupdate ') + fullPath);
-            const javaImport = 'import ' + importPackagePath + ';\n';
+            const javaImport = `import ${importPackagePath};\n`;
             jhipsterUtils.rewriteFile({
                 file: fullPath,
                 needle: 'jhipster-needle-add-social-connection-factory-import-package',
@@ -743,21 +742,21 @@ module.exports = class extends Generator {
                 ]
             }, this);
 
-            const clientId = socialName + 'ClientId';
-            const clientSecret = socialName + 'ClientSecret';
-            const javaCode = '// ' + socialName + ' configuration\n' +
-                '        String ' + clientId + ' = environment.getProperty("spring.social.' + configurationName + '.clientId");\n' +
-                '        String ' + clientSecret + ' = environment.getProperty("spring.social.' + configurationName + '.clientSecret");\n' +
-                '        if (' + clientId + ' != null && ' + clientSecret + ' != null) {\n' +
-                '            log.debug("Configuring ' + connectionFactoryClassName + '");\n' +
+            const clientId = `${socialName}ClientId`;
+            const clientSecret = `${socialName}ClientSecret`;
+            const javaCode = `// ${socialName} configuration\n` +
+                `        String ${clientId} = environment.getProperty("spring.social.${configurationName}.clientId");\n` +
+                `        String ${clientSecret} = environment.getProperty("spring.social.${configurationName}.clientSecret");\n` +
+                `        if (${clientId} != null && ${clientSecret} != null) {\n` +
+                `            log.debug("Configuring ${connectionFactoryClassName}");\n` +
                 '            connectionFactoryConfigurer.addConnectionFactory(\n' +
-                '                new ' + connectionFactoryClassName + '(\n' +
-                '                    ' + clientId + ',\n' +
-                '                    ' + clientSecret + '\n' +
+                `                new ${connectionFactoryClassName}(\n` +
+                `                    ${clientId},\n` +
+                `                    ${clientSecret}\n` +
                 '                )\n' +
                 '            );\n' +
                 '        } else {\n' +
-                '            log.error("Cannot configure ' + connectionFactoryClassName + ' id or secret null");\n' +
+                `            log.error("Cannot configure ${connectionFactoryClassName} id or secret null");\n` +
                 '        }\n';
 
             jhipsterUtils.rewriteFile({
@@ -768,7 +767,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Social connection ') + e + ' ' + chalk.yellow('not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Social connection ') + e} ${chalk.yellow('not added.\n')}`);
         }
     }
 
@@ -796,14 +795,14 @@ module.exports = class extends Generator {
             this.addMainSCSSStyle(style, comment);
         }
 
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'content/css/main.css';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/css/main.css`;
         let styleBlock = '';
         if (comment) {
             styleBlock += '/* ==========================================================================\n';
-            styleBlock += comment + '\n';
+            styleBlock += `${comment}\n`;
             styleBlock += '========================================================================== */\n';
         }
-        styleBlock += style + '\n';
+        styleBlock += `${style}\n`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -838,14 +837,14 @@ module.exports = class extends Generator {
      *
      */
     addMainSCSSStyle(style, comment) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'scss/main.scss';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}scss/main.scss`;
         let styleBlock = '';
         if (comment) {
             styleBlock += '/* ==========================================================================\n';
-            styleBlock += comment + '\n';
+            styleBlock += `${comment}\n`;
             styleBlock += '========================================================================== */\n';
         }
-        styleBlock += style + '\n';
+        styleBlock += `${style}\n`;
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
@@ -870,14 +869,14 @@ module.exports = class extends Generator {
     addMavenDependency(groupId, artifactId, version, other) {
         const fullPath = 'pom.xml';
         try {
-            let dependency = '<dependency>\n' +
-                '            <groupId>' + groupId + '</groupId>\n' +
-                '            <artifactId>' + artifactId + '</artifactId>\n';
+            let dependency = `${'<dependency>\n' +
+                '            <groupId>'}${groupId}</groupId>\n` +
+                `            <artifactId>${artifactId}</artifactId>\n`;
             if (version) {
-                dependency += '            <version>' + version + '</version>\n';
+                dependency += `            <version>${version}</version>\n`;
             }
             if (other) {
-                dependency += other + '\n';
+                dependency += `${other}\n`;
             }
             dependency += '        </dependency>';
             jhipsterUtils.rewriteFile({
@@ -888,7 +887,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -903,14 +902,14 @@ module.exports = class extends Generator {
     addMavenPlugin(groupId, artifactId, version, other) {
         const fullPath = 'pom.xml';
         try {
-            let plugin = '<plugin>\n' +
-                '                <groupId>' + groupId + '</groupId>\n' +
-                '                <artifactId>' + artifactId + '</artifactId>\n';
+            let plugin = `${'<plugin>\n' +
+                '                <groupId>'}${groupId}</groupId>\n` +
+                `                <artifactId>${artifactId}</artifactId>\n`;
             if (version) {
-                plugin += '                <version>' + version + '</version>\n';
+                plugin += `                <version>${version}</version>\n`;
             }
             if (other) {
-                plugin += other + '\n';
+                plugin += `${other}\n`;
             }
             plugin += '            </plugin>';
             jhipsterUtils.rewriteFile({
@@ -921,7 +920,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven plugin (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -943,7 +942,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'classpath: ' + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}classpath: ${group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -966,7 +965,7 @@ module.exports = class extends Generator {
                 ]
             }, this);
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
         }
     }
 
@@ -996,26 +995,26 @@ module.exports = class extends Generator {
     dateFormatForLiquibase() {
         const now = new Date();
         const now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-        const year = '' + now_utc.getFullYear();
-        let month = '' + (now_utc.getMonth() + 1);
+        const year = `${now_utc.getFullYear()}`;
+        let month = `${now_utc.getMonth() + 1}`;
         if (month.length === 1) {
-            month = '0' + month;
+            month = `0${month}`;
         }
-        let day = '' + now_utc.getDate();
+        let day = `${now_utc.getDate()}`;
         if (day.length === 1) {
-            day = '0' + day;
+            day = `0${day}`;
         }
-        let hour = '' + now_utc.getHours();
+        let hour = `${now_utc.getHours()}`;
         if (hour.length === 1) {
-            hour = '0' + hour;
+            hour = `0${hour}`;
         }
-        let minute = '' + now_utc.getMinutes();
+        let minute = `${now_utc.getMinutes()}`;
         if (minute.length === 1) {
-            minute = '0' + minute;
+            minute = `0${minute}`;
         }
-        let second = '' + now_utc.getSeconds();
+        let second = `${now_utc.getSeconds()}`;
         if (second.length === 1) {
-            second = '0' + second;
+            second = `0${second}`;
         }
         return `${year}${month}${day}${hour}${minute}${second}`;
     }
@@ -1031,12 +1030,11 @@ module.exports = class extends Generator {
      * @param {boolean} template - flag to use template method instead of copy method
      */
     copyTemplate(source, dest, action, generator, opt = {}, template) {
-
         const _this = generator || this;
         let regex;
         switch (action) {
         case 'stripHtml' :
-            regex= new RegExp([
+            regex = new RegExp([
                 /( (data-t|jhiT)ranslate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")/,                    // data-translate or jhiTranslate
                 /( translate(-v|V)alues\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")/,    // translate-values or translateValues
                 /( translate-compile)/,                                                         // translate-compile
@@ -1046,12 +1044,12 @@ module.exports = class extends Generator {
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
             break;
         case 'stripJs' :
-            regex= new RegExp([
+            regex = new RegExp([
                 /(\,[\s]*(resolve)\:[\s]*[\{][\s]*(translatePartialLoader)[\'a-zA-Z0-9\$\,\(\)\{\.\<\%\=\-\>\;\s\:\[\]]*(\;[\s]*\}\][\s]*\}))/, // ng1 resolve block
                 /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s[\"|\']ng-jhipster[\"|\']\;)/,       // ng2 import jhiLanguageService
                 /(\,?\s?JhiLanguageService\,?\s?)/,                                                          // ng2 import jhiLanguageService
                 /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?\:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
-                /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'\"a-zA-Z0-9\-_,\s]+\]\)\;[\s]*)/,// jhiLanguageService invocations
+                /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'\"a-zA-Z0-9\-_,\s]+\]\)\;[\s]*)/, // jhiLanguageService invocations
             ].map(r => r.source).join('|'), 'g');
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
@@ -1144,14 +1142,15 @@ module.exports = class extends Generator {
     registerModule(npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
         try {
             let modules;
-            let error, duplicate;
-            const moduleName = _.startCase(npmPackageName.replace(GENERATOR_JHIPSTER + '-', ''));
+            let error,
+                duplicate;
+            const moduleName = _.startCase(npmPackageName.replace(`${GENERATOR_JHIPSTER}-`, ''));
             const generatorName = npmPackageName.replace('generator-', '');
-            const generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app');
+            const generatorCallback = `${generatorName}:${callbackSubGenerator || 'app'}`;
             const moduleConfig = {
-                name: moduleName + ' generator',
+                name: `${moduleName} generator`,
                 npmPackageName: npmPackageName,
-                description: description ? description : 'A JHipster module to generate ' + moduleName,
+                description: description || `A JHipster module to generate ${moduleName}`,
                 hookFor: hookFor,
                 hookType: hookType,
                 generatorCallback: generatorCallback
@@ -1169,7 +1168,7 @@ module.exports = class extends Generator {
                 this.fs.writeJSON(MODULES_HOOK_FILE, modules, null, 4);
             }
         } catch (err) {
-            this.log('\n' + chalk.bold.red('Could not add jhipster module configuration'));
+            this.log(`\n${chalk.bold.red('Could not add jhipster module configuration')}`);
         }
     }
 
@@ -1181,7 +1180,6 @@ module.exports = class extends Generator {
      * @param {object} value - value to be added
      */
     updateEntityConfig(file, key, value) {
-
         try {
             const entityJson = this.fs.readJSON(file);
             entityJson[key] = value;
@@ -1189,7 +1187,6 @@ module.exports = class extends Generator {
         } catch (err) {
             this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
         }
-
     }
 
     /**
@@ -1224,7 +1221,7 @@ module.exports = class extends Generator {
                     this.composeWith(module.generatorCallback, options);
                 } catch (err) {
                     this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm -g ${module.npmPackageName}'`));
                 }
             }
         });
@@ -1238,7 +1235,7 @@ module.exports = class extends Generator {
         let entityJson = null;
 
         try {
-            entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, _.upperFirst(file) + '.json'));
+            entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
         } catch (err) {
             this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
         }
@@ -1259,7 +1256,7 @@ module.exports = class extends Generator {
         if (shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
             shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach((file) => {
                 const definition = this.fs.readJSON(file);
-                entities.push({name: path.basename(file, '.json'), definition: definition});
+                entities.push({ name: path.basename(file, '.json'), definition: definition });
             });
         }
 
@@ -1311,7 +1308,7 @@ module.exports = class extends Generator {
         if (!Array.isArray(args)) {
             args = [args];
         }
-        const command = 'git ' + args.join(' ');
+        const command = `git ${args.join(' ')}`;
         shelljs.exec(command, options, callback);
     }
 
@@ -1350,19 +1347,19 @@ module.exports = class extends Generator {
      * @param {string} prodDatabaseType - database type
      */
     getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-        const joinTableName = this.getTableName(entityName) + '_'+ this.getTableName(relationshipName);
+        const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-            this.warning(`The generated join table "${ joinTableName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+            this.warning(`The generated join table "${joinTableName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 30;
         } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64) {
-            this.warning(`The generated join table "${ joinTableName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+            this.warning(`The generated join table "${joinTableName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 64;
         }
         if (limit > 0) {
-            const halfLimit = Math.floor(limit/2);
+            const halfLimit = Math.floor(limit / 2);
             const entityTable = _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
             const relationTable = _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
             return `${entityTable}_${relationTable}`;
@@ -1388,16 +1385,16 @@ module.exports = class extends Generator {
         let limit = 0;
 
         if (prodDatabaseType === 'oracle' && constraintName.length > 30) {
-            this.warning(`The generated constraint name "${ constraintName }" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+            this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 28;
         } else if (prodDatabaseType === 'mysql' && constraintName.length > 64) {
-            this.warning(`The generated constraint name "${ constraintName }" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+            this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 62;
         }
         if (limit > 0) {
-            const halfLimit = Math.floor(limit/2);
+            const halfLimit = Math.floor(limit / 2);
             const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
             const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
             return `${entityTable}_${relationTable}_id`;
@@ -1427,15 +1424,15 @@ module.exports = class extends Generator {
      * Generate a KeyStore for uaa authorization server.
      */
     generateKeyStore() {
-        const keyStoreFile = SERVER_MAIN_RES_DIR + 'keystore.jks';
+        const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
         } else {
             shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
-            const javaHome = shelljs.env['JAVA_HOME'];
+            const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
-                keytoolPath = javaHome + '/bin/';
+                keytoolPath = `${javaHome}/bin/`;
             }
             shelljs.exec(`"${keytoolPath}keytool" -genkey -noprompt ` +
                 '-keyalg RSA ' +
@@ -1468,9 +1465,9 @@ module.exports = class extends Generator {
             chalk.green('   ╚═════╝ ') + chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝\n')
         );
         this.log(chalk.white.bold('                            https://jhipster.github.io\n'));
-        this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
-        this.log(chalk.white('Documentation for creating an application: ' + chalk.yellow('https://jhipster.github.io/creating-an-app/')));
-        this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
+        this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow(`v${packagejs.version}`));
+        this.log(chalk.white(`Documentation for creating an application: ${chalk.yellow('https://jhipster.github.io/creating-an-app/')}`));
+        this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
     }
 
     /**
@@ -1479,16 +1476,16 @@ module.exports = class extends Generator {
     checkForNewVersion() {
         try {
             const done = this.async();
-            shelljs.exec('npm show ' + GENERATOR_JHIPSTER + ' version', {silent:true}, (code, stdout, stderr) => {
+            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
                     this.log(
-                        chalk.yellow(' ______________________________________________________________________________\n\n') +
-                        chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n','')) + chalk.gray(' (current: ' + packagejs.version + ')') + '\n'
+                        `${chalk.yellow(' ______________________________________________________________________________\n\n') +
+                        chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`
                     );
                     if (this.useYarn) {
-                        this.log(chalk.yellow('  Run ' + chalk.magenta('yarn global upgrade ' + GENERATOR_JHIPSTER ) + ' to update.\n'));
+                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     } else {
-                        this.log(chalk.yellow('  Run ' + chalk.magenta('npm install -g ' + GENERATOR_JHIPSTER ) + ' to update.\n'));
+                        this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     }
                     this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                 }
@@ -1517,7 +1514,6 @@ module.exports = class extends Generator {
      * get the java main class name.
      */
     getMainClassName() {
-
         const main = _.upperFirst(this.getAngularAppName());
         const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
@@ -1530,7 +1526,6 @@ module.exports = class extends Generator {
      * @param {object} generator - generator instance to use
      */
     askModuleName(generator) {
-
         const done = generator.async();
         const defaultAppBaseName = this.getDefaultAppName();
         generator.prompt({
@@ -1560,7 +1555,6 @@ module.exports = class extends Generator {
      * @param {object} generator - generator instance to use
      */
     aski18n(generator) {
-
         const languageOptions = this.getAllSupportedLanguageOptions();
 
         const done = generator.async();
@@ -1615,7 +1609,7 @@ module.exports = class extends Generator {
                 'skip-server': skipServer,
                 'skip-client': skipClient,
                 configOptions: configOptions,
-                force: generator.options['force'],
+                force: generator.options.force,
                 languages: generator.languages
             });
         }
@@ -1628,12 +1622,10 @@ module.exports = class extends Generator {
      * @param {boolean} cond - increment question
      */
     getNumberedQuestion(msg, cond) {
-        let order;
         if (cond) {
             ++this.currentQuestion;
         }
-        order = `(${this.currentQuestion}/${this.totalQuestions}) `;
-        return order + msg;
+        return `(${this.currentQuestion}/${this.totalQuestions}) ${msg}`;
     }
 
     /**
@@ -1651,9 +1643,9 @@ module.exports = class extends Generator {
         }
 
         if (os.platform() !== 'win32') {
-            buildCmd = './' + buildCmd;
+            buildCmd = `./${buildCmd}`;
         }
-        buildCmd += ' -P' + profile;
+        buildCmd += ` -P${profile}`;
         const child = {};
         child.stdout = exec(buildCmd, cb).stdout;
         child.buildCmd = buildCmd;
@@ -1670,21 +1662,21 @@ module.exports = class extends Generator {
      * @param {string} prefix - pefix to add to path
      */
     writeFilesToDisk(files, generator, returnFiles, prefix) {
-        let _this = generator || this;
-        let filesOut = [];
-        let startTime = new Date();
+        const _this = generator || this;
+        const filesOut = [];
+        const startTime = new Date();
         // using the fastest method for iterations
         for (let i = 0, blocks = Object.keys(files); i < blocks.length; i++) {
             for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {
-                let blockTemplate = blockTemplates[j];
+                const blockTemplate = blockTemplates[j];
                 if (!blockTemplate.condition || blockTemplate.condition(_this)) {
-                    let path = blockTemplate.path ? blockTemplate.path : '';
-                    blockTemplate.templates.map(templateObj => {
+                    const path = blockTemplate.path ? blockTemplate.path : '';
+                    blockTemplate.templates.forEach((templateObj) => {
                         let templatePath = path;
                         let method = 'template';
                         let useTemplate = false;
                         let options = {};
-                        let templatePathTo ;
+                        let templatePathTo;
                         if (typeof templateObj === 'string') {
                             templatePath += templateObj;
                         } else {
@@ -1714,12 +1706,12 @@ module.exports = class extends Generator {
         return filesOut;
     }
 
-    /*========================================================================*/
+    /*= =======================================================================*/
     /* private methods use within generator (not exposed to modules)*/
-    /*========================================================================*/
+    /*= =======================================================================*/
 
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
-        let generator = _this || this;
+        const generator = _this || this;
         generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
@@ -1748,15 +1740,13 @@ module.exports = class extends Generator {
         generator.template(`${webappDir}i18n/${lang}/_global.json`, `${webappDir}i18n/${lang}/global.json`);
         generator.template(`${webappDir}i18n/${lang}/_health.json`, `${webappDir}i18n/${lang}/health.json`);
         generator.template(`${webappDir}i18n/${lang}/_reset.json`, `${webappDir}i18n/${lang}/reset.json`);
-
     }
 
     installI18nServerFilesByLanguage(_this, resourceDir, lang) {
-        let generator = _this || this;
+        const generator = _this || this;
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
         generator.template(`${resourceDir}i18n/_messages_${langProp}.properties`, `${resourceDir}i18n/messages_${langProp}.properties`);
-
     }
 
     copyI18n(language, prefix) {
@@ -1769,7 +1759,7 @@ module.exports = class extends Generator {
         }
     }
 
-    copyEnumI18n(language, enumInfo , prefix) {
+    copyEnumI18n(language, enumInfo, prefix) {
         try {
             this.template(`${prefix}/i18n/_enum_${language}.json`, `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.enumInstance}.json`, this, {}, enumInfo);
         } catch (e) {
@@ -1779,12 +1769,12 @@ module.exports = class extends Generator {
     }
 
     updateLanguagesInLanguageConstant(languages) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
         try {
             let content = '.constant(\'LANGUAGES\', [\n';
             for (let i = 0, len = languages.length; i < len; i++) {
                 const language = languages[i];
-                content += '            \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
+                content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
             }
             content +=
                 '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
@@ -1801,12 +1791,12 @@ module.exports = class extends Generator {
     }
 
     updateLanguagesInLanguageConstantNG2(languages) {
-        const fullPath = CLIENT_MAIN_SRC_DIR + 'app/shared/language/language.constants.ts';
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             for (let i = 0, len = languages.length; i < len; i++) {
                 const language = languages[i];
-                content += '    \'' + language + '\'' + (i !== languages.length - 1 ? ',' : '') + '\n';
+                content += `    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
             }
             content +=
                 '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
@@ -1834,7 +1824,7 @@ module.exports = class extends Generator {
             insight.trackEvent({
                 category: category,
                 action: action,
-                label: category + ' ' + action,
+                label: `${category} ${action}`,
                 value: 1
             });
         };
@@ -1844,14 +1834,14 @@ module.exports = class extends Generator {
 
     removeFile(file) {
         if (shelljs.test('-f', file)) {
-            this.log('Removing the file - ' + file);
+            this.log(`Removing the file - ${file}`);
             shelljs.rm(file);
         }
     }
 
     removeFolder(folder) {
         if (shelljs.test('-d', folder)) {
-            this.log('Removing the folder - ' + folder);
+            this.log(`Removing the folder - ${folder}`);
             shelljs.rm('-rf', folder);
         }
     }
@@ -1873,14 +1863,13 @@ module.exports = class extends Generator {
         let description = rows[0];
         for (let i = 1; i < rows.length; i++) {
             // discard empty rows
-            if (rows[i] === '') {
-                continue;
+            if (rows[i] !== '') {
+                // if simple text then put space between row strings
+                if (!description.endsWith('>') && !rows[i].startsWith('<')) {
+                    description += ' ';
+                }
+                description += rows[i];
             }
-            // if simple text then put space between row strings
-            if (!description.endsWith('>') && !rows[i].startsWith('<')) {
-                description = description + ' ';
-            }
-            description = description + rows[i];
         }
         return description;
     }
@@ -1909,7 +1898,7 @@ module.exports = class extends Generator {
     filterNumber(input, isSigned, isDecimal) {
         const signed = isSigned ? '(\\-|\\+)?' : '';
         const decimal = isDecimal ? '(\\.[0-9]+)?' : '';
-        const regex = new RegExp('^' + signed + '([0-9]+' + decimal + ')$');
+        const regex = new RegExp(`^${signed}([0-9]+${decimal})$`);
 
         if (regex.test(input)) return Number(input);
 
@@ -1920,7 +1909,7 @@ module.exports = class extends Generator {
         this.gitExec('--version', (code) => {
             if (code !== 0) {
                 this.warning('git is not found on your computer.\n',
-                    ' Install git: ' + chalk.yellow('https://git-scm.com/')
+                    ` Install git: ${chalk.yellow('https://git-scm.com/')}`
                 );
             }
             callback && callback(code);
@@ -1950,16 +1939,16 @@ module.exports = class extends Generator {
             value = value.replace('.', '_');
             res = value[0];
             for (let i = 1, len = value.length - 1; i < len; i++) {
-                if (value[i-1] !== value[i-1].toUpperCase() &&
+                if (value[i - 1] !== value[i - 1].toUpperCase() &&
                     value[i] !== value[i].toLowerCase() &&
-                    value[i+1] !== value[i+1].toUpperCase()
+                    value[i + 1] !== value[i + 1].toUpperCase()
                 ) {
-                    res += '_' + value[i];
+                    res += `_${value[i]}`;
                 } else {
                     res += value[i];
                 }
             }
-            res += value[value.length -1];
+            res += value[value.length - 1];
             res = res.toLowerCase();
         }
         return res;
@@ -2000,7 +1989,7 @@ module.exports = class extends Generator {
      * Strip margin indicated by pipe `|` from a string literal
      */
     stripMargin(content) {
-        return content.replace(/^[ ]*\|/gm,'');
+        return content.replace(/^[ ]*\|/gm, '');
     }
 
     /**

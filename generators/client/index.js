@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -102,26 +102,26 @@ module.exports = JhipsterClientGenerator.extend({
 
         this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.authenticationType = this.options['auth'];
-        this.buildTool = this.options['build'];
-        this.websocket = this.options['websocket'];
+        this.authenticationType = this.options.auth;
+        this.buildTool = this.options.build;
+        this.websocket = this.options.websocket;
         this.devDatabaseType = this.options['dev-db'];
-        this.databaseType = this.options['db'];
-        this.enableSocialSignIn = this.options['social'];
+        this.databaseType = this.options.db;
+        this.enableSocialSignIn = this.options.social;
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
         this.otherModules = this.configOptions.otherModules || [];
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         this.testFrameworks = [];
-        this.options['protractor'] && this.testFrameworks.push('protractor');
+        this.options.protractor && this.testFrameworks.push('protractor');
         this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
-        this.useYarn = this.configOptions.useYarn = !this.options['npm'];
+        this.useYarn = this.configOptions.useYarn = !this.options.npm;
         this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options['debug'];
+        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
     },
 
     initializing: {
@@ -286,7 +286,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.languages = this.configOptions.languages;
             }
 
-            if(this.configOptions.uaaBaseName !== undefined) {
+            if (this.configOptions.uaaBaseName !== undefined) {
                 this.uaaBaseName = this.configOptions.uaaBaseName;
             }
 
@@ -309,29 +309,25 @@ module.exports = JhipsterClientGenerator.extend({
     writing: function () {
         if (this.clientFramework === 'angular1') {
             return writeAngularJsFiles.call(this);
-        } else {
-            return writeAngularFiles.call(this);
         }
+        return writeAngularFiles.call(this);
     },
 
     install: function () {
-
         let logMsg =
-            'To install your dependencies manually, run: ' + chalk.yellow.bold(this.clientPackageManager + ' install');
+            `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
         if (this.clientFramework === 'angular1') {
             logMsg =
-                'To install your dependencies manually, run: ' + chalk.yellow.bold(this.clientPackageManager + ' install & bower install');
+                `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install & bower install`)}`;
         }
 
         const injectDependenciesAndConstants = (err) => {
             if (err) {
                 this.warning('Install of dependencies failed!');
                 this.log(logMsg);
-            } else {
-                if (this.clientFramework === 'angular1') {
-                    this.spawnCommand('gulp', ['install']);
-                }
+            } else if (this.clientFramework === 'angular1') {
+                this.spawnCommand('gulp', ['install']);
             }
         };
 
@@ -353,25 +349,25 @@ module.exports = JhipsterClientGenerator.extend({
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         let logMsg =
-            'Start your Webpack development server with:' +
-            '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
-            '\n';
+            `${'Start your Webpack development server with:' +
+            '\n '}${chalk.yellow.bold(`${this.clientPackageManager} start`)
+            }\n`;
 
         if (this.clientFramework === 'angular1') {
             logMsg =
-                'Inject your front end dependencies into your source code:' +
-                '\n ' + chalk.yellow.bold('gulp inject') +
-                '\n' +
+                `${'Inject your front end dependencies into your source code:' +
+                '\n '}${chalk.yellow.bold('gulp inject')
+                }\n` +
                 '\nGenerate the AngularJS constants:' +
-                '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
-                (this.useSass ?
-                '\n' +
+                `\n ${chalk.yellow.bold('gulp ngconstant:dev')
+                }${this.useSass ?
+                `${'\n' +
                 '\nCompile your Sass style sheets:' +
-                '\n ' + chalk.yellow.bold('gulp sass') : '') +
-                '\n' +
+                '\n '}${chalk.yellow.bold('gulp sass')}` : ''
+                }\n` +
                 '\nOr do all of the above:' +
-                '\n ' + chalk.yellow.bold('gulp install') +
-                '\n';
+                `\n ${chalk.yellow.bold('gulp install')
+                }\n`;
         }
         this.log(chalk.green(logMsg));
     }

@@ -1,4 +1,4 @@
-'use strict';
+
 const util = require('util'),
     os = require('os'),
     generator = require('yeoman-generator'),
@@ -49,7 +49,7 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.abort) return;
             this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
             this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
-            this.template('_application-cloudfoundry.yml', constants.SERVER_MAIN_RES_DIR + 'config/application-cloudfoundry.yml');
+            this.template('_application-cloudfoundry.yml', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
         },
 
         checkInstallation: function () {
@@ -73,7 +73,7 @@ module.exports = CloudFoundryGenerator.extend({
             const done = this.async();
 
             this.log(chalk.bold('\nChecking for an existing Cloud Foundry hosting environment...'));
-            exec('cf app ' + this.cloudfoundryDeployedName + ' ', {}, (err, stdout, stderr) => {
+            exec(`cf app ${this.cloudfoundryDeployedName} `, {}, (err, stdout, stderr) => {
                 // Unauthenticated
                 if (stdout.search('cf login') >= 0) {
                     this.log.error('Error: Not authenticated. Run \'cf login\' to login to your cloudfoundry account and try again.');
@@ -92,7 +92,7 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.databaseType !== 'no') {
                 this.log(chalk.bold('Creating the database'));
                 const child = exec(
-                    'cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName,
+                    `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
                     {},
                     (err, stdout, stderr) => {
                         done();
@@ -109,7 +109,7 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.abort) return;
             const done = this.async();
 
-            this.log(chalk.bold('\nBuilding the application with the ' + this.cloudfoundryProfile + ' profile'));
+            this.log(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
 
             const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, (err) => {
                 if (err) {
@@ -138,9 +138,9 @@ module.exports = CloudFoundryGenerator.extend({
                 warFolder = ' build/libs/';
             }
             if (os.platform() === 'win32') {
-                cloudfoundryDeployCommand += ' ' + glob.sync(warFolder.trim() + '*.war')[0];
+                cloudfoundryDeployCommand += ` ${glob.sync(`${warFolder.trim()}*.war`)[0]}`;
             } else {
-                cloudfoundryDeployCommand += warFolder + '*.war';
+                cloudfoundryDeployCommand += `${warFolder}*.war`;
             }
 
             this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
@@ -149,8 +149,8 @@ module.exports = CloudFoundryGenerator.extend({
                     this.log.error(err);
                 }
                 this.log(chalk.green('\nYour app should now be live'));
-                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold(this.buildCmd)));
-                this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(cloudfoundryDeployCommand)));
+                this.log(chalk.yellow(`After application modification, repackage it with\n\t${chalk.bold(this.buildCmd)}`));
+                this.log(chalk.yellow(`And then re-deploy it with\n\t${chalk.bold(cloudfoundryDeployCommand)}`));
                 done();
             });
 
@@ -163,9 +163,9 @@ module.exports = CloudFoundryGenerator.extend({
             if (this.abort || !this.cloudfoundry_remote_exists) return;
             this.log(chalk.bold('\nRestarting your cloudfoundry app.\n'));
 
-            exec('cf restart ' + this.cloudfoundryDeployedName, (err, stdout, stderr) => {
+            exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
                 this.log(chalk.green('\nYour app should now be live'));
-                this.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('gulp deploycloudfoundry')));
+                this.log(chalk.yellow(`After application modification, re-deploy it with\n\t${chalk.bold('gulp deploycloudfoundry')}`));
             });
         }
     }
