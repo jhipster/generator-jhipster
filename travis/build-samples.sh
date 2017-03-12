@@ -11,7 +11,7 @@ function ctrl_c() {
 function usage() {
     me=$(basename "$0")
     echo
-    echo "Usage: $me build|clean [sample_name]"
+    echo "Usage: $me generate|build|clean [sample_name]"
     echo
     exit 2
 }
@@ -19,47 +19,30 @@ function usage() {
 function generateProject() {
     dir=$1
     JHIPSTER=$dir
-    APP_FOLDER="$JHIPSTER_SAMPLES/$dir"
-    echo "*********************** Copying entities for $dir"
+    APP_FOLDER="$JHIPSTER_SAMPLES/$dir-sample"
+    UAA_APP_FOLDER="$JHIPSTER_SAMPLES/$uaa-sample"
+    echo "*********************** Copying entities for $dir-sample"
     source ./scripts/01-generate-entities.sh
-    echo "*********************** Building $dir"
-    pushd "$APP_FOLDER"
-    yarn link generator-jhipster
-    yo jhipster --force --no-insight --skip-checks --with-entities --debug
-    popd
+    echo "*********************** Building $dir-sample"
+    source ./scripts/02-generate-project.sh
+    cd "$mydir"
 }
 
 function buildProject() {
     dir=$1
     JHIPSTER=$dir
-    APP_FOLDER="$JHIPSTER_SAMPLES/$dir"
+    APP_FOLDER="$JHIPSTER_SAMPLES/$dir-sample"
+    UAA_APP_FOLDER="$JHIPSTER_SAMPLES/$uaa-sample"
     generateProject "$1"
-    pushd "$APP_FOLDER"
-    echo "*********************** Testing $dir"
-    if [ -f "mvnw" ]; then
-        ./mvnw test \
-            -Dlogging.level.io.github.jhipster.sample=ERROR \
-            -Dlogging.level.io.github.jhipster.travis=ERROR
-    elif [ -f "gradlew" ]; then
-        ./gradlew test \
-            -Dlogging.level.io.github.jhipster.sample=ERROR \
-            -Dlogging.level.io.github.jhipster.travis=ERROR
-    fi
-    if [ -f "gulpfile.js" ]; then
-        gulp test --no-notification
-    fi
-    if [ -f "tsconfig.json" ]; then
-        yarn run test
-    fi
-    popd
+    echo "*********************** Testing $dir-sample"
+    source ./scripts/04-tests.sh
+    cd "$mydir"
 }
 
 function cleanProject() {
     dir=$1
     echo "*********************** Cleaning $dir"
-    pushd "$JHIPSTER_SAMPLES/$dir"
-    ls -a | grep -v .yo-rc.json | xargs rm -rf | true
-    popd
+    rm -rf "$JHIPSTER_SAMPLES/$dir"
 }
 
 mydir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -91,13 +74,13 @@ elif [ "$1" = "generate" ]; then
     fi
 elif [ "$1" = "clean" ]; then
     if [ "$2" != "" ]; then
-        cleanProject "$2"
+        cleanProject "$2-sample"
     else
         for dir in $(ls -1 "$JHIPSTER_SAMPLES"); do
-            if [ -f "$JHIPSTER_SAMPLES/$dir/.yo-rc.json" ]; then
-                cleanProject "$dir"
+            if [ -f "$JHIPSTER_SAMPLES/$dir-sample/.yo-rc.json" ]; then
+                cleanProject "$dir-sample"
             else
-                echo "$dir: Not a JHipster project. Skipping"
+                echo "$dir-sample: Not a JHipster project. Skipping"
             fi
         done
     fi
