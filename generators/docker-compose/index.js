@@ -1,17 +1,17 @@
 'use strict';
-var generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    shelljs = require('shelljs'),
-    crypto = require('crypto'),
-    _ = require('lodash'),
-    jsyaml = require('js-yaml'),
-    pathjs = require('path'),
-    util = require('util'),
-    prompts = require('./prompts'),
-    writeFiles = require('./files').writeFiles,
-    scriptBase = require('../generator-base');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const shelljs = require('shelljs');
+const crypto = require('crypto');
+const _ = require('lodash');
+const jsyaml = require('js-yaml');
+const pathjs = require('path');
+const util = require('util');
+const prompts = require('./prompts');
+const writeFiles = require('./files').writeFiles;
+const scriptBase = require('../generator-base');
 
-var DockerComposeGenerator = generators.Base.extend({});
+const DockerComposeGenerator = generator.extend({});
 
 util.inherits(DockerComposeGenerator, scriptBase);
 
@@ -19,7 +19,7 @@ const constants = require('../generator-constants');
 
 module.exports = DockerComposeGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
     },
 
     initializing: {
@@ -28,7 +28,7 @@ module.exports = DockerComposeGenerator.extend({
             this.log(chalk.white('Files will be generated in folder: ' + chalk.yellow(this.destinationRoot())));
         },
 
-        setupServerVars: function () {
+        setupServerconsts: function () {
             // Make constants available in templates
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
             this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
@@ -44,16 +44,16 @@ module.exports = DockerComposeGenerator.extend({
         },
 
         checkDocker: function() {
-            var done = this.async();
+            const done = this.async();
 
-            shelljs.exec('docker -v', {silent:true}, function(code, stdout, stderr) {
+            shelljs.exec('docker -v', {silent:true}, (code, stdout, stderr) => {
                 if (stderr) {
                     this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
                         '         Read http://docs.docker.com/engine/installation/#installation\n'));
                 } else {
-                    var dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-                    var dockerVersionMajor = dockerVersion.split('.')[0];
-                    var dockerVersionMinor = dockerVersion.split('.')[1];
+                    const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
+                    const dockerVersionMajor = dockerVersion.split('.')[0];
+                    const dockerVersionMinor = dockerVersion.split('.')[1];
                     if ( dockerVersionMajor < 1 || ( dockerVersionMajor === 1 && dockerVersionMinor < 10 )) {
                         this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n' +
                             '         Docker version found: ' + dockerVersion + '\n' +
@@ -61,20 +61,20 @@ module.exports = DockerComposeGenerator.extend({
                     }
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         checkDockerCompose: function() {
-            var done = this.async();
+            const done = this.async();
 
-            shelljs.exec('docker-compose -v', {silent:true}, function(code, stdout, stderr) {
+            shelljs.exec('docker-compose -v', {silent:true}, (code, stdout, stderr) => {
                 if (stderr) {
                     this.log(chalk.red('Docker Compose 1.6.0 or later is not installed on your computer.\n' +
                         '         Read https://docs.docker.com/compose/install/\n'));
                 } else {
-                    var composeVersion = stdout.split(' ')[2].replace(/,/g, '');
-                    var composeVersionMajor = composeVersion.split('.')[0];
-                    var composeVersionMinor = composeVersion.split('.')[1];
+                    const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
+                    const composeVersionMajor = composeVersion.split('.')[0];
+                    const composeVersionMinor = composeVersion.split('.')[1];
                     if ( composeVersionMajor < 1 || ( composeVersionMajor === 1 && composeVersionMinor < 6 )) {
                         this.log(chalk.red('Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
                             '         Docker Compose version found: ' + composeVersion + '\n' +
@@ -82,7 +82,7 @@ module.exports = DockerComposeGenerator.extend({
                     }
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         loadConfig: function() {
@@ -107,23 +107,17 @@ module.exports = DockerComposeGenerator.extend({
 
     prompting: {
         askForApplicationType: prompts.askForApplicationType,
-
         askForPath: prompts.askForPath,
-
         askForApps: prompts.askForApps,
-
         askForClustersMode: prompts.askForClustersMode,
-
         askForMonitoring: prompts.askForMonitoring,
-
         askForServiceDiscovery: prompts.askForServiceDiscovery,
-
         askForAdminPassword: prompts.askForAdminPassword
     },
 
     configuring: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'docker-compose');
         },
 
@@ -131,12 +125,12 @@ module.exports = DockerComposeGenerator.extend({
 
             this.log('\nChecking Docker images in applications\' directories...');
 
-            var imagePath = '';
-            var runCommand = '';
+            let imagePath = '';
+            let runCommand = '';
             this.warning = false;
             this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
-            this.appsFolders.forEach(function (appsFolder, index) {
-                var appConfig = this.appConfigs[index];
+            this.appsFolders.forEach((appsFolder, index) => {
+                const appConfig = this.appConfigs[index];
                 if (appConfig.buildTool === 'maven') {
                     imagePath = this.destinationPath(this.directoryPath + appsFolder + '/target/docker/' + _.kebabCase(appConfig.baseName) + '-*.war');
                     runCommand = './mvnw package -Pprod docker:build';
@@ -148,7 +142,7 @@ module.exports = DockerComposeGenerator.extend({
                     this.warning = true;
                     this.warningMessage += '  ' + chalk.cyan(runCommand) +  ' in ' + this.destinationPath(this.directoryPath + appsFolder) + '\n';
                 }
-            }, this);
+            });
         },
 
         generateJwtSecret: function() {
@@ -159,28 +153,28 @@ module.exports = DockerComposeGenerator.extend({
 
         setAppsFolderPaths: function() {
             this.appsFolderPaths = [];
-            this.appsFolders.forEach(function (appsFolder) {
-                var path = this.destinationPath(this.directoryPath + appsFolder);
+            this.appsFolders.forEach((appsFolder) => {
+                const path = this.destinationPath(this.directoryPath + appsFolder);
                 this.appsFolderPaths.push(path);
-            }, this);
+            });
         },
 
         setAppsYaml: function() {
             this.appsYaml = [];
 
-            var portIndex=8080;
-            this.appsFolders.forEach(function (appsFolder, index) {
-                var appConfig = this.appConfigs[index];
-                var lowercaseBaseName = appConfig.baseName.toLowerCase();
-                var parentConfiguration = {};
-                var path = this.destinationPath(this.directoryPath + appsFolder);
+            let portIndex=8080;
+            this.appsFolders.forEach((appsFolder, index) => {
+                const appConfig = this.appConfigs[index];
+                const lowercaseBaseName = appConfig.baseName.toLowerCase();
+                const parentConfiguration = {};
+                const path = this.destinationPath(this.directoryPath + appsFolder);
 
                 // Add application configuration
-                var yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
-                var yamlConfig = yaml.services[lowercaseBaseName + '-app'];
+                const yaml = jsyaml.load(this.fs.read(path + '/src/main/docker/app.yml'));
+                const yamlConfig = yaml.services[lowercaseBaseName + '-app'];
 
                 if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
-                    var ports = yamlConfig.ports[0].split(':');
+                    const ports = yamlConfig.ports[0].split(':');
                     ports[0] = portIndex;
                     yamlConfig.ports[0] = ports.join(':');
                     portIndex++;
@@ -207,39 +201,39 @@ module.exports = DockerComposeGenerator.extend({
                 parentConfiguration[lowercaseBaseName + '-app'] = yamlConfig;
 
                 // Add database configuration
-                var database = appConfig.prodDatabaseType;
+                const database = appConfig.prodDatabaseType;
                 if (database !== 'no') {
-                    var relativePath = '';
-                    var databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
-                    var databaseServiceName = lowercaseBaseName + '-' + database;
-                    var databaseYamlConfig = databaseYaml.services[databaseServiceName];
+                    let relativePath = '';
+                    const databaseYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + database + '.yml'));
+                    const databaseServiceName = lowercaseBaseName + '-' + database;
+                    let databaseYamlConfig = databaseYaml.services[databaseServiceName];
                     delete databaseYamlConfig.ports;
 
                     if (database === 'cassandra') {
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
 
                         // node config
-                        var cassandraClusterYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-cluster.yml'));
-                        var cassandraNodeConfig = cassandraClusterYaml.services[databaseServiceName + '-node'];
+                        const cassandraClusterYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-cluster.yml'));
+                        const cassandraNodeConfig = cassandraClusterYaml.services[databaseServiceName + '-node'];
                         parentConfiguration[databaseServiceName + '-node'] = cassandraNodeConfig;
 
                         // migration service config
-                        var cassandraMigrationYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-migration.yml'));
-                        var cassandraMigrationConfig = cassandraMigrationYaml.services[databaseServiceName + '-migration'];
+                        const cassandraMigrationYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/cassandra-migration.yml'));
+                        const cassandraMigrationConfig = cassandraMigrationYaml.services[databaseServiceName + '-migration'];
                         cassandraMigrationConfig.build.context = relativePath;
-                        var createKeyspaceScript = cassandraClusterYaml.services[databaseServiceName + '-migration'].environment[0];
+                        const createKeyspaceScript = cassandraClusterYaml.services[databaseServiceName + '-migration'].environment[0];
                         cassandraMigrationConfig.environment.push(createKeyspaceScript);
-                        var cqlFilesRelativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/resources/config/cql');
+                        const cqlFilesRelativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/resources/config/cql');
                         cassandraMigrationConfig['volumes'][0] = cqlFilesRelativePath + ':/cql:ro';
 
                         parentConfiguration[databaseServiceName + '-migration'] = cassandraMigrationConfig;
                     }
 
                     if (appConfig.clusteredDb) {
-                        var clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
+                        const clusterDbYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/mongodb-cluster.yml'));
                         relativePath = pathjs.relative(this.destinationRoot(), path + '/src/main/docker');
-                        var mongodbNodeConfig = clusterDbYaml.services[databaseServiceName + '-node'];
-                        var mongoDbConfigSrvConfig = clusterDbYaml.services[databaseServiceName + '-config'];
+                        const mongodbNodeConfig = clusterDbYaml.services[databaseServiceName + '-node'];
+                        const mongoDbConfigSrvConfig = clusterDbYaml.services[databaseServiceName + '-config'];
                         mongodbNodeConfig.build.context = relativePath;
                         databaseYamlConfig = clusterDbYaml.services[databaseServiceName];
                         delete databaseYamlConfig.ports;
@@ -250,24 +244,24 @@ module.exports = DockerComposeGenerator.extend({
                     parentConfiguration[databaseServiceName] = databaseYamlConfig;
                 }
                 // Add search engine configuration
-                var searchEngine = appConfig.searchEngine;
+                const searchEngine = appConfig.searchEngine;
                 if (searchEngine === 'elasticsearch') {
-                    var searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
-                    var searchEngineConfig = searchEngineYaml.services[lowercaseBaseName + '-' + searchEngine];
+                    const searchEngineYaml = jsyaml.load(this.fs.read(path + '/src/main/docker/' + searchEngine + '.yml'));
+                    const searchEngineConfig = searchEngineYaml.services[lowercaseBaseName + '-' + searchEngine];
                     delete searchEngineConfig.ports;
                     parentConfiguration[lowercaseBaseName + '-' + searchEngine] = searchEngineConfig;
                 }
                 // Add message broker support
-                var messageBroker = appConfig.messageBroker;
+                const messageBroker = appConfig.messageBroker;
                 if (messageBroker === 'kafka') {
                     this.useKafka = true;
                 }
                 // Dump the file
-                var yamlString = jsyaml.dump(parentConfiguration, {indent: 4});
+                let yamlString = jsyaml.dump(parentConfiguration, {indent: 4});
 
                 // Fix the output file which is totally broken!!!
-                var yamlArray = yamlString.split('\n');
-                for (var j = 0; j < yamlArray.length; j++) {
+                const yamlArray = yamlString.split('\n');
+                for (let j = 0; j < yamlArray.length; j++) {
                     yamlArray[j] = '    ' + yamlArray[j];
                     yamlArray[j] = yamlArray[j].replace(/\'/g, '');
                 }
@@ -275,7 +269,7 @@ module.exports = DockerComposeGenerator.extend({
                 yamlString = yamlString.replace('>-\n                ', '');
                 yamlString = yamlString.replace('>-\n                ', '');
                 this.appsYaml.push(yamlString);
-            }, this);
+            });
         },
 
         saveConfig: function() {
@@ -302,13 +296,13 @@ module.exports = DockerComposeGenerator.extend({
         this.log('You can launch all your infrastructure by running : ' + chalk.cyan('docker-compose up -d'));
         if (this.gatewayNb + this.monolithicNb > 1) {
             this.log('\nYour applications will be accessible on these URLs:');
-            var portIndex = 8080;
-            this.appConfigs.forEach(function (appConfig) {
+            let portIndex = 8080;
+            this.appConfigs.forEach((appConfig) => {
                 if(appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
                     this.log('\t- ' + appConfig.baseName + ':' + ' http://localhost:'+ portIndex);
                     portIndex++;
                 }
-            }, this);
+            });
             this.log('\n');
         }
     }

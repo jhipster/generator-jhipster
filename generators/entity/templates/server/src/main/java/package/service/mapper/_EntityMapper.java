@@ -15,9 +15,9 @@ public interface <%= entityClass %>Mapper {
 <%
 // entity -> DTO mapping
 for (idx in relationships) {
-    var relationshipType = relationships[idx].relationshipType;
-    var relationshipName = relationships[idx].relationshipName;
-    var ownerSide = relationships[idx].ownerSide;
+    const relationshipType = relationships[idx].relationshipType;
+    const relationshipName = relationships[idx].relationshipName;
+    const ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) {
     %>
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")<% if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized != '') { %>
@@ -28,10 +28,10 @@ for (idx in relationships) {
 <%
 // DTO -> entity mapping
 for (idx in relationships) {
-    var relationshipType = relationships[idx].relationshipType;
-    var relationshipName = relationships[idx].relationshipName;
-    var relationshipNamePlural = relationships[idx].relationshipNamePlural;
-    var ownerSide = relationships[idx].ownerSide;
+    const relationshipType = relationships[idx].relationshipType;
+    const relationshipName = relationships[idx].relationshipName;
+    const relationshipNamePlural = relationships[idx].relationshipNamePlural;
+    const ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { %>
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")<% } else if (relationshipType == 'many-to-many' && ownerSide == false) { %>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType == 'one-to-many') { %>
@@ -42,12 +42,12 @@ for (idx in relationships) {
     List<<%= entityClass %>> <%= entityInstance %>DTOsTo<%= entityClassPlural %>(List<<%= entityClass %>DTO> <%= entityInstance %>DTOs);<%
 
 // the user mapping is imported in the @Mapper annotation
-var existingMappings = ['user'];
+const existingMappings = ['user'];
 for (idx in relationships) {
-    var relationshipType = relationships[idx].relationshipType;
-    var otherEntityName = relationships[idx].otherEntityName;
-    var otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-    var ownerSide = relationships[idx].ownerSide;
+    const relationshipType = relationships[idx].relationshipType;
+    const otherEntityName = relationships[idx].otherEntityName;
+    const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+    const ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true) || (relationshipType == 'many-to-many' && ownerSide == true)) {
         // if the entity is mapped twice, we should implement the mapping once
         if (existingMappings.indexOf(otherEntityName) == -1) {

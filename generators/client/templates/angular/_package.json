@@ -103,6 +103,9 @@
     "node-sass": "4.5.0",
     "postcss-loader": "1.3.0",
     <%_ } _%>
+    <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_ }); _%>
     "yargs": "6.6.0"
   },
   "engines": {

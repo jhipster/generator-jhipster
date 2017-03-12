@@ -1,29 +1,30 @@
 'use strict';
-var util = require('util'),
-    shelljs = require('shelljs'),
-    generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    jhiCore = require('jhipster-core'),
-    scriptBase = require('../generator-base');
 
-var JDLGenerator = generators.Base.extend({});
+const util = require('util');
+const shelljs = require('shelljs');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const jhiCore = require('jhipster-core');
+const scriptBase = require('../generator-base');
+
+const JDLGenerator = generator.extend({});
 
 util.inherits(JDLGenerator, scriptBase);
 
 module.exports = JDLGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
         this.argument('jdlFiles', {type: Array, required: true});
-
+        this.jdlFiles = this.options.jdlFiles;
     },
 
     initializing: {
         validate: function () {
-            this.jdlFiles && this.jdlFiles.forEach(function (key) {
+            this.jdlFiles && this.jdlFiles.forEach((key) => {
                 if (!shelljs.test('-f', key)) {
-                    this.env.error(chalk.red(`\nCould not find ${ key }, make sure the path is correct!\n`));
+                    this.env.error(chalk.red(`\nCould not find ${key}, make sure the path is correct!\n`));
                 }
-            }, this);
+            });
         },
 
         getConfig: function () {
@@ -36,7 +37,7 @@ module.exports = JDLGenerator.extend({
             }
             this.clientPackageManager = this.config.get('clientPackageManager');
             if (!this.clientPackageManager) {
-                if (this.yarnInstall) {
+                if (this.useYarn) {
                     this.clientPackageManager = 'yarn';
                 } else {
                     this.clientPackageManager = 'npm';
@@ -47,15 +48,15 @@ module.exports = JDLGenerator.extend({
 
     default: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'import-jdl');
         },
 
         parseJDL: function () {
             this.log('The jdl is being parsed.');
             try {
-                var jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType);
-                var entities = jhiCore.convertToJHipsterJSON({
+                const jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType);
+                const entities = jhiCore.convertToJHipsterJSON({
                     jdlObject: jdlObject,
                     databaseType: this.prodDatabaseType
                 });
@@ -65,48 +66,40 @@ module.exports = JDLGenerator.extend({
                 this.log(e);
                 this.error('\nError while parsing entities from JDL\n');
             }
-
-
         },
 
         generateEntities: function () {
             this.log('Generating entities.');
             try {
-                this.getExistingEntities().forEach(function (entity) {
-                    this.composeWith('jhipster:entity', {
-                        options: {
-                            regenerate: true,
-                            'skip-install': true
-                        },
-                        args: [entity.name]
-                    }, {
-                        local: require.resolve('../entity')
+                this.getExistingEntities().forEach((entity) => {
+                    this.composeWith(require.resolve('../entity'), {
+                        regenerate: true,
+                        'skip-install': true,
+                        arguments: [entity.name]
                     });
-                }, this);
+                });
             } catch (e) {
-                this.error(`Error while generating entities from parsed JDL\n${ e }`);
+                this.error(`Error while generating entities from parsed JDL\n${e}`);
             }
-
         }
     },
 
     install: function () {
-        var injectJsFilesToIndex = function () {
+        const injectJsFilesToIndex = () => {
             this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
             this.spawnCommand('gulp', ['inject:app']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
-            injectJsFilesToIndex.call(this);
+            injectJsFilesToIndex();
         }
 
         // rebuild client for Angular
-        var rebuildClient = function () {
-            this.log('\n' + chalk.bold.green('Running `webpack:build:dev` to update client app\n'));
+        const rebuildClient = () => {
+            this.log(`\n${chalk.bold.green('Running `webpack:build:dev` to update client app')}\n`);
             this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
-            rebuildClient.call(this);
+            rebuildClient();
         }
     }
-
 });

@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 import { <%= entityAngularName %> } from './<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
-var hasDate = false;
+let hasDate = false;
 if (fieldsContainZonedDateTime || fieldsContainLocalDate) {
     hasDate = true;
 }

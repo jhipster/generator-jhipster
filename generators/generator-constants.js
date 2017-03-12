@@ -96,5 +96,4 @@ const constants = {
     DOCKER_JENKINS: DOCKER_JENKINS
 };
 
-
 module.exports = constants;

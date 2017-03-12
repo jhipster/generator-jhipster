@@ -1,10 +1,10 @@
 /*global describe, beforeEach, it*/
 'use strict';
 
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fse = require('fs-extra');
+const path = require('path');
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+const fse = require('fs-extra');
 
 const constants = require('../generators/generator-constants'),
     TEST_DIR = constants.TEST_DIR,
@@ -63,11 +63,11 @@ const expectedFiles = {
         TEST_DIR + 'gatling/simulations/FooGatlingTest.scala'
     ]
 };
-describe('JHipster generator entity for angular1', function () {
-    describe('no dto, no service, no pagination', function () {
-        beforeEach(function (done) {
+describe('JHipster generator entity for angular1', () => {
+    describe('no dto, no service, no pagination', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -81,7 +81,7 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file([
@@ -91,10 +91,10 @@ describe('JHipster generator entity for angular1', function () {
         });
     });
 
-    describe('with dto, no service, no pagination', function () {
-        beforeEach(function (done) {
+    describe('with dto, no service, no pagination', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -108,7 +108,7 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file([
@@ -118,10 +118,10 @@ describe('JHipster generator entity for angular1', function () {
         });
     });
 
-    describe('no dto, with serviceClass, no pagination', function () {
-        beforeEach(function (done) {
+    describe('no dto, with serviceClass, no pagination', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -135,7 +135,7 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file([
@@ -144,10 +144,10 @@ describe('JHipster generator entity for angular1', function () {
         });
     });
 
-    describe('no dto, with serviceImpl, no pagination', function () {
-        beforeEach(function (done) {
+    describe('no dto, with serviceImpl, no pagination', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -161,7 +161,7 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file([
@@ -171,10 +171,10 @@ describe('JHipster generator entity for angular1', function () {
         });
     });
 
-    describe('no dto, no service, with pager', function () {
-        beforeEach(function (done) {
+    describe('no dto, no service, with pager', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -188,16 +188,16 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
         });
     });
 
-    describe('no dto, no service, with pagination', function () {
-        beforeEach(function (done) {
+    describe('no dto, no service, with pagination', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -211,16 +211,16 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
         });
     });
 
-    describe('no dto, no service, with infinite-scroll', function () {
-        beforeEach(function (done) {
+    describe('no dto, no service, with infinite-scroll', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -234,16 +234,16 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
         });
     });
 
-    describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', function () {
-        beforeEach(function (done) {
+    describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir);
                 })
                 .withArguments(['foo'])
@@ -257,7 +257,7 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.noFile([
@@ -267,10 +267,10 @@ describe('JHipster generator entity for angular1', function () {
         });
     });
 
-    describe('with angulr suffix', function () {
-        beforeEach(function (done) {
+    describe('with angulr suffix', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -285,20 +285,20 @@ describe('JHipster generator entity for angular1', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
-            
+
             assert.file(expectedFiles.clientWithSuffix);
             assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');
         });
     });
 });
 
-describe('JHipster generator entity for angular2', function () {
-    describe('no dto, no service, no pagination', function () {
-        beforeEach(function (done) {
+describe('JHipster generator entity for angular2', () => {
+    describe('no dto, no service, no pagination', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -312,17 +312,17 @@ describe('JHipster generator entity for angular2', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
         });
     });
 
     // Enable these tests once migration is complete
-    /*describe('no dto, no service, with pagination', function () {
-        beforeEach(function (done) {
+    /*describe('no dto, no service, with pagination', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -336,16 +336,16 @@ describe('JHipster generator entity for angular2', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
         });
     });
 
-    describe('no dto, no service, with infinite-scroll', function () {
-        beforeEach(function (done) {
+    describe('no dto, no service, with infinite-scroll', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -359,16 +359,16 @@ describe('JHipster generator entity for angular2', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
         });
     });
 
-    describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', function () {
-        beforeEach(function (done) {
+    describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/noi18n-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -382,7 +382,7 @@ describe('JHipster generator entity for angular2', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.noFile([
@@ -392,10 +392,10 @@ describe('JHipster generator entity for angular2', function () {
         });
     });
 
-    describe('with angulr suffix', function () {
-        beforeEach(function (done) {
+    describe('with angulr suffix', () => {
+        beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir(function (dir) {
+                .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -410,7 +410,7 @@ describe('JHipster generator entity for angular2', function () {
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientWithSuffix);
             assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');

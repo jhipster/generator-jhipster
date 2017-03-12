@@ -1,25 +1,25 @@
 'use strict';
-const util = require('util'),
-    generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
-    scriptBase = require('../generator-base'),
-    prompts = require('./prompts'),
-    writeAngularFiles = require('./files-angular').writeFiles,
-    writeAngularJsFiles = require('./files-angularjs').writeFiles,
-    packagejs = require('../../package.json');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const _ = require('lodash');
+const scriptBase = require('../generator-base');
+const prompts = require('./prompts');
+const writeAngularFiles = require('./files-angular').writeFiles;
+const writeAngularJsFiles = require('./files-angularjs').writeFiles;
+const packagejs = require('../../package.json');
 
-var JhipsterClientGenerator = generators.Base.extend({});
+const JhipsterClientGenerator = generator.extend({});
 
 util.inherits(JhipsterClientGenerator, scriptBase);
 
-/* Constants use throughout */
-const constants = require('../generator-constants'),
-    QUESTIONS = constants.CLIENT_QUESTIONS;
+/* Constants used throughout */
+const constants = require('../generator-constants');
+const QUESTIONS = constants.CLIENT_QUESTIONS;
 
 module.exports = JhipsterClientGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         this.configOptions = this.options.configOptions || {};
 
@@ -119,8 +119,9 @@ module.exports = JhipsterClientGenerator.extend({
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;
         this.logo = this.configOptions.logo;
-        this.yarnInstall = this.configOptions.yarnInstall = !this.options['npm'];
+        this.useYarn = this.configOptions.useYarn = !this.options['npm'];
         this.clientPackageManager = this.configOptions.clientPackageManager;
+        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options['debug'];
     },
 
     initializing: {
@@ -130,7 +131,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
         },
 
-        setupClientVars: function () {
+        setupClientconsts: function () {
             // Make constants available in templates
             this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -151,12 +152,12 @@ module.exports = JhipsterClientGenerator.extend({
             this.languages = this.config.get('languages');
             this.messageBroker = this.config.get('messageBroker');
             this.packagejs = packagejs;
-            var baseName = this.config.get('baseName');
+            const baseName = this.config.get('baseName');
             if (baseName) {
                 this.baseName = baseName;
             }
 
-            var clientConfigFound = this.useSass !== undefined;
+            const clientConfigFound = this.useSass !== undefined;
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation === undefined) {
@@ -172,7 +173,7 @@ module.exports = JhipsterClientGenerator.extend({
                 this.existingProject = true;
             }
             if (!this.clientPackageManager) {
-                if (this.yarnInstall) {
+                if (this.useYarn) {
                     this.clientPackageManager = 'yarn';
                 } else {
                     this.clientPackageManager = 'npm';
@@ -199,7 +200,7 @@ module.exports = JhipsterClientGenerator.extend({
 
     configuring: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'client');
             insight.track('app/clientFramework', this.clientFramework);
             insight.track('app/useSass', this.useSass);
@@ -323,8 +324,9 @@ module.exports = JhipsterClientGenerator.extend({
                 'To install your dependencies manually, run: ' + chalk.yellow.bold(this.clientPackageManager + ' install & bower install');
         }
 
-        let injectDependenciesAndConstants = () => {
-            if (this.options['skip-install']) {
+        const injectDependenciesAndConstants = (err) => {
+            if (err) {
+                this.warning('Install of dependencies failed!');
                 this.log(logMsg);
             } else {
                 if (this.clientFramework === 'angular1') {
@@ -333,42 +335,17 @@ module.exports = JhipsterClientGenerator.extend({
             }
         };
 
-        let installConfig = {
-            bower: false,
-            npm: true,
+        const installConfig = {
+            bower: this.clientFramework === 'angular1',
+            npm: this.clientPackageManager !== 'yarn',
+            yarn: this.clientPackageManager === 'yarn',
             callback: injectDependenciesAndConstants
         };
 
-        if (this.clientFramework === 'angular1') {
-            installConfig = {
-                callback: injectDependenciesAndConstants
-            };
-        }
-
-        if (!this.options['skip-install']) {
-            if (this.clientPackageManager === 'yarn') {
-                var nbRetry = 0;
-                var maxRetry = 2;
-                do {
-                    if (nbRetry > 0) {
-                        this.warning('yarn install failed. Retrying to launch yarn: ' + nbRetry + '/' + maxRetry + ' retries.');
-                    }
-                    var result = this.spawnCommandSync('yarn');
-                    nbRetry++;
-                } while(result.status !== 0 && nbRetry <= maxRetry);
-                if (result.status !== 0) {
-                    this.error('yarn install failed.');
-                }
-                if (this.clientFramework === 'angular1') {
-                    this.spawnCommandSync('bower', ['install']);
-                }
-                injectDependenciesAndConstants();
-
-            } else if (this.clientPackageManager === 'npm') {
-                this.installDependencies(installConfig);
-            }
+        if (this.options['skip-install']) {
+            this.log(logMsg);
         } else {
-            injectDependenciesAndConstants();
+            this.installDependencies(installConfig);
         }
     },
 

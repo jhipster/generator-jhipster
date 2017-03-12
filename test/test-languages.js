@@ -1,17 +1,17 @@
 /*global describe, beforeEach, it*/
 'use strict';
 
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fse = require('fs-extra');
+const path = require('path');
+const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
+const fse = require('fs-extra');
 
 const constants = require('../generators/generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
-describe('JHipster generator languages', function () {
-    var languages = [
+describe('JHipster generator languages', () => {
+    const languages = [
         {name: 'Armenian', value: 'hy'},
         {name: 'Catalan', value: 'ca'},
         {name: 'Chinese (Simplified)', value: 'zh-cn'},
@@ -44,10 +44,10 @@ describe('JHipster generator languages', function () {
     ];
 
     languages.forEach( function(language) {
-        describe('no social - creates ' + language.name, function () {
-            beforeEach(function (done) {
+        describe('no social - creates ' + language.name, () => {
+            beforeEach((done) => {
                 helpers.run(require.resolve('../generators/languages'))
-                    .inTmpDir(function (dir) {
+                    .inTmpDir((dir) => {
                         fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                     })
                     .withOptions({'skip-install': true})
@@ -57,7 +57,7 @@ describe('JHipster generator languages', function () {
                     .on('end', done);
             });
 
-            it('creates expected files', function () {
+            it('creates expected files', () => {
                 assert.file([
                     CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/activate.json',
                     CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/audits.json',
@@ -79,12 +79,12 @@ describe('JHipster generator languages', function () {
                     SERVER_MAIN_RES_DIR + 'i18n/messages_' + language.value.replace('-','_') + '.properties'
                 ]);
             });
-            it('doesnt create social.json', function () {
+            it('doesnt create social.json', () => {
                 assert.noFile([
                     CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/social.json'
                 ]);
             });
-            it('contains 3 needles in global.json', function () {
+            it('contains 3 needles in global.json', () => {
                 assert.fileContent(CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
                     '"jhipster-needle-menu-add-element": \"JHipster will add additional menu entries here (do not translate!)"');
                 assert.fileContent(CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
@@ -96,10 +96,10 @@ describe('JHipster generator languages', function () {
     });
 
     languages.forEach( function(language) {
-        describe('with social - creates ' + language.name, function () {
-            beforeEach(function (done) {
+        describe('with social - creates ' + language.name, () => {
+            beforeEach((done) => {
                 helpers.run(require.resolve('../generators/languages'))
-                    .inTmpDir(function (dir) {
+                    .inTmpDir((dir) => {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir);
                     })
                     .withOptions({'skip-install': true})
@@ -109,7 +109,7 @@ describe('JHipster generator languages', function () {
                     .on('end', done);
             });
 
-            it('creates expected files', function () {
+            it('creates expected files', () => {
                 assert.file([
                     CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/activate.json',
                     CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/audits.json',

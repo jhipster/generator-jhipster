@@ -19,9 +19,9 @@ if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     ls -al "$HOME"/uaa
 fi
 
-mkdir -p "$HOME"/app
-mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$HOME"/app/
-cd "$HOME"/app
+mkdir -p "$APP_FOLDER"
+mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
+cd "$APP_FOLDER"
 yarn link generator-jhipster
 yo jhipster --force --no-insight --skip-checks --with-entities
-ls -al "$HOME"/app
+ls -al "$APP_FOLDER"

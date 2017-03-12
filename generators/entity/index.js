@@ -1,27 +1,27 @@
 'use strict';
-const util = require('util'),
-    generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    _ = require('lodash'),
-    shelljs = require('shelljs'),
-    pluralize = require('pluralize'),
-    prompts = require('./prompts'),
-    jhiCore = require('jhipster-core'),
-    writeFiles = require('./files').writeFiles,
-    scriptBase = require('../generator-base');
+const util = require('util');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const _ = require('lodash');
+const shelljs = require('shelljs');
+const pluralize = require('pluralize');
+const prompts = require('./prompts');
+const jhiCore = require('jhipster-core');
+const writeFiles = require('./files').writeFiles;
+const scriptBase = require('../generator-base');
 
 /* constants used throughout */
 const constants = require('../generator-constants'),
     SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
 
-var EntityGenerator = generators.Base.extend({});
+const EntityGenerator = generator.extend({});
 
 util.inherits(EntityGenerator, scriptBase);
 
 module.exports = EntityGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         // This makes `name` a required argument.
         this.argument('name', {
@@ -69,6 +69,8 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
+
+        this.name = this.options.name;
         // remove extension if feeding json files
         if (this.name !== undefined) {
             this.name = this.name.replace('.json', '');
@@ -80,17 +82,18 @@ module.exports = EntityGenerator.extend({
         this.entityNameCapitalized = _.upperFirst(this.name);
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
+        this.isDebugEnabled = this.options['debug'];
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
         this.rootDir = this.destinationRoot();
-        // enum-specific vars
+        // enum-specific consts
         this.enums = [];
 
         this.existingEnum = false;
 
         this.fieldNamesUnderscored = ['id'];
-        // these variable will hold field and relationship names for question options during update
+        // these constiable will hold field and relationship names for question options during update
         this.fieldNameChoices = [];
         this.relNameChoices = [];
     },
@@ -129,7 +132,7 @@ module.exports = EntityGenerator.extend({
             }
             this.clientPackageManager = this.config.get('clientPackageManager');
             if (!this.clientPackageManager) {
-                if (this.yarnInstall) {
+                if (this.useYarn) {
                     this.clientPackageManager = 'yarn';
                 } else {
                     this.clientPackageManager = 'npm';
@@ -170,8 +173,8 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        setupVars: function () {
-            // Specific Entity sub-generator variables
+        setupconsts: function () {
+            // Specific Entity sub-generator constiables
             if (!this.useConfigurationFile) {
                 //no file present, new entity creation
                 this.log(`\nThe entity ${ this.name } is being created.\n`);
@@ -189,7 +192,7 @@ module.exports = EntityGenerator.extend({
         },
 
         validateTableName: function () {
-            var prodDatabaseType = this.prodDatabaseType;
+            const prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
                 this.error(chalk.red('The table name cannot contain special characters'));
             } else if (this.entityTableName === '') {
@@ -226,13 +229,13 @@ module.exports = EntityGenerator.extend({
             this.warning(`entityTableName is missing in .jhipster/${ this.name }.json, using entity name as fallback`);
             this.entityTableName = this.getTableName(this.name);
         }
-        this.fields && this.fields.forEach(function (field) {
+        this.fields && this.fields.forEach((field) => {
             this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             this.fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
-        }, this);
-        this.relationships && this.relationships.forEach(function (rel) {
+        });
+        this.relationships && this.relationships.forEach((rel) => {
             this.relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
-        }, this);
+        });
         if (this.fileData.angularJSSuffix !== undefined){
             this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
         }
@@ -273,8 +276,8 @@ module.exports = EntityGenerator.extend({
                 return;
             }
             // Validate entity json field content
-            for (var idx in this.fields) {
-                var field = this.fields[idx];
+            for (const idx in this.fields) {
+                const field = this.fields[idx];
                 if (_.isUndefined(field.fieldName)) {
                     this.error(chalk.red(`fieldName is missing in .jhipster/${ this.name }.json for field ${ JSON.stringify(field, null, 4) }`));
                 }
@@ -287,8 +290,8 @@ module.exports = EntityGenerator.extend({
                     if (!_.isArray(field.fieldValidateRules)) {
                         this.error(chalk.red(`fieldValidateRules is not an array in .jhipster/${ this.name }.json for field ${ JSON.stringify(field, null, 4) }`));
                     }
-                    for (var idxRules in field.fieldValidateRules) {
-                        var fieldValidateRule = field.fieldValidateRules[idxRules];
+                    for (const idxRules in field.fieldValidateRules) {
+                        const fieldValidateRule = field.fieldValidateRules[idxRules];
                         if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
                             this.error(chalk.red(`fieldValidateRules contains unknown validation rule ${ fieldValidateRule } in .jhipster/${ this.name }.json for field ${ JSON.stringify(field, null, 4) } [supported validation rules ${ SUPPORTED_VALIDATION_RULES }]`));
                         }
@@ -318,8 +321,8 @@ module.exports = EntityGenerator.extend({
             }
 
             // Validate entity json relationship content
-            for (idx in this.relationships) {
-                var relationship = this.relationships[idx];
+            for (const idx in this.relationships) {
+                const relationship = this.relationships[idx];
                 if (_.isUndefined(relationship.relationshipName)) {
                     relationship.relationshipName = relationship.otherEntityName;
                     this.warning(`relationshipName is missing in .jhipster/${ this.name }.json for relationship ${ JSON.stringify(relationship, null, 4) }, using ${ relationship.otherEntityName } as fallback`);
@@ -354,7 +357,7 @@ module.exports = EntityGenerator.extend({
             // Validate root entity json content
             if (_.isUndefined(this.changelogDate)
                 && (this.databaseType === 'sql' || this.databaseType === 'cassandra')) {
-                var currentDate = this.dateFormatForLiquibase();
+                const currentDate = this.dateFormatForLiquibase();
                 this.warning(`changelogDate is missing in .jhipster/${ this.name }.json, using ${ currentDate } as fallback`);
                 this.changelogDate = currentDate;
             }
@@ -413,8 +416,8 @@ module.exports = EntityGenerator.extend({
         },
 
         loadInMemoryData: function () {
-            var entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
-            var entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
+            const entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
+            const entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
 
             this.entityClass = this.entityNameCapitalized;
             this.entityClassHumanized = _.startCase(this.entityNameCapitalized);
@@ -450,14 +453,14 @@ module.exports = EntityGenerator.extend({
             this.differentRelationships = [];
 
             // Load in-memory data for fields
-            this.fields && this.fields.forEach( function (field) {
+            this.fields && this.fields.forEach((field) => {
                 // Migration from JodaTime to Java Time
                 if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                     field.fieldType = 'ZonedDateTime';
                 }
-                var fieldType = field.fieldType;
+                const fieldType = field.fieldType;
 
-                var nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
+                const nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
                     'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'], fieldType);
                 if ((this.databaseType === 'sql' || this.databaseType === 'mongodb') && !nonEnumType) {
                     field.fieldIsEnum = true;
@@ -481,8 +484,8 @@ module.exports = EntityGenerator.extend({
                     // Handle the specific case when the second letter is capitalized
                     // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
                     if (field.fieldName.length > 1) {
-                        var firstLetter = field.fieldName.charAt(0);
-                        var secondLetter = field.fieldName.charAt(1);
+                        const firstLetter = field.fieldName.charAt(0);
+                        const secondLetter = field.fieldName.charAt(1);
                         if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
                             field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
                         } else {
@@ -517,10 +520,10 @@ module.exports = EntityGenerator.extend({
                 if (field.fieldValidate) {
                     this.validation = true;
                 }
-            }, this);
+            });
 
             // Load in-memory data for relationships
-            this.relationships && this.relationships.forEach( function (relationship) {
+            this.relationships && this.relationships.forEach((relationship) => {
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }
@@ -549,7 +552,9 @@ module.exports = EntityGenerator.extend({
                     relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
                 }
 
-                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) || (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
+                if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' ||
+                    (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
+                    (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
                     relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                 }
 
@@ -582,7 +587,7 @@ module.exports = EntityGenerator.extend({
 
                 if (_.isUndefined(relationship.otherEntityAngularName)) {
                     if (relationship.otherEntityNameCapitalized !== 'User') {
-                        var otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
+                        const otherEntityAngularSuffix = otherEntityData ? otherEntityData.angularJSSuffix || '' : '';
                         relationship.otherEntityAngularName = _.upperFirst(relationship.otherEntityName) + _.upperFirst(_.camelCase(otherEntityAngularSuffix));
                     } else {
                         relationship.otherEntityAngularName = 'User';
@@ -626,12 +631,12 @@ module.exports = EntityGenerator.extend({
                     relationship.relationshipValidate = relationship.relationshipRequired = this.validation = true;
                 }
 
-                var entityType = relationship.otherEntityNameCapitalized;
+                const entityType = relationship.otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) === -1) {
                     this.differentTypes.push(entityType);
                     this.differentRelationships.push(relationship);
                 }
-            }, this);
+            });
 
             if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
                 this.pkType = 'String';
@@ -642,7 +647,7 @@ module.exports = EntityGenerator.extend({
 
         insight: function () {
             // track insights
-            var insight = this.insight();
+            const insight = this.insight();
 
             insight.trackWithEvent('generator', 'entity');
             insight.track('entity/fields', this.fields.length);
@@ -657,32 +662,32 @@ module.exports = EntityGenerator.extend({
     writing : writeFiles(),
 
     install: function () {
-        var injectJsFilesToIndex = function () {
+        const injectJsFilesToIndex = () => {
             this.log('\n' + chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n'));
             this.spawnCommand('gulp', ['inject:app']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular1') {
-            injectJsFilesToIndex.call(this);
+            injectJsFilesToIndex();
         }
 
         // rebuild client for Angular
-        var rebuildClient = function () {
+        const rebuildClient = () => {
             this.log('\n' + chalk.bold.green('Running `webpack:build:dev` to update client app\n'));
             this.spawnCommand(this.clientPackageManager, ['run', 'webpack:build:dev']);
         };
         if (!this.options['skip-install'] && !this.skipClient && this.clientFramework === 'angular2') {
-            rebuildClient.call(this);
+            rebuildClient();
         }
     },
 
     end: {
         afterRunHook: function () {
             try {
-                var modules = this.getModuleHooks();
+                const modules = this.getModuleHooks();
                 if (modules.length > 0) {
                     this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // form the data to be passed to modules
-                    var entityConfig = {
+                    const entityConfig = {
                         jhipsterConfigDirectory: this.jhipsterConfigDirectory,
                         filename: this.filename,
                         data: this.data || this.fileData,

@@ -2,7 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { <%= angular2AppName %>SharedModule } from '../../shared';
-<%_ for (var rel of differentRelationships) {
+<%_ for (const rel of differentRelationships) {
        if (rel.otherEntityNameCapitalized === 'User') { _%>
 import { <%= angular2AppName %>AdminModule } from '../../admin/admin.module';
 <%_ }} _%>
@@ -31,7 +31,7 @@ let ENTITY_STATES = [
 @NgModule({
     imports: [
         <%= angular2AppName %>SharedModule,
-        <%_ for (var rel of differentRelationships) {
+        <%_ for (const rel of differentRelationships) {
               if (rel.otherEntityNameCapitalized === 'User') { _%>
         <%= angular2AppName %>AdminModule,
         <%_ }} _%>
