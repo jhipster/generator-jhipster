@@ -161,7 +161,7 @@ function askModulesToBeInstalled(done, generator) {
                 prompt.otherModules.forEach((module) => {
                     generator.otherModules.push({name:module.name, version:module.version});
                 });
-                generator.configOptions.otherModules = this.otherModules;
+                generator.configOptions.otherModules = generator.otherModules;
                 done();
             });
         } else {
