@@ -25,8 +25,8 @@ ajv-keywords@^1.0.0:
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-1.5.1.tgz#314dd0a4b3368fad3dfcdc54ede6171b886daf3c"
 
 ajv@^4.7.0, ajv@^4.9.1:
-  version "4.11.4"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.4.tgz#ebf3a55d4b132ea60ff5847ae85d2ef069960b45"
+  version "4.11.5"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.5.tgz#b6ee74657b993a01dce44b7944d56f485828d5bd"
   dependencies:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
@@ -530,8 +530,8 @@ debug@2.2.0:
     ms "0.7.1"
 
 debug@^2.0.0, debug@^2.1.0, debug@^2.1.1, debug@^2.2.0:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.1.tgz#79855090ba2c4e3115cc7d8769491d58f0491351"
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.2.tgz#dfa96a861ee9b8c2f29349b3bcc41aa599a71e0f"
   dependencies:
     ms "0.7.2"
 
@@ -1187,7 +1187,7 @@ har-schema@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/har-schema/-/har-schema-1.0.5.tgz#d263135f43307c02c602afc8fe95970c0151369e"
 
-har-validator@~4.2.0:
+har-validator@~4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/har-validator/-/har-validator-4.2.1.tgz#33481d0f1bbff600dd203d75812a6a5fba002e2a"
   dependencies:
@@ -2205,9 +2205,9 @@ punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-qs@~6.3.0:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.3.2.tgz#e75bd5f6e268122a2a0e0bda630b2550c166502c"
+qs@~6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
 randexp@0.4.5:
   version "0.4.5"
@@ -2345,8 +2345,8 @@ replace-ext@^1.0.0:
   resolved "https://registry.yarnpkg.com/replace-ext/-/replace-ext-1.0.0.tgz#de63128373fcbf7c3ccfa4de5a480c45a67958eb"
 
 request@^2.40.0, request@^2.74.0:
-  version "2.80.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.80.0.tgz#8cc162d76d79381cdefdd3505d76b80b60589bd0"
+  version "2.81.0"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.81.0.tgz#c6928946a0e06c5f8d6f8a9333469ffda46298a0"
   dependencies:
     aws-sign2 "~0.6.0"
     aws4 "^1.2.1"
@@ -2355,7 +2355,7 @@ request@^2.40.0, request@^2.74.0:
     extend "~3.0.0"
     forever-agent "~0.6.1"
     form-data "~2.1.1"
-    har-validator "~4.2.0"
+    har-validator "~4.2.1"
     hawk "~3.1.3"
     http-signature "~1.1.0"
     is-typedarray "~1.0.0"
@@ -2364,10 +2364,11 @@ request@^2.40.0, request@^2.74.0:
     mime-types "~2.1.7"
     oauth-sign "~0.8.1"
     performance-now "^0.2.0"
-    qs "~6.3.0"
+    qs "~6.4.0"
+    safe-buffer "^5.0.1"
     stringstream "~0.0.4"
     tough-cookie "~2.3.0"
-    tunnel-agent "~0.4.1"
+    tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
 require-uncached@^1.0.2:
@@ -2639,7 +2640,7 @@ sudo-block@^1.1.0:
     is-docker "^1.0.0"
     is-root "^1.0.0"
 
-supports-color@3.1.2, supports-color@^3.1.2:
+supports-color@3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-3.1.2.tgz#72a262894d9d408b956ca05ff37b2ed8a6e2a2d5"
   dependencies:
@@ -2648,6 +2649,12 @@ supports-color@3.1.2, supports-color@^3.1.2:
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
+
+supports-color@^3.1.2:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-3.2.3.tgz#65ac0504b3954171d8a64946b2ae3cbb8a5f54f6"
+  dependencies:
+    has-flag "^1.0.0"
 
 table@^3.7.8:
   version "3.8.3"
@@ -2733,9 +2740,11 @@ tryit@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tryit/-/tryit-1.0.3.tgz#393be730a9446fd1ead6da59a014308f36c289cb"
 
-tunnel-agent@~0.4.1:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.4.3.tgz#6373db76909fe570e08d73583365ed828a74eeeb"
+tunnel-agent@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
+  dependencies:
+    safe-buffer "^5.0.1"
 
 tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
@@ -2932,8 +2941,8 @@ xtend@^4.0.0, xtend@~4.0.0, xtend@~4.0.1:
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 
 yallist@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.0.0.tgz#306c543835f09ee1a4cb23b7bce9ab341c91cdd4"
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.0.1.tgz#6c11279640abd6ed0a86dd32ed56b03caa9df4f1"
 
 yeoman-assert@3.0.0:
   version "3.0.0"

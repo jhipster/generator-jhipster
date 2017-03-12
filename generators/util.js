@@ -15,27 +15,29 @@ module.exports = {
     classify,
     rewriteJSONFile,
     copyWebResource,
+    renderContent,
+    deepFind,
     getJavadoc
 };
 
-function rewriteFile(args, _this) {
+function rewriteFile(args, generator) {
     args.path = args.path || process.cwd();
     const fullPath = path.join(args.path, args.file);
 
-    args.haystack = _this.fs.read(fullPath);
+    args.haystack = generator.fs.read(fullPath);
     const body = rewrite(args);
-    _this.fs.write(fullPath, body);
+    generator.fs.write(fullPath, body);
 }
 
-function replaceContent(args, _this) {
+function replaceContent(args, generator) {
     args.path = args.path || process.cwd();
     const fullPath = path.join(args.path, args.file);
 
     const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
-    let body = _this.fs.read(fullPath);
+    let body = generator.fs.read(fullPath);
     body = body.replace(re, args.content);
-    _this.fs.write(fullPath, body);
+    generator.fs.write(fullPath, body);
 }
 
 function escapeRegExp(str) {
@@ -83,67 +85,65 @@ function classify(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function rewriteJSONFile(filePath, rewriteFile, _this) {
-    const jsonObj = _this.fs.readJSON(filePath);
-    rewriteFile(jsonObj, _this);
-    _this.fs.writeJSON(filePath, jsonObj, null, 4);
+function rewriteJSONFile(filePath, rewriteFile, generator) {
+    const jsonObj = generator.fs.readJSON(filePath);
+    rewriteFile(jsonObj, generator);
+    generator.fs.writeJSON(filePath, jsonObj, null, 4);
 }
 
-function copyWebResource(source, dest, regex, type, generator, opt, template) {
-    const _this = generator || this;
-    const _opt = opt || {};
-    if (_this.enableTranslation) {
-        _this.template(source, dest, _this, _opt);
+function copyWebResource(source, dest, regex, type, generator, opt = {}, template) {
+    if (generator.enableTranslation) {
+        generator.template(source, dest, generator, opt);
     } else {
-        stripContent(source, regex, _this, _opt, (body) => {
+        renderContent(source, generator, generator, opt, (body) => {
+            body = body.replace(regex, '');
             switch (type) {
             case 'html' :
-                body = replacePlaceholders(body, _this);
+                body = replacePlaceholders(body, generator);
                 break;
             case 'js' :
-                body = replaceTitle(body, _this);
+                body = replaceTitle(body, generator);
                 break;
             }
-            _this.fs.write(dest, body);
+            generator.fs.write(dest, body);
         });
     }
 }
 
-function stripContent(source, regex, _this, _opt, cb) {
-    ejs.renderFile(_this.templatePath(source), _this, _opt, (err, res) => {
+function renderContent(source, generator, context, options, cb) {
+    ejs.renderFile(generator.templatePath(source), context, options, (err, res) => {
         if(!err) {
-            res = res.replace(regex, '');
             cb(res);
         } else {
-            _this.error(`Copying template ${source} failed. [${err}]`);
+            generator.error(`Copying template ${source} failed. [${err}]`);
         }
     });
 }
 
-function replaceTitle(body, _this) {
+function replaceTitle(body, generator) {
     const re = /pageTitle[\s]*:[\s]*[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"]/g;
     let match;
 
     while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         const key = match[1], target = key;
-        const jsonData = geti18nJson(key, _this);
+        const jsonData = geti18nJson(key, generator);
         const keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
 
-        body = body.replace(target, keyValue !== undefined ? keyValue : _this.baseName);
+        body = body.replace(target, keyValue !== undefined ? keyValue : generator.baseName);
     }
 
     return body;
 }
 
-function replacePlaceholders(body, _this) {
+function replacePlaceholders(body, generator) {
     const re = /placeholder=[\'|\"]([\{]{2}[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"][\s][\|][\s](translate)[\}]{2})[\'|\"]/g;
     let match;
 
     while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
         const key = match[2], target = match[1];
-        const jsonData = geti18nJson(key, _this);
+        const jsonData = geti18nJson(key, generator);
         const keyValue = jsonData !== undefined ? deepFind(jsonData, key, true) : undefined; // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
 
         body = body.replace(target, keyValue !== undefined ? keyValue : '');
@@ -152,26 +152,26 @@ function replacePlaceholders(body, _this) {
     return body;
 }
 
-function geti18nJson(key, _this) {
+function geti18nJson(key, generator) {
 
     const i18nDirectory = LANGUAGES_MAIN_SRC_DIR + 'i18n/en/';
     const name = _.kebabCase(key.split('.')[0]);
     let filename = i18nDirectory + name + '.json';
     let render;
 
-    if (!shelljs.test('-f', path.join(_this.sourceRoot(), filename))) {
+    if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
         filename = i18nDirectory + '_' + name + '.json';
         render = true;
     }
     try {
-        let file = html.readFileAsString(path.join(_this.sourceRoot(), filename));
+        let file = html.readFileAsString(path.join(generator.sourceRoot(), filename));
 
-        file = render ? ejs.render(file, _this, {}) : file;
+        file = render ? ejs.render(file, generator, {}) : file;
         file = JSON.parse(file);
         return file;
     } catch (err) {
-        _this.log(err);
-        _this.log('Error in file: ' + filename);
+        generator.log(err);
+        generator.log('Error in file: ' + filename);
         // 'Error reading translation file!'
         return undefined;
     }

@@ -13,7 +13,6 @@ const exec = require('child_process').exec;
 const os = require('os');
 const https = require('https');
 const pluralize = require('pluralize');
-const ejs = require('ejs');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
@@ -1031,10 +1030,9 @@ module.exports = class extends Generator {
      * @param {object} opt - options that can be passed to template method
      * @param {boolean} template - flag to use template method instead of copy method
      */
-    copyTemplate(source, dest, action, generator, opt, template) {
+    copyTemplate(source, dest, action, generator, opt = {}, template) {
 
         const _this = generator || this;
-        const _opt = opt || {};
         let regex;
         switch (action) {
         case 'stripHtml' :
@@ -1045,7 +1043,7 @@ module.exports = class extends Generator {
                 /( translate-value-max\="[0-9\{\}\(\)\|]*")/,                                   // translate-value-max
             ].map(r => r.source).join('|'), 'g');
 
-            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
+            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
             break;
         case 'stripJs' :
             regex= new RegExp([
@@ -1056,13 +1054,13 @@ module.exports = class extends Generator {
                 /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'\"a-zA-Z0-9\-_,\s]+\]\)\;[\s]*)/,// jhiLanguageService invocations
             ].map(r => r.source).join('|'), 'g');
 
-            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
+            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
             break;
         case 'copy' :
             _this.copy(source, dest);
             break;
         default:
-            _this.template(source, dest, _this, _opt);
+            _this.template(source, dest, _this, opt);
         }
     }
 
@@ -2019,12 +2017,8 @@ module.exports = class extends Generator {
     template(source, destination, generator, options = {}, context) {
         const _this = generator || this;
         const _context = context || _this;
-        ejs.renderFile(_this.templatePath(source), _context, options, (err, res) => {
-            if(!err) {
-                _this.fs.write(_this.destinationPath(destination), res);
-            } else {
-                _this.error(`Copying template ${source} failed. [${err}]`);
-            }
+        jhipsterUtils.renderContent(source, _this, _context, options, (res) => {
+            _this.fs.write(_this.destinationPath(destination), res);
         });
     }
 
