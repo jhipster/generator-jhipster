@@ -25,7 +25,7 @@ function generateProject() {
     echo "*********************** Building $dir"
     pushd "$APP_FOLDER"
     yarn link generator-jhipster
-    yo jhipster --force --no-insight --skip-checks --with-entities
+    yo jhipster --force --no-insight --skip-checks --with-entities --debug
     popd
 }
 

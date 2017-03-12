@@ -13,6 +13,7 @@ const exec = require('child_process').exec;
 const os = require('os');
 const https = require('https');
 const pluralize = require('pluralize');
+const ejs = require('ejs');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
@@ -2009,13 +2010,22 @@ module.exports = class extends Generator {
     /**
      * Utility function to copy and process templates.
      *
-     * @param {string} template - Template file.
-     * @param {string} destination - The resulting file.
+     * @param {string} source
+     * @param {string} destination
+     * @param {*} generator
+     * @param {*} options
+     * @param {*} context
      */
-    template(template, destination, generator, options, context) {
+    template(source, destination, generator, options = {}, context) {
         const _this = generator || this;
         const _context = context || _this;
-        _this.fs.copyTpl(_this.templatePath(template), _this.destinationPath(destination), _context, options);
+        ejs.renderFile(_this.templatePath(source), _context, options, (err, res) => {
+            if(!err) {
+                _this.fs.write(_this.destinationPath(destination), res);
+            } else {
+                _this.error(`Copying template ${source} failed. [${err}]`);
+            }
+        });
     }
 
     /**

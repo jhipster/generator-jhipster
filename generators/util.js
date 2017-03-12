@@ -90,8 +90,8 @@ function rewriteJSONFile(filePath, rewriteFile, _this) {
 }
 
 function copyWebResource(source, dest, regex, type, generator, opt, template) {
-    let _this = generator || this;
-    let _opt = opt || {};
+    const _this = generator || this;
+    const _opt = opt || {};
     if (_this.enableTranslation) {
         _this.template(source, dest, _this, _opt);
     } else {
@@ -110,10 +110,12 @@ function copyWebResource(source, dest, regex, type, generator, opt, template) {
 }
 
 function stripContent(source, regex, _this, _opt, cb) {
-    ejs.renderFile(path.join(_this.sourceRoot(), source), _this, _opt, (err, res) => {
+    ejs.renderFile(_this.templatePath(source), _this, _opt, (err, res) => {
         if(!err) {
             res = res.replace(regex, '');
             cb(res);
+        } else {
+            _this.error(`Copying template ${source} failed. [${err}]`);
         }
     });
 }
