@@ -1,13 +1,13 @@
 'use strict';
-var fs = require('fs');
+const fs = require('fs');
 
 const FILE_EXTENSION = '.original',
     S3_STANDARD_REGION = 'us-east-1';
 
-var progressbar;
+let progressbar;
 
 
-var S3 = module.exports = function S3(Aws, generator) {
+const S3 = module.exports = function S3(Aws, generator) {
     this.Aws = Aws;
     try {
         progressbar = require('progress');
@@ -17,10 +17,10 @@ var S3 = module.exports = function S3(Aws, generator) {
 };
 
 S3.prototype.createBucket = function createBucket(params, callback) {
-    var bucket = params.bucket,
+    const bucket = params.bucket,
         region = this.Aws.config.region;
 
-    var s3Params = {
+    const s3Params = {
         Bucket: bucket,
         CreateBucketConfiguration: {LocationConstraint: region}
     };
@@ -29,14 +29,14 @@ S3.prototype.createBucket = function createBucket(params, callback) {
         s3Params.CreateBucketConfiguration = undefined;
     }
 
-    var s3 = new this.Aws.S3({
+    const s3 = new this.Aws.S3({
         params: s3Params,
         signatureVersion: 'v4'
     });
 
-    s3.headBucket(function (err) {
+    s3.headBucket((err) => {
         if (err && err.statusCode === 404) {
-            s3.createBucket(function (err) {
+            s3.createBucket((err) => {
                 if (err) {
                     error(err.message, callback);
                 } else {
@@ -54,9 +54,9 @@ S3.prototype.createBucket = function createBucket(params, callback) {
 };
 
 S3.prototype.uploadWar = function uploadWar(params, callback) {
-    var bucket = params.bucket;
-    var buildTool = params.buildTool;
-    var buildFolder;
+    const bucket = params.bucket;
+    const buildTool = params.buildTool;
+    let buildFolder;
 
     if (buildTool === 'gradle') {
         buildFolder = 'build/libs/';
@@ -64,13 +64,13 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
         buildFolder = 'target/';
     }
 
-    findWarFilename(buildFolder, function (err, warFilename) {
+    findWarFilename(buildFolder, (err, warFilename)  => {
         if (err) {
             error(err, callback);
         } else {
-            var warKey = warFilename.slice(0, -FILE_EXTENSION.length);
+            const warKey = warFilename.slice(0, -FILE_EXTENSION.length);
 
-            var s3 = new this.Aws.S3({
+            const s3 = new this.Aws.S3({
                 params: {
                     Bucket: bucket,
                     Key: warKey
@@ -79,10 +79,10 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                 httpOptions: {timeout: 600000}
             });
 
-            var filePath = buildFolder + warFilename,
+            const filePath = buildFolder + warFilename,
                 body = fs.createReadStream(filePath);
 
-            uploadToS3(s3, body, function (err, message) {
+            uploadToS3(s3, body, (err, message) => {
                 if (err) {
                     error(err.message, callback);
                 } else {
@@ -90,19 +90,17 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                 }
             });
         }
-    }.bind(this));
+    });
 };
 
 function findWarFilename(buildFolder, callback) {
-    var warFilename = '';
-    fs.readdir(buildFolder, function (err, files) {
+    let warFilename = '';
+    fs.readdir(buildFolder, (err, files) => {
         if (err) {
             error(err, callback);
         }
-        files.filter(function (file) {
-            return file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION;
-        })
-        .forEach(function (file) {
+        files.filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION)
+        .forEach((file) => {
             warFilename = file;
         });
         callback(null, warFilename);
@@ -110,16 +108,16 @@ function findWarFilename(buildFolder, callback) {
 }
 
 function uploadToS3(s3, body, callback) {
-    var bar;
+    let bar;
 
-    s3.waitFor('bucketExists', function (err) {
+    s3.waitFor('bucketExists', (err) => {
         if (err) {
             callback(err, null);
         } else {
-            s3.upload({Body: body}).on('httpUploadProgress', function (evt) {
+            s3.upload({Body: body}).on('httpUploadProgress', (evt) => {
 
                 if (bar === undefined && evt.total) {
-                    var total = evt.total / 1000000;
+                    const total = evt.total / 1000000;
                     bar = new progressbar('uploading [:bar] :percent :etas', {
                         complete: '=',
                         incomplete: ' ',
@@ -129,9 +127,9 @@ function uploadToS3(s3, body, callback) {
                     });
                 }
 
-                var curr = evt.loaded / 1000000;
+                const curr = evt.loaded / 1000000;
                 bar.tick(curr - bar.curr);
-            }).send(function (err) {
+            }).send((err) => {
                 if (err) {
                     callback(err, null);
                 } else {

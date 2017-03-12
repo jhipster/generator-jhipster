@@ -76,8 +76,8 @@ const files = {
             templates: [
                 { file: '_favicon.ico', method: 'copy' },
                 { file: '_robots.txt', method: 'copy' },
-                { file: '_404.html', method: 'copy' },
-                { file: '_index.html', method: 'copy' }
+                '_404.html',
+                '_index.html'
             ]
         }
     ],
@@ -395,7 +395,7 @@ module.exports = {
 
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
-    this.fs.copy(this.templatePath('angularjs/gulp/_handle-errors.js'), this.destinationPath('gulp/handle-errors.js')); // to avoid interpolate errors
+    this.copy('angularjs/gulp/_handle-errors.js', 'gulp/handle-errors.js'); // to avoid interpolate errors
     // write angular 1.x files
     this.writeFilesToDisk(files, this, false, 'angularjs');
 }

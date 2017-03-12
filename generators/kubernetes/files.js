@@ -7,8 +7,8 @@ module.exports = {
 function writeFiles() {
     return {
         writeDeployments: function() {
-            for (var i = 0; i < this.appConfigs.length; i++) {
-                var appName = this.appConfigs[i].baseName.toLowerCase();
+            for (let i = 0; i < this.appConfigs.length; i++) {
+                const appName = this.appConfigs[i].baseName.toLowerCase();
                 this.app = this.appConfigs[i];
                 this.template('_deployment.yml', appName + '/' + appName + '-deployment.yml');
                 this.template('_service.yml', appName + '/' + appName + '-service.yml');

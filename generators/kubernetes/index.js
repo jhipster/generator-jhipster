@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 'use strict';
-var generators = require('yeoman-generator'),
-    chalk = require('chalk'),
-    shelljs = require('shelljs'),
-    crypto = require('crypto'),
-    _ = require('lodash'),
-    util = require('util'),
-    prompts = require('./prompts'),
-    writeFiles = require('./files').writeFiles,
-    scriptBase = require('../generator-base');
+const generator = require('yeoman-generator');
+const chalk = require('chalk');
+const shelljs = require('shelljs');
+const crypto = require('crypto');
+const _ = require('lodash');
+const util = require('util');
+const prompts = require('./prompts');
+const writeFiles = require('./files').writeFiles;
+const scriptBase = require('../generator-base');
 
-var KubernetesGenerator = generators.Base.extend({});
+const KubernetesGenerator = generator.extend({});
 util.inherits(KubernetesGenerator, scriptBase);
 
 /* Constants used throughout */
@@ -32,7 +32,7 @@ const constants = require('../generator-constants');
 
 module.exports = KubernetesGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
@@ -52,16 +52,16 @@ module.exports = KubernetesGenerator.extend({
 
         checkDocker: function() {
             if (this.skipChecks) return;
-            var done = this.async();
+            const done = this.async();
 
-            shelljs.exec('docker -v', {silent:true},function(code, stdout, stderr) {
+            shelljs.exec('docker -v', {silent:true}, (code, stdout, stderr) => {
                 if (stderr) {
                     this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
                         '         Read http://docs.docker.com/engine/installation/#installation\n');
                 } else {
-                    var dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
-                    var dockerVersionMajor = dockerVersion.split('.')[0];
-                    var dockerVersionMinor = dockerVersion.split('.')[1];
+                    const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
+                    const dockerVersionMajor = dockerVersion.split('.')[0];
+                    const dockerVersionMinor = dockerVersion.split('.')[1];
                     if ( dockerVersionMajor < 1 || ( dockerVersionMajor === 1 && dockerVersionMinor < 10 )) {
                         this.log(chalk.yellow.bold('WARNING!') + ' Docker version 1.10.0 or later is not installed on your computer.\n' +
                             '         Docker version found: ' + dockerVersion + '\n' +
@@ -69,20 +69,20 @@ module.exports = KubernetesGenerator.extend({
                     }
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         checkKubernetes: function() {
             if (this.skipChecks) return;
-            var done = this.async();
+            const done = this.async();
 
-            shelljs.exec('kubectl version', {silent:true}, function(code, stdout, stderr) {
+            shelljs.exec('kubectl version', {silent:true}, (code, stdout, stderr) => {
                 if (stderr) {
                     this.log(chalk.yellow.bold('WARNING!') + ' kubectl 1.2 or later is not installed on your computer.\n' +
                       'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n');
                 }
                 done();
-            }.bind(this));
+            });
         },
 
         loadConfig: function() {
@@ -115,15 +115,15 @@ module.exports = KubernetesGenerator.extend({
     },
 
     _getAppFolders: function (input) {
-        var files = shelljs.ls('-l', this.destinationPath(input));
-        var appsFolders = [];
+        const files = shelljs.ls('-l', this.destinationPath(input));
+        const appsFolders = [];
 
-        files.forEach(function(file) {
+        files.forEach((file) => {
             if (file.isDirectory()) {
                 if ((shelljs.test('-f', file.name + '/.yo-rc.json'))
                     && (shelljs.test('-f', file.name + '/src/main/docker/app.yml'))) {
                     try {
-                        var fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
+                        const fileData = this.fs.readJSON(file.name + '/.yo-rc.json');
                         if (fileData['generator-jhipster'].baseName !== undefined) {
                             appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
                         }
@@ -132,46 +132,38 @@ module.exports = KubernetesGenerator.extend({
                     }
                 }
             }
-        }, this);
+        });
 
         return appsFolders;
     },
 
     prompting: {
         askForApplicationType: prompts.askForApplicationType,
-
         askForPath: prompts.askForPath,
-
         askForApps: prompts.askForApps,
-
         // cluster for mongodb: it can be done later
         // askForClustersMode: prompts.askForClustersMode,
-
         askForServiceDiscovery: prompts.askForServiceDiscovery,
-
         askForAdminPassword: prompts.askForAdminPassword,
-
         askForKubernetesNamespace: prompts.askForKubernetesNamespace,
-
         askForDockerRepositoryName: prompts.askForDockerRepositoryName,
-
         askForDockerPushCommand: prompts.askForDockerPushCommand
     },
 
     configuring: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'kubernetes');
         },
 
         checkImages: function() {
             this.log('\nChecking Docker images in applications\' directories...');
 
-            var imagePath = '';
-            var runCommand = '';
+            let imagePath = '';
+            let runCommand = '';
             this.warning = false;
             this.warningMessage = 'To generate Docker image, please run:\n';
-            for (var i = 0; i < this.appsFolders.length; i++) {
+            for (let i = 0; i < this.appsFolders.length; i++) {
                 if (this.appConfigs[i].buildTool === 'maven') {
                     imagePath = this.destinationPath(this.directoryPath + this.appsFolders[i] + '/target/docker/' + _.kebabCase(this.appConfigs[i].baseName) + '-*.war');
                     runCommand = './mvnw package -Pprod docker:build';
@@ -187,9 +179,9 @@ module.exports = KubernetesGenerator.extend({
         },
 
         configureImageNames: function() {
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                var originalImageName = this.appConfigs[i].baseName.toLowerCase();
-                var targetImageName = this.dockerRepositoryName ? this.dockerRepositoryName + '/' + originalImageName : originalImageName;
+            for (let i = 0; i < this.appsFolders.length; i++) {
+                const originalImageName = this.appConfigs[i].baseName.toLowerCase();
+                const targetImageName = this.dockerRepositoryName ? this.dockerRepositoryName + '/' + originalImageName : originalImageName;
                 this.appConfigs[i].targetImageName = targetImageName;
             }
         },
@@ -203,8 +195,8 @@ module.exports = KubernetesGenerator.extend({
         setAppsFolderPaths: function() {
             if (this.applicationType) return;
             this.appsFolderPaths = [];
-            for (var i = 0; i < this.appsFolders.length; i++) {
-                var path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
+            for (let i = 0; i < this.appsFolders.length; i++) {
+                const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
                 this.appsFolderPaths.push(path);
             }
         },
@@ -232,9 +224,9 @@ module.exports = KubernetesGenerator.extend({
         }
 
         this.log(chalk.yellow.bold('WARNING!') + ' You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:');
-        for (var i = 0; i < this.appsFolders.length; i++) {
-            var originalImageName = this.appConfigs[i].baseName.toLowerCase();
-            var targetImageName = this.appConfigs[i].targetImageName;
+        for (let i = 0; i < this.appsFolders.length; i++) {
+            const originalImageName = this.appConfigs[i].baseName.toLowerCase();
+            const targetImageName = this.appConfigs[i].targetImageName;
             if (originalImageName !== targetImageName) {
                 this.log('  ' + chalk.cyan('docker image tag ' + originalImageName + ' ' + targetImageName));
             }
@@ -245,13 +237,13 @@ module.exports = KubernetesGenerator.extend({
         if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
             this.log('  ' + chalk.cyan('kubectl apply -f registry'));
         }
-        for (i = 0; i < this.appsFolders.length; i++) {
+        for (let i = 0; i < this.appsFolders.length; i++) {
             this.log('  ' + chalk.cyan('kubectl apply -f ' + this.appConfigs[i].baseName));
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
             this.log('\nUse these commands to find your application\'s IP addresses:');
-            for (i = 0; i < this.appsFolders.length; i++) {
+            for (let i = 0; i < this.appsFolders.length; i++) {
                 if(this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
                     this.log('  ' + chalk.cyan('kubectl get svc '+this.appConfigs[i].baseName));
                 }

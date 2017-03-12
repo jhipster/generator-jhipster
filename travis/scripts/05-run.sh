@@ -57,7 +57,7 @@ fi
 #-------------------------------------------------------------------------------
 # Package the application
 #-------------------------------------------------------------------------------
-cd "$HOME"/app
+cd "$APP_FOLDER"
 
 if [ -f "mvnw" ]; then
     ./mvnw package -DskipTests=true -P"$PROFILE"
@@ -87,7 +87,7 @@ if [ "$RUN_APP" == 1 ]; then
         sleep 80
     fi
 
-    cd "$HOME"/app
+    cd "$APP_FOLDER"
     java -jar app.war \
         --spring.profiles.active="$PROFILE" \
         --logging.level.io.github.jhipster.sample=ERROR \

@@ -21,7 +21,7 @@ fi
 #-------------------------------------------------------------------------------
 # Launch tests
 #-------------------------------------------------------------------------------
-cd "$HOME"/app
+cd "$APP_FOLDER"
 if [ -f "mvnw" ]; then
     ./mvnw test \
         -Dlogging.level.io.github.jhipster.sample=ERROR \

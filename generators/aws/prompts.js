@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = {
     prompting
@@ -11,9 +11,9 @@ function prompting() {
         return;
     }
 
-    var done = this.async();
+    const done = this.async();
 
-    var prompts = [
+    const prompts = [
         {
             type: 'input',
             name: 'applicationName',
@@ -42,7 +42,7 @@ function prompting() {
             type: 'input',
             name: 'dbUsername',
             message: 'Database username:',
-            validate: function (input) {
+            validate: (input) => {
                 if (input === '') return 'Please provide a username';
                 else return true;
             }
@@ -51,7 +51,7 @@ function prompting() {
             type: 'password',
             name: 'dbPassword',
             message: 'Database password:',
-            validate: function (input) {
+            validate: (input) => {
                 if (input === '') return 'Please provide a password';
                 else if (input.length < 8) return 'Password must contain minimum 8 chars';
                 else return true;
@@ -85,7 +85,7 @@ function prompting() {
             default: 3
         }];
 
-    this.prompt(prompts).then(function (props) {
+    this.prompt(prompts).then((props) => {
         this.applicationName = _.kebabCase(props.applicationName);
         this.environmentName = _.kebabCase(props.environmentName);
         this.bucketName = _.kebabCase(props.bucketName);
@@ -97,5 +97,5 @@ function prompting() {
         this.dbInstanceClass = props.dbInstanceClass;
 
         done();
-    }.bind(this));
+    });
 }

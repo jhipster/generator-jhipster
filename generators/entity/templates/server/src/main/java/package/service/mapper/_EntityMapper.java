@@ -20,9 +20,9 @@ public interface <%= entityClass %>Mapper {
 <%
 // entity -> DTO mapping
 for (idx in relationships) {
-    var relationshipType = relationships[idx].relationshipType;
-    var relationshipName = relationships[idx].relationshipName;
-    var ownerSide = relationships[idx].ownerSide;
+    const relationshipType = relationships[idx].relationshipType;
+    const relationshipName = relationships[idx].relationshipName;
+    const ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) {
     %>
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")<% if (relationships[idx].otherEntityFieldCapitalized !='Id' && relationships[idx].otherEntityFieldCapitalized != '') { %>
@@ -33,10 +33,10 @@ for (idx in relationships) {
 <%
 // DTO -> entity mapping
 for (idx in relationships) {
-    var relationshipType = relationships[idx].relationshipType;
-    var relationshipName = relationships[idx].relationshipName;
-    var relationshipNamePlural = relationships[idx].relationshipNamePlural;
-    var ownerSide = relationships[idx].ownerSide;
+    const relationshipType = relationships[idx].relationshipType;
+    const relationshipName = relationships[idx].relationshipName;
+    const relationshipNamePlural = relationships[idx].relationshipNamePlural;
+    const ownerSide = relationships[idx].ownerSide;
     if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { %>
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")<% } else if (relationshipType == 'many-to-many' && ownerSide == false) { %>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)<% } else if (relationshipType == 'one-to-many') { %>
@@ -45,7 +45,6 @@ for (idx in relationships) {
     <%= entityClass %> <%= entityInstance %>DTOTo<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO);
 
     List<<%= entityClass %>> <%= entityInstance %>DTOsTo<%= entityClassPlural %>(List<<%= entityClass %>DTO> <%= entityInstance %>DTOs);
-
     /**
      * generating the fromId for all mappers if the databaseType is sql, as the class has relationship to it might need it, instead of
      * creating a new attribute to know if the enitity has any relationship from someother entity

@@ -1,25 +1,26 @@
 'use strict';
-var util = require('util'),
-    chalk = require('chalk'),
-    generators = require('yeoman-generator'),
-    jhiCore = require('jhipster-core'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const chalk = require('chalk');
+const generator = require('yeoman-generator');
+const jhiCore = require('jhipster-core');
+const scriptBase = require('../generator-base');
 
-var ExportJDLGenerator = generators.Base.extend({});
+const ExportJDLGenerator = generator.extend({});
 
 util.inherits(ExportJDLGenerator, scriptBase);
 
 module.exports = ExportJDLGenerator.extend({
     constructor: function () {
-        generators.Base.apply(this, arguments);
+        generator.apply(this, arguments);
         this.baseName = this.config.get('baseName');
         this.jdl = new jhiCore.JDLObject();
         this.argument('jdlFile', { type: String, required: false, defaults: this.baseName + '.jh' });
+        this.jdlFile = this.options.jdlFile;
     },
 
     default: {
         insight: function () {
-            var insight = this.insight();
+            const insight = this.insight();
             insight.trackWithEvent('generator', 'export-jdl');
         },
 
@@ -27,7 +28,7 @@ module.exports = ExportJDLGenerator.extend({
             this.log('Parsing entities from .jhipster dir...');
             try {
                 let entities = {};
-                this.getExistingEntities().forEach( entity => entities[entity.name] = entity.definition );
+                this.getExistingEntities().forEach(entity => entities[entity.name] = entity.definition);
                 jhiCore.convertJsonEntitiesToJDL(entities, this.jdl);
                 jhiCore.convertJsonServerOptionsToJDL({'generator-jhipster': this.config.getAll()}, this.jdl);
             } catch (e) {

@@ -7,8 +7,8 @@ module.exports = {
 
 function askPipelines() {
     if (this.abort) return;
-    var done = this.async();
-    var prompts = [
+    const done = this.async();
+    const prompts = [
         {
             type: 'checkbox',
             name: 'pipelines',
@@ -33,8 +33,8 @@ function askPipelines() {
 
 function askIntegrations() {
     if (this.abort || this.pipelines.length === 0) return;
-    var done = this.async();
-    var herokuChoices = [];
+    const done = this.async();
+    const herokuChoices = [];
     if (this.pipelines.includes('jenkins')) {
         herokuChoices.push({name: 'In Jenkins pipeline', value: 'jenkins'});
     }
@@ -48,7 +48,7 @@ function askIntegrations() {
         herokuChoices.push({name: 'In Travis CI', value: 'travis'});
     }
 
-    var prompts = [
+    const prompts = [
         {
             when: this.pipelines.includes('jenkins'),
             type: 'checkbox',

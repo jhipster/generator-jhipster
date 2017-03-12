@@ -1,8 +1,8 @@
 <%
-var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-var mapper = entityInstance  + 'Mapper';
-var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
-for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+const instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+const mapper = entityInstance  + 'Mapper';
+const entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+for (const idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
 
     /**
      *  get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
