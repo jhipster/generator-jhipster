@@ -1,4 +1,3 @@
-'use strict';
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -17,8 +16,8 @@ util.inherits(JhipsterGenerator, scriptBase);
 const constants = require('../generator-constants');
 
 module.exports = JhipsterGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) {
+        generator.apply(this, args);
 
         this.configOptions = {};
         // This adds support for a `--skip-client` flag
@@ -85,8 +84,8 @@ module.exports = JhipsterGenerator.extend({
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.useYarn = this.configOptions.useYarn = !this.options['npm'];
-        this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options['debug'];
+        this.useYarn = this.configOptions.useYarn = !this.options.npm;
+        this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
     },
 
     initializing: {
@@ -103,7 +102,7 @@ module.exports = JhipsterGenerator.extend({
                 } else {
                     const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                     if (!javaVersion.match(/1\.8/)) {
-                        this.warning('Java 8 is not found on your computer. Your Java version is: ' + chalk.yellow(javaVersion));
+                        this.warning(`Java 8 is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                     }
                 }
                 done();
@@ -120,7 +119,7 @@ module.exports = JhipsterGenerator.extend({
                     const nodeVersion = semver.clean(stdout);
                     const nodeFromPackageJson = packagejs.engines.node;
                     if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
-                        this.warning('Your NodeJS version is too old (' + nodeVersion + '). You should use at least NodeJS ' + chalk.bold(nodeFromPackageJson));
+                        this.warning(`Your NodeJS version is too old (${nodeVersion}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`);
                     }
                 }
                 done();
@@ -139,11 +138,11 @@ module.exports = JhipsterGenerator.extend({
         checkGitConnection: function () {
             if (!this.gitInstalled) return;
             const done = this.async();
-            exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, (error) => {
+            exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
                 if (error) {
-                    this.warning('Failed to connect to "git://github.com"\n',
-                        ' 1. Check your Internet connection.\n',
-                        ' 2. If you are using an HTTP proxy, try this command: ' + chalk.yellow('git config --global url."https://".insteadOf git://')
+                    this.warning(`Failed to connect to "git://github.com"
+                         1. Check your Internet connection.
+                         2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`
                     );
                 }
                 done();
@@ -173,7 +172,7 @@ module.exports = JhipsterGenerator.extend({
 
         validate: function () {
             if (this.skipServer && this.skipClient) {
-                this.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
+                this.error(chalk.red(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`));
             }
         },
 
@@ -240,7 +239,7 @@ module.exports = JhipsterGenerator.extend({
             if (this.skipClient) {
                 // defaults to use when skipping client
                 this.generatorType = 'server';
-                this.configOptions.enableTranslation = this.options['i18n'];
+                this.configOptions.enableTranslation = this.options.i18n;
             }
             if (this.skipServer) {
                 this.generatorType = 'client';
@@ -255,7 +254,7 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith(require.resolve('../server'), {
                 'client-hook': !this.skipClient,
                 configOptions: this.configOptions,
-                force: this.options['force']
+                force: this.options.force
             });
         },
 
@@ -265,7 +264,7 @@ module.exports = JhipsterGenerator.extend({
             this.composeWith(require.resolve('../client'), {
                 'skip-install': this.options['skip-install'],
                 configOptions: this.configOptions,
-                force: this.options['force']
+                force: this.options.force
             });
         },
 
@@ -307,9 +306,9 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('testFrameworks', this.testFrameworks);
             this.config.set('jhiPrefix', this.jhiPrefix);
             this.config.set('otherModules', this.otherModules);
-            this.skipClient && this.config.set('skipClient', true);
-            this.skipServer && this.config.set('skipServer', true);
-            this.skipUserManagement && this.config.set('skipUserManagement', true);
+            if (this.skipClient) this.config.set('skipClient', true);
+            if (this.skipServer) this.config.set('skipServer', true);
+            if (this.skipUserManagement) this.config.set('skipUserManagement', true);
             this.config.set('enableTranslation', this.enableTranslation);
             if (this.enableTranslation) {
                 this.config.set('nativeLanguage', this.nativeLanguage);
@@ -330,7 +329,7 @@ module.exports = JhipsterGenerator.extend({
                     this.composeWith(require.resolve('../entity'), {
                         regenerate: true,
                         'skip-install': true,
-                        force: this.options['force'],
+                        force: this.options.force,
                         debug: this.isDebugEnabled,
                         arguments: [entity.name]
                     });
@@ -340,12 +339,13 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: {
-        localInstall: function() {
+        localInstall: function () {
             if (this.skipClient) {
                 if (this.otherModules === undefined) {
                     this.otherModules = [];
                 }
-                // Generate a package.json file containing the current version of the generator as dependency
+                // Generate a package.json file containing the current version
+                // of the generator as dependency
                 this.template('_skipClientApp.package.json', 'package.json');
 
                 if (!this.options['skip-install']) {
@@ -364,15 +364,15 @@ module.exports = JhipsterGenerator.extend({
             try {
                 const modules = this.getModuleHooks();
                 if (modules.length > 0) {
-                    this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
+                    this.log(`\n${chalk.bold.green('Running post run module hooks\n')}`);
                     // run through all post app creation module hooks
                     this.callHooks('app', 'post', {
                         appConfig: this.configOptions,
-                        force: this.options['force']
+                        force: this.options.force
                     });
                 }
             } catch (err) {
-                this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.'));
+                this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.')}`);
             }
         }
     }
