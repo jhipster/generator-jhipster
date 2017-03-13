@@ -22,15 +22,14 @@
         "no-underscore-dangle": "off",
         "no-plusplus": "off",
 
+        "import/no-extraneous-dependencies": "off",
+        "import/no-unresolved": "off",
+        "global-require": "off",
         "object-shorthand": "off",
         "no-multi-assign": "off",
         "no-param-reassign": "off",
-        "global-require": "off",
-        "import/no-extraneous-dependencies": "off",
-        "import/no-unresolved": "off",
-        "no-shadow": "off",
-        "one-var": "off",
         "prefer-rest-params": "off",
-        "camelcase": "off"
+        "no-shadow": "off",
+        "one-var": "off"
     }
 }

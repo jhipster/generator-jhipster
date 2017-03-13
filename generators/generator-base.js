@@ -994,25 +994,25 @@ module.exports = class extends Generator {
      */
     dateFormatForLiquibase() {
         const now = new Date();
-        const now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-        const year = `${now_utc.getFullYear()}`;
-        let month = `${now_utc.getMonth() + 1}`;
+        const nowUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+        const year = `${nowUTC.getFullYear()}`;
+        let month = `${nowUTC.getMonth() + 1}`;
         if (month.length === 1) {
             month = `0${month}`;
         }
-        let day = `${now_utc.getDate()}`;
+        let day = `${nowUTC.getDate()}`;
         if (day.length === 1) {
             day = `0${day}`;
         }
-        let hour = `${now_utc.getHours()}`;
+        let hour = `${nowUTC.getHours()}`;
         if (hour.length === 1) {
             hour = `0${hour}`;
         }
-        let minute = `${now_utc.getMinutes()}`;
+        let minute = `${nowUTC.getMinutes()}`;
         if (minute.length === 1) {
             minute = `0${minute}`;
         }
-        let second = `${now_utc.getSeconds()}`;
+        let second = `${nowUTC.getSeconds()}`;
         if (second.length === 1) {
             second = `0${second}`;
         }
