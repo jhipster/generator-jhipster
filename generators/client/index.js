@@ -8,13 +8,13 @@ const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeAngularJsFiles = require('./files-angularjs').writeFiles;
 const packagejs = require('../../package.json');
+const constants = require('../generator-constants');
 
 const JhipsterClientGenerator = generator.extend({});
 
 util.inherits(JhipsterClientGenerator, scriptBase);
 
 /* Constants used throughout */
-const constants = require('../generator-constants');
 const QUESTIONS = constants.CLIENT_QUESTIONS;
 
 module.exports = JhipsterClientGenerator.extend({

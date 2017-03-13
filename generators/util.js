@@ -4,8 +4,8 @@ const html = require('html-wiring');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
-
 const constants = require('./generator-constants');
+
 const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
 module.exports = {

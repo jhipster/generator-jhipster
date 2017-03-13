@@ -1,6 +1,6 @@
 
-
 const constants = require('./generator-constants');
+
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
