@@ -210,6 +210,11 @@ public class UserService {
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
+     *
+     * @param firstName first name of user
+     * @param lastName last name of user
+     * @param email email id of user
+     * @param langKey language key
      */
     public void updateUser(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
@@ -229,6 +234,9 @@ public class UserService {
 
     /**
      * Update all information for a specific user, and return the modified user.
+     *
+     * @param userDTO user to update
+     * @return updated user
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userRepository
