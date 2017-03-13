@@ -42,8 +42,8 @@
   const parsed = {
     application: {
       baseName: 'jhipster',
-      packageName: '',
-      packageFolder: '',
+      packageName: 'io.github.jhipster',
+      packageFolder: 'io/github/jhipster',
       authenticationType: '',
       hibernateCache: 'no',
       clusteredHttpSession: false,
