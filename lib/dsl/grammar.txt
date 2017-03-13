@@ -65,7 +65,8 @@
       messageBroker: false,
       serviceDiscoveryType: false,
       clientPackageManager: 'yarn',
-      clientFramework: 'angular1'
+      clientFramework: 'angular1',
+      nativeLanguage: 'en'
     },
     constants: {},
     entities: [],
@@ -236,6 +237,9 @@ applicationContentDecl
   }
   / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.clientFramework = clientFramework.join('');
+  }
+  / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationContentDecl:applicationContentDecl {
+    parsed.application.nativeLanguage = nativeLanguage.join('');
   }
   / ''
 
@@ -500,6 +504,7 @@ MESSAGE_BROKER = 'messageBroker'
 SERVICE_DISCOVERY_TYPE = 'serviceDiscoveryType'
 CLIENT_PACKAGE_MANAGER = 'clientPackageManager'
 CLIENT_FRAMEWORK = 'clientFramework'
+NATIVE_LANGUAGE = 'nativeLanguage'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
