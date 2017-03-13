@@ -38,7 +38,8 @@ public final class DefaultProfileUtil {
     /**
      * Get the profiles that are applied else get default profiles.
      *
-     * @param env
+     * @param env spring environment
+     * @return profiles
      */
     public static String[] getActiveProfiles(Environment env) {
         String[] profiles = env.getActiveProfiles();
