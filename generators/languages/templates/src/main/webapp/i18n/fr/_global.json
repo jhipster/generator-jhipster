@@ -131,8 +131,8 @@
         "url.not.found": "Non trouvé",
         "NotNull": "Le champ {{fieldName}} ne peut pas être vide !",
         "Size": "Le champ {{fieldName}} ne respecte pas les critères minimum et maximum !",
-        "userexists": "Login déja utilisé !",
-        "emailexists": "Email déja utilisé !",
+        "userexists": "Login déjà utilisé !",
+        "emailexists": "Email déjà utilisé !",
         "idexists": "Une nouvelle entité {{entityName}} ne peut pas avoir d'ID !"
     },
     "footer": "Ceci est votre pied de page"
