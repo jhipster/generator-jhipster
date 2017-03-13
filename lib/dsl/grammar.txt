@@ -230,8 +230,18 @@ applicationContentDecl
   / MESSAGE_BROKER SPACE* messageBroker:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.messageBroker = messageBroker;
   }
-  / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.serviceDiscoveryType = serviceDiscoveryType;
+  / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    const choice = serviceDiscoveryType.join('');
+    switch (choice) {
+    case 'true':
+      parsed.application.serviceDiscoveryType = true;
+      break;
+    case 'false':
+      parsed.application.serviceDiscoveryType = false;
+      break;
+    default:
+      parsed.application.serviceDiscoveryType = choice;
+    }
   }
   / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.clientPackageManager = clientPackageManager.join('');
