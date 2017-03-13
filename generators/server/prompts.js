@@ -539,9 +539,9 @@ function getUaaAppName(input) {
     input = input.trim();
     let fromPath = '';
     if (path.isAbsolute(input)) {
-        fromPath = `${input}/` + '.yo-rc.json';
+        fromPath = `${input}/.yo-rc.json`;
     } else {
-        fromPath = this.destinationPath(`${input}/` + '.yo-rc.json');
+        fromPath = this.destinationPath(`${input}/.yo-rc.json`);
     }
 
     if (shelljs.test('-f', fromPath)) {

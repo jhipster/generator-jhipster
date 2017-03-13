@@ -297,7 +297,7 @@ module.exports = DockerComposeGenerator.extend({
             let portIndex = 8080;
             this.appConfigs.forEach((appConfig) => {
                 if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
-                    this.log(`\t- ${appConfig.baseName}:` + ` http://localhost:${portIndex}`);
+                    this.log(`\t- ${appConfig.baseName}: http://localhost:${portIndex}`);
                     portIndex++;
                 }
             });

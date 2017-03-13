@@ -31,7 +31,6 @@
         "no-shadow": "off",
         "one-var": "off",
         "prefer-rest-params": "off",
-        "no-useless-concat": "off",
         "camelcase": "off"
     }
 }

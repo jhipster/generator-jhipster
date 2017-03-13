@@ -17,10 +17,10 @@ function writeFiles() {
                     this.template(`db/_${this.app.prodDatabaseType}.yml`, `${appName}/${appName}-${this.app.prodDatabaseType}.yml`);
                 }
                 if (this.app.searchEngine === 'elasticsearch') {
-                    this.template('db/_elasticsearch.yml', `${appName}/${appName}-` + 'elasticsearch.yml');
+                    this.template('db/_elasticsearch.yml', `${appName}/${appName}-elasticsearch.yml`);
                 }
                 if (this.app.messageBroker === 'kafka') {
-                    this.template('db/_kafka.yml', `${appName}/${appName}-` + 'kafka.yml');
+                    this.template('db/_kafka.yml', `${appName}/${appName}-kafka.yml`);
                 }
             }
         },
