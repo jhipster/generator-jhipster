@@ -277,13 +277,17 @@ module.exports = UpgradeGenerator.extend({
                 if (this.clientFramework === 'angular1') {
                     this.spawnCommandSync('bower', ['install']);
                 }
+                done();
             });
         } else {
-            let logMsg =
-                'Start your Webpack development server with:' +
-                '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
-                '\n';
-            this.log(chalk.green(logMsg));
+            if (this.clientFramework === 'angular2') {
+                const logMsg =
+                    'Start your Webpack development server with:' +
+                    '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
+                    '\n';
+                this.log(chalk.green(logMsg));
+            }
+            done();
         }
     },
 
