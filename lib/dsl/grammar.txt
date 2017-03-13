@@ -66,7 +66,8 @@
       serviceDiscoveryType: false,
       clientPackageManager: 'yarn',
       clientFramework: 'angular1',
-      nativeLanguage: 'en'
+      nativeLanguage: 'en',
+      frontEndBuilder: null
     },
     constants: {},
     entities: [],
@@ -240,6 +241,9 @@ applicationContentDecl
   }
   / NATIVE_LANGUAGE SPACE* nativeLanguage:[a-z]+ applicationContentDecl:applicationContentDecl {
     parsed.application.nativeLanguage = nativeLanguage.join('');
+  }
+  / FRONT_END_BUILDER SPACE* frontEndBuilder:[A-z]+ applicationContentDecl:applicationContentDecl {
+    parsed.application.frontEndBuilder = frontEndBuilder.join('');
   }
   / ''
 
@@ -505,6 +509,7 @@ SERVICE_DISCOVERY_TYPE = 'serviceDiscoveryType'
 CLIENT_PACKAGE_MANAGER = 'clientPackageManager'
 CLIENT_FRAMEWORK = 'clientFramework'
 NATIVE_LANGUAGE = 'nativeLanguage'
+FRONT_END_BUILDER = 'frontendBuilder'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
