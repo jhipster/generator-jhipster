@@ -63,7 +63,9 @@
       useSass: false,
       jhiPrefix: 'jhi',
       messageBroker: false,
-      serviceDiscoveryType: false
+      serviceDiscoveryType: false,
+      clientPackageManager: 'yarn',
+      clientFramework: 'angular1'
     },
     constants: {},
     entities: [],
@@ -228,6 +230,12 @@ applicationContentDecl
   }
   / SERVICE_DISCOVERY_TYPE SPACE* serviceDiscoveryType:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.serviceDiscoveryType = serviceDiscoveryType;
+  }
+  / CLIENT_PACKAGE_MANAGER SPACE* clientPackageManager:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.clientPackageManager = clientPackageManager.join('');
+  }
+  / CLIENT_FRAMEWORK SPACE* clientFramework:[A-z0-9]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.clientFramework = clientFramework.join('');
   }
   / ''
 
@@ -490,6 +498,8 @@ USE_SASS = 'useSass'
 JHI_PREFIX = 'jhiPrefix'
 MESSAGE_BROKER = 'messageBroker'
 SERVICE_DISCOVERY_TYPE = 'serviceDiscoveryType'
+CLIENT_PACKAGE_MANAGER = 'clientPackageManager'
+CLIENT_FRAMEWORK = 'clientFramework'
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
