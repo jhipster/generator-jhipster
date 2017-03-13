@@ -282,9 +282,7 @@ module.exports = UpgradeGenerator.extend({
         } else {
             if (this.clientFramework === 'angular2') {
                 const logMsg =
-                    'Start your Webpack development server with:' +
-                    '\n ' + chalk.yellow.bold(this.clientPackageManager + ' start') +
-                    '\n';
+                    `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
                 this.log(chalk.green(logMsg));
             }
             done();

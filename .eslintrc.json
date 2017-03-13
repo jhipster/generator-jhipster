@@ -20,6 +20,7 @@
         "func-names": "off",
         "class-methods-use-this": "off",
         "no-underscore-dangle": "off",
+        "no-plusplus": "off",
 
         "object-shorthand": "off",
         "no-multi-assign": "off",
@@ -30,10 +31,7 @@
         "no-shadow": "off",
         "one-var": "off",
         "prefer-rest-params": "off",
-        "no-plusplus": "off",
         "no-useless-concat": "off",
-        "camelcase": "off",
-        "prefer-template": "off",
-        "default-case": "off"
+        "camelcase": "off"
     }
 }

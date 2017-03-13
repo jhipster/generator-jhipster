@@ -102,6 +102,8 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
             case 'js' :
                 body = replaceTitle(body, generator);
                 break;
+            default:
+                break;
             }
             generator.fs.write(dest, body);
         });
