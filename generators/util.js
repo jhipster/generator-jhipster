@@ -1,4 +1,3 @@
-
 const path = require('path');
 const html = require('html-wiring');
 const shelljs = require('shelljs');
@@ -67,7 +66,8 @@ function rewrite(args) {
     }
 
     let spaceStr = '';
-    while ((spaces -= 1) >= 0) {
+
+    while ((spaces -= 1) >= 0) { // eslint-disable-line no-cond-assign
         spaceStr += ' ';
     }
 
@@ -122,7 +122,7 @@ function replaceTitle(body, generator) {
     const re = /pageTitle[\s]*:[\s]*[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) {
+    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         const key = match[1];
         const target = key;
@@ -139,7 +139,7 @@ function replacePlaceholders(body, generator) {
     const re = /placeholder=[\'|\"]([\{]{2}[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"][\s][\|][\s](translate)[\}]{2})[\'|\"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) {
+    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
         // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
         const key = match[2];
         const target = match[1];

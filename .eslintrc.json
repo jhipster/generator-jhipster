@@ -19,6 +19,7 @@
         "max-len": "off",
         "func-names": "off",
         "class-methods-use-this": "off",
+        "no-underscore-dangle": "off",
 
         "object-shorthand": "off",
         "no-multi-assign": "off",
@@ -33,10 +34,8 @@
         "no-useless-escape": "off",
         "no-useless-concat": "off",
         "no-confusing-arrow": "off",
-        "no-underscore-dangle": "off",
         "camelcase": "off",
         "prefer-template": "off",
-        "no-cond-assign": "off",
         "default-case": "off"
     }
 }
