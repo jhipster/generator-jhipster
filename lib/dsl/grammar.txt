@@ -47,7 +47,7 @@
       authenticationType: '',
       hibernateCache: 'no',
       clusteredHttpSession: 'no',
-      websocket: false,
+      websocket: 'no',
       databaseType: 'sql',
       devDatabaseType: 'h2Memory',
       prodDatabaseType: 'mysql',
@@ -173,8 +173,8 @@ applicationContentDecl
   / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.clusteredHttpSession = clusteredHttpSession.join('');
   }
-  / WEBSOCKET SPACE* websocket:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.websocket = websocket;
+  / WEBSOCKET SPACE* websocket:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.websocket = websocket.join('');
   }
   / DATABASE_TYPE SPACE* databaseType:[a-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.databaseType = databaseType.join('');
