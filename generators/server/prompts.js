@@ -31,7 +31,7 @@ function askForServerSideOpts() {
             when: response => (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'),
             type: 'input',
             name: 'serverPort',
-            validate: input => /^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.',
+            validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
             message: response => this.getNumberedQuestion(
                 'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
                 applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'
@@ -41,8 +41,8 @@ function askForServerSideOpts() {
         {
             type: 'input',
             name: 'packageName',
-            validate: input => /^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input) ?
-                true : 'The package name you have provided is not a valid Java package name.',
+            validate: input => (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input) ?
+                true : 'The package name you have provided is not a valid Java package name.'),
             message: response => this.getNumberedQuestion('What is your default Java package name?', true),
             default: 'com.mycompany.myapp',
             store: true

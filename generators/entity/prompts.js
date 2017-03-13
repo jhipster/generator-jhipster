@@ -750,7 +750,7 @@ function askForField(done) {
                     response.fieldValidateRules.indexOf('minlength') !== -1,
             type: 'input',
             name: 'fieldValidateRulesMinlength',
-            validate: input => this.isNumber(input) ? true : 'Minimum length must be a positive number',
+            validate: input => (this.isNumber(input) ? true : 'Minimum length must be a positive number'),
             message: 'What is the minimum length of your field?',
             default: 0
         },
@@ -760,7 +760,7 @@ function askForField(done) {
                     response.fieldValidateRules.indexOf('maxlength') !== -1,
             type: 'input',
             name: 'fieldValidateRulesMaxlength',
-            validate: input => this.isNumber(input) ? true : 'Maximum length must be a positive number',
+            validate: input => (this.isNumber(input) ? true : 'Maximum length must be a positive number'),
             message: 'What is the maximum length of your field?',
             default: 20
         },
@@ -773,7 +773,7 @@ function askForField(done) {
             type: 'input',
             name: 'fieldValidateRulesMin',
             message: 'What is the minimum of your field?',
-            validate: input => this.isSignedNumber(input) ? true : 'Minimum must be a number',
+            validate: input => (this.isSignedNumber(input) ? true : 'Minimum must be a number'),
             default: 0
         },
         {
@@ -785,7 +785,7 @@ function askForField(done) {
             type: 'input',
             name: 'fieldValidateRulesMax',
             message: 'What is the maximum of your field?',
-            validate: input => this.isSignedNumber(input) ? true : 'Maximum must be a number',
+            validate: input => (this.isSignedNumber(input) ? true : 'Maximum must be a number'),
             default: 100
         },
         {
@@ -798,7 +798,7 @@ function askForField(done) {
             type: 'input',
             name: 'fieldValidateRulesMin',
             message: 'What is the minimum of your field?',
-            validate: input => this.isSignedDecimalNumber(input, true) ? true : 'Minimum must be a decimal number',
+            validate: input => (this.isSignedDecimalNumber(input, true) ? true : 'Minimum must be a decimal number'),
             default: 0
         },
         {
@@ -811,7 +811,7 @@ function askForField(done) {
             type: 'input',
             name: 'fieldValidateRulesMax',
             message: 'What is the maximum of your field?',
-            validate: input => this.isSignedDecimalNumber(input, true) ? true : 'Maximum must be a decimal number',
+            validate: input => (this.isSignedDecimalNumber(input, true) ? true : 'Maximum must be a decimal number'),
             default: 100
         },
         {
@@ -823,7 +823,7 @@ function askForField(done) {
             type: 'input',
             name: 'fieldValidateRulesMinbytes',
             message: 'What is the minimum byte size of your field?',
-            validate: input => this.isNumber(input) ? true : 'Minimum byte size must be a positive number',
+            validate: input => (this.isNumber(input) ? true : 'Minimum byte size must be a positive number'),
             default: 0
         },
         {
@@ -835,7 +835,7 @@ function askForField(done) {
             type: 'input',
             name: 'fieldValidateRulesMaxbytes',
             message: 'What is the maximum byte size of your field?',
-            validate: input => this.isNumber(input) ? true : 'Maximum byte size must be a positive number',
+            validate: input => (this.isNumber(input) ? true : 'Maximum byte size must be a positive number'),
             default: 5000000
         },
         {

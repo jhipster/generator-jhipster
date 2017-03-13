@@ -32,7 +32,6 @@
         "prefer-rest-params": "off",
         "no-plusplus": "off",
         "no-useless-concat": "off",
-        "no-confusing-arrow": "off",
         "camelcase": "off",
         "prefer-template": "off",
         "default-case": "off"

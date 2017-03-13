@@ -99,7 +99,7 @@ function askForApps() {
         message: messageAskForApps,
         choices: this.appsFolders,
         default: this.defaultAppsFolders,
-        validate: input => input.length === 0 ? 'Please choose at least one application' : true
+        validate: input => (input.length === 0 ? 'Please choose at least one application' : true)
     }];
 
     this.prompt(prompts).then((props) => {
@@ -268,7 +268,7 @@ function askForAdminPassword() {
         name: 'adminPassword',
         message: 'Enter the admin password used to secure the JHipster Registry',
         default: 'admin',
-        validate: input => input.length < 5 ? 'The password must have at least 5 characters' : true
+        validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true)
     }];
 
     this.prompt(prompts).then((props) => {
