@@ -63,8 +63,10 @@ module.exports = JhipsterServerGenerator.extend({
         this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.enableTranslation = this.options.i18n;
         this.testFrameworks = [];
-        this.options.gatling && this.testFrameworks.push('gatling');
-        this.options.cucumber && this.testFrameworks.push('cucumber');
+
+        if (this.options.gatling) this.testFrameworks.push('gatling');
+        if (this.options.cucumber) this.testFrameworks.push('cucumber');
+
         this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.logo = this.configOptions.logo;

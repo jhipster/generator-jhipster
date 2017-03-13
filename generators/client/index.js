@@ -114,7 +114,9 @@ module.exports = JhipsterClientGenerator.extend({
         this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
         this.testFrameworks = [];
-        this.options.protractor && this.testFrameworks.push('protractor');
+
+        if (this.options.protractor) this.testFrameworks.push('protractor');
+
         this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
         this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
         this.baseName = this.configOptions.baseName;

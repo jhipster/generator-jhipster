@@ -20,11 +20,13 @@ module.exports = JDLGenerator.extend({
 
     initializing: {
         validate: function () {
-            this.jdlFiles && this.jdlFiles.forEach((key) => {
-                if (!shelljs.test('-f', key)) {
-                    this.env.error(chalk.red(`\nCould not find ${key}, make sure the path is correct!\n`));
-                }
-            });
+            if (this.jdlFiles) {
+                this.jdlFiles.forEach((key) => {
+                    if (!shelljs.test('-f', key)) {
+                        this.env.error(chalk.red(`\nCould not find ${key}, make sure the path is correct!\n`));
+                    }
+                });
+            }
         },
 
         getConfig: function () {

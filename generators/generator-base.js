@@ -1912,7 +1912,7 @@ module.exports = class extends Generator {
                     ` Install git: ${chalk.yellow('https://git-scm.com/')}`
                 );
             }
-            callback && callback(code);
+            if (callback) callback(code);
         });
     }
 

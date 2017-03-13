@@ -214,8 +214,8 @@ module.exports = EntityGenerator.extend({
         } catch (err) {
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
-        this.relationships = this.fileData.relationships;
-        this.fields = this.fileData.fields;
+        this.relationships = this.fileData.relationships || [];
+        this.fields = this.fileData.fields || [];
         this.changelogDate = this.fileData.changelogDate;
         this.dto = this.fileData.dto;
         this.service = this.fileData.service;
@@ -228,11 +228,11 @@ module.exports = EntityGenerator.extend({
             this.warning(`entityTableName is missing in .jhipster/${this.name}.json, using entity name as fallback`);
             this.entityTableName = this.getTableName(this.name);
         }
-        this.fields && this.fields.forEach((field) => {
+        this.fields.forEach((field) => {
             this.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             this.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
         });
-        this.relationships && this.relationships.forEach((rel) => {
+        this.relationships.forEach((rel) => {
             this.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
         });
         if (this.fileData.angularJSSuffix !== undefined) {
@@ -449,7 +449,7 @@ module.exports = EntityGenerator.extend({
             this.differentRelationships = [];
 
             // Load in-memory data for fields
-            this.fields && this.fields.forEach((field) => {
+            this.fields.forEach((field) => {
                 // Migration from JodaTime to Java Time
                 if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                     field.fieldType = 'ZonedDateTime';
@@ -517,9 +517,8 @@ module.exports = EntityGenerator.extend({
                     this.validation = true;
                 }
             });
-
             // Load in-memory data for relationships
-            this.relationships && this.relationships.forEach((relationship) => {
+            this.relationships.forEach((relationship) => {
                 if (_.isUndefined(relationship.relationshipNameCapitalized)) {
                     relationship.relationshipNameCapitalized = _.upperFirst(relationship.relationshipName);
                 }

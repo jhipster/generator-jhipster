@@ -29,7 +29,6 @@
         "no-shadow": "off",
         "one-var": "off",
         "prefer-rest-params": "off",
-        "no-unused-expressions": "off",
         "no-plusplus": "off",
         "no-useless-escape": "off",
         "no-useless-concat": "off",

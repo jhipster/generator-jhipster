@@ -44,16 +44,18 @@ module.exports = LanguagesGenerator.extend({
         this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         // Validate languages passed as argument
         this.languages = this.options.languages;
-        this.languages && this.languages.forEach((language) => {
-            if (!this.isSupportedLanguage(language)) {
-                this.log('\n');
-                this.error(chalk.red(
-                    `Unsupported language "${language}" passed as argument to language generator.` +
-                    `\nSupported languages: ${_.map(this.getAllSupportedLanguageOptions(),
-                    o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
-                ));
-            }
-        });
+        if (this.languages) {
+            this.languages.forEach((language) => {
+                if (!this.isSupportedLanguage(language)) {
+                    this.log('\n');
+                    this.error(chalk.red(
+                        `Unsupported language "${language}" passed as argument to language generator.` +
+                        `\nSupported languages: ${_.map(this.getAllSupportedLanguageOptions(),
+                        o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`).join('')}`
+                    ));
+                }
+            });
+        }
     },
     initializing: {
         getConfig: function () {
@@ -65,7 +67,7 @@ module.exports = LanguagesGenerator.extend({
                 } else {
                     this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')}`));
                 }
-                this.languagesToApply = this.languages;
+                this.languagesToApply = this.languages || [];
             } else {
                 this.log(chalk.bold('\nLanguages configuration is starting'));
             }
@@ -98,7 +100,7 @@ module.exports = LanguagesGenerator.extend({
             }];
         if (this.enableTranslation || configOptions.enableTranslation) {
             this.prompt(prompts).then((props) => {
-                this.languagesToApply = props.languages;
+                this.languagesToApply = props.languages || [];
                 done();
             });
         } else {
@@ -160,7 +162,7 @@ module.exports = LanguagesGenerator.extend({
 
     writing: function () {
         const insight = this.insight();
-        this.languagesToApply && this.languagesToApply.forEach((language) => {
+        this.languagesToApply.forEach((language) => {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
             }
