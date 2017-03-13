@@ -117,7 +117,8 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
-     *  @param query the query of the search
+     *  @param query the query of the search<% if (pagination != 'no') { %>
+     *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
     <%_ if (service == 'serviceImpl') { _%>

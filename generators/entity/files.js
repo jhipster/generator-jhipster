@@ -348,8 +348,7 @@ function writeFiles() {
         },
 
         writeEnumFiles: function () {
-            for (const idx in this.fields) {
-                const field = this.fields[idx];
+            this.fields.forEach((field) => {
                 if (field.fieldIsEnum === true) {
                     const fieldType = field.fieldType;
                     field.enumInstance = _.lowerFirst(fieldType);
@@ -377,7 +376,7 @@ function writeFiles() {
                         });
                     }
                 }
-            }
+            });
         },
 
         writeClientFiles: function () {

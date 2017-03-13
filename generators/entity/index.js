@@ -275,8 +275,7 @@ module.exports = EntityGenerator.extend({
                 return;
             }
             // Validate entity json field content
-            for (const idx in this.fields) {
-                const field = this.fields[idx];
+            this.fields.forEach((field) => {
                 if (_.isUndefined(field.fieldName)) {
                     this.error(chalk.red(`fieldName is missing in .jhipster/${this.name}.json for field ${JSON.stringify(field, null, 4)}`));
                 }
@@ -289,12 +288,11 @@ module.exports = EntityGenerator.extend({
                     if (!_.isArray(field.fieldValidateRules)) {
                         this.error(chalk.red(`fieldValidateRules is not an array in .jhipster/${this.name}.json for field ${JSON.stringify(field, null, 4)}`));
                     }
-                    for (const idxRules in field.fieldValidateRules) {
-                        const fieldValidateRule = field.fieldValidateRules[idxRules];
+                    field.fieldValidateRules.forEach((fieldValidateRule) => {
                         if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
                             this.error(chalk.red(`fieldValidateRules contains unknown validation rule ${fieldValidateRule} in .jhipster/${this.name}.json for field ${JSON.stringify(field, null, 4)} [supported validation rules ${SUPPORTED_VALIDATION_RULES}]`));
                         }
-                    }
+                    });
                     if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
                         this.error(chalk.red(`fieldValidateRulesMax is missing in .jhipster/${this.name}.json for field ${JSON.stringify(field, null, 4)}`));
                     }
@@ -317,11 +315,10 @@ module.exports = EntityGenerator.extend({
                         this.error(chalk.red(`fieldValidateRulesPattern is missing in .jhipster/${this.name}.json for field ${JSON.stringify(field, null, 4)}`));
                     }
                 }
-            }
+            });
 
             // Validate entity json relationship content
-            for (const idx in this.relationships) {
-                const relationship = this.relationships[idx];
+            this.relationships.forEach((relationship) => {
                 if (_.isUndefined(relationship.relationshipName)) {
                     relationship.relationshipName = relationship.otherEntityName;
                     this.warning(`relationshipName is missing in .jhipster/${this.name}.json for relationship ${JSON.stringify(relationship, null, 4)}, using ${relationship.otherEntityName} as fallback`);
@@ -351,7 +348,7 @@ module.exports = EntityGenerator.extend({
                     && (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-many')) {
                     this.error(chalk.red(`ownerSide is missing in .jhipster/${this.name}.json for relationship ${JSON.stringify(relationship, null, 4)}`));
                 }
-            }
+            });
 
             // Validate root entity json content
             if (_.isUndefined(this.changelogDate)

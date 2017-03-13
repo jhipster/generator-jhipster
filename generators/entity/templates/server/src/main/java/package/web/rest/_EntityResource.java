@@ -139,8 +139,7 @@ public class <%= entityClass %>Resource {
      *
      * @param query the query of the <%= entityInstance %> search <% if (pagination != 'no') { %>
      * @param pageable the pagination information<% } %>
-     * @return the result of the search<% if (pagination != 'no') { %>
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
+     * @return the result of the search
      */
     @GetMapping("/_search/<%= entityApiUrl %>")
     @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>

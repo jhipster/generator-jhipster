@@ -22,6 +22,10 @@ function askForServerSideOpts() {
 
     const done = this.async();
     const applicationType = this.applicationType;
+    let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
+    if (applicationType === 'uaa') {
+        defaultPort = '9999';
+    }
     const prompts = [
         {
             when: response => (applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'),
@@ -32,7 +36,7 @@ function askForServerSideOpts() {
                 'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
                 applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa'
             ),
-            default: applicationType === 'gateway' ? '8080' : applicationType === 'uaa' ? '9999' : '8081'
+            default: defaultPort
         },
         {
             type: 'input',

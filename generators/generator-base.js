@@ -569,12 +569,12 @@ module.exports = class extends Generator {
         // Add the entity to ehcache
         this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName()`);
         // Add the collections linked to that entity to ehcache
-        for (const idx in relationships) {
-            const relationshipType = relationships[idx].relationshipType;
+        relationships.forEach((relationship) => {
+            const relationshipType = relationship.relationshipType;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-                this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName() + ".${relationships[idx].relationshipFieldNamePlural}"`);
+                this.addEntryToEhcache(`${this.packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`);
             }
-        }
+        });
     }
 
     /**

@@ -16,6 +16,7 @@
         "no-multi-str": 2,
         "no-irregular-whitespace": 2,
         "comma-dangle": "off",
+        "max-len": "off",
         "func-names": "off",
         "class-methods-use-this": "off",
 
@@ -27,7 +28,6 @@
         "import/no-unresolved": "off",
         "no-shadow": "off",
         "one-var": "off",
-        "max-len": "off",
         "prefer-rest-params": "off",
         "import/newline-after-import": "off",
         "no-unused-expressions": "off",
@@ -36,12 +36,10 @@
         "no-useless-concat": "off",
         "no-confusing-arrow": "off",
         "guard-for-in": "off",
-        "no-restricted-syntax": "off",
         "no-underscore-dangle": "off",
         "camelcase": "off",
         "prefer-template": "off",
         "no-cond-assign": "off",
-        "default-case": "off",
-        "no-nested-ternary": "off"
+        "default-case": "off"
     }
 }
