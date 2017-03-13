@@ -40,8 +40,12 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                         }
                     }
                     headers.sort();
-                    let errorHeader = httpResponse.headers.get(headers[0]);
-                    let entityKey = httpResponse.headers.get(headers[1]);
+                    let errorHeader = null;
+                    let entityKey = null;
+                    if (headers.length > 1) {
+                        errorHeader = httpResponse.headers.get(headers[0]);
+                        entityKey = httpResponse.headers.get(headers[1]);
+                    }
                     if (errorHeader) {
                         let entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                         this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
