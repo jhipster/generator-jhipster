@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <logger name="<%=packageName%>" level="INFO"/>
+
+    <logger name="io.github.jhipster" level="WARN"/>
+<% if (databaseType == 'cassandra') { %>
+    <logger name="io.netty" level="WARN"/><% } %>
+    <logger name="javax.activation" level="WARN"/>
+    <logger name="javax.mail" level="WARN"/>
+    <logger name="javax.xml.bind" level="WARN"/>
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="com.codahale.metrics" level="WARN"/><% if (databaseType == 'cassandra') { %>
+    <logger name="com.datastax" level="WARN"/><% } %>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix.discovery" level="INFO"/>
+    <%_ } _%>
+    <logger name="com.ryantenney" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
+    <logger name="com.zaxxer" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow.websockets.jsr" level="ERROR"/><% if (hibernateCache == 'ehcache') { %>
+    <logger name="org.ehcache" level="WARN"/><% } %>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+    <logger name="org.bson" level="WARN"/><% if (searchEngine == 'elasticsearch') { %>
+    <logger name="org.elasticsearch" level="WARN"/><% } %>
+    <logger name="org.hibernate.validator" level="WARN"/>
+    <%_ if (databaseType == 'sql') { _%>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <%_ } else if (databaseType == 'mongodb') { _%>
+    <logger name="org.mongodb.driver" level="WARN"/>
+    <logger name="org.reflections" level="WARN"/>
+    <%_ } _%>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.cache" level="WARN"/>
+    <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="org.xnio" level="WARN"/>
+    <%_ if (messageBroker == 'kafka') { _%>
+    <logger name="kafka" level="WARN"/>
+    <logger name="org.I0Itec" level="WARN"/>
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'mssql') { _%>
+    <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
+    <%_ } _%>
+    <logger name="springfox" level="WARN"/>
+    <logger name="sun.rmi" level="WARN"/><% if (databaseType == 'sql') { %>
+    <logger name="liquibase" level="WARN"/>
+    <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    <logger name="sun.net.www" level="INFO"/>
+    <%_ } _%>
+    <logger name="sun.rmi.transport" level="WARN"/>
+
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

@@ -429,7 +429,7 @@ function writeFiles() {
             this.template(`${SERVER_TEST_SRC_DIR}package/web/rest/_TestUtil.java`, `${testDir}web/rest/TestUtil.java`);
 
             this.template(`${SERVER_TEST_RES_DIR}config/_application.yml`, `${SERVER_TEST_RES_DIR}config/application.yml`);
-            this.template(`${SERVER_TEST_RES_DIR}_logback-test.xml`, `${SERVER_TEST_RES_DIR}logback-test.xml`);
+            this.template(`${SERVER_TEST_RES_DIR}_logback.xml`, `${SERVER_TEST_RES_DIR}logback.xml`);
 
             // Create Gateway tests files
             if (this.applicationType === 'gateway') {
