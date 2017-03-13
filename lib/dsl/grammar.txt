@@ -67,7 +67,10 @@
       clientPackageManager: 'yarn',
       clientFramework: 'angular1',
       nativeLanguage: 'en',
-      frontEndBuilder: null
+      frontEndBuilder: null,
+      skipUserManagement: false,
+      skipClient: false,
+      skipServer: false
     },
     constants: {},
     entities: [],
@@ -254,6 +257,15 @@ applicationContentDecl
   }
   / FRONT_END_BUILDER SPACE* frontEndBuilder:[A-z]+ applicationContentDecl:applicationContentDecl {
     parsed.application.frontEndBuilder = frontEndBuilder.join('');
+  }
+  / SKIP_USER_MANAGEMENT SPACE* skipUserManagement:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.skipUserManagement = skipUserManagement;
+  }
+  / SKIP_CLIENT SPACE* skipClient:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.skipClient = skipClient;
+  }
+  / SKIP_SERVER SPACE* skipServer:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.skipServer = skipServer;
   }
   / ''
 
@@ -520,6 +532,8 @@ CLIENT_PACKAGE_MANAGER = 'clientPackageManager'
 CLIENT_FRAMEWORK = 'clientFramework'
 NATIVE_LANGUAGE = 'nativeLanguage'
 FRONT_END_BUILDER = 'frontendBuilder'
+SKIP_USER_MANAGEMENT = 'skipUserManagement'
+// skipClient & skipServer are already defined
 TRUE = 'true'
 FALSE = 'false'
 // Entity constants
