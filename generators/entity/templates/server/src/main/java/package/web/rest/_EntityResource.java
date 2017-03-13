@@ -102,8 +102,7 @@ public class <%= entityClass %>Resource {
      *<% if (pagination != 'no') { %>
      * @param pageable the pagination information<% } if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request<% } %>
-     * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body<% if (pagination != 'no') { %>
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
+     * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
     @GetMapping("/<%= entityApiUrl %>")
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
