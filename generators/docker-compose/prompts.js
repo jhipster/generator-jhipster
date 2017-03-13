@@ -293,7 +293,7 @@ function getAppFolders(input, composeApplicationType) {
                             || (composeApplicationType === fileData['generator-jhipster'].applicationType)
                             || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'gateway'))
                             || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'uaa')))) {
-                        appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
+                        appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
                     }
                 } catch (err) {
                     this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));

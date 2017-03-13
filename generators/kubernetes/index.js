@@ -126,7 +126,7 @@ module.exports = KubernetesGenerator.extend({
                     try {
                         const fileData = this.fs.readJSON(`${file.name}/.yo-rc.json`);
                         if (fileData['generator-jhipster'].baseName !== undefined) {
-                            appsFolders.push(file.name.match(/([^\/]*)\/*$/)[1]);
+                            appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
                         }
                     } catch (err) {
                         this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));

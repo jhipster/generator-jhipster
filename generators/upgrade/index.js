@@ -38,7 +38,7 @@ module.exports = UpgradeGenerator.extend({
     _gitCheckout: function (branch, callback) {
         this.gitExec(['checkout', '-q', branch], (code, msg, err) => {
             if (code !== 0) this.error(`Unable to checkout branch ${branch}:\n${err}`);
-            this.log(`Checked out branch \"${branch}\"`);
+            this.log(`Checked out branch "${branch}"`);
             callback();
         });
     },
@@ -63,9 +63,9 @@ module.exports = UpgradeGenerator.extend({
 
     _gitCommitAll: function (commitMsg, callback) {
         const commit = () => {
-            this.gitExec(['commit', '-q', '-m', `\"${commitMsg}\"`, '-a', '--allow-empty'], (code, msg, err) => {
+            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty'], (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to commit in git:\n${err}`);
-                this.log(`Committed with message \"${commitMsg}\"`);
+                this.log(`Committed with message "${commitMsg}"`);
                 callback();
             });
         };

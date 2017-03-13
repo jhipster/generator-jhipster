@@ -261,7 +261,7 @@ module.exports = DockerComposeGenerator.extend({
                 const yamlArray = yamlString.split('\n');
                 for (let j = 0; j < yamlArray.length; j++) {
                     yamlArray[j] = `    ${yamlArray[j]}`;
-                    yamlArray[j] = yamlArray[j].replace(/\'/g, '');
+                    yamlArray[j] = yamlArray[j].replace(/'/g, '');
                 }
                 yamlString = yamlArray.join('\n');
                 yamlString = yamlString.replace('>-\n                ', '');

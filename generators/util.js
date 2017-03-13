@@ -40,12 +40,12 @@ function replaceContent(args, generator) {
 }
 
 function escapeRegExp(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'); // eslint-disable-line
 }
 
 function rewrite(args) {
     // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(line => `\s*${escapeRegExp(line)}`).join('\n'));
+    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line)}`).join('\n'));
 
     if (re.test(args.haystack)) {
         return args.haystack;
@@ -119,7 +119,7 @@ function renderContent(source, generator, context, options, cb) {
 }
 
 function replaceTitle(body, generator) {
-    const re = /pageTitle[\s]*:[\s]*[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"]/g;
+    const re = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
     let match;
 
     while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
@@ -136,7 +136,7 @@ function replaceTitle(body, generator) {
 }
 
 function replacePlaceholders(body, generator) {
-    const re = /placeholder=[\'|\"]([\{]{2}[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"][\s][\|][\s](translate)[\}]{2})[\'|\"]/g;
+    const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
     let match;
 
     while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign

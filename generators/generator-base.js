@@ -169,7 +169,7 @@ module.exports = class extends Generator {
                 needle: 'jhipster-needle-add-entity-module-import',
                 splicable: [
                     this.stripMargin(
-                        `|import \{ ${appName}${entityAngularName}Module \} from \'./${entityFolderName}/${entityFileName}.module\';`
+                        `|import { ${appName}${entityAngularName}Module } from './${entityFolderName}/${entityFileName}.module';`
                     )
                 ]
             }, this);
@@ -1035,21 +1035,21 @@ module.exports = class extends Generator {
         switch (action) {
         case 'stripHtml' :
             regex = new RegExp([
-                /( (data-t|jhiT)ranslate\="([a-zA-Z0-9\ \+\{\}\'](\.)?)+")/,                    // data-translate or jhiTranslate
-                /( translate(-v|V)alues\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")/,    // translate-values or translateValues
+                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'](\.)?)+")/,                    // data-translate or jhiTranslate
+                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.)*?\}")/,    // translate-values or translateValues
                 /( translate-compile)/,                                                         // translate-compile
-                /( translate-value-max\="[0-9\{\}\(\)\|]*")/,                                   // translate-value-max
+                /( translate-value-max="[0-9{}()|]*")/,                                   // translate-value-max
             ].map(r => r.source).join('|'), 'g');
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
             break;
         case 'stripJs' :
             regex = new RegExp([
-                /(\,[\s]*(resolve)\:[\s]*[\{][\s]*(translatePartialLoader)[\'a-zA-Z0-9\$\,\(\)\{\.\<\%\=\-\>\;\s\:\[\]]*(\;[\s]*\}\][\s]*\}))/, // ng1 resolve block
-                /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s[\"|\']ng-jhipster[\"|\']\;)/,       // ng2 import jhiLanguageService
-                /(\,?\s?JhiLanguageService\,?\s?)/,                                                          // ng2 import jhiLanguageService
-                /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?\:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
-                /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[[\'\"a-zA-Z0-9\-_,\s]+\]\)\;[\s]*)/, // jhiLanguageService invocations
+                /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
+                /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/,       // ng2 import jhiLanguageService
+                /(,?\s?JhiLanguageService,?\s?)/,                                                          // ng2 import jhiLanguageService
+                /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/,          // ng2 jhiLanguageService constructor argument
+                /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[['"a-zA-Z0-9\-_,\s]+\]\);[\s]*)/, // jhiLanguageService invocations
             ].map(r => r.source).join('|'), 'g');
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
