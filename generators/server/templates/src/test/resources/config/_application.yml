@@ -126,7 +126,7 @@ server:
 
 jhipster:
     async:
-        core-pool-size: 2
+        core-pool-size: 1
         max-pool-size: 50
         queue-capacity: 10000
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt' || authenticationType == 'uaa') { _%>
