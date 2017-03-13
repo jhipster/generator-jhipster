@@ -351,25 +351,18 @@ module.exports = JhipsterClientGenerator.extend({
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         let logMsg =
-            `${'Start your Webpack development server with:' +
-            '\n '}${chalk.yellow.bold(`${this.clientPackageManager} start`)
-            }\n`;
+            `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
 
         if (this.clientFramework === 'angular1') {
             logMsg =
-                `${'Inject your front end dependencies into your source code:' +
-                '\n '}${chalk.yellow.bold('gulp inject')
-                }\n` +
-                '\nGenerate the AngularJS constants:' +
-                `\n ${chalk.yellow.bold('gulp ngconstant:dev')
-                }${this.useSass ?
-                `${'\n' +
-                '\nCompile your Sass style sheets:' +
-                '\n '}${chalk.yellow.bold('gulp sass')}` : ''
-                }\n` +
-                '\nOr do all of the above:' +
-                `\n ${chalk.yellow.bold('gulp install')
-                }\n`;
+                'Inject your front end dependencies into your source code:\n' +
+                ` ${chalk.yellow.bold('gulp inject')}\n\n` +
+                'Generate the AngularJS constants:\n' +
+                ` ${chalk.yellow.bold('gulp ngconstant:dev')}` +
+                `${this.useSass ? '\n\nCompile your Sass style sheets:\n\n' +
+                `${chalk.yellow.bold('gulp sass')}` : ''}\n\n` +
+                'Or do all of the above:\n' +
+                ` ${chalk.yellow.bold('gulp install')}\n`;
         }
         this.log(chalk.green(logMsg));
     }
