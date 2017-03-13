@@ -46,7 +46,7 @@
       packageFolder: 'io/github/jhipster',
       authenticationType: '',
       hibernateCache: 'no',
-      clusteredHttpSession: false,
+      clusteredHttpSession: 'no',
       websocket: false,
       databaseType: 'sql',
       devDatabaseType: 'h2Memory',
@@ -170,8 +170,8 @@ applicationContentDecl
   / HIBERNATE_CACHE SPACE* hibernateCache:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.hibernateCache = hibernateCache.join('');
   }
-  / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
-    parsed.application.clusteredHttpSession = clusteredHttpSession;
+  / CLUSTERED_HTTP_SESSION SPACE* clusteredHttpSession:[A-z]+ SPACE* applicationContentDecl:applicationContentDecl {
+    parsed.application.clusteredHttpSession = clusteredHttpSession.join('');
   }
   / WEBSOCKET SPACE* websocket:booleanChoice SPACE* applicationContentDecl:applicationContentDecl {
     parsed.application.websocket = websocket;
