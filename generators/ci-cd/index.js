@@ -12,15 +12,15 @@ util.inherits(PipelineGenerator, scriptBase);
 const constants = require('../generator-constants');
 
 module.exports = PipelineGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
     },
 
     initializing: {
-        sayHello: function () {
+        sayHello() {
             this.log(chalk.white('[Beta] Welcome to the JHipster CI/CD Sub-Generator'));
         },
-        getConfig: function () {
+        getConfig() {
             this.baseName = this.config.get('baseName');
             this.applicationType = this.config.get('applicationType');
             this.skipClient = this.config.get('skipClient');
@@ -31,12 +31,12 @@ module.exports = PipelineGenerator.extend({
             this.testFrameworks = this.config.get('testFrameworks');
             this.abort = false;
         },
-        initConstants: function () {
+        initConstants() {
             this.NODE_VERSION = constants.NODE_VERSION;
             this.YARN_VERSION = constants.YARN_VERSION;
             this.NPM_VERSION = constants.NPM_VERSION;
         },
-        getConstants: function () {
+        getConstants() {
             this.DOCKER_DIR = constants.DOCKER_DIR;
             this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
             this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
@@ -48,12 +48,12 @@ module.exports = PipelineGenerator.extend({
         askIntegrations: prompts.askIntegrations
     },
     configuring: {
-        insight: function () {
+        insight() {
             if (this.abort) return;
             const insight = this.insight();
             insight.trackWithEvent('generator', 'ci-cd');
         },
-        setTemplateconstiables: function () {
+        setTemplateconstiables() {
             if (this.abort || this.jenkinsIntegrations === undefined) return;
             this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
             this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';
@@ -61,7 +61,7 @@ module.exports = PipelineGenerator.extend({
         }
     },
 
-    writing: function () {
+    writing() {
         if (this.pipelines.includes('jenkins')) {
             this.template('jenkins/_Jenkinsfile', 'Jenkinsfile');
             this.template('jenkins/_jenkins.yml', `${this.DOCKER_DIR}jenkins.yml`);

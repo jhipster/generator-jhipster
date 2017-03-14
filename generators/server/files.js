@@ -24,18 +24,18 @@ function writeFiles() {
             javaDir = this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
         },
 
-        cleanupOldServerFiles: function () {
+        cleanupOldServerFiles() {
             cleanup.cleanupOldServerFiles(this, this.javaDir, this.testDir);
         },
 
-        writeGlobalFiles: function () {
+        writeGlobalFiles() {
             this.template('_README.md', 'README.md');
             this.template('gitignore', '.gitignore');
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
         },
 
-        writeDockerFiles: function () {
+        writeDockerFiles() {
             // Create Docker and Docker Compose files
             this.template(`${DOCKER_DIR}_Dockerfile`, `${DOCKER_DIR}Dockerfile`);
             this.template(`${DOCKER_DIR}_app.yml`, `${DOCKER_DIR}app.yml`);
@@ -96,7 +96,7 @@ function writeFiles() {
             this.template(`${DOCKER_DIR}_sonar.yml`, `${DOCKER_DIR}sonar.yml`);
         },
 
-        writeServerBuildFiles: function () {
+        writeServerBuildFiles() {
             switch (this.buildTool) {
             case 'gradle':
                 this.template('_build.gradle', 'build.gradle');
@@ -133,7 +133,7 @@ function writeFiles() {
             }
         },
 
-        writeServerResourceFiles: function () {
+        writeServerResourceFiles() {
             // Create Java resource files
             mkdirp(SERVER_MAIN_RES_DIR);
             this.copy(`${SERVER_MAIN_RES_DIR}banner.txt`, `${SERVER_MAIN_RES_DIR}banner.txt`);
@@ -182,11 +182,11 @@ function writeFiles() {
             }
         },
 
-        writeServerPropertyFiles: function () {
+        writeServerPropertyFiles() {
             this.template(`../../languages/templates/${SERVER_MAIN_RES_DIR}i18n/_messages_en.properties`, `${SERVER_MAIN_RES_DIR}i18n/messages.properties`);
         },
 
-        writeServerJavaAuthConfigFiles: function () {
+        writeServerJavaAuthConfigFiles() {
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/security/_SpringSecurityAuditorAware.java`, `${javaDir}security/SpringSecurityAuditorAware.java`);
             }
@@ -266,7 +266,7 @@ function writeFiles() {
             }
         },
 
-        writeServerJavaGatewayFiles: function () {
+        writeServerJavaGatewayFiles() {
             if (this.applicationType !== 'gateway') return;
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_GatewayConfiguration.java`, `${javaDir}config/GatewayConfiguration.java`);
@@ -280,7 +280,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_GatewayResource.java`, `${javaDir}web/rest/GatewayResource.java`);
         },
 
-        writeServerMicroserviceFiles: function () {
+        writeServerMicroserviceFiles() {
             if (this.applicationType !== 'microservice' && !(this.applicationType === 'gateway' && this.authenticationType === 'uaa')) return;
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_MicroserviceSecurityConfiguration.java`, `${javaDir}config/MicroserviceSecurityConfiguration.java`);
@@ -291,21 +291,21 @@ function writeFiles() {
             }
         },
 
-        writeServerMicroserviceAndGatewayFiles: function () {
+        writeServerMicroserviceAndGatewayFiles() {
             if (!this.serviceDiscoveryType) return;
 
             this.template(`${SERVER_MAIN_RES_DIR}config/_bootstrap.yml`, `${SERVER_MAIN_RES_DIR}config/bootstrap.yml`);
             this.template(`${SERVER_MAIN_RES_DIR}config/_bootstrap-prod.yml`, `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`);
         },
 
-        writeServerJavaAppFiles: function () {
+        writeServerJavaAppFiles() {
             // Create Java files
             // Spring Boot main
             this.template(`${SERVER_MAIN_SRC_DIR}package/_Application.java`, `${javaDir}/${this.mainClass}.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/_ApplicationWebXml.java`, `${javaDir}/ApplicationWebXml.java`);
         },
 
-        writeServerJavaConfigFiles: function () {
+        writeServerJavaConfigFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/aop/logging/_LoggingAspect.java`, `${javaDir}aop/logging/LoggingAspect.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/config/_DefaultProfileUtil.java`, `${javaDir}config/DefaultProfileUtil.java`);
 
@@ -355,7 +355,7 @@ function writeFiles() {
             }
         },
 
-        writeServerJavaDomainFiles: function () {
+        writeServerJavaDomainFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/domain/_package-info.java`, `${javaDir}domain/package-info.java`);
 
             if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
@@ -364,14 +364,14 @@ function writeFiles() {
             }
         },
 
-        writeServerJaconstepoFiles: function () {
+        writeServerJaconstepoFiles() {
             if (this.searchEngine === 'elasticsearch') {
                 this.template(`${SERVER_MAIN_SRC_DIR}package/repository/search/_package-info.java`, `${javaDir}repository/search/package-info.java`);
             }
             this.template(`${SERVER_MAIN_SRC_DIR}package/repository/_package-info.java`, `${javaDir}repository/package-info.java`);
         },
 
-        writeServerJavaServiceFiles: function () {
+        writeServerJavaServiceFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/_package-info.java`, `${javaDir}service/package-info.java`);
 
             /* Skip the code below for --skip-user-management */
@@ -380,7 +380,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/service/util/_RandomUtil.java`, `${javaDir}service/util/RandomUtil.java`);
         },
 
-        writeServerJavaWebErrorFiles: function () {
+        writeServerJavaWebErrorFiles() {
             // error handler code - server side
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_ErrorConstants.java`, `${javaDir}web/rest/errors/ErrorConstants.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_CustomParameterizedException.java`, `${javaDir}web/rest/errors/CustomParameterizedException.java`);
@@ -390,7 +390,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/errors/_ParameterizedErrorVM.java`, `${javaDir}web/rest/errors/ParameterizedErrorVM.java`);
         },
 
-        writeServerJavaWebFiles: function () {
+        writeServerJavaWebFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_package-info.java`, `${javaDir}web/rest/vm/package-info.java`);
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/vm/_LoggerVM.java`, `${javaDir}web/rest/vm/LoggerVM.java`);
 
@@ -402,7 +402,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/rest/_ProfileInfoResource.java`, `${javaDir}web/rest/ProfileInfoResource.java`);
         },
 
-        writeServerJavaWebsocketFiles: function () {
+        writeServerJavaWebsocketFiles() {
             if (this.websocket !== 'spring-websocket') return;
 
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/websocket/_package-info.java`, `${javaDir}web/websocket/package-info.java`);
@@ -411,7 +411,7 @@ function writeFiles() {
             this.template(`${SERVER_MAIN_SRC_DIR}package/web/websocket/dto/_ActivityDTO.java`, `${javaDir}web/websocket/dto/ActivityDTO.java`);
         },
 
-        writeServerTestFwFiles: function () {
+        writeServerTestFwFiles() {
             // Create Test Java files
             const testDir = this.testDir;
 
@@ -464,7 +464,7 @@ function writeFiles() {
             }
         },
 
-        writeJavaUserManagementFiles: function () {
+        writeJavaUserManagementFiles() {
             if (this.skipUserManagement) return;
             // user management related files
 

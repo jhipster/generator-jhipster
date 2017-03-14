@@ -10,16 +10,16 @@ const ReportGenerator = generator.extend({});
 util.inherits(ReportGenerator, scriptBase);
 
 module.exports = ReportGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
     },
 
     initializing: {
-        sayHello: function () {
+        sayHello() {
             this.log(chalk.white('Welcome to the JHipster Information Sub-Generator\n'));
         },
 
-        checkJHipster: function () {
+        checkJHipster() {
             const done = this.async();
             this.log('##### **JHipster Version(s)**');
             shelljs.exec('npm list generator-jhipster', { silent: true }, (err, stdout, stderr) => {
@@ -30,7 +30,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        displayConfiguration: function () {
+        displayConfiguration() {
             const done = this.async();
             const result = shelljs.cat('.yo-rc.json');
             this.log(`${'\n##### **JHipster configuration, a `.yo-rc.json` file generated in the root folder**\n' +
@@ -38,7 +38,7 @@ module.exports = ReportGenerator.extend({
             done();
         },
 
-        displayEntities: function () {
+        displayEntities() {
             const done = this.async();
             this.log('\n##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**\n');
             shelljs.ls('.jhipster/*.json').forEach((file) => {
@@ -49,7 +49,7 @@ module.exports = ReportGenerator.extend({
             done();
         },
 
-        checkJava: function () {
+        checkJava() {
             const done = this.async();
             this.log('\n##### **Browsers and Operating System**\n');
             shelljs.exec('java -version', { silent: true }, (err, stdout, stderr) => {
@@ -60,7 +60,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkGit: function () {
+        checkGit() {
             const done = this.async();
             shelljs.exec('git version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -70,7 +70,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkNode: function () {
+        checkNode() {
             const done = this.async();
             shelljs.exec('node -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -80,7 +80,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkNpm: function () {
+        checkNpm() {
             const done = this.async();
             shelljs.exec('npm -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -90,7 +90,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkBower: function () {
+        checkBower() {
             const done = this.async();
             shelljs.exec('bower -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -100,7 +100,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkGulp: function () {
+        checkGulp() {
             const done = this.async();
             shelljs.exec('gulp -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -111,7 +111,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkYeoman: function () {
+        checkYeoman() {
             const done = this.async();
             shelljs.exec('yo --version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -121,7 +121,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkYarn: function () {
+        checkYarn() {
             const done = this.async();
             shelljs.exec('yarn --version', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -131,7 +131,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkDocker: function () {
+        checkDocker() {
             const done = this.async();
             shelljs.exec('docker -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {
@@ -141,7 +141,7 @@ module.exports = ReportGenerator.extend({
             });
         },
 
-        checkDockerCompose: function () {
+        checkDockerCompose() {
             const done = this.async();
             shelljs.exec('docker-compose -v', { silent: true }, (err, stdout, stderr) => {
                 if (!err) {

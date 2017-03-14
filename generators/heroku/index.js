@@ -15,10 +15,10 @@ const HerokuGenerator = generator.extend({});
 util.inherits(HerokuGenerator, scriptBase);
 
 module.exports = HerokuGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
     },
-    initializing: function () {
+    initializing() {
         this.log(chalk.bold('Heroku configuration is starting'));
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
         this.baseName = this.config.get('baseName');
@@ -34,7 +34,7 @@ module.exports = HerokuGenerator.extend({
         this.dynoSize = 'Free';
     },
 
-    prompting: function () {
+    prompting() {
         const done = this.async();
 
         if (this.herokuAppName) {
@@ -81,7 +81,7 @@ module.exports = HerokuGenerator.extend({
         }
     },
     configuring: {
-        checkInstallation: function () {
+        checkInstallation() {
             if (this.abort) return;
             const done = this.async();
 
@@ -97,12 +97,12 @@ module.exports = HerokuGenerator.extend({
     },
 
     default: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'heroku');
         },
 
-        gitInit: function () {
+        gitInit() {
             if (this.abort) return;
             const done = this.async();
 
@@ -122,7 +122,7 @@ module.exports = HerokuGenerator.extend({
             }
         },
 
-        installHerokuDeployPlugin: function () {
+        installHerokuDeployPlugin() {
             if (this.abort) return;
             const done = this.async();
             this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
@@ -139,7 +139,7 @@ module.exports = HerokuGenerator.extend({
             });
         },
 
-        herokuCreate: function () {
+        herokuCreate() {
             if (this.abort || this.herokuAppExists) return;
             const done = this.async();
 
@@ -212,7 +212,7 @@ module.exports = HerokuGenerator.extend({
             });
         },
 
-        herokuAddonsCreate: function () {
+        herokuAddonsCreate() {
             if (this.abort) return;
             const done = this.async();
 
@@ -240,7 +240,7 @@ module.exports = HerokuGenerator.extend({
             });
         },
 
-        configureJHipsterRegistry: function () {
+        configureJHipsterRegistry() {
             if (this.abort || this.herokuAppExists) return;
             const done = this.async();
 
@@ -274,7 +274,7 @@ module.exports = HerokuGenerator.extend({
             }
         },
 
-        copyHerokuFiles: function () {
+        copyHerokuFiles() {
             if (this.abort) return;
 
             const done = this.async();
@@ -292,7 +292,7 @@ module.exports = HerokuGenerator.extend({
             });
         },
 
-        addHerokuBuildPlugin: function () {
+        addHerokuBuildPlugin() {
             if (this.buildTool !== 'gradle') return;
             this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '0.2.0');
             this.applyFromGradleScript('gradle/heroku');
@@ -300,7 +300,7 @@ module.exports = HerokuGenerator.extend({
     },
 
     end: {
-        productionBuild: function () {
+        productionBuild() {
             if (this.abort) return;
             const done = this.async();
             this.log(chalk.bold('\nBuilding application'));
@@ -321,7 +321,7 @@ module.exports = HerokuGenerator.extend({
             });
         },
 
-        productionDeploy: function () {
+        productionDeploy() {
             if (this.abort) return;
             const done = this.async();
             this.log(chalk.bold('\nDeploying application'));

@@ -13,14 +13,13 @@ const constants = require('../generator-constants');
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
-
 const EntityGenerator = generator.extend({});
 
 util.inherits(EntityGenerator, scriptBase);
 
 module.exports = EntityGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         // This makes `name` a required argument.
         this.argument('name', {
@@ -98,7 +97,7 @@ module.exports = EntityGenerator.extend({
     },
     initializing: {
 
-        getConfig: function (args) {
+        getConfig(args) {
             this.useConfigurationFile = false;
             this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
@@ -154,13 +153,13 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        validateDbExistence: function () {
+        validateDbExistence() {
             if (this.databaseType === 'no' && !(this.authenticationType === 'uaa' && this.applicationType === 'gateway')) {
                 this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
             }
         },
 
-        validateEntityName: function () {
+        validateEntityName() {
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
                 this.error(chalk.red('The entity name cannot contain special characters'));
             } else if (this.name === '') {
@@ -172,7 +171,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        setupconsts: function () {
+        setupconsts() {
             // Specific Entity sub-generator constiables
             if (!this.useConfigurationFile) {
                 // no file present, new entity creation
@@ -190,7 +189,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        validateTableName: function () {
+        validateTableName() {
             const prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
                 this.error(chalk.red('The table name cannot contain special characters'));
@@ -207,7 +206,7 @@ module.exports = EntityGenerator.extend({
     },
 
     /* private Helper methods */
-    _loadJson: function () {
+    _loadJson() {
         try {
             this.fileData = this.fs.readJSON(this.fromPath);
         } catch (err) {
@@ -248,7 +247,7 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    _getMicroserviceAppName: function () {
+    _getMicroserviceAppName() {
         return _.camelCase(this.microserviceName, true) + (this.microserviceName.endsWith('App') ? '' : 'App');
     },
     /* end of Helper methods */
@@ -269,7 +268,7 @@ module.exports = EntityGenerator.extend({
     },
 
     configuring: {
-        validateFile: function () {
+        validateFile() {
             if (!this.useConfigurationFile) {
                 return;
             }
@@ -374,7 +373,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeEntityJson: function () {
+        writeEntityJson() {
             if (this.useConfigurationFile && this.updateEntity === 'regenerate') {
                 return; // do not update if regenerating entity
             }
@@ -410,7 +409,7 @@ module.exports = EntityGenerator.extend({
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
-        loadInMemoryData: function () {
+        loadInMemoryData() {
             const entityNameSpinalCased = _.kebabCase(_.lowerFirst(this.name));
             const entityNamePluralizedAndSpinalCased = _.kebabCase(_.lowerFirst(pluralize(this.name)));
 
@@ -639,7 +638,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        insight: function () {
+        insight() {
             // track insights
             const insight = this.insight();
 
@@ -655,7 +654,7 @@ module.exports = EntityGenerator.extend({
 
     writing: writeFiles(),
 
-    install: function () {
+    install() {
         const injectJsFilesToIndex = () => {
             this.log(`\n${chalk.bold.green('Running `gulp inject` to add JavaScript to index.html\n')}`);
             this.spawnCommand('gulp', ['inject:app']);
@@ -675,7 +674,7 @@ module.exports = EntityGenerator.extend({
     },
 
     end: {
-        afterRunHook: function () {
+        afterRunHook() {
             try {
                 const modules = this.getModuleHooks();
                 if (modules.length > 0) {
@@ -708,7 +707,7 @@ module.exports = EntityGenerator.extend({
                     };
                     // run through all post entity creation module hooks
                     this.callHooks('entity', 'post', {
-                        entityConfig: entityConfig,
+                        entityConfig,
                         force: this.options.force
                     });
                 }

@@ -624,7 +624,7 @@ module.exports = class extends Generator {
         try {
             jhipsterUtils.rewriteFile({
                 file: fullPath,
-                needle: needle,
+                needle,
                 splicable: [
                     `<include file="classpath:config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`
                 ]
@@ -1098,7 +1098,7 @@ module.exports = class extends Generator {
         try {
             jhipsterUtils.rewriteFile({
                 file: filePath,
-                needle: needle,
+                needle,
                 splicable: [
                     content
                 ]
@@ -1120,9 +1120,9 @@ module.exports = class extends Generator {
         try {
             jhipsterUtils.replaceContent({
                 file: filePath,
-                pattern: pattern,
-                content: content,
-                regex: regex
+                pattern,
+                content,
+                regex
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
@@ -1148,11 +1148,11 @@ module.exports = class extends Generator {
             const generatorCallback = `${generatorName}:${callbackSubGenerator || 'app'}`;
             const moduleConfig = {
                 name: `${moduleName} generator`,
-                npmPackageName: npmPackageName,
+                npmPackageName,
                 description: description || `A JHipster module to generate ${moduleName}`,
-                hookFor: hookFor,
-                hookType: hookType,
-                generatorCallback: generatorCallback
+                hookFor,
+                hookType,
+                generatorCallback
             };
             try {
                 // if file is not present, we got an empty list, no exception
@@ -1255,7 +1255,7 @@ module.exports = class extends Generator {
         if (shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
             shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach((file) => {
                 const definition = this.fs.readJSON(file);
-                entities.push({ name: path.basename(file, '.json'), definition: definition });
+                entities.push({ name: path.basename(file, '.json'), definition });
             });
         }
 
@@ -1297,7 +1297,7 @@ module.exports = class extends Generator {
      * @param {function} callback - a callback function to be called once process complete, The call back will receive code, stdout and stderr
      */
     gitExec(args, options, callback) {
-        callback = arguments[arguments.length - 1];
+        callback = arguments[arguments.length - 1]; // eslint-disable-line prefer-rest-params
         if (arguments.length < 3) {
             options = {};
         }
@@ -1607,7 +1607,7 @@ module.exports = class extends Generator {
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
-                configOptions: configOptions,
+                configOptions,
                 force: generator.options.force,
                 languages: generator.languages
             });
@@ -1782,7 +1782,7 @@ module.exports = class extends Generator {
             jhipsterUtils.replaceContent({
                 file: fullPath,
                 pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-                content: content
+                content
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
@@ -1804,7 +1804,7 @@ module.exports = class extends Generator {
             jhipsterUtils.replaceContent({
                 file: fullPath,
                 pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
-                content: content
+                content
             }, this);
         } catch (e) {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
@@ -1821,8 +1821,8 @@ module.exports = class extends Generator {
         insight.trackWithEvent = (category, action) => {
             insight.track(category, action);
             insight.trackEvent({
-                category: category,
-                action: action,
+                category,
+                action,
                 label: `${category} ${action}`,
                 value: 1
             });

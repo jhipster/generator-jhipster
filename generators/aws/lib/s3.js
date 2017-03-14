@@ -86,7 +86,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                 if (err) {
                     error(err.message, callback);
                 } else {
-                    callback(null, { message: message, warKey: warKey });
+                    callback(null, { message, warKey });
                 }
             });
         }
@@ -121,7 +121,7 @@ function uploadToS3(s3, body, callback) {
                         complete: '=',
                         incomplete: ' ',
                         width: 20,
-                        total: total,
+                        total,
                         clear: true
                     });
                 }
@@ -140,9 +140,9 @@ function uploadToS3(s3, body, callback) {
 }
 
 function success(message, callback) {
-    callback(null, { message: message });
+    callback(null, { message });
 }
 
 function error(message, callback) {
-    callback({ message: message }, null);
+    callback({ message }, null);
 }

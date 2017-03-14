@@ -18,8 +18,8 @@ util.inherits(JhipsterClientGenerator, scriptBase);
 const QUESTIONS = constants.CLIENT_QUESTIONS;
 
 module.exports = JhipsterClientGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         this.configOptions = this.options.configOptions || {};
 
@@ -127,13 +127,13 @@ module.exports = JhipsterClientGenerator.extend({
     },
 
     initializing: {
-        displayLogo: function () {
+        displayLogo() {
             if (this.logo) {
                 this.printJHipsterLogo();
             }
         },
 
-        setupClientconsts: function () {
+        setupClientconsts() {
             // Make constants available in templates
             this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -191,7 +191,7 @@ module.exports = JhipsterClientGenerator.extend({
         askForClientSideOpts: prompts.askForClientSideOpts,
         askFori18n: prompts.askFori18n,
 
-        setSharedConfigOptions: function () {
+        setSharedConfigOptions() {
             this.configOptions.lastQuestion = this.currentQuestion;
             this.configOptions.totalQuestions = this.totalQuestions;
             this.configOptions.clientFramework = this.clientFramework;
@@ -201,7 +201,7 @@ module.exports = JhipsterClientGenerator.extend({
     },
 
     configuring: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'client');
             insight.track('app/clientFramework', this.clientFramework);
@@ -211,7 +211,7 @@ module.exports = JhipsterClientGenerator.extend({
             insight.track('app/languages', this.languages);
         },
 
-        configureGlobal: function () {
+        configureGlobal() {
             // Application name modified, using each technology's conventions
             this.camelizedBaseName = _.camelCase(this.baseName);
             this.angularAppName = this.getAngularAppName();
@@ -225,7 +225,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
         },
 
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('clientFramework', this.clientFramework);
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
@@ -239,7 +239,7 @@ module.exports = JhipsterClientGenerator.extend({
 
     default: {
 
-        getSharedConfigOptions: function () {
+        getSharedConfigOptions() {
             if (this.configOptions.hibernateCache) {
                 this.hibernateCache = this.configOptions.hibernateCache;
             }
@@ -301,21 +301,21 @@ module.exports = JhipsterClientGenerator.extend({
             this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
         },
 
-        composeLanguages: function () {
+        composeLanguages() {
             if (this.configOptions.skipI18nQuestion) return;
 
             this.composeLanguagesSub(this, this.configOptions, 'client');
         }
     },
 
-    writing: function () {
+    writing() {
         if (this.clientFramework === 'angular1') {
             return writeAngularJsFiles.call(this);
         }
         return writeAngularFiles.call(this);
     },
 
-    install: function () {
+    install() {
         let logMsg =
             `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
@@ -347,7 +347,7 @@ module.exports = JhipsterClientGenerator.extend({
         }
     },
 
-    end: function () {
+    end() {
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
         let logMsg =

@@ -32,8 +32,8 @@ util.inherits(KubernetesGenerator, scriptBase);
 const constants = require('../generator-constants');
 
 module.exports = KubernetesGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
@@ -46,12 +46,12 @@ module.exports = KubernetesGenerator.extend({
     },
 
     initializing: {
-        sayHello: function () {
+        sayHello() {
             this.log(chalk.white(`${chalk.bold('⎈')} [BETA] Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
             this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
         },
 
-        checkDocker: function () {
+        checkDocker() {
             if (this.skipChecks) return;
             const done = this.async();
 
@@ -73,7 +73,7 @@ module.exports = KubernetesGenerator.extend({
             });
         },
 
-        checkKubernetes: function () {
+        checkKubernetes() {
             if (this.skipChecks) return;
             const done = this.async();
 
@@ -86,7 +86,7 @@ module.exports = KubernetesGenerator.extend({
             });
         },
 
-        loadConfig: function () {
+        loadConfig() {
             this.defaultAppsFolders = this.config.get('appsFolders');
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
@@ -115,7 +115,7 @@ module.exports = KubernetesGenerator.extend({
         }
     },
 
-    _getAppFolders: function (input) {
+    _getAppFolders(input) {
         const files = shelljs.ls('-l', this.destinationPath(input));
         const appsFolders = [];
 
@@ -152,12 +152,12 @@ module.exports = KubernetesGenerator.extend({
     },
 
     configuring: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'kubernetes');
         },
 
-        checkImages: function () {
+        checkImages() {
             this.log('\nChecking Docker images in applications\' directories...');
 
             let imagePath = '';
@@ -179,7 +179,7 @@ module.exports = KubernetesGenerator.extend({
             }
         },
 
-        configureImageNames: function () {
+        configureImageNames() {
             for (let i = 0; i < this.appsFolders.length; i++) {
                 const originalImageName = this.appConfigs[i].baseName.toLowerCase();
                 const targetImageName = this.dockerRepositoryName ? `${this.dockerRepositoryName}/${originalImageName}` : originalImageName;
@@ -187,13 +187,13 @@ module.exports = KubernetesGenerator.extend({
             }
         },
 
-        generateJwtSecret: function () {
+        generateJwtSecret() {
             if (this.jwtSecretKey === undefined) {
                 this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
             }
         },
 
-        setAppsFolderPaths: function () {
+        setAppsFolderPaths() {
             if (this.applicationType) return;
             this.appsFolderPaths = [];
             for (let i = 0; i < this.appsFolders.length; i++) {
@@ -202,7 +202,7 @@ module.exports = KubernetesGenerator.extend({
             }
         },
 
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('appsFolders', this.appsFolders);
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
@@ -216,7 +216,7 @@ module.exports = KubernetesGenerator.extend({
 
     writing: writeFiles(),
 
-    end: function () {
+    end() {
         if (this.warning) {
             this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated with missing images!`);
             this.log(this.warningMessage);

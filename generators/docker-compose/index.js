@@ -18,17 +18,17 @@ util.inherits(DockerComposeGenerator, scriptBase);
 const constants = require('../generator-constants');
 
 module.exports = DockerComposeGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
     },
 
     initializing: {
-        sayHello: function () {
+        sayHello() {
             this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
             this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
         },
 
-        setupServerconsts: function () {
+        setupServerconsts() {
             // Make constants available in templates
             this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
             this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
@@ -43,7 +43,7 @@ module.exports = DockerComposeGenerator.extend({
             this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
         },
 
-        checkDocker: function () {
+        checkDocker() {
             const done = this.async();
 
             shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
@@ -64,7 +64,7 @@ module.exports = DockerComposeGenerator.extend({
             });
         },
 
-        checkDockerCompose: function () {
+        checkDockerCompose() {
             const done = this.async();
 
             shelljs.exec('docker-compose -v', { silent: true }, (code, stdout, stderr) => {
@@ -85,7 +85,7 @@ module.exports = DockerComposeGenerator.extend({
             });
         },
 
-        loadConfig: function () {
+        loadConfig() {
             this.defaultAppsFolders = this.config.get('appsFolders');
             this.directoryPath = this.config.get('directoryPath');
             this.clusteredDbApps = this.config.get('clusteredDbApps');
@@ -115,12 +115,12 @@ module.exports = DockerComposeGenerator.extend({
     },
 
     configuring: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'docker-compose');
         },
 
-        checkImages: function () {
+        checkImages() {
             this.log('\nChecking Docker images in applications\' directories...');
 
             let imagePath = '';
@@ -143,13 +143,13 @@ module.exports = DockerComposeGenerator.extend({
             });
         },
 
-        generateJwtSecret: function () {
+        generateJwtSecret() {
             if (this.jwtSecretKey === undefined) {
                 this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
             }
         },
 
-        setAppsFolderPaths: function () {
+        setAppsFolderPaths() {
             this.appsFolderPaths = [];
             this.appsFolders.forEach((appsFolder) => {
                 const path = this.destinationPath(this.directoryPath + appsFolder);
@@ -157,7 +157,7 @@ module.exports = DockerComposeGenerator.extend({
             });
         },
 
-        setAppsYaml: function () {
+        setAppsYaml() {
             this.appsYaml = [];
 
             let portIndex = 8080;
@@ -270,7 +270,7 @@ module.exports = DockerComposeGenerator.extend({
             });
         },
 
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('appsFolders', this.appsFolders);
             this.config.set('directoryPath', this.directoryPath);
             this.config.set('clusteredDbApps', this.clusteredDbApps);
@@ -283,7 +283,7 @@ module.exports = DockerComposeGenerator.extend({
 
     writing: writeFiles(),
 
-    end: function () {
+    end() {
         if (this.warning) {
             this.log('\n');
             this.log(chalk.red('Docker Compose configuration generated with missing images!'));

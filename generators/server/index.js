@@ -18,8 +18,8 @@ util.inherits(JhipsterServerGenerator, scriptBase);
 const QUESTIONS = constants.SERVER_QUESTIONS;
 
 module.exports = JhipsterServerGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         this.configOptions = this.options.configOptions || {};
 
@@ -74,13 +74,13 @@ module.exports = JhipsterServerGenerator.extend({
         this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
     },
     initializing: {
-        displayLogo: function () {
+        displayLogo() {
             if (this.logo) {
                 this.printJHipsterLogo();
             }
         },
 
-        setupServerconsts: function () {
+        setupServerconsts() {
             // Make constants available in templates
             this.MAIN_DIR = constants.MAIN_DIR;
             this.TEST_DIR = constants.TEST_DIR;
@@ -262,7 +262,7 @@ module.exports = JhipsterServerGenerator.extend({
         askForOptionalItems: prompts.askForOptionalItems,
         askFori18n: prompts.askFori18n,
 
-        setSharedConfigOptions: function () {
+        setSharedConfigOptions() {
             this.configOptions.lastQuestion = this.currentQuestion;
             this.configOptions.totalQuestions = this.totalQuestions;
             this.configOptions.packageName = this.packageName;
@@ -295,7 +295,7 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     configuring: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'server');
             insight.track('app/authenticationType', this.authenticationType);
@@ -312,7 +312,7 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
         },
 
-        configureGlobal: function () {
+        configureGlobal() {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelCase(this.baseName);
@@ -335,7 +335,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
         },
 
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
@@ -365,7 +365,7 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     default: {
-        getSharedConfigOptions: function () {
+        getSharedConfigOptions() {
             this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
             if (this.configOptions.enableTranslation !== undefined) {
                 this.enableTranslation = this.configOptions.enableTranslation;
@@ -387,7 +387,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
         },
 
-        composeLanguages: function () {
+        composeLanguages() {
             if (this.configOptions.skipI18nQuestion) return;
 
             this.composeLanguagesSub(this, this.configOptions, 'server');
@@ -396,7 +396,7 @@ module.exports = JhipsterServerGenerator.extend({
 
     writing: writeFiles(),
 
-    end: function () {
+    end() {
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
             this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')

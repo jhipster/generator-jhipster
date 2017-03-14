@@ -108,7 +108,7 @@ function askForTestOpts() {
         type: 'checkbox',
         name: 'testFrameworks',
         message: response => this.getNumberedQuestion('Besides JUnit and Karma, which testing frameworks would you like to use?', true),
-        choices: choices,
+        choices,
         default: defaultChoice
     }).then((prompt) => {
         this.testFrameworks = prompt.testFrameworks;
@@ -151,7 +151,7 @@ function askModulesToBeInstalled(done, generator) {
                 type: 'checkbox',
                 name: 'otherModules',
                 message: 'Which other modules would you like to use?',
-                choices: choices,
+                choices,
                 default: []
             }).then((prompt) => {
                 // [ {name: [moduleName], version:[version]}, ...]

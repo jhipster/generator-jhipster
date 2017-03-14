@@ -14,8 +14,8 @@ util.inherits(LanguagesGenerator, scriptBase);
 let configOptions = {};
 
 module.exports = LanguagesGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         configOptions = this.options.configOptions || {};
 
@@ -58,7 +58,7 @@ module.exports = LanguagesGenerator.extend({
         }
     },
     initializing: {
-        getConfig: function () {
+        getConfig() {
             if (this.languages) {
                 if (this.skipClient) {
                     this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
@@ -86,7 +86,7 @@ module.exports = LanguagesGenerator.extend({
         }
     },
 
-    prompting: function () {
+    prompting() {
         if (this.languages) return;
 
         const done = this.async();
@@ -109,12 +109,12 @@ module.exports = LanguagesGenerator.extend({
     },
 
     default: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'languages');
         },
 
-        getSharedConfigOptions: function () {
+        getSharedConfigOptions() {
             if (configOptions.applicationType) {
                 this.applicationType = configOptions.applicationType;
             }
@@ -153,14 +153,14 @@ module.exports = LanguagesGenerator.extend({
             }
         },
 
-        saveConfig: function () {
+        saveConfig() {
             if (this.enableTranslation) {
                 this.config.set('languages', _.union(this.currentLanguages, this.languagesToApply));
             }
         }
     },
 
-    writing: function () {
+    writing() {
         const insight = this.insight();
         this.languagesToApply.forEach((language) => {
             if (!this.skipClient) {

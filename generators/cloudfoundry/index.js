@@ -16,12 +16,12 @@ const CloudFoundryGenerator = generator.extend({});
 util.inherits(CloudFoundryGenerator, scriptBase);
 
 module.exports = CloudFoundryGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
     },
 
     initializing: {
-        getConfig: function () {
+        getConfig() {
             this.log(chalk.bold('CloudFoundry configuration is starting'));
             this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
@@ -39,19 +39,19 @@ module.exports = CloudFoundryGenerator.extend({
     prompting: prompts.prompting,
 
     configuring: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'cloudfoundry');
         },
 
-        copyCloudFoundryFiles: function () {
+        copyCloudFoundryFiles() {
             if (this.abort) return;
             this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
             this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
             this.template('_application-cloudfoundry.yml', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
         },
 
-        checkInstallation: function () {
+        checkInstallation() {
             if (this.abort) return;
             const done = this.async();
 
@@ -67,7 +67,7 @@ module.exports = CloudFoundryGenerator.extend({
     },
 
     default: {
-        cloudfoundryAppShow: function () {
+        cloudfoundryAppShow() {
             if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
             const done = this.async();
 
@@ -82,7 +82,7 @@ module.exports = CloudFoundryGenerator.extend({
             });
         },
 
-        cloudfoundryAppCreate: function () {
+        cloudfoundryAppCreate() {
             if (this.abort || typeof this.dist_repo_url !== 'undefined') return;
             const done = this.async();
 
@@ -104,7 +104,7 @@ module.exports = CloudFoundryGenerator.extend({
             }
         },
 
-        productionBuild: function () {
+        productionBuild() {
             if (this.abort) return;
             const done = this.async();
 
@@ -126,7 +126,7 @@ module.exports = CloudFoundryGenerator.extend({
     },
 
     end: {
-        cloudfoundryPush: function () {
+        cloudfoundryPush() {
             if (this.abort) return;
             const done = this.async();
             let cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -p';
@@ -158,7 +158,7 @@ module.exports = CloudFoundryGenerator.extend({
             });
         },
 
-        restartApp: function () {
+        restartApp() {
             if (this.abort || !this.cloudfoundry_remote_exists) return;
             this.log(chalk.bold('\nRestarting your cloudfoundry app.\n'));
 

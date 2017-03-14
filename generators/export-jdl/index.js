@@ -10,8 +10,8 @@ const ExportJDLGenerator = generator.extend({});
 util.inherits(ExportJDLGenerator, scriptBase);
 
 module.exports = ExportJDLGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
         this.baseName = this.config.get('baseName');
         this.jdl = new jhiCore.JDLObject();
         this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jh` });
@@ -19,12 +19,12 @@ module.exports = ExportJDLGenerator.extend({
     },
 
     default: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'export-jdl');
         },
 
-        parseJson: function () {
+        parseJson() {
             this.log('Parsing entities from .jhipster dir...');
             try {
                 const entities = {};
@@ -38,12 +38,12 @@ module.exports = ExportJDLGenerator.extend({
         }
     },
 
-    writing: function () {
+    writing() {
         const content = `// JDL definition for application '${this.baseName}' generated with command 'yo jhipster:export-jdl'\n\n${this.jdl.toString()}`;
         this.fs.write(this.jdlFile, content);
     },
 
-    end: function () {
+    end() {
         this.log(chalk.green.bold('\nEntities successfully exported to JDL file\n'));
     }
 

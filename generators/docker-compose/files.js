@@ -6,11 +6,11 @@ module.exports = {
 
 function writeFiles() {
     return {
-        writeDockerCompose: function () {
+        writeDockerCompose() {
             this.template('_docker-compose.yml', 'docker-compose.yml');
         },
 
-        writeRegistryFiles: function () {
+        writeRegistryFiles() {
             if (this.serviceDiscoveryType === 'eureka') {
                 this.template('_jhipster-registry.yml', 'jhipster-registry.yml');
             }
@@ -23,13 +23,13 @@ function writeFiles() {
             }
         },
 
-        writeKafkaFiles: function () {
+        writeKafkaFiles() {
             if (!this.useKafka) return;
 
             this.template('_kafka.yml', 'kafka.yml');
         },
 
-        writeElkFiles: function () {
+        writeElkFiles() {
             if (this.monitoring !== 'elk') return;
 
             this.template('_jhipster-console.yml', 'jhipster-console.yml');
@@ -37,7 +37,7 @@ function writeFiles() {
             this.template('log-data/_.gitignore', 'log-data/.gitignore');
         },
 
-        writePrometheusFiles: function () {
+        writePrometheusFiles() {
             if (this.monitoring !== 'prometheus') return;
 
             // Generate a list of target apps to monitor for the prometheus config

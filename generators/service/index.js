@@ -12,14 +12,14 @@ const ServiceGenerator = generator.extend({});
 util.inherits(ServiceGenerator, scriptBase);
 
 module.exports = ServiceGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
     },
 
     initializing: {
-        getConfig: function () {
+        getConfig() {
             this.log(`The service ${this.name} is being created.`);
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
@@ -28,7 +28,7 @@ module.exports = ServiceGenerator.extend({
         }
     },
 
-    prompting: function () {
+    prompting() {
         const done = this.async();
 
         const prompts = [
@@ -45,14 +45,14 @@ module.exports = ServiceGenerator.extend({
         });
     },
     default: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'service');
             insight.track('service/interface', this.useInterface);
         }
     },
 
-    writing: function () {
+    writing() {
         this.serviceClass = _.upperFirst(this.name);
         this.serviceInstance = _.lowerCase(this.name);
 

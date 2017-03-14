@@ -507,7 +507,7 @@ function askForOptionalItems() {
             type: 'checkbox',
             name: 'serverSideOptions',
             message: response => this.getNumberedQuestion('Which other technologies would you like to use?', true),
-            choices: choices,
+            choices,
             default: defaultChoice
         }).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;

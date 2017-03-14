@@ -25,10 +25,8 @@
         "import/no-extraneous-dependencies": "off",
         "import/no-unresolved": "off",
         "global-require": "off",
-        "object-shorthand": "off",
         "no-multi-assign": "off",
         "no-param-reassign": "off",
-        "prefer-rest-params": "off",
         "no-shadow": "off"
     }
 }

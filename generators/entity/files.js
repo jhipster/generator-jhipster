@@ -119,7 +119,7 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [{
                 file: 'package/web/rest/_EntityResourceIntTest.java',
-                options: { context: { randexp: randexp, _: _, chalkRed: chalk.red, fs: fs, SERVER_TEST_SRC_DIR: SERVER_TEST_SRC_DIR } },
+                options: { context: { randexp, _, chalkRed: chalk.red, fs, SERVER_TEST_SRC_DIR } },
                 renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
             }]
         },
@@ -320,14 +320,14 @@ module.exports = {
 
 function writeFiles() {
     return {
-        saveRemoteEntityPath: function () {
+        saveRemoteEntityPath() {
             if (_.isUndefined(this.microservicePath)) {
                 return;
             }
             this.copy(`${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`, this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`));
         },
 
-        writeServerFiles: function () {
+        writeServerFiles() {
             if (this.skipServer) return;
 
             // write server side files
@@ -345,7 +345,7 @@ function writeFiles() {
             }
         },
 
-        writeEnumFiles: function () {
+        writeEnumFiles() {
             this.fields.forEach((field) => {
                 if (field.fieldIsEnum === true) {
                     const fieldType = field.fieldType;
@@ -377,7 +377,7 @@ function writeFiles() {
             });
         },
 
-        writeClientFiles: function () {
+        writeClientFiles() {
             if (this.skipClient) return;
 
             if (this.clientFramework === 'angular1') {

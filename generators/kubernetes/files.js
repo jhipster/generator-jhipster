@@ -6,7 +6,7 @@ module.exports = {
 
 function writeFiles() {
     return {
-        writeDeployments: function () {
+        writeDeployments() {
             for (let i = 0; i < this.appConfigs.length; i++) {
                 const appName = this.appConfigs[i].baseName.toLowerCase();
                 this.app = this.appConfigs[i];
@@ -25,7 +25,7 @@ function writeFiles() {
             }
         },
 
-        writeRegistryFiles: function () {
+        writeRegistryFiles() {
             if (this.serviceDiscoveryType === 'eureka') {
                 this.template('registry/_jhipster-registry.yml', 'registry/jhipster-registry.yml');
                 this.template('registry/_application-configmap.yml', 'registry/application-configmap.yml');

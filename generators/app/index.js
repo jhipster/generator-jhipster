@@ -16,7 +16,7 @@ util.inherits(JhipsterGenerator, scriptBase);
 const constants = require('../generator-constants');
 
 module.exports = JhipsterGenerator.extend({
-    constructor: function (...args) {
+    constructor: function (...args) { // eslint-disable-line object-shorthand
         generator.apply(this, args);
 
         this.configOptions = {};
@@ -89,11 +89,11 @@ module.exports = JhipsterGenerator.extend({
     },
 
     initializing: {
-        displayLogo: function () {
+        displayLogo() {
             this.printJHipsterLogo();
         },
 
-        checkJava: function () {
+        checkJava() {
             if (this.skipChecks || this.skipServer) return;
             const done = this.async();
             exec('java -version', (err, stdout, stderr) => {
@@ -109,7 +109,7 @@ module.exports = JhipsterGenerator.extend({
             });
         },
 
-        checkNode: function () {
+        checkNode() {
             if (this.skipChecks || this.skipServer) return;
             const done = this.async();
             exec('node -v', (err, stdout, stderr) => {
@@ -126,7 +126,7 @@ module.exports = JhipsterGenerator.extend({
             });
         },
 
-        checkGit: function () {
+        checkGit() {
             if (this.skipChecks || this.skipClient) return;
             const done = this.async();
             this.isGitInstalled((code) => {
@@ -135,7 +135,7 @@ module.exports = JhipsterGenerator.extend({
             });
         },
 
-        checkGitConnection: function () {
+        checkGitConnection() {
             if (!this.gitInstalled) return;
             const done = this.async();
             exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
@@ -149,7 +149,7 @@ module.exports = JhipsterGenerator.extend({
             });
         },
 
-        checkYarn: function () {
+        checkYarn() {
             if (this.skipChecks || !this.useYarn) return;
             const done = this.async();
             exec('yarn --version', (err) => {
@@ -164,19 +164,19 @@ module.exports = JhipsterGenerator.extend({
             });
         },
 
-        checkForNewVersion: function () {
+        checkForNewVersion() {
             if (!this.skipChecks) {
                 this.checkForNewVersion();
             }
         },
 
-        validate: function () {
+        validate() {
             if (this.skipServer && this.skipClient) {
                 this.error(chalk.red(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`));
             }
         },
 
-        setupconsts: function () {
+        setupconsts() {
             this.applicationType = this.config.get('applicationType');
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
@@ -218,7 +218,7 @@ module.exports = JhipsterGenerator.extend({
     },
 
     configuring: {
-        setup: function () {
+        setup() {
             this.configOptions.skipI18nQuestion = true;
             this.configOptions.baseName = this.baseName;
             this.configOptions.logo = false;
@@ -248,7 +248,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.clientPackageManager = this.clientPackageManager;
         },
 
-        composeServer: function () {
+        composeServer() {
             if (this.skipServer) return;
 
             this.composeWith(require.resolve('../server'), {
@@ -258,7 +258,7 @@ module.exports = JhipsterGenerator.extend({
             });
         },
 
-        composeClient: function () {
+        composeClient() {
             if (this.skipClient) return;
 
             this.composeWith(require.resolve('../client'), {
@@ -275,7 +275,7 @@ module.exports = JhipsterGenerator.extend({
 
         askForTestOpts: prompts.askForTestOpts,
 
-        setSharedConfigOptions: function () {
+        setSharedConfigOptions() {
             this.configOptions.lastQuestion = this.currentQuestion;
             this.configOptions.totalQuestions = this.totalQuestions;
             this.configOptions.testFrameworks = this.testFrameworks;
@@ -285,7 +285,7 @@ module.exports = JhipsterGenerator.extend({
             this.configOptions.clientPackageManager = this.clientPackageManager;
         },
 
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
@@ -294,12 +294,12 @@ module.exports = JhipsterGenerator.extend({
             insight.track('app/clientPackageManager', this.clientPackageManager);
         },
 
-        composeLanguages: function () {
+        composeLanguages() {
             if (this.skipI18n) return;
             this.composeLanguagesSub(this, this.configOptions, this.generatorType);
         },
 
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('applicationType', this.applicationType);
             this.config.set('baseName', this.baseName);
@@ -319,11 +319,11 @@ module.exports = JhipsterGenerator.extend({
     },
 
     writing: {
-        cleanup: function () {
+        cleanup() {
             cleanup.cleanupOldFiles(this, this.javaDir, this.testDir);
         },
 
-        regenerateEntities: function () {
+        regenerateEntities() {
             if (this.withEntities) {
                 this.getExistingEntities().forEach((entity) => {
                     this.composeWith(require.resolve('../entity'), {
@@ -339,7 +339,7 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: {
-        localInstall: function () {
+        localInstall() {
             if (this.skipClient) {
                 if (this.otherModules === undefined) {
                     this.otherModules = [];
@@ -360,7 +360,7 @@ module.exports = JhipsterGenerator.extend({
             }
         },
 
-        afterRunHook: function () {
+        afterRunHook() {
             try {
                 const modules = this.getModuleHooks();
                 if (modules.length > 0) {

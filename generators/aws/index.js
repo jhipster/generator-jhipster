@@ -11,16 +11,16 @@ util.inherits(AwsGenerator, scriptBase);
 
 module.exports = AwsGenerator.extend({
     initializing: {
-        initAws: function () {
+        initAws() {
             const done = this.async();
             this.awsFactory = new AwsFactory(this, done);
         },
-        getGlobalConfig: function () {
+        getGlobalConfig() {
             this.existingProject = false;
             this.baseName = this.config.get('baseName');
             this.buildTool = this.config.get('buildTool');
         },
-        getAwsConfig: function () {
+        getAwsConfig() {
             const awsConfig = this.config.get('aws');
 
             if (awsConfig) {
@@ -37,7 +37,7 @@ module.exports = AwsGenerator.extend({
                     'to deploy your application...\n'));
             }
         },
-        checkDatabase: function () {
+        checkDatabase() {
             const prodDatabaseType = this.config.get('prodDatabaseType');
 
             switch (prodDatabaseType.toLowerCase()) {
@@ -56,16 +56,16 @@ module.exports = AwsGenerator.extend({
     prompting: prompts.prompting,
 
     configuring: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'aws');
         },
-        createAwsFactory: function () {
+        createAwsFactory() {
             const cb = this.async();
             this.awsFactory.init({ region: this.awsRegion });
             cb();
         },
-        saveConfig: function () {
+        saveConfig() {
             this.config.set('aws', {
                 applicationName: this.applicationName,
                 environmentName: this.environmentName,
@@ -79,7 +79,7 @@ module.exports = AwsGenerator.extend({
     },
 
     default: {
-        productionBuild: function () {
+        productionBuild() {
             const cb = this.async();
             this.log(chalk.bold('Building application'));
 
@@ -95,7 +95,7 @@ module.exports = AwsGenerator.extend({
                 this.log(data.toString());
             });
         },
-        createBucket: function () {
+        createBucket() {
             const cb = this.async();
             this.log();
             this.log(chalk.bold('Create S3 bucket'));
@@ -111,7 +111,7 @@ module.exports = AwsGenerator.extend({
                 }
             });
         },
-        uploadWar: function () {
+        uploadWar() {
             const cb = this.async();
             this.log();
             this.log(chalk.bold('Upload WAR to S3'));
@@ -133,7 +133,7 @@ module.exports = AwsGenerator.extend({
                 }
             });
         },
-        createDatabase: function () {
+        createDatabase() {
             const cb = this.async();
             this.log();
             this.log(chalk.bold('Create database'));
@@ -157,7 +157,7 @@ module.exports = AwsGenerator.extend({
                 }
             });
         },
-        createDatabaseUrl: function () {
+        createDatabaseUrl() {
             const cb = this.async();
             this.log();
             this.log(chalk.bold('Waiting for database (This may take several minutes)'));
@@ -183,7 +183,7 @@ module.exports = AwsGenerator.extend({
                 }
             });
         },
-        createApplication: function () {
+        createApplication() {
             const cb = this.async();
             this.log();
             this.log(chalk.bold('Create/Update application'));

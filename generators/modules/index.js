@@ -12,8 +12,8 @@ const ModulesGenerator = generator.extend({});
 util.inherits(ModulesGenerator, scriptBase);
 
 module.exports = ModulesGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
 
         const jhipsterVar = this.options.jhipsterVar;
         const jhipsterFunc = this.options.jhipsterFunc;
@@ -141,7 +141,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc.getEntityJson = this.getEntityJson;
     },
 
-    initializing: function () {
+    initializing() {
         const insight = this.insight();
         insight.trackWithEvent('generator', 'modules');
 

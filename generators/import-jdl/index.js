@@ -12,14 +12,14 @@ const JDLGenerator = generator.extend({});
 util.inherits(JDLGenerator, scriptBase);
 
 module.exports = JDLGenerator.extend({
-    constructor: function () {
-        generator.apply(this, arguments);
+    constructor: function (...args) { // eslint-disable-line object-shorthand
+        generator.apply(this, args);
         this.argument('jdlFiles', { type: Array, required: true });
         this.jdlFiles = this.options.jdlFiles;
     },
 
     initializing: {
-        validate: function () {
+        validate() {
             if (this.jdlFiles) {
                 this.jdlFiles.forEach((key) => {
                     if (!shelljs.test('-f', key)) {
@@ -29,7 +29,7 @@ module.exports = JDLGenerator.extend({
             }
         },
 
-        getConfig: function () {
+        getConfig() {
             this.baseName = this.config.get('baseName');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
             this.skipClient = this.config.get('skipClient');
@@ -49,17 +49,17 @@ module.exports = JDLGenerator.extend({
     },
 
     default: {
-        insight: function () {
+        insight() {
             const insight = this.insight();
             insight.trackWithEvent('generator', 'import-jdl');
         },
 
-        parseJDL: function () {
+        parseJDL() {
             this.log('The jdl is being parsed.');
             try {
                 const jdlObject = jhiCore.convertToJDL(jhiCore.parseFromFiles(this.jdlFiles), this.prodDatabaseType);
                 const entities = jhiCore.convertToJHipsterJSON({
-                    jdlObject: jdlObject,
+                    jdlObject,
                     databaseType: this.prodDatabaseType
                 });
                 this.log('Writing entity JSON files.');
@@ -70,7 +70,7 @@ module.exports = JDLGenerator.extend({
             }
         },
 
-        generateEntities: function () {
+        generateEntities() {
             this.log('Generating entities.');
             try {
                 this.getExistingEntities().forEach((entity) => {
@@ -86,7 +86,7 @@ module.exports = JDLGenerator.extend({
         }
     },
 
-    install: function () {
+    install() {
         const injectJsFilesToIndex = () => {
             this.log(`\n${chalk.bold.green('Running gulp Inject to add javascript to index\n')}`);
             this.spawnCommand('gulp', ['inject:app']);

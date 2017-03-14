@@ -22,17 +22,17 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
             if (!rdsSecurityGroupId) {
                 callback(null, { message: `Database ${dbName} already exists` });
             } else {
-                authorizeSecurityGroupIngress({ rdsSecurityGroupId: rdsSecurityGroupId }, (err) => {
+                authorizeSecurityGroupIngress({ rdsSecurityGroupId }, (err) => {
                     if (err) {
                         callback({ message: err.message }, null);
                     } else {
                         createDbInstance({
-                            dbInstanceClass: dbInstanceClass,
-                            dbName: dbName,
-                            dbEngine: dbEngine,
-                            dbPassword: dbPassword,
-                            dbUsername: dbUsername,
-                            rdsSecurityGroupId: rdsSecurityGroupId
+                            dbInstanceClass,
+                            dbName,
+                            dbEngine,
+                            dbPassword,
+                            dbUsername,
+                            rdsSecurityGroupId
                         }, (err, data) => {
                             if (err) {
                                 callback({ message: err.message }, null);
@@ -59,7 +59,7 @@ Rds.prototype.createDatabaseUrl = function createDatabaseUrl(params, callback) {
             const dbEndpoint = data.DBInstances[0].Endpoint;
             const dbUrl = `jdbc:${dbEngine}://${dbEndpoint.Address}:${dbEndpoint.Port}/${dbName}`;
             const message = `Database available at ${dbUrl}`;
-            callback(null, { message: message, dbUrl: dbUrl });
+            callback(null, { message, dbUrl });
         }
     });
 };
