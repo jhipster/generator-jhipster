@@ -17,7 +17,7 @@ if [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
     cp -f "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$UAA_APP_FOLDER"/
     cd "$UAA_APP_FOLDER"
     yarn link generator-jhipster
-    yo jhipster --force --no-insight --with-entities -skip-checks
+    yo jhipster --force --no-insight --with-entities --skip-checks
     ls -al "$UAA_APP_FOLDER"
 fi
 
