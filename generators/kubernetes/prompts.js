@@ -43,19 +43,19 @@ function askForDockerRepositoryName() {
 }
 
 function askForDockerTag() {
-    var done = this.async();
+    const done = this.async();
 
-    var prompts = [{
+    const prompts = [{
         type: 'input',
         name: 'dockerTag',
         message: 'What should we use for the tag version?',
         default: this.dockerTag ? this.dockerTag : 'latest'
     }];
 
-    this.prompt(prompts).then(function(props) {
+    this.prompt(prompts).then((props) => {
         this.dockerTag = props.dockerTag;
         done();
-    }.bind(this));
+    });
 }
 
 function askForDockerPushCommand() {

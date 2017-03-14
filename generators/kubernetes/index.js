@@ -230,7 +230,7 @@ module.exports = KubernetesGenerator.extend({
         this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
-            const targetImageName = this.appConfigs[i].targetImageName + ':' + this.dockerTag;;
+            const targetImageName = `${this.appConfigs[i].targetImageName}:${this.dockerTag}`;
             if (originalImageName !== targetImageName) {
                 this.log(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
             }

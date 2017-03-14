@@ -88,7 +88,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
             assert.fileContent('jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
             assert.fileContent('jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
         });
-        it('creates deployment.yml without imagePullPolicy', function () {
+        it('creates deployment.yml without imagePullPolicy', () => {
             assert.noFileContent('jhgate/jhgate-deployment.yml', /imagePullPolicy:/);
         });
     });
@@ -124,7 +124,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
         });
-        it('creates deployment.yml without imagePullPolicy', function () {
+        it('creates deployment.yml without imagePullPolicy', () => {
             assert.noFileContent('jhgate/jhgate-deployment.yml', /imagePullPolicy:/);
         });
     });
@@ -163,7 +163,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
         });
-        it('creates deployment.yml without imagePullPolicy', function () {
+        it('creates deployment.yml without imagePullPolicy', () => {
             assert.noFileContent('msmysql/msmysql-deployment.yml', /imagePullPolicy:/);
         });
     });
