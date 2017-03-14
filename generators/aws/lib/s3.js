@@ -1,8 +1,8 @@
 
 const fs = require('fs');
 
-const FILE_EXTENSION = '.original',
-    S3_STANDARD_REGION = 'us-east-1';
+const FILE_EXTENSION = '.original';
+const S3_STANDARD_REGION = 'us-east-1';
 
 let Progressbar;
 
@@ -17,8 +17,8 @@ const S3 = module.exports = function S3(Aws, generator) {
 };
 
 S3.prototype.createBucket = function createBucket(params, callback) {
-    const bucket = params.bucket,
-        region = this.Aws.config.region;
+    const bucket = params.bucket;
+    const region = this.Aws.config.region;
 
     const s3Params = {
         Bucket: bucket,
@@ -79,8 +79,8 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                 httpOptions: { timeout: 600000 }
             });
 
-            const filePath = buildFolder + warFilename,
-                body = fs.createReadStream(filePath);
+            const filePath = buildFolder + warFilename;
+            const body = fs.createReadStream(filePath);
 
             uploadToS3(s3, body, (err, message) => {
                 if (err) {

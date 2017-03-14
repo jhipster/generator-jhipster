@@ -1,27 +1,26 @@
-
 const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
-const jhipsterUtils = require('./util');
 const Insight = require('insight');
 const fs = require('fs');
 const shelljs = require('shelljs');
-const packagejs = require('../package.json');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
 const https = require('https');
 const pluralize = require('pluralize');
+const packagejs = require('../package.json');
+const jhipsterUtils = require('./util');
+const constants = require('./generator-constants');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
-const constants = require('./generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = class extends Generator {
 
@@ -1142,8 +1141,8 @@ module.exports = class extends Generator {
     registerModule(npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
         try {
             let modules;
-            let error,
-                duplicate;
+            let error;
+            let duplicate;
             const moduleName = _.startCase(npmPackageName.replace(`${GENERATOR_JHIPSTER}-`, ''));
             const generatorName = npmPackageName.replace('generator-', '');
             const generatorCallback = `${generatorName}:${callbackSubGenerator || 'app'}`;

@@ -1,17 +1,16 @@
 /* global describe, beforeEach, it*/
 
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const constants = require('../generators/generator-constants');
 
-const constants = require('../generators/generator-constants'),
-    TEST_DIR = constants.TEST_DIR,
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const TEST_DIR = constants.TEST_DIR;
+const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 const expectedFiles = {
     client: [

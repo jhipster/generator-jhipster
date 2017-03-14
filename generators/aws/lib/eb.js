@@ -12,15 +12,15 @@ const Eb = module.exports = function Eb(Aws, generator) {
 };
 
 Eb.prototype.createApplication = function createApplication(params, callback) {
-    const applicationName = params.applicationName,
-        bucketName = params.bucketName,
-        warKey = params.warKey,
-        versionLabel = `${this.warKey}-${uuidV4()}`,
-        environmentName = params.environmentName,
-        dbUrl = params.dbUrl,
-        dbUsername = params.dbUsername,
-        dbPassword = params.dbPassword,
-        instanceType = params.instanceType;
+    const applicationName = params.applicationName;
+    const bucketName = params.bucketName;
+    const warKey = params.warKey;
+    const versionLabel = `${this.warKey}-${uuidV4()}`;
+    const environmentName = params.environmentName;
+    const dbUrl = params.dbUrl;
+    const dbUsername = params.dbUsername;
+    const dbPassword = params.dbPassword;
+    const instanceType = params.instanceType;
 
     const applicationParams = {
         applicationName,
@@ -69,10 +69,10 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
 };
 
 function createApplicationVersion(params, callback) {
-    const applicationName = params.applicationName,
-        versionLabel = params.versionLabel,
-        bucketName = params.bucketName,
-        warKey = params.warKey;
+    const applicationName = params.applicationName;
+    const versionLabel = params.versionLabel;
+    const bucketName = params.bucketName;
+    const warKey = params.warKey;
 
     const elasticbeanstalk = new aws.ElasticBeanstalk();
 
@@ -96,8 +96,8 @@ function createApplicationVersion(params, callback) {
 }
 
 function checkEnvironment(params, callback) {
-    const applicationName = params.applicationName,
-        environmentName = params.environmentName;
+    const applicationName = params.applicationName;
+    const environmentName = params.environmentName;
 
     const elasticbeanstalk = new aws.ElasticBeanstalk();
 
@@ -118,13 +118,13 @@ function checkEnvironment(params, callback) {
 }
 
 function createEnvironment(params, callback) {
-    const applicationName = params.applicationName,
-        environmentName = params.environmentName,
-        dbUrl = params.dbUrl,
-        dbUsername = params.dbUsername,
-        dbPassword = params.dbPassword,
-        instanceType = params.instanceType,
-        versionLabel = params.versionLabel;
+    const applicationName = params.applicationName;
+    const environmentName = params.environmentName;
+    const dbUrl = params.dbUrl;
+    const dbUsername = params.dbUsername;
+    const dbPassword = params.dbPassword;
+    const instanceType = params.instanceType;
+    const versionLabel = params.versionLabel;
 
     const elasticbeanstalk = new aws.ElasticBeanstalk();
 
@@ -201,9 +201,9 @@ function getLatestSolutionStackName(callback) {
 }
 
 function updateEnvironment(params, callback) {
-    const environmentName = params.environmentName,
-        instanceType = params.instanceType,
-        versionLabel = params.versionLabel;
+    const environmentName = params.environmentName;
+    const instanceType = params.instanceType;
+    const versionLabel = params.versionLabel;
 
     const elasticbeanstalk = new aws.ElasticBeanstalk();
 

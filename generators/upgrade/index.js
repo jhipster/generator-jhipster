@@ -1,4 +1,3 @@
-
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -11,9 +10,9 @@ const UpgradeGenerator = generator.extend({});
 util.inherits(UpgradeGenerator, scriptBase);
 
 /* Constants used throughout */
-const GENERATOR_JHIPSTER = 'generator-jhipster',
-    UPGRADE_BRANCH = 'jhipster_upgrade',
-    GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
+const GENERATOR_JHIPSTER = 'generator-jhipster';
+const UPGRADE_BRANCH = 'jhipster_upgrade';
+const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
 
 module.exports = UpgradeGenerator.extend({
     constructor: function () {

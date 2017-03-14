@@ -7,11 +7,11 @@ const Rds = module.exports = function Rds(Aws) {
 };
 
 Rds.prototype.createDatabase = function createDatabase(params, callback) {
-    const dbInstanceClass = params.dbInstanceClass,
-        dbName = params.dbName,
-        dbEngine = params.dbEngine,
-        dbPassword = params.dbPassword,
-        dbUsername = params.dbUsername;
+    const dbInstanceClass = params.dbInstanceClass;
+    const dbName = params.dbName;
+    const dbEngine = params.dbEngine;
+    const dbPassword = params.dbPassword;
+    const dbUsername = params.dbUsername;
 
     createRdsSecurityGroup({ rdsSecurityGroupName: dbName }, (err, data) => {
         if (err) {
@@ -48,17 +48,17 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
 };
 
 Rds.prototype.createDatabaseUrl = function createDatabaseUrl(params, callback) {
-    const rds = new aws.RDS(),
-        dbName = params.dbName,
-        dbEngine = params.dbEngine;
+    const rds = new aws.RDS();
+    const dbName = params.dbName;
+    const dbEngine = params.dbEngine;
 
     rds.waitFor('dBInstanceAvailable', { DBInstanceIdentifier: dbName }, (err, data) => {
         if (err) {
             callback(err, null);
         } else {
-            const dbEndpoint = data.DBInstances[0].Endpoint,
-                dbUrl = `jdbc:${dbEngine}://${dbEndpoint.Address}:${dbEndpoint.Port}/${dbName}`,
-                message = `Database available at ${dbUrl}`;
+            const dbEndpoint = data.DBInstances[0].Endpoint;
+            const dbUrl = `jdbc:${dbEngine}://${dbEndpoint.Address}:${dbEndpoint.Port}/${dbName}`;
+            const message = `Database available at ${dbUrl}`;
             callback(null, { message: message, dbUrl: dbUrl });
         }
     });

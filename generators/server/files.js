@@ -1,17 +1,15 @@
-
-
 const mkdirp = require('mkdirp');
 const cleanup = require('../cleanup');
+const constants = require('../generator-constants');
 
 /* Constants use throughout */
-const constants = require('../generator-constants'),
-    INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
-    DOCKER_DIR = constants.DOCKER_DIR,
-    TEST_DIR = constants.TEST_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
-    SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
+const DOCKER_DIR = constants.DOCKER_DIR;
+const TEST_DIR = constants.TEST_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
 module.exports = {
     writeFiles

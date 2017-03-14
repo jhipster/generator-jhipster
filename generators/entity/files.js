@@ -1,24 +1,22 @@
-
-
 const _ = require('lodash');
 const randexp = require('randexp');
 const chalk = require('chalk');
 const fs = require('fs');
+const constants = require('../generator-constants');
 
 /* Constants use throughout */
-const constants = require('../generator-constants'),
-    INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
-    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR = constants.ANGULAR_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    TEST_DIR = constants.TEST_DIR,
-    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
+const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
+const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const ANGULAR_DIR = constants.ANGULAR_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const TEST_DIR = constants.TEST_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-    SERVER_TEMPLATES_DIR = 'server',
-    CLIENT_NG1_TEMPLATES_DIR = 'client/angularjs',
-    CLIENT_NG2_TEMPLATES_DIR = 'client/angular',
-    CLIENT_I18N_TEMPLATES_DIR = 'client';
+const SERVER_TEMPLATES_DIR = 'server';
+const CLIENT_NG1_TEMPLATES_DIR = 'client/angularjs';
+const CLIENT_NG2_TEMPLATES_DIR = 'client/angular';
+const CLIENT_I18N_TEMPLATES_DIR = 'client';
 
 /**
 * The default is to use a file path string. It implies use of the template method.

@@ -29,7 +29,6 @@
         "no-multi-assign": "off",
         "no-param-reassign": "off",
         "prefer-rest-params": "off",
-        "no-shadow": "off",
-        "one-var": "off"
+        "no-shadow": "off"
     }
 }

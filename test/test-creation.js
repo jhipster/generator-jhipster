@@ -1,6 +1,5 @@
 /* global describe, beforeEach, it*/
 
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -8,12 +7,12 @@ const fse = require('fs-extra');
 const getFilesForOptions = require('./test-utils').getFilesForOptions;
 const expectedFiles = require('./test-expected-files');
 const shouldBeV3DockerfileCompatible = require('./test-utils').shouldBeV3DockerfileCompatible;
+const constants = require('../generators/generator-constants');
 
-const constants = require('../generators/generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    TEST_DIR = constants.TEST_DIR;
+const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const TEST_DIR = constants.TEST_DIR;
 
 describe('JHipster generator', () => {
     describe('default configuration', () => {

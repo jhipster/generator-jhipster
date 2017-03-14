@@ -1,12 +1,13 @@
-const constants = require('../generators/generator-constants'),
-    TEST_DIR = constants.TEST_DIR,
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
-    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
-    SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR,
-    DOCKER_DIR = constants.DOCKER_DIR;
+const constants = require('../generators/generator-constants');
+
+const TEST_DIR = constants.TEST_DIR;
+const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+const DOCKER_DIR = constants.DOCKER_DIR;
 
 const expectedFiles = {
 

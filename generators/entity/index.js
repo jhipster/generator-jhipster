@@ -1,4 +1,3 @@
-
 const util = require('util');
 const generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -9,10 +8,10 @@ const prompts = require('./prompts');
 const jhiCore = require('jhipster-core');
 const writeFiles = require('./files').writeFiles;
 const scriptBase = require('../generator-base');
+const constants = require('../generator-constants');
 
 /* constants used throughout */
-const constants = require('../generator-constants'),
-    SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
+const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 
 
 const EntityGenerator = generator.extend({});

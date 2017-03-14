@@ -1,12 +1,10 @@
 /* global describe, it*/
-/* eslint-disable no-console */
 
+const assert = require('assert');
+const expectedFiles = require('./test-expected-files');
+const BaseGenerator = require('../generators/generator-base');
 
-const assert = require('assert'),
-    expectedFiles = require('./test-expected-files'),
-    BaseGenerator = require('../generators/generator-base');
-
-BaseGenerator.prototype.log = (msg) => { console.log(msg); };
+BaseGenerator.prototype.log = (msg) => { console.log(msg); }; // eslint-disable-line no-console
 
 describe('Generator Base', () => {
     describe('getAllSupportedLanguages', () => {

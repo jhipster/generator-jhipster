@@ -1,12 +1,11 @@
-
-const util = require('util'),
-    os = require('os'),
-    generator = require('yeoman-generator'),
-    childProcess = require('child_process'),
-    chalk = require('chalk'),
-    glob = require('glob'),
-    prompts = require('./prompts'),
-    scriptBase = require('../generator-base');
+const util = require('util');
+const os = require('os');
+const generator = require('yeoman-generator');
+const childProcess = require('child_process');
+const chalk = require('chalk');
+const glob = require('glob');
+const prompts = require('./prompts');
+const scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants');
 

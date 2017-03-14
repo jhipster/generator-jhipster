@@ -1,13 +1,12 @@
 /* global describe, beforeEach, it*/
 
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const constants = require('../generators/generator-constants');
 
-const constants = require('../generators/generator-constants'),
-    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 describe('JHipster generator service', () => {
     describe('creates service without interface', () => {

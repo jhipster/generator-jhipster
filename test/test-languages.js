@@ -1,14 +1,13 @@
 /* global describe, beforeEach, it*/
 
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
+const constants = require('../generators/generator-constants');
 
-const constants = require('../generators/generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 describe('JHipster generator languages', () => {
     const languages = [
