@@ -9,14 +9,22 @@
         "removeComments": false,
         "noImplicitAny": false,
         "suppressImplicitAnyIndexErrors": true,
-        "outDir": "<%= DIST_DIR %>app",
+        "outDir": "build",
+        "rootDir": "<%= MAIN_SRC_DIR %>app",
         "lib": ["es6", "dom"],
+        "types": [
+            "node"
+        ],
         "typeRoots": [
             "node_modules/@types"
         ]
     },
-    "include": [
-        "src/main/webapp/app",
+    "exclude": [
+        "node_modules",
         "src/test/javascript"
-    ]
+    ],
+    "angularCompilerOptions": {
+        "genDir": ".",
+        "entryModule": "<%= MAIN_SRC_DIR %>app/app.module.ts#<%=angular2AppName%>AppModule"
+    }
 }

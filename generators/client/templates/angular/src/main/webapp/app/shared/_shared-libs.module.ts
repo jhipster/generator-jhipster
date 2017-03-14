@@ -9,12 +9,13 @@ import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 @NgModule({
     imports: [
         NgbModule.forRoot(),
-        NgJhipsterModule.forRoot({
+        // TODO uncomment the code below and make it works with AOT
+        NgJhipsterModule/*.forRoot({
             <%_ if (enableTranslation) { _%>
             i18nEnabled: true,
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
-        }),
+        })*/,
         InfiniteScrollModule
     ],
     exports: [

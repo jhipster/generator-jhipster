@@ -1,3 +1,3 @@
 /* tslint:disable */
-import 'reflect-metadata/Reflect';
+import 'reflect-metadata';
 import 'zone.js/dist/zone';
