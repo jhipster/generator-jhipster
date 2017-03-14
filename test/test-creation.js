@@ -8,6 +8,8 @@ const getFilesForOptions = require('./test-utils').getFilesForOptions;
 const expectedFiles = require('./test-expected-files');
 const shouldBeV3DockerfileCompatible = require('./test-utils').shouldBeV3DockerfileCompatible;
 const constants = require('../generators/generator-constants');
+const angularJsfiles = require('../generators/client/files-angularjs').files;
+const angularfiles = require('../generators/client/files-angular').files;
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
@@ -46,7 +48,7 @@ describe('JHipster generator', () => {
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -101,7 +103,7 @@ describe('JHipster generator', () => {
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
-            assert.file(getFilesForOptions(require('../generators/client/files-angular').files, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -144,7 +146,7 @@ describe('JHipster generator', () => {
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -190,7 +192,7 @@ describe('JHipster generator', () => {
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mariadb);
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -230,7 +232,7 @@ describe('JHipster generator', () => {
             assert.file(['gradle/yeoman.gradle']);
             assert.file(expectedFiles.dockerServices);
             assert.file(expectedFiles.mysql);
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -611,7 +613,7 @@ describe('JHipster generator', () => {
         });
 
         it('creates expected files with social login for http session enabled', () => {
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -648,7 +650,7 @@ describe('JHipster generator', () => {
         });
 
         it('creates expected files with social login for http session enabled', () => {
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'jwt',
@@ -684,7 +686,7 @@ describe('JHipster generator', () => {
 
         it('creates expected files with JWT authentication', () => {
             assert.file(expectedFiles.jwt);
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'jwt',
@@ -775,7 +777,7 @@ describe('JHipster generator', () => {
 
         it('creates expected files with Protractor enabled', () => {
             assert.file(expectedFiles.server);
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -863,7 +865,7 @@ describe('JHipster generator', () => {
         it('creates expected files for default configuration with skip client option enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
-            assert.noFile(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.noFile(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -898,7 +900,7 @@ describe('JHipster generator', () => {
         it('creates expected files for default configuration with skip client option enabled', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
-            assert.noFile(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.noFile(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -1217,7 +1219,7 @@ describe('JHipster server generator', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.gatling);
-            assert.noFile(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.noFile(getFilesForOptions(angularJsfiles, {
                 useSass: false,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -1246,7 +1248,7 @@ describe('JHipster client generator', () => {
         it('creates expected files for default configuration for client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
-            assert.file(getFilesForOptions(require('../generators/client/files-angularjs').files, {
+            assert.file(getFilesForOptions(angularJsfiles, {
                 useSass: true,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -1302,7 +1304,7 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
-            assert.file(getFilesForOptions(require('../generators/client/files-angular').files, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: true,
                 enableTranslation: true,
                 authenticationType: 'session',
@@ -1336,7 +1338,7 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
-            assert.file(getFilesForOptions(require('../generators/client/files-angular').files, {
+            assert.file(getFilesForOptions(angularfiles, {
                 useSass: true,
                 enableTranslation: true,
                 authenticationType: 'session',

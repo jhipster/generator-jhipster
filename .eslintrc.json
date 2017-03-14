@@ -22,9 +22,6 @@
         "no-underscore-dangle": "off",
         "no-plusplus": "off",
 
-        "import/no-extraneous-dependencies": "off",
-        "import/no-unresolved": "off",
-        "global-require": "off",
         "no-multi-assign": "off",
         "no-param-reassign": "off",
         "no-shadow": "off"

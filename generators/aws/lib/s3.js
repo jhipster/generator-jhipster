@@ -10,7 +10,7 @@ let Progressbar;
 const S3 = module.exports = function S3(Aws, generator) {
     this.Aws = Aws;
     try {
-        Progressbar = require('progress');
+        Progressbar = require('progress'); // eslint-disable-line
     } catch (e) {
         generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }

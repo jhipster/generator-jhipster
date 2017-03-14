@@ -10,7 +10,7 @@ let generator;
 const AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
     generator = generatorRef;
     try {
-        Aws = require('aws-sdk');
+        Aws = require('aws-sdk'); // eslint-disable-line
         cb();
     } catch (e) {
         generator.log('Installing AWS dependencies into your JHipster folder');
@@ -20,7 +20,7 @@ const AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
         }
         shelljs.exec(installCommand, { silent: true }, (code, msg, err) => {
             if (code !== 0) generator.error(`Something went wrong while installing:\n${err}`);
-            Aws = require('aws-sdk');
+            Aws = require('aws-sdk'); // eslint-disable-line
             cb();
         });
     }
