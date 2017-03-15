@@ -18,6 +18,9 @@ const expectedFiles = {
     ],
     circle: [
         'circle.yml'
+    ],
+    dockerRegistry: [
+        'src/main/docker/docker-registry.yml'
     ]
 };
 
@@ -298,6 +301,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
+            assert.file(expectedFiles.dockerRegistry);
             assert.noFile(expectedFiles.gitlab);
             assert.noFile(expectedFiles.travis);
             assert.noFile(expectedFiles.circle);
