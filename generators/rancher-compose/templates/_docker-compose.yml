@@ -48,10 +48,19 @@ services:
             - JHIPSTER_METRICS_PROMETHEUS_ENABLED=true
             - JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics
             <%_ } _%>
-            - GIT_URI=https://github.com/jhipster/jhipster-registry/
-            - GIT_SEARCH_PATHS=central-config
+            - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./config/
+            # Uncomment to use a git configuration source instead of the local filesystem
+            # mounted from the registry-config-sidekick volume
+            # - GIT_URI=https://github.com/jhipster/jhipster-registry/
+            # - GIT_SEARCH_PATHS=central-config
         ports:
             - 8761:8761
+        volumes:
+          - /config
+        volumes_from:
+          - registry-config-sidekick
+        labels:
+          io.rancher.sidekicks: registry-config-sidekick
 <%_ } _%>
 <%_ if (serviceDiscoveryType == 'consul') { _%>
     consul:
@@ -63,12 +72,28 @@ services:
         command: consul agent -dev -ui -client 0.0.0.0
     consul-config-loader:
         image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
-        volumes:
-        #    - ./central-server-config:/config
         environment:
             - INIT_SLEEP_SECONDS=5
             - CONSUL_URL=consul
             - CONSUL_PORT=8500
+        volumes:
+          - /config
+        volumes_from:
+          - consul-config-sidekick
+        labels:
+          io.rancher.sidekicks: consul-config-sidekick
+<%_ } _%>
+<%_ if (this.serviceDiscoveryType === 'eureka' || this.serviceDiscoveryType === 'consul') { _%>
+    registry-config-sidekick:
+        # this docker image must be built with:
+        # docker build -t <%= dockerRepositoryName %><% if (dockerRepositoryName !== '') { %>/<% } %>registry-config-sidekick registry-config-sidekick
+        image: <%= dockerRepositoryName %><% if (dockerRepositoryName !== '') { %>/<% } %>registry-config-sidekick
+        tty: true
+        stdin_open: true
+        command:
+          - cat
+        volumes:
+          - config:/config
 <%_ } _%>
 <%_ if (monitoring === 'elk') { _%>
     jhipster-elasticsearch:
