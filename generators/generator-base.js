@@ -112,12 +112,11 @@ module.exports = class extends Generator {
      * @param {string} clientFramework - The name of the client framework
      */
     addEntityToWebpack(microserviceName, clientFramework) {
-        if(clientFramework === 'angular1') {
-            //nothing to do here
+        if (clientFramework === 'angular1') {
             return;
         }
 
-        let webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
+        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
         jhipsterUtils.rewriteFile({
             file: webpackDevPath,
             needle: 'jhipster-needle-add-entity-to-webpack',
