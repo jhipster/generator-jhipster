@@ -38,7 +38,7 @@ module.exports = function (options) {
                 },
                 {
                     test: /\.html$/,
-                    loader: 'raw-loader',
+                    loader: 'html-loader',
                     exclude: ['./src/main/webapp/index.html']
                 },
                 <%_ if (useSass) { _%>
