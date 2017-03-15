@@ -91,6 +91,7 @@
     "tslint-loader": "3.4.3",
     "typescript": "2.2.1",
     "webpack": "2.2.1",
+    "webpack-dashboard": "0.3.0",
     "webpack-dev-server": "2.4.2",
     "webpack-merge": "2.6.1",
     "webpack-visualizer-plugin": "0.1.11",
