@@ -108,21 +108,20 @@ module.exports = class extends Generator {
     /**
      * Add a new entity route path to webpacks config
      *
-     * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+     * @param {string} microserviceName - The name of the microservice to put into the url
      * @param {string} clientFramework - The name of the client framework
      */
-    addEntityToWebpack(routerName, clientFramework) {
+    addEntityToWebpack(microserviceName, clientFramework) {
         if(clientFramework === 'angular1') {
             //nothing to do here
             return;
         }
 
-        let webpackDevPath = `${CLIENT_MAIN_SRC_DIR}`;
+        let webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
         jhipsterUtils.rewriteFile({
-            file: entityMenuPath,
+            file: webpackDevPath,
             needle: 'jhipster-needle-add-entity-to-webpack',
-            splicable: [`'/${routerLink}',
-            `]
+            splicable: [`'/${microserviceName.toLowerCase()}',`]
         }, this);
     }
 
