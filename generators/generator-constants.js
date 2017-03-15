@@ -55,6 +55,7 @@ const constants = {
 
     CLIENT_MAIN_SRC_DIR: `${MAIN_DIR}webapp/`,
     CLIENT_TEST_SRC_DIR: `${TEST_DIR}javascript/`,
+    CLIENT_WEBPACK_DIR: 'webpack/',
     CLIENT_DIST_DIR,
     ANGULAR_DIR: `${MAIN_DIR}webapp/app/`,
 

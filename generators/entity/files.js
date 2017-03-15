@@ -390,6 +390,7 @@ function writeFiles() {
             }
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework);
+            this.addEntityToWebpack(this.entityStateName, this.clientFramework);
 
             // Copy for each
             if (this.enableTranslation) {
