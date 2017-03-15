@@ -1011,9 +1011,9 @@ formatio@1.1.1:
   dependencies:
     samsam "~1.1"
 
-fs-extra@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-2.0.0.tgz#337352bded4a0b714f3eb84de8cea765e9d37600"
+fs-extra@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-2.1.0.tgz#122ac03cf15a84dd89c7a5b4edb42b1b46265dbe"
   dependencies:
     graceful-fs "^4.1.2"
     jsonfile "^2.1.0"
