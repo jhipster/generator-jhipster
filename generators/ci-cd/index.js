@@ -66,6 +66,9 @@ module.exports = PipelineGenerator.extend({
             this.template('jenkins/_Jenkinsfile', 'Jenkinsfile');
             this.template('jenkins/_jenkins.yml', `${this.DOCKER_DIR}jenkins.yml`);
             this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
+            if (this.jenkinsIntegrations.includes('publishDocker')) {
+                this.template('_docker-registry.yml', `${this.DOCKER_DIR}docker-registry.yml`);
+            }
         }
         if (this.pipelines.includes('gitlab')) {
             this.template('_.gitlab-ci.yml', '.gitlab-ci.yml');
